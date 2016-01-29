@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4DB70DE2-89DB-4F4D-AF15-EBA4AF7109EE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Milliman.Controller</RootNamespace>
+    <AssemblyName>Milliman.Controller</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BusinessLogic\AuditLogController.cs" />
+    <Compile Include="BusinessLogic\CommonController.cs" />
+    <Compile Include="BusinessLogic\IisLogController.cs" />
+    <Compile Include="BusinessLogic\SessionLogController.cs" />
+    <Compile Include="ControllerBase.cs" />
+    <Compile Include="ControllerContext.cs" />
+    <Compile Include="ControllerFactory.cs" />
+    <Compile Include="IController.cs" />
+    <Compile Include="IControllerAccessible.cs" />
+    <Compile Include="IControllerRetrievable.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Milliman.Data\Milliman.Data.csproj">
+      <Project>{689202c2-2ebe-43cf-8b16-68ba6f4e0494}</Project>
+      <Name>Milliman.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Milliman.Entities\Milliman.Entities.csproj">
+      <Project>{f79112aa-3e3e-4a77-a603-7e81f45afffb}</Project>
+      <Name>Milliman.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Milliman.Service\Milliman.Service.csproj">
+      <Project>{c9031791-c22c-47e5-83e6-e3bca11b2a5e}</Project>
+      <Name>Milliman.Service</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Milliman.Utilities\Milliman.Utilities.csproj">
+      <Project>{43ef8247-0456-458f-8f85-dfd57f54ae79}</Project>
+      <Name>Milliman.Utilities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

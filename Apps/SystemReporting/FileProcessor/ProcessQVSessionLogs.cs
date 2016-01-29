@@ -1,0 +1,213 @@
+﻿using Milliman.Entities.Models;
+using ReportingCommon;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace FileProcessor
+{
+    public class ProcessQVSessionLogs : ControllerAccess, IFileProcessor
+    {
+        DateTime _dateTimeReceived = new DateTime();
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="args"></param>
+        public ProcessQVSessionLogs(string args)
+        {
+            _dateTimeReceived = DateTime.Now;
+        }
+
+        /// <summary>
+        /// Process the iis files. Args are only the file type like iis. 
+        /// The file will be picked up by method GetFileFromDirectory
+        /// </summary>
+        /// <param name="args"></param>
+        public void ProcessFileData(string args)
+        {
+            bool blnSucessful = false;
+            try
+            {
+                if (args.Length > 0)
+                {
+                    EnumFileProcessor.eFilePath efilePath = EnumFileProcessor.eFilePath.QVSessionLogs;
+
+                    //Move from ProductionLogsTest\IISLogs\
+                    var dirInfo = new DirectoryInfo(ConfigurationManager.AppSettings["QVSessionLogsS"]);
+                    //ProductionLogsTest\IISLogs\
+                    var sourceDirectory = new DirectoryInfo(FileFunctions.GetFileOriginalSourceDirectory(efilePath));
+
+                    //Move To   LogFileProcessor\IN\IISLogs\
+                    var destInDirectory = FileFunctions.GetFileProcessingInDirectory(efilePath);
+                    //backUp    LogFileProcessor\BackUp\IISLogs
+                    var backUpDirectory = FileFunctions.GetFileBackUpDirectory(efilePath);
+
+                    string filter = "Sessions_INDY-PRM";
+                    if (sourceDirectory.Exists)
+                    {
+                        List<string> listFileToProcess = FileFunctions.GetFileToReadFromStatusFile(filter, efilePath);
+
+                        foreach (var file in listFileToProcess)
+                        {
+                            string fileFullNameWithSourcePath = dirInfo + file;
+                            if (File.Exists(fileFullNameWithSourcePath))
+                            {
+                                FileFunctions.CopyFile(dirInfo + file, efilePath, true);
+                                blnSucessful = ProcessLogFile(destInDirectory + file);
+                                if (blnSucessful)
+                                    File.Move(destInDirectory + file, backUpDirectory + file);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                BaseFileProcessor.LogError(ex, "Class ProcessQVSessionLogs. Method ProcessFileData.");
+            }
+        }
+
+        /// <summary>
+        /// This method process file by first parsing it, and then generating the proxy entity
+        /// </summary>
+        /// <param name="args"></param>
+        public bool ProcessLogFile(string fileFullNameWithSourcePath)
+        {
+            FileInfo fileInfo = new FileInfo(fileFullNameWithSourcePath);
+            FileFunctions ff = new FileFunctions();
+
+            bool blnSucessful = false;
+            try
+            {
+                List<QlikviewSessionLogEntry> listLogFile = ParseLogFile(fileInfo.ToString());
+
+                if (listLogFile != null & listLogFile.Count > 0)
+                {
+                    List<ProxySessionLog> listProxyLogs = new List<ProxySessionLog>();
+                    //Entity
+                    ProxySessionLog proxyLogEntry = new ProxySessionLog();
+
+                    //Time ZOne???TEMPo
+                    bool UseDaylightSavings = true;
+                    TimeZoneInfo serverTimeZone = TimeZoneInfo.FindSystemTimeZoneById(TimeZoneInfo.Local.Id);
+                    DateTime localDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, serverTimeZone);
+
+                    foreach (var entry in listLogFile)
+                    {
+                        proxyLogEntry.Document = (!string.IsNullOrEmpty(entry.Document)) ? entry.Document.Trim() : string.Empty;
+                        proxyLogEntry.ExitReason = (!string.IsNullOrEmpty(entry.ExitReason)) ? entry.ExitReason.Trim() : string.Empty;
+
+                        if (entry.SessionStart != null)
+                            proxyLogEntry.SessionStartTime = entry.SessionStart.ToString("MM/dd/yy HH:mm:ss");
+
+                        if (entry.SessionStart != null)
+                        {
+                            if (serverTimeZone.SupportsDaylightSavingTime && !UseDaylightSavings)
+                            {
+                                proxyLogEntry.SessionStartTime = (entry.SessionStart - serverTimeZone.BaseUtcOffset).ToString("MM/dd/yy HH:mm:ss");
+                            }
+                            else
+                            {
+                                proxyLogEntry.SessionStartTime = TimeZoneInfo.ConvertTimeToUtc(entry.SessionStart, serverTimeZone).ToString("MM/dd/yy HH:mm:ss");
+                            }
+                        }
+
+                        if (entry.SessionDuration != null)
+                            proxyLogEntry.SessionDuration = entry.SessionDuration.TotalMinutes.ToString();
+
+                        proxyLogEntry.CpuSpentS = entry.CpuSpentS != 0 ? entry.CpuSpentS : 0.0;
+
+                        //remove character in begging of email
+                        if (entry.IdentifyingUser != "Identifying user")
+                        {
+                            var user = entry.IdentifyingUser.Replace(@"Custom\", "").Replace(@"custom\", "");
+                            proxyLogEntry.IdentifyingUser = (!string.IsNullOrEmpty(user)) ? user.Trim() : string.Empty;
+                        }
+
+                        proxyLogEntry.ClientType = (!string.IsNullOrEmpty(entry.ClientType)) ? entry.ClientType.Trim() : string.Empty;
+                        proxyLogEntry.ClientAddress = (!string.IsNullOrEmpty(entry.ClientAddress)) ? entry.ClientAddress.Trim() : string.Empty;
+                        proxyLogEntry.CalType = (!string.IsNullOrEmpty(entry.CalType)) ? entry.CalType.Trim() : string.Empty;
+                        proxyLogEntry.CalUsageCount = entry.CalUsageCount != 0 ? entry.CalUsageCount : 0;
+
+                        proxyLogEntry.IsReduced = entry.Document.IndexOf(@"\reducedcachedqvws") > 0;
+                        //**************************************************************************************************//
+                        //GetAll the QVDoc Keys as it can be more than one
+                        var repositoryUrls = ConfigurationManager.AppSettings.AllKeys
+                                                     .Where(key => key.StartsWith("qvDocMultipleRoot"))
+                                                     .Select(key => ConfigurationManager.AppSettings[key])
+                                                     .ToArray();
+                        //loop through each and match with document. If a match is found then use that entry as root path
+                        var group = "";
+                        foreach (var item in repositoryUrls)
+                        {
+                            if (entry.Document.ToLower().Contains(item.ToLower()))
+                                group = QlikviewEventBase.GetGroup(entry.Document, item);
+                        }
+
+                        proxyLogEntry.Group = (!string.IsNullOrEmpty(group)) ? group : string.Empty;
+                        //**************************************************************************************************//
+                        proxyLogEntry.Report = QlikviewEventBase.GetReportName(entry.Document);
+                        proxyLogEntry.SessionLength = entry.SessionDuration.Minutes.ToString();
+                        proxyLogEntry.SessionEndReason = QlikviewSessionEvent.GetExitReason(entry.ExitReason).ToString();
+                        proxyLogEntry.Browser = QlikviewSessionEvent.GetBrowser(entry.ClientType);
+
+                        //add entry to list
+                        listProxyLogs.Add(proxyLogEntry);
+                        proxyLogEntry = new ProxySessionLog();
+                    }
+                    //process the list
+                    blnSucessful = ControllerSessionLog.ProcessLogs(listProxyLogs);
+                    if (blnSucessful)
+                    {
+                        BaseFileProcessor.LogError(null, "ProcessQVSessionLogs: Successfully processed fileInfo " + fileFullNameWithSourcePath);
+                    }
+                    else
+                    {
+                        BaseFileProcessor.LogError(null, "ProcessQVSessionLogs: Failed processing fileInfo " + fileFullNameWithSourcePath);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                BaseFileProcessor.LogError(ex, " Class ProcessQVSessionLogs. Method ProcessLogFile while sending the data to controller.");
+            }
+
+            return blnSucessful;
+        }
+
+        /// <summary>
+        /// Parse log file and returns the list
+        /// </summary>
+        /// <param name="filefullName"></param>
+        /// <param name="qvDocRoot"></param>
+        /// <returns></returns>
+        public static List<QlikviewSessionLogEntry> ParseLogFile(string filefullName)
+        {
+            List<string> fileLines = new List<string>();
+            List<QlikviewSessionLogEntry> listLogFile = new List<QlikviewSessionLogEntry>();
+
+            try
+            {
+                fileLines = File.ReadAllLines(filefullName).ToList();
+                if (fileLines != null && fileLines.Count > 0)
+                    fileLines.RemoveAt(0);//removes the first line
+
+                foreach (string line in fileLines)
+                {
+                    QlikviewSessionLogEntry entry = new QlikviewSessionLogEntry(line);
+                    listLogFile.Add(entry);
+                }
+            }
+            catch (Exception ex)
+            {
+                BaseFileProcessor.LogError(ex, " Class ProcessQVSessionLogs. Method ParseFile. File name. " + filefullName);
+            }
+            return listLogFile;
+        }
+    }
+}

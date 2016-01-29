@@ -1,0 +1,641 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Milliman.Utilities;
+using Milliman.Utilities.File;
+using Milliman.Utilities.ExceptionHandling;
+using System.Security.Cryptography;
+using Milliman.Controller;
+using Milliman.Controller.BusinessLogic.Controller;
+
+namespace FileProcessor
+{
+    public class FileFunctions
+    {
+        #region Properties
+        private DateTime _dStartDate;
+        private DateTime _dEndDate;
+        private DateTime _dDateTimeReceived = DateTime.Today;
+        private EnumFileProcessor.eFileOutputType _eFileOutputTypes;
+        private EnumFileProcessor.eFilePath _eFilePath;
+        #endregion
+
+        #region Create File
+        /// <summary>
+        /// Creates a file using the results
+        /// </summary>
+        /// <param name="sResults"></param>
+        /// <param name="eOutPutType"></param>
+        /// <param name="eFilePaths"></param>
+        public void CreateFile(string sResults, EnumFileProcessor.eFileOutputType eOutPutType,
+                                                            EnumFileProcessor.eFilePath eFilePath)
+        {
+            GetDateRange();
+
+            //get the root directory
+            string fileLocation = GetFileOriginalSourceDirectory(eFilePath);
+            string filFullNamePath = GetFileName(fileLocation, eOutPutType, eFilePath);
+
+            if (filFullNamePath.Length > 0)
+            {
+                if (sResults.Length > 0)
+                {
+                    ProcessFile(sResults, filFullNamePath);
+                }
+                else
+                {
+                    ProcessFile(filFullNamePath, eFilePath);
+                }
+            }
+
+        }
+
+        public string GetFileName(string fileLocation, EnumFileProcessor.eFileOutputType eOutputType,
+                                                                    EnumFileProcessor.eFilePath eFilePath)
+        {
+            _eFileOutputTypes = (EnumFileProcessor.eFileOutputType)Enum.Parse(typeof(EnumFileProcessor.eFileOutputType), eOutputType.ToString());
+
+            string nameFormat = string.Empty;
+            switch (_eFileOutputTypes)
+            {
+                case EnumFileProcessor.eFileOutputType.ExcelFile:
+                    nameFormat = GetNameAndDateFormat(fileLocation, eOutputType, eFilePath);
+                    break;
+                case EnumFileProcessor.eFileOutputType.CsvFile:
+                    nameFormat = GetNameAndDateFormat(fileLocation, eOutputType, eFilePath);
+                    break;
+                case EnumFileProcessor.eFileOutputType.TextFile:
+                    nameFormat = GetNameAndDateFormat(fileLocation, eOutputType, eFilePath);
+                    break;
+                default:
+                    throw new ApplicationException("Output type not supported");
+            }
+
+            return (string.Format(nameFormat));
+        }
+
+        public string GetFileName(string fileLocation, EnumFileProcessor.eFilePath eFilePath)
+        {
+
+            string nameFormat = string.Empty;
+            switch (eFilePath)
+            {
+                case EnumFileProcessor.eFilePath.IisLogs:
+                    nameFormat = GetNameAndDateFormat(fileLocation, eFilePath);
+                    break;
+                case EnumFileProcessor.eFilePath.QVAuditLogs:
+                    nameFormat = GetNameAndDateFormat(fileLocation, eFilePath);
+                    break;
+                case EnumFileProcessor.eFilePath.QVSessionLogs:
+                    nameFormat = GetNameAndDateFormat(fileLocation, eFilePath);
+                    break;
+                default:
+                    throw new ApplicationException("Output type not supported");
+            }
+
+            return (string.Format(nameFormat));
+        }
+
+        public string GetNameAndDateFormat(string fileLocation)
+        {
+            string todaysDate = DateTime.Now.ToString("yyyyMMdd_hhmm");
+            //get the file back up location
+            string nameFormat = fileLocation + "_S_" + todaysDate;
+
+            return (string.Format(nameFormat, _dDateTimeReceived));
+        }
+
+        /// <summary>
+        /// returns the name format
+        /// </summary>
+        /// <param name="fileLocation"></param>
+        /// <param name="eOutputType"></param>
+        /// <returns></returns>
+        public string GetNameAndDateFormat(string fileLocation, EnumFileProcessor.eFileOutputType eOutputType,
+                                                                    EnumFileProcessor.eFilePath eFilePath)
+        {
+            GetDateRange();
+            DateTime date = DateTime.Now;
+            string todaysDate = date.ToString("yyyyMMdd_hhmm");
+
+            _eFileOutputTypes = (EnumFileProcessor.eFileOutputType)Enum.Parse(typeof(EnumFileProcessor.eFileOutputType),
+                                                   eOutputType.ToString());
+
+            _eFilePath = (EnumFileProcessor.eFilePath)Enum.Parse(typeof(EnumFileProcessor.eFilePath), eFilePath.ToString());
+
+            string fileType = string.Empty;
+            switch (_eFilePath)
+            {
+                case EnumFileProcessor.eFilePath.IisLogs:
+                    //get the file back up location
+                    fileType = "IisL";
+                    break;
+                case EnumFileProcessor.eFilePath.QVAuditLogs:
+                    fileType = "QVA";
+                    break;
+                case EnumFileProcessor.eFilePath.QVSessionLogs:
+                    fileType = "QVS";
+                    break;
+            }
+
+            string nameFormat = string.Empty;
+            switch (_eFileOutputTypes)
+            {
+                case EnumFileProcessor.eFileOutputType.CsvFile:
+                    //get the file back up location
+                    nameFormat = fileLocation + "_" + fileType + "_" + todaysDate + ".csv";
+                    break;
+                case EnumFileProcessor.eFileOutputType.ExcelFile:
+                    nameFormat = fileLocation + "_" + fileType + "_" + todaysDate + ".xls";
+                    break;
+                case EnumFileProcessor.eFileOutputType.TextFile:
+                    nameFormat = fileLocation + "_" + fileType + "_" + todaysDate + ".txt";
+                    break;
+            }
+
+            return (string.Format(nameFormat, _dDateTimeReceived));
+        }
+
+        /// <summary>
+        /// returns the name format
+        /// </summary>
+        /// <param name="fileLocation"></param>
+        /// <param name="eOutputType"></param>
+        /// <returns></returns>
+        public string GetNameAndDateFormat(string fileLocation, EnumFileProcessor.eFilePath eFilePath)
+        {
+            GetDateRange();
+            DateTime date = DateTime.Now;
+            string todaysDate = date.ToString("yyyyMMdd_hhmm");
+
+            _eFilePath = (EnumFileProcessor.eFilePath)Enum.Parse(typeof(EnumFileProcessor.eFilePath), eFilePath.ToString());
+
+            string nameFormat = string.Empty;
+            switch (_eFilePath)
+            {
+                case EnumFileProcessor.eFilePath.IisLogs:
+                    //get the file back up location
+                    nameFormat = fileLocation + "_" + "IisL" + "_" + todaysDate;
+                    break;
+                case EnumFileProcessor.eFilePath.QVAuditLogs:
+                    nameFormat = fileLocation + "_" + "QVA" + "_" + todaysDate + "_";
+                    break;
+                case EnumFileProcessor.eFilePath.QVSessionLogs:
+                    nameFormat = fileLocation + "_" + "QVS" + "_" + todaysDate + "_";
+                    break;
+            }
+            return (string.Format(nameFormat, _dDateTimeReceived));
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Function that completely process a file and it creates if does not exist
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public bool ProcessFile(string sResults, string filFullNamePath)
+        {
+            bool bSucess = false;
+            string retVal = string.Empty;
+            File file = new File();
+
+            if (file.Exists(filFullNamePath))
+            {
+                file.Delete(filFullNamePath);
+            }
+            using (System.IO.FileStream fs = new System.IO.FileStream(filFullNamePath, System.IO.FileMode.OpenOrCreate,
+                                                                    System.IO.FileAccess.ReadWrite, System.IO.FileShare.ReadWrite))
+            using (System.IO.StreamWriter str = new System.IO.StreamWriter(fs))
+            {
+                str.BaseStream.Seek(0, System.IO.SeekOrigin.End);
+                str.Write(sResults);
+                str.Flush();
+            }
+
+            System.IO.File.AppendAllText(filFullNamePath, sResults);  //Exception occurrs ??????????
+            string readtext = System.IO.File.ReadAllText(filFullNamePath);
+
+            if (file.Exists(filFullNamePath))
+                bSucess = true;
+
+            return bSucess;
+        }
+
+        /// <summary>
+        /// Function that completely process a file if it exists, reads it, writes and copies it
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public bool ProcessFile(string filFullNamePath, EnumFileProcessor.eFilePath eFilePath)
+        {
+            bool bSucess = false;
+            string retVal = string.Empty;
+
+            File file = new File();
+            if (file.Exists(filFullNamePath))
+            {
+                //start reading the file. i have used Encoding 1256
+                System.IO.StreamReader sr = new System.IO.StreamReader(filFullNamePath);
+                retVal = sr.ReadToEnd(); // getting the entire text from the file.
+                sr.Close();
+
+                bSucess = WriteFile(retVal, filFullNamePath);
+                if (bSucess)
+                {
+                    CopyFile(filFullNamePath, eFilePath, true);
+                }
+            }
+
+            return bSucess;
+        }
+        
+        /// <summary>Description :This routine creates text file based 
+        ///on the string of data retrieved from databse 
+        ///</summary> 
+        public bool WriteFile(string sResults, string filFullNamePath)
+        {
+            File file = new File();
+
+            //create the file name
+            FileTextWriter textWriter = file.CreateFile(filFullNamePath);
+
+            string outputValue = sResults;
+            textWriter.WriteLine(outputValue);
+            textWriter.Close();
+
+            //if the file is there then
+            bool returnValue = false;
+            if (outputValue.Length > 0)
+                returnValue = true;
+
+            return returnValue;
+        }
+
+        /// <summary>
+        /// Method to check if the directory exist then copy file. If the file already exist then delete that one and move the recent
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="filePath"></param>
+        public static void CopyFile(string fileFullNameWithSourcePath, EnumFileProcessor.eFilePath eFilePath, bool overwrite)
+        {
+            string destinationDirectory = string.Empty;
+            var destination = GetFileProcessingInDirectory(eFilePath);
+
+            File file = new File();
+
+            switch (eFilePath)
+            {
+                case EnumFileProcessor.eFilePath.IisLogs:
+                    //Move file from its current location to the destination that is defined
+                    destinationDirectory = destination + file.GetFileName(fileFullNameWithSourcePath);
+                    break;
+                case EnumFileProcessor.eFilePath.QVAuditLogs:
+                    //Move file from its current location to the destination that is defined
+                    destinationDirectory = destination + file.GetFileName(fileFullNameWithSourcePath); ;
+                    break;
+                case EnumFileProcessor.eFilePath.QVSessionLogs:
+                    //Move file from its current location to the destination that is defined
+                    destinationDirectory = destination + file.GetFileName(fileFullNameWithSourcePath); ;
+                    break;
+            }
+
+            // To copy a folder's contents to a new location:
+            // Create a new target folder, if necessary.
+            if (!file.Exists(destinationDirectory))
+            {
+                file.Delete(destinationDirectory);
+            }
+            // To copy a file to another location and 
+            // overwrite the destination file if it already exists.
+            if (file.Exists(fileFullNameWithSourcePath))
+            {
+                file.Delete(destinationDirectory);
+            }
+            using (System.IO.FileStream fs = new System.IO.FileStream(fileFullNameWithSourcePath, System.IO.FileMode.OpenOrCreate,
+                                                                   System.IO.FileAccess.ReadWrite, System.IO.FileShare.ReadWrite))
+                file.Copy(fileFullNameWithSourcePath, destinationDirectory, overwrite);
+        }
+        /// <summary>
+        /// Method to check if the directory exist then copy file
+        /// </summary>
+        /// <param name="fileFullNameWithSourcePath"></param>
+        /// <param name="eFilePath"></param>
+        public static void CopyFileToBackUp(string fileFullNameWithSourcePath, EnumFileProcessor.eFilePath eFilePath)
+        {
+            string destinationDirectory = string.Empty;
+            var destination = GetFileBackUpDirectory(eFilePath);
+
+            File file = new File();
+
+            switch (eFilePath)
+            {
+                case EnumFileProcessor.eFilePath.IisLogs:
+                    //Move file from its current location to the destination that is defined
+                    destinationDirectory = destination + file.GetFileName(fileFullNameWithSourcePath);
+                    break;
+                case EnumFileProcessor.eFilePath.QVAuditLogs:
+                    //Move file from its current location to the destination that is defined
+                    destinationDirectory = destination + file.GetFileName(fileFullNameWithSourcePath); ;
+                    break;
+                case EnumFileProcessor.eFilePath.QVSessionLogs:
+                    //Move file from its current location to the destination that is defined
+                    destinationDirectory = destination + file.GetFileName(fileFullNameWithSourcePath); ;
+                    break;
+            }
+
+            // To copy a folder's contents to a new location:
+            // Create a new target folder, if necessary.
+            if (!file.Exists(destinationDirectory))
+            {
+                file.Delete(destinationDirectory);
+            }
+            // To copy a file to another location and 
+            // overwrite the destination file if it already exists.
+            file.Copy(fileFullNameWithSourcePath, destinationDirectory, false);
+        }
+
+        /// <summary>
+        /// Returns the destination folder
+        /// LogFileProcessor\IN\eFilePath\
+        /// </summary>
+        /// <returns></returns>
+        public static string GetFileProcessingInDirectory(EnumFileProcessor.eFilePath eFilePath)
+        {
+            string fileLocation = string.Empty;
+          
+            var appIISLogs = ConfigurationManager.AppSettings["IISLogsIN"];
+            var appMiscLogs = ConfigurationManager.AppSettings["MiscLogsIN"];
+            var appQVAuditLogs = ConfigurationManager.AppSettings["QVAuditLogsIN"];
+            var appQVSessionLogs = ConfigurationManager.AppSettings["QVSessionLogsIN"];
+
+            //get the directory name
+            switch (eFilePath)
+            {
+                case EnumFileProcessor.eFilePath.IisLogs:
+                    fileLocation = appIISLogs;
+                    break;
+                case EnumFileProcessor.eFilePath.QVAuditLogs:
+                    fileLocation = appQVAuditLogs;
+                    break;
+                case EnumFileProcessor.eFilePath.QVSessionLogs:
+                    fileLocation = appQVSessionLogs;
+                    break;
+            }
+
+            return (string.Format(fileLocation));
+        }
+
+        /// <summary>
+        /// Back up file after the reading and writing to DB
+        /// LogFileProcessor\BackUp\eFilePath\
+        /// </summary>
+        /// <param name="eFilePath"></param>
+        /// <returns></returns>
+        public static string GetFileBackUpDirectory(EnumFileProcessor.eFilePath eFilePath)
+        {
+            string fileLocation = string.Empty;
+            //var destination = ConfigurationManager.AppSettings["BackUp"];
+            //  LogFileProcessor\IISLogs\
+            var appIISLogs = ConfigurationManager.AppSettings["IISLogsBU"];
+            var appMiscLogs = ConfigurationManager.AppSettings["MiscLogsBU"];
+            var appQVAuditLogs = ConfigurationManager.AppSettings["QVAuditLogsBU"];
+            var appQVSessionLogs = ConfigurationManager.AppSettings["QVSessionLogsBU"];
+
+            //get the directory name
+            switch (eFilePath)
+            {
+                case EnumFileProcessor.eFilePath.IisLogs:
+                    fileLocation = appIISLogs;
+                    break;
+                case EnumFileProcessor.eFilePath.QVAuditLogs:
+                    fileLocation = appQVAuditLogs;
+                    break;
+                case EnumFileProcessor.eFilePath.QVSessionLogs:
+                    fileLocation = appQVSessionLogs;
+                    break;
+            }
+
+            return (string.Format(fileLocation));
+        }
+
+        /// <summary>
+        /// This method retrieves the location where the files will be copied from to be processed
+        /// \ProductionLogs\eFilePaths\
+        /// </summary>
+        /// <param name="eFilePath"></param>
+        /// <returns></returns>
+        public static string GetFileOriginalSourceDirectory(EnumFileProcessor.eFilePath eFilePath)
+        {
+            // ProductionLogsTest\IISLogs\
+            var appIISLogs = ConfigurationManager.AppSettings["IISLogsS"];
+            var appMiscLogs = ConfigurationManager.AppSettings["MiscLogsS"];
+            var appQVAuditLogs = ConfigurationManager.AppSettings["QVAuditLogsS"];
+            var appQVSessionLogs = ConfigurationManager.AppSettings["QVSessionLogsS"];
+
+            string source = string.Empty;
+            //get the directory name
+            switch (eFilePath)
+            {
+                case EnumFileProcessor.eFilePath.IisLogs:
+                    source = appIISLogs;
+                    break;
+                case EnumFileProcessor.eFilePath.QVAuditLogs:
+                    source = appQVAuditLogs;
+                    break;
+                case EnumFileProcessor.eFilePath.QVSessionLogs:
+                    source = appQVSessionLogs;
+                    break;
+            }
+            return (string.Format(source));
+        }
+
+        /// <summary>
+        /// This method retrieves the location for QV document
+        /// </summary>
+        /// <param name="FilePaths"></param>
+        /// <returns></returns>
+        public static string GetStatusFileDirectory()
+        {
+            string fileStatusDirectory = ConfigurationManager.AppSettings["FileStatus"];
+            return (fileStatusDirectory);
+        }
+
+        public void GetDateRange()
+        {
+            var dateValue = ConfigurationManager.AppSettings["OverrideDate"];
+            _dDateTimeReceived = (!string.IsNullOrEmpty(dateValue)) ? (DateTime.Parse(dateValue.ToString())) : DateTime.Today;
+            //get Yesterday date
+            var yesterday = DateTime.Today.AddDays(-1);
+            _dStartDate = yesterday;//string.Format(DateTime.Parse(_dDateTimeReceived.AddDays(-1)), "MM/dd/yy");
+            _dEndDate = _dStartDate.AddDays(1);
+        }
+
+        private static T ParseEnum<T>(string value)
+        {
+            return (T)Enum.Parse(typeof(T), value, true);
+        }
+
+        /// <summary>
+        /// return all files
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        public static string[] GetFileNames(string path, string filter)
+        {
+            string[] files = System.IO.Directory.GetFiles(path, filter);
+            for (int i = 0; i < files.Length; i++)
+                files[i] = System.IO.Path.GetFileName(files[i]);
+            return files;
+        }
+
+        public static List<string> GetAllFileNamesFromDirectory(string dir, string filter)
+        {
+            List<string> files = new List<string>();
+            bool isEmpty = !System.IO.Directory.EnumerateFiles(dir).Any();
+            if (!isEmpty)
+            {
+                var directory = new System.IO.DirectoryInfo(dir);
+                files = directory.GetFiles("*"+filter+"*")
+                                 .Where(file => file.Name.StartsWith(filter))
+                                 .OrderBy(file => file.LastWriteTime)
+                                 .Select(file => file.Name).ToList();
+
+            }
+
+            return files;
+        }
+
+        /// <summary>
+        /// Returns latest file
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        public string GetLatestFileName(string path, string filter)
+        {
+            bool isEmpty = !System.IO.Directory.EnumerateFiles(path).Any();
+            var myFile = (String)null;
+            var file = (String)null;
+            if (!isEmpty)
+            {
+                var directory = new System.IO.DirectoryInfo(path);
+                myFile = directory.GetFiles()
+                                .OrderByDescending(f => f.LastWriteTime)
+                                .OrderBy(f => f.Length)
+                                .First().ToString();
+                file = myFile.ToString();
+            }
+            return file;
+        }
+
+        /// <summary>
+        /// Get latest file if more than one exist
+        /// </summary>
+        /// <param name="directoryInfo"></param>
+        /// <param name="filePth"></param>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        public static System.IO.FileInfo GetFileFromDirectory(string filePath, string filter)
+        {
+            if (string.IsNullOrEmpty(filePath))
+                return null;
+
+            string fileName = System.IO.Path.GetFileName(filePath);
+            string dir = System.IO.Path.GetDirectoryName(filePath);
+            var latestFile = new System.IO.DirectoryInfo(dir)
+                            .EnumerateFiles(filter, System.IO.SearchOption.TopDirectoryOnly)
+                            //.Where(file => file.Name.Contains(filter))
+                            .OrderByDescending(file => file.LastWriteTime)
+                            .First();
+            long len = latestFile.Length;
+
+            return latestFile;
+        }
+
+        public static List<string> GetFileToReadFromStatusFile(string filter, EnumFileProcessor.eFilePath eFilePath)
+        {
+            string fileName = "status";
+
+            //status file name with directory
+            string statusFileFullName = GetStatusFileDirectory() + fileName + ".txt";
+
+            List<string> fileToRead = new List<string>();
+            if (!string.IsNullOrEmpty(statusFileFullName))
+            {
+                //get file name
+                fileToRead = GetFileNameToReadFile(statusFileFullName, filter, eFilePath);
+            }
+            return fileToRead;
+        }
+
+        public static List<string> GetFileNameToReadFile(string pathToFile, string filter, EnumFileProcessor.eFilePath eFilePath)
+        {
+            if (string.IsNullOrEmpty(pathToFile))
+                return null;
+
+            //Get the Source location
+            var sourceDirectory = GetFileOriginalSourceDirectory(eFilePath);
+            //Get backup location
+            var backUpDirectory = GetFileBackUpDirectory(eFilePath);
+
+            List<string> listFilesAtSourceLocation = new List<string>();
+            List<string> listFilesAtBackUpLocation = new List<string>();
+            //file names that are unique among source and dest
+            List<string> listFilesDifferenceBWSB = new List<string>();
+            bool isEmpty = !System.IO.Directory.EnumerateFiles(System.IO.Path.GetDirectoryName(sourceDirectory)).Any();
+            if (!isEmpty)
+            {
+                //get list of files at source location
+                listFilesAtSourceLocation = GetAllFileNamesFromDirectory(sourceDirectory, filter);
+                //get list of files at destination location
+                listFilesAtBackUpLocation = GetAllFileNamesFromDirectory(backUpDirectory, filter);
+                //get files that are difference from source and destination
+                listFilesDifferenceBWSB = listFilesAtSourceLocation.Union(listFilesAtBackUpLocation)
+                                                           .Except(listFilesAtSourceLocation.Intersect(listFilesAtBackUpLocation))
+                                                           .ToList();
+            }
+
+            //Read status file
+            List<string> listFileLines = System.IO.File.ReadAllLines(pathToFile).ToList();
+            
+            //get the values that has the newer and new file
+            var newerFileNamesInList = listFileLines.Where(f => f.StartsWith(filter) || 
+                                                        f.Contains("Newer")).Select(s => s.Replace('\t', ' '));
+
+            //validate if the file exist in list that matches the filter
+            var validateFilterFileExist = newerFileNamesInList.Any(x => x.IndexOf(filter) > -1);
+            if (validateFilterFileExist)
+            {
+                var fileNameToProcess = newerFileNamesInList.Where(a => a.Contains(filter) 
+                                                            && a.Contains("Newer")).FirstOrDefault().Trim();
+
+                var finalFileToProcess = fileNameToProcess.Split(' ')
+                                                          .ToArray().Where(a => a.Contains(filter));
+
+                string fileNameFinal = string.Join(",", finalFileToProcess.ToArray());
+
+                //check if the listFilesDifference contains the fileNameFinal. If it does then process that file only
+                if (listFilesDifferenceBWSB.Any(str => str.Contains(fileNameFinal)))
+                {
+                    //listFilesDifferenceBWSB = listFilesDifferenceBWSB.RemoveAll(x => listFilesDifferenceBWSB.Contains(fileNameFinal));
+                    var finalFile = listFilesDifferenceBWSB.Where(s => s.Contains(fileNameFinal)).ToList();
+                    listFilesDifferenceBWSB = finalFile;
+                }
+            }
+            else
+            {
+                listFilesDifferenceBWSB = new List<string>();
+            }
+
+            return listFilesDifferenceBWSB;
+        }
+    }
+    
+}
