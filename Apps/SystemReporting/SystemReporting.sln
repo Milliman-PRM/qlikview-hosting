@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Milliman.Utilities", "Milli
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReportingTest", "ReportingTest\ReportingTest.csproj", "{CB275537-C69F-4188-9404-B5F87C29810B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReportingCommon", "..\WIP\ReportingCommon\ReportingCommon.csproj", "{51F3D6D1-BE23-4950-B536-109864113C04}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReportingCommon", "..\AppsCommon\ReportingCommon\ReportingCommon.csproj", "{51F3D6D1-BE23-4950-B536-109864113C04}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileProcessorApplication", "FileProcessorApplication\FileProcessorApplication.csproj", "{3B4C5C0A-7CE7-4090-BD77-E94677157C47}"
 EndProject

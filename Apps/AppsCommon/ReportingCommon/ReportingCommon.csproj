@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{AA153166-0FB2-4A34-8D26-227E0BE97D87}</ProjectGuid>
+    <ProjectGuid>{51F3D6D1-BE23-4950-B536-109864113C04}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FileProcessor</RootNamespace>
-    <AssemblyName>FileProcessor</AssemblyName>
+    <RootNamespace>ReportingCommon</RootNamespace>
+    <AssemblyName>ReportingCommon</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -35,7 +35,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -44,40 +43,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseFileProcessor.cs" />
-    <Compile Include="DTHasher.cs" />
-    <Compile Include="EnumFileProcessor.cs" />
-    <Compile Include="FileFunctions.cs" />
-    <Compile Include="ProcessFile.cs" />
-    <Compile Include="ProcessIisLogs.cs" />
-    <Compile Include="ProcessQVAuditLogs.cs" />
-    <Compile Include="ProcessQVSessionLogs.cs" />
+    <Compile Include="Aggregation\AggregatedStatistics.cs" />
+    <Compile Include="EventRepresentation\IisAccessEvent.cs" />
+    <Compile Include="EventRepresentation\QlikviewAuditEvent.cs" />
+    <Compile Include="EventRepresentation\QlikviewEventBase.cs" />
+    <Compile Include="EventRepresentation\QlikviewSessionEvent.cs" />
+    <Compile Include="EventRepresentation\UserEventBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\AppsCommon\ReportingCommon\ReportingCommon.csproj">
-      <Project>{51f3d6d1-be23-4950-b536-109864113c04}</Project>
-      <Name>ReportingCommon</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Milliman.Controller\Milliman.Controller.csproj">
-      <Project>{4db70de2-89db-4f4d-af15-eba4af7109ee}</Project>
-      <Name>Milliman.Controller</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Milliman.Entities\Milliman.Entities.csproj">
-      <Project>{f79112aa-3e3e-4a77-a603-7e81f45afffb}</Project>
-      <Name>Milliman.Entities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Milliman.Utilities\Milliman.Utilities.csproj">
-      <Project>{43ef8247-0456-458f-8f85-dfd57f54ae79}</Project>
-      <Name>Milliman.Utilities</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-    <None Include="appsettings.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="appsettings_Dev.config" />
+    <Compile Include="RawDataRepresentation\IisLogFileEntry.cs" />
+    <Compile Include="RawDataRepresentation\QlikviewAuditLogEntry.cs" />
+    <Compile Include="RawDataRepresentation\QlikviewSessionLogEntry.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
