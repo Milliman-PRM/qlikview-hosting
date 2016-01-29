@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Milliman.Entities.Proxy
+namespace SystemReporting.Entities.Proxy
 {
     [Serializable()]
     public class ProxyAuditLog

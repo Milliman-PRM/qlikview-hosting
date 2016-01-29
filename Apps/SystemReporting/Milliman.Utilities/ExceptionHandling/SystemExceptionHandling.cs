@@ -4,7 +4,7 @@ using System.Configuration;
 using System.Diagnostics;
 using System.Text;
 
-namespace Milliman.Utilities.ExceptionHandling
+namespace SystemReporting.Utilities.ExceptionHandling
 {
     public class SystemExceptionHandling
     {

@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Milliman.Utilities.Linq
+namespace SystemReporting.Utilities.Linq
 {
     public static class DynamicQueryable
     {

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Milliman.Entities.Models
+namespace SystemReporting.Entities.Models
 {
     [Serializable()]
     [Table("group", Schema = "public")]

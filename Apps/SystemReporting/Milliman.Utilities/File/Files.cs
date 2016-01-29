@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Milliman.Utilities.File
+namespace SystemReporting.Utilities.File
 {
     /// <summary>
     /// Collection of files in a specified directory.

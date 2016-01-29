@@ -1,4 +1,4 @@
-﻿using Milliman.Data.Database;
+﻿using SystemReporting.Data.Database;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
 
-namespace Milliman.Data.Repository
+namespace SystemReporting.Data.Repository
 {
     public class Repository<T> : IRepository<T> where T : class
     {

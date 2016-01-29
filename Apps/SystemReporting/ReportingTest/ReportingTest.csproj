@@ -88,25 +88,25 @@
       <Project>{aa153166-0fb2-4a34-8d26-227e0be97d87}</Project>
       <Name>FileProcessor</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Milliman.Controller\Milliman.Controller.csproj">
+    <ProjectReference Include="..\Milliman.Controller\SystemReporting.Controller.csproj">
       <Project>{4db70de2-89db-4f4d-af15-eba4af7109ee}</Project>
-      <Name>Milliman.Controller</Name>
+      <Name>SystemReporting.Controller</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Milliman.Data\Milliman.Data.csproj">
+    <ProjectReference Include="..\Milliman.Data\SystemReporting.Data.csproj">
       <Project>{689202c2-2ebe-43cf-8b16-68ba6f4e0494}</Project>
-      <Name>Milliman.Data</Name>
+      <Name>SystemReporting.Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Milliman.Entities\Milliman.Entities.csproj">
+    <ProjectReference Include="..\Milliman.Entities\SystemReporting.Entities.csproj">
       <Project>{f79112aa-3e3e-4a77-a603-7e81f45afffb}</Project>
-      <Name>Milliman.Entities</Name>
+      <Name>SystemReporting.Entities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Milliman.Service\Milliman.Service.csproj">
+    <ProjectReference Include="..\Milliman.Service\SystemReporting.Service.csproj">
       <Project>{c9031791-c22c-47e5-83e6-e3bca11b2a5e}</Project>
-      <Name>Milliman.Service</Name>
+      <Name>SystemReporting.Service</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Milliman.Utilities\Milliman.Utilities.csproj">
+    <ProjectReference Include="..\Milliman.Utilities\SystemReporting.Utilities.csproj">
       <Project>{43ef8247-0456-458f-8f85-dfd57f54ae79}</Project>
-      <Name>Milliman.Utilities</Name>
+      <Name>SystemReporting.Utilities</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

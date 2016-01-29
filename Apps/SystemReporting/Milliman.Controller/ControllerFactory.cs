@@ -1,7 +1,7 @@
-﻿using Milliman.Controller.BusinessLogic.Controller;
+﻿using SystemReporting.Controller.BusinessLogic.Controller;
 using System;
 
-namespace Milliman.Controller
+namespace SystemReporting.Controller
 {
     public static class ControllerFactory
     {

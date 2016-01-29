@@ -3,7 +3,7 @@ using System.Net.Mail;
 using System.Configuration;
 using System.IO;
 
-namespace Milliman.Utilities.Email
+namespace SystemReporting.Utilities.Email
 {
     public class Notification
     {

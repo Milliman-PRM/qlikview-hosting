@@ -1,10 +1,10 @@
-﻿using Milliman.Data.Repository;
-using Milliman.Entities.Models;
-using Milliman.Service;
+﻿using SystemReporting.Data.Repository;
+using SystemReporting.Entities.Models;
+using SystemReporting.Service;
 using System;
 using System.Collections.Generic;
 
-namespace Milliman.Controller.BusinessLogic.Controller
+namespace SystemReporting.Controller.BusinessLogic.Controller
 {
     public class CommonController : ControllerBase
     {

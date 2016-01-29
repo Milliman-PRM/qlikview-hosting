@@ -6,18 +6,17 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Milliman.Controller;
-using Milliman.Controller.BusinessLogic.Controller;
-using Milliman.Entities.Proxy;
+using SystemReporting.Controller;
+using SystemReporting.Controller.BusinessLogic.Controller;
+using SystemReporting.Entities.Proxy;
 
 namespace FileProcessor
 {
     public class ProcessIisLogs : ControllerAccess, IFileProcessor
     {
-        DateTime _dateTimeReceived = new DateTime();
         public ProcessIisLogs(string args)
         {
-            _dateTimeReceived = DateTime.Now;
+
         }
 
         /// <summary>
@@ -33,33 +32,38 @@ namespace FileProcessor
                 if (args.Length > 0)
                 {
                     EnumFileProcessor.eFilePath efilePath = EnumFileProcessor.eFilePath.IisLogs;
-
-                    //Move from ProductionLogsTest\IISLogs\
-                    var dirInfo = new DirectoryInfo(ConfigurationManager.AppSettings["IISLogsS"]);
-                    //ProductionLogsTest\IISLogs\
+                    
+                    // ProductionLogsTest\IISLogs\
                     var sourceDirectory = new DirectoryInfo(FileFunctions.GetFileOriginalSourceDirectory(efilePath));
 
-                    //Move To   LogFileProcessor\IN\IISLogs\
-                    var destInDirectory = FileFunctions.GetFileProcessingInDirectory(efilePath);
-                    //backUp    LogFileProcessor\BackUp\IISLogs
-                    var backUpDirectory = FileFunctions.GetFileBackUpDirectory(efilePath);
+                    //LogFileProcessor\IN
+                    var destinationInDirectory = FileFunctions.GetFileProcessingInDirectory(efilePath);
 
                     string filter = "u_ex";
                     if (sourceDirectory.Exists)
-                    {                        
+                    {
                         List<string> listFileToProcess = FileFunctions.GetFileToReadFromStatusFile(filter, efilePath);
-
                         if (listFileToProcess.Count > 0)
                         {
                             foreach (var file in listFileToProcess)
                             {
-                                string fileFullNameWithSourcePath = dirInfo + file;
-                                if (File.Exists(fileFullNameWithSourcePath))
+                                string fileNameWithsourceDirectory = sourceDirectory + file;
+                                if (File.Exists(fileNameWithsourceDirectory))
                                 {
-                                    FileFunctions.CopyFile(dirInfo + file, efilePath, true);
-                                    blnSucessful = ProcessLogFile(destInDirectory + file);
+                                    FileFunctions.CopyFile(sourceDirectory + file, efilePath, true);
+                                    blnSucessful = ProcessLogFile(destinationInDirectory + file);
                                     if (blnSucessful)
-                                        File.Move(destInDirectory + file, backUpDirectory + file);
+                                    {
+                                        File.Delete(destinationInDirectory + file);
+                                        foreach(var item in listFileToProcess)
+                                        {
+                                            BaseFileProcessor.LogProcessedFile(item);
+                                        }                                        
+                                    }
+                                    else
+                                    {
+                                        BaseFileProcessor.LogError(null, "ProcessIisLogs: Failed processing fileInfo || " + fileNameWithsourceDirectory);
+                                    }
                                 }
                             }
                         }
@@ -76,12 +80,12 @@ namespace FileProcessor
         /// This method process file by first parsing it, and then generating the proxy entity
         /// </summary>
         /// <param name="args"></param>
-        public bool ProcessLogFile(string fileFullNameWithSourcePath)
+        public bool ProcessLogFile(string fileNameWithDirectory)
         {
-            FileInfo fileInfo = new FileInfo(fileFullNameWithSourcePath);
+            FileInfo fileInfo = new FileInfo(fileNameWithDirectory);
             if (fileInfo == null)
             {
-                BaseFileProcessor.LogError(null, "FileInfo missing. Can not process iisFile " + fileFullNameWithSourcePath);
+                BaseFileProcessor.LogError(null, "FileInfo missing. Can not process iisFile " + fileNameWithDirectory);
                 return false;
             }
 
@@ -176,14 +180,6 @@ namespace FileProcessor
                     List<ProxyIisLog> listProxyLogsFinal = listProxyExcludeDups.ToList();
                     //process the list
                     blnSucessful = ControllerIisLog.ProcessLogs(listProxyLogsFinal);
-                    if (blnSucessful)
-                    {
-                        BaseFileProcessor.LogError(null, "ProcessIisLogs: Successfully processed fileInfo ||" + fileFullNameWithSourcePath);
-                    }
-                    else
-                    {
-                        BaseFileProcessor.LogError(null, "ProcessIisLogs: Failed processing fileInfo || " + fileFullNameWithSourcePath);
-                    }
                 }
             }
             catch (Exception ex)

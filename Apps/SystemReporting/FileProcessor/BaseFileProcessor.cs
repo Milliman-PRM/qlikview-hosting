@@ -1,6 +1,6 @@
-﻿using Milliman.Controller;
-using Milliman.Controller.BusinessLogic.Controller;
-using Milliman.Utilities;
+﻿using SystemReporting.Controller;
+using SystemReporting.Controller.BusinessLogic.Controller;
+using SystemReporting.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -91,6 +91,7 @@ namespace FileProcessor
     /// </summary>
     public class BaseFileProcessor
     {
+        #region Error Log
         public static void LogError(Exception ex, string message)
         {
             if (ex != null && !string.IsNullOrEmpty(message))
@@ -142,6 +143,18 @@ namespace FileProcessor
                                           + "Exception Source: " + ex.Source.ToString()
                                           + Environment.NewLine);
         }
+        #endregion
+
+        #region FileProcessed
+        public static void LogProcessedFile(string message)
+        {
+            var LoggerFileDirectory = ConfigurationManager.AppSettings["ProcessedFileLogDirectory"];
+            var LoggerFileName = ConfigurationManager.AppSettings["ProcessedFileLogFileName"];
+            Logger.Instance.LogPath = LoggerFileDirectory;
+            Logger.Instance.LogFileName = LoggerFileName;
+            Logger.WriteLine(DateTime.Now + " ProcessedFileName:~ " + message + Environment.NewLine);
+        }
+        #endregion
     }
     #endregion
 }

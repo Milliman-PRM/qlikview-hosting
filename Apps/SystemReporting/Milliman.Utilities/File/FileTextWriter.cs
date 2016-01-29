@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Milliman.Utilities.File
+namespace SystemReporting.Utilities.File
 {
     /// <summary>
     /// This class wraps the most common ways of making calls to the StreamWriter object.

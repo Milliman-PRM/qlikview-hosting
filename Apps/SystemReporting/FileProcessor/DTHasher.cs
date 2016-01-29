@@ -1,4 +1,4 @@
-﻿using Milliman.Utilities.ExceptionHandling;
+﻿using SystemReporting.Utilities.ExceptionHandling;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -115,7 +115,7 @@ namespace FileProcessor
         {
             //string pathDest = "copy_" + pathSrc;
 
-            Milliman.Utilities.File.File file = new Milliman.Utilities.File.File();
+            SystemReporting.Utilities.File.File file = new SystemReporting.Utilities.File.File();
             file.Copy(pathSrc, dest, true);
 
             String md5Result;

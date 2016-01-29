@@ -1,4 +1,4 @@
-﻿using Milliman.Entities.Models;
+﻿using SystemReporting.Entities.Models;
 using Npgsql;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using C = Milliman.Utilities.Constants;
+using C = SystemReporting.Utilities.Constants;
 
 //  IisLogs has One PK and two FK (Group and User)
 //  Group has one PK, one Unique
@@ -18,7 +18,7 @@ using C = Milliman.Utilities.Constants;
 //  IisLog Navigation Property
 //
 
-namespace Milliman.Data.Database
+namespace SystemReporting.Data.Database
 {
     public class ApplicationDbContext : DbContext
     {

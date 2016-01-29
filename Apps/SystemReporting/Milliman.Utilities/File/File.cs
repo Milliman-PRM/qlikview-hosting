@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace Milliman.Utilities.File
+namespace SystemReporting.Utilities.File
 {
     /// <summary>
     /// File interface.  All file operations are performed though this class.

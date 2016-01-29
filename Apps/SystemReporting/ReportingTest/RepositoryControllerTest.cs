@@ -1,9 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Milliman.Controller;
-using Milliman.Controller.BusinessLogic.Controller;
-using Milliman.Data.Repository;
-using Milliman.Entities.Models;
-using Milliman.Service;
+using SystemReporting.Controller;
+using SystemReporting.Controller.BusinessLogic.Controller;
+using SystemReporting.Data.Repository;
+using SystemReporting.Entities.Models;
+using SystemReporting.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;

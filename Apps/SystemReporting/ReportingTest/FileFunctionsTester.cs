@@ -1,16 +1,16 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Milliman.Service;
-using Milliman.Entities.Models;
-using Milliman.Controller;
-using Milliman.Data.Repository;
-using Milliman.Controller.BusinessLogic.Controller;
+using SystemReporting.Service;
+using SystemReporting.Entities.Models;
+using SystemReporting.Controller;
+using SystemReporting.Data.Repository;
+using SystemReporting.Controller.BusinessLogic.Controller;
 using System.Collections.Generic;
-using Milliman.Utilities.File;
+using SystemReporting.Utilities.File;
 using FileProcessor;
 using System.Web;
 using System.Configuration;
-using Milliman.Utilities;
+using SystemReporting.Utilities;
 using System.Linq;
 
 namespace ReportingTest
@@ -82,13 +82,13 @@ namespace ReportingTest
             Assert.IsNotNull(fileLocation);
         }
 
-        [TestMethod]
-        public void TestGetFileDestinationBackUpLocation()
-        {
-            EnumFileProcessor.eFilePath filePaths = EnumFileProcessor.eFilePath.IisLogs;
-            string fileLocation = FileFunctions.GetFileBackUpDirectory(filePaths);
-            Assert.IsNotNull(fileLocation);
-        }
+        //[TestMethod]
+        //public void TestGetFileDestinationBackUpLocation()
+        //{
+        //    EnumFileProcessor.eFilePath filePaths = EnumFileProcessor.eFilePath.IisLogs;
+        //    string fileLocation = FileFunctions.GetFileBackUpDirectory(filePaths);
+        //    Assert.IsNotNull(fileLocation);
+        //}
 
         [TestMethod]
         public void TestGetFileCopyToDestinationInLocation()
@@ -281,7 +281,7 @@ namespace ReportingTest
             string fileGetLatest = fp.GetLatestFileName(fileSource, "u_*.log");
             string fileFullPath = fileSource + fileGetLatest;
             //copy file
-            FileFunctions.CopyFileToBackUp(fileFullPath, filePath);
+            FileFunctions.CopyFile(fileFullPath, filePath,true);
             //check if file exist
             
             bool bSucess = true;
@@ -305,7 +305,7 @@ namespace ReportingTest
 
             //move file from here
             string fileSource = FileFunctions.GetFileProcessingInDirectory(filePath);
-            string fileDestinationPath = FileFunctions.GetFileBackUpDirectory(filePath);
+            string fileDestinationPath = FileFunctions.GetFileProcessingInDirectory(filePath);
 
             //get lastest file 
             string latestFileName = fp.GetLatestFileName(fileSource, "u_*.log");
@@ -412,62 +412,65 @@ namespace ReportingTest
         [TestMethod]
         public void TestGetFileNameiisLogsFromStatus()
         {
-            string filepath = FileFunctions.GetStatusFileDirectory();
+            //status file name with directory
+            string statusFileName = ConfigurationManager.AppSettings["statusFileName"];
+            string statusFileAndDirectory = FileFunctions.GetStatusFileDirectory() + statusFileName + ".txt";
 
-            string fileName = "status";
-            string filter = string.Empty;
+            //backup file name with directory
+            string processedLogFileName = ConfigurationManager.AppSettings["ProcessedFileLogFileName"];
+            string processedLogFileAndDirectory = FileFunctions.ProcessedFileLogDirectory() + processedLogFileName + ".log";
 
-            string statusFileFullName = filepath + fileName + ".txt";
-            filter = "u_ex";
-
-            string dir = string.Empty;
+            string filter = "u_ex";
+            
             List<string> fileToRead = new List<string>();
-            bool isEmpty = !System.IO.Directory.EnumerateFiles(filepath).Any();
+            bool isEmpty = !System.IO.Directory.EnumerateFiles(statusFileAndDirectory).Any();
             if (!isEmpty)
             {
-                fileToRead = FileFunctions.GetFileNameToReadFile(statusFileFullName, filter, EnumFileProcessor.eFilePath.IisLogs);
+                fileToRead = FileFunctions.GetFileNameToReadFile(statusFileAndDirectory, processedLogFileAndDirectory, filter, EnumFileProcessor.eFilePath.IisLogs);
             }
             Assert.IsNotNull(fileToRead);
         }
         [TestMethod]
         public void TestGetFileNameAuditLogsFromStatus()
         {
-            string filepath = FileFunctions.GetStatusFileDirectory();
 
-            string fileName = "status";
-            string filter = string.Empty;
+            //status file name with directory
+            string statusFileName = ConfigurationManager.AppSettings["statusFileName"];
+            string statusFileAndDirectory = FileFunctions.GetStatusFileDirectory() + statusFileName + ".txt";
 
-            string statusFileFullName = filepath + fileName + ".txt";
-            filter = "Audit_INDY-PRM";
+            //backup file name with directory
+            string processedLogFileName = ConfigurationManager.AppSettings["ProcessedFileLogFileName"];
+            string processedLogFileAndDirectory = FileFunctions.ProcessedFileLogDirectory() + processedLogFileName + ".log";
 
-            string dir = string.Empty;
+            string filter = "Audit_INDY-PRM";
+            
             List<string> fileToRead = new List<string>();
-            bool isEmpty = !System.IO.Directory.EnumerateFiles(filepath).Any();
+            bool isEmpty = !System.IO.Directory.EnumerateFiles(statusFileAndDirectory).Any();
             if (!isEmpty)
             {
-                dir = System.IO.Path.GetDirectoryName(filepath);
-                fileToRead = FileFunctions.GetFileNameToReadFile(statusFileFullName, filter, EnumFileProcessor.eFilePath.QVAuditLogs);
+                fileToRead = FileFunctions.GetFileNameToReadFile(statusFileAndDirectory, processedLogFileAndDirectory, 
+                                                                                            filter, EnumFileProcessor.eFilePath.QVAuditLogs);
             }
             Assert.IsNotNull(fileToRead);
         }
         [TestMethod]
         public void TestGetFileNameSessionLogsFromStatus()
         {
-            string filepath = FileFunctions.GetStatusFileDirectory();
+            //status file name with directory
+            string statusFileName = ConfigurationManager.AppSettings["statusFileName"];
+            string statusFileAndDirectory = FileFunctions.GetStatusFileDirectory() + statusFileName + ".txt";
 
-            string fileName = "status";
-            string filter = string.Empty;
-
-            string statusFileFullName = filepath + fileName + ".txt";
-            filter = "Sessions_INDY-PRM";
-
-            string dir = string.Empty;
+            //backup file name with directory
+            string processedLogFileName = ConfigurationManager.AppSettings["ProcessedFileLogFileName"];
+            string processedLogFileAndDirectory = FileFunctions.ProcessedFileLogDirectory() + processedLogFileName + ".log";
+            
+            string filter = "Sessions_INDY-PRM";
             List<string> fileToRead = new List<string>();
-            bool isEmpty = !System.IO.Directory.EnumerateFiles(filepath).Any();
+            bool isEmpty = !System.IO.Directory.EnumerateFiles(statusFileAndDirectory).Any();
             if (!isEmpty)
             {
-                dir = System.IO.Path.GetDirectoryName(filepath);
-                fileToRead = FileFunctions.GetFileNameToReadFile(statusFileFullName, filter, EnumFileProcessor.eFilePath.QVSessionLogs);
+                fileToRead = FileFunctions.GetFileNameToReadFile(statusFileAndDirectory, processedLogFileAndDirectory,
+                                                                            filter, EnumFileProcessor.eFilePath.QVSessionLogs);
             }
             Assert.IsNotNull(fileToRead);
         }

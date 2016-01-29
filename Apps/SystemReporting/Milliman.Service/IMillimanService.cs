@@ -1,10 +1,10 @@
-﻿using Milliman.Entities.Models;
+﻿using SystemReporting.Entities.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace Milliman.Service
+namespace SystemReporting.Service
 {
     public interface IMillimanService
     {

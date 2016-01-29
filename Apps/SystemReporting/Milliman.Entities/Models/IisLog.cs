@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Milliman.Entities.Models
+namespace SystemReporting.Entities.Models
 {
     [Serializable()]
     [Table("iislog", Schema = "public")]

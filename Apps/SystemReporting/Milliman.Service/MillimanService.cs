@@ -1,11 +1,11 @@
-﻿using Milliman.Data.Repository;
-using Milliman.Entities.Models;
+﻿using SystemReporting.Data.Repository;
+using SystemReporting.Entities.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace Milliman.Service
+namespace SystemReporting.Service
 {
     public partial class MillimanService : IMillimanService
     {

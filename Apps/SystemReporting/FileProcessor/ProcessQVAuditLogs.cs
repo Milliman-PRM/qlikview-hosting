@@ -1,4 +1,4 @@
-﻿using Milliman.Entities.Proxy;
+﻿using SystemReporting.Entities.Proxy;
 using ReportingCommon;
 using System;
 using System.Collections.Generic;
@@ -12,15 +12,13 @@ namespace FileProcessor
 {
     public class ProcessQVAuditLogs : ControllerAccess, IFileProcessor
     {
-        DateTime _dateTimeReceived = new DateTime();
-
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="args"></param>
         public ProcessQVAuditLogs(string args)
         {
-            _dateTimeReceived = DateTime.Now;
+
         }
 
         /// <summary>
@@ -35,15 +33,12 @@ namespace FileProcessor
                 if (args.Length > 0)
                 {
                     EnumFileProcessor.eFilePath efilePath = EnumFileProcessor.eFilePath.QVAuditLogs;
-                    //Move from ProductionLogsTest\QVLogs\
-                    var dirInfo = new DirectoryInfo(ConfigurationManager.AppSettings["QVAuditLogsS"]);
+
                     //ProductionLogsTest\QVLogs\
                     var sourceDirectory = new DirectoryInfo(FileFunctions.GetFileOriginalSourceDirectory(efilePath));
 
-                    //Move To   LogFileProcessor\IN\QVLogs\
-                    var destInDirectory = FileFunctions.GetFileProcessingInDirectory(efilePath);
-                    //backUp    LogFileProcessor\BackUp\QVLogs
-                    var backUpDirectory = FileFunctions.GetFileBackUpDirectory(efilePath);
+                    //Move To   LogFileProcessor\IN\
+                    var destinationInDirectory = FileFunctions.GetFileProcessingInDirectory(efilePath);
 
                     string filter = "Audit_INDY-PRM";
                     if (sourceDirectory.Exists)
@@ -52,13 +47,20 @@ namespace FileProcessor
 
                         foreach (var file in listFileToProcess)
                         {
-                            string fileFullNameWithSourcePath = dirInfo + file;
-                            if (File.Exists(fileFullNameWithSourcePath))
+                            string fileNameWithsourceDirectory = sourceDirectory + file;
+                            if (File.Exists(fileNameWithsourceDirectory))
                             {
-                                FileFunctions.CopyFile(dirInfo + file, efilePath, true);
-                                blnSucessful = ProcessLogFile(destInDirectory + file);
+                                FileFunctions.CopyFile(sourceDirectory + file, efilePath, true);
+                                blnSucessful = ProcessLogFile(destinationInDirectory + file);
                                 if (blnSucessful)
-                                    File.Move(destInDirectory + file, backUpDirectory + file);
+                                {
+                                    File.Delete(destinationInDirectory + file);
+                                    BaseFileProcessor.LogProcessedFile(string.Join(",", listFileToProcess.ToArray()));
+                                }
+                                else
+                                {
+                                    BaseFileProcessor.LogError(null, "ProcessIisLogs: Failed processing fileInfo || " + fileNameWithsourceDirectory);
+                                }
                             }
                         }
                     }
@@ -74,9 +76,9 @@ namespace FileProcessor
         /// This method process file by first parsing it, and then generating the proxy entity
         /// </summary>
         /// <param name="args"></param>
-        public bool ProcessLogFile(string fileFullNameWithSourcePath)
+        public bool ProcessLogFile(string fileNameWithDirectory)
         {
-            FileInfo fileInfo = new FileInfo(fileFullNameWithSourcePath);
+            FileInfo fileInfo = new FileInfo(fileNameWithDirectory);
             FileFunctions ff = new FileFunctions();
 
             bool blnSucessful = false;
@@ -153,14 +155,6 @@ namespace FileProcessor
                     }
                     //process the list
                     blnSucessful = ControllerAuditLog.ProcessLogs(listProxyLogs);
-                    if (blnSucessful)
-                    {
-                        BaseFileProcessor.LogError(null, "ProcessQVAuditLogs: Successfully processed fileInfo " + fileFullNameWithSourcePath);
-                    }
-                    else
-                    {
-                        BaseFileProcessor.LogError(null, "ProcessQVAuditLogs: Failed processing fileInfo " + fileFullNameWithSourcePath);
-                    }
                 }
             }
             catch (Exception ex)

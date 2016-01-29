@@ -6,7 +6,7 @@ using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Milliman.Utilities.Email
+namespace SystemReporting.Utilities.Email
 {
     /// <summary>
     /// http://referencesource.microsoft.com/#System/net/System/Net/mail/Message.cs,0800189429387e13

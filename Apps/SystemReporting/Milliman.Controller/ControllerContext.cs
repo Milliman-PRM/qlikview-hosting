@@ -1,6 +1,6 @@
-﻿using Milliman.Controller.BusinessLogic.Controller;
+﻿using SystemReporting.Controller.BusinessLogic.Controller;
 
-namespace Milliman.Controller
+namespace SystemReporting.Controller
 {
     public static class ControllerContext
     {

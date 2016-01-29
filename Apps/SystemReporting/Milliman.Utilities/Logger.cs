@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Milliman.Utilities
+namespace SystemReporting.Utilities
 {
     public class Logger
     {

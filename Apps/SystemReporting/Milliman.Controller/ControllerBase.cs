@@ -1,11 +1,11 @@
-﻿using Milliman.Controller.BusinessLogic.Controller;
-using Milliman.Service;
-using Milliman.Utilities;
+﻿using SystemReporting.Controller.BusinessLogic.Controller;
+using SystemReporting.Service;
+using SystemReporting.Utilities;
 using System;
 using System.Configuration;
 
 
-namespace Milliman.Controller
+namespace SystemReporting.Controller
 {
     /// <summary>
     /// Base class in hierarchy

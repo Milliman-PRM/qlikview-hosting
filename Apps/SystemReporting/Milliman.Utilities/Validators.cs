@@ -1,4 +1,4 @@
-﻿using Milliman.Utilities.ExceptionHandling;
+﻿using SystemReporting.Utilities.ExceptionHandling;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -6,10 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using C = Milliman.Utilities.Constants;
+using C = SystemReporting.Utilities.Constants;
 
 
-namespace Milliman.Utilities
+namespace SystemReporting.Utilities
 {
     public static class Validators
     {

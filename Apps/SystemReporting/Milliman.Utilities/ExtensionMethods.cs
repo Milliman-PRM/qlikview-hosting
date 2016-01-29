@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Milliman.Utilities
+namespace SystemReporting.Utilities
 {
     public static class ExtensionMethods
     {

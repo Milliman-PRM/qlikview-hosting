@@ -1,14 +1,14 @@
-﻿using Milliman.Data.Database;
-using Milliman.Data.Repository;
-using Milliman.Entities.Models;
-using Milliman.Entities.Proxy;
-using Milliman.Service;
+﻿using SystemReporting.Data.Database;
+using SystemReporting.Data.Repository;
+using SystemReporting.Entities.Models;
+using SystemReporting.Entities.Proxy;
+using SystemReporting.Service;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
-namespace Milliman.Controller.BusinessLogic.Controller
+namespace SystemReporting.Controller.BusinessLogic.Controller
 {
     public class IisLogController : ControllerBase
     {

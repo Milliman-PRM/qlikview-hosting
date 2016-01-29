@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Milliman.Entities.Proxy
+namespace SystemReporting.Entities.Proxy
 {
     [Serializable()]
     public class ProxyIisLog

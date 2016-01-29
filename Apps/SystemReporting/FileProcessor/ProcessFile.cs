@@ -1,4 +1,4 @@
-﻿using Milliman.Utilities;
+﻿using SystemReporting.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +30,10 @@ namespace FileProcessor
              *  Qlick view Session: Sessions_*.log
              */
             IFileProcessor proc = null;
+
+            Console.WriteLine("----------------------------------------");
             Console.WriteLine("Processing data for file: {0}", args);
+            Console.WriteLine("----------------------------------------");
 
             //this can be empty
             string fullFilePath = string.Empty;
