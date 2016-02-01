@@ -28,12 +28,8 @@ namespace BayClinicEmrLib
 
             MongoDbConnection MongoCxn = new MongoDbConnection(CxParams);
 
-            // Temporary for connection test
-            List<string> Names = MongoCxn.GetCollectionNames();
-
             foreach (string Zip in Directory.GetFiles(zipFolder, @"*.zip").OrderBy(name => Directory.GetLastWriteTime(name)))
             {
-                //using (ZipArchive archive = ZipFile.OpenRead(zipPath))
                 using (ZipArchive archive = ZipFile.OpenRead(Zip))
                 {
                     foreach (ZipArchiveEntry entry in archive.Entries.OrderBy(entry => entry.LastWriteTime))

@@ -29,9 +29,6 @@ namespace NorthBendUnityLib
 
             MongoCxn = new MongoDbConnection(CxParams);
 
-            // Temporary for connection test
-            List<string> Names = MongoCxn.GetCollectionNames();
-
             foreach (string Zip in Directory.GetFiles(zipFolder, @"*.zip").OrderBy(name => Directory.GetLastWriteTime(name)))
             {
                 using (ZipArchive archive = ZipFile.OpenRead(Zip))
