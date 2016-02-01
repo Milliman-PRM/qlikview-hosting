@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CustomFileBrowserProvider>
+  <Paths>
+    <genericHandlerPath>FileSystemHandler.ashx</genericHandlerPath>
+  </Paths>
+  <Mappings>
+    <Mapping>
+      <PhysicalPath>
+        <![CDATA[D:\prmsystem\QVDocuments]]>
+      </PhysicalPath>
+      <VirtualPath><![CDATA[QVDocuments]]></VirtualPath>
+    </Mapping>
+  </Mappings>
+</CustomFileBrowserProvider>

@@ -1,0 +1,535 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://HCIntel.Cloudapp.net/MPMCS" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://HCIntel.Cloudapp.net/MPMCS" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://HCIntel.Cloudapp.net/MPMCS">
+      <s:element name="ValidUser">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Pswd" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ValidUserResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="ValidUserResult" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetGroups">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetGroupsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetGroupsResult" type="tns:ArrayOfString" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfString">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="CreateGroup">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreateGroupResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="CreateGroupResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteGroup">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteGroupResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="DeleteGroupResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PutBinarySlice">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="VirtualPath" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Item" type="s:base64Binary" />
+            <s:element minOccurs="1" maxOccurs="1" name="ItemLength" type="s:long" />
+            <s:element minOccurs="1" maxOccurs="1" name="DeleteBeforeWrite" type="s:boolean" />
+            <s:element minOccurs="1" maxOccurs="1" name="CreateDirectory" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PutBinarySliceResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PutBinarySliceResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ProcessProject">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="VirtualPath" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ProcessProjectResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ProcessProjectResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Get">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="VirtualDirItem" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetResult" type="s:base64Binary" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetAllProjectFiles">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="VirtualDirectory" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetAllProjectFilesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetAllProjectFilesResult" type="tns:ArrayOfString" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTextFile">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="VirtualDirItem" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTextFileResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetTextFileResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetHash">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="XMLQualifiedDirItem" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetHashResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetHashResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetFileListHash">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="VirtualQualifedFiles" type="tns:ArrayOfString" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetFileListHashResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetFileListHashResult" type="tns:ArrayOfString" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetIndexsAndSelections">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="VirtualPathAndProject" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetIndexsAndSelectionsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetIndexsAndSelectionsResult" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="ProjectMissing" type="s:boolean" />
+            <s:element minOccurs="1" maxOccurs="1" name="IsErrorCondition" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="ValidUserSoapIn">
+    <wsdl:part name="parameters" element="tns:ValidUser" />
+  </wsdl:message>
+  <wsdl:message name="ValidUserSoapOut">
+    <wsdl:part name="parameters" element="tns:ValidUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetGroupsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetGroups" />
+  </wsdl:message>
+  <wsdl:message name="GetGroupsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetGroupsResponse" />
+  </wsdl:message>
+  <wsdl:message name="CreateGroupSoapIn">
+    <wsdl:part name="parameters" element="tns:CreateGroup" />
+  </wsdl:message>
+  <wsdl:message name="CreateGroupSoapOut">
+    <wsdl:part name="parameters" element="tns:CreateGroupResponse" />
+  </wsdl:message>
+  <wsdl:message name="DeleteGroupSoapIn">
+    <wsdl:part name="parameters" element="tns:DeleteGroup" />
+  </wsdl:message>
+  <wsdl:message name="DeleteGroupSoapOut">
+    <wsdl:part name="parameters" element="tns:DeleteGroupResponse" />
+  </wsdl:message>
+  <wsdl:message name="PutBinarySliceSoapIn">
+    <wsdl:part name="parameters" element="tns:PutBinarySlice" />
+  </wsdl:message>
+  <wsdl:message name="PutBinarySliceSoapOut">
+    <wsdl:part name="parameters" element="tns:PutBinarySliceResponse" />
+  </wsdl:message>
+  <wsdl:message name="ProcessProjectSoapIn">
+    <wsdl:part name="parameters" element="tns:ProcessProject" />
+  </wsdl:message>
+  <wsdl:message name="ProcessProjectSoapOut">
+    <wsdl:part name="parameters" element="tns:ProcessProjectResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetSoapIn">
+    <wsdl:part name="parameters" element="tns:Get" />
+  </wsdl:message>
+  <wsdl:message name="GetSoapOut">
+    <wsdl:part name="parameters" element="tns:GetResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetAllProjectFilesSoapIn">
+    <wsdl:part name="parameters" element="tns:GetAllProjectFiles" />
+  </wsdl:message>
+  <wsdl:message name="GetAllProjectFilesSoapOut">
+    <wsdl:part name="parameters" element="tns:GetAllProjectFilesResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetTextFileSoapIn">
+    <wsdl:part name="parameters" element="tns:GetTextFile" />
+  </wsdl:message>
+  <wsdl:message name="GetTextFileSoapOut">
+    <wsdl:part name="parameters" element="tns:GetTextFileResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetHashSoapIn">
+    <wsdl:part name="parameters" element="tns:GetHash" />
+  </wsdl:message>
+  <wsdl:message name="GetHashSoapOut">
+    <wsdl:part name="parameters" element="tns:GetHashResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetFileListHashSoapIn">
+    <wsdl:part name="parameters" element="tns:GetFileListHash" />
+  </wsdl:message>
+  <wsdl:message name="GetFileListHashSoapOut">
+    <wsdl:part name="parameters" element="tns:GetFileListHashResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetIndexsAndSelectionsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetIndexsAndSelections" />
+  </wsdl:message>
+  <wsdl:message name="GetIndexsAndSelectionsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetIndexsAndSelectionsResponse" />
+  </wsdl:message>
+  <wsdl:portType name="MPMCServicesSoap">
+    <wsdl:operation name="ValidUser">
+      <wsdl:input message="tns:ValidUserSoapIn" />
+      <wsdl:output message="tns:ValidUserSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetGroups">
+      <wsdl:input message="tns:GetGroupsSoapIn" />
+      <wsdl:output message="tns:GetGroupsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateGroup">
+      <wsdl:input message="tns:CreateGroupSoapIn" />
+      <wsdl:output message="tns:CreateGroupSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteGroup">
+      <wsdl:input message="tns:DeleteGroupSoapIn" />
+      <wsdl:output message="tns:DeleteGroupSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PutBinarySlice">
+      <wsdl:input message="tns:PutBinarySliceSoapIn" />
+      <wsdl:output message="tns:PutBinarySliceSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ProcessProject">
+      <wsdl:input message="tns:ProcessProjectSoapIn" />
+      <wsdl:output message="tns:ProcessProjectSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Get">
+      <wsdl:input message="tns:GetSoapIn" />
+      <wsdl:output message="tns:GetSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllProjectFiles">
+      <wsdl:input message="tns:GetAllProjectFilesSoapIn" />
+      <wsdl:output message="tns:GetAllProjectFilesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTextFile">
+      <wsdl:input message="tns:GetTextFileSoapIn" />
+      <wsdl:output message="tns:GetTextFileSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetHash">
+      <wsdl:input message="tns:GetHashSoapIn" />
+      <wsdl:output message="tns:GetHashSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetFileListHash">
+      <wsdl:input message="tns:GetFileListHashSoapIn" />
+      <wsdl:output message="tns:GetFileListHashSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetIndexsAndSelections">
+      <wsdl:input message="tns:GetIndexsAndSelectionsSoapIn" />
+      <wsdl:output message="tns:GetIndexsAndSelectionsSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="MPMCServicesSoap" type="tns:MPMCServicesSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="ValidUser">
+      <soap:operation soapAction="http://HCIntel.Cloudapp.net/MPMCS/ValidUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetGroups">
+      <soap:operation soapAction="http://HCIntel.Cloudapp.net/MPMCS/GetGroups" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateGroup">
+      <soap:operation soapAction="http://HCIntel.Cloudapp.net/MPMCS/CreateGroup" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteGroup">
+      <soap:operation soapAction="http://HCIntel.Cloudapp.net/MPMCS/DeleteGroup" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PutBinarySlice">
+      <soap:operation soapAction="http://HCIntel.Cloudapp.net/MPMCS/PutBinarySlice" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProcessProject">
+      <soap:operation soapAction="http://HCIntel.Cloudapp.net/MPMCS/ProcessProject" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Get">
+      <soap:operation soapAction="http://HCIntel.Cloudapp.net/MPMCS/Get" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllProjectFiles">
+      <soap:operation soapAction="http://HCIntel.Cloudapp.net/MPMCS/GetAllProjectFiles" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTextFile">
+      <soap:operation soapAction="http://HCIntel.Cloudapp.net/MPMCS/GetTextFile" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetHash">
+      <soap:operation soapAction="http://HCIntel.Cloudapp.net/MPMCS/GetHash" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFileListHash">
+      <soap:operation soapAction="http://HCIntel.Cloudapp.net/MPMCS/GetFileListHash" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetIndexsAndSelections">
+      <soap:operation soapAction="http://HCIntel.Cloudapp.net/MPMCS/GetIndexsAndSelections" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="MPMCServicesSoap12" type="tns:MPMCServicesSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="ValidUser">
+      <soap12:operation soapAction="http://HCIntel.Cloudapp.net/MPMCS/ValidUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetGroups">
+      <soap12:operation soapAction="http://HCIntel.Cloudapp.net/MPMCS/GetGroups" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateGroup">
+      <soap12:operation soapAction="http://HCIntel.Cloudapp.net/MPMCS/CreateGroup" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteGroup">
+      <soap12:operation soapAction="http://HCIntel.Cloudapp.net/MPMCS/DeleteGroup" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PutBinarySlice">
+      <soap12:operation soapAction="http://HCIntel.Cloudapp.net/MPMCS/PutBinarySlice" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ProcessProject">
+      <soap12:operation soapAction="http://HCIntel.Cloudapp.net/MPMCS/ProcessProject" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Get">
+      <soap12:operation soapAction="http://HCIntel.Cloudapp.net/MPMCS/Get" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllProjectFiles">
+      <soap12:operation soapAction="http://HCIntel.Cloudapp.net/MPMCS/GetAllProjectFiles" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTextFile">
+      <soap12:operation soapAction="http://HCIntel.Cloudapp.net/MPMCS/GetTextFile" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetHash">
+      <soap12:operation soapAction="http://HCIntel.Cloudapp.net/MPMCS/GetHash" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFileListHash">
+      <soap12:operation soapAction="http://HCIntel.Cloudapp.net/MPMCS/GetFileListHash" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetIndexsAndSelections">
+      <soap12:operation soapAction="http://HCIntel.Cloudapp.net/MPMCS/GetIndexsAndSelections" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="MPMCServices">
+    <wsdl:port name="MPMCServicesSoap" binding="tns:MPMCServicesSoap">
+      <soap:address location="https://prm.milliman.com/prm_projectmanagementservices/MPMCServices.asmx" />
+    </wsdl:port>
+    <wsdl:port name="MPMCServicesSoap12" binding="tns:MPMCServicesSoap12">
+      <soap12:address location="https://prm.milliman.com/prm_projectmanagementservices/MPMCServices.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

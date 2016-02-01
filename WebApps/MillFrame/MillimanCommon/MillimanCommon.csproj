@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4CF8C253-1952-4F25-A169-542FEADE27B4}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MillimanCommon</RootNamespace>
+    <AssemblyName>MillimanCommon</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Polenter.SharpSerializer">
+      <HintPath>..\3rdPartyAssemblies\Polenter.SharpSerializer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Telerik.Web.Design, Version=2015.2.826.40, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL" />
+    <Reference Include="Telerik.Web.UI">
+      <HintPath>C:\Program Files (x86)\Telerik\UI for ASP.NET AJAX Q2 2015\Bin40\Telerik.Web.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Web.UI.Skins">
+      <HintPath>C:\Program Files (x86)\Telerik\UI for ASP.NET AJAX Q2 2015\Bin40\Telerik.Web.UI.Skins.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Documents.Core">
+      <HintPath>C:\Program Files (x86)\Telerik\UI for ASP.NET AJAX Q2 2015\Bin40\..\AdditionalLibraries\Bin40\Telerik.Windows.Documents.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Documents.Flow">
+      <HintPath>C:\Program Files (x86)\Telerik\UI for ASP.NET AJAX Q2 2015\Bin40\..\AdditionalLibraries\Bin40\Telerik.Windows.Documents.Flow.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Documents.Spreadsheet">
+      <HintPath>C:\Program Files (x86)\Telerik\UI for ASP.NET AJAX Q2 2015\Bin40\..\AdditionalLibraries\Bin40\Telerik.Windows.Documents.Spreadsheet.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml">
+      <HintPath>C:\Program Files (x86)\Telerik\UI for ASP.NET AJAX Q2 2015\Bin40\..\AdditionalLibraries\Bin40\Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Maths">
+      <HintPath>C:\Program Files (x86)\Telerik\UI for ASP.NET AJAX Q2 2015\Bin40\..\AdditionalLibraries\Bin40\Telerik.Windows.Maths.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Zip">
+      <HintPath>C:\Program Files (x86)\Telerik\UI for ASP.NET AJAX Q2 2015\Bin40\..\AdditionalLibraries\Bin40\Telerik.Windows.Zip.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AutoCrypt.cs" />
+    <Compile Include="CacheEntry.cs" />
+    <Compile Include="ClientInteraction.cs" />
+    <Compile Include="CustomExtensions.cs" />
+    <Compile Include="CustomUserDownloads.cs" />
+    <Compile Include="DownloadDescriptions.cs" />
+    <Compile Include="FileSignature.cs" />
+    <Compile Include="FileSplitter.cs" />
+    <Compile Include="HtmlConversion.cs" />
+    <Compile Include="ImageUtilities.cs" />
+    <Compile Include="InlineImage.cs" />
+    <Compile Include="MillimanEmail.cs" />
+    <Compile Include="MillimanGroupMap.cs" />
+    <Compile Include="PerformanceInfo.cs" />
+    <Compile Include="Predefined.cs" />
+    <Compile Include="ProjectSettings.cs" />
+    <Compile Include="QVWUtilities\NewAutoInclusionProcessor.cs" />
+    <Compile Include="QVWUtilities\QVWReportBank.cs" />
+    <Compile Include="QVWUtilities\QVWReportBankProcessor.cs" />
+    <Compile Include="QVWUtilities\QVWReportGenerator.cs" />
+    <Compile Include="QVWUtilities\QVWUtilities.cs" />
+    <Compile Include="QVWUtilities\ReduceConfig.cs" />
+    <Compile Include="QVWUtilities\ReducedQVWUtilities.cs" />
+    <Compile Include="Report.cs" />
+    <Compile Include="SecureLink.cs" />
+    <Compile Include="SuperGroup.cs" />
+    <Compile Include="TreeUtilities\DropTableProcessor.cs" />
+    <Compile Include="TreeUtilities\TreeBuilder.cs" />
+    <Compile Include="TreeUtilities\TreeToFileUtilities.cs" />
+    <Compile Include="UI\DynamicTable.cs" />
+    <Compile Include="UNCAccess.cs" />
+    <Compile Include="UserAccessList.cs" />
+    <Compile Include="UserRepo.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserRepoAccess.cs" />
+    <Compile Include="Utilities.cs" />
+    <Compile Include="XMLFileSignature.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

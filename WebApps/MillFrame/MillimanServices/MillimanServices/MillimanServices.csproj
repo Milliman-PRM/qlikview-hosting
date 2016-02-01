@@ -1,0 +1,288 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{2B912551-FDE7-4BFC-820C-8AB0D6FC5CD5}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Milliman</RootNamespace>
+    <AssemblyName>MillimanServices</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <TargetFrameworkProfile />
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ComponentPro.Common">
+      <HintPath>..\..\..\ComponentPro\UltimateSaml v5.2.8221\Bin\Net4_0\ComponentPro.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="ComponentPro.Saml">
+      <HintPath>..\..\..\ComponentPro\UltimateSaml v5.2.8221\Bin\Net4_0\ComponentPro.Saml.dll</HintPath>
+    </Reference>
+    <Reference Include="MercuryReuse">
+      <HintPath>..\..\3rdPartyAssemblies\MercuryReuse.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="MillimanCommon">
+      <HintPath>..\..\MyWSAT35\Bin\MillimanCommon.dll</HintPath>
+    </Reference>
+    <Reference Include="Polenter.SharpSerializer, Version=2.18.0.0, Culture=neutral, PublicKeyToken=8f4f20011571ee5f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\3rdPartyAssemblies\Polenter.SharpSerializer.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Telerik.Web.UI, Version=2015.2.826.40, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\Telerik\UI for ASP.NET AJAX Q2 2015\Bin40\Telerik.Web.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Web.UI.Skins, Version=2015.2.826.40, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\Telerik\UI for ASP.NET AJAX Q2 2015\Bin40\Telerik.Web.UI.Skins.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Documents.Core, Version=2015.2.826.40, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\Telerik\UI for ASP.NET AJAX Q2 2015\Bin40\..\AdditionalLibraries\Bin40\Telerik.Windows.Documents.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Documents.Flow, Version=2015.2.826.40, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\Telerik\UI for ASP.NET AJAX Q2 2015\Bin40\..\AdditionalLibraries\Bin40\Telerik.Windows.Documents.Flow.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Documents.Spreadsheet, Version=2015.2.826.40, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\Telerik\UI for ASP.NET AJAX Q2 2015\Bin40\..\AdditionalLibraries\Bin40\Telerik.Windows.Documents.Spreadsheet.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml, Version=2015.2.826.40, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\Telerik\UI for ASP.NET AJAX Q2 2015\Bin40\..\AdditionalLibraries\Bin40\Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Maths, Version=2015.2.826.40, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\Telerik\UI for ASP.NET AJAX Q2 2015\Bin40\..\AdditionalLibraries\Bin40\Telerik.Windows.Maths.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Zip, Version=2015.2.826.40, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\Telerik\UI for ASP.NET AJAX Q2 2015\Bin40\..\AdditionalLibraries\Bin40\Telerik.Windows.Zip.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Administration.asmx" />
+    <Content Include="DebugView.aspx" />
+    <Content Include="Images\Document-icon.png" />
+    <Content Include="Images\NortonSecured.png" />
+    <Content Include="Images\PointLeftArrow.png" />
+    <Content Include="Images\PointRightArrow.png" />
+    <Content Include="Images\PRM_Logo.png" />
+    <Content Include="Images\transparent16x16.gif" />
+    <Content Include="time.aspx" />
+    <Content Include="UnspecifiedIssue.html" />
+    <Content Include="Css\Milliman_small.jpg" />
+    <Content Include="Images\applychanges.png" />
+    <Content Include="Images\missing.gif" />
+    <Content Include="Images\New_LoginSplash.png" />
+    <Content Include="Images\New_MillimanHeader.png" />
+    <Content Include="Images\Next.png" />
+    <Content Include="Images\SignIn.png" />
+    <Content Include="Images\star-blue-icon.png" />
+    <Content Include="Images\warning-orange.png" />
+    <Content Include="Images\watermark.png" />
+    <Content Include="Javascript\jquery.min.js" />
+    <Content Include="Javascript\WaterMark.min.js" />
+    <Content Include="LostPassword.aspx" />
+    <Content Include="HTML\NotApprovedIssue.html" />
+    <Content Include="HTML\NotAuthorizedIssue.html" />
+    <Content Include="Css\costmodels.png" />
+    <Content Include="Css\divider.gif" />
+    <Content Include="Css\hover.gif" />
+    <Content Include="Css\off.gif" />
+    <Content Include="Css\PopulationReport.png" />
+    <Content Include="HTML\DashboardMissingIssue.html" />
+    <Content Include="Css\btn.png" />
+    <Content Include="Css\btnact.png" />
+    <Content Include="Css\dashboardplaceholder.png" />
+    <Content Include="Css\loginbackground.jpg" />
+    <Content Include="Css\Logo.gif" />
+    <Content Include="Css\Milliman.jpg" />
+    <Content Include="Css\Styles.css" />
+    <Content Include="Default.aspx" />
+    <Content Include="Global.asax" />
+    <Content Include="images\database.png" />
+    <Content Include="images\dialog-bg.png" />
+    <Content Include="images\header.gif" />
+    <Content Include="images\Info-blue.png" />
+    <Content Include="images\nodatabase.png" />
+    <Content Include="images\warning-blue.png" />
+    <Content Include="MillimanLogout.aspx" />
+    <Content Include="Site.css" />
+    <Content Include="ToDo_Notes.txt" />
+    <Content Include="UserLogin.aspx" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Code\SqlStoredProcedureProfileProvider.cs" />
+    <Content Include="App_Code\SqlTableProfileProvider.cs" />
+    <Compile Include="Administration.asmx.cs">
+      <DependentUpon>Administration.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Data\ExternalGroups.cs" />
+    <Compile Include="Data\ExternalGroupToInternalGroupMap.cs" />
+    <Compile Include="Data\ExternalUsers.cs" />
+    <Compile Include="DebugHelper.cs" />
+    <Compile Include="DebugView.aspx.cs">
+      <DependentUpon>DebugView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DebugView.aspx.designer.cs">
+      <DependentUpon>DebugView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="LostPassword.aspx.cs">
+      <DependentUpon>LostPassword.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="LostPassword.aspx.designer.cs">
+      <DependentUpon>LostPassword.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MillimanLogout.aspx.cs">
+      <DependentUpon>MillimanLogout.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MillimanLogout.aspx.designer.cs">
+      <DependentUpon>MillimanLogout.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reflector.ashx.cs">
+      <DependentUpon>Reflector.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="SystemCredentials.cs" />
+    <Compile Include="time.aspx.cs">
+      <DependentUpon>time.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="time.aspx.designer.cs">
+      <DependentUpon>time.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="UserLogin.aspx.cs">
+      <DependentUpon>UserLogin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserLogin.aspx.designer.cs">
+      <DependentUpon>UserLogin.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Util.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\PublishProfiles\MillimanDebug.pubxml" />
+    <None Include="Properties\PublishProfiles\MillimanProduction.pubxml" />
+    <Content Include="Reflector.ashx" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\MillimanCommon\MillimanCommon.csproj">
+      <Project>{4cf8c253-1952-4f25-a169-542feade27b4}</Project>
+      <Name>MillimanCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MillimanCommon\MillimanCommon.csproj">
+      <Project>{4cf8c253-1952-4f25-a169-542feade27b4}</Project>
+      <Name>MillimanCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MillimanReportReduction\MillimanReportReduction.csproj">
+      <Project>{e02b1c1d-33e8-4565-934d-13e6d7c36869}</Project>
+      <Name>MillimanReportReduction</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>2184</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:2333/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

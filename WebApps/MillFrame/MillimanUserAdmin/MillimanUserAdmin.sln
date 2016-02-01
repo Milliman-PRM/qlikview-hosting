@@ -1,0 +1,35 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "MillimanUserAdmin", ".", "{4873B8F5-2675-4583-8460-A88281063DAF}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv3.5"
+		Debug.AspNetCompiler.VirtualPath = "/MillimanUserAdmin"
+		Debug.AspNetCompiler.PhysicalPath = "..\..\..\..\..\..\Dev\MillimanUserAdmin\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\MillimanUserAdmin\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/MillimanUserAdmin"
+		Release.AspNetCompiler.PhysicalPath = "..\..\..\..\..\..\Dev\MillimanUserAdmin\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\MillimanUserAdmin\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "1148"
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4873B8F5-2675-4583-8460-A88281063DAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4873B8F5-2675-4583-8460-A88281063DAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
