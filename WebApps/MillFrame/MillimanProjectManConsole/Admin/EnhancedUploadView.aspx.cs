@@ -97,7 +97,7 @@ public partial class EnhancedUploadView : System.Web.UI.Page
         {
             string FullLocationWithName = MillimanCommon.Utilities.ConvertHexToString(Request["loc"]);
             string Group = string.Empty;
-            bool CanEmit = false;
+            //bool CanEmit = false;
             MillimanCommon.XMLFileSignature XMLFS = new MillimanCommon.XMLFileSignature(FullLocationWithName);
             foreach (KeyValuePair<string, string> Item in XMLFS.SignatureDictionary)
             {
@@ -107,8 +107,8 @@ public partial class EnhancedUploadView : System.Web.UI.Page
                         Group += "_";
                     Group += Item.Value;
                 }
-                if (string.Compare(Item.Key, "can_emit", true) == 0)
-                    CanEmit = true;
+                //if (string.Compare(Item.Key, "can_emit", true) == 0)
+                //    CanEmit = true;
             }
 
             _Settings = new MillimanCommon.ProjectSettings();

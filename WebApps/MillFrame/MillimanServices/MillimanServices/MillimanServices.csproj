@@ -24,6 +24,7 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -43,9 +44,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ComponentPro.Common">
-      <HintPath>..\..\..\ComponentPro\UltimateSaml v5.2.8221\Bin\Net4_0\ComponentPro.Common.dll</HintPath>
-    </Reference>
     <Reference Include="ComponentPro.Saml">
       <HintPath>..\..\..\ComponentPro\UltimateSaml v5.2.8221\Bin\Net4_0\ComponentPro.Saml.dll</HintPath>
     </Reference>
@@ -53,9 +51,6 @@
       <HintPath>..\..\3rdPartyAssemblies\MercuryReuse.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="MillimanCommon">
-      <HintPath>..\..\MyWSAT35\Bin\MillimanCommon.dll</HintPath>
-    </Reference>
     <Reference Include="Polenter.SharpSerializer, Version=2.18.0.0, Culture=neutral, PublicKeyToken=8f4f20011571ee5f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\3rdPartyAssemblies\Polenter.SharpSerializer.dll</HintPath>
@@ -240,6 +235,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <ProjectReference Include="..\..\MillimanCommon\MillimanCommon.csproj">
+      <Project>{4cf8c253-1952-4f25-a169-542feade27b4}</Project>
+      <Name>MillimanCommon</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\MillimanCommon\MillimanCommon.csproj">
       <Project>{4cf8c253-1952-4f25-a169-542feade27b4}</Project>
       <Name>MillimanCommon</Name>

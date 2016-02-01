@@ -23,6 +23,7 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -43,7 +44,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AjaxControlToolkit">
-      <HintPath>..\..\..\WIP 17 - NewLoginGraphics_TEMP\MillFrame\3rdPartyAssemblies\AjaxControlToolkit.dll</HintPath>
+      <HintPath>..\3rdPartyAssemblies\AjaxControlToolkit.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip">
       <HintPath>..\3rdPartyAssemblies\Ionic.Zip.dll</HintPath>

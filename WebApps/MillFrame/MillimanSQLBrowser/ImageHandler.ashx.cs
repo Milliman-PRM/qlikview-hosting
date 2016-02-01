@@ -15,7 +15,7 @@ namespace WebSqlUtility
         public void ProcessRequest(HttpContext context)
         {
             string _Path;
-            string DBCacheDir = System.Configuration.ConfigurationSettings.AppSettings["HCIntelDBBrowserCache"];
+            string DBCacheDir = System.Configuration.ConfigurationManager.AppSettings["HCIntelDBBrowserCache"];
             if ((DBCacheDir.EndsWith("/") == false) && (DBCacheDir.EndsWith("\\") == false))
                 DBCacheDir += "\\";  //put a slash on it
 

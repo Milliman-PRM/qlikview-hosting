@@ -24,8 +24,6 @@ namespace MillimanSupport
         private List<string> IPs = null;
         private bool IsValidConnection()
         {
-            return true;
-            //load one if not already loaded
             if (IPs == null)
             {
                 IPs = new List<string>();

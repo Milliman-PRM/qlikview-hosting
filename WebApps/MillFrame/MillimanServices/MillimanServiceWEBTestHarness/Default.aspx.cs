@@ -34,10 +34,10 @@ namespace MillimanServiceWEBTestHarness
             return;
 
             //test sync alls
-            bool RValue = Admin.ClientAccess("van.nanney@milliman.com", AlphaTestGuid, "AlphaX", true);
-            List<MillimanServices.ClientID_NameMap> AllClients = Admin.GetClients("van.nanney@milliman.com", MillimanServices.StatusEnum.ALL).ToList();
-            List<MillimanServices.ClientID_NameMap> EnabledClients = Admin.GetClients("van.nanney@milliman.com", MillimanServices.StatusEnum.ENABLED).ToList();
-            List<MillimanServices.ClientID_NameMap> DisabledClients = Admin.GetClients("van.nanney@milliman.com", MillimanServices.StatusEnum.DISABLED).ToList();
+            //bool RValue = Admin.ClientAccess("van.nanney@milliman.com", AlphaTestGuid, "AlphaX", true);
+            //List<MillimanServices.ClientID_NameMap> AllClients = Admin.GetClients("van.nanney@milliman.com", MillimanServices.StatusEnum.ALL).ToList();
+            //List<MillimanServices.ClientID_NameMap> EnabledClients = Admin.GetClients("van.nanney@milliman.com", MillimanServices.StatusEnum.ENABLED).ToList();
+            //List<MillimanServices.ClientID_NameMap> DisabledClients = Admin.GetClients("van.nanney@milliman.com", MillimanServices.StatusEnum.DISABLED).ToList();
             //RValue = Admin.AddUser("van.nanney@milliman.com", AlphaTestGuid, AlphaTestGuid.ToString() + "_3", "CARECOORD", Providers.ToArray(), true);
             //List<MillimanServices.MillimanUser> Users = Admin.GetUsers("van.nanney@milliman.com", ClientsIDs.ToArray(), MillimanServices.StatusEnum.ALL).ToList();
             //RValue = Admin.AddUser("van.nanney@milliman.com", AlphaTestGuid, "qbert.machine@somewhere.com", "COSTMODEL", Providers.ToArray(), true);

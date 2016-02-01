@@ -31,25 +31,25 @@
     
     <asp:Label style="position:absolute;top:200px; left:327px; height:19px; width:150px" ID="SuperConsistsOf" runat="server" Text="Super group consists of"></asp:Label>
     <asp:ListBox ID="GroupsInSuper" runat="server" style="z-index: 1; left: 322px; top: 218px; position: absolute; height: 105px; width: 285px"></asp:ListBox>
-    <asp:Button style="position:absolute;top:265px; left:640px; height:21px; width:41px" ID="RemoveGroup" runat="server" Text="&gt;&gt;&gt;" OnClick="RemoveGroup_Click" />
+    <asp:ImageButton style="position:absolute;top:265px; left:640px; height:24px; width:24px" ID="RemoveGroup" runat="server" Text="&gt;&gt;&gt;" OnClick="RemoveGroup_Click" ImageUrl="~/images/next.png" />
     
-    <asp:Button ID="AddToSuperGroup" runat="server" style="z-index: 1; left: 640px; top: 227px; position: absolute; width: 41px; height: 21px; bottom: 452px;" Text="&lt;&lt;&lt;" OnClick="AddToSuperGroup_Click" />
+    <asp:ImageButton ID="AddToSuperGroup" runat="server" style="z-index: 1; left: 640px; top: 227px; position: absolute; width: 24px; height: 24px; bottom: 452px;" Text="&lt;&lt;&lt;" OnClick="AddToSuperGroup_Click" ImageUrl="~/images/back.png" />
     <asp:ListBox ID="AllGroups" runat="server" style="z-index: 1; left: 688px; top: 218px; position: absolute; height: 101px; width: 312px" AutoPostBack="True"></asp:ListBox>
     <asp:Label style="position:absolute;top:199px; left:693px; height:15px; width:191px" ID="GroupNote" runat="server" Text="All groups in PRM system"></asp:Label>
    
     <asp:Label style="position:absolute;top:349px; left:332px; height:16px; width:150px" ID="Label2" runat="server" Text="Client Admin Users"></asp:Label>
     <asp:ListBox ID="ClientAdminUsers" runat="server" style="z-index: 1; left: 322px; top: 368px; position: absolute; height: 105px; width: 285px"></asp:ListBox>
-    <asp:Button style="position:absolute;top:421px; left:640px; height:21px; width:41px" ID="RemoveAdmin" runat="server" Text="&gt;&gt;&gt;" OnClick="RemoveAdmin_Click" />
+    <asp:ImageButton style="position:absolute;top:421px; left:640px; height:24px; width:24px" ID="RemoveAdmin" runat="server" Text="&gt;&gt;&gt;" OnClick="RemoveAdmin_Click" ImageUrl="~/images/next.png"/>
     
-    <asp:Button ID="AddAdmin" runat="server" style="z-index: 1; left: 640px; top: 380px; position: absolute; width: 41px; height: 21px; " Text="&lt;&lt;&lt;" OnClick="AddAdmin_Click" />
+    <asp:ImageButton ID="AddAdmin" runat="server" style="z-index: 1; left: 640px; top: 380px; position: absolute; width: 24px; height: 24px; " Text="&lt;&lt;&lt;" OnClick="AddAdmin_Click" ImageUrl="~/images/back.png"/>
     <asp:ListBox ID="AllAdmins" runat="server" style="z-index: 1; left: 692px; top: 368px; position: absolute; height: 99px; width: 300px" AutoPostBack="True"></asp:ListBox>
     <asp:Label style="position:absolute;top:350px; left:693px; height:15px; width:221px" ID="Label3" runat="server" Text="All client admins with group access"></asp:Label>
 
     <asp:Label style="position:absolute;top:504px; left:339px; height:19px; width:150px" ID="Label4" runat="server" Text="Client Publshing Admins"></asp:Label>
     <asp:ListBox ID="PublishingUsers" runat="server" style="z-index: 1; left: 322px; top: 524px; position: absolute; height: 105px; width: 285px"></asp:ListBox>
-    <asp:Button style="position:absolute;top:584px; left:639px; height:21px; width:41px" ID="RemovePublisher" runat="server" Text="&gt;&gt;&gt;" OnClick="RemovePublisher_Click" />
+    <asp:ImageButton style="position:absolute;left:639px; height:24px; width:24px;top:588px" ID="RemovePublisher" runat="server" Text="&gt;&gt;&gt;" OnClick="RemovePublisher_Click" ImageUrl="~/images/next.png" />
     
-    <asp:Button ID="AddPublisher" runat="server" style="z-index: 1; left: 639px; top: 547px; position: absolute; width: 41px; height: 21px; " Text="&lt;&lt;&lt;" OnClick="AddPublisher_Click" />
+    <asp:ImageButton ID="AddPublisher" runat="server" style="z-index: 1; left: 639px; top: 547px; position: absolute; width: 24px; height: 24px; " Text="&lt;&lt;&lt;" OnClick="AddPublisher_Click" ImageUrl="~/images/back.png"/>
     <asp:ListBox ID="AllPublishers" runat="server" style="z-index: 1; left: 694px; top: 530px; position: absolute; height: 97px; width: 289px" AutoPostBack="True"></asp:ListBox>
     <asp:Label style="position:absolute;top:507px; left:694px; height:15px; width:246px" ID="Label5" runat="server" Text="All client publishers with group access"></asp:Label>
 
@@ -58,7 +58,7 @@
     <div style="position:absolute;border:1px solid black;background-color:#EBEBEB; top: 40px; left: 307px; width: 317px; height: 633px;z-index:-1"></div>
  
     
-    <asp:Label style="position:absolute;top:22px; left:348px; height:19px; width:200px" ID="SelectedSuperGroup" runat="server" Text="&lt;center&gt;Selected Super Group&lt;center&gt;" Font-Bold="True"></asp:Label>
+    <asp:Label style="position:absolute;top:22px; left:307px; height:19px; width:317px;text-align:center" ID="SelectedSuperGroup" runat="server" Text="Selected Super Group" Font-Bold="True"></asp:Label>
    
 </div>
 

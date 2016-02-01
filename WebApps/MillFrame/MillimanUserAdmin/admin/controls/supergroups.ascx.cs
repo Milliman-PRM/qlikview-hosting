@@ -81,12 +81,14 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
             UseCommaDelimited.Checked = SelectedSGC.SemiColonDelimitedEmail;
             SmartLinkOn.Checked = !SelectedSGC.AllowTempPasswordEntry;
 
-             AddGroups();
+            AddGroups(SelectedSGC.GroupNames);
 
             List<string> ClientAdmins = null;
             List<string> PublisherAdmins = null;
             if ( GetValidAdminsForGroups( SelectedSGC.GroupNames, out ClientAdmins, out PublisherAdmins))
             {
+                MutuallyExclusiveLists(SelectedSGC.AdminUserAccounts, ref ClientAdmins);  //remove redundanate selections
+                MutuallyExclusiveLists(SelectedSGC.PublisherUserAccounts, ref PublisherAdmins);
                 AllAdmins.DataSource = ClientAdmins;
                 AllAdmins.DataBind();
                 AllPublishers.DataSource = PublisherAdmins;
@@ -95,14 +97,20 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
         }
     }
 
-    private bool AddGroups()
+    /// <summary>
+    /// Add all the groups to the list, unless they have already
+    /// been selected as part of supergroup
+    /// </summary>
+    /// <param name="GroupsAlreadyAdded"></param>
+    /// <returns></returns>
+    private bool AddGroups(List<string> GroupsAlreadyAdded)
     {
         AllGroups.Items.Clear();
         MillimanCommon.UserRepo Repo = MillimanCommon.UserRepo.GetInstance();
         string[] AllRoles = Roles.GetAllRoles();
         foreach (string Role in AllRoles)
         {
-            if (string.Compare(Role, "administrator", true) != 0)
+            if ( (string.Compare(Role, "administrator", true)) != 0 && (GroupsAlreadyAdded.Contains(Role) == false) )
             {
                 //the role can only have 1 QVW in it, or we will have issues in publisher and client admin
                 if (Repo.FindAllQVProjectsForRole(Role).Count == 1)
@@ -112,6 +120,13 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
         return true;
     }
 
+    /// <summary>
+    /// get all the accounts marked for client admin/publishing admins, with groups that qualify
+    /// </summary>
+    /// <param name="GroupNames"></param>
+    /// <param name="ClientAdmins"></param>
+    /// <param name="PublisherAdmins"></param>
+    /// <returns></returns>
     private bool GetValidAdminsForGroups(List<string> GroupNames, out List<string> ClientAdmins, out List<string> PublisherAdmins )
     {
         if ( GroupNames.Count == 0 )
@@ -175,21 +190,6 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
             PublisherAdmins = new List<string>();
             MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "Failed to retrieve publisher and client admins from DB");
         }
-            
-        //MembershipUserCollection MUC = Membership.GetAllUsers();
-        //foreach (MembershipUser MU in MUC)
-        //{
-        //    ProfileCommon p = (ProfileCommon)ProfileCommon.Create(MU.UserName, true);
-        //    System.Web.Profile.ProfileGroupBase PGB = p.GetProfileGroup("AccessOptions");
-        //    var V = PGB.GetPropertyValue("IsClientAdministrator");
-        //    bool IsClientAdmin = System.Convert.ToBoolean(V);
-        //    if (IsClientAdmin)
-        //        ClientAdmins.Add(MU.UserName);
-        //    V = PGB.GetPropertyValue("IsPublishingAdministrator");
-        //    bool IsPubliser = System.Convert.ToBoolean(V);
-        //    if (IsPubliser)
-        //        PublisherAdmins.Add(MU.UserName);
-        //}
 
         //to save on processing time put these in session to cache for now
         Session["ALLCLIENTADMINS"] = ClientAdmins;
@@ -197,6 +197,11 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
 
         return true;
     }
+    /// <summary>
+    /// Apply the updates the user has selected
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     protected void Update_Click(object sender, EventArgs e)
     {
         //save all changes for group
@@ -224,6 +229,12 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
         MillimanCommon.Alert.Show(Msg);
 
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     protected void AddNewSuperGroup_Click(object sender, EventArgs e)
     {
         string SGName = NewSuperGroupName.Text;
@@ -261,7 +272,7 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
             PublishingUsers.Items.Clear();
             AllAdmins.Items.Clear();
             AllPublishers.Items.Clear();
-            AddGroups();
+            AddGroups(new List<string>());
             ActiveInterface(true);
         
         }
@@ -283,6 +294,13 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
         ActiveInterface(false);
 
     }
+
+    /// <summary>
+    /// Remove a group from the super group, re-add to all groups
+    /// and update candidate groups for admin and publishing
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     protected void RemoveGroup_Click(object sender, EventArgs e)
     {
         string SelectedGroup = GroupsInSuper.SelectedValue;
@@ -290,6 +308,8 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
             return;  //do nothing, nothing is selected
 
         GroupsInSuper.Items.RemoveAt(GroupsInSuper.Items.IndexOf(new ListItem(SelectedGroup)));
+        AllGroups.Items.Add(SelectedGroup);  //add the group back to the ALL list
+
         List<string> ListItems = new List<string>();
         foreach (ListItem LI in GroupsInSuper.Items)
             ListItems.Add(LI.Value);
@@ -308,17 +328,20 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
     {
         string Admin = ClientAdminUsers.SelectedValue;
         ClientAdminUsers.Items.RemoveAt(ClientAdminUsers.SelectedIndex);
+        AllAdmins.Items.Add(Admin);  //add back to all admin list
     }
     protected void RemovePublisher_Click(object sender, EventArgs e)
     {
         string Publisher = PublishingUsers.SelectedValue;
         PublishingUsers.Items.RemoveAt(PublishingUsers.SelectedIndex);
+        AllPublishers.Items.Add(Publisher);  //add back to list of all publishers
     }
     protected void AddToSuperGroup_Click(object sender, EventArgs e)
     {
         string SelectedGroup = AllGroups.SelectedValue;
         if (string.IsNullOrEmpty(SelectedGroup))
             return;  //do nothing, nothing is selected
+        AllGroups.Items.RemoveAt(AllGroups.SelectedIndex); //remove entry from AllGroups
 
         GroupsInSuper.Items.Add(SelectedGroup);
         List<string> ListItems = new List<string>();
@@ -339,13 +362,19 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
     {
         string Admin = AllAdmins.SelectedValue;
         if (ClientAdminUsers.Items.IndexOf(new ListItem(Admin)) == -1)
+        {
             ClientAdminUsers.Items.Add(Admin);
+            AllAdmins.Items.RemoveAt(AllAdmins.SelectedIndex);  //remove from all list
+        }
     }
     protected void AddPublisher_Click(object sender, EventArgs e)
     {
         string Publisher = AllPublishers.SelectedValue;
         if (PublishingUsers.Items.IndexOf(new ListItem(Publisher)) == -1)
+        {
             PublishingUsers.Items.Add(Publisher);
+            AllPublishers.Items.RemoveAt(AllPublishers.SelectedIndex);  //remove from all pubs list
+        }
     }
 
     private List<string> ListItemsToStringList( ListBox LB)
@@ -391,5 +420,19 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
             Console.WriteLine(e.ToString());
         }
         return false;
+    }
+
+    /// <summary>
+    /// ensure items in 'IfInThisList' do not exit in other list
+    /// </summary>
+    /// <param name="IfInThisList"></param>
+    /// <param name="RemoveFromThisList"></param>
+    private void MutuallyExclusiveLists( List<string> IfInThisList, ref List<string> RemoveFromThisList)
+    {
+        foreach( string S in IfInThisList )
+        {
+            if (RemoveFromThisList.Contains(S))
+                RemoveFromThisList.RemoveAt(RemoveFromThisList.IndexOf(S));
+        }
     }
 }

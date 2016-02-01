@@ -30,7 +30,7 @@ namespace WebSqlUtility
 		protected Repeater RepHistory, RepFavourites;
 		protected PlaceHolder PlcResultGrids;
 		protected int HistoryFileCount = 0;
-		protected DbUtilConfig conf = (DbUtilConfig)ConfigurationSettings.GetConfig("DbUtilConfig");
+		protected DbUtilConfig conf = (DbUtilConfig)System.Configuration.ConfigurationManager.GetSection("DbUtilConfig");
         protected Label UserNameLabel;
         protected Label DatabaseName;
 		DataSet ds = new DataSet();
@@ -73,13 +73,13 @@ namespace WebSqlUtility
             ///testing mode end
             if (string.IsNullOrEmpty(Key) == false)
             {
-               string CacheDir = System.Configuration.ConfigurationSettings.AppSettings["HCIntelCache"];  //should be full path in web.config
+               string CacheDir = System.Configuration.ConfigurationManager.AppSettings["HCIntelCache"];  //should be full path in web.config
                string CachePathFileName = System.IO.Path.Combine(CacheDir, Key);
 
                MillimanCommon.CacheEntry CE = MillimanCommon.CacheEntry.Load( CachePathFileName);
                if (CE != null)
                {
-                   string DBCacheDir = System.Configuration.ConfigurationSettings.AppSettings["HCIntelDBBrowserCache"];
+                   string DBCacheDir = System.Configuration.ConfigurationManager.AppSettings["HCIntelDBBrowserCache"];
 
                    UserNameLabel.Text = CE.UserName;
                    DatabaseName.Text = CE.DBFriendlyName;
