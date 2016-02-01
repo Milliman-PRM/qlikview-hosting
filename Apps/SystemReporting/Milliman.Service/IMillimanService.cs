@@ -28,9 +28,8 @@ namespace SystemReporting.Service
         #region User
         void Remove(User obj);
         void Save(User obj);
-         T GetUser<T>(Expression<Func<T, bool>> predicate) where T : User;
+         //T GetUser<T>(Expression<Func<T, bool>> predicate) where T : User;
         IQueryable<T> GetUsers<T>(Expression<Func<T, bool>> predicate = null) where T : User;
-        IEnumerable<User> SelectAll();
         #endregion
         #region Report
         void Remove(Report obj);

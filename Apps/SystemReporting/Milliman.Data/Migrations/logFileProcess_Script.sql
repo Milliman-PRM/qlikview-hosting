@@ -1,18 +1,21 @@
-﻿-- Database: "logFileProcess"
+﻿-- Database: "systemreporting"
 
--- DROP DATABASE "logFileProcess";
+-- DROP DATABASE "systemreporting";
 
-CREATE DATABASE "logFileProcess"
+CREATE DATABASE systemreporting
   WITH OWNER = postgres
        ENCODING = 'UTF8'
        TABLESPACE = pg_default
        LC_COLLATE = 'English_United States.1252'
        LC_CTYPE = 'English_United States.1252'
        CONNECTION LIMIT = -1;
-GRANT ALL ON DATABASE "logFileProcess" TO public;
-GRANT ALL ON DATABASE "logFileProcess" TO postgres WITH GRANT OPTION;
+GRANT ALL ON DATABASE "systemreporting" TO public;
+GRANT ALL ON DATABASE "systemreporting" TO postgres WITH GRANT OPTION;
 
 
+/*********************************************************************
+			Look Up Tables
+**********************************************************************/
 -- Table: "user"
 
 -- DROP TABLE "user";
@@ -31,6 +34,28 @@ ALTER TABLE "user"
   OWNER TO postgres;
 GRANT ALL ON TABLE "user" TO postgres WITH GRANT OPTION;
 GRANT ALL ON TABLE "user" TO public;
+
+
+-- Table: "group"
+
+-- DROP TABLE "group";
+
+CREATE TABLE "group"
+(
+  id serial NOT NULL,
+  groupname character(100) NOT NULL,
+  groupdescription character(100),
+  CONSTRAINT pk_group_id PRIMARY KEY (id),
+  CONSTRAINT uq_group_groupname UNIQUE (groupname)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE "group"
+  OWNER TO postgres;
+GRANT ALL ON TABLE "group" TO postgres WITH GRANT OPTION;
+GRANT ALL ON TABLE "group" TO public;
+
 
 
 -- Table: report
@@ -54,26 +79,10 @@ GRANT ALL ON TABLE report TO postgres WITH GRANT OPTION;
 GRANT ALL ON TABLE report TO public;
 
 
--- Table: "group"
 
--- DROP TABLE "group";
-
-CREATE TABLE "group"
-(
-  id serial NOT NULL,
-  groupname character(100) NOT NULL,
-  groupdescription character(100),
-  CONSTRAINT pk_group_id PRIMARY KEY (id),
-  CONSTRAINT uq_group_groupname UNIQUE (groupname)
-)
-WITH (
-  OIDS=FALSE
-);
-ALTER TABLE "group"
-  OWNER TO postgres;
-GRANT ALL ON TABLE "group" TO postgres WITH GRANT OPTION;
-GRANT ALL ON TABLE "group" TO public;
-
+/*********************************************************************
+			Reporting Logs Tables
+**********************************************************************/
 
 -- Table: iislog
 
@@ -117,6 +126,7 @@ ALTER TABLE iislog
   OWNER TO postgres;
 GRANT ALL ON TABLE iislog TO postgres WITH GRANT OPTION;
 GRANT ALL ON TABLE iislog TO public;
+
 
 
 -- Table: qlickviewauditlog
@@ -200,8 +210,3 @@ ALTER TABLE qlickviewsessionlog
   OWNER TO postgres;
 GRANT ALL ON TABLE qlickviewsessionlog TO postgres WITH GRANT OPTION;
 GRANT ALL ON TABLE qlickviewsessionlog TO public;
-
-
-
-
-

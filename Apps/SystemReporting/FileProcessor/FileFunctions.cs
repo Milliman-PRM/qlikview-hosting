@@ -106,17 +106,16 @@ namespace FileProcessor
 
             //Read status File
             List<string> listStatusFileLines = System.IO.File.ReadAllLines(statusFileAndDirectory).ToList();
-            //Read Processed Log File lines
+            //Read Processed Log File lines at the back up location
             List<string> listProcessedFileLines = System.IO.File.ReadAllLines(processedLogFileAndDirectory).ToList();
 
             //Get the Source location
             var sourceDirectory = GetFileOriginalSourceDirectory(eFilePath);
 
-            List<string> listFilesAtSourceLocation = new List<string>();
+            var listFilesAtSourceLocation = new List<string>();
             //file names that are unique among source and dest
-            List<string> listFilesDifferenceBWSB = new List<string>();
-
-            List<string> listFinalFilesToBeProcessed = new List<string>();
+            var listFilesDifferenceBWSB = new List<string>();
+            var listFinalFilesToBeProcessed = new List<string>();
 
             bool isEmpty = !System.IO.Directory.EnumerateFiles(System.IO.Path.GetDirectoryName(sourceDirectory)).Any();
             if (!isEmpty)
@@ -128,29 +127,33 @@ namespace FileProcessor
                 var listProcessedFilesInProcessFileLog = listProcessedFileLines.Select(s => s.Split('~').Last().Trim())
                                                                 .Where(s => !string.IsNullOrWhiteSpace(s)).Distinct().ToList();
 
-                //get files that are difference from source and destination
+                //List of files different in back up file and source location
                 listFilesDifferenceBWSB = listFilesAtSourceLocation.Union(listProcessedFilesInProcessFileLog)
                                                            .Except(listFilesAtSourceLocation.Intersect(listProcessedFilesInProcessFileLog))
                                                            .ToList();
 
                 //get the values that has the newer file name in status file
-                var newerFileNamesInList = listStatusFileLines.Where(f => f.StartsWith(filter) ||
+                var newerFileNamesInStatusList = listStatusFileLines.Where(f => f.StartsWith(filter) ||
                                                             f.Contains("Newer")).Select(s => s.Replace('\t', ' '));
 
                 //validate if the file exist in list that matches the filter
-                var validateFilterFileExist = newerFileNamesInList.Any(x => x.IndexOf(filter) > -1);
+                var validateFilterFileExist = newerFileNamesInStatusList.Any(x => x.IndexOf(filter) > -1);
                 if (validateFilterFileExist)
                 {
                     //#region Status File FileNames 
-                    //get all the file names that has Newer
-                    var fileNameToProcess = newerFileNamesInList.Where(a => a.Contains(filter)
+                    //get list of all the file names that has Newer and matches filter
+                    var fileNameToProcessFromStatus = newerFileNamesInStatusList.Where(a => a.Contains(filter)
                                                                 && a.Contains("Newer"))
-                                                                .Select(a=> a.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
+                                                                .Select(split=> split.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
                                                                 .Last();
+                    //get the list of file names only
+                    var finalFileToProcess = fileNameToProcessFromStatus.Where(s=>s.Contains(filter)).ToList();
 
-                    var finalFileToProcess = fileNameToProcess.Where(s=>s.Contains(filter)).ToList();
-                                        
-                    listFinalFilesToBeProcessed = finalFileToProcess.Where(x => !listFilesDifferenceBWSB.Contains(x)).ToList();
+                    //match the above list with difference and which ever file(s) names match, process those                               
+                    var matching = from s in finalFileToProcess where listFilesDifferenceBWSB.Any(r => s.StartsWith(r)) select s;
+
+                    listFinalFilesToBeProcessed = finalFileToProcess.Where(x => listFilesDifferenceBWSB.Contains(x)).ToList();
+
                 }
                 else
                 {

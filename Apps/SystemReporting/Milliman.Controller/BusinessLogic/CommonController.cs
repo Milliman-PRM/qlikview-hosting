@@ -3,6 +3,7 @@ using SystemReporting.Entities.Models;
 using SystemReporting.Service;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SystemReporting.Controller.BusinessLogic.Controller
 {
@@ -26,7 +27,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
         {
             try
             {
-                var userExist = serviceMilliman.GetUser<User>(a => a.UserName == model.UserName);
+                var userExist = serviceMilliman.GetUsers<User>(a => a.UserName == model.UserName).FirstOrDefault();
                 User user = new User();
                 if (userExist == null)
                 {
@@ -51,7 +52,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
         {
             try
             {
-                var reportExist = serviceMilliman.GetReport<Report>(a => a.ReportName == model.ReportName);
+                var reportExist = serviceMilliman.GetReports<Report>(a => a.ReportName == model.ReportName).FirstOrDefault();
                 Report report = new Report();
                 if (reportExist == null)
                 {
@@ -80,7 +81,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
         {
             try
             {
-                var groupExist = serviceMilliman.GetGroup<Group>(a => a.GroupName == model.GroupName);
+                var groupExist = serviceMilliman.GetGroups<Group>(a => a.GroupName == model.GroupName).FirstOrDefault(); 
                 Group group = new Group();
                 if (groupExist == null)
                 {

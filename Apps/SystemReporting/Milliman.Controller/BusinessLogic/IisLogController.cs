@@ -54,7 +54,6 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                     logEntity.ClientIpAddress = (!string.IsNullOrEmpty(entry.ClientIpAddress)) ? entry.ClientIpAddress.Trim() : string.Empty;
 
                     #region User
-
                     //Insert User
                     if (!string.IsNullOrEmpty(entry.UserName))
                     {
@@ -77,7 +76,6 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                             logEntity.fk_user_id = userExist.Id; 
                         }
                     }
-
                     #endregion
 
                     logEntity.ServerIPAddress = (!string.IsNullOrEmpty(entry.ServerIPAddress)) ? entry.ServerIPAddress.Trim() : string.Empty;

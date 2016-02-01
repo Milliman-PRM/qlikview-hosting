@@ -9,6 +9,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using C = SystemReporting.Utilities.Constants;
+using System.Data.Entity.Infrastructure.Annotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 //  IisLogs has One PK and two FK (Group and User)
 //  Group has one PK, one Unique
@@ -68,20 +70,20 @@ namespace SystemReporting.Data.Database
             modelBuilder.Entity<Group>().ToTable("group", C.DB_POSTGRESQL_NAMESPACE);
 
             modelBuilder.Entity<IisLog>().HasKey(x => x.Id).ToTable("iislog",C.DB_POSTGRESQL_NAMESPACE);
-            modelBuilder.Entity<IisLog>().HasOptional(c => c.User).WithMany(d => d.IisLog).HasForeignKey(c => c.fk_user_id);
-            modelBuilder.Entity<IisLog>().HasOptional(c => c.Group).WithMany(d => d.IisLog).HasForeignKey(c => c.fk_group_id);
+            modelBuilder.Entity<IisLog>().HasOptional(c => c.User).WithMany(d => d.ListIisLog).HasForeignKey(c => c.fk_user_id);
+            modelBuilder.Entity<IisLog>().HasOptional(c => c.Group).WithMany(d => d.ListIisLog).HasForeignKey(c => c.fk_group_id);
 
 
             modelBuilder.Entity<AuditLog>().HasKey(x => x.Id).ToTable("qlickviewauditlog", C.DB_POSTGRESQL_NAMESPACE);
-            modelBuilder.Entity<AuditLog>().HasOptional(c => c.User).WithMany(d => d.AuditLog).HasForeignKey(c => c.fk_user_id);
-            modelBuilder.Entity<AuditLog>().HasOptional(c => c.Group).WithMany(d => d.AuditLog).HasForeignKey(c => c.fk_group_id);
-            modelBuilder.Entity<AuditLog>().HasOptional(c => c.Report).WithMany(d => d.AuditLog).HasForeignKey(c => c.fk_report_id);
+            modelBuilder.Entity<AuditLog>().HasOptional(c => c.User).WithMany(d => d.ListAuditLog).HasForeignKey(c => c.fk_user_id);
+            modelBuilder.Entity<AuditLog>().HasOptional(c => c.Group).WithMany(d => d.ListAuditLog).HasForeignKey(c => c.fk_group_id);
+            modelBuilder.Entity<AuditLog>().HasOptional(c => c.Report).WithMany(d => d.ListAuditLog).HasForeignKey(c => c.fk_report_id);
 
 
             modelBuilder.Entity<SessionLog>().HasKey(x => x.Id).ToTable("qlickviewsessionlog", C.DB_POSTGRESQL_NAMESPACE);
-            modelBuilder.Entity<SessionLog>().HasOptional(c => c.User).WithMany(d => d.SessionLog).HasForeignKey(c => c.fk_user_id);
-            modelBuilder.Entity<SessionLog>().HasOptional(c => c.Group).WithMany(d => d.SessionLog).HasForeignKey(c => c.fk_group_id);
-            modelBuilder.Entity<SessionLog>().HasOptional(c => c.Report).WithMany(d => d.SessionLog).HasForeignKey(c => c.fk_report_id);
+            modelBuilder.Entity<SessionLog>().HasOptional(c => c.User).WithMany(d => d.ListSessionLog).HasForeignKey(c => c.fk_user_id);
+            modelBuilder.Entity<SessionLog>().HasOptional(c => c.Group).WithMany(d => d.ListSessionLog).HasForeignKey(c => c.fk_group_id);
+            modelBuilder.Entity<SessionLog>().HasOptional(c => c.Report).WithMany(d => d.ListSessionLog).HasForeignKey(c => c.fk_report_id);
 
             base.OnModelCreating(modelBuilder);
         }

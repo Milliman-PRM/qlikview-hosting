@@ -21,7 +21,16 @@ namespace SystemReporting.Entities.Models
         public string ReportDesctiption { get; set; }
 
         // Navigation property 
-        public virtual ICollection<AuditLog> AuditLog { get; set; }
-        public virtual ICollection<SessionLog> SessionLog { get; set; }
+        public virtual ICollection<AuditLog> ListAuditLog { get; set; }
+        public virtual ICollection<SessionLog> ListSessionLog { get; set; }
+
+        public Report() { }
+        public Report(Report r)
+        {
+            this.Id = r.Id;
+            this.ReportName = r.ReportName;
+            this.ListAuditLog = new List<AuditLog>();
+            this.ListSessionLog = new List<SessionLog>();
+        }
     }
 }

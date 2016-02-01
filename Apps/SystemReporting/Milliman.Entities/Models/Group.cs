@@ -24,8 +24,18 @@ namespace SystemReporting.Entities.Models
         public string Description { get; set; }
 
         // Navigation property 
-        public virtual ICollection<IisLog> IisLog { get; set; }
-        public virtual ICollection<AuditLog> AuditLog { get; set; }
-        public virtual ICollection<SessionLog> SessionLog { get; set; }
+        public virtual ICollection<IisLog> ListIisLog { get; set; }
+        public virtual ICollection<AuditLog> ListAuditLog { get; set; }
+        public virtual ICollection<SessionLog> ListSessionLog { get; set; }
+
+        public Group() { }
+        public Group(Group g)
+        {
+            this.Id = g.Id;
+            this.GroupName = g.GroupName;
+            this.ListIisLog = new List<IisLog>();
+            this.ListAuditLog = new List<AuditLog>();
+            this.ListSessionLog = new List<SessionLog>();
+        }
     }
 }

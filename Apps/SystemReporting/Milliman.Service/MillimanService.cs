@@ -16,8 +16,6 @@ namespace SystemReporting.Service
         Repository<User> UserRepository = new Repository<User>();
         Repository<Report> ReportRepository = new Repository<Report>();
         Repository<Group> GroupRepository = new Repository<Group>();
-        //Repository<Blog> BlogRepository = new Repository<Blog>();
-
         #endregion
 
         #region IisLog
@@ -29,7 +27,7 @@ namespace SystemReporting.Service
         {
             if (obj.Id > 0)
                 IisLogRepository.Delete(obj);
-            IisLogRepository.Commit();
+            IisLogRepository.Commit();            
         }
         /// <summary>
         /// Save an object
@@ -54,7 +52,6 @@ namespace SystemReporting.Service
         /// <returns></returns>
         public IQueryable<T> GetIisLogs<T>(Expression<Func<T, bool>> predicate = null) where T : IisLog
         {
-            //var query = BlogRepository.FindAll().OfType<T>();
             var query = IisLogRepository.FindAll().OfType<T>();
             if (predicate != null)
                 query = query.Where(predicate);
@@ -92,6 +89,7 @@ namespace SystemReporting.Service
             return returnValues;
         }
         #endregion
+
         #region AuditLog
         /// <summary>
         /// Remove an object
@@ -164,6 +162,7 @@ namespace SystemReporting.Service
             return returnValues;
         }
         #endregion
+
         #region SessionLog
         /// <summary>
         /// Remove an object
@@ -236,6 +235,7 @@ namespace SystemReporting.Service
             return returnValues;
         }
         #endregion
+
         #region User
         /// <summary>
         /// Remove an object
@@ -266,9 +266,8 @@ namespace SystemReporting.Service
         public IQueryable<T> GetUsers<T>(Expression<Func<T, bool>> predicate = null) where T : User
         {
             var query = UserRepository.FindAll().OfType<T>();
-
             if (predicate != null)
-                query = query.Where(predicate);
+                query = query.Where(predicate);            
 
             return query;
         }
@@ -322,26 +321,27 @@ namespace SystemReporting.Service
             return returnValues;
         }        
 
-        /// <summary>
-        /// Get first or default user
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="predicate"></param>
-        /// <returns></returns>
-        public T GetUser<T>(Expression<Func<T, bool>> predicate) where T : User
-        {
-            return GetUsers<T>(predicate).FirstOrDefault();
-        }
+        ///// <summary>
+        ///// Get first or default user
+        ///// </summary>
+        ///// <typeparam name="T"></typeparam>
+        ///// <param name="predicate"></param>
+        ///// <returns></returns>
+        //public T GetUser<T>(Expression<Func<T, bool>> predicate) where T : User
+        //{
+        //    return GetUsers<T>(predicate).FirstOrDefault();
+        //}
                 
-        /// <summary>
-        /// Returns list of users using SelectAll
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerable<User> SelectAll()
-        {
-            return UserRepository.SelectAll();
-        }
+        ///// <summary>
+        ///// Returns list of users using SelectAll
+        ///// </summary>
+        ///// <returns></returns>
+        //public IEnumerable<User> SelectAll()
+        //{
+        //    return UserRepository.SelectAll();
+        //}
         #endregion
+
         #region Report
         /// <summary>
         /// Remove an object
@@ -365,7 +365,6 @@ namespace SystemReporting.Service
             }
             else
                 ReportRepository.Attach(obj);
-
             ReportRepository.Commit();
         }
         /// <summary>
@@ -413,16 +412,16 @@ namespace SystemReporting.Service
             return returnValues;
         }
 
-        /// <summary>
-        /// Get firstordefualt user
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="predicate"></param>
-        /// <returns></returns>
-        public T GetReport<T>(Expression<Func<T, bool>> predicate) where T : Report
-        {
-            return GetReports<T>(predicate).FirstOrDefault();
-        }
+        ///// <summary>
+        ///// Get firstordefualt user
+        ///// </summary>
+        ///// <typeparam name="T"></typeparam>
+        ///// <param name="predicate"></param>
+        ///// <returns></returns>
+        //public T GetReport<T>(Expression<Func<T, bool>> predicate) where T : Report
+        //{
+        //    return GetReports<T>(predicate).FirstOrDefault();
+        //}
         #endregion
 
         #region Group
@@ -448,7 +447,6 @@ namespace SystemReporting.Service
             }
             else
                 GroupRepository.Attach(obj);
-
             GroupRepository.Commit();
         }
         /// <summary>
@@ -484,16 +482,16 @@ namespace SystemReporting.Service
             return query;
         }
 
-        /// <summary>
-        /// Get firstordefualt user
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="predicate"></param>
-        /// <returns></returns>
-        public T GetGroup<T>(Expression<Func<T, bool>> predicate) where T : Group
-        {
-            return GetGroups<T>(predicate).FirstOrDefault();
-        }
+        ///// <summary>
+        ///// Get firstordefualt user
+        ///// </summary>
+        ///// <typeparam name="T"></typeparam>
+        ///// <param name="predicate"></param>
+        ///// <returns></returns>
+        //public T GetGroup<T>(Expression<Func<T, bool>> predicate) where T : Group
+        //{
+        //    return GetGroups<T>(predicate).FirstOrDefault();
+        //}
         #endregion        
     }
 }

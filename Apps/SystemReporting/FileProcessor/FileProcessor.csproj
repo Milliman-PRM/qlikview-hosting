@@ -45,7 +45,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseFileProcessor.cs" />
-    <Compile Include="DTHasher.cs" />
     <Compile Include="EnumFileProcessor.cs" />
     <Compile Include="FileFunctions.cs" />
     <Compile Include="ProcessFile.cs" />
@@ -59,15 +58,15 @@
       <Project>{51f3d6d1-be23-4950-b536-109864113c04}</Project>
       <Name>ReportingCommon</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Milliman.Controller\SystemReporting.Controller.csproj">
+    <ProjectReference Include="..\Milliman.Controller\Milliman.Controller.csproj">
       <Project>{4db70de2-89db-4f4d-af15-eba4af7109ee}</Project>
       <Name>Milliman.Controller</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Milliman.Entities\SystemReporting.Entities.csproj">
+    <ProjectReference Include="..\Milliman.Entities\Milliman.Entities.csproj">
       <Project>{f79112aa-3e3e-4a77-a603-7e81f45afffb}</Project>
       <Name>Milliman.Entities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Milliman.Utilities\SystemReporting.Utilities.csproj">
+    <ProjectReference Include="..\Milliman.Utilities\Milliman.Utilities.csproj">
       <Project>{43ef8247-0456-458f-8f85-dfd57f54ae79}</Project>
       <Name>Milliman.Utilities</Name>
     </ProjectReference>

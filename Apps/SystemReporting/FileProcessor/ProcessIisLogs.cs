@@ -199,7 +199,7 @@ namespace FileProcessor
         /// <returns>List<IisLogFileEntry></returns>
         public static List<IisLogFileEntry> ParseFile(string filefullName)
         {
-            List<IisLogFileEntry> listLogFile = new List<IisLogFileEntry>();
+            var listLogFile = new List<IisLogFileEntry>();
             string[] supportedIisVersion = { "8.5" };
 
             try

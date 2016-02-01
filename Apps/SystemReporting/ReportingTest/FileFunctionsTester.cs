@@ -330,65 +330,7 @@ namespace ReportingTest
             Assert.IsTrue(bSucess);
         }
 
-        [TestMethod]
-        public void TestGetHash()
-        {
-            FileFunctions fp = new FileFunctions();            
-            EnumFileProcessor.eFilePath filePath = EnumFileProcessor.eFilePath.IisLogs;
-
-            //move file from here
-            string fileSource = FileFunctions.GetFileOriginalSourceDirectory(filePath);
-            string fileDestinationPath = FileFunctions.GetFileProcessingInDirectory(filePath);
-
-            //get lastest file 
-            string latestFileName = fp.GetLatestFileName(fileSource, "u_*.log");
-
-            string hash = string.Empty;
-            if (!string.IsNullOrEmpty(latestFileName))
-            {
-                string fileSourceFullNameAndPath = fileSource + latestFileName;
-                string destNationFileFullNameAndPath = fileDestinationPath + latestFileName;
-
-                DTHasher dth = new DTHasher();
-                File file = new File();
-                if (file.Exists(fileSourceFullNameAndPath))
-                {
-                    hash = dth.GetHash(fileSourceFullNameAndPath, destNationFileFullNameAndPath);
-                }
-            }
-            Assert.IsNotNull(hash);
-        }
-
-        [TestMethod]
-        public void TestGetHash2()
-        {
-            FileFunctions fp = new FileFunctions();
-            EnumFileProcessor.eFilePath filePath = EnumFileProcessor.eFilePath.IisLogs;
-
-            //move file from here
-            string fileSource = FileFunctions.GetFileOriginalSourceDirectory(filePath);
-            string fileDestinationPath = FileFunctions.GetFileProcessingInDirectory(filePath);
-
-            //get lastest file 
-            string latestFileName = fp.GetLatestFileName(fileSource, "u_*.log");
-
-            string hash = string.Empty;
-            if (!string.IsNullOrEmpty(latestFileName))
-            {
-                string fileSourceFullNameAndPath = fileSource + latestFileName;
-                string destNationFileFullNameAndPath = fileDestinationPath + latestFileName;
-
-                DTHasher dth = new DTHasher();
-                File file = new File();
-                if (file.Exists(fileSourceFullNameAndPath))
-                {
-                    hash = dth.GetHash(fileSourceFullNameAndPath);
-                }
-            }
-            Assert.IsNotNull(hash);
-        }
-
-        [TestMethod]
+       [TestMethod]
         public void TestLogger()
         {
             LogError("This is Test  || DateTime: " + DateTime.Now );

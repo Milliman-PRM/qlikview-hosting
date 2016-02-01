@@ -17,16 +17,34 @@ namespace SystemReporting.Data.Repository
         private DbSet<T> _entity = null;
 
         /// <summary>
-        /// Constructor
+        /// Constructor opens the connection to DB
         /// </summary>
         public Repository()
         {
-            this._dbContext = new ApplicationDbContext();
+            //this._dbContext = new ApplicationDbContext();
+            //if (this._dbContext.Database.Connection.State == System.Data.ConnectionState.Closed)
+            //{
+            //    this._dbContext.Database.Connection.Open();
+            //}
+            OpenDatabaseConnection();
+            _entity = _dbContext.Set<T>();
+        }
+
+        public void OpenDatabaseConnection()
+        {
+            _dbContext = new ApplicationDbContext();
             if (this._dbContext.Database.Connection.State == System.Data.ConnectionState.Closed)
             {
                 this._dbContext.Database.Connection.Open();
             }
-            _entity = _dbContext.Set<T>();
+        }
+        public void CloseDatabaseConnection()
+        {
+            if (_dbContext != null)
+            {
+                _dbContext.Dispose();
+                _dbContext = null;
+            }            
         }
 
         /// <summary>
@@ -74,13 +92,12 @@ namespace SystemReporting.Data.Repository
         /// </summary>
         public void Commit()
         {
-
             for (int i = 0; i < 10; i++)
             {
                 try
                 {
                     _dbContext.Configuration.ValidateOnSaveEnabled = false;
-                    _dbContext.Configuration.AutoDetectChangesEnabled = false;
+                    _dbContext.Configuration.AutoDetectChangesEnabled = false;                    
                     using (var scope = new TransactionScope(TransactionScopeOption.Required,
                                                         new TransactionOptions
                                                         {
@@ -92,6 +109,7 @@ namespace SystemReporting.Data.Repository
                     }
                     _dbContext.Configuration.ValidateOnSaveEnabled = true;
                     _dbContext.Configuration.AutoDetectChangesEnabled = true;
+                    CloseDatabaseConnection();
                     break;
                 }
                 catch (DbUpdateException ex)
@@ -105,11 +123,13 @@ namespace SystemReporting.Data.Repository
                     if (!string.IsNullOrEmpty(message)
                         && (message.Contains("deadlock victim")
                             || message.Contains("timeout")))
-                    {
-                        continue;
+                    {                        
+                        CloseDatabaseConnection();
+                        continue;                        
                     }
                     else
                     {
+                        CloseDatabaseConnection();
                         throw ex;
                     }
                 }
