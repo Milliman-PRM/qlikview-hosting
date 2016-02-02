@@ -11,6 +11,9 @@ namespace SystemReporting.Entities.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
+        [Column("useraccessdatetime")]
+        public DateTime? UserAccessDatetime { get; set; }
+
         [Column("document")]
         public string Document { get; set; }
 

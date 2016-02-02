@@ -37,17 +37,22 @@ namespace FileProcessor
                     var sourceDirectory = new DirectoryInfo(FileFunctions.GetFileOriginalSourceDirectory(efilePath));
 
                     //LogFileProcessor\IN
-                    var destinationInDirectory = FileFunctions.GetFileProcessingInDirectory(efilePath);
+                    var destinationInDirectory = new DirectoryInfo(FileFunctions.GetFileProcessingInDirectory(efilePath));
 
                     string filter = "u_ex";
                     if (sourceDirectory.Exists)
                     {
                         List<string> listFileToProcess = FileFunctions.GetFileToReadFromStatusFile(filter, efilePath);
+                        if (listFileToProcess.Count <= 0)
+                        {
+                            Console.WriteLine("No files exist to Process.");
+                        }
+
                         if (listFileToProcess.Count > 0)
                         {
                             foreach (var file in listFileToProcess)
                             {
-                                string fileNameWithsourceDirectory = sourceDirectory + file;
+                                string fileNameWithsourceDirectory = (sourceDirectory + file);
                                 if (File.Exists(fileNameWithsourceDirectory))
                                 {
                                     FileFunctions.CopyFile(sourceDirectory + file, efilePath, true);
@@ -96,9 +101,9 @@ namespace FileProcessor
                 if (listLogFile != null & listLogFile.Count > 0)
                 {
                     //list
-                    List<ProxyIisLog> listProxyLogs = new List<ProxyIisLog>();
+                    var listProxyLogs = new List<ProxyIisLog>();
                     //Entity
-                    ProxyIisLog proxyLogEntry = new ProxyIisLog();
+                    var proxyLogEntry = new ProxyIisLog();
                     foreach (var entry in listLogFile)
                     {
                         //find what type of event 
@@ -111,11 +116,10 @@ namespace FileProcessor
 
                         if (entry.TimeStamp != null)
                         {
-                            proxyLogEntry.LogCreateDate = entry.TimeStamp.ToString("MM/dd/yy");
-                            proxyLogEntry.LogCreateTime = entry.TimeStamp.ToString("HH:mm:ss");
+                            proxyLogEntry.UserAccessDatetime = entry.TimeStamp.ToString();
                         }
                         proxyLogEntry.ClientIpAddress = (!string.IsNullOrEmpty(entry.ClientIp)) ? entry.ClientIp.Trim() : string.Empty;
-                        proxyLogEntry.UserName = (!string.IsNullOrEmpty(entry.UserName)) ? entry.UserName.Trim() : string.Empty;
+                        proxyLogEntry.User = (!string.IsNullOrEmpty(entry.UserName)) ? entry.UserName.Trim() : string.Empty;
                         proxyLogEntry.ServerIPAddress = (!string.IsNullOrEmpty(entry.ServerIp)) ? entry.ServerIp.Trim() : string.Empty;
                         proxyLogEntry.PortNumber = entry.Port != 0 ? entry.Port : 0;
                         proxyLogEntry.CommandSentMethod = (!string.IsNullOrEmpty(entry.Method)) ? entry.Method.Trim() : string.Empty;
@@ -163,18 +167,18 @@ namespace FileProcessor
 
                     //sort the list
                     var listProxyLogsOrdered = listProxyLogs.OrderBy(a => a.EventType)
-                                                            .ThenBy(b => b.UserName)
+                                                            .ThenBy(b => b.User)
                                                             .ThenByDescending(c => c.Group);
 
                     //give me distinct latest and last records based on the two fields UN (if there is any) & Event
-                    var listProxyLogsDistinctRecords = listProxyLogsOrdered.GroupBy(x => new { x.EventType, x.UserName, x.Group })
+                    var listProxyLogsDistinctRecords = listProxyLogsOrdered.GroupBy(x => new { x.EventType, x.User, x.Group })
                                                                         .Select(y => y.First())
-                                                                        .OrderBy(x => x.UserName).ThenByDescending(x => x.EventType)
+                                                                        .OrderBy(x => x.User).ThenByDescending(x => x.EventType)
                                                                         .Distinct();
 
-                    var listProxyExcludeDups = listProxyLogsDistinctRecords.GroupBy(x => new { x.UserName, x.EventType })
+                    var listProxyExcludeDups = listProxyLogsDistinctRecords.GroupBy(x => new { x.User, x.EventType })
                                                                         .Select(y => y.First())
-                                                                        .OrderBy(x => x.UserName).ThenByDescending(x => x.EventType)
+                                                                        .OrderBy(x => x.User).ThenByDescending(x => x.EventType)
                                                                         .Distinct();
 
                     List<ProxyIisLog> listProxyLogsFinal = listProxyExcludeDups.ToList();
@@ -199,12 +203,14 @@ namespace FileProcessor
         /// <returns>List<IisLogFileEntry></returns>
         public static List<IisLogFileEntry> ParseFile(string filefullName)
         {
+            var fileLines = new List<string>();
             var listLogFile = new List<IisLogFileEntry>();
+
             string[] supportedIisVersion = { "8.5" };
 
             try
             {
-                List<string> fileLines = File.ReadAllLines(filefullName).ToList();
+                fileLines = File.ReadAllLines(filefullName).ToList();
                 string thisIisVersion = fileLines[0].Substring(fileLines[0].IndexOfAny("0123456789".ToCharArray()));
 
                 if (supportedIisVersion.Contains(thisIisVersion))

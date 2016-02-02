@@ -30,7 +30,8 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
             {
                 SessionLog logEntity = new SessionLog();
                 foreach (var entry in listProxyLogs)
-                {                   
+                {                    
+                    logEntity.UserAccessDatetime = string.IsNullOrEmpty(entry.UserAccessDatetime) ? (DateTime?)null : DateTime.Parse(entry.UserAccessDatetime);
                     logEntity.Document = (!string.IsNullOrEmpty(entry.Document)) ? entry.Document.Trim() : string.Empty;
                     logEntity.ExitReason = (!string.IsNullOrEmpty(entry.ExitReason)) ? entry.ExitReason.Trim() : string.Empty;
                     logEntity.SessionStartTime = string.IsNullOrEmpty(entry.SessionStartTime) ? (DateTime?)null : DateTime.Parse(entry.SessionStartTime);

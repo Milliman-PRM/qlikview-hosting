@@ -84,11 +84,11 @@ namespace FileProcessor
         {
             //status file name with directory
             string statusFileName = ConfigurationManager.AppSettings["statusFileName"];
-            string statusFileAndDirectory = GetStatusFileDirectory() + statusFileName + ".txt";
+            string statusFileAndDirectory = (GetStatusFileDirectory() + statusFileName + ".txt");
 
             //backup file name with directory
             string processedLogFileName = ConfigurationManager.AppSettings["ProcessedFileLogFileName"];
-            string processedLogFileAndDirectory = ProcessedFileLogDirectory() + processedLogFileName + ".log";
+            string processedLogFileAndDirectory = (ProcessedFileLogDirectory() + processedLogFileName + ".log");
 
             List<string> fileToRead = new List<string>();
             if (!string.IsNullOrEmpty(statusFileAndDirectory))
@@ -110,7 +110,7 @@ namespace FileProcessor
             List<string> listProcessedFileLines = System.IO.File.ReadAllLines(processedLogFileAndDirectory).ToList();
 
             //Get the Source location
-            var sourceDirectory = GetFileOriginalSourceDirectory(eFilePath);
+            var sourceDirectory = (GetFileOriginalSourceDirectory(eFilePath));
 
             var listFilesAtSourceLocation = new List<string>();
             //file names that are unique among source and dest
@@ -150,8 +150,6 @@ namespace FileProcessor
                     var finalFileToProcess = fileNameToProcessFromStatus.Where(s=>s.Contains(filter)).ToList();
 
                     //match the above list with difference and which ever file(s) names match, process those                               
-                    var matching = from s in finalFileToProcess where listFilesDifferenceBWSB.Any(r => s.StartsWith(r)) select s;
-
                     listFinalFilesToBeProcessed = finalFileToProcess.Where(x => listFilesDifferenceBWSB.Contains(x)).ToList();
 
                 }

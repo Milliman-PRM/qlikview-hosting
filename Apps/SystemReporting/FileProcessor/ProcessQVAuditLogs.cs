@@ -45,6 +45,10 @@ namespace FileProcessor
                     {
                         List<string> listFileToProcess = FileFunctions.GetFileToReadFromStatusFile(filter, efilePath);
 
+                        if (listFileToProcess.Count <=0)
+                        {
+                            Console.WriteLine("No files exist to Process.");
+                        }
                         foreach (var file in listFileToProcess)
                         {
                             string fileNameWithsourceDirectory = sourceDirectory + file;
@@ -55,7 +59,10 @@ namespace FileProcessor
                                 if (blnSucessful)
                                 {
                                     File.Delete(destinationInDirectory + file);
-                                    BaseFileProcessor.LogProcessedFile(string.Join(",", listFileToProcess.ToArray()));
+                                    foreach (var item in listFileToProcess)
+                                    {
+                                        BaseFileProcessor.LogProcessedFile(item);
+                                    }
                                 }
                                 else
                                 {
@@ -88,9 +95,9 @@ namespace FileProcessor
 
                 if (listLogFile != null & listLogFile.Count > 0)
                 {
-                    List<ProxyAuditLog> listProxyLogs = new List<ProxyAuditLog>();
+                    var listProxyLogs = new List<ProxyAuditLog>();
                     //Entity
-                    ProxyAuditLog proxyLogEntry = new ProxyAuditLog();
+                    var proxyLogEntry = new ProxyAuditLog();
 
                     //Time Zone
                     bool UseDaylightSavings = true;
@@ -100,28 +107,22 @@ namespace FileProcessor
 
                     foreach (var entry in listLogFile)
                     {
-                        if (entry.ServerStarted != null)
-                        {
-                            proxyLogEntry.ServerStarted = entry.ServerStarted.ToString("MM/dd/yy HH:mm:ss");
-                        }
-
                         if (entry.Timestamp != null)
                         {
                             if (UseDaylightSavings)
                             {
-                                proxyLogEntry.Timestamp = TimeZoneInfo.ConvertTimeToUtc(entry.Timestamp, serverTimeZone).ToString("MM/dd/yy HH:mm:ss");
+                                proxyLogEntry.UserAccessDatetime = TimeZoneInfo.ConvertTimeToUtc(entry.Timestamp, serverTimeZone).ToString("MM/dd/yy HH:mm:ss");
                             }
                             else
                             {
-                                proxyLogEntry.Timestamp = (entry.Timestamp - serverTimeZone.BaseUtcOffset).ToString("MM/dd/yy HH:mm:ss");
+                                proxyLogEntry.UserAccessDatetime = (entry.Timestamp - serverTimeZone.BaseUtcOffset).ToString("MM/dd/yy HH:mm:ss");
                             }
                         }
-
                         proxyLogEntry.Document = (!string.IsNullOrEmpty(entry.Document)) ? entry.Document.Trim() : string.Empty;
                         proxyLogEntry.EventType = (!string.IsNullOrEmpty(entry.EventType)) ? entry.EventType.Trim() : string.Empty;
 
                         var user = entry.User.Replace(@"Custom\", "").Replace(@"custom\", "");
-                        proxyLogEntry.UserName = (!string.IsNullOrEmpty(user)) ? user.Trim() : "UnKnown User";
+                        proxyLogEntry.User = (!string.IsNullOrEmpty(user)) ? user.Trim() : "UnKnown User";
 
                         proxyLogEntry.Message = (!string.IsNullOrEmpty(entry.Message)) ? entry.Message.Trim() : string.Empty;
 
@@ -172,8 +173,8 @@ namespace FileProcessor
         /// <returns></returns>
         public static List<QlikviewAuditLogEntry> ParseLogFile(string filefullName)
         {
-            List<string> fileLines = new List<string>();
-            List<QlikviewAuditLogEntry> listLogFile = new List<QlikviewAuditLogEntry>();
+            var fileLines = new List<string>();
+            var listLogFile = new List<QlikviewAuditLogEntry>();
 
             try
             {

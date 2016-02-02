@@ -6,13 +6,13 @@ namespace SystemReporting.Entities.Proxy
     [Serializable()]
     public class ProxyAuditLog
     {
-        public string ServerStarted { get; set; }
-        public string Timestamp { get; set; }
+        public string UserAccessDatetime { get; set; }
         public string Document { get; set; }
         public string EventType { get; set; }
-        public string UserName { get; set; }
         public string Message { get; set; }
 
+        //User table
+        public string User { get; set; }
         //Goes to group table
         public string Group { get; set; }
         //Goes to report table

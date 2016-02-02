@@ -9,10 +9,8 @@ namespace SystemReporting.Entities.Proxy
     [Serializable()]
     public class ProxyIisLog
     {
-        public string LogCreateDate { get; set; }
-        public string LogCreateTime { get; set; }
+        public string UserAccessDatetime { get; set; }
         public string ClientIpAddress { get; set; }
-        public string UserName { get; set; }
         public string ServerIPAddress { get; set; }
         public int? PortNumber { get; set; }
         public string CommandSentMethod { get; set; }
@@ -25,6 +23,8 @@ namespace SystemReporting.Entities.Proxy
         public string UserAgent { get; set; }
         public string ClientReferer { get; set; }
 
+        //User table
+        public string User { get; set; }
         //Goes to group table
         public string Group { get; set; }
         //Need to find out where to store this

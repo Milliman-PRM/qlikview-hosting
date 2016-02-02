@@ -109,6 +109,7 @@ namespace FileProcessor
         }        
         public static void LogError(Exception ex)
         {
+            Console.WriteLine("Exception Occurred. Check the Exception Log. Message : ", ex.Message.ToString());
             var LoggerFileDirectory = ConfigurationManager.AppSettings["LoggerFileDirectory"];
             var LoggerFileName = ConfigurationManager.AppSettings["LoggerFileName"];
             Logger.Instance.LogPath = LoggerFileDirectory;
@@ -121,6 +122,7 @@ namespace FileProcessor
         }
         public static void LogError(string message)
         {
+            Console.WriteLine("Exception Occurred. Check the Exception Log. Message : ", message);
             var LoggerFileDirectory = ConfigurationManager.AppSettings["LoggerFileDirectory"];
             var LoggerFileName = ConfigurationManager.AppSettings["LoggerFileName"];
             Logger.Instance.LogPath = LoggerFileDirectory;
@@ -131,6 +133,7 @@ namespace FileProcessor
         }
         public static void LogExAndErr(Exception ex, string message)
         {
+            Console.WriteLine("Exception Occurred. Check the Exception Log. Message : ", message);
             var LoggerFileDirectory = ConfigurationManager.AppSettings["LoggerFileDirectory"];
             var LoggerFileName = ConfigurationManager.AppSettings["LoggerFileName"];
             Logger.Instance.LogPath = LoggerFileDirectory;
@@ -148,6 +151,7 @@ namespace FileProcessor
         #region FileProcessed
         public static void LogProcessedFile(string message)
         {
+            Console.WriteLine("Processed file successfully {0}", message);
             var LoggerFileDirectory = ConfigurationManager.AppSettings["ProcessedFileLogDirectory"];
             var LoggerFileName = ConfigurationManager.AppSettings["ProcessedFileLogFileName"];
             Logger.Instance.LogPath = LoggerFileDirectory;

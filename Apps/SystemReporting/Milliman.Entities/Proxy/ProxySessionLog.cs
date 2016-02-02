@@ -6,6 +6,7 @@ namespace SystemReporting.Entities.Models
     [Serializable()]
     public class ProxySessionLog
     {
+        public string UserAccessDatetime { get; set; }
         public string Document { get; set; }
         public string ExitReason { get; set; }
         public string SessionStartTime { get; set; }

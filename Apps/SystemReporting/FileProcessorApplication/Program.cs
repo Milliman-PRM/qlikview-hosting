@@ -15,14 +15,34 @@ namespace FileProcessorApplication
                 DisplayInfo();
                 if (args.Length == 0)
                 {
-                    //args = "Audit";
-                    //args = "Session";
-                    string[] ar1 = new string[] { "Iis" };
-                    args = ar1;
-                }                
+                    Console.WriteLine("The system is not Auto sept up for process to execute. Please select the process you want to Execute and press Enter:");
+                    string[] argument;
+                    string choice;
+                    Console.WriteLine("1. Iis Log");
+                    Console.WriteLine("2. Audit Log");
+                    Console.WriteLine("3. Session Log");
+                    choice = Console.ReadLine();
+                    switch (choice)
+                    {
+                        case "1": // Do Something
+                            argument = new string[] { "Iis" };
+                            break;
+                        case "2": //Do that
+                            argument = new string[] { "Audit" };
+                            break;
+                        case "3":
+                            argument = new string[] { "Session" };
+                            break;
+                        default:
+                            argument = new string[] { "Iis" };
+                            break;
+                    }
+                    Console.WriteLine("Please wait till process for log {0} file completes. ", argument);
+                    Console.WriteLine("----------------------------------------");
+                    args = argument;
+                }
                 if (CheckArgs(args))
                 {
-
                     FileProcessor.ProcessFile.ExecuteProcessFile(args);
                 }
                 else
@@ -53,12 +73,12 @@ namespace FileProcessorApplication
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.White;
             Console.Title = "Reporting Application Milliman Inc.";
-            
+
             // Get rid of the scroll bars by making the buffer the same size as the window
             Console.Clear();
-            Console.SetWindowSize(65, 20);
-            Console.BufferWidth = 65;
-            Console.BufferHeight = 20;
+            //Console.SetWindowSize(65, 20);
+            //Console.BufferWidth = 65;
+            //Console.BufferHeight = 20;
 
             int left = Console.CursorLeft;
             int top = Console.CursorTop;
@@ -83,6 +103,7 @@ namespace FileProcessorApplication
 
         private static void DisplayUsage()
         {
+            Console.WriteLine("----------------------------------------");
             Console.WriteLine("Pass in Report name as command line arguments ");
             Console.WriteLine("for usage to process specific data.");
             Console.WriteLine(String.Empty);

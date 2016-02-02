@@ -12,17 +12,14 @@ namespace SystemReporting.Entities.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        [Column("logcreatedate")]
-        public DateTime? LogCreateDate { get; set; }
-
-        [Column("logcreatetime")]
-        public DateTime? LogCreateTime { get; set; }
+        [Column("useraccessdatetime")]
+        public DateTime? UserAccessDatetime { get; set; }
 
         [Column("clientipaddress")]
         public string ClientIpAddress { get; set; }
 
-        [Column("username")]
-        public string UserName { get; set; }
+        //[Column("username")]
+        //public string UserName { get; set; }
 
         [Column("serveripaddress")]
         public string ServerIPAddress { get; set; }

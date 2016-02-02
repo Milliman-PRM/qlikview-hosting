@@ -36,6 +36,7 @@ GRANT ALL ON TABLE "user" TO postgres WITH GRANT OPTION;
 GRANT ALL ON TABLE "user" TO public;
 
 
+
 -- Table: "group"
 
 -- DROP TABLE "group";
@@ -55,7 +56,6 @@ ALTER TABLE "group"
   OWNER TO postgres;
 GRANT ALL ON TABLE "group" TO postgres WITH GRANT OPTION;
 GRANT ALL ON TABLE "group" TO public;
-
 
 
 -- Table: report
@@ -80,10 +80,10 @@ GRANT ALL ON TABLE report TO public;
 
 
 
+
 /*********************************************************************
 			Reporting Logs Tables
 **********************************************************************/
-
 -- Table: iislog
 
 -- DROP TABLE iislog;
@@ -91,10 +91,8 @@ GRANT ALL ON TABLE report TO public;
 CREATE TABLE iislog
 (
   id serial NOT NULL,
-  logcreatedate date,
-  logcreatetime timestamp with time zone,
+  useraccessdatetime timestamp with time zone,
   clientipaddress character(15),
-  username character(30),
   serveripaddress character(15),
   portnumber integer,
   commandsentmethod character(10),
@@ -107,7 +105,7 @@ CREATE TABLE iislog
   useragent text,
   clientreferer text,
   browser character(25),
-  eventtype character(50),
+  eventtype character(25),
   adddate timestamp with time zone,
   fk_user_id integer,
   fk_group_id integer,
@@ -136,11 +134,9 @@ GRANT ALL ON TABLE iislog TO public;
 CREATE TABLE qlickviewauditlog
 (
   id serial NOT NULL,
-  serverstarted timestamp(0) with time zone,
-  "timestamp" timestamp with time zone,
+  useraccessdatetime timestamp with time zone,
   document text,
-  eventtype character(50),
-  username character(30),
+  eventtype character(25),
   message text,
   isreduced boolean,
   fk_user_id integer,
@@ -168,6 +164,7 @@ GRANT ALL ON TABLE qlickviewauditlog TO public;
 
 
 
+
 -- Table: qlickviewsessionlog
 
 -- DROP TABLE qlickviewsessionlog;
@@ -175,6 +172,7 @@ GRANT ALL ON TABLE qlickviewauditlog TO public;
 CREATE TABLE qlickviewsessionlog
 (
   id serial NOT NULL,
+  useraccessdatetime timestamp with time zone,
   document text,
   exitreason character(50),
   sessionstarttime timestamp with time zone,
@@ -210,3 +208,4 @@ ALTER TABLE qlickviewsessionlog
   OWNER TO postgres;
 GRANT ALL ON TABLE qlickviewsessionlog TO postgres WITH GRANT OPTION;
 GRANT ALL ON TABLE qlickviewsessionlog TO public;
+

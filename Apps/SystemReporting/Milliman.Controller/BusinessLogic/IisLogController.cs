@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using SystemReporting.Utilities;
 
 namespace SystemReporting.Controller.BusinessLogic.Controller
 {
@@ -33,46 +34,29 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                 IisLog logEntity = new IisLog();
                 foreach (var entry in listProxyLogs)
                 {
-                    
-                    logEntity.LogCreateDate = string.IsNullOrEmpty(entry.LogCreateDate) ? (DateTime?)null : DateTime.Parse(entry.LogCreateDate);
-                    logEntity.LogCreateTime = string.IsNullOrEmpty(entry.LogCreateTime) ? (DateTime?)null : DateTime.Parse(entry.LogCreateTime);
-
-                    //if (logEntity.LogCreateDate.HasValue)
-                    //{
-                    //    DateTime dtNow = new DateTime();
-                    //    dtNow = logEntity.LogCreateDate.Value;
-                    //    DateTime dt = DateTime.Parse(dtNow.ToShortDateString());
-                    //    logEntity.LogCreateDate = Convert.ToDateTime(dt.ToString("dd/MM/yyyy"));
-                    //}
-
-                    if (logEntity.LogCreateDate.HasValue)
-                        logEntity.LogCreateDate = Convert.ToDateTime(logEntity.LogCreateDate.Value.ToString("MM/dd/yy"));
-
-                    if (logEntity.LogCreateTime.HasValue)
-                        logEntity.LogCreateTime = Convert.ToDateTime(logEntity.LogCreateTime.Value.ToString("HH:mm:ss"));
-
+                    //DateTime userAccessDatetime = Convert.ToDateTime(entry.UserAccessDatetime);
+                    //string userAccessDatetimeStr = userAccessDatetime.ToString("MM-dd-yyyy hh:mm:ss tt");
+                    logEntity.UserAccessDatetime = string.IsNullOrEmpty(entry.UserAccessDatetime) ? (DateTime?)null : DateTime.Parse(entry.UserAccessDatetime);
                     logEntity.ClientIpAddress = (!string.IsNullOrEmpty(entry.ClientIpAddress)) ? entry.ClientIpAddress.Trim() : string.Empty;
 
                     #region User
                     //Insert User
-                    if (!string.IsNullOrEmpty(entry.UserName))
+                    if (!string.IsNullOrEmpty(entry.User))
                     {
                         User user = new User();
-                        var userExist = serviceMilliman.GetUsers<User>(u => u.UserName == entry.UserName).FirstOrDefault();
+                        var userExist = serviceMilliman.GetUsers<User>(u => u.UserName == entry.User).FirstOrDefault();
                         if (userExist == null)
                         {
-                            user.UserName = entry.UserName.Trim(); 
+                            user.UserName = entry.User.Trim(); 
                             ControllerCommon.SaveUser(user);
                             user = new User();
-
-                            logEntity.UserName = entry.UserName.Trim();
+                            
                             //after insert set the id
-                            User userFound = serviceMilliman.GetUsers<User>(a => a.UserName == entry.UserName).FirstOrDefault();
+                            User userFound = serviceMilliman.GetUsers<User>(a => a.UserName == entry.User).FirstOrDefault();
                             logEntity.fk_user_id = userFound.Id;
                         }
                         else
                         {
-                            logEntity.UserName = userExist.UserName.Trim();
                             logEntity.fk_user_id = userExist.Id; 
                         }
                     }

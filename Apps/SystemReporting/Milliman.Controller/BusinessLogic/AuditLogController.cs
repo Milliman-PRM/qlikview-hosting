@@ -32,39 +32,29 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                 AuditLog logEntity = new AuditLog();
                 foreach (var entry in listProxyLogs)
                 {
-                    logEntity.ServerStarted = string.IsNullOrEmpty(entry.ServerStarted) ? (DateTime?)null : DateTime.Parse(entry.ServerStarted);
-                    logEntity.Timestamp = string.IsNullOrEmpty(entry.Timestamp) ? (DateTime?)null : DateTime.Parse(entry.Timestamp);
-
-                    if (logEntity.ServerStarted.HasValue)
-                        logEntity.ServerStarted.Value.ToString("MM/dd/yy");
-
-                    if (logEntity.Timestamp.HasValue)
-                        logEntity.Timestamp.Value.ToString("HH:mm:ss");
-
+                    logEntity.UserAccessDatetime = string.IsNullOrEmpty(entry.UserAccessDatetime) ? (DateTime?)null : DateTime.Parse(entry.UserAccessDatetime);
                     logEntity.Document = (!string.IsNullOrEmpty(entry.Document)) ? entry.Document.Trim() : string.Empty;
                     logEntity.EventType = (!string.IsNullOrEmpty(entry.EventType)) ? entry.EventType.Trim() : string.Empty;
 
                     #region User
 
                     ///Insert User
-                    if (!string.IsNullOrEmpty(entry.UserName))
+                    if (!string.IsNullOrEmpty(entry.User))
                     {
                         User user = new User();
-                        var userExist = serviceMilliman.GetUsers<User>(u => u.UserName == entry.UserName).FirstOrDefault();
+                        var userExist = serviceMilliman.GetUsers<User>(u => u.UserName == entry.User).FirstOrDefault();
                         if (userExist == null)
                         {
-                            user.UserName = entry.UserName.Trim();
+                            user.UserName = entry.User.Trim();
                             ControllerCommon.SaveUser(user);
                             user = new User();
-
-                            logEntity.UserName = entry.UserName.Trim();
+                            
                             //after insert set the id
-                            User userFound = serviceMilliman.GetUsers<User>(a => a.UserName == entry.UserName).FirstOrDefault();
+                            User userFound = serviceMilliman.GetUsers<User>(a => a.UserName == entry.User).FirstOrDefault();
                             logEntity.fk_user_id = userFound.Id;
                         }
                         else
                         {
-                            logEntity.UserName = userExist.UserName.Trim();
                             logEntity.fk_user_id = userExist.Id;
                         }
                     }

@@ -11,7 +11,7 @@ using System.Transactions;
 
 namespace SystemReporting.Data.Repository
 {
-    public class Repository<T> : IRepository<T> where T : class
+    public class Repository<T> : IDisposable, IRepository<T> where T : class
     {
         private ApplicationDbContext _dbContext = null;
         private DbSet<T> _entity = null;
@@ -21,30 +21,12 @@ namespace SystemReporting.Data.Repository
         /// </summary>
         public Repository()
         {
-            //this._dbContext = new ApplicationDbContext();
-            //if (this._dbContext.Database.Connection.State == System.Data.ConnectionState.Closed)
-            //{
-            //    this._dbContext.Database.Connection.Open();
-            //}
-            OpenDatabaseConnection();
-            _entity = _dbContext.Set<T>();
-        }
-
-        public void OpenDatabaseConnection()
-        {
-            _dbContext = new ApplicationDbContext();
+            this._dbContext = new ApplicationDbContext();
             if (this._dbContext.Database.Connection.State == System.Data.ConnectionState.Closed)
             {
                 this._dbContext.Database.Connection.Open();
             }
-        }
-        public void CloseDatabaseConnection()
-        {
-            if (_dbContext != null)
-            {
-                _dbContext.Dispose();
-                _dbContext = null;
-            }            
+            _entity = _dbContext.Set<T>();
         }
 
         /// <summary>
@@ -56,7 +38,31 @@ namespace SystemReporting.Data.Repository
             this._dbContext = db;
             _entity = db.Set<T>();
         }
+        //public void OpenDatabaseConnection()
+        //{
+        //    _dbContext = new ApplicationDbContext();
+        //    if (this._dbContext.Database.Connection.State == System.Data.ConnectionState.Closed)
+        //    {
+        //        this._dbContext.Database.Connection.Open();
+        //    }
+        //}
+        //public void CloseDatabaseConnection()
+        //{
+        //    Dispose();
+        //}
 
+        public void Dispose()
+        {
+            if (_dbContext != null)
+                _dbContext.Dispose();
+            GC.SuppressFinalize(_dbContext);
+        }
+
+        public DbContext GetContext()
+        {
+            return _dbContext;
+        }
+        
         #region Functions Add/Update/Delete
 
         public void Add(T obj)
@@ -109,7 +115,6 @@ namespace SystemReporting.Data.Repository
                     }
                     _dbContext.Configuration.ValidateOnSaveEnabled = true;
                     _dbContext.Configuration.AutoDetectChangesEnabled = true;
-                    CloseDatabaseConnection();
                     break;
                 }
                 catch (DbUpdateException ex)
@@ -123,13 +128,13 @@ namespace SystemReporting.Data.Repository
                     if (!string.IsNullOrEmpty(message)
                         && (message.Contains("deadlock victim")
                             || message.Contains("timeout")))
-                    {                        
-                        CloseDatabaseConnection();
+                    {
+                        Dispose();
                         continue;                        
                     }
                     else
                     {
-                        CloseDatabaseConnection();
+                        Dispose();
                         throw ex;
                     }
                 }

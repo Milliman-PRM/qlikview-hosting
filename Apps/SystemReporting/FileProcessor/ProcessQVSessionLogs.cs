@@ -43,7 +43,10 @@ namespace FileProcessor
                     if (sourceDirectory.Exists)
                     {
                         List<string> listFileToProcess = FileFunctions.GetFileToReadFromStatusFile(filter, efilePath);
-
+                        if (listFileToProcess.Count <= 0)
+                        {
+                            Console.WriteLine("No files exist to Process.");
+                        }
                         foreach (var file in listFileToProcess)
                         {
                             string fileNameWithsourceDirectory = sourceDirectory + file;
@@ -54,7 +57,10 @@ namespace FileProcessor
                                 if (blnSucessful)
                                 {
                                     File.Delete(destinationInDirectory + file);
-                                    BaseFileProcessor.LogProcessedFile(string.Join(",", listFileToProcess.ToArray()));
+                                    foreach (var item in listFileToProcess)
+                                    {
+                                        BaseFileProcessor.LogProcessedFile(item);
+                                    }
                                 }
                                 else
                                 {
@@ -100,6 +106,9 @@ namespace FileProcessor
                     {
                         proxyLogEntry.Document = (!string.IsNullOrEmpty(entry.Document)) ? entry.Document.Trim() : string.Empty;
                         proxyLogEntry.ExitReason = (!string.IsNullOrEmpty(entry.ExitReason)) ? entry.ExitReason.Trim() : string.Empty;
+
+                        if (entry.Timestamp != null)
+                            proxyLogEntry.UserAccessDatetime = entry.Timestamp.ToString();
 
                         if (entry.SessionStart != null)
                             proxyLogEntry.SessionStartTime = entry.SessionStart.ToString("MM/dd/yy HH:mm:ss");
@@ -179,8 +188,8 @@ namespace FileProcessor
         /// <returns></returns>
         public static List<QlikviewSessionLogEntry> ParseLogFile(string filefullName)
         {
-            List<string> fileLines = new List<string>();
-            List<QlikviewSessionLogEntry> listLogFile = new List<QlikviewSessionLogEntry>();
+            var fileLines = new List<string>();
+            var listLogFile = new List<QlikviewSessionLogEntry>();
 
             try
             {

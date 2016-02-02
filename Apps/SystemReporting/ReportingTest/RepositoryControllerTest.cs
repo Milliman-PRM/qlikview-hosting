@@ -27,7 +27,7 @@ namespace TestFileProcessor
             IisLog log = new IisLog()
             {
                 QueryURI = "test",
-                UserName = u.UserName
+                fk_user_id=2
             };
             ser.Save(log);
 
