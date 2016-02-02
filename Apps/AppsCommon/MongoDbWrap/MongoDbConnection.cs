@@ -74,13 +74,36 @@ namespace MongoDbWrap
             return _Db;
         }
 
+        public bool TestDatabaseAccess()
+        {
+            try
+            {
+                GetCollectionNames();
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
+
         public List<string> GetCollectionNames()
         {
             List<string> CollectionNames = new List<string>();
 
             if (_Db != null)
             {
-                var Collections = _Db.ListCollectionsAsync().Result.ToListAsync().Result;
+                List<BsonDocument> Collections;
+                try
+                {
+                    Collections = _Db.ListCollectionsAsync().Result.ToListAsync().Result;
+                }
+                catch (Exception e) // typically happens if the database server is down
+                {
+                    string Error = e.ToString();
+                    throw;
+                }
+
                 foreach (var Collection in Collections)
                 {
                     CollectionNames.Add(Collection.GetValue("name", "").AsString);

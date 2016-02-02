@@ -29,6 +29,12 @@ namespace NorthBendUnityLib
 
             MongoCxn = new MongoDbConnection(CxParams);
 
+            if (!MongoCxn.TestDatabaseAccess())
+            {
+                throw new Exception("problem while testing database using connection parameters: " + CxParams.ToString());
+            }
+
+
             foreach (string Zip in Directory.GetFiles(zipFolder, @"*.zip").OrderBy(name => Directory.GetLastWriteTime(name)))
             {
                 using (ZipArchive archive = ZipFile.OpenRead(Zip))

@@ -29,7 +29,15 @@ namespace CdrExtractTest
                 Console.Beep();
                 return;
             }
-            Parser.MigrateRawToMongo(txtFolder.Text, chkMongoInsert.Checked);
+
+            try
+            {
+                Parser.MigrateRawToMongo(txtFolder.Text, chkMongoInsert.Checked);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void btnNorthBend_Click(object sender, EventArgs e)
@@ -41,7 +49,15 @@ namespace CdrExtractTest
                 Console.Beep();
                 return;
             }
-            Parser.MigrateRawToMongo(txtFolder.Text, chkMongoInsert.Checked);
+
+            try
+            {
+                Parser.MigrateRawToMongo(txtFolder.Text, chkMongoInsert.Checked);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void txtFolder_TextChanged(object sender, EventArgs e)

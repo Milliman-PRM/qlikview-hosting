@@ -28,6 +28,11 @@ namespace BayClinicEmrLib
 
             MongoDbConnection MongoCxn = new MongoDbConnection(CxParams);
 
+            if (!MongoCxn.TestDatabaseAccess())
+            {
+                throw new Exception("problem while testing database using connection parameters: " + CxParams.ToString());
+            }
+
             foreach (string Zip in Directory.GetFiles(zipFolder, @"*.zip").OrderBy(name => Directory.GetLastWriteTime(name)))
             {
                 using (ZipArchive archive = ZipFile.OpenRead(Zip))
@@ -64,12 +69,9 @@ namespace BayClinicEmrLib
                                     NewDocDictionary.Add("ImportFile", entry.Name);
 
                                     // Insert the MongoDB document
-                                    if (InsertToMongo)
+                                    if (DoMongoInsert)
                                     {
-                                        if (DoMongoInsert)
-                                        {
-                                            MongoCxn.InsertDocument(CollectionName, NewDocDictionary);
-                                        }
+                                        MongoCxn.InsertDocument(CollectionName, NewDocDictionary);
                                     }
                                 }
                                 Console.WriteLine(
@@ -85,43 +87,6 @@ namespace BayClinicEmrLib
             MongoCxn.Disconnect();
         }
 
-        private void SampleDictionaryCode()
-        {
-            /* Sample usage of Dictionary class
-             * 
-            Dictionary<string, string> openWith = new Dictionary<string, string>();
-
-            // Add some elements to the dictionary. There are no 
-            // duplicate keys, but some of the values are duplicates.
-            openWith.Add("txt", "notepad.exe");
-            openWith.Add("bmp", "paint.exe");
-            openWith.Add("dib", "paint.exe");
-            openWith.Add("rtf", "wordpad.exe");
-
-            // The Add method throws an exception if the new key is 
-            // already in the dictionary.
-            try
-            {
-                openWith.Add("txt", "winword.exe");
-            }
-            catch (ArgumentException)
-            {
-                Console.WriteLine("An element with Key = \"txt\" already exists.");
-            }
-
-            // The Item property is another name for the indexer, so you 
-            // can omit its name when accessing elements. 
-            Console.WriteLine("For key = \"rtf\", value = {0}.",
-                openWith["rtf"]);
-
-            // The indexer can be used to change the value associated
-            // with a key.
-            openWith["rtf"] = "winword.exe";
-            Console.WriteLine("For key = \"rtf\", value = {0}.",
-                openWith["rtf"]);
-             * 
-             */
-        }
     }
 }
 

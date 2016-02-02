@@ -51,5 +51,16 @@ namespace MongoDbWrap
 
             return true;
         }
+
+        public override string ToString()
+        {
+            return
+            " _UserDomain: " + _UserDomain +
+            " _User: " + _User +
+            " _Password: " + _Password +
+            " _Host: " + _Host +
+            " _Port: " + _Port.ToString() +
+            " _Db: " + _Db;
     }
+}
 }
