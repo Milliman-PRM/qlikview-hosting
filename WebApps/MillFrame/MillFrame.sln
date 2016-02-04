@@ -74,6 +74,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3rdPartyAssemblies", "3rdPa
 		3rdPartyAssemblies\AjaxControlToolkit.dll = 3rdPartyAssemblies\AjaxControlToolkit.dll
 		3rdPartyAssemblies\Ionic.Zip.dll = 3rdPartyAssemblies\Ionic.Zip.dll
 		3rdPartyAssemblies\Polenter.SharpSerializer.dll = 3rdPartyAssemblies\Polenter.SharpSerializer.dll
+		3rdPartyAssemblies\Telerik.Web.Design.dll = 3rdPartyAssemblies\Telerik.Web.Design.dll
 		3rdPartyAssemblies\Telerik.Web.UI.dll = 3rdPartyAssemblies\Telerik.Web.UI.dll
 		3rdPartyAssemblies\Telerik.Web.UI.Skins.dll = 3rdPartyAssemblies\Telerik.Web.UI.Skins.dll
 		3rdPartyAssemblies\Telerik.Web.UI.XML = 3rdPartyAssemblies\Telerik.Web.UI.XML

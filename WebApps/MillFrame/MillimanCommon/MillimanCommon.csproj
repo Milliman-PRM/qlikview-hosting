@@ -49,7 +49,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Telerik.Web.Design, Version=2015.2.826.40, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL" />
+    <Reference Include="Telerik.Web.Design, Version=2015.2.826.40, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
     <Reference Include="Telerik.Web.UI">
       <HintPath>C:\Program Files (x86)\Telerik\UI for ASP.NET AJAX Q2 2015\Bin40\Telerik.Web.UI.dll</HintPath>
     </Reference>
@@ -100,7 +102,9 @@
   <PropertyGroup>
     <PreBuildEvent>mkdir $(SolutionDir)\MillimanUserAdmin\bin
 
-copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\Milliman\bin
+copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanCommon\bin\debug
+copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanCommon\bin\release
+copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\Milliman\Milliman\bin
 copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanClientPublisher\bin
 copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanClientUserAdmin\bin
 copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanProjectManagementConsoleServices\bin
