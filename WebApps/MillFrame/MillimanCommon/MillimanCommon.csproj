@@ -116,7 +116,7 @@ copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanServiceWEBT
 copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanSignature\bin\debug
 copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanSignature\bin\release
 copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanSQLBrowser\bin
-copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanSupport\bin
+copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanSupport\MillimanSupport\bin
 copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanSystemBackup\bin\debug
 copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanSystemBackup\bin\release
 copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanUserAdmin\bin
