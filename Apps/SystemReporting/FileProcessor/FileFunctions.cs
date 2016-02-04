@@ -187,23 +187,32 @@ namespace FileProcessor
 
                 //get the values that has the newer file name in status file
                 var newerFileNamesInStatusList = listStatusFileLines.Where(f => f.StartsWith(filter) ||
-                                                            f.Contains("Newer")).Select(s => s.Replace('\t', ' '));
+                                                                        f.Contains("Newer"))
+                                                                    .Select(s => s.Replace('\t', ' ')).ToList();
 
                 //validate if the file exist in list that matches the filter
                 var validateFilterFileExist = newerFileNamesInStatusList.Any(x => x.IndexOf(filter) > -1);
                 if (validateFilterFileExist)
                 {
                     //#region Status File FileNames 
-                    //get list of all the file names that has Newer and matches filter
-                    var fileNameToProcessFromStatus = newerFileNamesInStatusList.Where(a => a.Contains(filter)
-                                                                && a.Contains("Newer"))
-                                                                .Select(split=> split.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
-                                                                .Last();
-                    //get the list of file names only
-                    var finalFileToProcess = fileNameToProcessFromStatus.Where(s=>s.Contains(filter)).ToList();
+                    //get all the file names that has Newer
+                    var fileNameToProcess = newerFileNamesInStatusList.Where(a => a.Contains(filter)
+                                                                            && a.Contains("Newer"))                                                              
+                                                                            .ToList();
+                    //Remove all the Newer
+                    for (int i = 0; i < fileNameToProcess.Count; i++)
+                        fileNameToProcess[i] = fileNameToProcess[i].Replace("Newer", "").Trim();
+
+                    //fileNameToProcess.Select(i => i.Replace("Newer", "")).DefaultIfEmpty("").Count();
+                    ////fileNameToProcess.RemoveAll(item => item.Contains("Newer"));
+                    //fileNameToProcess.RemoveAll(r => String.IsNullOrEmpty(r.ToString()));
 
                     //match the above list with difference and which ever file(s) names match, process those                               
-                    listFinalFilesToBeProcessed = finalFileToProcess.Where(x => listFilesDifferenceBWSB.Contains(x)).ToList();
+                    var matching = from s in fileNameToProcess
+                                   where listFilesDifferenceBWSB.Any(r => s.Contains(r))
+                                   select s;
+
+                    listFinalFilesToBeProcessed = fileNameToProcess.Where(x => listFilesDifferenceBWSB.Contains(x)).Distinct().ToList();
 
                 }
                 else

@@ -126,7 +126,6 @@ GRANT ALL ON TABLE iislog TO postgres WITH GRANT OPTION;
 GRANT ALL ON TABLE iislog TO public;
 
 
-
 -- Table: qlickviewauditlog
 
 -- DROP TABLE qlickviewauditlog;
@@ -179,7 +178,7 @@ CREATE TABLE qlickviewsessionlog
   sessionduration integer,
   sessionendreason character(25),
   cpuspents double precision,
-  identifyinguser character(30),
+  identifyinguser character(50),
   clienttype character(50),
   clientaddress character(25),
   caltype character(20),
@@ -208,4 +207,5 @@ ALTER TABLE qlickviewsessionlog
   OWNER TO postgres;
 GRANT ALL ON TABLE qlickviewsessionlog TO postgres WITH GRANT OPTION;
 GRANT ALL ON TABLE qlickviewsessionlog TO public;
+
 
