@@ -1,8 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "MillimanUserAdmin", ".", "{4873B8F5-2675-4583-8460-A88281063DAF}"
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "MillimanUserAdmin", ".", "{308AAB17-DF36-478A-89CA-D4D2517B45FB}"
 	ProjectSection(WebsiteProperties) = preProject
+		SccProjectName = "SAK"
+		SccAuxPath = "SAK"
+		SccLocalPath = "SAK"
+		SccProvider = "SAK"
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv3.5"
 		Debug.AspNetCompiler.VirtualPath = "/MillimanUserAdmin"
 		Debug.AspNetCompiler.PhysicalPath = "..\..\..\..\..\..\Dev\MillimanUserAdmin\"
@@ -26,8 +32,8 @@ Global
 		Debug|Any CPU = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4873B8F5-2675-4583-8460-A88281063DAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4873B8F5-2675-4583-8460-A88281063DAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{308AAB17-DF36-478A-89CA-D4D2517B45FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{308AAB17-DF36-478A-89CA-D4D2517B45FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

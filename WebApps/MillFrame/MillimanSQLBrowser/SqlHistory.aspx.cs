@@ -18,7 +18,7 @@ namespace WebSqlUtility
 	public class SqlHistory : System.Web.UI.Page
 	{
 		protected Repeater RepFullHistory;
-		protected DbUtilConfig conf = (DbUtilConfig)ConfigurationSettings.GetConfig("DbUtilConfig");
+		protected DbUtilConfig conf = (DbUtilConfig)System.Configuration.ConfigurationManager.GetSection("DbUtilConfig");
 
 
 		override protected void OnInit(EventArgs e)

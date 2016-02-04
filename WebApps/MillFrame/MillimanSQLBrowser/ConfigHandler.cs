@@ -49,7 +49,7 @@ namespace WebSqlUtility
 				if (node.Attributes["csAppKey"] != null)
 					cs = (string)HttpContext.Current.Application[node.Attributes["csAppKey"].Value];
 				else if (node.Attributes["csConfKey"] != null)
-					cs = ConfigurationSettings.AppSettings[node.Attributes["csConfKey"].Value];
+					cs = System.Configuration.ConfigurationManager.AppSettings[node.Attributes["csConfKey"].Value];
 				else
 					cs = node.Attributes["cs"].Value;
 

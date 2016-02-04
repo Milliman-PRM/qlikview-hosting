@@ -16,7 +16,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MillimanProjectManConsole",
 		{567257AE-B788-4C06-B687-0D4EFB504878} = {567257AE-B788-4C06-B687-0D4EFB504878}
 	EndProjectSection
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "MillimanUserAdmin", "MillimanUserAdmin", "{308AAB17-DF36-478A-89CA-D4D2517B45FB}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "MillimanUserAdmin", "MillimanUserAdmin\", "{308AAB17-DF36-478A-89CA-D4D2517B45FB}"
 	ProjectSection(WebsiteProperties) = preProject
 		SccProjectName = "SAK"
 		SccAuxPath = "SAK"
@@ -161,64 +161,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 18
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://prmanalytics.visualstudio.com/defaultcollection
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = MillimanSQLBrowser\\MillimanSQLBrowser.csproj
-		SccProjectName1 = MillimanSQLBrowser
-		SccLocalPath1 = MillimanSQLBrowser
-		SccProjectUniqueName2 = MillimanClientUserAdmin\\MillimanClientUserAdmin.csproj
-		SccProjectName2 = MillimanClientUserAdmin
-		SccLocalPath2 = MillimanClientUserAdmin
-		SccProjectUniqueName3 = MillimanCommon\\MillimanCommon.csproj
-		SccProjectName3 = MillimanCommon
-		SccLocalPath3 = MillimanCommon
-		SccProjectUniqueName4 = MillimanProjectManagementConsoleServices\\MillimanProjectManagementConsoleServices.csproj
-		SccProjectName4 = MillimanProjectManagementConsoleServices
-		SccLocalPath4 = MillimanProjectManagementConsoleServices
-		SccProjectUniqueName5 = MillimanProjectManConsole\\MillimanProjectManConsole.csproj
-		SccProjectName5 = MillimanProjectManConsole
-		SccLocalPath5 = MillimanProjectManConsole
-		SccProjectUniqueName6 = MillimanServices\\MillimanReportReduction\\MillimanReportReduction.csproj
-		SccProjectName6 = MillimanServices/MillimanReportReduction
-		SccLocalPath6 = MillimanServices\\MillimanReportReduction
-		SccProjectUniqueName7 = MillimanServices\\MillimanServices\\MillimanServices.csproj
-		SccProjectName7 = MillimanServices/MillimanServices
-		SccLocalPath7 = MillimanServices\\MillimanServices
-		SccProjectUniqueName8 = MillimanServices\\MillimanServiceWEBTestHarness\\MillimanServiceWEBTestHarness.csproj
-		SccProjectName8 = MillimanServices/MillimanServiceWEBTestHarness
-		SccLocalPath8 = MillimanServices\\MillimanServiceWEBTestHarness
-		SccProjectUniqueName9 = MillimanSignature\\MillimanSignature.csproj
-		SccProjectName9 = MillimanSignature
-		SccLocalPath9 = MillimanSignature
-		SccProjectUniqueName10 = MillimanSupport\\MillimanSupport\\MillimanSupport.csproj
-		SccProjectName10 = MillimanSupport/MillimanSupport
-		SccLocalPath10 = MillimanSupport\\MillimanSupport
-		SccProjectUniqueName11 = MillimanValidationGC\\MillimanValidationGC.csproj
-		SccProjectName11 = MillimanValidationGC
-		SccLocalPath11 = MillimanValidationGC
-		SccProjectUniqueName12 = ReportingCommon\\ReportingCommon.csproj
-		SccProjectName12 = ReportingCommon
-		SccLocalPath12 = ReportingCommon
-		SccWebProject13 = true
-		SccProjectUniqueName13 = MillimanUserAdmin
-		SccProjectName13 = MillimanUserAdmin
-		SccLocalPath13 = MillimanUserAdmin
-		SccProjectEnlistmentChoice13 = 2
-		SccProjectUniqueName14 = Milliman\\Milliman\\Milliman.csproj
-		SccProjectName14 = Milliman/Milliman
-		SccLocalPath14 = Milliman\\Milliman
-		SccProjectUniqueName15 = MillimanServices\\MillimanServiceTestHarness\\MillimanServiceAppHarness.csproj
-		SccProjectName15 = MillimanServices/MillimanServiceTestHarness
-		SccLocalPath15 = MillimanServices\\MillimanServiceTestHarness
-		SccProjectUniqueName16 = MillimanClientPublisher\\MillimanClientPublisher.csproj
-		SccProjectName16 = MillimanClientPublisher
-		SccLocalPath16 = MillimanClientPublisher
-		SccProjectUniqueName17 = MillimanSystemBackup\\MillimanSystemBackup.csproj
-		SccProjectName17 = MillimanSystemBackup
-		SccLocalPath17 = MillimanSystemBackup
 	EndGlobalSection
 EndGlobal

@@ -23,7 +23,7 @@ namespace WebSqlUtility
 {
     public partial class DownloadPage : System.Web.UI.Page
     {
-        protected DbUtilConfig conf = (DbUtilConfig)ConfigurationSettings.GetConfig("DbUtilConfig");
+        protected DbUtilConfig conf = (DbUtilConfig)System.Configuration.ConfigurationManager.GetSection("DbUtilConfig");
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)

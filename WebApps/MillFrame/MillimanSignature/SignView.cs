@@ -40,7 +40,7 @@ namespace MillimanSignature
                 }
 
                 SignatureGrid.Enabled = true;
-                Update.Enabled = true;
+                UpdateQVW.Enabled = true;
             }
         }
 

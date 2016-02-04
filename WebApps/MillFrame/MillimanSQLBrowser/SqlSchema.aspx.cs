@@ -23,7 +23,7 @@ namespace WebSqlUtility
 
 		Color[] rowColors = new Color[] { Color.LightGoldenrodYellow, Color.FromArgb(240, 240, 240) };
 
-		protected DbUtilConfig conf = (DbUtilConfig)ConfigurationSettings.GetConfig("DbUtilConfig");
+		protected DbUtilConfig conf = (DbUtilConfig)System.Configuration.ConfigurationManager.GetSection("DbUtilConfig");
 
 
 		override protected void OnInit(EventArgs e)

@@ -31,7 +31,7 @@ namespace WebSqlUtility
 		
 		protected void Application_Start(Object sender, EventArgs e)
 		{
-			Application["AccessDb"] = "Provider=Microsoft.Jet.OleDb.4.0; Data Source=" + Server.MapPath(ConfigurationSettings.AppSettings["AccessDb"]);
+			Application["AccessDb"] = "Provider=Microsoft.Jet.OleDb.4.0; Data Source=" + Server.MapPath(System.Configuration.ConfigurationManager.AppSettings["AccessDb"]);
 		}
  
 		protected void Session_Start(Object sender, EventArgs e)

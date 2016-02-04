@@ -380,10 +380,10 @@ public class CustomFileSystemProvider : FileBrowserContentProvider
 	}
 
 	// This function is obsolete ;
-	public override string StoreFile(HttpPostedFile file, string path, string name, params string[] arguments)
-	{
-		return base.StoreFile(file, path, name, arguments);
-	}
+	//public override string StoreFile(HttpPostedFile file, string path, string name, params string[] arguments)
+	//{
+	//	return base.StoreFile(file, path, name, arguments);
+	//}
 
 	public override string StoreBitmap(System.Drawing.Bitmap bitmap, string url, System.Drawing.Imaging.ImageFormat format)
 	{

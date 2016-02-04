@@ -23,6 +23,7 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -42,9 +43,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ComponentPro.Common">
-      <HintPath>..\..\..\ComponentPro\UltimateSaml v5.2.8221\Bin\Net4_0\ComponentPro.Common.dll</HintPath>
-    </Reference>
     <Reference Include="ComponentPro.Saml">
       <HintPath>..\..\..\ComponentPro\UltimateSaml v5.2.8221\Bin\Net4_0\ComponentPro.Saml.dll</HintPath>
     </Reference>

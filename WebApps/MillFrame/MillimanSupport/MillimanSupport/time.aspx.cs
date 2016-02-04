@@ -41,11 +41,11 @@ namespace MillimanSupport
                         SystemIsInBadHealth = true;
 
                     Status.Text = @"<status>" + StatusXML + @"</status>";
-                    //if (SystemIsInBadHealth)
-                    //{
-                    //    Response.StatusDescription = Status.Text;
-                    //    Response.StatusCode = 555;
-                    //}
+                    if (SystemIsInBadHealth)
+                    {
+                        //Response.StatusDescription = Status.Text;
+                        //Response.StatusCode = 555;
+                    }
                 }
                 catch (Exception)
                 {

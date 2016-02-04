@@ -9,9 +9,9 @@ namespace PRMValidationGC
     static class Program
     {
         private static bool DisplayUI = false;
-        private static bool RunGC = false;
+        //private static bool RunGC = false;
         private static bool RunLicenseReport = false;
-        private static bool AutoArchive = false;
+        //private static bool AutoArchive = false;
         private static string RootDir = string.Empty;
 
         /// <summary>

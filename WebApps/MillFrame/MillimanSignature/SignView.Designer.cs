@@ -34,7 +34,7 @@
             this.SignatureGrid = new System.Windows.Forms.DataGridView();
             this.Key = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Update = new System.Windows.Forms.Button();
+            this.UpdateQVW = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SignatureGrid)).BeginInit();
@@ -48,7 +48,7 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.Controls.Add(this.Open, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.SignatureGrid, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.Update, 2, 1);
+            this.tableLayoutPanel1.Controls.Add(this.UpdateQVW, 2, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(14, 11, 14, 11);
@@ -90,7 +90,7 @@
             this.Key.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.Key.HeaderText = "Key";
             this.Key.Name = "Key";
-            this.Key.Width = 49;
+            this.Key.Width = 53;
             // 
             // Value
             // 
@@ -98,18 +98,18 @@
             this.Value.HeaderText = "Value";
             this.Value.Name = "Value";
             // 
-            // Update
+            // UpdateQVW
             // 
-            this.Update.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.Update.Enabled = false;
-            this.Update.Location = new System.Drawing.Point(267, 252);
-            this.Update.Name = "Update";
-            this.Update.Size = new System.Drawing.Size(99, 25);
-            this.Update.TabIndex = 0;
-            this.Update.Text = "Update";
-            this.toolTip1.SetToolTip(this.Update, "Update the file signature");
-            this.Update.UseVisualStyleBackColor = true;
-            this.Update.Click += new System.EventHandler(this.Update_Click);
+            this.UpdateQVW.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.UpdateQVW.Enabled = false;
+            this.UpdateQVW.Location = new System.Drawing.Point(267, 252);
+            this.UpdateQVW.Name = "UpdateQVW";
+            this.UpdateQVW.Size = new System.Drawing.Size(99, 25);
+            this.UpdateQVW.TabIndex = 0;
+            this.UpdateQVW.Text = "Update";
+            this.toolTip1.SetToolTip(this.UpdateQVW, "Update the file signature");
+            this.UpdateQVW.UseVisualStyleBackColor = true;
+            this.UpdateQVW.Click += new System.EventHandler(this.Update_Click);
             // 
             // SignView
             // 
@@ -129,7 +129,7 @@
         #endregion
 
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.Button Update;
+        private System.Windows.Forms.Button UpdateQVW;
         private System.Windows.Forms.DataGridView SignatureGrid;
         private System.Windows.Forms.Button Open;
         private System.Windows.Forms.ToolTip toolTip1;
