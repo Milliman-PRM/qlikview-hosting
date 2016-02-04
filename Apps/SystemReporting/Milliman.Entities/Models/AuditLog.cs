@@ -42,5 +42,23 @@ namespace SystemReporting.Entities.Models
         public virtual User User { get; set; }
         public virtual Report Report { get; set; }
         public virtual Group Group { get; set; }
+
+        public AuditLog() { }
+        public AuditLog(AuditLog a)
+        {
+            Id = a.Id;
+            UserAccessDatetime = a.UserAccessDatetime;
+            Document = a.Document;
+            EventType = a.EventType;
+            Message = a.Message;
+            IsReduced = a.IsReduced;
+            fk_user_id = a.fk_user_id;
+            fk_group_id = a.fk_group_id;
+            fk_report_id = a.fk_report_id;
+            AddDate = a.AddDate;
+            User = a.User;
+            Report = a.Report;
+            Group = a.Group;
+        }
     }
 }

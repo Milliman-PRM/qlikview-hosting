@@ -5,28 +5,29 @@ using SystemReporting.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using SystemReporting.Utilities;
 
 namespace SystemReporting.Controller.BusinessLogic.Controller
 {
     [Serializable]
     public class AuditLogController : ControllerBase
     {
-        private IRepository<AuditLog> LogRepository = null;
+        private IMillimanService dbService { get; set; }
 
-        public AuditLogController()
-        {
-            LogRepository = new Repository<AuditLog>();
-        }
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public AuditLogController() { }
 
-        public AuditLogController(IRepository<AuditLog> repository)
-        {
-            LogRepository = repository;
-        }
-
+        /// <summary>
+        /// Method to process the logs list and enter data to db
+        /// This will insert data into User, Group, Report and IIsLogs
+        /// </summary>
+        /// <param name="listProxyLogs"></param>
+        /// <returns></returns>
         public bool ProcessLogs(List<ProxyAuditLog> listProxyLogs)
-        {
+        {           
             bool blnSucessful = false;
-            MillimanService serviceMilliman = new MillimanService();
             try
             {
                 AuditLog logEntity = new AuditLog();
@@ -35,53 +36,34 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                     logEntity.UserAccessDatetime = string.IsNullOrEmpty(entry.UserAccessDatetime) ? (DateTime?)null : DateTime.Parse(entry.UserAccessDatetime);
                     logEntity.Document = (!string.IsNullOrEmpty(entry.Document)) ? entry.Document.Trim() : string.Empty;
                     logEntity.EventType = (!string.IsNullOrEmpty(entry.EventType)) ? entry.EventType.Trim() : string.Empty;
+                    logEntity.Message = (!string.IsNullOrEmpty(entry.Message)) ? entry.Message.Trim() : string.Empty;
+                    logEntity.AddDate = DateTime.Now;
 
-                    #region User
+                    #region User/ Report / Group
 
                     ///Insert User
                     if (!string.IsNullOrEmpty(entry.User))
                     {
                         User user = new User();
-                        var userExist = serviceMilliman.GetUsers<User>(u => u.UserName == entry.User).FirstOrDefault();
-                        if (userExist == null)
+                        user.UserName = entry.User;
+                        var addOrGetUser = ControllerCommon.AddOrGetUser(user);
+                        if (addOrGetUser != null)
                         {
-                            user.UserName = entry.User.Trim();
-                            ControllerCommon.SaveUser(user);
-                            user = new User();
-                            
                             //after insert set the id
-                            User userFound = serviceMilliman.GetUsers<User>(a => a.UserName == entry.User).FirstOrDefault();
-                            logEntity.fk_user_id = userFound.Id;
-                        }
-                        else
-                        {
-                            logEntity.fk_user_id = userExist.Id;
+                            logEntity.fk_user_id = addOrGetUser.Id;
                         }
                     }
-
-                    #endregion
-                    logEntity.Message = (!string.IsNullOrEmpty(entry.Message)) ? entry.Message.Trim() : string.Empty;
-
-                    #region Report / Group
-
+                    
                     //Insert Group
                     if (!string.IsNullOrEmpty(entry.Group))
                     {
                         Group group = new Group();
-                        var groupExist = serviceMilliman.GetGroups<Group>(a => a.GroupName == entry.Group).FirstOrDefault();
-                        if (groupExist == null)
+                        group.GroupName = entry.Group;
+                        var addOrGetGroup = ControllerCommon.AddOrGetGroup(group);
+                        if (addOrGetGroup != null)
                         {
-                            group.GroupName = entry.Group;
-                            ControllerCommon.SaveGroup(group);
-                            group = new Group();
-
                             //after insert set the id
-                            Group groupFound = serviceMilliman.GetGroups<Group>(a => a.GroupName == entry.Group).FirstOrDefault();
-                            logEntity.fk_group_id = groupFound.Id;
-                        }
-                        else
-                        {
-                            logEntity.fk_group_id = groupExist.Id;
+                            logEntity.fk_group_id = addOrGetGroup.Id;
                         }
                     }
 
@@ -89,43 +71,32 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                     if (!string.IsNullOrEmpty(entry.Report))
                     {
                         Report report = new Report();
-                        var reportExist = serviceMilliman.GetReports<Report>(a => a.ReportName == entry.Report).FirstOrDefault();
-                        if (reportExist == null)
+                        report.ReportName = entry.Report;
+                        var addOrGetReport = ControllerCommon.AddOrGetReport(report);
+                        if (addOrGetReport != null)
                         {
-                            report.ReportName = entry.Report.Trim();
-                            ControllerCommon.SaveReport(report);
-                            report = new Report();
-
                             //after insert set the id
-                            Report reportFound = serviceMilliman.GetReports<Report>(a => a.ReportName == entry.Report).FirstOrDefault();
-                            logEntity.fk_report_id = reportFound.Id;
+                            logEntity.fk_report_id = addOrGetReport.Id;
                         }
-                        else
-                        {
-                            logEntity.fk_report_id = reportExist.Id;
-                        }
-                    }                   
+                    }
 
                     #endregion
 
-                    logEntity.AddDate = DateTime.Now;
-
+                    //initiate service
+                    dbService = new MillimanService();
                     //5. Insert record in the table     
-                    serviceMilliman.Save(logEntity);
+                    dbService.Save(logEntity);
+                    dbService.Dispose();
                     logEntity = new AuditLog();
                     blnSucessful = true;
                 }
             }
             catch (Exception ex)
             {
-                LogError(DateTime.Now + " ||-|| "
-                                        + "Class AuditLogController. Method ProcessLogs." + Environment.NewLine
-                                        + ex.Message + " ||-|| " + ex.InnerException + Environment.NewLine);
+                dbService.Dispose();
+                Logger.LogError(ex, "Class AuditLogController. Method ProcessLogs.");
             }
             return blnSucessful;
-        }
-
-
-
+        }                
     }
 }

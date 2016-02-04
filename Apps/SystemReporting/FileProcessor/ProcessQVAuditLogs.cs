@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SystemReporting.Utilities;
 
 namespace FileProcessor
 {
@@ -16,10 +17,7 @@ namespace FileProcessor
         /// Constructor
         /// </summary>
         /// <param name="args"></param>
-        public ProcessQVAuditLogs(string args)
-        {
-
-        }
+        public ProcessQVAuditLogs(string args) { }
 
         /// <summary>
         /// Process the files. 
@@ -32,6 +30,7 @@ namespace FileProcessor
             {
                 if (args.Length > 0)
                 {
+                    string filter = "Audit_INDY-PRM";
                     EnumFileProcessor.eFilePath efilePath = EnumFileProcessor.eFilePath.QVAuditLogs;
 
                     //ProductionLogsTest\QVLogs\
@@ -39,8 +38,7 @@ namespace FileProcessor
 
                     //Move To   LogFileProcessor\IN\
                     var destinationInDirectory = FileFunctions.GetFileProcessingInDirectory(efilePath);
-
-                    string filter = "Audit_INDY-PRM";
+                                       
                     if (sourceDirectory.Exists)
                     {
                         List<string> listFileToProcess = FileFunctions.GetFileToReadFromStatusFile(filter, efilePath);
@@ -51,6 +49,7 @@ namespace FileProcessor
                         }
                         foreach (var file in listFileToProcess)
                         {
+                            Console.WriteLine("Processing file:  {0}.", file);
                             string fileNameWithsourceDirectory = sourceDirectory + file;
                             if (File.Exists(fileNameWithsourceDirectory))
                             {
@@ -66,7 +65,7 @@ namespace FileProcessor
                                 }
                                 else
                                 {
-                                    BaseFileProcessor.LogError(null, "ProcessIisLogs: Failed processing fileInfo || " + fileNameWithsourceDirectory);
+                                    Logger.LogError(null, "ProcessIisLogs: Failed processing fileInfo || " + fileNameWithsourceDirectory);
                                 }
                             }
                         }
@@ -75,7 +74,7 @@ namespace FileProcessor
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, "Class ProcessQVAuditLogs. Method ProcessFileData.");
+                Logger.LogError(ex, "Class ProcessQVAuditLogs. Method ProcessFileData.");
             }
         }
 
@@ -99,7 +98,7 @@ namespace FileProcessor
                     //Entity
                     var proxyLogEntry = new ProxyAuditLog();
 
-                    //Time Zone
+                    //Time Zone for aduit log is true
                     bool UseDaylightSavings = true;
                     //local time zone of the server
                     TimeZoneInfo serverTimeZone = TimeZoneInfo.FindSystemTimeZoneById(TimeZoneInfo.Local.Id);
@@ -160,7 +159,7 @@ namespace FileProcessor
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, " Class ProcessQVAuditLogs. Method ProcessLogFile while sending the data to controller.");
+                Logger.LogError(ex, " Class ProcessQVAuditLogs. Method ProcessLogFile while sending the data to controller.");
             }
 
             return blnSucessful;
@@ -190,7 +189,7 @@ namespace FileProcessor
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, " Class ProcessQVAuditLogs. Method ParseFile. File name. " + filefullName);
+                Logger.LogError(ex, " Class ProcessQVAuditLogs. Method ParseFile. File name. " + filefullName);
             }
             return listLogFile;
         }

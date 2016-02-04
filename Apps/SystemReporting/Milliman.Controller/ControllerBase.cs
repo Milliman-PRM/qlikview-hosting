@@ -73,31 +73,7 @@ namespace SystemReporting.Controller
         }
 
         #endregion
-
-        #region Error Logger
-
-        public static void LogError(Exception ex)
-        {
-            var LoggerFileDirectory = ConfigurationManager.AppSettings["LoggerFileDirectory"];
-            var LoggerFileName = ConfigurationManager.AppSettings["LoggerFileName"];
-            Logger.Instance.LogPath = LoggerFileDirectory;
-            Logger.Instance.LogFileName = LoggerFileName;
-            Logger.WriteLine("An exception:   Exception Message: " + ex.Message.ToString() +
-                                             "Exception Trace : " + ex.StackTrace +
-                                             "Exception Target: " + ex.TargetSite.ToString() +
-                                             "Exception Source: " + ex.Source.ToString());
-        }
-
-        public static void LogError(string message)
-        {
-            var LoggerFileDirectory = ConfigurationManager.AppSettings["LoggerFileDirectory"];
-            var LoggerFileName = ConfigurationManager.AppSettings["LoggerFileName"];
-            Logger.Instance.LogPath = LoggerFileDirectory;
-            Logger.Instance.LogFileName = LoggerFileName;
-            Logger.WriteLine("Exception Message: " + message);
-        }
-
-        #endregion
+        
     }
 
 }

@@ -1,4 +1,3 @@
-
 /*******************************************************************************************************/
 This program depends on following directories for processing of log files:
 
@@ -15,15 +14,15 @@ This program will log the sucessfully "Processed" file on this location.
 
 
   <!--GetFileCopyToDestinationInLocation - In-->
-  <add key="ProcessingInDir" value="C:\LogFileProcessor\IN\" />
+  <add key="ProcessingInDir" value="C:\ProductionLogs\LogFileProcessor\" />
 
   Note: Note: The file is moved temporarily to this location and after completion, its deleted
 /*******************************************************************************************************/
 This program will log the sucessfully processed file to a file ["ProcessedFileLog"] on this location.
 
-<!--ProcessedFileLog-->
-<add key="ProcessedFileLogDirectory" value="C:\LogFileProcessor\BackUp\" />
-<add key="ProcessedFileLogFileName" value="ProcessedFileLog" />
+  <!--ProcessedFileLog-->
+  <add key="ProcessedFileLogDirectory" value="C:\ProductionLogs\LogFileProcessor\BackUp\" />
+  <add key="ProcessedFileLogFileName" value="ProcessedFileLog" />
 
 /*******************************************************************************************************/
 This program will compare the files documented in the status file ["SyncStatus"] on this location.
@@ -34,10 +33,19 @@ on the source location to ensure that certian file is not processed twice.
 <add key="statusFileName" value="status" />
 <add key="FileStatus" value="C:\ProductionLogs\SyncStatus\" />
 
-
 /*******************************************************************************************************/
 This program will create "Exception log" file ["Logger"] at this location:
 
 <!--Logger-->
-<add key="LoggerFileDirectory" value="C:\LogFileProcessor\" />
+<add key="LoggerFileDirectory" value="C:\ProductionLogs\LogFileProcessor\" />
 <add key="LoggerFileName" value="Logger" />
+
+
+/*******************************************************************************************************/
+This program will read the QvDoc path from this listingings. We can add as many as we want making sure that 
+all the "key" verbage starts with string "qvDocMultipleRoot"
+
+  <!--MultipleQVDocs: Every report must contain 'qvDocMultipleRoot' as key-->
+  <add key="qvDocMultipleRoot1" value="d:\installedapplications\prm\qvdocuments\"/>
+  <add key="qvDocMultipleRoot2" value="d:\installedapplications\millimansite\qvdocuments\"/>
+  <add key="qvDocMultipleRoot3" value="d:\installedapplications\Test\qvdocuments\"/>

@@ -8,8 +8,8 @@ namespace SystemReporting.Utilities.File
     /// </summary>
     public class File
     {
-        public File()
-        {
+        public File() {
+
         }
 
         public void MakeDirectory(string dirPath)
@@ -158,6 +158,29 @@ namespace SystemReporting.Utilities.File
             return combinedPath;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sResults"></param>
+        /// <param name="filFullNamePath"></param>
+        public bool WriteFile(string sResults, string filFullNamePath)
+        {
+            File file = new File();
+
+            //create the file name
+            FileTextWriter textWriter = file.CreateFile(filFullNamePath);
+
+            string outputValue = sResults;
+            textWriter.WriteLine(outputValue);
+            textWriter.Close();
+
+            //if the file is there then
+            bool returnValue = false;
+            if (outputValue.Length > 0)
+                returnValue = true;
+
+            return returnValue;
+        }
         #region Copy File Funciton
 
         public static void CopyFile(string source, string destination)

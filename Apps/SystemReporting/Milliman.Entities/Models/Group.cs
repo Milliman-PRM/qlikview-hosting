@@ -31,11 +31,11 @@ namespace SystemReporting.Entities.Models
         public Group() { }
         public Group(Group g)
         {
-            this.Id = g.Id;
-            this.GroupName = g.GroupName;
-            this.ListIisLog = new List<IisLog>();
-            this.ListAuditLog = new List<AuditLog>();
-            this.ListSessionLog = new List<SessionLog>();
+            Id = g.Id;
+            GroupName = g.GroupName;
+            ListIisLog = new List<IisLog>();
+            ListAuditLog = new List<AuditLog>();
+            ListSessionLog = new List<SessionLog>();
         }
     }
 }

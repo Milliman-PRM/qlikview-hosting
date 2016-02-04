@@ -5,6 +5,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using SystemReporting.Entities.Models;
+using SystemReporting.Utilities;
 
 namespace FileProcessor
 {
@@ -14,10 +15,7 @@ namespace FileProcessor
         /// Constructor
         /// </summary>
         /// <param name="args"></param>
-        public ProcessQVSessionLogs(string args)
-        {
-
-        }
+        public ProcessQVSessionLogs(string args)    { }
 
         /// <summary>
         /// Process the iis files. Args are only the file type like iis. 
@@ -31,6 +29,7 @@ namespace FileProcessor
             {
                 if (args.Length > 0)
                 {
+                    string filter = "Sessions_INDY-PRM";
                     EnumFileProcessor.eFilePath efilePath = EnumFileProcessor.eFilePath.QVSessionLogs;
 
                     // ProductionLogsTest\IISLogs\
@@ -38,8 +37,7 @@ namespace FileProcessor
 
                     //LogFileProcessor\IN
                     var destinationInDirectory = FileFunctions.GetFileProcessingInDirectory(efilePath);
-
-                    string filter = "Sessions_INDY-PRM";
+                                        
                     if (sourceDirectory.Exists)
                     {
                         List<string> listFileToProcess = FileFunctions.GetFileToReadFromStatusFile(filter, efilePath);
@@ -49,6 +47,7 @@ namespace FileProcessor
                         }
                         foreach (var file in listFileToProcess)
                         {
+                            Console.WriteLine("Processing file:  {0}.", file);
                             string fileNameWithsourceDirectory = sourceDirectory + file;
                             if (File.Exists(fileNameWithsourceDirectory))
                             {
@@ -64,7 +63,7 @@ namespace FileProcessor
                                 }
                                 else
                                 {
-                                    BaseFileProcessor.LogError(null, "ProcessIisLogs: Failed processing fileInfo || " + fileNameWithsourceDirectory);
+                                    Logger.LogError(null, "ProcessIisLogs: Failed processing fileInfo || " + fileNameWithsourceDirectory);
                                 }
                             }
                         }
@@ -73,7 +72,7 @@ namespace FileProcessor
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, "Class ProcessQVSessionLogs. Method ProcessFileData.");
+                Logger.LogError(ex, "Class ProcessQVSessionLogs. Method ProcessFileData.");
             }
         }
 
@@ -97,8 +96,8 @@ namespace FileProcessor
                     //Entity
                     ProxySessionLog proxyLogEntry = new ProxySessionLog();
 
-                    //Time ZOne???TEMPo
-                    bool UseDaylightSavings = true;
+                    //Time Zone is false for session
+                    bool UseDaylightSavings = false;
                     TimeZoneInfo serverTimeZone = TimeZoneInfo.FindSystemTimeZoneById(TimeZoneInfo.Local.Id);
                     DateTime localDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, serverTimeZone);
 
@@ -107,21 +106,21 @@ namespace FileProcessor
                         proxyLogEntry.Document = (!string.IsNullOrEmpty(entry.Document)) ? entry.Document.Trim() : string.Empty;
                         proxyLogEntry.ExitReason = (!string.IsNullOrEmpty(entry.ExitReason)) ? entry.ExitReason.Trim() : string.Empty;
 
-                        if (entry.Timestamp != null)
-                            proxyLogEntry.UserAccessDatetime = entry.Timestamp.ToString();
+                        //if (entry.Timestamp != null)
+                        //    proxyLogEntry.UserAccessDatetime = entry.Timestamp.ToString();
 
                         if (entry.SessionStart != null)
-                            proxyLogEntry.SessionStartTime = entry.SessionStart.ToString("MM/dd/yy HH:mm:ss");
+                            proxyLogEntry.SessionStartDateTime = entry.SessionStart.ToString();
 
                         if (entry.SessionStart != null)
                         {
                             if (serverTimeZone.SupportsDaylightSavingTime && !UseDaylightSavings)
                             {
-                                proxyLogEntry.SessionStartTime = (entry.SessionStart - serverTimeZone.BaseUtcOffset).ToString("MM/dd/yy HH:mm:ss");
+                                proxyLogEntry.UserAccessDatetime = (entry.SessionStart - serverTimeZone.BaseUtcOffset).ToString();
                             }
                             else
                             {
-                                proxyLogEntry.SessionStartTime = TimeZoneInfo.ConvertTimeToUtc(entry.SessionStart, serverTimeZone).ToString("MM/dd/yy HH:mm:ss");
+                                proxyLogEntry.UserAccessDatetime = TimeZoneInfo.ConvertTimeToUtc(entry.SessionStart, serverTimeZone).ToString();
                             }
                         }
 
@@ -174,7 +173,7 @@ namespace FileProcessor
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, " Class ProcessQVSessionLogs. Method ProcessLogFile while sending the data to controller.");
+                Logger.LogError(ex, " Class ProcessQVSessionLogs. Method ProcessLogFile while sending the data to controller.");
             }
 
             return blnSucessful;
@@ -205,7 +204,7 @@ namespace FileProcessor
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, " Class ProcessQVSessionLogs. Method ParseFile. File name. " + filefullName);
+                Logger.LogError(ex, " Class ProcessQVSessionLogs. Method ParseFile. File name. " + filefullName);
             }
             return listLogFile;
         }

@@ -18,8 +18,114 @@ namespace ReportingTest
     [TestClass]
     public class FileFunctionsTester : BaseFileProcessor
     {
-        
+
         #region File Basic Functions Test
+        /// <summary>
+        /// This routine creates text file based on the string of data retrieved 
+        /// <param name="sResults"></param>
+        /// <param name="filFullNamePath"></param>
+        /// <returns></returns>
+        [TestMethod]
+        public void TestWriteFile()
+        {
+            string sResults, filFullNamePath = string.Empty;
+
+            sResults = "This is test";
+            filFullNamePath = @"C:\ProductionLogs\LogFileProcessor\Logger";
+
+            File file = new File();
+
+            //create the file name
+            FileTextWriter textWriter = file.CreateFile(filFullNamePath);
+
+            string outputValue = sResults;
+            textWriter.WriteLine(outputValue);
+            textWriter.Close();
+
+            //if the file is there then
+            bool returnValue = false;
+            if (outputValue.Length > 0)
+                returnValue = true;
+
+            Assert.IsTrue(returnValue);
+        }
+       
+        /// <summary>
+        /// Function that completely process a file and it creates if does not exist
+        /// </summary>
+        /// <param name="sResults"></param>
+        /// <param name="filFullNamePath"></param>
+        /// <returns></returns>
+        [TestMethod]
+        public void TestProcessFile()
+        {
+            string sResults, filFullNamePath = string.Empty;
+
+            sResults = "This is test";
+            filFullNamePath = @"C:\ProductionLogs\LogFileProcessor\TestLogger";
+
+            bool bSucess = false;
+            string retVal = string.Empty;
+            File file = new File();
+
+            if (file.Exists(filFullNamePath))
+            {
+                file.Delete(filFullNamePath);
+            }
+            using (System.IO.FileStream fs = new System.IO.FileStream(filFullNamePath, System.IO.FileMode.OpenOrCreate,
+                                                                    System.IO.FileAccess.ReadWrite, System.IO.FileShare.ReadWrite))
+            using (System.IO.StreamWriter str = new System.IO.StreamWriter(fs))
+            {
+                str.BaseStream.Seek(0, System.IO.SeekOrigin.End);
+                str.Write(sResults);
+                str.Flush();
+            }
+
+            System.IO.File.AppendAllText(filFullNamePath, sResults);
+            string readtext = System.IO.File.ReadAllText(filFullNamePath);
+
+            if (file.Exists(filFullNamePath))
+                bSucess = true;
+
+            Assert.IsTrue(bSucess);
+        }
+
+        /// <summary>
+        /// Function that completely process a file if it exists, reads it, writes and copies it
+        /// </summary>
+        /// <param name="filFullNamePath"></param>
+        /// <param name="eFilePath"></param>
+        /// <returns></returns>
+        [TestMethod]
+        public void TestProcessFile2()
+        {
+            //Pass var: string filFullNamePath, EnumFileProcessor.eFilePath eFilePath
+            string filFullNamePath = string.Empty;
+            EnumFileProcessor.eFilePath eFilePath = EnumFileProcessor.eFilePath.IisLogs;
+
+            filFullNamePath = @"C:\ProductionLogs\LogFileProcessor\TestLogger";
+
+            bool bSucess = false;
+            string retVal = string.Empty;
+
+            File file = new File();
+            if (file.Exists(filFullNamePath))
+            {
+                //start reading the file. i have used Encoding 1256
+                System.IO.StreamReader sr = new System.IO.StreamReader(filFullNamePath);
+                retVal = sr.ReadToEnd(); // getting the entire text from the file.
+                sr.Close();
+
+                bSucess = file.WriteFile(retVal, filFullNamePath);
+                if (bSucess)
+                {
+                    file.Copy(filFullNamePath, eFilePath.ToString(), true);
+                }
+            }
+
+            Assert.IsTrue(bSucess);
+        }
+
         [TestMethod]
         public void TestCheckDirectory()
         {
@@ -53,26 +159,7 @@ namespace ReportingTest
             Assert.IsNotNull(message);
         }
 
-        [TestMethod]
-        public void TestGetFileName()
-        {
-            //successful
-            FileFunctions fp = new FileFunctions();
-            EnumFileProcessor.eFileOutputType eFileOutputType = EnumFileProcessor.eFileOutputType.TextFile;
-            EnumFileProcessor.eFilePath filePaths = EnumFileProcessor.eFilePath.IisLogs;
-            string fileLocation = FileFunctions.GetFileProcessingInDirectory(filePaths);
-            string fileFullNameAndPath = fp.GetFileName(fileLocation, eFileOutputType, filePaths);
-            Assert.IsNotNull(fileFullNameAndPath);
-        }
 
-        [TestMethod]
-        public void TestGetDateRange()
-        {
-            //successful
-            FileFunctions fp = new FileFunctions();
-            fp.GetDateRange();
-            Assert.IsTrue(true);
-        }
 
         [TestMethod]
         public void TestGetFileSourceLocation()
@@ -81,14 +168,6 @@ namespace ReportingTest
             string fileLocation = FileFunctions.GetFileOriginalSourceDirectory(filePaths);
             Assert.IsNotNull(fileLocation);
         }
-
-        //[TestMethod]
-        //public void TestGetFileDestinationBackUpLocation()
-        //{
-        //    EnumFileProcessor.eFilePath filePaths = EnumFileProcessor.eFilePath.IisLogs;
-        //    string fileLocation = FileFunctions.GetFileBackUpDirectory(filePaths);
-        //    Assert.IsNotNull(fileLocation);
-        //}
 
         [TestMethod]
         public void TestGetFileCopyToDestinationInLocation()
@@ -128,54 +207,6 @@ namespace ReportingTest
         }
 
         [TestMethod]
-        public void TestFileCreation2()
-        {
-            //sucess
-            FileFunctions fp = new FileFunctions();
-            EnumFileProcessor.eFilePath efilePaths = EnumFileProcessor.eFilePath.IisLogs;
-            EnumFileProcessor.eFileOutputType eOutPutType = EnumFileProcessor.eFileOutputType.TextFile;
-
-            string sResults = "Some Data";
-            fp.CreateFile(sResults, eOutPutType, efilePaths);
-
-            bool bSucess = true;   
-            Assert.IsTrue(bSucess);
-        }
-
-
-        [TestMethod]
-        public void TestFileCreation3()
-        {
-            //sucess
-            FileFunctions fp = new FileFunctions();
-            EnumFileProcessor.eFilePath efilePaths = EnumFileProcessor.eFilePath.IisLogs;
-            EnumFileProcessor.eFileOutputType eOutPutType = EnumFileProcessor.eFileOutputType.TextFile;
-
-            string sResults = string.Empty;
-            fp.CreateFile(sResults, eOutPutType, efilePaths);
-
-            bool bSucess = true;
-            Assert.IsTrue(bSucess);
-        }
-
-        [TestMethod]
-        public void TestWriteFile()
-        {
-            FileFunctions fp = new FileFunctions();
-            EnumFileProcessor.eFileOutputType eFileOutputType = EnumFileProcessor.eFileOutputType.TextFile;  
-            EnumFileProcessor.eFilePath filePaths = EnumFileProcessor.eFilePath.IisLogs;
-
-            string filepath = FileFunctions.GetFileProcessingInDirectory(filePaths);
-            string fileFullNameAndPath = fp.GetFileName(filepath, eFileOutputType, filePaths);
-
-            string sResults = "sResults";
-            //copy file
-            bool bSucess = fp.WriteFile(sResults, fileFullNameAndPath);
-            //check if file exist
-           Assert.IsTrue(bSucess);
-        }
-
-        [TestMethod]
         public void TestCopyFile()
         {
             //the file has to be avalible
@@ -197,143 +228,12 @@ namespace ReportingTest
             Assert.IsTrue(bSucess);
         }
 
-
-        [TestMethod]
-        public void TestProcessFile()
-        {
-            FileFunctions fp = new FileFunctions();
-            EnumFileProcessor.eFilePath filePath = EnumFileProcessor.eFilePath.IisLogs;
-
-            string filepath = FileFunctions.GetFileProcessingInDirectory(filePath);
-            string fileFullNameAndPath = @"\\indy-ss01\ProductionLogsTest\IISLogs\test_writer.txt";
-
-            bool bSucess = fp.ProcessFile(fileFullNameAndPath, filePath);
-            //check if file exist
-            Assert.IsTrue(bSucess);
-        }
-
-        #endregion
+        #endregion       
         
-        #region iisLogs
-        [TestMethod]
-        public void TestGetFileNameiisLogs()
-        {
-            //sucessful
-            FileProcessor.FileFunctions fp = new FileProcessor.FileFunctions();
-            EnumFileProcessor.eFileOutputType eFileOutputType = EnumFileProcessor.eFileOutputType.TextFile;
-
-            EnumFileProcessor.eFilePath efilePath = EnumFileProcessor.eFilePath.IisLogs;
-            string filepath = FileFunctions.GetFileProcessingInDirectory(efilePath);
-
-            string fileFullNameAndPath = fp.GetFileName(filepath, eFileOutputType, efilePath);
-            Assert.IsNotNull(fileFullNameAndPath);
-        }
-        #endregion
-
-        [TestMethod]
-        public void TestGetFileNames()
-        {
-            //sucessful
-            FileFunctions fp = new FileFunctions();
-            EnumFileProcessor.eFilePath filePath = EnumFileProcessor.eFilePath.IisLogs;
-            string filepath = FileFunctions.GetFileProcessingInDirectory(filePath);
-
-            string file = fp.GetLatestFileName(filepath, "u_*.log");
-            Assert.IsNotNull(file);
-        }
-
-        #region Copy
-        [TestMethod]
-        public void TestCopyFileFromProductionLogsInToLogFileProcessorIisLogsIN()
-        {
-            FileFunctions fp = new FileFunctions();
-
-            EnumFileProcessor.eFilePath filePath = EnumFileProcessor.eFilePath.IisLogs;
-            //move file from here
-            string fileSource = FileFunctions.GetFileOriginalSourceDirectory(filePath);
-            //get lastest file 
-            string fileGet = fp.GetLatestFileName(fileSource, "u_*.log");
-            string fileFullPath = fileSource + fileGet;
-            //copy file
-            FileFunctions.CopyFile(fileFullPath, filePath,true);
-            //check if file exist
-
-            bool bSucess = true;
-            File file = new File();
-            if (file.Exists(fileFullPath))
-            {
-                bSucess = true;
-            }
-            Assert.IsTrue(bSucess);
-        }
-        
-        [TestMethod]
-        public void TestCopyFileFromLogFileProcessorIisLogsINToLogFileProcessorIisLogsBackUp()
-        {
-            //no need 
-            FileFunctions fp = new FileFunctions();
-
-            EnumFileProcessor.eFilePath filePath = EnumFileProcessor.eFilePath.IisLogs;
-
-            //move file from here
-            string fileSource = FileFunctions.GetFileProcessingInDirectory(filePath);
-            //get lastest file 
-            string fileGetLatest = fp.GetLatestFileName(fileSource, "u_*.log");
-            string fileFullPath = fileSource + fileGetLatest;
-            //copy file
-            FileFunctions.CopyFile(fileFullPath, filePath,true);
-            //check if file exist
-            
-            bool bSucess = true;
-            File file = new File();
-        
-            if (file.Exists(fileFullPath))
-            {
-                bSucess = true;
-            }
-            Assert.IsTrue(bSucess);
-        }
-
-        #endregion
-
-        [TestMethod]
-        public void TestMoveFileFromLogFileProcessorIisLogsINToLogFileProcessorIisLogsBackUp()
-        {
-            FileFunctions fp = new FileFunctions();
-
-            EnumFileProcessor.eFilePath filePath = EnumFileProcessor.eFilePath.IisLogs;
-
-            //move file from here
-            string fileSource = FileFunctions.GetFileProcessingInDirectory(filePath);
-            string fileDestinationPath = FileFunctions.GetFileProcessingInDirectory(filePath);
-
-            //get lastest file 
-            string latestFileName = fp.GetLatestFileName(fileSource, "u_*.log");
-
-            bool bSucess = false;
-            if (!string.IsNullOrEmpty(latestFileName))
-            {
-                string fileSourceFullNameAndPath = fileSource + latestFileName;
-                string destNationFileFullNameAndPath = fileDestinationPath + latestFileName;
-                
-                File file = new File();
-                if (!file.Exists(destNationFileFullNameAndPath))
-                {
-                    file.Move(fileSourceFullNameAndPath, destNationFileFullNameAndPath);
-                }
-
-                if (file.Exists(destNationFileFullNameAndPath))
-                {
-                    bSucess = true;
-                }
-            }
-            Assert.IsTrue(bSucess);
-        }
-
        [TestMethod]
         public void TestLogger()
         {
-            LogError("This is Test  || DateTime: " + DateTime.Now );
+            Logger.LogError("This is Test  || DateTime: " + DateTime.Now );
             var LoggerFileDirectory = ConfigurationManager.AppSettings["LoggerFileDirectory"];
             var LoggerFileName = ConfigurationManager.AppSettings["LoggerFileName"];
 
@@ -360,7 +260,7 @@ namespace ReportingTest
 
             //backup file name with directory
             string processedLogFileName = ConfigurationManager.AppSettings["ProcessedFileLogFileName"];
-            string processedLogFileAndDirectory = FileFunctions.ProcessedFileLogDirectory() + processedLogFileName + ".log";
+            string processedLogFileAndDirectory = FileFunctions.GetProcessedFileLogDirectory() + processedLogFileName + ".log";
 
             string filter = "u_ex";
             
@@ -382,7 +282,7 @@ namespace ReportingTest
 
             //backup file name with directory
             string processedLogFileName = ConfigurationManager.AppSettings["ProcessedFileLogFileName"];
-            string processedLogFileAndDirectory = FileFunctions.ProcessedFileLogDirectory() + processedLogFileName + ".log";
+            string processedLogFileAndDirectory = FileFunctions.GetProcessedFileLogDirectory() + processedLogFileName + ".log";
 
             string filter = "Audit_INDY-PRM";
             
@@ -404,7 +304,7 @@ namespace ReportingTest
 
             //backup file name with directory
             string processedLogFileName = ConfigurationManager.AppSettings["ProcessedFileLogFileName"];
-            string processedLogFileAndDirectory = FileFunctions.ProcessedFileLogDirectory() + processedLogFileName + ".log";
+            string processedLogFileAndDirectory = FileFunctions.GetProcessedFileLogDirectory() + processedLogFileName + ".log";
             
             string filter = "Sessions_INDY-PRM";
             List<string> fileToRead = new List<string>();
@@ -417,5 +317,141 @@ namespace ReportingTest
             Assert.IsNotNull(fileToRead);
         }
         #endregion
+        
+        //public string GetFileName(string fileLocation, EnumFileProcessor.eFilePath eFilePath)
+        //{
+
+        //    string nameFormat = string.Empty;
+        //    switch (eFilePath)
+        //    {
+        //        case EnumFileProcessor.eFilePath.IisLogs:
+        //            nameFormat = GetNameAndDateFormat(fileLocation, eFilePath);
+        //            break;
+        //        case EnumFileProcessor.eFilePath.QVAuditLogs:
+        //            nameFormat = GetNameAndDateFormat(fileLocation, eFilePath);
+        //            break;
+        //        case EnumFileProcessor.eFilePath.QVSessionLogs:
+        //            nameFormat = GetNameAndDateFormat(fileLocation, eFilePath);
+        //            break;
+        //        default:
+        //            throw new ApplicationException("Output type not supported");
+        //    }
+
+        //    return (string.Format(nameFormat));
+        //}
+
+        //public string GetNameAndDateFormat(string fileLocation)
+        //{
+        //    string todaysDate = DateTime.Now.ToString("yyyyMMdd_hhmm");
+        //    //get the file back up location
+        //    string nameFormat = fileLocation + "_S_" + todaysDate;
+
+        //    return (string.Format(nameFormat, DateTime.Now));
+        //}
+        //#region Create File
+        ///// <summary>
+        ///// Creates a file using the results
+        ///// </summary>
+        ///// <param name="sResults"></param>
+        ///// <param name="eOutPutType"></param>
+        ///// <param name="eFilePaths"></param>
+        //public void CreateFile(string sResults, EnumFileProcessor.eFileOutputType eOutPutType,
+        //                                                    EnumFileProcessor.eFilePath eFilePath)
+        //{
+        //    //GetDateRange();
+
+        //    //get the root directory
+        //    string fileLocation = GetFileOriginalSourceDirectory(eFilePath);
+        //    string filFullNamePath = GetFileName(fileLocation, eOutPutType, eFilePath);
+
+        //    if (filFullNamePath.Length > 0)
+        //    {
+        //        if (sResults.Length > 0)
+        //        {
+        //            ProcessFile(sResults, filFullNamePath);
+        //        }
+        //        else
+        //        {
+        //            ProcessFile(filFullNamePath, eFilePath);
+        //        }
+        //    }
+
+        //}
+
+        //public string GetFileName(string fileLocation, EnumFileProcessor.eFileOutputType eOutputType,
+        //                                                            EnumFileProcessor.eFilePath eFilePath)
+        //{
+        //    _eFileOutputTypes = (EnumFileProcessor.eFileOutputType)Enum.Parse(typeof(EnumFileProcessor.eFileOutputType), eOutputType.ToString());
+
+        //    string nameFormat = string.Empty;
+        //    switch (_eFileOutputTypes)
+        //    {
+        //        case EnumFileProcessor.eFileOutputType.ExcelFile:
+        //            nameFormat = GetNameAndDateFormat(fileLocation, eOutputType, eFilePath);
+        //            break;
+        //        case EnumFileProcessor.eFileOutputType.CsvFile:
+        //            nameFormat = GetNameAndDateFormat(fileLocation, eOutputType, eFilePath);
+        //            break;
+        //        case EnumFileProcessor.eFileOutputType.TextFile:
+        //            nameFormat = GetNameAndDateFormat(fileLocation, eOutputType, eFilePath);
+        //            break;
+        //        default:
+        //            throw new ApplicationException("Output type not supported");
+        //    }
+
+        //    return (string.Format(nameFormat));
+        //}
+
+        ///// <summary>
+        ///// returns the name format
+        ///// </summary>
+        ///// <param name="fileLocation"></param>
+        ///// <param name="eOutputType"></param>
+        ///// <returns></returns>
+        //public string GetNameAndDateFormat(string fileLocation, EnumFileProcessor.eFileOutputType eOutputType,
+        //                                                            EnumFileProcessor.eFilePath eFilePath)
+        //{
+        //    //GetDateRange();
+        //    DateTime date = DateTime.Now;
+        //    string todaysDate = date.ToString("yyyyMMdd_hhmm");
+
+        //    _eFileOutputTypes = (EnumFileProcessor.eFileOutputType)Enum.Parse(typeof(EnumFileProcessor.eFileOutputType),
+        //                                           eOutputType.ToString());
+
+        //    _eFilePath = (EnumFileProcessor.eFilePath)Enum.Parse(typeof(EnumFileProcessor.eFilePath), eFilePath.ToString());
+
+        //    string fileType = string.Empty;
+        //    switch (_eFilePath)
+        //    {
+        //        case EnumFileProcessor.eFilePath.IisLogs:
+        //            //get the file back up location
+        //            fileType = "IisL";
+        //            break;
+        //        case EnumFileProcessor.eFilePath.QVAuditLogs:
+        //            fileType = "QVA";
+        //            break;
+        //        case EnumFileProcessor.eFilePath.QVSessionLogs:
+        //            fileType = "QVS";
+        //            break;
+        //    }
+
+        //    string nameFormat = string.Empty;
+        //    switch (_eFileOutputTypes)
+        //    {
+        //        case EnumFileProcessor.eFileOutputType.CsvFile:
+        //            //get the file back up location
+        //            nameFormat = fileLocation + "_" + fileType + "_" + todaysDate + ".csv";
+        //            break;
+        //        case EnumFileProcessor.eFileOutputType.ExcelFile:
+        //            nameFormat = fileLocation + "_" + fileType + "_" + todaysDate + ".xls";
+        //            break;
+        //        case EnumFileProcessor.eFileOutputType.TextFile:
+        //            nameFormat = fileLocation + "_" + fileType + "_" + todaysDate + ".txt";
+        //            break;
+        //    }
+
+        //    return (string.Format(nameFormat, DateTime.Now));
+        //}
+
     }
 }

@@ -68,5 +68,31 @@ namespace SystemReporting.Entities.Models
         public virtual Report Report { get; set; }
         public virtual Group Group { get; set; }
 
+        public SessionLog() { }
+        public SessionLog(SessionLog s)
+        {
+            Id = s.Id;
+            UserAccessDatetime = s.UserAccessDatetime;
+            Document = s.Document;
+            ExitReason = s.ExitReason;
+            SessionStartTime = s.SessionStartTime;
+            SessionDuration = s.SessionDuration;
+            SessionEndReason = s.SessionEndReason;
+            CpuSpentS = s.CpuSpentS;
+            IdentifyingUser = s.IdentifyingUser;
+            ClientType = s.ClientType;
+            ClientAddress = s.ClientAddress;
+            CalType = s.CalType;
+            CalUsageCount = s.CalUsageCount;
+            Browser = s.Browser;
+            IsReduced = s.IsReduced;
+            fk_user_id = s.fk_user_id;
+            fk_group_id = s.fk_group_id;
+            fk_report_id = s.fk_report_id;
+            AddDate = s.AddDate;
+            User = s.User;
+            Report = s.Report;
+            Group = s.Group;
+        }
     }
 }

@@ -74,5 +74,31 @@ namespace SystemReporting.Entities.Models
         // Navigation properties 
         public virtual User User { get; set; }
         public virtual Group Group { get; set; }
-    }
+
+        public IisLog() { }
+        public IisLog(IisLog i)
+        {
+            Id = i.Id;
+            UserAccessDatetime = i.UserAccessDatetime;
+            ClientIpAddress = i.ClientIpAddress;
+            ServerIPAddress = i.ServerIPAddress;
+            PortNumber = i.PortNumber;
+            CommandSentMethod = i.CommandSentMethod;
+            StepURI = i.StepURI;
+            QueryURI = i.QueryURI;
+            StatusCode = i.StatusCode;
+            SubStatusCode = i.SubStatusCode;
+            Win32StatusCode = i.Win32StatusCode;
+            ResponseTime = i.ResponseTime;
+            UserAgent = i.UserAgent;
+            ClientReferer = i.ClientReferer;
+            Browser = i.Browser;
+            EventType = i.EventType;
+            AddDate = i.AddDate;
+            fk_user_id =	i.fk_user_id;
+            fk_group_id =	i.fk_group_id;
+            User = i.User;
+            Group = i.Group;
+        }
+}
 }

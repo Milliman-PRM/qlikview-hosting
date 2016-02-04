@@ -10,6 +10,7 @@ namespace SystemReporting.Service
     {
         #region Services
 
+        void Dispose();
         #region AuditLog
         void Remove(AuditLog obj);
         void Save(AuditLog obj);

@@ -12,7 +12,7 @@ namespace SystemReporting.Entities.Models
         // Primary key
         [Column("id")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int? Id { get; set; }
+        public int Id { get; set; }
 
         [Column("username")]
         public string UserName { get; set; }
@@ -26,11 +26,11 @@ namespace SystemReporting.Entities.Models
         public User() { }
         public User(User u)
         {
-            this.Id = u.Id;
-            this.UserName = u.UserName;
-            this.ListIisLog = new List<IisLog>();
-            this.ListAuditLog = new List<AuditLog>();
-            this.ListSessionLog = new List<SessionLog>();
+            Id = u.Id;
+            UserName = u.UserName;
+            ListIisLog = new List<IisLog>();
+            ListAuditLog = new List<AuditLog>();
+            ListSessionLog = new List<SessionLog>();
         }
     }
 }

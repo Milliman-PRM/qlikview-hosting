@@ -76,6 +76,10 @@
       <Project>{aa153166-0fb2-4a34-8d26-227e0be97d87}</Project>
       <Name>FileProcessor</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Milliman.Utilities\Milliman.Utilities.csproj">
+      <Project>{43ef8247-0456-458f-8f85-dfd57f54ae79}</Project>
+      <Name>Milliman.Utilities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

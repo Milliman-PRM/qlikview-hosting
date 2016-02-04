@@ -4,28 +4,29 @@ using SystemReporting.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using SystemReporting.Utilities;
 
 namespace SystemReporting.Controller.BusinessLogic.Controller
 {
     [Serializable]
     public class SessionLogController : ControllerBase
     {
-        private IRepository<SessionLog> LogRepository = null;
+        private IMillimanService dbService { get; set; }
+       
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public SessionLogController() {  }
 
-        public SessionLogController()
-        {
-            LogRepository = new Repository<SessionLog>();
-        }
-
-        public SessionLogController(IRepository<SessionLog> repository)
-        {
-            LogRepository = repository;
-        }
-
+        /// <summary>
+        /// Method to process the logs list and enter data to db
+        /// This will insert data into User, Group, Report and IIsLogs
+        /// </summary>
+        /// <param name="listProxyLogs"></param>
+        /// <returns></returns>
         public bool ProcessLogs(List<ProxySessionLog> listProxyLogs)
-        {
+        {            
             bool blnSucessful = false;
-            MillimanService serviceMilliman = new MillimanService();
             try
             {
                 SessionLog logEntity = new SessionLog();
@@ -34,67 +35,44 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                     logEntity.UserAccessDatetime = string.IsNullOrEmpty(entry.UserAccessDatetime) ? (DateTime?)null : DateTime.Parse(entry.UserAccessDatetime);
                     logEntity.Document = (!string.IsNullOrEmpty(entry.Document)) ? entry.Document.Trim() : string.Empty;
                     logEntity.ExitReason = (!string.IsNullOrEmpty(entry.ExitReason)) ? entry.ExitReason.Trim() : string.Empty;
-                    logEntity.SessionStartTime = string.IsNullOrEmpty(entry.SessionStartTime) ? (DateTime?)null : DateTime.Parse(entry.SessionStartTime);
+                    logEntity.SessionStartTime = string.IsNullOrEmpty(entry.SessionStartDateTime) ? (DateTime?)null : DateTime.Parse(entry.SessionStartDateTime);
                     logEntity.SessionDuration = string.IsNullOrEmpty(entry.SessionLength) ? (int?)null : int.Parse(entry.SessionLength);
                     logEntity.SessionEndReason = (!string.IsNullOrEmpty(entry.SessionEndReason)) ? entry.SessionEndReason.Trim() : string.Empty;
                     logEntity.CpuSpentS = entry.CpuSpentS != null ? entry.CpuSpentS : 0.0;
-                   
-                    //special 
                     logEntity.IdentifyingUser = (!string.IsNullOrEmpty(entry.IdentifyingUser)) ? entry.IdentifyingUser : string.Empty;
-                    #region User
-                    //Insert User
-                    if (!string.IsNullOrEmpty(entry.IdentifyingUser))
-                    {
-                        User user = new User();
-                        var userExist = serviceMilliman.GetUsers<User>(u => u.UserName == entry.IdentifyingUser).FirstOrDefault();
-                        if (userExist == null)
-                        {
-                            user.UserName = entry.IdentifyingUser.Trim();
-                            ControllerCommon.SaveUser(user);
-                            user = new User();
-
-                            logEntity.IdentifyingUser = entry.IdentifyingUser.Trim();
-                            //after insert set the id
-                            User userFound = serviceMilliman.GetUsers<User>(a => a.UserName == entry.IdentifyingUser).FirstOrDefault();
-                            logEntity.fk_user_id = userFound.Id;
-                        }
-                        else
-                        {
-                            logEntity.IdentifyingUser = userExist.UserName.Trim();
-                            logEntity.fk_user_id = userExist.Id;
-                        }
-                    }
-
-                    #endregion
-
                     logEntity.ClientType = (!string.IsNullOrEmpty(entry.ClientType)) ? entry.ClientType.Trim() : string.Empty;
                     logEntity.ClientAddress = (!string.IsNullOrEmpty(entry.ClientAddress)) ? entry.ClientAddress.Trim() : string.Empty;
                     logEntity.CalType = (!string.IsNullOrEmpty(entry.CalType)) ? entry.CalType.Trim() : string.Empty;
                     logEntity.CalUsageCount = entry.CalUsageCount.HasValue ? entry.CalUsageCount.Value : 0;
-
                     logEntity.Browser = (!string.IsNullOrEmpty(entry.Browser)) ? entry.Browser.Trim() : string.Empty;
                     logEntity.IsReduced = entry.IsReduced;
+                    logEntity.AddDate = DateTime.Now;
                     
-                    #region Report / Group
+                    #region User / Report / Group
+
+                    //Insert User
+                    if (!string.IsNullOrEmpty(entry.IdentifyingUser))
+                    {
+                        User user = new User();
+                        user.UserName = entry.IdentifyingUser;
+                        var addOrGetUser = ControllerCommon.AddOrGetUser(user);
+                        if (addOrGetUser != null)
+                        {
+                            //after insert set the id
+                            logEntity.fk_user_id = addOrGetUser.Id;
+                        }
+                    }
 
                     //Insert Report
                     if (!string.IsNullOrEmpty(entry.Report))
                     {
                         Report report = new Report();
-                        var reportExist = serviceMilliman.GetReports<Report>(a => a.ReportName == entry.Report).FirstOrDefault();
-                        if (reportExist == null)
+                        report.ReportName = entry.Report;
+                        var addOrGetReport = ControllerCommon.AddOrGetReport(report);
+                        if (addOrGetReport != null)
                         {
-                            report.ReportName = entry.Report.Trim();
-                            ControllerCommon.SaveReport(report);
-                            report = new Report();
-                            
                             //after insert set the id
-                            Report reportFound = serviceMilliman.GetReports<Report>(a => a.ReportName == entry.Report).FirstOrDefault();
-                            logEntity.fk_report_id = reportFound.Id;
-                        }
-                        else
-                        {
-                            logEntity.fk_report_id = reportExist.Id;
+                            logEntity.fk_report_id = addOrGetReport.Id;
                         }
                     }
 
@@ -102,41 +80,31 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                     if (!string.IsNullOrEmpty(entry.Group))
                     {
                         Group group = new Group();
-                        var groupExist = serviceMilliman.GetGroups<Group>(a => a.GroupName == entry.Group).FirstOrDefault();
-                        if (groupExist == null)
+                        group.GroupName = entry.Group;
+                        var addOrGetGroup = ControllerCommon.AddOrGetGroup(group);
+                        if (addOrGetGroup != null)
                         {
-                            group.GroupName = entry.Group;
-                            ControllerCommon.SaveGroup(group);
-                            group = new Group();
-
                             //after insert set the id
-                            Group groupFound = serviceMilliman.GetGroups<Group>(a => a.GroupName == entry.Group).FirstOrDefault();
-                            logEntity.fk_group_id = groupFound.Id;
-                        }
-                        else
-                        {
-                            logEntity.fk_group_id = groupExist.Id;
+                            logEntity.fk_group_id = addOrGetGroup.Id;
                         }
                     }
+
                     #endregion
-                                    
-                    logEntity.AddDate = DateTime.Now;
+                    //initiate service
+                    dbService = new MillimanService();
                     //5. Insert record in the table     
-                    serviceMilliman.Save(logEntity);
+                    dbService.Save(logEntity);
+                    dbService.Dispose();
                     logEntity = new SessionLog();
                     blnSucessful = true;
                 }
             }
             catch (Exception ex)
             {
-                LogError(DateTime.Now + " ||-|| "
-                        + "Class SessionLogController. Method ProcessLogs." + Environment.NewLine
-                        + ex.Message + " ||-|| " + ex.InnerException + Environment.NewLine);
+                dbService.Dispose();
+                Logger.LogError(ex, "Class SessionLogController. Method ProcessLogs.");
             }
             return blnSucessful;
         }
-
-
-
     }
 }

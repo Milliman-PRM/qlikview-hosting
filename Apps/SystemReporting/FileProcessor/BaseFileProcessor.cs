@@ -91,73 +91,15 @@ namespace FileProcessor
     /// </summary>
     public class BaseFileProcessor
     {
-        #region Error Log
-        public static void LogError(Exception ex, string message)
-        {
-            if (ex != null && !string.IsNullOrEmpty(message))
-            {
-                LogExAndErr( ex, message);
-            }
-            else if (ex == null & (!string.IsNullOrEmpty(message)))
-            {
-                LogError(message);
-            }
-            else if (ex!=null & (string.IsNullOrEmpty(message)))
-            {
-                LogError(ex);
-            }
-        }        
-        public static void LogError(Exception ex)
-        {
-            Console.WriteLine("Exception Occurred. Check the Exception Log. Message : ", ex.Message.ToString());
-            var LoggerFileDirectory = ConfigurationManager.AppSettings["LoggerFileDirectory"];
-            var LoggerFileName = ConfigurationManager.AppSettings["LoggerFileName"];
-            Logger.Instance.LogPath = LoggerFileDirectory;
-            Logger.Instance.LogFileName = LoggerFileName;
-            Logger.WriteLine(DateTime.Now + " Todays Exceptions: ~ " +  "Exception Message: " + ex.Message.ToString() + "||-||" 
-                                          +  "Exception Trace : " + ex.StackTrace + "||-||"
-                                          +  "Exception Target: " + ex.TargetSite.ToString() + "||-||"
-                                          +  "Exception Source: " + ex.Source.ToString()
-                                          + Environment.NewLine);
-        }
-        public static void LogError(string message)
-        {
-            Console.WriteLine("Exception Occurred. Check the Exception Log. Message : ", message);
-            var LoggerFileDirectory = ConfigurationManager.AppSettings["LoggerFileDirectory"];
-            var LoggerFileName = ConfigurationManager.AppSettings["LoggerFileName"];
-            Logger.Instance.LogPath = LoggerFileDirectory;
-            Logger.Instance.LogFileName = LoggerFileName;
-            Logger.WriteLine(DateTime.Now + " Todays Exceptions: ~ "   + "||-||"
-                                          + " Exception Message: " + message
-                                          + Environment.NewLine);
-        }
-        public static void LogExAndErr(Exception ex, string message)
-        {
-            Console.WriteLine("Exception Occurred. Check the Exception Log. Message : ", message);
-            var LoggerFileDirectory = ConfigurationManager.AppSettings["LoggerFileDirectory"];
-            var LoggerFileName = ConfigurationManager.AppSettings["LoggerFileName"];
-            Logger.Instance.LogPath = LoggerFileDirectory;
-            Logger.Instance.LogFileName = LoggerFileName;
-            Logger.WriteLine(DateTime.Now + " Todays Exceptions: ~ " + "||-||"
-                                          + message  + "||-||"
-                                          + "Exception Message: " + ex.Message.ToString()   + "||-||"
-                                          + "Exception Trace : " + ex.StackTrace   + "||-||"
-                                          + "Exception Target: " + ex.TargetSite.ToString()  + "||-||"
-                                          + "Exception Source: " + ex.Source.ToString()
-                                          + Environment.NewLine);
-        }
-        #endregion
-
         #region FileProcessed
         public static void LogProcessedFile(string message)
         {
-            Console.WriteLine("Processed file successfully {0}", message);
-            var LoggerFileDirectory = ConfigurationManager.AppSettings["ProcessedFileLogDirectory"];
-            var LoggerFileName = ConfigurationManager.AppSettings["ProcessedFileLogFileName"];
-            Logger.Instance.LogPath = LoggerFileDirectory;
-            Logger.Instance.LogFileName = LoggerFileName;
+            Console.WriteLine("Processed successfully file: {0}", message);
+            Logger.Instance.LogPath = FileFunctions.GetProcessedFileLogDirectory();
+            Logger.Instance.LogFileName = FileFunctions.GetProcessedFileLogFileName(); 
             Logger.WriteLine(DateTime.Now + " ProcessedFileName:~ " + message + Environment.NewLine);
         }
+
         #endregion
     }
     #endregion

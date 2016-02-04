@@ -4,104 +4,136 @@ using SystemReporting.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using SystemReporting.Utilities;
 
 namespace SystemReporting.Controller.BusinessLogic.Controller
 {
     public class CommonController : ControllerBase
     {
-        private MillimanService serviceMilliman = null;
+        private IMillimanService dbService { get; set; }
 
-        public CommonController()
-        {
-            serviceMilliman = new MillimanService();
-        }
-
-        public CommonController(MillimanService mserv)
-        {
-            serviceMilliman = mserv;
-        }
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public CommonController(){  }
 
         #region User
 
-        public void SaveUser(User model)
+        /// <summary>
+        /// Method to check if model exist. If it does then return and if it does not then add and return
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public User AddOrGetUser(User model)
         {
+            //initiate service
+            dbService = new MillimanService();
+            User user = new User();
             try
-            {
-                var userExist = serviceMilliman.GetUsers<User>(a => a.UserName == model.UserName).FirstOrDefault();
-                User user = new User();
-                if (userExist == null)
+            {                
+                var exists = dbService.GetUsers<User>(u => u.UserName == model.UserName).FirstOrDefault();
+                if (exists == null)
                 {
-                    user = new User()
-                    {
-                        UserName = model.UserName.Trim()
-                    };
+                    user.UserName = model.UserName.Trim();
+                    dbService.Save(user);
+
+                    user = new User();
+                    //after insert set the id
+                    user = dbService.GetUsers<User>(a => a.UserName == model.UserName).FirstOrDefault();
                 }
-                serviceMilliman.Save(user);
+                else
+                {
+                    user = exists;
+                }
+
+                dbService.Dispose();
             }
             catch (Exception ex)
             {
-                LogError(DateTime.Now + " ||-|| "
-                                        + "Class CommonController. Method SaveUser." + Environment.NewLine
-                                        + ex.Message + " ||-|| " + ex.InnerException + Environment.NewLine);
+                dbService.Dispose();
+                Logger.LogError(ex, "Class CommonController. Method SaveUser.");
             }
+
+            return user;
         }
         #endregion
 
         #region Report
-        public void SaveReport(Report model)
+        /// <summary>
+        /// Method checks if object exist then add to db - No Update
+        /// </summary>
+        /// <param name="model"></param>
+        public Report AddOrGetReport(Report model)
         {
+            //initiate service
+            dbService = new MillimanService();
+            Report report = new Report();
             try
             {
-                var reportExist = serviceMilliman.GetReports<Report>(a => a.ReportName == model.ReportName).FirstOrDefault();
-                Report report = new Report();
-                if (reportExist == null)
+                var exists = dbService.GetReports<Report>(u => u.ReportName == model.ReportName).FirstOrDefault();
+                if (exists == null)
                 {
-                    report = new Report()
-                    {
-                        ReportName = model.ReportName.Trim()
-                    };
-                }
-                serviceMilliman.Save(report);
+                    report.ReportName = model.ReportName.Trim();
+                    dbService.Save(report);
 
+                    report = new Report();
+                    //after insert set the id
+                    report = dbService.GetReports<Report>(a => a.ReportName == model.ReportName).FirstOrDefault();
+                }
+                else
+                {
+                    report = exists;
+                }
+
+                dbService.Dispose();
             }
             catch (Exception ex)
             {
-                LogError(DateTime.Now + " ||-|| "
-                                        + "Class CommonController. Method SaveReport." + Environment.NewLine
-                                        + ex.Message + " ||-|| " + ex.InnerException + Environment.NewLine);
+                dbService.Dispose();
+                Logger.LogError(ex, "Class CommonController. Method SaveUser.");
             }
 
+            return report;
         }
-
         #endregion
 
         #region Group
-
-        public void SaveGroup(Group model)
+        /// <summary>
+        /// Method checks if object exist then add to db - No Update
+        /// </summary>
+        /// <param name="model"></param>
+        public Group AddOrGetGroup(Group model)
         {
+            //initiate service
+            dbService = new MillimanService();
+            Group group = new Group();
             try
             {
-                var groupExist = serviceMilliman.GetGroups<Group>(a => a.GroupName == model.GroupName).FirstOrDefault(); 
-                Group group = new Group();
-                if (groupExist == null)
+                var exists = dbService.GetGroups<Group>(u => u.GroupName == model.GroupName).FirstOrDefault();
+                if (exists == null)
                 {
-                    group = new Group()
-                    {
-                        GroupName = model.GroupName.Trim()
-                    };
-                }
-                serviceMilliman.Save(group);
+                    group.GroupName = model.GroupName.Trim();
+                    dbService.Save(group);
 
+                    group = new Group();
+                    //after insert set the id
+                    group = dbService.GetGroups<Group>(a => a.GroupName == model.GroupName).FirstOrDefault();
+                }
+                else
+                {
+                    group = exists;
+                }
+
+                dbService.Dispose();
             }
             catch (Exception ex)
             {
-                LogError(DateTime.Now + " ||-|| "
-                        + "Class CommonController. Method SaveGroup." + Environment.NewLine
-                        + ex.Message + " ||-|| " + ex.InnerException + Environment.NewLine);
+                dbService.Dispose();
+                Logger.LogError(ex, "Class CommonController. Method SaveUser.");
             }
 
+            return group;
         }
-
         #endregion
     }
 }

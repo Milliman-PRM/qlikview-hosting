@@ -13,8 +13,8 @@ namespace SystemReporting.Data.Repository
 {
     public class Repository<T> : IDisposable, IRepository<T> where T : class
     {
-        private ApplicationDbContext _dbContext = null;
-        private DbSet<T> _entity = null;
+        private ApplicationDbContext _dbContext { get; set; }
+        private DbSet<T> _entity { get; set; }
 
         /// <summary>
         /// Constructor opens the connection to DB
@@ -22,6 +22,7 @@ namespace SystemReporting.Data.Repository
         public Repository()
         {
             this._dbContext = new ApplicationDbContext();
+            //this is needed if we call the repository and not pass the db
             if (this._dbContext.Database.Connection.State == System.Data.ConnectionState.Closed)
             {
                 this._dbContext.Database.Connection.Open();
@@ -33,24 +34,15 @@ namespace SystemReporting.Data.Repository
         /// Constructor
         /// </summary>
         /// <param name="db"></param>
-        public Repository(ApplicationDbContext db)
+        public Repository(ApplicationDbContext dbContext)
         {
-            this._dbContext = db;
-            _entity = db.Set<T>();
-        }
-        //public void OpenDatabaseConnection()
-        //{
-        //    _dbContext = new ApplicationDbContext();
-        //    if (this._dbContext.Database.Connection.State == System.Data.ConnectionState.Closed)
-        //    {
-        //        this._dbContext.Database.Connection.Open();
-        //    }
-        //}
-        //public void CloseDatabaseConnection()
-        //{
-        //    Dispose();
-        //}
+            if (dbContext == null)
+                GetContext();
 
+            this._dbContext = dbContext;
+            _entity = dbContext.Set<T>();
+        }
+       
         public void Dispose()
         {
             if (_dbContext != null)
@@ -60,6 +52,7 @@ namespace SystemReporting.Data.Repository
 
         public DbContext GetContext()
         {
+            this._dbContext = new ApplicationDbContext();
             return _dbContext;
         }
         

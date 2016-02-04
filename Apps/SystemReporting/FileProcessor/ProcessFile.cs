@@ -19,7 +19,7 @@ namespace FileProcessor
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, "ProcessFile: Failed processing file. || " + args.ToArray());
+                Logger.LogError(ex, "ProcessFile: Failed processing file. || " + args.ToArray());
             }
         }
         private static void ProcessLogfiles(string args)

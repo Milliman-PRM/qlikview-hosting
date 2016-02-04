@@ -4,18 +4,141 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using SystemReporting.Data.Database;
 
 namespace SystemReporting.Service
 {
     public partial class MillimanService : IMillimanService
-    {
+    {        
+        public MillimanService()
+        {
+            //CreateDbContext();
+        }
+
+        #region Database
+
+        #region Conn
+        //private ApplicationDbContext dbContext { get; set; }
+        //protected void CreateDbContext()
+        //{
+        //    dbContext = new ApplicationDbContext();
+        //}
+        #endregion
+
+        #region IDisposable
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (this.IisLogRepository != null)     { this.IisLogRepository.Dispose();}
+                if (this.AuditLogRepository != null)   { this.AuditLogRepository.Dispose();}
+                if (this.SessionLogRepository != null) { this.SessionLogRepository.Dispose();}
+                if (this.UserRepository != null)       { this.UserRepository.Dispose(); }
+                if (this.ReportRepository != null)     { this.ReportRepository.Dispose(); }
+                if (this.GroupRepository != null)      {this.GroupRepository.Dispose();}                
+            }
+        }
+
+        #endregion
+        
         #region Repositories
-        Repository<AuditLog> AuditLogRepository = new Repository<AuditLog>();
-        Repository<IisLog> IisLogRepository = new Repository<IisLog>();
-        Repository<SessionLog> SessionLogRepository = new Repository<SessionLog>();
-        Repository<User> UserRepository = new Repository<User>();
-        Repository<Report> ReportRepository = new Repository<Report>();
-        Repository<Group> GroupRepository = new Repository<Group>();
+        //initiate repositories with database context
+        IRepository<IisLog> IisLogRepository = new Repository<IisLog>(new ApplicationDbContext());
+        IRepository<AuditLog> AuditLogRepository = new Repository<AuditLog>(new ApplicationDbContext());
+        IRepository<SessionLog> SessionLogRepository = new Repository<SessionLog>(new ApplicationDbContext());
+        IRepository<User> UserRepository = new Repository<User>(new ApplicationDbContext());
+        IRepository<Report> ReportRepository = new Repository<Report>(new ApplicationDbContext());
+        IRepository<Group> GroupRepository = new Repository<Group>(new ApplicationDbContext());
+
+        #region Repositories
+        //private IRepository<IisLog> _IisLogRepository;
+        //public IRepository<IisLog> IisLogRepository
+        //{
+        //    get
+        //    {
+        //        if (_IisLogRepository == null)
+        //        {
+        //            _IisLogRepository = new Repository<IisLog>(dbContext);
+        //        }
+        //        return _IisLogRepository;
+        //    }
+        //}
+
+        //private IRepository<AuditLog> _AuditLogRepository;
+        //public IRepository<AuditLog> AuditLogRepository
+        //{
+        //    get
+        //    {
+        //        if (_AuditLogRepository == null)
+        //        {
+        //            _AuditLogRepository = new Repository<AuditLog>(dbContext);
+        //        }
+        //        return _AuditLogRepository;
+        //    }
+        //}
+
+        //private IRepository<SessionLog> _SessionLogRepository;
+        //public IRepository<SessionLog> SessionLogRepository
+        //{
+        //    get
+        //    {
+        //        if (_SessionLogRepository == null)
+        //        {
+        //            _SessionLogRepository = new Repository<SessionLog>(dbContext);
+        //        }
+        //        return _SessionLogRepository;
+        //    }
+        //}
+
+        //private IRepository<User> _UserRepository;
+        //public IRepository<User> UserRepository
+        //{
+        //    get
+        //    {
+        //        if (_UserRepository == null)
+        //        {
+        //            _UserRepository = new Repository<User>(dbContext);
+        //        }
+        //        return _UserRepository;
+        //    }
+        //}
+
+        //private IRepository<Group> _GroupRepository;
+        //public IRepository<Group> GroupRepository
+        //{
+        //    get
+        //    {
+        //        if (_GroupRepository == null)
+        //        {
+        //            _GroupRepository = new Repository<Group>(dbContext);
+        //        }
+        //        return _GroupRepository;
+        //    }
+        //}
+
+        //private IRepository<Report> _ReportRepository;
+        //public IRepository<Report> ReportRepository
+        //{
+        //    get
+        //    {
+        //        if (_ReportRepository == null)
+        //        {
+        //            _ReportRepository = new Repository<Report>(dbContext);
+        //        }
+        //        return _ReportRepository;
+        //    }
+        //}
+        #endregion
+
+        #endregion
+
         #endregion
 
         #region IisLog
@@ -27,6 +150,7 @@ namespace SystemReporting.Service
         {
             if (obj.Id > 0)
                 IisLogRepository.Delete(obj);
+
             IisLogRepository.Commit();            
         }
         /// <summary>
@@ -44,6 +168,7 @@ namespace SystemReporting.Service
 
             IisLogRepository.Commit();
         }
+
         /// <summary>
         /// Get list of Object
         /// </summary>
@@ -58,6 +183,7 @@ namespace SystemReporting.Service
 
             return query;
         }
+
         /// <summary>
         /// Get list of Object
         /// </summary>
@@ -76,6 +202,7 @@ namespace SystemReporting.Service
 
             return query;
         }
+
         /// <summary>
         /// Get list of Objects
         /// </summary>
@@ -99,8 +226,10 @@ namespace SystemReporting.Service
         {
             if (obj.Id > 0)
                 AuditLogRepository.Delete(obj);
+
             AuditLogRepository.Commit();
         }
+
         /// <summary>
         /// Save an object
         /// </summary>
@@ -116,6 +245,7 @@ namespace SystemReporting.Service
 
             AuditLogRepository.Commit();
         }
+
         /// <summary>
         /// Get list of Object
         /// </summary>
@@ -124,13 +254,13 @@ namespace SystemReporting.Service
         /// <returns></returns>
         public IQueryable<T> GetAuditLogs<T>(Expression<Func<T, bool>> predicate = null) where T : AuditLog
         {
-            //var query = BlogRepository.FindAll().OfType<T>();
             var query = AuditLogRepository.FindAll().OfType<T>();
             if (predicate != null)
                 query = query.Where(predicate);
 
             return query;
         }
+
         /// <summary>
         /// Get list of Object
         /// </summary>
@@ -149,6 +279,7 @@ namespace SystemReporting.Service
 
             return query;
         }
+
         /// <summary>
         /// Get list of Objects
         /// </summary>
@@ -164,6 +295,7 @@ namespace SystemReporting.Service
         #endregion
 
         #region SessionLog
+
         /// <summary>
         /// Remove an object
         /// </summary>
@@ -172,8 +304,10 @@ namespace SystemReporting.Service
         {
             if (obj.Id > 0)
                 SessionLogRepository.Delete(obj);
+
             SessionLogRepository.Commit();
         }
+
         /// <summary>
         /// Save an object
         /// </summary>
@@ -189,6 +323,7 @@ namespace SystemReporting.Service
 
             SessionLogRepository.Commit();
         }
+
         /// <summary>
         /// Get list of Object
         /// </summary>
@@ -204,6 +339,7 @@ namespace SystemReporting.Service
 
             return query;
         }
+
         /// <summary>
         /// Get list of Object
         /// </summary>
@@ -222,6 +358,7 @@ namespace SystemReporting.Service
 
             return query;
         }
+
         /// <summary>
         /// Get list of Objects
         /// </summary>
@@ -237,6 +374,7 @@ namespace SystemReporting.Service
         #endregion
 
         #region User
+
         /// <summary>
         /// Remove an object
         /// </summary>
@@ -245,8 +383,10 @@ namespace SystemReporting.Service
         {
             if (obj.Id > 0)
                 UserRepository.Delete(obj);
+
             UserRepository.Commit();
         }
+
         /// <summary>
         /// Save an object
         /// </summary>
@@ -320,26 +460,7 @@ namespace SystemReporting.Service
             returnValues = GetUsers<User>(userName).ToList();
             return returnValues;
         }        
-
-        ///// <summary>
-        ///// Get first or default user
-        ///// </summary>
-        ///// <typeparam name="T"></typeparam>
-        ///// <param name="predicate"></param>
-        ///// <returns></returns>
-        //public T GetUser<T>(Expression<Func<T, bool>> predicate) where T : User
-        //{
-        //    return GetUsers<T>(predicate).FirstOrDefault();
-        //}
-                
-        ///// <summary>
-        ///// Returns list of users using SelectAll
-        ///// </summary>
-        ///// <returns></returns>
-        //public IEnumerable<User> SelectAll()
-        //{
-        //    return UserRepository.SelectAll();
-        //}
+            
         #endregion
 
         #region Report
@@ -351,8 +472,10 @@ namespace SystemReporting.Service
         {
             if (obj.Id > 0)
                 ReportRepository.Delete(obj);
+
             ReportRepository.Commit();
         }
+
         /// <summary>
         /// Save an object
         /// </summary>
@@ -365,8 +488,10 @@ namespace SystemReporting.Service
             }
             else
                 ReportRepository.Attach(obj);
+
             ReportRepository.Commit();
         }
+
         /// <summary>
         /// Get list of Object
         /// </summary>
@@ -381,6 +506,7 @@ namespace SystemReporting.Service
 
             return query;
         }
+
         /// <summary>
         /// Get list of Object
         /// </summary>
@@ -399,6 +525,7 @@ namespace SystemReporting.Service
 
             return query;
         }
+
         /// <summary>
         /// Get list of Objects
         /// </summary>
@@ -412,19 +539,10 @@ namespace SystemReporting.Service
             return returnValues;
         }
 
-        ///// <summary>
-        ///// Get firstordefualt user
-        ///// </summary>
-        ///// <typeparam name="T"></typeparam>
-        ///// <param name="predicate"></param>
-        ///// <returns></returns>
-        //public T GetReport<T>(Expression<Func<T, bool>> predicate) where T : Report
-        //{
-        //    return GetReports<T>(predicate).FirstOrDefault();
-        //}
         #endregion
 
         #region Group
+
         /// <summary>
         /// Remove an object
         /// </summary>
@@ -433,8 +551,10 @@ namespace SystemReporting.Service
         {
             if (obj.Id > 0)
                 GroupRepository.Delete(obj);
+
             GroupRepository.Commit();
         }
+
         /// <summary>
         /// Save an object
         /// </summary>
@@ -447,8 +567,10 @@ namespace SystemReporting.Service
             }
             else
                 GroupRepository.Attach(obj);
+
             GroupRepository.Commit();
         }
+
         /// <summary>
         /// Get list of Object
         /// </summary>
@@ -463,6 +585,7 @@ namespace SystemReporting.Service
 
             return query;
         }
+
         /// <summary>
         /// Get list of Object
         /// </summary>
@@ -481,17 +604,6 @@ namespace SystemReporting.Service
 
             return query;
         }
-
-        ///// <summary>
-        ///// Get firstordefualt user
-        ///// </summary>
-        ///// <typeparam name="T"></typeparam>
-        ///// <param name="predicate"></param>
-        ///// <returns></returns>
-        //public T GetGroup<T>(Expression<Func<T, bool>> predicate) where T : Group
-        //{
-        //    return GetGroups<T>(predicate).FirstOrDefault();
-        //}
         #endregion        
     }
 }

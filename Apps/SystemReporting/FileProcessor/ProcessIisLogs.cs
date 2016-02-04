@@ -9,15 +9,13 @@ using System.Threading.Tasks;
 using SystemReporting.Controller;
 using SystemReporting.Controller.BusinessLogic.Controller;
 using SystemReporting.Entities.Proxy;
+using SystemReporting.Utilities;
 
 namespace FileProcessor
 {
     public class ProcessIisLogs : ControllerAccess, IFileProcessor
     {
-        public ProcessIisLogs(string args)
-        {
-
-        }
+        public ProcessIisLogs(string args) {  }
 
         /// <summary>
         /// Process the iis files. Args are only the file type like iis. 
@@ -31,6 +29,7 @@ namespace FileProcessor
             {
                 if (args.Length > 0)
                 {
+                    string filter = "u_ex";
                     EnumFileProcessor.eFilePath efilePath = EnumFileProcessor.eFilePath.IisLogs;
                     
                     // ProductionLogsTest\IISLogs\
@@ -38,8 +37,7 @@ namespace FileProcessor
 
                     //LogFileProcessor\IN
                     var destinationInDirectory = new DirectoryInfo(FileFunctions.GetFileProcessingInDirectory(efilePath));
-
-                    string filter = "u_ex";
+                                        
                     if (sourceDirectory.Exists)
                     {
                         List<string> listFileToProcess = FileFunctions.GetFileToReadFromStatusFile(filter, efilePath);
@@ -52,6 +50,7 @@ namespace FileProcessor
                         {
                             foreach (var file in listFileToProcess)
                             {
+                                Console.WriteLine("Processing file:  {0}." , file);
                                 string fileNameWithsourceDirectory = (sourceDirectory + file);
                                 if (File.Exists(fileNameWithsourceDirectory))
                                 {
@@ -67,7 +66,7 @@ namespace FileProcessor
                                     }
                                     else
                                     {
-                                        BaseFileProcessor.LogError(null, "ProcessIisLogs: Failed processing fileInfo || " + fileNameWithsourceDirectory);
+                                        Logger.LogError(null, "ProcessIisLogs: Failed processing fileInfo || " + fileNameWithsourceDirectory);
                                     }
                                 }
                             }
@@ -77,7 +76,7 @@ namespace FileProcessor
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, " Class ProcessIisLogs. Method ProcessFileData.");
+                Logger.LogError(ex, " Class ProcessIisLogs. Method ProcessFileData.");
             }
         }
 
@@ -90,7 +89,7 @@ namespace FileProcessor
             FileInfo fileInfo = new FileInfo(fileNameWithDirectory);
             if (fileInfo == null)
             {
-                BaseFileProcessor.LogError(null, "FileInfo missing. Can not process iisFile " + fileNameWithDirectory);
+                Logger.LogError(null, "FileInfo missing. Can not process iisFile " + fileNameWithDirectory);
                 return false;
             }
 
@@ -188,7 +187,7 @@ namespace FileProcessor
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, " Class ProcessIisLogs. Method ProcessLogFile while sending the data to controller.");
+                Logger.LogError(ex, " Class ProcessIisLogs. Method ProcessLogFile while sending the data to controller.");
             }
 
             return blnSucessful;
@@ -229,7 +228,7 @@ namespace FileProcessor
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, " Class ProcessIisLogs. Method ParseFile. File name. " + filefullName);
+                Logger.LogError(ex, " Class ProcessIisLogs. Method ParseFile. File name. " + filefullName);
             }
             return listLogFile;
         }

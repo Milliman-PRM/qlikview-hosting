@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SystemReporting.Utilities;
 
 namespace FileProcessorApplication
 {
@@ -37,7 +38,7 @@ namespace FileProcessorApplication
                             argument = new string[] { "Iis" };
                             break;
                     }
-                    Console.WriteLine("Please wait till process for log {0} file completes. ", argument);
+                    Console.WriteLine("Please wait till process for {0} log file completes. ", argument);
                     Console.WriteLine("----------------------------------------");
                     args = argument;
                 }
@@ -54,7 +55,7 @@ namespace FileProcessorApplication
             }
             catch (Exception ex)
             {
-                FileProcessor.BaseFileProcessor.LogError(ex, "ProcessFile: Failed processing file. || " + args.ToArray());
+                Logger.LogError(ex, "ProcessFile: Failed processing file. || " + args.ToArray());
             }
         }
 
@@ -88,12 +89,9 @@ namespace FileProcessorApplication
             Console.Write(DateTime.Now + Environment.NewLine);
             Console.WriteLine("----------------------------------------");
             Console.Write("Reporting Application in Progress." + Environment.NewLine);
-            Console.Write("Press any key to continue" + Environment.NewLine);
-            Console.WriteLine("----------------------------------------");
             Console.WriteLine("----------------------------------------");
             Console.WriteLine("----------------------------------------");
             Console.WriteLine("Attention: Reporting Application Running");
-            Console.WriteLine("----------------------------------------");
             Console.WriteLine("----------------------------------------");
             Console.WriteLine("----------------------------------------");
 

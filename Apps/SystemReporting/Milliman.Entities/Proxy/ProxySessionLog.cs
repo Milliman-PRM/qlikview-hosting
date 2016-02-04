@@ -9,7 +9,7 @@ namespace SystemReporting.Entities.Models
         public string UserAccessDatetime { get; set; }
         public string Document { get; set; }
         public string ExitReason { get; set; }
-        public string SessionStartTime { get; set; }
+        public string SessionStartDateTime { get; set; }
         public string SessionDuration { get; set; }
         public string SessionEndReason { get; set; }
         public double? CpuSpentS { get; set; }

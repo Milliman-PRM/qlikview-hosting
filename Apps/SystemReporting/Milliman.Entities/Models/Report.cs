@@ -27,10 +27,10 @@ namespace SystemReporting.Entities.Models
         public Report() { }
         public Report(Report r)
         {
-            this.Id = r.Id;
-            this.ReportName = r.ReportName;
-            this.ListAuditLog = new List<AuditLog>();
-            this.ListSessionLog = new List<SessionLog>();
+            Id = r.Id;
+            ReportName = r.ReportName;
+            ListAuditLog = new List<AuditLog>();
+            ListSessionLog = new List<SessionLog>();
         }
     }
 }
