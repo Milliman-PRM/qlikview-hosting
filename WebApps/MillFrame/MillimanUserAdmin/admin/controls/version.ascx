@@ -3,6 +3,6 @@
     <br />
 
     <div style="margin: 15px auto auto auto;">
-    HCIntel Milliman User Administration v2.08
+    PRM User Administration v4.0
     </div>
 </div>

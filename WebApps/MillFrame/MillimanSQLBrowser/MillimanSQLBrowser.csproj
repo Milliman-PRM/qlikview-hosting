@@ -214,6 +214,7 @@
     <Content Include="packages.config" />
     <None Include="PublishProfiles\PortalSQLUtility.pubxml" />
     <None Include="PublishProfiles\WebSQLUtilityDebug.pubxml" />
+    <None Include="Staging.pubxml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MillimanCommon\MillimanCommon.csproj">

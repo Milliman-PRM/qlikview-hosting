@@ -25,11 +25,11 @@ namespace MillimanDev
         // Server where the QlikView AccessPoint resides (ends with slash) - must be 127.0.0.1 to be trusted by server
         //private string AccessPointServer = "https://127.0.0.1/";
         //private string ExternalAccessPointServer = "https://hcintel.milliman.com";
-       
+
         //for production server this must be HTTPS://127.0.0.1 to work
         //we have code below that will look to see if the external server name is PRM.MILLIMAN.COM and default to HTTPS if needed
-        private string AccessPointServer = "https://127.0.0.1/";
-       // private string ExternalAccessPointServer = "http://hcintel.cloudapp.net";
+        private string AccessPointServer = "http://127.0.0.1/";
+        // private string ExternalAccessPointServer = "http://hcintel.cloudapp.net";
 
         #endregion
 
@@ -70,7 +70,7 @@ namespace MillimanDev
 
             if (LicenseSetup(_UserName, _QVDocument))
             {
-                RedirectToQlikView(_QVDocument, AccessPointServer, _ContextSelections, Origin.ToString().ToLower());
+                RedirectToQlikView(_QVDocument, System.Configuration.ConfigurationManager.AppSettings["ExternalServerName"], _ContextSelections, Origin.ToString().ToLower());
                 return true;
             }
             else

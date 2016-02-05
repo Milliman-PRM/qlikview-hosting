@@ -269,10 +269,10 @@
     <None Include="Properties\PublishProfiles\MillimanDebug.pubxml" />
     <Content Include="SSOConfigure\tibcert.crt" />
     <Content Include="SSOConfigure\HCIntel.cer" />
-    <Content Include="SSOConfigure\hcintel.cloudapp.net.pfx" />
     <None Include="Properties\PublishProfiles\MillimanProduction.pubxml" />
     <Content Include="SSOConfigure\HCO-Prod-cert.crt" />
     <Content Include="Reflector.ashx" />
+    <None Include="Properties\PublishProfiles\Staging.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
