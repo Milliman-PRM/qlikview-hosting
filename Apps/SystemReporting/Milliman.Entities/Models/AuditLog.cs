@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace SystemReporting.Entities.Models
 {
     [Serializable()]
-    [Table("qlickviewauditlog", Schema = "public")]
+    [Table("qvauditlog", Schema = "public")]
     public class AuditLog
     {
         [Column("id")]

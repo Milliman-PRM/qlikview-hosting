@@ -26,17 +26,17 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
         /// <returns></returns>
         public bool ProcessLogs(List<ProxySessionLog> listProxyLogs)
         {            
-            bool blnSucessful = false;
+            var blnSucessful = false;
             try
             {
-                SessionLog logEntity = new SessionLog();
+                var logEntity = new SessionLog();
                 foreach (var entry in listProxyLogs)
                 {                    
                     logEntity.UserAccessDatetime = string.IsNullOrEmpty(entry.UserAccessDatetime) ? (DateTime?)null : DateTime.Parse(entry.UserAccessDatetime);
                     logEntity.Document = (!string.IsNullOrEmpty(entry.Document)) ? entry.Document.Trim() : string.Empty;
                     logEntity.ExitReason = (!string.IsNullOrEmpty(entry.ExitReason)) ? entry.ExitReason.Trim() : string.Empty;
                     logEntity.SessionStartTime = string.IsNullOrEmpty(entry.SessionStartDateTime) ? (DateTime?)null : DateTime.Parse(entry.SessionStartDateTime);
-                    logEntity.SessionDuration = string.IsNullOrEmpty(entry.SessionLength) ? (int?)null : int.Parse(entry.SessionLength);
+                    logEntity.SessionDuration = (!string.IsNullOrEmpty(entry.SessionDuration)) ? entry.SessionDuration : string.Empty;
                     logEntity.SessionEndReason = (!string.IsNullOrEmpty(entry.SessionEndReason)) ? entry.SessionEndReason.Trim() : string.Empty;
                     logEntity.CpuSpentS = entry.CpuSpentS != null ? entry.CpuSpentS : 0.0;
                     logEntity.IdentifyingUser = (!string.IsNullOrEmpty(entry.IdentifyingUser)) ? entry.IdentifyingUser : string.Empty;
@@ -45,7 +45,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                     logEntity.CalType = (!string.IsNullOrEmpty(entry.CalType)) ? entry.CalType.Trim() : string.Empty;
                     logEntity.CalUsageCount = entry.CalUsageCount.HasValue ? entry.CalUsageCount.Value : 0;
                     logEntity.Browser = (!string.IsNullOrEmpty(entry.Browser)) ? entry.Browser.Trim() : string.Empty;
-                    logEntity.IsReduced = entry.IsReduced;
+                    logEntity.IsReduced = (entry.IsReduced);
                     logEntity.AddDate = DateTime.Now;
                     
                     #region User / Report / Group
@@ -53,8 +53,10 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                     //Insert User
                     if (!string.IsNullOrEmpty(entry.IdentifyingUser))
                     {
-                        User user = new User();
-                        user.UserName = entry.IdentifyingUser;
+                        var user = new User
+                        {
+                            UserName = entry.IdentifyingUser
+                        };
                         var addOrGetUser = ControllerCommon.AddOrGetUser(user);
                         if (addOrGetUser != null)
                         {
@@ -66,8 +68,10 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                     //Insert Report
                     if (!string.IsNullOrEmpty(entry.Report))
                     {
-                        Report report = new Report();
-                        report.ReportName = entry.Report;
+                        var report = new Report
+                        {
+                            ReportName = entry.Report
+                        };
                         var addOrGetReport = ControllerCommon.AddOrGetReport(report);
                         if (addOrGetReport != null)
                         {
@@ -79,8 +83,10 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                     //Insert Group
                     if (!string.IsNullOrEmpty(entry.Group))
                     {
-                        Group group = new Group();
-                        group.GroupName = entry.Group;
+                        var group = new Group
+                        {
+                            GroupName = entry.Group
+                        };
                         var addOrGetGroup = ControllerCommon.AddOrGetGroup(group);
                         if (addOrGetGroup != null)
                         {
@@ -92,8 +98,8 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                     #endregion
                     //initiate service
                     dbService = new MillimanService();
-                    //5. Insert record in the table     
-                    dbService.Save(logEntity);
+                    //5. Insert record in the table   
+                    dbService.Save(logEntity); 
                     dbService.Dispose();
                     logEntity = new SessionLog();
                     blnSucessful = true;

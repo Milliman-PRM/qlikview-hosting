@@ -10,6 +10,7 @@ using SystemReporting.Utilities.ExceptionHandling;
 using System.Security.Cryptography;
 using SystemReporting.Controller;
 using SystemReporting.Controller.BusinessLogic.Controller;
+using SystemReporting.Utilities.Email;
 
 namespace FileProcessor
 {
@@ -50,7 +51,7 @@ namespace FileProcessor
         /// Returns the destination folder
         /// </summary>
         /// <returns>LogFileProcessor\IN\</returns>
-        public static string GetFileProcessingInDirectory(EnumFileProcessor.eFilePath eFilePath)
+        public static string GetFileProcessingInDirectory()
         {
             return (ConfigurationManager.AppSettings["ProcessingInDir"]);
         }
@@ -128,14 +129,14 @@ namespace FileProcessor
         public static List<string> GetFileToReadFromStatusFile(string filter, EnumFileProcessor.eFilePath eFilePath)
         {
             //status file name with directory
-            string statusFileName = ConfigurationManager.AppSettings["statusFileName"];
-            string statusFileAndDirectory = (GetStatusFileDirectory() + statusFileName + ".txt");
+            var statusFileName = ConfigurationManager.AppSettings["statusFileName"];
+            var statusFileAndDirectory = (GetStatusFileDirectory() + statusFileName + ".txt");
 
             //backup file name with directory
-            string processedLogFileName = ConfigurationManager.AppSettings["ProcessedFileLogFileName"];
-            string processedLogFileAndDirectory = (GetProcessedFileLogDirectory() + processedLogFileName + ".log");
+            var processedLogFileName = ConfigurationManager.AppSettings["ProcessedFileLogFileName"];
+            var processedLogFileAndDirectory = (GetProcessedFileLogDirectory() + processedLogFileName + ".log");
 
-            List<string> fileToRead = new List<string>();
+            var fileToRead = new List<string>();
             if (!string.IsNullOrEmpty(statusFileAndDirectory))
             {
                 //get file name
@@ -158,9 +159,11 @@ namespace FileProcessor
                 return null;
 
             //Read status File
-            List<string> listStatusFileLines = System.IO.File.ReadAllLines(statusFileAndDirectory).ToList();
+            var listStatusFileLines = System.IO.File.ReadAllLines(statusFileAndDirectory).ToList();
+
             //Read Processed Log File lines at the back up location
-            List<string> listProcessedFileLines = System.IO.File.ReadAllLines(processedLogFileAndDirectory).ToList();
+            FileCheck(processedLogFileAndDirectory);
+            var listProcessedFileLines = System.IO.File.ReadAllLines(processedLogFileAndDirectory).ToList();
 
             //Get the Source location
             var sourceDirectory = (GetFileOriginalSourceDirectory(eFilePath));
@@ -170,7 +173,7 @@ namespace FileProcessor
             var listFilesDifferenceBWSB = new List<string>();
             var listFinalFilesToBeProcessed = new List<string>();
 
-            bool isEmpty = !System.IO.Directory.EnumerateFiles(System.IO.Path.GetDirectoryName(sourceDirectory)).Any();
+            var isEmpty = !System.IO.Directory.EnumerateFiles(System.IO.Path.GetDirectoryName(sourceDirectory)).Any();
             if (!isEmpty)
             {
                 //get list of files at source location
@@ -186,26 +189,21 @@ namespace FileProcessor
                                                            .ToList();
 
                 //get the values that has the newer file name in status file
-                var newerFileNamesInStatusList = listStatusFileLines.Where(f => f.StartsWith(filter) ||
+                var newerFileNamesInStatusList = listStatusFileLines.Where(f => f.StartsWith(filter, StringComparison.Ordinal) ||
                                                                         f.Contains("Newer"))
                                                                     .Select(s => s.Replace('\t', ' ')).ToList();
 
                 //validate if the file exist in list that matches the filter
-                var validateFilterFileExist = newerFileNamesInStatusList.Any(x => x.IndexOf(filter) > -1);
+                var validateFilterFileExist = newerFileNamesInStatusList.Any(x => x.IndexOf(filter, StringComparison.Ordinal) > -1);
                 if (validateFilterFileExist)
                 {
-                    //#region Status File FileNames 
                     //get all the file names that has Newer
                     var fileNameToProcess = newerFileNamesInStatusList.Where(a => a.Contains(filter)
-                                                                            && a.Contains("Newer"))                                                              
+                                                                            && a.Contains("Newer"))
                                                                             .ToList();
                     //Remove all the Newer
                     for (int i = 0; i < fileNameToProcess.Count; i++)
                         fileNameToProcess[i] = fileNameToProcess[i].Replace("Newer", "").Trim();
-
-                    //fileNameToProcess.Select(i => i.Replace("Newer", "")).DefaultIfEmpty("").Count();
-                    ////fileNameToProcess.RemoveAll(item => item.Contains("Newer"));
-                    //fileNameToProcess.RemoveAll(r => String.IsNullOrEmpty(r.ToString()));
 
                     //match the above list with difference and which ever file(s) names match, process those                               
                     var matching = from s in fileNameToProcess
@@ -224,6 +222,22 @@ namespace FileProcessor
             return listFinalFilesToBeProcessed;
         }
 
+        /// <summary>
+        /// Method to recreate file if does not exist
+        /// </summary>
+        /// <param name="fileNameAndDirectoryPath"></param>
+        public static void FileCheck(string fileNameAndDirectoryPath)
+        {
+            var file = new File();
+            if (!file.Exists(fileNameAndDirectoryPath))
+            {
+                file.CreateFile(fileNameAndDirectoryPath);
+                Notification.SendNotification("New Processed file for the recording of sucessfully exectuted file is created. " + Environment.NewLine +
+                                                    "Please review the new file at file location: " + fileNameAndDirectoryPath,
+                                                    System.IO.Path.GetFileName(fileNameAndDirectoryPath));
+            }                
+        }
+
         #endregion
 
         #region Common       
@@ -236,10 +250,10 @@ namespace FileProcessor
         /// <param name="overwrite"></param>
         public static void CopyFile(string fileFullNameWithSourcePath, EnumFileProcessor.eFilePath eFilePath, bool overwrite)
         {
-            string destinationDirectory = string.Empty;
-            var destination = GetFileProcessingInDirectory(eFilePath);
+            var destinationDirectory = string.Empty;
+            var destination = GetFileProcessingInDirectory();
 
-            File file = new File();
+            var file = new File();
 
             switch (eFilePath)
             {
@@ -257,14 +271,12 @@ namespace FileProcessor
                     break;
             }
 
-            // To copy a folder's contents to a new location:
-            // Create a new target folder, if necessary.
+            // To copy a folder's contents to a new location: Create a new target folder, if necessary.
             if (!file.Exists(destinationDirectory))
             {
                 file.Delete(destinationDirectory);
             }
-            // To copy a file to another location and 
-            // overwrite the destination file if it already exists.
+            // To copy a file to another location and overwrite the destination file if it already exists.
             if (file.Exists(fileFullNameWithSourcePath))
             {
                 file.Delete(destinationDirectory);
@@ -273,7 +285,7 @@ namespace FileProcessor
                                                                    System.IO.FileAccess.ReadWrite, System.IO.FileShare.ReadWrite))
                 file.Copy(fileFullNameWithSourcePath, destinationDirectory, overwrite);
         }
-
+                
         #endregion                     
     }
 

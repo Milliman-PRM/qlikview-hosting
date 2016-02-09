@@ -1,4 +1,11 @@
-﻿-- Database: "systemreporting"
+﻿/***************************************************************************************************************
+	Create Database Script 
+	Owner: Afsheen Khan
+	Date Created/Modified : 02/09/2015
+	Desc: This script will generate db
+****************************************************************************************************************/
+
+-- Database: "systemreporting"
 
 -- DROP DATABASE "systemreporting";
 
@@ -81,9 +88,9 @@ GRANT ALL ON TABLE report TO public;
 
 
 
-/*********************************************************************
+/*****************************************
 			Reporting Logs Tables
-**********************************************************************/
+*****************************************/
 -- Table: iislog
 
 -- DROP TABLE iislog;
@@ -125,12 +132,11 @@ ALTER TABLE iislog
 GRANT ALL ON TABLE iislog TO postgres WITH GRANT OPTION;
 GRANT ALL ON TABLE iislog TO public;
 
+-- Table: qvauditlog
 
--- Table: qlickviewauditlog
+-- DROP TABLE qvauditlog;
 
--- DROP TABLE qlickviewauditlog;
-
-CREATE TABLE qlickviewauditlog
+CREATE TABLE qvauditlog
 (
   id serial NOT NULL,
   useraccessdatetime timestamp with time zone,
@@ -142,7 +148,7 @@ CREATE TABLE qlickviewauditlog
   fk_group_id integer,
   fk_report_id integer,
   adddate timestamp with time zone,
-  CONSTRAINT pk_qlickviewauditlog_id PRIMARY KEY (id),
+  CONSTRAINT pk_qvauditlog_id PRIMARY KEY (id),
   CONSTRAINT fk_tbl_group_id FOREIGN KEY (fk_group_id)
       REFERENCES "group" (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION,
@@ -156,26 +162,25 @@ CREATE TABLE qlickviewauditlog
 WITH (
   OIDS=FALSE
 );
-ALTER TABLE qlickviewauditlog
+ALTER TABLE qvauditlog
   OWNER TO postgres;
-GRANT ALL ON TABLE qlickviewauditlog TO postgres WITH GRANT OPTION;
-GRANT ALL ON TABLE qlickviewauditlog TO public;
+GRANT ALL ON TABLE qvauditlog TO postgres WITH GRANT OPTION;
+GRANT ALL ON TABLE qvauditlog TO public;
 
 
 
+-- Table: qvsessionlog
 
--- Table: qlickviewsessionlog
+-- DROP TABLE qvsessionlog;
 
--- DROP TABLE qlickviewsessionlog;
-
-CREATE TABLE qlickviewsessionlog
+CREATE TABLE qvsessionlog
 (
   id serial NOT NULL,
   useraccessdatetime timestamp with time zone,
   document text,
   exitreason character(50),
   sessionstarttime timestamp with time zone,
-  sessionduration integer,
+  sessionduration character(10),
   sessionendreason character(25),
   cpuspents double precision,
   identifyinguser character(50),
@@ -189,7 +194,7 @@ CREATE TABLE qlickviewsessionlog
   fk_group_id integer,
   fk_report_id integer,
   adddate timestamp with time zone,
-  CONSTRAINT pk_qlickviewsessionlog_id PRIMARY KEY (id),
+  CONSTRAINT pk_qvsessionlog_id PRIMARY KEY (id),
   CONSTRAINT fk_tbl_group_id FOREIGN KEY (fk_group_id)
       REFERENCES "group" (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION,
@@ -203,9 +208,62 @@ CREATE TABLE qlickviewsessionlog
 WITH (
   OIDS=FALSE
 );
-ALTER TABLE qlickviewsessionlog
+ALTER TABLE qvsessionlog
   OWNER TO postgres;
-GRANT ALL ON TABLE qlickviewsessionlog TO postgres WITH GRANT OPTION;
-GRANT ALL ON TABLE qlickviewsessionlog TO public;
+GRANT ALL ON TABLE qvsessionlog TO postgres WITH GRANT OPTION;
+GRANT ALL ON TABLE qvsessionlog TO public;
+
+
+
+
+
+/***************************************************************************************************************
+	Truncate Cascade reset identity 
+	Owner: Afsheen Khan
+	Date Created/Modified : 02/09/2015
+	Desc: This script will clear data and reset the identity seed to 1
+****************************************************************************************************************/
+
+/***************************************
+	Truncate Cascade reset identity
+****************************************/
+TRUNCATE TABLE "user" restart identity CASCADE;
+TRUNCATE TABLE "group" restart identity CASCADE;
+TRUNCATE TABLE "report" restart identity CASCADE;
+
+
+TRUNCATE TABLE "iislog" restart identity CASCADE;
+TRUNCATE TABLE "qvauditlog" restart identity CASCADE;
+TRUNCATE TABLE "qvsessionlog" restart identity CASCADE;
+
+
+/***************************************
+	Reset Sequence if it does not reset
+****************************************/
+
+ALTER SEQUENCE group_id_seq RESTART WITH 1;
+ALTER SEQUENCE iislog_id_seq RESTART WITH 1;
+ALTER SEQUENCE qlickviewauditlog_id_seq RESTART WITH 1;
+ALTER SEQUENCE qlickviewsessionlog_id_seq RESTART WITH 1;
+ALTER SEQUENCE report_id_seq RESTART WITH 1;
+ALTER SEQUENCE user_id_seq RESTART WITH 1;
+
+
+/*
+
+SELECT *  FROM "user";
+SELECT *  FROM "group";
+SELECT *  FROM "report";
+SELECT *  FROM "iislog";
+SELECT *  FROM "qvauditlog";
+SELECT *  FROM "qvsessionlog";
+
+SELECT max(id)  FROM "user";
+SELECT max(id)  FROM "group";
+SELECT max(id)  FROM "report";
+SELECT max(id)  FROM "iislog";
+SELECT max(id)  FROM "qvauditlog";
+SELECT max(id)  FROM "qvsessionlog";
+*/
 
 

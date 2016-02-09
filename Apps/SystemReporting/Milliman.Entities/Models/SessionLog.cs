@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace SystemReporting.Entities.Models
 {
     [Serializable()]
-    [Table("qlickviewsessionlog", Schema = "public")]
+    [Table("qvsessionlog", Schema = "public")]
     public class SessionLog
     {
         [Column("id")]
@@ -24,7 +24,7 @@ namespace SystemReporting.Entities.Models
         public DateTime? SessionStartTime { get; set; }
 
         [Column("sessionduration")]
-        public int? SessionDuration { get; set; }
+        public string SessionDuration { get; set; }
         
         [Column("sessionendreason")]
         public string SessionEndReason { get; set; }

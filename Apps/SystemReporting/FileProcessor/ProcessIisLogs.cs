@@ -15,7 +15,7 @@ namespace FileProcessor
 {
     public class ProcessIisLogs : ControllerAccess, IFileProcessor
     {
-        public ProcessIisLogs(string args) {  }
+        public ProcessIisLogs(string args) { }
 
         /// <summary>
         /// Process the iis files. Args are only the file type like iis. 
@@ -24,23 +24,23 @@ namespace FileProcessor
         /// <param name="args"></param>
         public void ProcessFileData(string args)
         {
-            bool blnSucessful = false;
+            var blnSucessful = false;
             try
             {
                 if (args.Length > 0)
                 {
-                    string filter = "u_ex";
-                    EnumFileProcessor.eFilePath efilePath = EnumFileProcessor.eFilePath.IisLogs;
+                    var filter = "u_ex";
+                    var efilePath = EnumFileProcessor.eFilePath.IisLogs;
                     
                     // ProductionLogsTest\IISLogs\
                     var sourceDirectory = new DirectoryInfo(FileFunctions.GetFileOriginalSourceDirectory(efilePath));
 
                     //LogFileProcessor\IN
-                    var destinationInDirectory = new DirectoryInfo(FileFunctions.GetFileProcessingInDirectory(efilePath));
+                    var destinationInDirectory = new DirectoryInfo(FileFunctions.GetFileProcessingInDirectory());
                                         
                     if (sourceDirectory.Exists)
                     {
-                        List<string> listFileToProcess = FileFunctions.GetFileToReadFromStatusFile(filter, efilePath);
+                        var listFileToProcess = FileFunctions.GetFileToReadFromStatusFile(filter, efilePath);
                         if (listFileToProcess.Count <= 0)
                         {
                             Console.WriteLine("No files exist to Process.");
@@ -51,7 +51,7 @@ namespace FileProcessor
                             foreach (var file in listFileToProcess)
                             {
                                 Console.WriteLine("Processing file:  {0}." , file);
-                                string fileNameWithsourceDirectory = (sourceDirectory + file);
+                                var fileNameWithsourceDirectory = (sourceDirectory + file);
                                 if (File.Exists(fileNameWithsourceDirectory))
                                 {
                                     FileFunctions.CopyFile(sourceDirectory + file, efilePath, true);
@@ -83,20 +83,20 @@ namespace FileProcessor
         /// <summary>
         /// This method process file by first parsing it, and then generating the proxy entity
         /// </summary>
-        /// <param name="args"></param>
+        /// <param name="fileNameWithDirectory">todo: describe fileNameWithDirectory parameter on ProcessLogFile</param>
         public bool ProcessLogFile(string fileNameWithDirectory)
         {
-            FileInfo fileInfo = new FileInfo(fileNameWithDirectory);
+            var fileInfo = new FileInfo(fileNameWithDirectory);
             if (fileInfo == null)
             {
                 Logger.LogError(null, "FileInfo missing. Can not process iisFile " + fileNameWithDirectory);
                 return false;
             }
 
-            bool blnSucessful = false;
+            var blnSucessful = false;
             try
             {
-                List<IisLogFileEntry> listLogFile = ParseFile(fileInfo.ToString());
+                var listLogFile = ParseFile(fileInfo.ToString());
                 if (listLogFile != null & listLogFile.Count > 0)
                 {
                     //list
@@ -106,14 +106,14 @@ namespace FileProcessor
                     foreach (var entry in listLogFile)
                     {
                         //find what type of event 
-                        ReportingCommon.IisAccessEvent.IisEventType eventType = IisAccessEvent.GetEventType(entry);
+                        var eventType = IisAccessEvent.GetEventType(entry);
                         proxyLogEntry.EventType = eventType.ToString();
 
                         //Do not process a record that is Unknown event or that does not have a user name associated with it
                         if ((eventType == IisAccessEvent.IisEventType.IIS_UNKNOWN_EVENT) || (entry.HasUserName() == false))
                             continue;
 
-                        if (entry.TimeStamp != null)
+                        if (entry.TimeStamp!=null)
                         {
                             proxyLogEntry.UserAccessDatetime = entry.TimeStamp.ToString();
                         }
@@ -129,7 +129,7 @@ namespace FileProcessor
                         //**************************************************************************************************//
                         //GetAll the QVDoc Keys as it can be more than one
                         var repositoryUrls = ConfigurationManager.AppSettings.AllKeys
-                                                                 .Where(key => key.StartsWith("qvDocMultipleRoot"))
+                                                                 .Where(key => key.StartsWith("qvDocMultipleRoot", StringComparison.CurrentCulture))
                                                                  .Select(key => ConfigurationManager.AppSettings[key])
                                                                  .ToArray();
                         //loop through each and match with document. If a match is found then use that entry as root path
@@ -180,7 +180,7 @@ namespace FileProcessor
                                                                         .OrderBy(x => x.User).ThenByDescending(x => x.EventType)
                                                                         .Distinct();
 
-                    List<ProxyIisLog> listProxyLogsFinal = listProxyExcludeDups.ToList();
+                    var listProxyLogsFinal = listProxyExcludeDups.ToList();
                     //process the list
                     blnSucessful = ControllerIisLog.ProcessLogs(listProxyLogsFinal);
                 }
@@ -196,10 +196,9 @@ namespace FileProcessor
         /// <summary>
         ///     Parse one log file and return the complete List of entries
         /// </summary>
-        /// <param name="LogFileName">The name of the log file to be parsed</param>
-        /// <param name="LogFileName">The start of the defined date range</param>
-        /// <param name="LogFileName">The end of the defined date range</param>
+        /// <param name="filefullName">todo: describe filefullName parameter on ParseFile</param>
         /// <returns>List<IisLogFileEntry></returns>
+
         public static List<IisLogFileEntry> ParseFile(string filefullName)
         {
             var fileLines = new List<string>();
@@ -210,17 +209,17 @@ namespace FileProcessor
             try
             {
                 fileLines = File.ReadAllLines(filefullName).ToList();
-                string thisIisVersion = fileLines[0].Substring(fileLines[0].IndexOfAny("0123456789".ToCharArray()));
+                var thisIisVersion = fileLines[0].Substring(fileLines[0].IndexOfAny("0123456789".ToCharArray()));
 
                 if (supportedIisVersion.Contains(thisIisVersion))
                 {
                     // Strip out comment lines
-                    fileLines = fileLines.SkipWhile(x => x.StartsWith("#")).ToList();
+                    fileLines = fileLines.SkipWhile(x => x.StartsWith("#", StringComparison.Ordinal)).ToList();
                     if (fileLines.Count > 0)
                     {
                         foreach (string row in fileLines)
                         {
-                            IisLogFileEntry entry = new IisLogFileEntry(row);
+                            var entry = new IisLogFileEntry(row);
                             listLogFile.Add(entry);
                         }
                     }

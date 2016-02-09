@@ -23,22 +23,22 @@ namespace SystemReporting.Utilities
 
         public static DateTime FromUTC(DateTime utcDateTime)
         {
-            DateTime convertedDateTime = DateTime.SpecifyKind(utcDateTime, DateTimeKind.Utc);
-            TimeZoneInfo timezoneInfo = DefaultTimeZoneInfo;
+            var convertedDateTime = DateTime.SpecifyKind(utcDateTime, DateTimeKind.Utc);
+            var timezoneInfo = DefaultTimeZoneInfo;
             convertedDateTime = TimeZoneInfo.ConvertTimeFromUtc(convertedDateTime, timezoneInfo);
             return convertedDateTime;
         }
 
         public static DateTime FromUTC(DateTime utcDateTime, TimeZoneInfo toTimeZone)
         {
-            DateTime convertedDateTime = DateTime.SpecifyKind(utcDateTime, DateTimeKind.Utc);
+            var convertedDateTime = DateTime.SpecifyKind(utcDateTime, DateTimeKind.Utc);
             convertedDateTime = TimeZoneInfo.ConvertTimeFromUtc(convertedDateTime, toTimeZone);
             return convertedDateTime;
         }
 
         public static DateTime ToUTC(DateTime dateTimeToConvert, TimeZoneInfo currentTimeZone)
         {
-            bool isInvalid = currentTimeZone.IsInvalidTime(dateTimeToConvert);
+            var isInvalid = currentTimeZone.IsInvalidTime(dateTimeToConvert);
             if (isInvalid == true)
             {
                 dateTimeToConvert = (dateTimeToConvert.AddHours(1));
@@ -46,7 +46,7 @@ namespace SystemReporting.Utilities
             if (dateTimeToConvert.Kind == DateTimeKind.Local)
                 dateTimeToConvert = DateTime.SpecifyKind(dateTimeToConvert, DateTimeKind.Unspecified);
 
-            DateTime returnUtcDateTime = dateTimeToConvert;
+            var returnUtcDateTime = dateTimeToConvert;
 
             if (dateTimeToConvert.Kind != DateTimeKind.Utc)
                 returnUtcDateTime = TimeZoneInfo.ConvertTimeToUtc(dateTimeToConvert, currentTimeZone);

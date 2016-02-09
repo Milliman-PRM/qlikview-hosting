@@ -28,10 +28,10 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
         /// <returns></returns>
         public bool ProcessLogs(List<ProxyIisLog> listProxyLogs)
         {
-            bool blnSucessful = false;            
+            var blnSucessful = false;            
             try
             {
-                IisLog logEntity = new IisLog();
+                var logEntity = new IisLog();
                 foreach (var entry in listProxyLogs)
                 {
                     logEntity.UserAccessDatetime = string.IsNullOrEmpty(entry.UserAccessDatetime) ? (DateTime?)null : DateTime.Parse(entry.UserAccessDatetime);
@@ -57,8 +57,10 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                     //Insert User
                     if (!string.IsNullOrEmpty(entry.User))
                     {
-                        User user = new User();
-                        user.UserName = entry.User;
+                        var user = new User
+                        {
+                            UserName = entry.User
+                        };
                         var addOrGetUser = ControllerCommon.AddOrGetUser(user);
                         if (addOrGetUser != null)
                         {
@@ -70,8 +72,10 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                     //Insert Group
                     if (!string.IsNullOrEmpty(entry.Group))
                     {
-                        Group group = new Group();
-                        group.GroupName = entry.Group;
+                        var group = new Group
+                        {
+                            GroupName = entry.Group
+                        };
                         var addOrGetGroup = ControllerCommon.AddOrGetGroup(group);
                         if (addOrGetGroup != null)
                         {
@@ -84,7 +88,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                     //initiate service
                     dbService = new MillimanService();
                     //5. Insert record in the table   
-                    dbService.Save(logEntity);
+                    dbService.Save(logEntity); 
                     dbService.Dispose();
                     logEntity = new IisLog();
                     blnSucessful = true;

@@ -25,23 +25,23 @@ namespace FileProcessor
         /// <param name="args"></param>
         public void ProcessFileData(string args)
         {
-            bool blnSucessful = false;
+            var blnSucessful = false;
             try
             {
                 if (args.Length > 0)
                 {
-                    string filter = "Audit_INDY-PRM";
-                    EnumFileProcessor.eFilePath efilePath = EnumFileProcessor.eFilePath.QVAuditLogs;
+                    var filter = "Audit_INDY-PRM";
+                    var efilePath = EnumFileProcessor.eFilePath.QVAuditLogs;
 
                     //ProductionLogsTest\QVLogs\
                     var sourceDirectory = new DirectoryInfo(FileFunctions.GetFileOriginalSourceDirectory(efilePath));
 
                     //Move To   LogFileProcessor\IN\
-                    var destinationInDirectory = FileFunctions.GetFileProcessingInDirectory(efilePath);
+                    var destinationInDirectory = FileFunctions.GetFileProcessingInDirectory();
                                        
                     if (sourceDirectory.Exists)
                     {
-                        List<string> listFileToProcess = FileFunctions.GetFileToReadFromStatusFile(filter, efilePath);
+                        var listFileToProcess = FileFunctions.GetFileToReadFromStatusFile(filter, efilePath);
 
                         if (listFileToProcess.Count <=0)
                         {
@@ -50,7 +50,7 @@ namespace FileProcessor
                         foreach (var file in listFileToProcess)
                         {
                             Console.WriteLine("Processing file:  {0}.", file);
-                            string fileNameWithsourceDirectory = sourceDirectory + file;
+                            var fileNameWithsourceDirectory = sourceDirectory + file;
                             if (File.Exists(fileNameWithsourceDirectory))
                             {
                                 FileFunctions.CopyFile(sourceDirectory + file, efilePath, true);
@@ -81,16 +81,16 @@ namespace FileProcessor
         /// <summary>
         /// This method process file by first parsing it, and then generating the proxy entity
         /// </summary>
-        /// <param name="args"></param>
+        /// <param name="fileNameWithDirectory">todo: describe fileNameWithDirectory parameter on ProcessLogFile</param>
         public bool ProcessLogFile(string fileNameWithDirectory)
         {
-            FileInfo fileInfo = new FileInfo(fileNameWithDirectory);
-            FileFunctions ff = new FileFunctions();
+            var fileInfo = new FileInfo(fileNameWithDirectory);
+            var ff = new FileFunctions();
 
-            bool blnSucessful = false;
+            var blnSucessful = false;
             try
             {
-                List<QlikviewAuditLogEntry> listLogFile = ParseLogFile(fileInfo.ToString());
+                var listLogFile = ParseLogFile(fileInfo.ToString());
 
                 if (listLogFile != null & listLogFile.Count > 0)
                 {
@@ -99,10 +99,10 @@ namespace FileProcessor
                     var proxyLogEntry = new ProxyAuditLog();
 
                     //Time Zone for aduit log is true
-                    bool UseDaylightSavings = true;
+                    var UseDaylightSavings = true;
                     //local time zone of the server
-                    TimeZoneInfo serverTimeZone = TimeZoneInfo.FindSystemTimeZoneById(TimeZoneInfo.Local.Id);
-                    DateTime localDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, serverTimeZone);
+                    var serverTimeZone = TimeZoneInfo.FindSystemTimeZoneById(TimeZoneInfo.Local.Id);
+                    var localDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, serverTimeZone);
 
                     foreach (var entry in listLogFile)
                     {
@@ -122,13 +122,12 @@ namespace FileProcessor
 
                         var user = entry.User.Replace(@"Custom\", "").Replace(@"custom\", "");
                         proxyLogEntry.User = (!string.IsNullOrEmpty(user)) ? user.Trim() : "UnKnown User";
-
                         proxyLogEntry.Message = (!string.IsNullOrEmpty(entry.Message)) ? entry.Message.Trim() : string.Empty;
 
                         //**************************************************************************************************//
                         //GetAll the QVDoc Keys as it can be more than one
                         var repositoryUrls = ConfigurationManager.AppSettings.AllKeys
-                                                     .Where(key => key.StartsWith("qvDocMultipleRoot"))
+                                                     .Where(key => key.StartsWith("qvDocMultipleRoot", StringComparison.Ordinal))
                                                      .Select(key => ConfigurationManager.AppSettings[key])
                                                      .ToArray();
                         //loop through each and match with document. If a match is found then use that entry as root path
@@ -147,7 +146,7 @@ namespace FileProcessor
                         var report = QlikviewEventBase.GetReportName(entry.Document);
                         proxyLogEntry.Report = (!string.IsNullOrEmpty(report)) ? report : string.Empty;
 
-                        proxyLogEntry.IsReduced = entry.Document.IndexOf(@"\reducedcachedqvws") > 0;
+                        proxyLogEntry.IsReduced = entry.Document.IndexOf(@"\reducedcachedqvws", StringComparison.Ordinal) > -1;
 
                         //add entry to list
                         listProxyLogs.Add(proxyLogEntry);
@@ -183,7 +182,7 @@ namespace FileProcessor
 
                 foreach (string line in fileLines)
                 {
-                    QlikviewAuditLogEntry entry = new QlikviewAuditLogEntry(line);
+                    var entry = new QlikviewAuditLogEntry(line);
                     listLogFile.Add(entry);
                 }
             }

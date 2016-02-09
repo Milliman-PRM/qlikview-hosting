@@ -7,6 +7,7 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SystemReporting.Utilities.File;
 
 namespace FileProcessor
 {
@@ -96,7 +97,9 @@ namespace FileProcessor
         {
             Console.WriteLine("Processed successfully file: {0}", message);
             Logger.Instance.LogPath = FileFunctions.GetProcessedFileLogDirectory();
-            Logger.Instance.LogFileName = FileFunctions.GetProcessedFileLogFileName(); 
+            Logger.Instance.LogFileName = FileFunctions.GetProcessedFileLogFileName();
+
+            FileFunctions.FileCheck(Logger.Instance.LogPath + Logger.Instance.LogFileName);
             Logger.WriteLine(DateTime.Now + " ProcessedFileName:~ " + message + Environment.NewLine);
         }
 

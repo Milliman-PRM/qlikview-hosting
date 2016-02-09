@@ -27,16 +27,17 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
         /// <returns></returns>
         public bool ProcessLogs(List<ProxyAuditLog> listProxyLogs)
         {           
-            bool blnSucessful = false;
+            var blnSucessful = false;
             try
             {
-                AuditLog logEntity = new AuditLog();
+                var logEntity = new AuditLog();
                 foreach (var entry in listProxyLogs)
                 {
                     logEntity.UserAccessDatetime = string.IsNullOrEmpty(entry.UserAccessDatetime) ? (DateTime?)null : DateTime.Parse(entry.UserAccessDatetime);
                     logEntity.Document = (!string.IsNullOrEmpty(entry.Document)) ? entry.Document.Trim() : string.Empty;
                     logEntity.EventType = (!string.IsNullOrEmpty(entry.EventType)) ? entry.EventType.Trim() : string.Empty;
                     logEntity.Message = (!string.IsNullOrEmpty(entry.Message)) ? entry.Message.Trim() : string.Empty;
+                    logEntity.IsReduced = (entry.IsReduced);
                     logEntity.AddDate = DateTime.Now;
 
                     #region User/ Report / Group
@@ -44,8 +45,10 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                     ///Insert User
                     if (!string.IsNullOrEmpty(entry.User))
                     {
-                        User user = new User();
-                        user.UserName = entry.User;
+                        var user = new User
+                        {
+                            UserName = entry.User
+                        };
                         var addOrGetUser = ControllerCommon.AddOrGetUser(user);
                         if (addOrGetUser != null)
                         {
@@ -53,12 +56,14 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                             logEntity.fk_user_id = addOrGetUser.Id;
                         }
                     }
-                    
+
                     //Insert Group
                     if (!string.IsNullOrEmpty(entry.Group))
                     {
-                        Group group = new Group();
-                        group.GroupName = entry.Group;
+                        var group = new Group
+                        {
+                            GroupName = entry.Group
+                        };
                         var addOrGetGroup = ControllerCommon.AddOrGetGroup(group);
                         if (addOrGetGroup != null)
                         {
@@ -70,8 +75,10 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                     //Insert Report
                     if (!string.IsNullOrEmpty(entry.Report))
                     {
-                        Report report = new Report();
-                        report.ReportName = entry.Report;
+                        var report = new Report
+                        {
+                            ReportName = entry.Report
+                        };
                         var addOrGetReport = ControllerCommon.AddOrGetReport(report);
                         if (addOrGetReport != null)
                         {
@@ -84,8 +91,8 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
 
                     //initiate service
                     dbService = new MillimanService();
-                    //5. Insert record in the table     
-                    dbService.Save(logEntity);
+                    //5. Insert record in the table   
+                    dbService.Save(logEntity); 
                     dbService.Dispose();
                     logEntity = new AuditLog();
                     blnSucessful = true;

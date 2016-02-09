@@ -60,9 +60,9 @@ namespace SystemReporting.Data.Database
             //modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
             modelBuilder.HasDefaultSchema(C.DB_POSTGRESQL_NAMESPACE);
 
-            modelBuilder.Entity<AuditLog>().ToTable("qlickViewAuditLog", C.DB_POSTGRESQL_NAMESPACE);
+            modelBuilder.Entity<AuditLog>().ToTable("qvauditlog", C.DB_POSTGRESQL_NAMESPACE);
             modelBuilder.Entity<IisLog>().ToTable("iislog", C.DB_POSTGRESQL_NAMESPACE);
-            modelBuilder.Entity<SessionLog>().ToTable("qlickViewSessionLog", C.DB_POSTGRESQL_NAMESPACE);
+            modelBuilder.Entity<SessionLog>().ToTable("qvsessionlog", C.DB_POSTGRESQL_NAMESPACE);
 
             ////Foreign Keys
             modelBuilder.Entity<User>().ToTable("user", C.DB_POSTGRESQL_NAMESPACE);
@@ -74,13 +74,13 @@ namespace SystemReporting.Data.Database
             modelBuilder.Entity<IisLog>().HasOptional(c => c.Group).WithMany(d => d.ListIisLog).HasForeignKey(c => c.fk_group_id);
 
 
-            modelBuilder.Entity<AuditLog>().HasKey(x => x.Id).ToTable("qlickviewauditlog", C.DB_POSTGRESQL_NAMESPACE);
+            modelBuilder.Entity<AuditLog>().HasKey(x => x.Id).ToTable("qvauditlog", C.DB_POSTGRESQL_NAMESPACE);
             modelBuilder.Entity<AuditLog>().HasOptional(c => c.User).WithMany(d => d.ListAuditLog).HasForeignKey(c => c.fk_user_id);
             modelBuilder.Entity<AuditLog>().HasOptional(c => c.Group).WithMany(d => d.ListAuditLog).HasForeignKey(c => c.fk_group_id);
             modelBuilder.Entity<AuditLog>().HasOptional(c => c.Report).WithMany(d => d.ListAuditLog).HasForeignKey(c => c.fk_report_id);
 
 
-            modelBuilder.Entity<SessionLog>().HasKey(x => x.Id).ToTable("qlickviewsessionlog", C.DB_POSTGRESQL_NAMESPACE);
+            modelBuilder.Entity<SessionLog>().HasKey(x => x.Id).ToTable("qvsessionlog", C.DB_POSTGRESQL_NAMESPACE);
             modelBuilder.Entity<SessionLog>().HasOptional(c => c.User).WithMany(d => d.ListSessionLog).HasForeignKey(c => c.fk_user_id);
             modelBuilder.Entity<SessionLog>().HasOptional(c => c.Group).WithMany(d => d.ListSessionLog).HasForeignKey(c => c.fk_group_id);
             modelBuilder.Entity<SessionLog>().HasOptional(c => c.Report).WithMany(d => d.ListSessionLog).HasForeignKey(c => c.fk_report_id);

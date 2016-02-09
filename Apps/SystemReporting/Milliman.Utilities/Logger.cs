@@ -43,6 +43,7 @@ namespace SystemReporting.Utilities
             LogFileExtension = ".log";
             LogPath = ConfigurationManager.AppSettings["LoggerFileDirectory"];
             LogFileName = ConfigurationManager.AppSettings["LoggerFileName"];
+            
             //Logger.WriteLine("Logs started" + " | " + DateTime.Now);
         }
                 

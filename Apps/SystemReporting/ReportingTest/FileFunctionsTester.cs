@@ -173,7 +173,7 @@ namespace ReportingTest
         public void TestGetFileCopyToDestinationInLocation()
         {
             EnumFileProcessor.eFilePath filePaths = EnumFileProcessor.eFilePath.IisLogs;
-            string fileLocation = FileFunctions.GetFileProcessingInDirectory(filePaths);
+            string fileLocation = FileFunctions.GetFileProcessingInDirectory();
             Assert.IsNotNull(fileLocation);
         }
         #endregion
@@ -191,7 +191,7 @@ namespace ReportingTest
             //string fileLocation = @"\\indy-ss01\ProductionLogsTest\IISLogs\test_writer.txt";
             EnumFileProcessor.eFilePath filePaths = EnumFileProcessor.eFilePath.IisLogs;
 
-            string fileLocation = FileFunctions.GetFileProcessingInDirectory(filePaths);
+            string fileLocation = FileFunctions.GetFileProcessingInDirectory();
             string fileName = "test_writer.txt";
             string fileFullNameAndPath = fileLocation + fileName;
             File file = new File();
@@ -240,9 +240,9 @@ namespace ReportingTest
             Logger.Instance.LogPath = LoggerFileDirectory;
             Logger.Instance.LogFileName = LoggerFileName;
 
-            string fileSourceFullNameAndPath = Logger.Instance.LogPath + Logger.Instance.LogFileName;
-            bool bFileExist = false;
-            File file = new File();
+            var fileSourceFullNameAndPath = Logger.Instance.LogPath + Logger.Instance.LogFileName;
+            var bFileExist = false;
+            var file = new File();
             if (file.Exists(fileSourceFullNameAndPath))
             {
                 bFileExist = true;
@@ -255,17 +255,17 @@ namespace ReportingTest
         public void TestGetFileNameiisLogsFromStatus()
         {
             //status file name with directory
-            string statusFileName = ConfigurationManager.AppSettings["statusFileName"];
-            string statusFileAndDirectory = FileFunctions.GetStatusFileDirectory() + statusFileName + ".txt";
+            var statusFileName = ConfigurationManager.AppSettings["statusFileName"];
+            var statusFileAndDirectory = FileFunctions.GetStatusFileDirectory() + statusFileName + ".txt";
 
             //backup file name with directory
-            string processedLogFileName = ConfigurationManager.AppSettings["ProcessedFileLogFileName"];
-            string processedLogFileAndDirectory = FileFunctions.GetProcessedFileLogDirectory() + processedLogFileName + ".log";
+            var processedLogFileName = ConfigurationManager.AppSettings["ProcessedFileLogFileName"];
+            var processedLogFileAndDirectory = FileFunctions.GetProcessedFileLogDirectory() + processedLogFileName + ".log";
 
-            string filter = "u_ex";
-            
-            List<string> fileToRead = new List<string>();
-            bool isEmpty = !System.IO.Directory.EnumerateFiles(statusFileAndDirectory).Any();
+            var filter = "u_ex";
+
+            var fileToRead = new List<string>();
+            var isEmpty = !System.IO.Directory.EnumerateFiles(statusFileAndDirectory).Any();
             if (!isEmpty)
             {
                 fileToRead = FileFunctions.GetFileNameToReadFile(statusFileAndDirectory, processedLogFileAndDirectory, filter, EnumFileProcessor.eFilePath.IisLogs);
@@ -277,17 +277,17 @@ namespace ReportingTest
         {
 
             //status file name with directory
-            string statusFileName = ConfigurationManager.AppSettings["statusFileName"];
-            string statusFileAndDirectory = FileFunctions.GetStatusFileDirectory() + statusFileName + ".txt";
+            var statusFileName = ConfigurationManager.AppSettings["statusFileName"];
+            var statusFileAndDirectory = FileFunctions.GetStatusFileDirectory() + statusFileName + ".txt";
 
             //backup file name with directory
-            string processedLogFileName = ConfigurationManager.AppSettings["ProcessedFileLogFileName"];
-            string processedLogFileAndDirectory = FileFunctions.GetProcessedFileLogDirectory() + processedLogFileName + ".log";
+            var processedLogFileName = ConfigurationManager.AppSettings["ProcessedFileLogFileName"];
+            var processedLogFileAndDirectory = FileFunctions.GetProcessedFileLogDirectory() + processedLogFileName + ".log";
 
-            string filter = "Audit_INDY-PRM";
-            
-            List<string> fileToRead = new List<string>();
-            bool isEmpty = !System.IO.Directory.EnumerateFiles(statusFileAndDirectory).Any();
+            var filter = "Audit_INDY-PRM";
+
+            var fileToRead = new List<string>();
+            var isEmpty = !System.IO.Directory.EnumerateFiles(statusFileAndDirectory).Any();
             if (!isEmpty)
             {
                 fileToRead = FileFunctions.GetFileNameToReadFile(statusFileAndDirectory, processedLogFileAndDirectory, 
@@ -299,16 +299,16 @@ namespace ReportingTest
         public void TestGetFileNameSessionLogsFromStatus()
         {
             //status file name with directory
-            string statusFileName = ConfigurationManager.AppSettings["statusFileName"];
-            string statusFileAndDirectory = FileFunctions.GetStatusFileDirectory() + statusFileName + ".txt";
+            var statusFileName = ConfigurationManager.AppSettings["statusFileName"];
+            var statusFileAndDirectory = FileFunctions.GetStatusFileDirectory() + statusFileName + ".txt";
 
             //backup file name with directory
-            string processedLogFileName = ConfigurationManager.AppSettings["ProcessedFileLogFileName"];
-            string processedLogFileAndDirectory = FileFunctions.GetProcessedFileLogDirectory() + processedLogFileName + ".log";
-            
-            string filter = "Sessions_INDY-PRM";
-            List<string> fileToRead = new List<string>();
-            bool isEmpty = !System.IO.Directory.EnumerateFiles(statusFileAndDirectory).Any();
+            var processedLogFileName = ConfigurationManager.AppSettings["ProcessedFileLogFileName"];
+            var processedLogFileAndDirectory = FileFunctions.GetProcessedFileLogDirectory() + processedLogFileName + ".log";
+
+            var filter = "Sessions_INDY-PRM";
+            var fileToRead = new List<string>();
+            var isEmpty = !System.IO.Directory.EnumerateFiles(statusFileAndDirectory).Any();
             if (!isEmpty)
             {
                 fileToRead = FileFunctions.GetFileNameToReadFile(statusFileAndDirectory, processedLogFileAndDirectory,

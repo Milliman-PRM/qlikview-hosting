@@ -13,7 +13,7 @@ namespace FileProcessor
         {
             try
             {
-                string arg = args[0].ToString();
+                var arg = args[0].ToString();
                 if (!string.IsNullOrEmpty(arg))
                     ProcessLogfiles(arg);                
             }
@@ -36,7 +36,7 @@ namespace FileProcessor
             Console.WriteLine("----------------------------------------");
 
             //this can be empty
-            string fullFilePath = string.Empty;
+            var fullFilePath = string.Empty;
             switch (args)
             {
                 case "Iis":

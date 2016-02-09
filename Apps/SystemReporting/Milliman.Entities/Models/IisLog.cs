@@ -18,9 +18,6 @@ namespace SystemReporting.Entities.Models
         [Column("clientipaddress")]
         public string ClientIpAddress { get; set; }
 
-        //[Column("username")]
-        //public string UserName { get; set; }
-
         [Column("serveripaddress")]
         public string ServerIPAddress { get; set; }
 
