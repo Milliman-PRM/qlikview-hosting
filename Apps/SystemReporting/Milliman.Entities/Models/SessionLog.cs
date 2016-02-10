@@ -32,9 +32,6 @@ namespace SystemReporting.Entities.Models
         [Column("cpuspents")]
         public double? CpuSpentS { get; set; }
 
-        [Column("identifyinguser")]
-        public string IdentifyingUser { get; set; }
-
         [Column("clienttype")]
         public string ClientType { get; set; }
 
@@ -79,7 +76,6 @@ namespace SystemReporting.Entities.Models
             SessionDuration = s.SessionDuration;
             SessionEndReason = s.SessionEndReason;
             CpuSpentS = s.CpuSpentS;
-            IdentifyingUser = s.IdentifyingUser;
             ClientType = s.ClientType;
             ClientAddress = s.ClientAddress;
             CalType = s.CalType;
