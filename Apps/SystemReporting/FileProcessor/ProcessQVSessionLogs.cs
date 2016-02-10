@@ -130,9 +130,9 @@ namespace FileProcessor
                         proxyLogEntry.CpuSpentS = entry.CpuSpentS != 0 ? entry.CpuSpentS : 0.0;
 
                         //remove character in begging of email
-                        if (entry.IdentifyingUser != "Identifying user")
+                        if ((!string.IsNullOrEmpty(entry.IdentifyingUser)) && ( entry.IdentifyingUser != "Identifying user"))
                         {
-                            var user = entry.IdentifyingUser.Replace(@"Custom\", "").Replace(@"custom\", "");
+                            proxyLogEntry.User = (!string.IsNullOrEmpty(entry.ClientType)) ? entry.IdentifyingUser.Replace(@"Custom\", "").Replace(@"custom\", "") : string.Empty;
                         }
 
                         proxyLogEntry.ClientType = (!string.IsNullOrEmpty(entry.ClientType)) ? entry.ClientType.Trim() : string.Empty;

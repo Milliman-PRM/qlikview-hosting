@@ -30,7 +30,7 @@ GRANT ALL ON DATABASE "systemreporting" TO postgres WITH GRANT OPTION;
 CREATE TABLE "user"
 (
   id serial NOT NULL,
-  username character(100) NOT NULL,
+  username character varying(100) NOT NULL,
   CONSTRAINT pk_user_id PRIMARY KEY (id),
   CONSTRAINT uq_user_username UNIQUE (username)
 )
@@ -51,8 +51,8 @@ GRANT ALL ON TABLE "user" TO public;
 CREATE TABLE "group"
 (
   id serial NOT NULL,
-  groupname character(100) NOT NULL,
-  groupdescription character(100),
+  groupname character varying(100) NOT NULL,
+  groupdescription character varying(100),
   CONSTRAINT pk_group_id PRIMARY KEY (id),
   CONSTRAINT uq_group_groupname UNIQUE (groupname)
 )
@@ -72,8 +72,8 @@ GRANT ALL ON TABLE "group" TO public;
 CREATE TABLE report
 (
   id serial NOT NULL,
-  reportname character(100) NOT NULL,
-  reportdescription character(100),
+  reportname character varying(100) NOT NULL,
+  reportdescription character varying(100),
   CONSTRAINT pk_report_id PRIMARY KEY (id),
   CONSTRAINT uq_report_reportname UNIQUE (reportname)
 )
@@ -99,11 +99,11 @@ CREATE TABLE iislog
 (
   id serial NOT NULL,
   useraccessdatetime timestamp with time zone,
-  clientipaddress character(15),
-  serveripaddress character(15),
+  clientipaddress character varying(15),
+  serveripaddress character varying(15),
   portnumber integer,
-  commandsentmethod character(10),
-  stepuri character(50),
+  commandsentmethod character varying(10),
+  stepuri character varying(50),
   queryuri text,
   statuscode integer,
   substatuscode integer,
@@ -111,8 +111,8 @@ CREATE TABLE iislog
   responsetime integer,
   useragent text,
   clientreferer text,
-  browser character(25),
-  eventtype character(25),
+  browser character varying(25),
+  eventtype character varying(25),
   adddate timestamp with time zone,
   fk_user_id integer,
   fk_group_id integer,
@@ -143,7 +143,7 @@ CREATE TABLE qvauditlog
   id serial NOT NULL,
   useraccessdatetime timestamp with time zone,
   document text,
-  eventtype character(25),
+  eventtype character varying(25),
   message text,
   isreduced boolean,
   fk_user_id integer,
@@ -179,16 +179,16 @@ CREATE TABLE qvsessionlog
   id serial NOT NULL,
   useraccessdatetime timestamp with time zone,
   document text,
-  exitreason character(50),
+  exitreason character varying(50),
   sessionstarttime timestamp with time zone,
-  sessionduration character(10),
-  sessionendreason character(25),
+  sessionduration character varying(10),
+  sessionendreason character varying(25),
   cpuspents double precision,
-  clienttype character(50),
-  clientaddress character(25),
-  caltype character(20),
+  clienttype character varying(50),
+  clientaddress character varying(25),
+  caltype character varying(20),
   calusagecount integer,
-  browser character(25),
+  browser character varying(25),
   isreduced boolean,
   fk_user_id integer,
   fk_group_id integer,

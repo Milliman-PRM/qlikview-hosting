@@ -13,13 +13,13 @@ namespace SystemReporting.Entities.Models
         public string SessionDuration { get; set; }
         public string SessionEndReason { get; set; }
         public double? CpuSpentS { get; set; }
-        public string IdentifyingUser { get; set; }
         public string ClientType { get; set; }
         public string ClientAddress { get; set; }
         public string CalType { get; set; }
         public int? CalUsageCount { get; set; }
 
         //Goes to group table
+        public string User { get; set; }
         public string Group { get; set; }
         public string Report { get; set; }
         //Need to find out where to store this

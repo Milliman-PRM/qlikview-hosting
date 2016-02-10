@@ -50,11 +50,11 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                     #region User / Report / Group
 
                     //Insert User
-                    if (!string.IsNullOrEmpty(entry.IdentifyingUser))
+                    if (!string.IsNullOrEmpty(entry.User))
                     {
                         var user = new User
                         {
-                            UserName = entry.IdentifyingUser
+                            UserName = entry.User
                         };
                         var addOrGetUser = ControllerCommon.AddOrGetUser(user);
                         if (addOrGetUser != null)
