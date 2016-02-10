@@ -39,7 +39,6 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                     logEntity.SessionDuration = (!string.IsNullOrEmpty(entry.SessionDuration)) ? entry.SessionDuration : string.Empty;
                     logEntity.SessionEndReason = (!string.IsNullOrEmpty(entry.SessionEndReason)) ? entry.SessionEndReason.Trim() : string.Empty;
                     logEntity.CpuSpentS = entry.CpuSpentS != null ? entry.CpuSpentS : 0.0;
-                    logEntity.IdentifyingUser = (!string.IsNullOrEmpty(entry.IdentifyingUser)) ? entry.IdentifyingUser : string.Empty;
                     logEntity.ClientType = (!string.IsNullOrEmpty(entry.ClientType)) ? entry.ClientType.Trim() : string.Empty;
                     logEntity.ClientAddress = (!string.IsNullOrEmpty(entry.ClientAddress)) ? entry.ClientAddress.Trim() : string.Empty;
                     logEntity.CalType = (!string.IsNullOrEmpty(entry.CalType)) ? entry.CalType.Trim() : string.Empty;

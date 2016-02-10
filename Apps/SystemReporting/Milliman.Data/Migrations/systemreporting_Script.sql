@@ -132,6 +132,8 @@ ALTER TABLE iislog
 GRANT ALL ON TABLE iislog TO postgres WITH GRANT OPTION;
 GRANT ALL ON TABLE iislog TO public;
 
+
+
 -- Table: qvauditlog
 
 -- DROP TABLE qvauditlog;
@@ -168,7 +170,6 @@ GRANT ALL ON TABLE qvauditlog TO postgres WITH GRANT OPTION;
 GRANT ALL ON TABLE qvauditlog TO public;
 
 
-
 -- Table: qvsessionlog
 
 -- DROP TABLE qvsessionlog;
@@ -183,7 +184,6 @@ CREATE TABLE qvsessionlog
   sessionduration character(10),
   sessionendreason character(25),
   cpuspents double precision,
-  identifyinguser character(50),
   clienttype character(50),
   clientaddress character(25),
   caltype character(20),
@@ -212,6 +212,7 @@ ALTER TABLE qvsessionlog
   OWNER TO postgres;
 GRANT ALL ON TABLE qvsessionlog TO postgres WITH GRANT OPTION;
 GRANT ALL ON TABLE qvsessionlog TO public;
+
 
 
 

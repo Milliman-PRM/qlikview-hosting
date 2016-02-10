@@ -133,7 +133,6 @@ namespace FileProcessor
                         if (entry.IdentifyingUser != "Identifying user")
                         {
                             var user = entry.IdentifyingUser.Replace(@"Custom\", "").Replace(@"custom\", "");
-                            proxyLogEntry.IdentifyingUser = (!string.IsNullOrEmpty(user)) ? user.Trim() : string.Empty;
                         }
 
                         proxyLogEntry.ClientType = (!string.IsNullOrEmpty(entry.ClientType)) ? entry.ClientType.Trim() : string.Empty;
@@ -159,7 +158,7 @@ namespace FileProcessor
                         proxyLogEntry.Group = (!string.IsNullOrEmpty(group)) ? group : string.Empty;
                         //**************************************************************************************************//
                         proxyLogEntry.Report = QlikviewEventBase.GetReportName(entry.Document);
-                        proxyLogEntry.SessionLength = entry.SessionDuration.Minutes.ToString();
+                        proxyLogEntry.SessionLength = entry.SessionDuration.ToString();
                         proxyLogEntry.SessionEndReason = QlikviewSessionEvent.GetExitReason(entry.ExitReason).ToString();
                         proxyLogEntry.Browser = QlikviewSessionEvent.GetBrowser(entry.ClientType);
 
