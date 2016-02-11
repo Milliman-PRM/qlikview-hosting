@@ -134,7 +134,7 @@
                         <asp:Label ID="lblErrorMessage" CssClass="error-1" runat="server">*A valid email and password are required!</asp:Label>
                     </td>
                     <td title="SFv2.11" style="text-align:right;background-color:#3D3D3D;color:white;height:30px;vertical-align:bottom;" colspan="4">
-                        &copy; Powered by Milliman 2015
+                        &copy; Powered by Milliman 2016
                     </td>
                 </tr>
             </table>

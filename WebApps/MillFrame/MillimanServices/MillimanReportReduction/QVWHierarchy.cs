@@ -72,6 +72,8 @@ namespace MillimanReportReduction
             string DebugFilename = System.IO.Path.GetFileName(AbsoluteDebugFileValue);
 
             System.IO.File.Copy(AbsoluteDebugFileValue, System.IO.Path.Combine(SubDir, DebugFilename), true);
+            System.IO.File.Copy(AbsoluteDebugFileValue, System.IO.Path.Combine(SubDir, "ancillary_script.txt"), true);
+
             if ( System.IO.File.Exists(System.IO.Path.Combine(SubDir, DebugFilename)) == false )
             {
                 MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "Failed to copy debug file from '" + AbsoluteDebugFileValue + "' to '" + System.IO.Path.Combine(SubDir, DebugFilename) + "'");

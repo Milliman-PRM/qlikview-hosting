@@ -24,6 +24,7 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <NuGetPackageImportStamp>d658b0ad</NuGetPackageImportStamp>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -89,23 +90,9 @@
     <Reference Include="Telerik.Web.UI">
       <HintPath>..\MillimanServices\MillimanReportReduction\bin\Debug\Telerik.Web.UI.dll</HintPath>
     </Reference>
-    <Reference Include="Telerik.Windows.Documents.Core">
-      <HintPath>..\MillimanServices\MillimanReportReduction\bin\Debug\Telerik.Windows.Documents.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Telerik.Windows.Documents.Flow">
-      <HintPath>..\MillimanServices\MillimanReportReduction\bin\Debug\Telerik.Windows.Documents.Flow.dll</HintPath>
-    </Reference>
-    <Reference Include="Telerik.Windows.Documents.Spreadsheet">
-      <HintPath>..\MillimanServices\MillimanReportReduction\bin\Debug\Telerik.Windows.Documents.Spreadsheet.dll</HintPath>
-    </Reference>
-    <Reference Include="Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml">
-      <HintPath>..\MillimanServices\MillimanReportReduction\bin\Debug\Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml.dll</HintPath>
-    </Reference>
-    <Reference Include="Telerik.Windows.Maths">
-      <HintPath>..\MillimanServices\MillimanReportReduction\bin\Debug\Telerik.Windows.Maths.dll</HintPath>
-    </Reference>
-    <Reference Include="Telerik.Windows.Zip">
-      <HintPath>..\MillimanServices\MillimanReportReduction\bin\Debug\Telerik.Windows.Zip.dll</HintPath>
+    <Reference Include="Telerik.Web.UI.Skins, Version=2015.3.1111.40, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3rdPartyAssemblies\Telerik.Web.UI.Skins.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -159,6 +146,7 @@
     <Content Include="Reflector.ashx" />
     <Content Include="packages.config" />
     <None Include="Properties\PublishProfiles\LocalPublish.pubxml" />
+    <None Include="Properties\PublishProfiles\Staging.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

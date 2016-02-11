@@ -11,6 +11,10 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
     {
         if (!IsPostBack)
         {
+            Session["ALLCLIENTADMINS"] = null;
+            Session["ALLPUBLISHERADMINS"] = null;
+            Session["ALLROLES"] = null;
+
             ActiveInterface(false);
 
             MillimanCommon.SuperGroup SG = MillimanCommon.SuperGroup.GetInstance();
@@ -108,13 +112,16 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
         AllGroups.Items.Clear();
         MillimanCommon.UserRepo Repo = MillimanCommon.UserRepo.GetInstance();
         string[] AllRoles = Roles.GetAllRoles();
+
         foreach (string Role in AllRoles)
         {
             if ( (string.Compare(Role, "administrator", true)) != 0 && (GroupsAlreadyAdded.Contains(Role) == false) )
             {
                 //the role can only have 1 QVW in it, or we will have issues in publisher and client admin
                 if (Repo.FindAllQVProjectsForRole(Role).Count == 1)
+                {
                     AllGroups.Items.Add(Role);
+                }
             }
         }
         return true;
@@ -279,20 +286,22 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
     }
     protected void DeleteSuperGroup_Click(object sender, EventArgs e)
     {
-        if (string.IsNullOrEmpty(SuperGroups.SelectedValue))
-            return;
+        if (SuperGroups.SelectedIndex >= 0)
+        {
+            if (string.IsNullOrEmpty(SuperGroups.SelectedValue))
+                return;
 
-        SuperGroups.Items.RemoveAt(SuperGroups.SelectedIndex);
+            SuperGroups.Items.RemoveAt(SuperGroups.SelectedIndex);
 
-        string DeleteGroup = SuperGroups.SelectedValue;
-        MillimanCommon.SuperGroup SG = MillimanCommon.SuperGroup.GetInstance();
+            string DeleteGroup = SuperGroups.SelectedValue;
+            MillimanCommon.SuperGroup SG = MillimanCommon.SuperGroup.GetInstance();
 
-        MillimanCommon.SuperGroup.SuperGroupContainer SGC = SG.FindSuper(DeleteGroup);
-        if (SGC != null) //tis not an error if null, may be a new item not saved in list yet
-            SG.DeleteSuper(DeleteGroup);
+            MillimanCommon.SuperGroup.SuperGroupContainer SGC = SG.FindSuper(DeleteGroup);
+            if (SGC != null) //tis not an error if null, may be a new item not saved in list yet
+                SG.DeleteSuper(DeleteGroup);
 
-        ActiveInterface(false);
-
+            ActiveInterface(false);
+        }
     }
 
     /// <summary>
@@ -303,77 +312,93 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
     /// <param name="e"></param>
     protected void RemoveGroup_Click(object sender, EventArgs e)
     {
-        string SelectedGroup = GroupsInSuper.SelectedValue;
-        if (string.IsNullOrEmpty(SelectedGroup))
-            return;  //do nothing, nothing is selected
-
-        GroupsInSuper.Items.RemoveAt(GroupsInSuper.Items.IndexOf(new ListItem(SelectedGroup)));
-        AllGroups.Items.Add(SelectedGroup);  //add the group back to the ALL list
-
-        List<string> ListItems = new List<string>();
-        foreach (ListItem LI in GroupsInSuper.Items)
-            ListItems.Add(LI.Value);
-
-        List<string> ClientAdmins = null;
-        List<string> PublisherAdmins = null;
-        if (GetValidAdminsForGroups(ListItems, out ClientAdmins, out PublisherAdmins))
+        if (GroupsInSuper.SelectedIndex >= 0)
         {
-            AllAdmins.DataSource = ClientAdmins;
-            AllAdmins.DataBind();
-            AllPublishers.DataSource = PublisherAdmins;
-            AllPublishers.DataBind();
+            string SelectedGroup = GroupsInSuper.SelectedValue;
+            if (string.IsNullOrEmpty(SelectedGroup))
+                return;  //do nothing, nothing is selected
+
+            GroupsInSuper.Items.RemoveAt(GroupsInSuper.Items.IndexOf(new ListItem(SelectedGroup)));
+            AllGroups.Items.Add(SelectedGroup);
+
+            List<string> ListItems = new List<string>();
+            foreach (ListItem LI in GroupsInSuper.Items)
+                ListItems.Add(LI.Value);
+
+            List<string> ClientAdmins = null;
+            List<string> PublisherAdmins = null;
+            if (GetValidAdminsForGroups(ListItems, out ClientAdmins, out PublisherAdmins))
+            {
+                AllAdmins.DataSource = ClientAdmins;
+                AllAdmins.DataBind();
+                AllPublishers.DataSource = PublisherAdmins;
+                AllPublishers.DataBind();
+            }
         }
     }
     protected void RemoveAdmin_Click(object sender, EventArgs e)
     {
-        string Admin = ClientAdminUsers.SelectedValue;
-        ClientAdminUsers.Items.RemoveAt(ClientAdminUsers.SelectedIndex);
-        AllAdmins.Items.Add(Admin);  //add back to all admin list
+        if (ClientAdminUsers.SelectedIndex >= 0)
+        {
+            AllAdmins.Items.Add(ClientAdminUsers.SelectedValue);
+            ClientAdminUsers.Items.RemoveAt(ClientAdminUsers.SelectedIndex);
+        }
     }
     protected void RemovePublisher_Click(object sender, EventArgs e)
     {
-        string Publisher = PublishingUsers.SelectedValue;
-        PublishingUsers.Items.RemoveAt(PublishingUsers.SelectedIndex);
-        AllPublishers.Items.Add(Publisher);  //add back to list of all publishers
+        if (PublishingUsers.SelectedIndex >= 0)
+        {
+            AllPublishers.Items.Add(PublishingUsers.SelectedValue);
+            PublishingUsers.Items.RemoveAt(PublishingUsers.SelectedIndex);
+        }
     }
     protected void AddToSuperGroup_Click(object sender, EventArgs e)
     {
-        string SelectedGroup = AllGroups.SelectedValue;
-        if (string.IsNullOrEmpty(SelectedGroup))
-            return;  //do nothing, nothing is selected
-        AllGroups.Items.RemoveAt(AllGroups.SelectedIndex); //remove entry from AllGroups
-
-        GroupsInSuper.Items.Add(SelectedGroup);
-        List<string> ListItems = new List<string>();
-        foreach (ListItem LI in GroupsInSuper.Items)
-            ListItems.Add(LI.Value);
-
-        List<string> ClientAdmins = null;
-        List<string> PublisherAdmins = null;
-        if ( GetValidAdminsForGroups( ListItems, out ClientAdmins, out PublisherAdmins ))
+        if (AllGroups.SelectedIndex >= 0)
         {
-            AllAdmins.DataSource = ClientAdmins;
-            AllAdmins.DataBind();
-            AllPublishers.DataSource = PublisherAdmins;
-            AllPublishers.DataBind();
+            string SelectedGroup = AllGroups.SelectedValue;
+            if (string.IsNullOrEmpty(SelectedGroup))
+                return;  //do nothing, nothing is selected
+            AllGroups.Items.RemoveAt(AllGroups.SelectedIndex); //remove entry from AllGroups
+
+            GroupsInSuper.Items.Add(SelectedGroup);
+            List<string> ListItems = new List<string>();
+            foreach (ListItem LI in GroupsInSuper.Items)
+                ListItems.Add(LI.Value);
+
+            List<string> ClientAdmins = null;
+            List<string> PublisherAdmins = null;
+            if (GetValidAdminsForGroups(ListItems, out ClientAdmins, out PublisherAdmins))
+            {
+                AllAdmins.DataSource = ClientAdmins;
+                AllAdmins.DataBind();
+                AllPublishers.DataSource = PublisherAdmins;
+                AllPublishers.DataBind();
+            }
         }
     }
     protected void AddAdmin_Click(object sender, EventArgs e)
     {
-        string Admin = AllAdmins.SelectedValue;
-        if (ClientAdminUsers.Items.IndexOf(new ListItem(Admin)) == -1)
+        if (AllAdmins.SelectedIndex >= 0)
         {
-            ClientAdminUsers.Items.Add(Admin);
-            AllAdmins.Items.RemoveAt(AllAdmins.SelectedIndex);  //remove from all list
+            string Admin = AllAdmins.SelectedValue;
+            if (ClientAdminUsers.Items.IndexOf(new ListItem(Admin)) == -1)
+            {
+                ClientAdminUsers.Items.Add(Admin);
+                AllAdmins.Items.RemoveAt(AllAdmins.SelectedIndex);  //remove from all list
+            }
         }
     }
     protected void AddPublisher_Click(object sender, EventArgs e)
     {
-        string Publisher = AllPublishers.SelectedValue;
-        if (PublishingUsers.Items.IndexOf(new ListItem(Publisher)) == -1)
+        if (AllPublishers.SelectedIndex >= 0)
         {
-            PublishingUsers.Items.Add(Publisher);
-            AllPublishers.Items.RemoveAt(AllPublishers.SelectedIndex);  //remove from all pubs list
+            string Publisher = AllPublishers.SelectedValue;
+            if (PublishingUsers.Items.IndexOf(new ListItem(Publisher)) == -1)
+            {
+                PublishingUsers.Items.Add(Publisher);
+                AllPublishers.Items.RemoveAt(AllPublishers.SelectedIndex);  //remove from all pubs list
+            }
         }
     }
 
@@ -429,10 +454,37 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
     /// <param name="RemoveFromThisList"></param>
     private void MutuallyExclusiveLists( List<string> IfInThisList, ref List<string> RemoveFromThisList)
     {
-        foreach( string S in IfInThisList )
+        if ((IfInThisList != null) && (RemoveFromThisList != null))
         {
-            if (RemoveFromThisList.Contains(S))
-                RemoveFromThisList.RemoveAt(RemoveFromThisList.IndexOf(S));
+            foreach (string S in IfInThisList)
+            {
+                if (RemoveFromThisList.Contains(S))
+                    RemoveFromThisList.RemoveAt(RemoveFromThisList.IndexOf(S));
+            }
+        }
+    }
+
+    protected void Sorted_PreRender(object sender, EventArgs e)
+    {
+        ListBox LB = sender as ListBox;
+        if (LB != null)
+        {
+            System.Collections.SortedList sorted = new System.Collections.SortedList();
+            string Selected = LB.SelectedValue;
+
+            foreach (ListItem ll in LB.Items)
+            {
+                sorted.Add(ll.Text, ll.Value);
+            }
+
+            LB.Items.Clear();
+
+            foreach (String key in sorted.Keys)
+            {
+                LB.Items.Add(new ListItem(key, sorted[key].ToString()));
+            }
+            if (string.IsNullOrEmpty(Selected) == false)
+                LB.SelectedValue = Selected;
         }
     }
 }

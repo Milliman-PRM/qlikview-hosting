@@ -49,30 +49,14 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Telerik.Web.Design, Version=2015.2.826.40, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL" />
+    <Reference Include="Telerik.Web.Design, Version=2015.2.826.40, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
     <Reference Include="Telerik.Web.UI">
       <HintPath>C:\Program Files (x86)\Telerik\UI for ASP.NET AJAX Q2 2015\Bin40\Telerik.Web.UI.dll</HintPath>
     </Reference>
     <Reference Include="Telerik.Web.UI.Skins">
       <HintPath>C:\Program Files (x86)\Telerik\UI for ASP.NET AJAX Q2 2015\Bin40\Telerik.Web.UI.Skins.dll</HintPath>
-    </Reference>
-    <Reference Include="Telerik.Windows.Documents.Core">
-      <HintPath>C:\Program Files (x86)\Telerik\UI for ASP.NET AJAX Q2 2015\Bin40\..\AdditionalLibraries\Bin40\Telerik.Windows.Documents.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Telerik.Windows.Documents.Flow">
-      <HintPath>C:\Program Files (x86)\Telerik\UI for ASP.NET AJAX Q2 2015\Bin40\..\AdditionalLibraries\Bin40\Telerik.Windows.Documents.Flow.dll</HintPath>
-    </Reference>
-    <Reference Include="Telerik.Windows.Documents.Spreadsheet">
-      <HintPath>C:\Program Files (x86)\Telerik\UI for ASP.NET AJAX Q2 2015\Bin40\..\AdditionalLibraries\Bin40\Telerik.Windows.Documents.Spreadsheet.dll</HintPath>
-    </Reference>
-    <Reference Include="Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml">
-      <HintPath>C:\Program Files (x86)\Telerik\UI for ASP.NET AJAX Q2 2015\Bin40\..\AdditionalLibraries\Bin40\Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml.dll</HintPath>
-    </Reference>
-    <Reference Include="Telerik.Windows.Maths">
-      <HintPath>C:\Program Files (x86)\Telerik\UI for ASP.NET AJAX Q2 2015\Bin40\..\AdditionalLibraries\Bin40\Telerik.Windows.Maths.dll</HintPath>
-    </Reference>
-    <Reference Include="Telerik.Windows.Zip">
-      <HintPath>C:\Program Files (x86)\Telerik\UI for ASP.NET AJAX Q2 2015\Bin40\..\AdditionalLibraries\Bin40\Telerik.Windows.Zip.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -117,7 +101,29 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>mkdir $(SolutionDir)\MillimanUserAdmin\bin
-copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanUserAdmin\bin</PreBuildEvent>
+
+copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanCommon\bin\debug
+copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanCommon\bin\release
+copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\Milliman\Milliman\bin
+copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanClientPublisher\bin
+copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanClientUserAdmin\bin
+copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanProjectManagementConsoleServices\bin
+copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanProjectManConsole\bin
+copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanReportReduction\bin
+copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanServiceAppHarness\bin
+copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanServices\MillimanServices\bin
+copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanServiceWEBTestHarness\bin
+copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanSignature\bin\debug
+copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanSignature\bin\release
+copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanSQLBrowser\bin
+copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanSupport\MillimanSupport\bin
+copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanSystemBackup\bin\debug
+copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanSystemBackup\bin\release
+copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanUserAdmin\bin
+copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanValidationGC\bin\debug
+copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanValidationGC\bin\release
+copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\ReportingCommon\bin\debug
+copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\ReportingCommon\bin\release</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

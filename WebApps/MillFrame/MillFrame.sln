@@ -51,6 +51,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MillimanServices", "MillimanServices\MillimanServices\MillimanServices.csproj", "{2B912551-FDE7-4BFC-820C-8AB0D6FC5CD5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MillimanServiceAppHarness", "MillimanServices\MillimanServiceTestHarness\MillimanServiceAppHarness.csproj", "{C83AF35D-C58A-46B4-9DDD-BC20E0E01959}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4CF8C253-1952-4F25-A169-542FEADE27B4} = {4CF8C253-1952-4F25-A169-542FEADE27B4}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MillimanServiceWEBTestHarness", "MillimanServices\MillimanServiceWEBTestHarness\MillimanServiceWEBTestHarness.csproj", "{5B7C067D-8554-47DE-86F2-84F579DA6C1A}"
 EndProject
@@ -70,17 +73,24 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3rdPartyAssemblies", "3rdPa
 	ProjectSection(SolutionItems) = preProject
 		3rdPartyAssemblies\AjaxControlToolkit.dll = 3rdPartyAssemblies\AjaxControlToolkit.dll
 		3rdPartyAssemblies\Ionic.Zip.dll = 3rdPartyAssemblies\Ionic.Zip.dll
-		3rdPartyAssemblies\MercuryReuse.dll = 3rdPartyAssemblies\MercuryReuse.dll
 		3rdPartyAssemblies\Polenter.SharpSerializer.dll = 3rdPartyAssemblies\Polenter.SharpSerializer.dll
-		3rdPartyAssemblies\UltimateSaml_Standard_v6.1.41005.exe = 3rdPartyAssemblies\UltimateSaml_Standard_v6.1.41005.exe
-		3rdPartyAssemblies\wkhtmltox-win64_0.12.0-03c001d.exe = 3rdPartyAssemblies\wkhtmltox-win64_0.12.0-03c001d.exe
+		3rdPartyAssemblies\Telerik.Web.Design.dll = 3rdPartyAssemblies\Telerik.Web.Design.dll
+		3rdPartyAssemblies\Telerik.Web.UI.dll = 3rdPartyAssemblies\Telerik.Web.UI.dll
+		3rdPartyAssemblies\Telerik.Web.UI.Skins.dll = 3rdPartyAssemblies\Telerik.Web.UI.Skins.dll
+		3rdPartyAssemblies\Telerik.Web.UI.XML = 3rdPartyAssemblies\Telerik.Web.UI.XML
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MillimanSystemBackup", "MillimanSystemBackup\MillimanSystemBackup.csproj", "{7C5D905F-A4DD-4FF8-BF45-4F43ABE67733}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4CF8C253-1952-4F25-A169-542FEADE27B4} = {4CF8C253-1952-4F25-A169-542FEADE27B4}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MillimanValidationGC", "MillimanValidationGC\MillimanValidationGC.csproj", "{4DA8CD86-581A-4435-97DF-024C4F1F9171}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReportingCommon", "ReportingCommon\ReportingCommon.csproj", "{51F3D6D1-BE23-4950-B536-109864113C04}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4CF8C253-1952-4F25-A169-542FEADE27B4} = {4CF8C253-1952-4F25-A169-542FEADE27B4}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MillimanClientPublisher", "MillimanClientPublisher\MillimanClientPublisher.csproj", "{9B158955-C8EF-44F5-867E-0F41B76342F2}"
 EndProject

@@ -79,15 +79,15 @@ namespace MillimanDev
             // Set the server certificate validation callback.
             ServicePointManager.ServerCertificateValidationCallback = ValidateRemoteServerCertificate;
 
-            LoadAllCovisintCerts("CovisintCert");
+           // LoadAllCovisintCerts("CovisintCert");
             //code below is replaced,  need to load multiple certs
             //IdPCertFile = Path.Combine(Server.MapPath("~"), ConfigurationManager.AppSettings["CovisintCert"]);
             //// Load the IdP cert file.
             //LoadCertificate(IdPCertKey, IdPCertFile, null);
 
-            SPKeyFile = Path.Combine(Server.MapPath("~"), ConfigurationManager.AppSettings["HCIntelPFX"]);
-            // Load the SP cert file.
-            LoadCertificate(SPCertKey, SPKeyFile, SPKeyPassword);
+            //SPKeyFile = Path.Combine(Server.MapPath("~"), ConfigurationManager.AppSettings["HCIntelPFX"]);
+            //// Load the SP cert file.
+            //LoadCertificate(SPCertKey, SPKeyFile, SPKeyPassword);
 
 
             string MDFile = Path.Combine(Server.MapPath("~"), ConfigurationManager.AppSettings["SSOMetaData"]);

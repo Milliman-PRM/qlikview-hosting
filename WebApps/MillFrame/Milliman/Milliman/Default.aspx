@@ -105,7 +105,7 @@
         </div>
 
          <div id="footer" style="height:25px;bottom:0px;position:absolute;left:5px;left:10px;right:10px;overflow:hidden;vertical-align:bottom">
-             <center>Copyright &copy Milliman 2015</center>
+             <center>Copyright &copy Milliman 2016</center>
         </div>
 
         <telerik:RadWindowManager EnableShadow="true" Behaviors="Resize, Close, Reload, Move" ID="RadWindowManager" DestroyOnClose="true" Opacity="100" runat="server" Width="450" Height="400" VisibleStatusbar="False" Style="z-index: 20000;">

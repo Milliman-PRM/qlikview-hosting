@@ -53,10 +53,11 @@ namespace MillimanDev
                     return sr.ReadToEnd().Trim();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return null;
+                MillimanCommon.Report.Log( MillimanCommon.Report.ReportType.Error,"Failed to get QV ticket");
             }
+            return string.Empty;
         }
     }
 

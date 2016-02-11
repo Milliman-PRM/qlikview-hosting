@@ -23,3 +23,12 @@
 1/17/2016 5:56:28 PMInfo           Application Start
 1/17/2016 5:59:28 PMInfo           Application Start
 1/17/2016 6:14:14 PMInfo           Application Start
+2/4/2016 12:48:33 PMInfo           Application Start
+2/4/2016 1:06:07 PM Info           Application Start
+2/4/2016 3:25:09 PM Info           Application Start
+3:26:09 PM                    Error     Failed to get QV ticket\r\n----------------------------------------3:28:25 PM                    Error     Failed to get QV ticket\r\n----------------------------------------3:35:58 PM                    Error     Failed to get QV ticket\r\n----------------------------------------2/4/2016 9:06:51 PM Info           Application Start
+2/4/2016 9:10:45 PM Info           Application Start
+9:11:34 PM                    Error     Failed to get QV ticket\r\n----------------------------------------9:14:00 PM                    Error     Failed to get QV ticket\r\n----------------------------------------2/4/2016 9:14:47 PM Info           Application Start
+2/4/2016 9:18:54 PM Info           Application Start
+2/4/2016 9:26:39 PM Info           Application Start
+2/4/2016 9:27:13 PM Info           Application Start
