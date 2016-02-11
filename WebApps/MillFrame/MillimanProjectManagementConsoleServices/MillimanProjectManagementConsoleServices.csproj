@@ -52,7 +52,7 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Polenter.SharpSerializer, Version=2.18.0.0, Culture=neutral, PublicKeyToken=8f4f20011571ee5f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\WIP 17 - NewLoginGraphics_TEMP\MillFrame\3rdPartyAssemblies\Polenter.SharpSerializer.dll</HintPath>
+      <HintPath>..\3rdPartyAssemblies\Polenter.SharpSerializer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
