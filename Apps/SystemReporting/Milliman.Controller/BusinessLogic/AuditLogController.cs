@@ -11,7 +11,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
 {
     [Serializable]
     public class AuditLogController : ControllerBase
-    {
+    {      
         private IMillimanService dbService { get; set; }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
             catch (Exception ex)
             {
                 dbService.Dispose();
-                Logger.LogError(ex, "Class AuditLogController. Method ProcessLogs.");
+                log.Error("Class AuditLogController. Method ProcessLogs.", ex);
             }
             return blnSucessful;
         }                

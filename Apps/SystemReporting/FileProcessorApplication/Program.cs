@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FileProcessor;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -23,19 +24,17 @@ namespace FileProcessorApplication
                 }
                 else
                 {
-                   var argsAll = new string[] { "Iis", "Audit", "Session" };
-                    for (int i = 0; i < argsAll.Length; i++)
+                    var argsProcessAll = new string[] { "Iis", "Audit", "Session" };
+                    for (int i = 0; i < argsProcessAll.Length; i++)
                     {
-                        Console.WriteLine("Processing...... {0} ",argsAll[i] );
-                        FileProcessor.ProcessFile.ExecuteProcessFile(new string[]{ argsAll[i] });
+                        FileProcessor.ProcessFile.ExecuteProcessFile(new string[] { argsProcessAll[i] });
                     }
                 }
                 Environment.ExitCode = 0;
-
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, "ProcessFile: Failed processing file. || " + args.ToArray());
+                BaseFileProcessor.LogError(ex, "ProcessFile: Failed processing file. || " + args.ToArray());
             }
         }
 
@@ -43,8 +42,8 @@ namespace FileProcessorApplication
         {
             if (args.Length == 0)
             {
-                Console.WriteLine("The system is not Auto sept up for process to execute. Please select the process you want to Execute and press Enter:");
-                
+                Console.WriteLine("Select the process you want to Execute and press Enter:");
+
                 var listArgs = new List<string>();
                 string choice;
                 if (console_present)
@@ -52,6 +51,7 @@ namespace FileProcessorApplication
                     Console.WriteLine("1. Iis Log");
                     Console.WriteLine("2. Audit Log");
                     Console.WriteLine("3. Session Log");
+                    Console.WriteLine("4. File Path");
                 }
                 choice = Console.ReadLine();
                 switch (choice)
@@ -64,6 +64,12 @@ namespace FileProcessorApplication
                         break;
                     case "3":
                         listArgs.Add("Session");
+                        break;
+                    case "4":
+                        string file;
+                        Console.WriteLine("Enter file path and name.");
+                        file = Console.ReadLine();
+                        listArgs.Add(file);
                         break;
                 }
 
@@ -134,10 +140,14 @@ namespace FileProcessorApplication
             if (console_present)
             {
                 Console.WriteLine("----------------------------------------");
-                Console.WriteLine("Pass in Report name as command line arguments ");
-                Console.WriteLine("for usage to process specific data.");
+                Console.WriteLine("Processing Instruction. Choose following metods... ");
+                Console.WriteLine("Application and file type");
+                Console.WriteLine("Application only ");
+                Console.WriteLine("Application and fully qualified file path ");
                 Console.WriteLine(String.Empty);
-                Console.WriteLine("Ex: FileProcessorApplication.exe Iis ");
+                Console.WriteLine("Ex: FileProcessorApplication.exe  Iis ");
+                Console.WriteLine("Ex: FileProcessorApplication.exe");
+                Console.WriteLine("Ex: FileProcessorApplication.exe   C:\\ProductionLogs\\IISLogs\\u_ex151002.log  ");
                 Console.WriteLine("--------------------------------------------------");
             }
         }

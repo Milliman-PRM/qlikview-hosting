@@ -16,14 +16,7 @@ namespace SystemReporting.Utilities.Email
         #region Properties
         private System.Net.Mail.MailMessage _MailMessage;
         private System.Collections.Specialized.StringCollection _TempFileList;
-        private string _SMTPServer;
-
-        private string _To;
-        private string _CC;
-        private string _Bcc;
-        private string _From;
-        private string _ReplyTo;
-
+        private string _SMTPServer;   
         private bool _Disposed;
         #endregion
 
@@ -56,6 +49,7 @@ namespace SystemReporting.Utilities.Email
             High = 2
         }
 
+        private string _To;
         /// <summary>
         /// To recipient.
         /// </summary>
@@ -65,6 +59,7 @@ namespace SystemReporting.Utilities.Email
             set { _To = value; }
         }
 
+        private string _CC;
         /// <summary>
         /// Carbon Copy recipients.
         /// </summary>
@@ -74,6 +69,7 @@ namespace SystemReporting.Utilities.Email
             set { _CC = value; }
         }
 
+        private string _Bcc;
         /// <summary>
         /// Blind Carbon Copy recipients.
         /// </summary>
@@ -83,6 +79,7 @@ namespace SystemReporting.Utilities.Email
             set { _Bcc = value; }
         }
 
+        private string _From;
         /// <summary>
         /// From Address
         /// </summary>
@@ -92,6 +89,7 @@ namespace SystemReporting.Utilities.Email
             set { _From = value; }
         }
 
+        private string _ReplyTo;
         /// <summary>
         /// Reply To Address
         /// </summary>

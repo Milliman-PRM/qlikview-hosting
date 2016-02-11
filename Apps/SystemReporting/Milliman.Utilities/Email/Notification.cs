@@ -27,7 +27,7 @@ namespace SystemReporting.Utilities.Email
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, "Notification.SendNotification. Failed to send email.");
+                //LogError(ex, "Notification.SendNotification. Failed to send email.");
             }            
         }
         
@@ -52,7 +52,7 @@ namespace SystemReporting.Utilities.Email
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, "Notification.SendNotification. Failed to send email." );
+                //Logger.WriteLine(ex, "Notification.SendNotification. Failed to send email." );
             }
         }
 

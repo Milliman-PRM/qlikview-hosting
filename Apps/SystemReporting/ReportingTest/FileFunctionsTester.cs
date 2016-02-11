@@ -32,18 +32,16 @@ namespace ReportingTest
 
             sResults = "This is test";
             filFullNamePath = @"C:\ProductionLogs\LogFileProcessor\Logger";
-
-            File file = new File();
-
+            
             //create the file name
-            FileTextWriter textWriter = file.CreateFile(filFullNamePath);
+            var textWriter = File.CreateFile(filFullNamePath);
 
-            string outputValue = sResults;
+            var outputValue = sResults;
             textWriter.WriteLine(outputValue);
             textWriter.Close();
 
             //if the file is there then
-            bool returnValue = false;
+            var returnValue = false;
             if (outputValue.Length > 0)
                 returnValue = true;
 
@@ -53,8 +51,6 @@ namespace ReportingTest
         /// <summary>
         /// Function that completely process a file and it creates if does not exist
         /// </summary>
-        /// <param name="sResults"></param>
-        /// <param name="filFullNamePath"></param>
         /// <returns></returns>
         [TestMethod]
         public void TestProcessFile()
@@ -64,13 +60,12 @@ namespace ReportingTest
             sResults = "This is test";
             filFullNamePath = @"C:\ProductionLogs\LogFileProcessor\TestLogger";
 
-            bool bSucess = false;
-            string retVal = string.Empty;
-            File file = new File();
+            var bSucess = false;
+            var retVal = string.Empty;
 
-            if (file.Exists(filFullNamePath))
+            if (File.Exists(filFullNamePath))
             {
-                file.Delete(filFullNamePath);
+                File.Delete(filFullNamePath);
             }
             using (System.IO.FileStream fs = new System.IO.FileStream(filFullNamePath, System.IO.FileMode.OpenOrCreate,
                                                                     System.IO.FileAccess.ReadWrite, System.IO.FileShare.ReadWrite))
@@ -82,9 +77,9 @@ namespace ReportingTest
             }
 
             System.IO.File.AppendAllText(filFullNamePath, sResults);
-            string readtext = System.IO.File.ReadAllText(filFullNamePath);
+            var readtext = System.IO.File.ReadAllText(filFullNamePath);
 
-            if (file.Exists(filFullNamePath))
+            if (File.Exists(filFullNamePath))
                 bSucess = true;
 
             Assert.IsTrue(bSucess);
@@ -93,33 +88,30 @@ namespace ReportingTest
         /// <summary>
         /// Function that completely process a file if it exists, reads it, writes and copies it
         /// </summary>
-        /// <param name="filFullNamePath"></param>
-        /// <param name="eFilePath"></param>
         /// <returns></returns>
         [TestMethod]
         public void TestProcessFile2()
         {
             //Pass var: string filFullNamePath, EnumFileProcessor.eFilePath eFilePath
-            string filFullNamePath = string.Empty;
-            EnumFileProcessor.eFilePath eFilePath = EnumFileProcessor.eFilePath.IisLogs;
+            var filFullNamePath = string.Empty;
+            var eFilePath = EnumFileProcessor.eFilePath.IisLogs;
 
             filFullNamePath = @"C:\ProductionLogs\LogFileProcessor\TestLogger";
 
-            bool bSucess = false;
-            string retVal = string.Empty;
+            var bSucess = false;
+            var retVal = string.Empty;
 
-            File file = new File();
-            if (file.Exists(filFullNamePath))
+            if (File.Exists(filFullNamePath))
             {
                 //start reading the file. i have used Encoding 1256
-                System.IO.StreamReader sr = new System.IO.StreamReader(filFullNamePath);
+                var sr = new System.IO.StreamReader(filFullNamePath);
                 retVal = sr.ReadToEnd(); // getting the entire text from the file.
                 sr.Close();
 
-                bSucess = file.WriteFile(retVal, filFullNamePath);
+                bSucess = File.WriteFile(retVal, filFullNamePath);
                 if (bSucess)
                 {
-                    file.Copy(filFullNamePath, eFilePath.ToString(), true);
+                    File.Copy(filFullNamePath, eFilePath.ToString(), true);
                 }
             }
 
@@ -129,9 +121,8 @@ namespace ReportingTest
         [TestMethod]
         public void TestCheckDirectory()
         {
-            System.IO.DirectoryInfo directoryInfo = new 
-                                    System.IO.DirectoryInfo(HttpContext.Current.Server.MapPath("/ProductionLogsTest"));
-            string message = string.Empty;
+            var directoryInfo = new System.IO.DirectoryInfo(HttpContext.Current.Server.MapPath("/ProductionLogsTest"));
+            var message = string.Empty;
             if (directoryInfo != null)
             {
                 message = "alert('Directory already exists.');";
@@ -146,8 +137,8 @@ namespace ReportingTest
         [TestMethod]
         public void TestCheckDirectory2()
         {
-            string directoryPath = HttpContext.Current.Server.MapPath(string.Format("~/{0}/", "ProductionLogsTest"));
-            string message = string.Empty;
+            var directoryPath = HttpContext.Current.Server.MapPath(string.Format("~/{0}/", "ProductionLogsTest"));
+            var message = string.Empty;
             if (!System.IO.Directory.Exists(directoryPath))
             {
                 System.IO.Directory.CreateDirectory(directoryPath);
@@ -164,16 +155,16 @@ namespace ReportingTest
         [TestMethod]
         public void TestGetFileSourceLocation()
         {
-            EnumFileProcessor.eFilePath filePaths = EnumFileProcessor.eFilePath.IisLogs;
-            string fileLocation = FileFunctions.GetFileOriginalSourceDirectory(filePaths);
+            var filePaths = EnumFileProcessor.eFilePath.IisLogs;
+            var fileLocation = FileFunctions.GetFileOriginalSourceDirectory(filePaths);
             Assert.IsNotNull(fileLocation);
         }
 
         [TestMethod]
         public void TestGetFileCopyToDestinationInLocation()
         {
-            EnumFileProcessor.eFilePath filePaths = EnumFileProcessor.eFilePath.IisLogs;
-            string fileLocation = FileFunctions.GetFileProcessingInDirectory();
+            var filePaths = EnumFileProcessor.eFilePath.IisLogs;
+            var fileLocation = FileFunctions.GetFileProcessingInDirectory();
             Assert.IsNotNull(fileLocation);
         }
         #endregion
@@ -189,16 +180,13 @@ namespace ReportingTest
 
             //sucess
             //string fileLocation = @"\\indy-ss01\ProductionLogsTest\IISLogs\test_writer.txt";
-            EnumFileProcessor.eFilePath filePaths = EnumFileProcessor.eFilePath.IisLogs;
+            var fileLocation = FileFunctions.GetFileProcessingInDirectory();
+            var fileName = "test_writer.txt";
+            var fileFullNameAndPath = fileLocation + fileName;
+            var textWriter = File.CreateFile(fileFullNameAndPath);
 
-            string fileLocation = FileFunctions.GetFileProcessingInDirectory();
-            string fileName = "test_writer.txt";
-            string fileFullNameAndPath = fileLocation + fileName;
-            File file = new File();
-            FileTextWriter textWriter = file.CreateFile(fileFullNameAndPath);
-
-            bool bSucess = false;
-            if (file.Exists(fileFullNameAndPath))
+            var bSucess = false;
+            if (File.Exists(fileFullNameAndPath))
             {
                 bSucess = true;
             }
@@ -210,18 +198,17 @@ namespace ReportingTest
         public void TestCopyFile()
         {
             //the file has to be avalible
-            FileFunctions fp = new FileFunctions();
-            
-            EnumFileProcessor.eFilePath filePath = EnumFileProcessor.eFilePath.IisLogs;
-            string fileFullNameAndSourcePath = @"\\indy-ss01\ProductionLogsTest\IISLogs\test_writer.txt";
+            var fp = new FileFunctions();
+
+            var filePath = EnumFileProcessor.eFilePath.IisLogs;
+            var fileFullNameAndSourcePath = @"\\indy-ss01\ProductionLogsTest\IISLogs\test_writer.txt";
 
             //copy file
             FileFunctions.CopyFile(fileFullNameAndSourcePath, filePath,true);
             //check if file exist
-            
-            bool bSucess = false;
-            File file = new File();
-            if (file.Exists(fileFullNameAndSourcePath))
+
+            var bSucess = false;
+            if (File.Exists(fileFullNameAndSourcePath))
             {
                 bSucess = true;
             }
@@ -233,7 +220,7 @@ namespace ReportingTest
        [TestMethod]
         public void TestLogger()
         {
-            Logger.LogError("This is Test  || DateTime: " + DateTime.Now );
+            BaseFileProcessor.LogError("This is Test  || DateTime: " + DateTime.Now );
             var LoggerFileDirectory = ConfigurationManager.AppSettings["LoggerFileDirectory"];
             var LoggerFileName = ConfigurationManager.AppSettings["LoggerFileName"];
 
@@ -243,7 +230,7 @@ namespace ReportingTest
             var fileSourceFullNameAndPath = Logger.Instance.LogPath + Logger.Instance.LogFileName;
             var bFileExist = false;
             var file = new File();
-            if (file.Exists(fileSourceFullNameAndPath))
+            if (File.Exists(fileSourceFullNameAndPath))
             {
                 bFileExist = true;
             }

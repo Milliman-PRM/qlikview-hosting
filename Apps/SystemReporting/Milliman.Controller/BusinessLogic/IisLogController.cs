@@ -8,11 +8,17 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using SystemReporting.Utilities;
+using log4net.Repository;
+using log4net.Appender;
+using System.IO;
+using log4net;
 
 namespace SystemReporting.Controller.BusinessLogic.Controller
 {
     public class IisLogController : ControllerBase
     {
+        //private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.
+        //                                                                        MethodBase.GetCurrentMethod().DeclaringType);
         private IMillimanService dbService { get; set; }
 
         /// <summary>
@@ -97,7 +103,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
             catch (Exception ex)
             {
                 dbService.Dispose();
-                Logger.LogError(ex, "Class IisLogController. Method ProcessLogs.");
+                log.Fatal("Class IisLogController. Method ProcessLogs.", ex);
             }
             return blnSucessful;
         }        

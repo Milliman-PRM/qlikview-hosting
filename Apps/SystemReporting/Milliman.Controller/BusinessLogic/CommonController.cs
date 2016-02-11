@@ -10,7 +10,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
 {
     public class CommonController : ControllerBase
     {
-        private IMillimanService dbService { get; set; }
+         private IMillimanService dbService { get; set; }
 
         /// <summary>
         /// Constructor
@@ -51,7 +51,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
             catch (Exception ex)
             {
                 dbService.Dispose();
-                Logger.LogError(ex, "Class CommonController. Method SaveUser.");
+                log.Fatal("Class SessionLogController. Method ProcessLogs.", ex);
             }
 
             return user;
@@ -90,7 +90,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
             catch (Exception ex)
             {
                 dbService.Dispose();
-                Logger.LogError(ex, "Class CommonController. Method SaveUser.");
+                log.Fatal("Class SessionLogController. Method ProcessLogs.", ex);
             }
 
             return report;
@@ -129,7 +129,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
             catch (Exception ex)
             {
                 dbService.Dispose();
-                Logger.LogError(ex, "Class CommonController. Method SaveUser.");
+                log.Fatal("Class SessionLogController. Method ProcessLogs.", ex);
             }
 
             return group;

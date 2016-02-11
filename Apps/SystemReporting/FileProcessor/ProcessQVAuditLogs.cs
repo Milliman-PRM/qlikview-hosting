@@ -23,59 +23,69 @@ namespace FileProcessor
         /// Process the files. 
         /// </summary>
         /// <param name="args"></param>
-        public void ProcessFileData(string args)
+        public void ProcessLogFileData(string args)
         {
-            var blnSucessful = false;
             try
             {
-                if (args.Length > 0)
                 {
-                    var filter = "Audit_INDY-PRM";
-                    var efilePath = EnumFileProcessor.eFilePath.QVAuditLogs;
-
-                    //ProductionLogsTest\QVLogs\
-                    var sourceDirectory = new DirectoryInfo(FileFunctions.GetFileOriginalSourceDirectory(efilePath));
-
-                    //Move To   LogFileProcessor\IN\
-                    var destinationInDirectory = FileFunctions.GetFileProcessingInDirectory();
-                                       
-                    if (sourceDirectory.Exists)
+                    if (args.Length > 0)
                     {
-                        var listFileToProcess = FileFunctions.GetFileToReadFromStatusFile(filter, efilePath);
+                        var efilePath = EnumFileProcessor.eFilePath.QVAuditLogs;
+                        // ProductionLogsTest\efilePath\
+                        var sourceDirectory = new DirectoryInfo(FileFunctions.GetFileOriginalSourceDirectory(efilePath));
 
-                        if (listFileToProcess.Count <=0)
+                        //LogFileProcessor\IN
+                        var destinationInDirectory = new DirectoryInfo(FileFunctions.GetFileProcessingInDirectory());
+
+                        if (sourceDirectory.Exists)
                         {
-                            Console.WriteLine("No files exist to Process.");
-                        }
-                        foreach (var file in listFileToProcess)
-                        {
-                            Console.WriteLine("Processing file:  {0}.", file);
-                            var fileNameWithsourceDirectory = sourceDirectory + file;
-                            if (File.Exists(fileNameWithsourceDirectory))
+                            if (args.IndexOf("productionlogs", StringComparison.Ordinal) > -1)
                             {
-                                FileFunctions.CopyFile(sourceDirectory + file, efilePath, true);
-                                blnSucessful = ProcessLogFile(destinationInDirectory + file);
-                                if (blnSucessful)
+                                var filename = Path.GetFileName(args);
+                                ProcessLogFile(efilePath, sourceDirectory, destinationInDirectory, filename);
+                            }
+                            else
+                            {
+                                var filter = "Audit_INDY-PRM";
+                                var listFileToProcess = FileFunctions.GetFileToReadFromStatusFile(filter, efilePath);
+
+                                if (listFileToProcess.Count > 0)
                                 {
-                                    File.Delete(destinationInDirectory + file);
-                                    foreach (var item in listFileToProcess)
+                                    foreach (var file in listFileToProcess)
                                     {
-                                        BaseFileProcessor.LogProcessedFile(item);
+                                        ProcessLogFile(efilePath, sourceDirectory, destinationInDirectory, file);
                                     }
-                                }
-                                else
-                                {
-                                    Logger.LogError(null, "ProcessIisLogs: Failed processing fileInfo || " + fileNameWithsourceDirectory);
                                 }
                             }
                         }
                     }
                 }
             }
+
             catch (Exception ex)
             {
-                Logger.LogError(ex, "Class ProcessQVAuditLogs. Method ProcessFileData.");
+                BaseFileProcessor.LogError(ex, "Class ProcessQVAuditLogs. Method ProcessFileData.");
             }
+        }
+
+        private bool ProcessLogFile(EnumFileProcessor.eFilePath efilePath, DirectoryInfo sourceDirectory,
+                                                                    DirectoryInfo destinationInDirectory, string file)
+        {
+            var blnSucessful = false;
+            Console.WriteLine("Processing file:  {0}.", file);
+            var fileNameWithsourceDirectory = (sourceDirectory + file);
+            if (File.Exists(fileNameWithsourceDirectory))
+            {
+                FileFunctions.CopyFile(sourceDirectory + file, efilePath, true);
+                blnSucessful = ProcessLogFile(destinationInDirectory + file);
+                if (blnSucessful)
+                {
+                    File.Delete(destinationInDirectory + file);
+                    BaseFileProcessor.LogProcessedFile(file);
+                }
+            }
+
+            return blnSucessful;
         }
 
         /// <summary>
@@ -158,7 +168,7 @@ namespace FileProcessor
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, " Class ProcessQVAuditLogs. Method ProcessLogFile while sending the data to controller.");
+                BaseFileProcessor.LogError(ex, " Class ProcessQVAuditLogs. Method ProcessLogFile while sending the data to controller.");
             }
 
             return blnSucessful;
@@ -188,7 +198,7 @@ namespace FileProcessor
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, " Class ProcessQVAuditLogs. Method ParseFile. File name. " + filefullName);
+                //LogError(ex, " Class ProcessQVAuditLogs. Method ParseFile. File name. " + filefullName);
             }
             return listLogFile;
         }

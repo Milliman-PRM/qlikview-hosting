@@ -11,6 +11,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
     [Serializable]
     public class SessionLogController : ControllerBase
     {
+        
         private IMillimanService dbService { get; set; }
        
         /// <summary>
@@ -107,7 +108,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
             catch (Exception ex)
             {
                 dbService.Dispose();
-                Logger.LogError(ex, "Class SessionLogController. Method ProcessLogs.");
+                log.Fatal("Class SessionLogController. Method ProcessLogs.",ex);
             }
             return blnSucessful;
         }

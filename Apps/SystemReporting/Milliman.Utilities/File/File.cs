@@ -12,12 +12,12 @@ namespace SystemReporting.Utilities.File
 
         }
 
-        public void MakeDirectory(string dirPath)
+        public static void MakeDirectory(string dirPath)
         {
             System.IO.Directory.CreateDirectory(dirPath);
         }
 
-        public bool DirectoryExists(string dirPath)
+        public static bool DirectoryExists(string dirPath)
         {
             return System.IO.Directory.Exists(dirPath);
         }
@@ -27,7 +27,7 @@ namespace SystemReporting.Utilities.File
         /// </summary>
         /// <param name="path">Path for the new file</param>
         /// <returns>FileTextWriter object.</returns>
-        public FileTextWriter CreateFile(string path)
+        public static FileTextWriter CreateFile(string path)
         {
             return new FileTextWriter(path);
         }
@@ -37,7 +37,7 @@ namespace SystemReporting.Utilities.File
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        public FileTextReader ReadFile(string path)
+        public static FileTextReader ReadFile(string path)
         {
             return new FileTextReader(path);
         }
@@ -47,7 +47,7 @@ namespace SystemReporting.Utilities.File
         /// </summary>
         /// <param name="path">The directory to find files in.</param>
         /// <returns>Returns a collection of files based on the given directory.</returns>
-        public Files GetFiles(string path)
+        public static Files GetFiles(string path)
         {
             return new Files(path);
         }
@@ -58,7 +58,7 @@ namespace SystemReporting.Utilities.File
         /// <param name="path">The directory to find files in.</param>
         /// <param name="searchPattern">Filter for a search, such as *.txt</param>
         /// <returns>Returns a collection of files based on the given directory.</returns>
-        public Files GetFiles(string path, string searchPattern)
+        public static Files GetFiles(string path, string searchPattern)
         {
             return new Files(path, searchPattern);
         }
@@ -68,7 +68,7 @@ namespace SystemReporting.Utilities.File
         /// </summary>
         /// <param name="path">The file path to check</param>
         /// <returns>Boolean</returns>
-        public bool Exists(string fileFullPath)
+        public static bool Exists(string fileFullPath)
         {
             return System.IO.File.Exists(fileFullPath);
         }
@@ -77,7 +77,7 @@ namespace SystemReporting.Utilities.File
         /// Deletes a specified file
         /// </summary>
         /// <param name="path">The file to delete</param>
-        public void Delete(string path)
+        public static void Delete(string path)
         {
             System.IO.File.Delete(path);
         }
@@ -87,12 +87,12 @@ namespace SystemReporting.Utilities.File
         /// </summary>
         /// <param name="sourceFileName"></param>
         /// <param name="destFileName"></param>
-        public void Move(string sourceFileName, string destFileName)
+        public static void Move(string sourceFileName, string destFileName)
         {
             System.IO.File.Move(sourceFileName, destFileName);
         }
 
-        public void CreateDirectory(string directoryPath)
+        public static void CreateDirectory(string directoryPath)
         { 
             System.IO.Directory.CreateDirectory(directoryPath); 
         }
@@ -102,27 +102,27 @@ namespace SystemReporting.Utilities.File
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        public string GetFileName(string path)
+        public static string GetFileName(string path)
         {
             return System.IO.Path.GetFileName(path);
         }
 
-        public string GetFileNameWithoutExtension(string filePath) { return System.IO.Path.GetFileNameWithoutExtension(filePath); }
+        public static string GetFileNameWithoutExtension(string filePath) { return System.IO.Path.GetFileNameWithoutExtension(filePath); }
 
         /// <summary>
         /// Copies a file from one location to another.
         /// </summary>
         /// <param name="sourceFileName"></param>
         /// <param name="destFileName"></param>
-        public void Copy(string sourceFileName, string destFileName)
+        public static void Copy(string sourceFileName, string destFileName)
         {
             System.IO.File.Copy(sourceFileName, destFileName);
         }
 
-        public void Copy(string sourceFilePath, string destinationFilePath, bool overWrite)
+        public static void Copy(string sourceFilePath, string destinationFilePath, bool overWrite)
         {
-            bool whatwasInfoReadOnly = false;
-            bool fileExists = false;
+            var whatwasInfoReadOnly = false;
+            var fileExists = false;
             System.IO.FileInfo info;
 
             if (Exists(destinationFilePath) && overWrite)
@@ -146,14 +146,14 @@ namespace SystemReporting.Utilities.File
         }
 
         
-        public void FilesCopy(string sourceDirectoryFilePath, string destinationDirectoryFilePath, bool overWrite)
+        public static void FilesCopy(string sourceDirectoryFilePath, string destinationDirectoryFilePath, bool overWrite)
         {                     
              Copy(sourceDirectoryFilePath, destinationDirectoryFilePath, overWrite);
         }
 
-        public string Combine(params string[] paths)
+        public static string Combine(params string[] paths)
         {
-            string combinedPath = String.Empty;
+            var combinedPath = String.Empty;
             foreach (string path in paths) { combinedPath = System.IO.Path.Combine(combinedPath, path); }
             return combinedPath;
         }
@@ -163,19 +163,17 @@ namespace SystemReporting.Utilities.File
         /// </summary>
         /// <param name="sResults"></param>
         /// <param name="filFullNamePath"></param>
-        public bool WriteFile(string sResults, string filFullNamePath)
+        public static bool WriteFile(string sResults, string filFullNamePath)
         {
-            File file = new File();
-
             //create the file name
-            FileTextWriter textWriter = file.CreateFile(filFullNamePath);
+            FileTextWriter textWriter = File.CreateFile(filFullNamePath);
 
-            string outputValue = sResults;
+            var outputValue = sResults;
             textWriter.WriteLine(outputValue);
             textWriter.Close();
 
             //if the file is there then
-            bool returnValue = false;
+            var returnValue = false;
             if (outputValue.Length > 0)
                 returnValue = true;
 
@@ -185,8 +183,8 @@ namespace SystemReporting.Utilities.File
 
         public static void CopyFile(string source, string destination)
         {
-            FileInfo sourceFile = new FileInfo(source);
-            FileInfo destFile = new FileInfo(destination);
+            var sourceFile = new FileInfo(source);
+            var destFile = new FileInfo(destination);
 
             CopyFile(sourceFile, destFile);
         }
@@ -201,7 +199,7 @@ namespace SystemReporting.Utilities.File
             //check source exists
             if (!source.Exists)
             {
-                string message = "File '" + source.FullName + "' does not exist";
+                var message = "File '" + source.FullName + "' does not exist";
                 throw new FileNotFoundException(message);
             }
 
@@ -214,14 +212,14 @@ namespace SystemReporting.Utilities.File
             //make sure we can write to destination
             if (destination.Exists && (destination.Attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
             {
-                String message = "Unable to open file '" + destination.FullName + "' for writing.";
+                var message = "Unable to open file '" + destination.FullName + "' for writing.";
                 throw new IOException(message);
             }
 
             //makes sure it is not the same file        
             if (source.DirectoryName.Equals(destination.DirectoryName))
             {
-                String message = "Unable to write file '" + source + "' on itself.";
+                var message = "Unable to write file '" + source + "' on itself.";
                 throw new IOException(message);
             }
 
@@ -231,7 +229,7 @@ namespace SystemReporting.Utilities.File
 
             if (source.Length != destination.Length)
             {
-                String message =
+                var message =
                   "Failed to copy full contents from "
                   + source.FullName
                   + " to "

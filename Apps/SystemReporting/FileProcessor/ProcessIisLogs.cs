@@ -22,52 +22,36 @@ namespace FileProcessor
         /// The file will be picked up by method GetFileFromDirectory
         /// </summary>
         /// <param name="args"></param>
-        public void ProcessFileData(string args)
+        public void ProcessLogFileData(string args)
         {
-            var blnSucessful = false;
             try
             {
                 if (args.Length > 0)
                 {
-                    var filter = "u_ex";
                     var efilePath = EnumFileProcessor.eFilePath.IisLogs;
-                    
                     // ProductionLogsTest\IISLogs\
                     var sourceDirectory = new DirectoryInfo(FileFunctions.GetFileOriginalSourceDirectory(efilePath));
 
                     //LogFileProcessor\IN
                     var destinationInDirectory = new DirectoryInfo(FileFunctions.GetFileProcessingInDirectory());
-                                        
+
                     if (sourceDirectory.Exists)
                     {
-                        var listFileToProcess = FileFunctions.GetFileToReadFromStatusFile(filter, efilePath);
-                        if (listFileToProcess.Count <= 0)
+                        if (args.IndexOf("productionlogs", StringComparison.Ordinal) > -1)
                         {
-                            Console.WriteLine("No files exist to Process.");
+                            var filename = Path.GetFileName(args);
+                            ProcessLogFile(efilePath, sourceDirectory, destinationInDirectory, filename);
                         }
-
-                        if (listFileToProcess.Count > 0)
+                        else
                         {
-                            foreach (var file in listFileToProcess)
+                            var filter = "u_ex";
+                            var listFileToProcess = FileFunctions.GetFileToReadFromStatusFile(filter, efilePath);
+
+                            if (listFileToProcess.Count > 0)
                             {
-                                Console.WriteLine("Processing file:  {0}." , file);
-                                var fileNameWithsourceDirectory = (sourceDirectory + file);
-                                if (File.Exists(fileNameWithsourceDirectory))
+                                foreach (var file in listFileToProcess)
                                 {
-                                    FileFunctions.CopyFile(sourceDirectory + file, efilePath, true);
-                                    blnSucessful = ProcessLogFile(destinationInDirectory + file);
-                                    if (blnSucessful)
-                                    {
-                                        File.Delete(destinationInDirectory + file);
-                                        foreach(var item in listFileToProcess)
-                                        {
-                                            BaseFileProcessor.LogProcessedFile(item);
-                                        }                                        
-                                    }
-                                    else
-                                    {
-                                        Logger.LogError(null, "ProcessIisLogs: Failed processing fileInfo || " + fileNameWithsourceDirectory);
-                                    }
+                                    ProcessLogFile(efilePath, sourceDirectory, destinationInDirectory, file);
                                 }
                             }
                         }
@@ -76,7 +60,25 @@ namespace FileProcessor
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, " Class ProcessIisLogs. Method ProcessFileData.");
+                BaseFileProcessor.LogError(ex, " Class ProcessIisLogs. Method ProcessFileData.");
+            }
+        }
+
+        private void ProcessLogFile(EnumFileProcessor.eFilePath efilePath, DirectoryInfo sourceDirectory,
+                                                                    DirectoryInfo destinationInDirectory, string file)
+        {
+            var blnSucessful = false;
+            Console.WriteLine("Processing file:  {0}.", file);
+            var fileNameWithsourceDirectory = (sourceDirectory + file);
+            if (File.Exists(fileNameWithsourceDirectory))
+            {
+                FileFunctions.CopyFile(sourceDirectory + file, efilePath, true);
+                blnSucessful = ProcessLogFile(destinationInDirectory + file);
+                if (blnSucessful)
+                {
+                    File.Delete(destinationInDirectory + file);
+                    BaseFileProcessor.LogProcessedFile(file);
+                }
             }
         }
 
@@ -89,7 +91,7 @@ namespace FileProcessor
             var fileInfo = new FileInfo(fileNameWithDirectory);
             if (fileInfo == null)
             {
-                Logger.LogError(null, "FileInfo missing. Can not process iisFile " + fileNameWithDirectory);
+                BaseFileProcessor.LogError(null, "FileInfo missing. Can not process iisFile " + fileNameWithDirectory);
                 return false;
             }
 
@@ -113,7 +115,7 @@ namespace FileProcessor
                         if ((eventType == IisAccessEvent.IisEventType.IIS_UNKNOWN_EVENT) || (entry.HasUserName() == false))
                             continue;
 
-                        if (entry.TimeStamp!=null)
+                        if (entry.TimeStamp != null)
                         {
                             proxyLogEntry.UserAccessDatetime = entry.TimeStamp.ToString();
                         }
@@ -187,7 +189,7 @@ namespace FileProcessor
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, " Class ProcessIisLogs. Method ProcessLogFile while sending the data to controller.");
+                BaseFileProcessor.LogError(ex, " Class ProcessIisLogs. Method ProcessLogFile while sending the data to controller.");
             }
 
             return blnSucessful;
@@ -198,7 +200,6 @@ namespace FileProcessor
         /// </summary>
         /// <param name="filefullName">todo: describe filefullName parameter on ParseFile</param>
         /// <returns>List<IisLogFileEntry></returns>
-
         public static List<IisLogFileEntry> ParseFile(string filefullName)
         {
             var fileLines = new List<string>();
@@ -227,7 +228,7 @@ namespace FileProcessor
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, " Class ProcessIisLogs. Method ParseFile. File name. " + filefullName);
+                BaseFileProcessor.LogError(ex, " Class ProcessIisLogs. Method ParseFile. File name. " + filefullName);
             }
             return listLogFile;
         }

@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SystemReporting.Utilities.Email;
 
 namespace SystemReporting.Utilities
 {
@@ -41,12 +38,9 @@ namespace SystemReporting.Utilities
         {
             //LogFileName = DateTime.Now + "_" + LoggerFileName;
             LogFileExtension = ".log";
-            LogPath = ConfigurationManager.AppSettings["LoggerFileDirectory"];
-            LogFileName = ConfigurationManager.AppSettings["LoggerFileName"];
-            
-            //Logger.WriteLine("Logs started" + " | " + DateTime.Now);
+            //Logger.WriteLine("Logs started: " + " || " + DateTime.Now);
         }
-                
+
         public void WriteLineToLog(String inLogMessage)
         {
             WriteToLog(inLogMessage + Environment.NewLine);
@@ -72,54 +66,6 @@ namespace SystemReporting.Utilities
         public static void Write(String inLogMessage)
         {
             Instance.WriteToLog(inLogMessage);
-        }
-
-        #region Error Log
-        public static void LogError(Exception ex, string message)
-        {
-            if (ex != null && !string.IsNullOrEmpty(message))
-            {
-                LogExAndErr(ex, message);
-            }
-            else if (ex == null & (!string.IsNullOrEmpty(message)))
-            {
-                LogError(message);
-            }
-            else if (ex != null & (string.IsNullOrEmpty(message)))
-            {
-                LogError(ex);
-            }
-        }
-
-        public static void LogError(Exception ex)
-        {
-            Console.WriteLine("Exception Occurred. Check the Exception Log. Message : ", ex.Message.ToString());
-            //Logger.Instance.LogPath = FileFunctions.GetLoggerFileDirectory();
-            //Logger.Instance.LogFileName = FileFunctions.GetLoggerFileName();
-            Logger.WriteLine(DateTime.Now + " Todays Exceptions: ~ " + "Exception Message: " + ex.Message.ToString() + "||-||"
-                                          + "Exception Trace : " + ex.StackTrace + "||-||"
-                                          + "Exception Target: " + ex.TargetSite.ToString() + "||-||"
-                                          + "Exception Source: " + ex.Source.ToString()
-                                          + Environment.NewLine);
-        }
-        public static void LogError(string message)
-        {
-            Console.WriteLine("Exception Occurred. Check the Exception Log. Message : ", message);
-            Logger.WriteLine(DateTime.Now + " Todays Exceptions: ~ " + "||-||"
-                                          + " Exception Message: " + message
-                                          + Environment.NewLine);
-        }
-        public static void LogExAndErr(Exception ex, string message)
-        {
-            Console.WriteLine("Exception Occurred. Check the Exception Log. Message : ", message);
-            Logger.WriteLine(DateTime.Now + " Todays Exceptions: ~ " + "||-||"
-                                          + message + "||-||"
-                                          + "Exception Message: " + ex.Message.ToString() + "||-||"
-                                          + "Exception Trace : " + ex.StackTrace + "||-||"
-                                          + "Exception Target: " + ex.TargetSite.ToString() + "||-||"
-                                          + "Exception Source: " + ex.Source.ToString()
-                                          + Environment.NewLine);
-        }
-        #endregion
+        }        
     }
 }

@@ -13,6 +13,9 @@ namespace SystemReporting.Controller
     [Serializable]
     public abstract class ControllerBase : IController, IControllerAccessible
     {
+        public static log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.
+                                                                               MethodBase.GetCurrentMethod().DeclaringType);
+
         public ControllerBase() { }
 
         #region Registering Controllers

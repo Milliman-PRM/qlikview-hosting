@@ -16,8 +16,8 @@ namespace FileProcessor
     /// </summary>
     public interface IFileProcessor
     {
-        void ProcessFileData(string args);
-    }  
+        void ProcessLogFileData(string args);
+    }
 
     #region IControllerAccessible Members
     /// <summary>
@@ -92,18 +92,74 @@ namespace FileProcessor
     /// </summary>
     public class BaseFileProcessor
     {
+        public static string _exceptionLoggerFileDirectory = FileFunctions.GetExceptionLoggerFileDirectory();
+        public static string _exceptionLoggerFileName = FileFunctions.GetExceptionLoggerFileName();
+
         #region FileProcessed
+
+        /// <summary>
+        /// Record the file that was just processed. It will also check if the file exist
+        /// If the file does not, then create file and send email
+        /// </summary>
+        /// <param name="message"></param>
         public static void LogProcessedFile(string message)
         {
             Console.WriteLine("Processed successfully file: {0}", message);
             Logger.Instance.LogPath = FileFunctions.GetProcessedFileLogDirectory();
             Logger.Instance.LogFileName = FileFunctions.GetProcessedFileLogFileName();
-
             FileFunctions.FileCheck(Logger.Instance.LogPath + Logger.Instance.LogFileName);
-            Logger.WriteLine(DateTime.Now + " ProcessedFileName:~ " + message + Environment.NewLine);
+            Logger.WriteLine(DateTime.Now + " ProcessedLogFileName:~ " + message + Environment.NewLine);
         }
-
         #endregion
+
+        #region Error Log     
+        //Logs error. It will create file at the directory if file does not exist   
+        public static void LogError(Exception ex, string message)
+        {
+            if (ex != null && !string.IsNullOrEmpty(message))
+            {
+                LogExAndErr(ex, message);
+            }
+            else if (ex == null & (!string.IsNullOrEmpty(message)))
+            {
+                LogError(message);
+            }
+            else if (ex != null & (string.IsNullOrEmpty(message)))
+            {
+                LogError(ex);
+            }
+        }
+        public static void LogError(Exception ex)
+        {
+            Logger.Instance.LogPath = _exceptionLoggerFileDirectory;
+            Logger.Instance.LogFileName = _exceptionLoggerFileName;
+            Logger.WriteLine(DateTime.Now + " Todays Exceptions: ~ " + "Exception Message: " + ex.Message.ToString() + "||-||"
+                                          + "Exception Trace : " + ex.StackTrace + "||-||"
+                                          + "Exception Target: " + ex.TargetSite.ToString() + "||-||"
+                                          + "Exception Source: " + ex.Source.ToString()
+                                          + Environment.NewLine);
+        }
+        public static void LogError(string message)
+        {
+            Logger.Instance.LogPath = _exceptionLoggerFileDirectory;
+            Logger.Instance.LogFileName = _exceptionLoggerFileName;
+            Logger.WriteLine(DateTime.Now + " Todays Exceptions: ~ " + "||-||"
+                                          + " Exception Message: " + message
+                                          + Environment.NewLine);
+        }
+        public static void LogExAndErr(Exception ex, string message)
+        {
+            Logger.Instance.LogPath = _exceptionLoggerFileDirectory;
+            Logger.Instance.LogFileName = _exceptionLoggerFileName;
+            Logger.WriteLine(DateTime.Now + " Todays Exceptions: ~ " + "||-||"
+                                          + message + "||-||"
+                                          + "Exception Message: " + ex.Message.ToString() + "||-||"
+                                          + "Exception Trace : " + ex.StackTrace + "||-||"
+                                          + "Exception Target: " + ex.TargetSite.ToString() + "||-||"
+                                          + "Exception Source: " + ex.Source.ToString()
+                                          + Environment.NewLine);
+        }
+        #endregion        
     }
     #endregion
 }
