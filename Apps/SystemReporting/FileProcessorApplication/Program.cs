@@ -111,7 +111,7 @@ namespace FileProcessorApplication
         {
             if (console_present)
             {
-                Console.BackgroundColor = ConsoleColor.Blue;
+                Console.BackgroundColor = ConsoleColor.DarkCyan;
                 Console.Clear();
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.Title = "Reporting Application Milliman Inc.";

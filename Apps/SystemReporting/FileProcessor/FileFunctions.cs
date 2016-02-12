@@ -180,36 +180,45 @@ namespace FileProcessor
 
                 //get list of files name from the processed file at back up location
                 var listProcessedFilesInProcessFileLog = listProcessedFileLines.Select(s => s.Split('~').Last().Trim())
-                                                                .Where(s => !string.IsNullOrWhiteSpace(s) && !s.Contains("New File Created"))
-                                                                .Distinct().ToList();
+                                                                                        .Where(s => !string.IsNullOrWhiteSpace(s)
+                                                                                        && !s.Contains("New File Created"))
+                                                                                        .Distinct().ToList();
 
                 //List of files different in back up file and source location
                 listFilesDifferenceBWSB = listFilesAtSourceLocation.Union(listProcessedFilesInProcessFileLog)
-                                                           .Except(listFilesAtSourceLocation.Intersect(listProcessedFilesInProcessFileLog))
-                                                           .Distinct().ToList(); 
+                                                                    .Except(listFilesAtSourceLocation.Intersect(listProcessedFilesInProcessFileLog))
+                                                                    .Distinct().ToList();
+
 
                 //get the values that has the new file name in status file and split the list
-                var newFileNamesInStatusList = listStatusFileLines.Where(f => f.StartsWith(filter, StringComparison.Ordinal) ||
-                                                                        f.Contains("New File"))
+                var newFileNamesInStatusList = listStatusFileLines.Where(f => f.Any(r => f.Contains(filter)) &&
+                                                                        f.Contains("New File") ||
+                                                                        f.Contains("Newer"))
                                                                     .Select(s => s.Replace('\t', ' ')).ToList();
 
+                //Remove all the New File phrase
+                for (int i = 0; i < newFileNamesInStatusList.Count; i++)
+                    newFileNamesInStatusList[i] = newFileNamesInStatusList[i].Replace("Newer", "").Trim();
+
+                //Remove all the New File phrase
+                for (int i = 0; i < newFileNamesInStatusList.Count; i++)
+                    newFileNamesInStatusList[i] = newFileNamesInStatusList[i].Replace("New File", "").Trim();
+
+                //get the values that has the new file name in status file and split the list
+                var filesNotToProcess = newFileNamesInStatusList.Where(f => f.StartsWith(filter, StringComparison.Ordinal)).ToList();
+
                 //validate if the file exist in list that matches the filter
-                var validateFilterFileExist = newFileNamesInStatusList.Any(x => x.IndexOf(filter, StringComparison.Ordinal) > -1);
+                var validateFilterFileExist = filesNotToProcess.Any(x => x.IndexOf(filter, StringComparison.Ordinal) > -1);
                 if (validateFilterFileExist)
                 {
-                    //get all the file names that has Newer
-                    var fileNotToProcess = newFileNamesInStatusList.Where(a => a.Contains(filter)
-                                                                            && a.Contains("New File")).ToList();
-                    //Remove all the New File phrase
-                    for (int i = 0; i < fileNotToProcess.Count; i++)
-                        fileNotToProcess[i] = fileNotToProcess[i].Replace("New File", "").Trim();
-
+                    //files not to process   
                     //now find the files in difference that matches the above list and remove those
-                    var matchingFile = from s in listFilesDifferenceBWSB
-                                   where fileNotToProcess.Any(r => s.Contains(r))
-                                   select s;
+                    var matchingFileToBeRemoved = from s in listFilesDifferenceBWSB
+                                                  where filesNotToProcess.Any(r => s.Contains(r))
+                                                  select s;
 
-                    listFinalFilesToBeProcessed = listFilesDifferenceBWSB.Except(matchingFile).ToList();
+                    listFinalFilesToBeProcessed = listFilesDifferenceBWSB.Except(matchingFileToBeRemoved)
+                                                        .Where(f => f.Contains(filter)).ToList();
 
                 }
                 else
@@ -237,14 +246,16 @@ namespace FileProcessor
             if (!File.Exists(fileNameAndDirectoryPath))
             {
                 //create the file name
+                var message = (DateTime.Now + "||" + "New File Created");
+                ////create the file name
                 var textWriter = File.CreateFile(fileNameAndDirectoryPath);
-                textWriter.WriteLine(DateTime.Now + "||" + "New File Created");
-                textWriter.Close();                         
-  
+                textWriter.WriteLine(message);
+                textWriter.Close();
                 Notification.SendNotification("New file for the recording of sucessfully exectuted log file is created. " + Environment.NewLine +
-                                                    "Please review the new file at file location: " + fileNameAndDirectoryPath,
-                                                    System.IO.Path.GetFileName(fileNameAndDirectoryPath));
-            }                
+                                        "Please review the new file at file location: " + fileNameAndDirectoryPath,
+                                        System.IO.Path.GetFileName(fileNameAndDirectoryPath));
+            }
+
         }
 
         #endregion
@@ -261,7 +272,7 @@ namespace FileProcessor
         {
             var destinationDirectory = string.Empty;
             var destination = GetFileProcessingInDirectory();
-            
+
             switch (eFilePath)
             {
                 case EnumFileProcessor.eFilePath.IisLogs:
@@ -292,8 +303,8 @@ namespace FileProcessor
                                                                    System.IO.FileAccess.ReadWrite, System.IO.FileShare.ReadWrite))
                 File.Copy(fileFullNameWithSourcePath, destinationDirectory, overwrite);
         }
-                
-        #endregion                     
+
+        #endregion
     }
 
 }

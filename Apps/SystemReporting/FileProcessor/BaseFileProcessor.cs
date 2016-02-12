@@ -104,11 +104,15 @@ namespace FileProcessor
         /// <param name="message"></param>
         public static void LogProcessedFile(string message)
         {
-            Console.WriteLine("Processed successfully file: {0}", message);
-            Logger.Instance.LogPath = FileFunctions.GetProcessedFileLogDirectory();
-            Logger.Instance.LogFileName = FileFunctions.GetProcessedFileLogFileName();
-            FileFunctions.FileCheck(Logger.Instance.LogPath + Logger.Instance.LogFileName);
-            Logger.WriteLine(DateTime.Now + " ProcessedLogFileName:~ " + message + Environment.NewLine);
+            Console.WriteLine("Processed file: {0}", message);
+            var fMessage = DateTime.Now + " ProcessedLogFileName:~ " + message + Environment.NewLine;
+            var filePath = FileFunctions.GetProcessedFileLogDirectory() + FileFunctions.GetProcessedFileLogFileName() + ".log";
+            FileFunctions.FileCheck(filePath);           
+            var aFile = new System.IO.FileStream(filePath, System.IO.FileMode.Append, System.IO.FileAccess.Write);
+            var sw = new System.IO.StreamWriter(aFile);
+            sw.WriteLine(fMessage);
+            sw.Close();
+            aFile.Close();
         }
         #endregion
 
@@ -136,16 +140,14 @@ namespace FileProcessor
             Logger.WriteLine(DateTime.Now + " Todays Exceptions: ~ " + "Exception Message: " + ex.Message.ToString() + "||-||"
                                           + "Exception Trace : " + ex.StackTrace + "||-||"
                                           + "Exception Target: " + ex.TargetSite.ToString() + "||-||"
-                                          + "Exception Source: " + ex.Source.ToString()
-                                          + Environment.NewLine);
+                                          + "Exception Source: " + ex.Source.ToString() + Environment.NewLine);
         }
         public static void LogError(string message)
         {
             Logger.Instance.LogPath = _exceptionLoggerFileDirectory;
             Logger.Instance.LogFileName = _exceptionLoggerFileName;
             Logger.WriteLine(DateTime.Now + " Todays Exceptions: ~ " + "||-||"
-                                          + " Exception Message: " + message
-                                          + Environment.NewLine);
+                                          + " Exception Message: " + message + Environment.NewLine);
         }
         public static void LogExAndErr(Exception ex, string message)
         {
@@ -156,8 +158,7 @@ namespace FileProcessor
                                           + "Exception Message: " + ex.Message.ToString() + "||-||"
                                           + "Exception Trace : " + ex.StackTrace + "||-||"
                                           + "Exception Target: " + ex.TargetSite.ToString() + "||-||"
-                                          + "Exception Source: " + ex.Source.ToString()
-                                          + Environment.NewLine);
+                                          + "Exception Source: " + ex.Source.ToString() + Environment.NewLine);
         }
         #endregion        
     }

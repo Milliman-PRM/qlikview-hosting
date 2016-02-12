@@ -28,7 +28,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
         {
             //initiate service
             dbService = new MillimanService();
-            User user = new User();
+            var user = new User();
             try
             {                
                 var exists = dbService.GetUsers<User>(u => u.UserName == model.UserName).FirstOrDefault();
@@ -67,7 +67,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
         {
             //initiate service
             dbService = new MillimanService();
-            Report report = new Report();
+            var report = new Report();
             try
             {
                 var exists = dbService.GetReports<Report>(u => u.ReportName == model.ReportName).FirstOrDefault();
@@ -106,7 +106,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
         {
             //initiate service
             dbService = new MillimanService();
-            Group group = new Group();
+            var group = new Group();
             try
             {
                 var exists = dbService.GetGroups<Group>(u => u.GroupName == model.GroupName).FirstOrDefault();

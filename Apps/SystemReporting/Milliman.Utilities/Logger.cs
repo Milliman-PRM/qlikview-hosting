@@ -53,9 +53,9 @@ namespace SystemReporting.Utilities
 
             if (Writer == null)
                 Writer = new StreamWriter(LogFullPath, true);
-
-            Writer.Write(inLogMessage);
-            Writer.Flush();
+               
+            Writer.WriteLine(inLogMessage);            
+            Writer.Close();
         }
 
         public static void WriteLine(String inLogMessage)

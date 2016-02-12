@@ -28,7 +28,9 @@ namespace FileProcessor
             {
                 if (args.Length > 0)
                 {
+                    var filter = "u_ex";
                     var efilePath = EnumFileProcessor.eFilePath.IisLogs;
+
                     // ProductionLogsTest\IISLogs\
                     var sourceDirectory = new DirectoryInfo(FileFunctions.GetFileOriginalSourceDirectory(efilePath));
 
@@ -40,18 +42,16 @@ namespace FileProcessor
                         if (args.IndexOf("productionlogs", StringComparison.Ordinal) > -1)
                         {
                             var filename = Path.GetFileName(args);
-                            ProcessLogFile(efilePath, sourceDirectory, destinationInDirectory, filename);
+                            ProcessLogFileMove(efilePath,sourceDirectory, destinationInDirectory, filename);
                         }
                         else
-                        {
-                            var filter = "u_ex";
+                        {                           
                             var listFileToProcess = FileFunctions.GetFileToReadFromStatusFile(filter, efilePath);
-
                             if (listFileToProcess.Count > 0)
                             {
                                 foreach (var file in listFileToProcess)
                                 {
-                                    ProcessLogFile(efilePath, sourceDirectory, destinationInDirectory, file);
+                                    ProcessLogFileMove(efilePath,sourceDirectory, destinationInDirectory, file);
                                 }
                             }
                         }
@@ -64,11 +64,11 @@ namespace FileProcessor
             }
         }
 
-        private void ProcessLogFile(EnumFileProcessor.eFilePath efilePath, DirectoryInfo sourceDirectory,
+        private bool ProcessLogFileMove(EnumFileProcessor.eFilePath efilePath, DirectoryInfo sourceDirectory,
                                                                     DirectoryInfo destinationInDirectory, string file)
         {
             var blnSucessful = false;
-            Console.WriteLine("Processing file:  {0}.", file);
+            Console.WriteLine("Processing :  {0}", file);
             var fileNameWithsourceDirectory = (sourceDirectory + file);
             if (File.Exists(fileNameWithsourceDirectory))
             {
@@ -80,6 +80,7 @@ namespace FileProcessor
                     BaseFileProcessor.LogProcessedFile(file);
                 }
             }
+            return blnSucessful;
         }
 
         /// <summary>
