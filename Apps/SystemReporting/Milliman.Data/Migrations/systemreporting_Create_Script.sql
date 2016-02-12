@@ -179,16 +179,16 @@ CREATE TABLE qvsessionlog
   id serial NOT NULL,
   useraccessdatetime timestamp with time zone,
   document text,
-  exitreason character varying(50),
+  exitreason character varying(75),
   sessionstarttime timestamp with time zone,
   sessionduration character varying(10),
   sessionendreason character varying(25),
   cpuspents double precision,
-  clienttype character varying(50),
+  clienttype character varying(75),
   clientaddress character varying(25),
   caltype character varying(20),
   calusagecount integer,
-  browser character varying(25),
+  browser character varying(50),
   isreduced boolean,
   fk_user_id integer,
   fk_group_id integer,
@@ -212,4 +212,5 @@ ALTER TABLE qvsessionlog
   OWNER TO postgres;
 GRANT ALL ON TABLE qvsessionlog TO postgres WITH GRANT OPTION;
 GRANT ALL ON TABLE qvsessionlog TO public;
+
 
