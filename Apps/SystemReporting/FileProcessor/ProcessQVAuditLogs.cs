@@ -69,7 +69,6 @@ namespace FileProcessor
                                                                     DirectoryInfo destinationInDirectory, string file)
         {
             var blnSucessful = false;
-            Console.WriteLine("Processing file:  {0}.", file);
             var fileNameWithsourceDirectory = (sourceDirectory + file);
             if (File.Exists(fileNameWithsourceDirectory))
             {

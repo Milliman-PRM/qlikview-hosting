@@ -114,7 +114,7 @@ namespace FileProcessorApplication
                 Console.BackgroundColor = ConsoleColor.DarkCyan;
                 Console.Clear();
                 Console.ForegroundColor = ConsoleColor.White;
-                Console.Title = "Reporting Application Milliman Inc.";
+                Console.Title = "Reporting Application";
 
                 // Get rid of the scroll bars by making the buffer the same size as the window
                 Console.Clear();
@@ -125,13 +125,11 @@ namespace FileProcessorApplication
                 Console.SetCursorPosition(left, top);
 
                 Console.Write(DateTime.Now + Environment.NewLine);
-                Console.WriteLine("----------------------------------------");
-                Console.Write("Reporting Application in Progress." + Environment.NewLine);
-                Console.WriteLine("----------------------------------------");
-                Console.WriteLine("----------------------------------------");
-                Console.WriteLine("Attention: Reporting Application Running");
-                Console.WriteLine("----------------------------------------");
-                Console.WriteLine("----------------------------------------");
+                Console.WriteLine("--------------------------------------------");
+                Console.WriteLine("--------------------------------------------");
+                Console.WriteLine("     Reporting Application in Progress      ");
+                Console.WriteLine("--------------------------------------------");
+                Console.WriteLine("--------------------------------------------");
             }
         }
 
