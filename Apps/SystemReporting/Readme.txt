@@ -1,3 +1,12 @@
+Processing Instruction. Choose following metods... 
+
+1. Application and file type					
+		Ex: FileProcessorApplication.exe  Iis 
+2. Application only 							
+		Ex: FileProcessorApplication.exe
+3. Application and fully qualified file path 	
+		Ex: FileProcessorApplication.exe   "C:\\ProductionLogs\\IISLogs\\u_ex151002.log" 
+
 /*******************************************************************************************************/
 This program depends on following directories for processing of log files:
 
@@ -8,7 +17,7 @@ This program depends on following directories for processing of log files:
 <add key="QVAuditLogsS" value="C:\ProductionLogs\QVLogs\" />
 <add key="QVSessionLogsS" value="C:\ProductionLogs\QVLogs\" />
 
-/////////////-----------TODO: we will change the directory C to D --------------/////////////
+/----------------------TODO: we will change the directory C to D ----------------------/
 /*******************************************************************************************************/
 This program will log the sucessfully "Processed" file on this location.
 
@@ -36,9 +45,9 @@ on the source location to ensure that certian file is not processed twice.
 /*******************************************************************************************************/
 This program will create "Exception log" file ["Logger"] at this location:
 
-<!--Logger-->
-<add key="LoggerFileDirectory" value="C:\ProductionLogs\LogFileProcessor\" />
-<add key="LoggerFileName" value="Logger" />
+<!--ExceptionLogger-->
+<add key="ExceptionFileDirectory" value="C:\ProductionLogs\LogFileProcessor\" />
+<add key="ExceptionFileName" value="ExceptionLogger" />
 
 
 /*******************************************************************************************************/
