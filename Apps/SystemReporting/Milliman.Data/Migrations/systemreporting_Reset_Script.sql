@@ -24,8 +24,8 @@ TRUNCATE TABLE "qvsessionlog" restart identity CASCADE;
 
 ALTER SEQUENCE group_id_seq RESTART WITH 1;
 ALTER SEQUENCE iislog_id_seq RESTART WITH 1;
-ALTER SEQUENCE qlickviewauditlog_id_seq RESTART WITH 1;
-ALTER SEQUENCE qlickviewsessionlog_id_seq RESTART WITH 1;
+ALTER SEQUENCE qvauditlog_id_seq RESTART WITH 1;
+ALTER SEQUENCE qvsessionlog_id_seq RESTART WITH 1;
 ALTER SEQUENCE report_id_seq RESTART WITH 1;
 ALTER SEQUENCE user_id_seq RESTART WITH 1;
 

@@ -211,6 +211,18 @@ namespace FileProcessor
                 var validateFilterFileExist = filesNotToProcess.Any(x => x.IndexOf(filter, StringComparison.Ordinal) > -1);
                 if (validateFilterFileExist)
                 {
+                    //if a file exist in processed and it is listed again in status as new or newer then send email
+                    var fileExistForReProcessing = from s in listProcessedFilesInProcessFileLog
+                                                   where filesNotToProcess.Any(r => s.Contains(r))
+                                                   select s;
+
+                    if (fileExistForReProcessing.ToList().Count>0)
+                    {
+                        var displyList = string.Join(",", fileExistForReProcessing.ToArray());
+                        Notification.SendNotification("File(s) " + displyList + " has been modified that has already been processed - updated content of file will not be added to database. " 
+                                                          , "Previously processed file listed in Status File");
+                    }
+
                     //files not to process   
                     //now find the files in difference that matches the above list and remove those
                     var matchingFileToBeRemoved = from s in listFilesDifferenceBWSB
