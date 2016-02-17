@@ -23,6 +23,9 @@ namespace SystemReporting.Entities.Models
         [Column("groupdescription")]
         public string Description { get; set; }
 
+        [Column("adddate")]
+        public DateTime AddDate { get; set; }
+
         // Navigation property 
         public virtual ICollection<IisLog> ListIisLog { get; set; }
         public virtual ICollection<AuditLog> ListAuditLog { get; set; }

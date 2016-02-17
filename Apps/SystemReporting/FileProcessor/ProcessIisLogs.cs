@@ -120,6 +120,7 @@ namespace FileProcessor
                             proxyLogEntry.UserAccessDatetime = entry.TimeStamp.ToString();
                         }
                         proxyLogEntry.ClientIpAddress = (!string.IsNullOrEmpty(entry.ClientIp)) ? entry.ClientIp.Trim() : string.Empty;
+                        //User
                         proxyLogEntry.User = (!string.IsNullOrEmpty(entry.UserName)) ? entry.UserName.Trim() : string.Empty;
                         proxyLogEntry.ServerIPAddress = (!string.IsNullOrEmpty(entry.ServerIp)) ? entry.ServerIp.Trim() : string.Empty;
                         proxyLogEntry.PortNumber = entry.Port != 0 ? entry.Port : 0;

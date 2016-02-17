@@ -28,22 +28,23 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
         {
             //initiate service
             dbService = new MillimanService();
-            var user = new User();
+            var obj = new User();
             try
             {                
                 var exists = dbService.GetUsers<User>(u => u.UserName == model.UserName).FirstOrDefault();
                 if (exists == null)
                 {
-                    user.UserName = model.UserName.Trim();
-                    dbService.Save(user);
+                    obj.UserName = model.UserName.Trim();
+                    obj.AddDate = DateTime.Now;
+                    dbService.Save(obj);
 
-                    user = new User();
+                    obj = new User();
                     //after insert set the id
-                    user = dbService.GetUsers<User>(a => a.UserName == model.UserName).FirstOrDefault();
+                    obj = dbService.GetUsers<User>(a => a.UserName == model.UserName).FirstOrDefault();
                 }
                 else
                 {
-                    user = exists;
+                    obj = exists;
                 }
 
                 dbService.Dispose();
@@ -54,7 +55,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                 log.Fatal("Class SessionLogController. Method ProcessLogs.", ex);
             }
 
-            return user;
+            return obj;
         }
         #endregion
 
@@ -67,22 +68,23 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
         {
             //initiate service
             dbService = new MillimanService();
-            var report = new Report();
+            var obj = new Report();
             try
             {
                 var exists = dbService.GetReports<Report>(u => u.ReportName == model.ReportName).FirstOrDefault();
                 if (exists == null)
                 {
-                    report.ReportName = model.ReportName.Trim();
-                    dbService.Save(report);
+                    obj.ReportName = model.ReportName.Trim();
+                    obj.AddDate = DateTime.Now;
+                    dbService.Save(obj);
 
-                    report = new Report();
+                    obj = new Report();
                     //after insert set the id
-                    report = dbService.GetReports<Report>(a => a.ReportName == model.ReportName).FirstOrDefault();
+                    obj = dbService.GetReports<Report>(a => a.ReportName == model.ReportName).FirstOrDefault();
                 }
                 else
                 {
-                    report = exists;
+                    obj = exists;
                 }
 
                 dbService.Dispose();
@@ -93,7 +95,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                 log.Fatal("Class SessionLogController. Method ProcessLogs.", ex);
             }
 
-            return report;
+            return obj;
         }
         #endregion
 
@@ -106,22 +108,23 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
         {
             //initiate service
             dbService = new MillimanService();
-            var group = new Group();
+            var obj = new Group();
             try
             {
                 var exists = dbService.GetGroups<Group>(u => u.GroupName == model.GroupName).FirstOrDefault();
                 if (exists == null)
                 {
-                    group.GroupName = model.GroupName.Trim();
-                    dbService.Save(group);
+                    obj.GroupName = model.GroupName.Trim();
+                    obj.AddDate = DateTime.Now;
+                    dbService.Save(obj);
 
-                    group = new Group();
+                    obj = new Group();
                     //after insert set the id
-                    group = dbService.GetGroups<Group>(a => a.GroupName == model.GroupName).FirstOrDefault();
+                    obj = dbService.GetGroups<Group>(a => a.GroupName == model.GroupName).FirstOrDefault();
                 }
                 else
                 {
-                    group = exists;
+                    obj = exists;
                 }
 
                 dbService.Dispose();
@@ -132,7 +135,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                 log.Fatal("Class SessionLogController. Method ProcessLogs.", ex);
             }
 
-            return group;
+            return obj;
         }
         #endregion
     }

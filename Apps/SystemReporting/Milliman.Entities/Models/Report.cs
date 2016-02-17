@@ -20,6 +20,9 @@ namespace SystemReporting.Entities.Models
         [Column("reportdescription")]
         public string ReportDesctiption { get; set; }
 
+        [Column("adddate")]
+        public DateTime AddDate { get; set; }
+
         // Navigation property 
         public virtual ICollection<AuditLog> ListAuditLog { get; set; }
         public virtual ICollection<SessionLog> ListSessionLog { get; set; }

@@ -107,12 +107,8 @@ namespace FileProcessor
                     var localDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, serverTimeZone);
 
                     foreach (var entry in listLogFile)
-                    {
-                        proxyLogEntry.Document = (!string.IsNullOrEmpty(entry.Document)) ? entry.Document.Trim() : string.Empty;
+                    {                        
                         proxyLogEntry.ExitReason = (!string.IsNullOrEmpty(entry.ExitReason)) ? entry.ExitReason.Trim() : string.Empty;
-
-                        //if (entry.Timestamp != null)
-                        //    proxyLogEntry.UserAccessDatetime = entry.Timestamp.ToString();
 
                         if (entry.SessionStart != null)
                             proxyLogEntry.SessionStartDateTime = entry.SessionStart.ToString();
@@ -154,15 +150,23 @@ namespace FileProcessor
                                                      .ToArray();
                         //loop through each and match with document. If a match is found then use that entry as root path
                         var group = "";
+                        var docNameNoPath = "";
                         foreach (var item in repositoryUrls)
                         {
                             if (entry.Document.ToLower().Contains(item.ToLower()))
+                            {
                                 group = QlikviewEventBase.GetGroup(entry.Document, item);
+                                docNameNoPath = entry.Document.ToLower().Replace(item.ToLower(), "");
+                                break;
+                            }
                         }
 
                         proxyLogEntry.Group = (!string.IsNullOrEmpty(group)) ? group : string.Empty;
                         //**************************************************************************************************//
                         proxyLogEntry.Report = QlikviewEventBase.GetReportName(entry.Document);
+
+                        proxyLogEntry.Document = (!string.IsNullOrEmpty(docNameNoPath)) ? docNameNoPath.ToUpper().Trim() : string.Empty;
+
                         proxyLogEntry.SessionLength = entry.SessionDuration.ToString();
                         proxyLogEntry.SessionEndReason = QlikviewSessionEvent.GetExitReason(entry.ExitReason).ToString();
                         proxyLogEntry.Browser = QlikviewSessionEvent.GetBrowser(entry.ClientType);

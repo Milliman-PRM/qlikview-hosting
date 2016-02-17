@@ -43,11 +43,11 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                     #region User/ Report / Group
 
                     ///Insert User
-                    if (!string.IsNullOrEmpty(entry.User))
+                    if (!string.IsNullOrEmpty(entry.User.Trim()))
                     {
                         var user = new User
                         {
-                            UserName = entry.User
+                            UserName = entry.User.Trim()
                         };
                         var addOrGetUser = ControllerCommon.AddOrGetUser(user);
                         if (addOrGetUser != null)
@@ -58,11 +58,11 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                     }
 
                     //Insert Group
-                    if (!string.IsNullOrEmpty(entry.Group))
+                    if (!string.IsNullOrEmpty(entry.Group.Trim()))
                     {
                         var group = new Group
                         {
-                            GroupName = entry.Group
+                            GroupName = entry.Group.Trim()
                         };
                         var addOrGetGroup = ControllerCommon.AddOrGetGroup(group);
                         if (addOrGetGroup != null)
@@ -73,11 +73,11 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                     }
 
                     //Insert Report
-                    if (!string.IsNullOrEmpty(entry.Report))
+                    if (!string.IsNullOrEmpty(entry.Report.Trim()))
                     {
                         var report = new Report
                         {
-                            ReportName = entry.Report
+                            ReportName = entry.Report.Trim()
                         };
                         var addOrGetReport = ControllerCommon.AddOrGetReport(report);
                         if (addOrGetReport != null)

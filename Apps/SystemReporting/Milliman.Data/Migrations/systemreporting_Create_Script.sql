@@ -23,6 +23,7 @@ GRANT ALL ON DATABASE "systemreporting" TO postgres WITH GRANT OPTION;
 /*********************************************************************
 			Look Up Tables
 **********************************************************************/
+
 -- Table: "user"
 
 -- DROP TABLE "user";
@@ -31,6 +32,7 @@ CREATE TABLE "user"
 (
   id serial NOT NULL,
   username character varying(100) NOT NULL,
+  adddate timestamp with time zone,
   CONSTRAINT pk_user_id PRIMARY KEY (id),
   CONSTRAINT uq_user_username UNIQUE (username)
 )
@@ -44,6 +46,7 @@ GRANT ALL ON TABLE "user" TO public;
 
 
 
+
 -- Table: "group"
 
 -- DROP TABLE "group";
@@ -53,6 +56,7 @@ CREATE TABLE "group"
   id serial NOT NULL,
   groupname character varying(100) NOT NULL,
   groupdescription character varying(100),
+  adddate timestamp with time zone,
   CONSTRAINT pk_group_id PRIMARY KEY (id),
   CONSTRAINT uq_group_groupname UNIQUE (groupname)
 )
@@ -65,6 +69,8 @@ GRANT ALL ON TABLE "group" TO postgres WITH GRANT OPTION;
 GRANT ALL ON TABLE "group" TO public;
 
 
+
+
 -- Table: report
 
 -- DROP TABLE report;
@@ -74,6 +80,7 @@ CREATE TABLE report
   id serial NOT NULL,
   reportname character varying(100) NOT NULL,
   reportdescription character varying(100),
+  adddate timestamp with time zone,
   CONSTRAINT pk_report_id PRIMARY KEY (id),
   CONSTRAINT uq_report_reportname UNIQUE (reportname)
 )
@@ -88,9 +95,11 @@ GRANT ALL ON TABLE report TO public;
 
 
 
+
 /*****************************************
 			Reporting Logs Tables
 *****************************************/
+
 -- Table: iislog
 
 -- DROP TABLE iislog;
@@ -134,6 +143,7 @@ GRANT ALL ON TABLE iislog TO public;
 
 
 
+
 -- Table: qvauditlog
 
 -- DROP TABLE qvauditlog;
@@ -170,6 +180,9 @@ GRANT ALL ON TABLE qvauditlog TO postgres WITH GRANT OPTION;
 GRANT ALL ON TABLE qvauditlog TO public;
 
 
+
+
+
 -- Table: qvsessionlog
 
 -- DROP TABLE qvsessionlog;
@@ -188,7 +201,7 @@ CREATE TABLE qvsessionlog
   clientaddress character varying(25),
   caltype character varying(20),
   calusagecount integer,
-  browser character varying(50),
+  browser character varying(25),
   isreduced boolean,
   fk_user_id integer,
   fk_group_id integer,
@@ -212,5 +225,6 @@ ALTER TABLE qvsessionlog
   OWNER TO postgres;
 GRANT ALL ON TABLE qvsessionlog TO postgres WITH GRANT OPTION;
 GRANT ALL ON TABLE qvsessionlog TO public;
+
 
 

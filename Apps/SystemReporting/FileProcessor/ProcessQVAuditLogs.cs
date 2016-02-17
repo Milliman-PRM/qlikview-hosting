@@ -122,11 +122,12 @@ namespace FileProcessor
                                 proxyLogEntry.UserAccessDatetime = (entry.Timestamp - serverTimeZone.BaseUtcOffset).ToString("MM/dd/yy HH:mm:ss");
                             }
                         }
-                        proxyLogEntry.Document = (!string.IsNullOrEmpty(entry.Document)) ? entry.Document.Trim() : string.Empty;
+                        
                         proxyLogEntry.EventType = (!string.IsNullOrEmpty(entry.EventType)) ? entry.EventType.Trim() : string.Empty;
 
                         var user = entry.User.Replace(@"Custom\", "").Replace(@"custom\", "");
-                        proxyLogEntry.User = (!string.IsNullOrEmpty(user)) ? user.Trim() : "UnKnown User";
+                        proxyLogEntry.User = (!string.IsNullOrEmpty(user)) ? user.Trim() : string.Empty;
+
                         proxyLogEntry.Message = (!string.IsNullOrEmpty(entry.Message)) ? entry.Message.Trim() : string.Empty;
 
                         //**************************************************************************************************//
@@ -137,19 +138,22 @@ namespace FileProcessor
                                                      .ToArray();
                         //loop through each and match with document. If a match is found then use that entry as root path
                         var group = "";
+                        var docName = "";
                         foreach (var item in repositoryUrls)
                         {
                             if (entry.Document.ToLower().Contains(item.ToLower()))
                             {
                                 group = QlikviewEventBase.GetGroup(entry.Document, item);
+                                docName = entry.Document.ToLower().Replace(item.ToLower(),"");
+                                break;
                             }
                         }
-
                         proxyLogEntry.Group = (!string.IsNullOrEmpty(group)) ? group : string.Empty;
                         //**************************************************************************************************//
-
                         var report = QlikviewEventBase.GetReportName(entry.Document);
                         proxyLogEntry.Report = (!string.IsNullOrEmpty(report)) ? report : string.Empty;
+
+                        proxyLogEntry.Document = (!string.IsNullOrEmpty(docName)) ? docName.ToUpper().Trim() : string.Empty;
 
                         proxyLogEntry.IsReduced = entry.Document.IndexOf(@"\reducedcachedqvws", StringComparison.Ordinal) > -1;
 
