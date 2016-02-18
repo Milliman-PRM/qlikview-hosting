@@ -1,0 +1,116 @@
+﻿using SystemReporting.Data.Repository;
+using SystemReporting.Entities.Models;
+using SystemReporting.Service;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using SystemReporting.Utilities;
+
+namespace SystemReporting.Controller.BusinessLogic.Controller
+{
+    [Serializable]
+    public class SessionLogController : ControllerBase
+    {
+        
+        private IMillimanService dbService { get; set; }
+       
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public SessionLogController() {  }
+
+        /// <summary>
+        /// Method to process the logs list and enter data to db
+        /// This will insert data into User, Group, Report and IIsLogs
+        /// </summary>
+        /// <param name="listProxyLogs"></param>
+        /// <returns></returns>
+        public bool ProcessLogs(List<ProxySessionLog> listProxyLogs)
+        {            
+            var blnSucessful = false;
+            try
+            {
+                var logEntity = new SessionLog();
+                foreach (var entry in listProxyLogs)
+                {                    
+                    logEntity.UserAccessDatetime = string.IsNullOrEmpty(entry.UserAccessDatetime) ? (DateTime?)null : DateTime.Parse(entry.UserAccessDatetime);
+                    logEntity.Document = (!string.IsNullOrEmpty(entry.Document)) ? entry.Document.Trim() : string.Empty;
+                    logEntity.ExitReason = (!string.IsNullOrEmpty(entry.ExitReason)) ? entry.ExitReason.Trim() : string.Empty;
+                    logEntity.SessionStartTime = string.IsNullOrEmpty(entry.SessionStartDateTime) ? (DateTime?)null : DateTime.Parse(entry.SessionStartDateTime);
+                    logEntity.SessionDuration = (!string.IsNullOrEmpty(entry.SessionDuration)) ? entry.SessionDuration : string.Empty;
+                    logEntity.SessionEndReason = (!string.IsNullOrEmpty(entry.SessionEndReason)) ? entry.SessionEndReason.Trim() : string.Empty;
+                    logEntity.CpuSpentS = entry.CpuSpentS != null ? entry.CpuSpentS : 0.0;
+                    logEntity.ClientType = (!string.IsNullOrEmpty(entry.ClientType)) ? entry.ClientType.Trim() : string.Empty;
+                    logEntity.ClientAddress = (!string.IsNullOrEmpty(entry.ClientAddress)) ? entry.ClientAddress.Trim() : string.Empty;
+                    logEntity.CalType = (!string.IsNullOrEmpty(entry.CalType)) ? entry.CalType.Trim() : string.Empty;
+                    logEntity.CalUsageCount = entry.CalUsageCount.HasValue ? entry.CalUsageCount.Value : 0;
+                    logEntity.Browser = (!string.IsNullOrEmpty(entry.Browser)) ? entry.Browser.Trim() : string.Empty;
+                    logEntity.IsReduced = (entry.IsReduced);
+                    logEntity.AddDate = DateTime.Now;
+                    
+                    #region User / Report / Group
+
+                    //Insert User
+                    if (!string.IsNullOrEmpty(entry.User.Trim()))
+                    {
+                        var user = new User
+                        {
+                            UserName = entry.User.Trim()
+                        };
+                        var addOrGetUser = ControllerCommon.AddOrGetUser(user);
+                        if (addOrGetUser != null)
+                        {
+                            //after insert set the id
+                            logEntity.fk_user_id = addOrGetUser.Id;
+                        }
+                    }
+
+                    //Insert Report
+                    if (!string.IsNullOrEmpty(entry.Report.Trim()))
+                    {
+                        var report = new Report
+                        {
+                            ReportName = entry.Report.Trim()
+                        };
+                        var addOrGetReport = ControllerCommon.AddOrGetReport(report);
+                        if (addOrGetReport != null)
+                        {
+                            //after insert set the id
+                            logEntity.fk_report_id = addOrGetReport.Id;
+                        }
+                    }
+
+                    //Insert Group
+                    if (!string.IsNullOrEmpty(entry.Group.Trim()))
+                    {
+                        var group = new Group
+                        {
+                            GroupName = entry.Group.Trim()
+                        };
+                        var addOrGetGroup = ControllerCommon.AddOrGetGroup(group);
+                        if (addOrGetGroup != null)
+                        {
+                            //after insert set the id
+                            logEntity.fk_group_id = addOrGetGroup.Id;
+                        }
+                    }
+
+                    #endregion
+                    //initiate service
+                    dbService = new MillimanService();
+                    //5. Insert record in the table   
+                    dbService.Save(logEntity); 
+                    dbService.Dispose();
+                    logEntity = new SessionLog();
+                    blnSucessful = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                dbService.Dispose();
+                log.Fatal("Class SessionLogController. Method ProcessLogs.",ex);
+            }
+            return blnSucessful;
+        }
+    }
+}
