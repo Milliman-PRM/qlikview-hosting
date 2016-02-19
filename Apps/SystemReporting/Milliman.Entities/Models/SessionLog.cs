@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace SystemReporting.Entities.Models
 {
     [Serializable()]
-    [Table("qvsessionlog", Schema = "public")]
     public class SessionLog
     {
         [Column("id")]

@@ -33,7 +33,7 @@ namespace SystemReporting.Data.Database
         public ApplicationDbContext() :
             base(new NpgsqlConnection(ConnectionString), true)
         {
-            Configuration.LazyLoadingEnabled = true;
+            Configuration.LazyLoadingEnabled = false;
             Configuration.ProxyCreationEnabled = false;
         }
 
@@ -55,32 +55,31 @@ namespace SystemReporting.Data.Database
         /// </summary>
         /// <param name="modelBuilder"></param>
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {            
+        {
+            var dbSchema = C.DB_POSTGRESQL_NAMESPACE_PUBLIC;
             //modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
             //modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
-            modelBuilder.HasDefaultSchema(C.DB_POSTGRESQL_NAMESPACE);
+            modelBuilder.HasDefaultSchema(dbSchema);
 
-            modelBuilder.Entity<AuditLog>().ToTable("qvauditlog", C.DB_POSTGRESQL_NAMESPACE);
-            modelBuilder.Entity<IisLog>().ToTable("iislog", C.DB_POSTGRESQL_NAMESPACE);
-            modelBuilder.Entity<SessionLog>().ToTable("qvsessionlog", C.DB_POSTGRESQL_NAMESPACE);
+            modelBuilder.Entity<AuditLog>().ToTable("qvauditlog", dbSchema);
+            modelBuilder.Entity<IisLog>().ToTable("iislog", dbSchema);
+            modelBuilder.Entity<SessionLog>().ToTable("qvsessionlog", dbSchema);
 
             ////Foreign Keys
-            modelBuilder.Entity<User>().ToTable("user", C.DB_POSTGRESQL_NAMESPACE);
-            modelBuilder.Entity<Report>().ToTable("report", C.DB_POSTGRESQL_NAMESPACE);
-            modelBuilder.Entity<Group>().ToTable("group", C.DB_POSTGRESQL_NAMESPACE);
+            modelBuilder.Entity<User>().ToTable("user", dbSchema);
+            modelBuilder.Entity<Report>().ToTable("report", dbSchema);
+            modelBuilder.Entity<Group>().ToTable("group", dbSchema);
 
-            modelBuilder.Entity<IisLog>().HasKey(x => x.Id).ToTable("iislog",C.DB_POSTGRESQL_NAMESPACE);
+            modelBuilder.Entity<IisLog>().HasKey(x => x.Id).ToTable("iislog", dbSchema);
             modelBuilder.Entity<IisLog>().HasOptional(c => c.User).WithMany(d => d.ListIisLog).HasForeignKey(c => c.fk_user_id);
             modelBuilder.Entity<IisLog>().HasOptional(c => c.Group).WithMany(d => d.ListIisLog).HasForeignKey(c => c.fk_group_id);
-
-
-            modelBuilder.Entity<AuditLog>().HasKey(x => x.Id).ToTable("qvauditlog", C.DB_POSTGRESQL_NAMESPACE);
+            
+            modelBuilder.Entity<AuditLog>().HasKey(x => x.Id).ToTable("qvauditlog", dbSchema);
             modelBuilder.Entity<AuditLog>().HasOptional(c => c.User).WithMany(d => d.ListAuditLog).HasForeignKey(c => c.fk_user_id);
             modelBuilder.Entity<AuditLog>().HasOptional(c => c.Group).WithMany(d => d.ListAuditLog).HasForeignKey(c => c.fk_group_id);
             modelBuilder.Entity<AuditLog>().HasOptional(c => c.Report).WithMany(d => d.ListAuditLog).HasForeignKey(c => c.fk_report_id);
-
-
-            modelBuilder.Entity<SessionLog>().HasKey(x => x.Id).ToTable("qvsessionlog", C.DB_POSTGRESQL_NAMESPACE);
+            
+            modelBuilder.Entity<SessionLog>().HasKey(x => x.Id).ToTable("qvsessionlog", dbSchema);
             modelBuilder.Entity<SessionLog>().HasOptional(c => c.User).WithMany(d => d.ListSessionLog).HasForeignKey(c => c.fk_user_id);
             modelBuilder.Entity<SessionLog>().HasOptional(c => c.Group).WithMany(d => d.ListSessionLog).HasForeignKey(c => c.fk_group_id);
             modelBuilder.Entity<SessionLog>().HasOptional(c => c.Report).WithMany(d => d.ListSessionLog).HasForeignKey(c => c.fk_report_id);
