@@ -12,6 +12,7 @@ using System.Web;
 using System.Configuration;
 using SystemReporting.Utilities;
 using System.Linq;
+using System.IO;
 
 namespace ReportingTest
 {
@@ -31,10 +32,11 @@ namespace ReportingTest
             string sResults, filFullNamePath = string.Empty;
 
             sResults = "This is test";
-            filFullNamePath = @"C:\ProductionLogs\LogFileProcessor\Logger";
-            
+            filFullNamePath = @"C:\ProductionLogsTest\LogFileProcessor\Logger";           
+
+
             //create the file name
-            var textWriter = File.CreateFile(filFullNamePath);
+            var textWriter = SystemReporting.Utilities.File.File.CreateFile(filFullNamePath);
 
             var outputValue = sResults;
             textWriter.WriteLine(outputValue);
@@ -63,9 +65,9 @@ namespace ReportingTest
             var bSucess = false;
             var retVal = string.Empty;
 
-            if (File.Exists(filFullNamePath))
+            if (SystemReporting.Utilities.File.File.Exists(filFullNamePath))
             {
-                File.Delete(filFullNamePath);
+                SystemReporting.Utilities.File.File.Delete(filFullNamePath);
             }
             using (System.IO.FileStream fs = new System.IO.FileStream(filFullNamePath, System.IO.FileMode.OpenOrCreate,
                                                                     System.IO.FileAccess.ReadWrite, System.IO.FileShare.ReadWrite))
@@ -79,7 +81,7 @@ namespace ReportingTest
             System.IO.File.AppendAllText(filFullNamePath, sResults);
             var readtext = System.IO.File.ReadAllText(filFullNamePath);
 
-            if (File.Exists(filFullNamePath))
+            if (SystemReporting.Utilities.File.File.Exists(filFullNamePath))
                 bSucess = true;
 
             Assert.IsTrue(bSucess);
@@ -101,17 +103,17 @@ namespace ReportingTest
             var bSucess = false;
             var retVal = string.Empty;
 
-            if (File.Exists(filFullNamePath))
+            if (SystemReporting.Utilities.File.File.Exists(filFullNamePath))
             {
                 //start reading the file. i have used Encoding 1256
                 var sr = new System.IO.StreamReader(filFullNamePath);
                 retVal = sr.ReadToEnd(); // getting the entire text from the file.
                 sr.Close();
 
-                bSucess = File.WriteFile(retVal, filFullNamePath);
+                bSucess = SystemReporting.Utilities.File.File.WriteFile(retVal, filFullNamePath);
                 if (bSucess)
                 {
-                    File.Copy(filFullNamePath, eFilePath.ToString(), true);
+                    SystemReporting.Utilities.File.File.Copy(filFullNamePath, eFilePath.ToString(), true);
                 }
             }
 
@@ -179,14 +181,21 @@ namespace ReportingTest
             //string testFilePath = "C:\\Users\\afsheen.khan\\Desktop\\Informaiton\\test_writer.txt";
 
             //sucess
-            //string fileLocation = @"\\indy-ss01\ProductionLogsTest\IISLogs\test_writer.txt";
-            var fileLocation = FileFunctions.GetFileProcessingInDirectory();
-            var fileName = "test_writer.txt";
+            string fileLocation = @"\\indy-ss01\ProductionLogs\IISLogs\";
+            // var fileLocation = FileFunctions.GetFileProcessingInDirectory();
+             var fileName = "test_writer.txt";
             var fileFullNameAndPath = fileLocation + fileName;
-            var textWriter = File.CreateFile(fileFullNameAndPath);
+            var textWriter = SystemReporting.Utilities.File.File.CreateFile(fileFullNameAndPath);
+
+            var sourceDirectory = new DirectoryInfo(fileLocation);
+            var fi = new System.IO.FileInfo(fileLocation);
+            if (!ReferenceEquals(sourceDirectory, null))
+            {
+                Assert.IsTrue(true);
+            }
 
             var bSucess = false;
-            if (File.Exists(fileFullNameAndPath))
+            if (SystemReporting.Utilities.File.File.Exists(fileFullNameAndPath))
             {
                 bSucess = true;
             }
@@ -208,7 +217,7 @@ namespace ReportingTest
             //check if file exist
 
             var bSucess = false;
-            if (File.Exists(fileFullNameAndSourcePath))
+            if (SystemReporting.Utilities.File.File.Exists(fileFullNameAndSourcePath))
             {
                 bSucess = true;
             }
@@ -229,8 +238,7 @@ namespace ReportingTest
 
             var fileSourceFullNameAndPath = Logger.Instance.LogPath + Logger.Instance.LogFileName;
             var bFileExist = false;
-            var file = new File();
-            if (File.Exists(fileSourceFullNameAndPath))
+            if (SystemReporting.Utilities.File.File.Exists(fileSourceFullNameAndPath))
             {
                 bFileExist = true;
             }
