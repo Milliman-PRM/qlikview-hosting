@@ -69,6 +69,7 @@
     <None Include="appsettings.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="appsettings_Prod.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
