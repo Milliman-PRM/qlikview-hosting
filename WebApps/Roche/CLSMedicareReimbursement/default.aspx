@@ -114,9 +114,8 @@
     </div>
 
     <div id="section">
-        <div style="margin-right:20px">
-        <asp:Button style="float:right;"  ID="CurrentYear" runat="server" Text="2016" BorderStyle="Solid" BorderWidth="1px" BackColor="lightgreen" BorderColor="#CCCCCC" OnClick="CurrentYear_Click" />
-        <asp:Button style="float:right;"  ID="LastYear" runat="server" Text="2015" BorderStyle="Solid" BorderWidth="1px" BorderColor="#CCCCCC" OnClick="LastYear_Click"/>
+        <div style="margin-right:40px">
+        <asp:DropDownList ID="YearDropdown"  style="float:right;" runat="server" Width="100px"></asp:DropDownList>
 <%--        &nbsp;&nbsp;&nbsp;
         <asp:ImageButton style="float:right;" ID="ExportToExcel" runat="server" OnClientClick="PrintRatesGrid()" ImageUrl="~/Images/excel.png" ToolTip="Export to Excel" />
         <asp:ImageButton style="float:right;" ID="ExportToWord" runat="server" OnClientClick="PrintRatesGrid()" ImageUrl="~/Images/word.png" ToolTip="Export to Word" />
@@ -125,13 +124,13 @@
         <h2>Medicare Reimbursment Rates</h2>
         </div>
         <div  style="width: 99%;height:100%">
-                <telerik:RadGrid RenderMode="Classic" ID="RatesGrid" runat="server" GridLines="Both" AllowSorting="true" AllowPaging="true" PageSize="250" Width="100%"  AllowCustomPaging="true" OnNeedDataSource="RatesGrid_NeedDataSource" PagerStyle-ShowPagerText="True" PagerStyle-Visible="False" OnSortCommand="RatesGrid_SortCommand" >
+                <telerik:RadGrid RenderMode="Classic" ID="RatesGrid" runat="server" GridLines="Both" AllowSorting="true" AllowPaging="true" PageSize="250" Width="100%"  AllowCustomPaging="true" OnNeedDataSource="RatesGrid_NeedDataSource" PagerStyle-ShowPagerText="True" PagerStyle-Visible="False" OnSortCommand="RatesGrid_SortCommand">
                     <ClientSettings EnableRowHoverStyle="True" Resizing-AllowColumnResize="true" Resizing-EnableRealTimeResize="true" Resizing-ResizeGridOnColumnResize="false">
                         <Selecting CellSelectionMode="SingleCell" />
                         <Scrolling AllowScroll="True" UseStaticHeaders="True" SaveScrollPosition="true" EnableVirtualScrollPaging="true" ></Scrolling>
                         <ClientEvents OnGridCreated="GridCreated" />
                     </ClientSettings>
-                    <MasterTableView AllowMultiColumnSorting="false"></MasterTableView>
+                    <MasterTableView AllowMultiColumnSorting="false" ></MasterTableView>
                     <SortingSettings SortedBackColor="#FFF6D6" EnableSkinSortStyles="false"></SortingSettings>
                     <HeaderStyle Font-Bold="True"></HeaderStyle>
                 </telerik:RadGrid>
@@ -158,10 +157,14 @@
         
         function ResizeGrid()
         {
-                var GridTop = $(RatesGrid).offset().top;
-                var FooterTop = $(footer).offset().top;
-                $(RatesGrid).height((FooterTop - GridTop) - 10);
-            
+            var GridTop = $(RatesGrid).offset().top;
+            var FooterTop = $(footer).offset().top;
+            $(RatesGrid).height((FooterTop - GridTop) - 10);
+ <%--           var scrollArea = document.getElementById("<%= RatesGrid.ClientID %>" + "_GridData");
+            if(scrollArea)
+            {
+                scrollArea.style.height = $(RatesGrid).height() + "px";
+            }--%>
         }
 
         function GridCreated(sender, args) {

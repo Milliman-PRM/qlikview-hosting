@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLSMedicareReimbursement", "CLSMedicareReimbursement.csproj", "{A79E19DD-5577-44F4-80A2-B525818DC024}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLSMedicareReimbursement", "CLSMedicareReimbursement\CLSMedicareReimbursement.csproj", "{A79E19DD-5577-44F4-80A2-B525818DC024}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLSPOCO", "..\CLSPOCO\CLSPOCO.csproj", "{A71B1D6B-EF20-49AB-B625-850F24CCC160}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLSPOCO", "CLSPOCO\CLSPOCO.csproj", "{A71B1D6B-EF20-49AB-B625-850F24CCC160}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLSdbContext", "..\Framework\CLSdbContext\CLSdbContext.csproj", "{8290F3DD-DDAA-46BD-9ADC-29D12DEC1B56}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLSdbContext", "Framework\CLSdbContext\CLSdbContext.csproj", "{8290F3DD-DDAA-46BD-9ADC-29D12DEC1B56}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Controller", "..\Framework\Controller\Controller.csproj", "{398E4896-F6F9-4551-B135-2F202E917CCB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Controller", "Framework\Controller\Controller.csproj", "{398E4896-F6F9-4551-B135-2F202E917CCB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLSTest", "..\CLSTest\CLSTest.csproj", "{3F001C5C-64A0-422D-8C00-6BCDA82F1F95}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLSTest", "CLSTest\CLSTest.csproj", "{3F001C5C-64A0-422D-8C00-6BCDA82F1F95}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Framework", "Framework", "{B7100394-60CE-4AA7-815D-260B0930ED89}"
 EndProject

@@ -33,6 +33,8 @@ namespace CLSMedicareReimbursement
                 LocalityList.DataSource = Data.LocalityData.Localities;
                 LocalityList.DataBind();
 
+                YearDropdown.Items.Add("2015");
+                YearDropdown.Items.Add("2016");
             }
         }
 
@@ -53,22 +55,9 @@ namespace CLSMedicareReimbursement
         private System.Drawing.Color Selected = System.Drawing.Color.LightGreen;
         private System.Drawing.Color UnSelected = System.Drawing.SystemColors.Control;
 
-        protected void CurrentYear_Click(object sender, EventArgs e)
-        {
-            CurrentYear.BackColor = Selected;
-            LastYear.BackColor = UnSelected;
-            
-        }
-
-        protected void LastYear_Click(object sender, EventArgs e)
-        {
-            CurrentYear.BackColor = UnSelected;
-            LastYear.BackColor = Selected;
-        }
-
         protected void RatesGrid_SortCommand(object sender, Telerik.Web.UI.GridSortCommandEventArgs e)
         {
-            int index = 0;
+            
         }
 
         protected void AnalyzerCheckList_SelectedIndexChanged(object sender, EventArgs e)
