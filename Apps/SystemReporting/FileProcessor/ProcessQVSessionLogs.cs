@@ -103,8 +103,7 @@ namespace FileProcessor
 
                     //Time Zone is false for session
                     var UseDaylightSavings = false;
-                    var serverTimeZone = TimeZoneInfo.FindSystemTimeZoneById(TimeZoneInfo.Local.Id);
-                    var localDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, serverTimeZone);
+                    var serverTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
 
                     foreach (var entry in listLogFile)
                     {                        
@@ -115,14 +114,8 @@ namespace FileProcessor
 
                         if (entry.SessionStart != null)
                         {
-                            if (serverTimeZone.SupportsDaylightSavingTime && !UseDaylightSavings)
-                            {
-                                proxyLogEntry.UserAccessDatetime = (entry.SessionStart - serverTimeZone.BaseUtcOffset).ToString();
-                            }
-                            else
-                            {
+                            if (!UseDaylightSavings)
                                 proxyLogEntry.UserAccessDatetime = TimeZoneInfo.ConvertTimeToUtc(entry.SessionStart, serverTimeZone).ToString();
-                            }
                         }
 
                         if (entry.SessionDuration != null)

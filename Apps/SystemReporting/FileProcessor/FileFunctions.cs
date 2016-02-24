@@ -258,7 +258,7 @@ namespace FileProcessor
             if (!File.Exists(fileNameAndDirectoryPath))
             {
                 //create the file name
-                var message = (DateTime.Now + "||" + "New File Created");
+                var message = (DateTime.Now + "||" + "=================== Log Created Started ===================");
                 ////create the file name
                 var textWriter = File.CreateFile(fileNameAndDirectoryPath);
                 textWriter.WriteLine(message);

@@ -106,21 +106,14 @@ namespace FileProcessor
                     //Time Zone for aduit log is true
                     var UseDaylightSavings = true;
                     //local time zone of the server
-                    var serverTimeZone = TimeZoneInfo.FindSystemTimeZoneById(TimeZoneInfo.Local.Id);
-                    var localDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, serverTimeZone);
+                    var serverTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
 
                     foreach (var entry in listLogFile)
                     {
                         if (entry.Timestamp != null)
                         {
                             if (UseDaylightSavings)
-                            {
-                                proxyLogEntry.UserAccessDatetime = TimeZoneInfo.ConvertTimeToUtc(entry.Timestamp, serverTimeZone).ToString("MM/dd/yy HH:mm:ss");
-                            }
-                            else
-                            {
-                                proxyLogEntry.UserAccessDatetime = (entry.Timestamp - serverTimeZone.BaseUtcOffset).ToString("MM/dd/yy HH:mm:ss");
-                            }
+                                proxyLogEntry.UserAccessDatetime = TimeZoneInfo.ConvertTimeToUtc(entry.Timestamp, serverTimeZone).ToString();
                         }
                         
                         proxyLogEntry.EventType = (!string.IsNullOrEmpty(entry.EventType)) ? entry.EventType.Trim() : string.Empty;
