@@ -16,3 +16,9 @@ public static List<SearchTerm> getSearchTermsForAnalyzerName( string AnalyzerNam
 			return list of searchterms
         }
 
+public static List<string> getUniqueYears()
+		{
+			Query the reimbursmenet_rate table and return a list of unquie year values
+		
+		}
+
