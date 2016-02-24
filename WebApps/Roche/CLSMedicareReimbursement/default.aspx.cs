@@ -16,25 +16,36 @@ namespace CLSMedicareReimbursement
                 //get the data from the factory
                 CLSPOCO.CLSPOCO Data = CLSPOCO.CLSPOCO.GetCLSDomainData();
 
+                CLSBusinessLogic.BusinessLogicManager BLM = CLSBusinessLogic.BusinessLogicManager.GetInstance();
                 //get the footer data and bind it
-                FooterList.DataSource = Data.FooterData.FooterItems;
+                FooterList.DataSource = BLM.FootNotes;
+                FooterList.DataTextField = "Footnote1";
+                FooterList.DataValueField = "Id";
                 FooterList.DataBind();
-                FooterLink.Text = Data.FooterData.FooterLink + "(" + Data.FooterData.FootLinkURI + ")";
-                FooterLink.NavigateUrl = Data.FooterData.FootLinkURI;
+
+                FooterLink.Text = "[MISSING]" + "(" + BLM.WebURL[0].Webaddressurl + ")";
+                FooterLink.NavigateUrl = BLM.WebURL[0].Webaddressurl;
 
                 RatesGrid.VirtualItemCount = Data.RatesData.AllRates.Count();
 
-                AnalyzerCheckList.DataSource = Data.AnalyzerData.UniqueAnalyzers;
+                AnalyzerCheckList.DataSource = BLM.UniqueAnalyzers;
+                AnalyzerCheckList.DataTextField = "AnalyzerName";
+                AnalyzerCheckList.DataValueField = "Id";
                 AnalyzerCheckList.DataBind();
 
-                AssayDescriptionList.DataSource = Data.AssayDescriptionData.AssayDescriptions;
+                AssayDescriptionList.DataSource = BLM.UniqueAssayDescriptions;
+                AssayDescriptionList.DataTextField = "SearchDesc";
+                AssayDescriptionList.DataValueField = "Id";
                 AssayDescriptionList.DataBind();
 
-                LocalityList.DataSource = Data.LocalityData.Localities;
+                LocalityList.DataSource = BLM.UniqueLocalities;
+                LocalityList.DataTextField = "LocalityDescLong";
+                LocalityList.DataValueField = "Id";
                 LocalityList.DataBind();
 
                 YearDropdown.Items.Add("2015");
                 YearDropdown.Items.Add("2016");
+
             }
         }
 
@@ -62,8 +73,13 @@ namespace CLSMedicareReimbursement
 
         protected void AnalyzerCheckList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Test(ref AssayDescriptionList);
-            Test(ref LocalityList);
+            List<string> SelectedAnalyzerIDs = AnalyzerCheckList.Items.Cast<ListItem>().Where(n => n.Selected).Select(n => n.Value).ToList();
+            AssayDescriptionList.Items.Clear();
+            List<CLSdbContext.SearchTerm> AssociatedAssayDescriptions = CLSBusinessLogic.BusinessLogicManager.GetInstance().FindAssayDescriptionForAnalyzer(SelectedAnalyzerIDs);
+            AssayDescriptionList.DataSource = AssociatedAssayDescriptions;
+            AssayDescriptionList.DataTextField = "SearchDesc";
+            AssayDescriptionList.DataValueField = "Id";
+            AssayDescriptionList.DataBind();
         }
 
         protected void AssayDescriptionList_SelectedIndexChanged(object sender, EventArgs e)

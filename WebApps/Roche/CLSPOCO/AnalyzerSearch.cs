@@ -24,8 +24,13 @@ namespace CLSPOCO
 
         public AnalyzerSearch(bool Test = false)
         {
+            Test = false;
             _UniqueAnalyzers = new List<string>();
-            if ( Test )
+            if ( Test == false  )
+            {
+                //_UniqueAnalyzers = CLSBusinessLogic.BusinessLogicManager.GetInstance().UniqueAnalyzers;
+            }
+            else
             {
                 _UniqueAnalyzers.Add("AVL 9181");
                 _UniqueAnalyzers.Add("COBAS 4000 A");

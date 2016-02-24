@@ -1,0 +1,18 @@
+﻿
+
+ public static List<string> getUniqueAnalyzerNames()
+        {
+            query the analyzers table and return a list 
+			of unique values from column "analyzer_name"
+        }
+
+
+public static List<SearchTerm> getSearchTermsForAnalyzerName( string AnalyzerName )
+        {
+            Query the analyzer table and get all rows where "analyzer_name" == AnalyzerName
+			for each row item returned in query the searchterms table using the "fk_code_id"
+				for each row item returned from searchterm add to return list of search terms
+
+			return list of searchterms
+        }
+
