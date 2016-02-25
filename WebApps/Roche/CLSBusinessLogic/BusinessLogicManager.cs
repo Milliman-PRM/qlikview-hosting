@@ -239,7 +239,8 @@ namespace CLSBusinessLogic
                                                List<string> Years = null,
                                                List<string> CPTCodes = null)
         {
-            string QueryRoot = "select analyzers.analyzer_name, code.description, code.code, analyzers.notes, localities.locality_desc_shrt, reimbursement_rates.rate from rmrrdb_20160222.reimbursement_rates INNER JOIN rmrrdb_20160222.analyzers ON analyzers.fk_code_id = reimbursement_rates.fk_code_id INNER JOIN rmrrdb_20160222.code ON code.id = reimbursement_rates.fk_code_id INNER JOIN rmrrdb_20160222.localities ON localities.id = reimbursement_rates.fk_locality_id ";
+            //string QueryRoot = "select analyzers.analyzer_name, code.description, code.code, analyzers.notes, localities.locality_desc_shrt, reimbursement_rates.rate from rmrrdb_20160222.reimbursement_rates INNER JOIN rmrrdb_20160222.analyzers ON analyzers.fk_code_id = reimbursement_rates.fk_code_id INNER JOIN rmrrdb_20160222.code ON code.id = reimbursement_rates.fk_code_id INNER JOIN rmrrdb_20160222.localities ON localities.id = reimbursement_rates.fk_locality_id ";
+            string QueryRoot = "SELECT analyzers.analyzer_name, code.description, code.code, analyzers.notes, localities.locality_desc_shrt, reimbursement_rates.rate FROM rmrrdb_20160222.analyzers, rmrrdb_20160222.code, rmrrdb_20160222.reimbursement_rates, rmrrdb_20160222.localities WHERE reimbursement_rates.fk_code_id = code.id AND reimbursement_rates.fk_code_id = analyzers.fk_code_id AND reimbursement_rates.fk_locality_id = localities.id ";
             string WhereClause = string.Empty;
 
             if (AnalyzerNames != null)
@@ -266,9 +267,9 @@ namespace CLSBusinessLogic
                 WhereClause += WhereClauseBuilder("code.code", CPTCodes, !string.IsNullOrEmpty(WhereClause));
 
             if (string.IsNullOrEmpty(WhereClause) == false)
-                QueryRoot += " WHERE " + WhereClause;
+                QueryRoot += WhereClause;
 
-            QueryRoot += " ORDER BY code.description, localities.locality_desc_shrt";
+            QueryRoot += " ORDER BY analyzers.analyzer_name, code.description, localities.locality_desc_shrt;";
             return QueryRoot;
         }
         /// <summary>
