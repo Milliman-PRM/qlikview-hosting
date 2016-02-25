@@ -26,8 +26,10 @@ namespace CLSMedicareReimbursement
                 FooterLink.Text = "[MISSING]" + "(" + BLM.WebURL[0].Webaddressurl + ")";
                 FooterLink.NavigateUrl = BLM.WebURL[0].Webaddressurl;
 
-                RatesGrid.VirtualItemCount = Data.RatesData.AllRates.Count();
-
+                //set current working set in memory "DataSet" for main view grid
+                Session["DataSet"] = BLM.AllData;
+                RatesGrid.VirtualItemCount = BLM.AllData.Rows.Count;
+                
                 AnalyzerCheckList.DataSource = BLM.UniqueAnalyzers;
                 AnalyzerCheckList.DataTextField = "AnalyzerName";
                 AnalyzerCheckList.DataValueField = "Id";
@@ -46,21 +48,41 @@ namespace CLSMedicareReimbursement
                 YearDropdown.Items.Add("2015");
                 YearDropdown.Items.Add("2016");
 
+                
             }
         }
 
+
         protected void RatesGrid_NeedDataSource(object sender, Telerik.Web.UI.GridNeedDataSourceEventArgs e)
         {
-            CLSPOCO.CLSPOCO Data = CLSPOCO.CLSPOCO.GetCLSDomainData();
-            int PageIndex = RatesGrid.CurrentPageIndex;
-            int PageSize = RatesGrid.PageSize;
-            int StartAt = PageIndex * PageSize;
-            int ItemCount = PageSize;
-            if (StartAt + ItemCount >= Data.RatesData.AllRates.Count())
-                ItemCount = (Data.RatesData.AllRates.Count() - StartAt);
-            RatesGrid.DataSource = Data.RatesData.AllRates.GetRange(StartAt, ItemCount );
-         
-          
+            System.Data.DataTable DataSet = Session["DataSet"] as System.Data.DataTable;
+            if (DataSet != null)
+            {
+                DataSet.Columns[0].ColumnName = "Analyzer";
+                DataSet.Columns[1].ColumnName = "Assay Description";
+                DataSet.Columns[2].ColumnName = "CPT Descriptor";
+                DataSet.Columns[3].ColumnName = "Notes";
+                DataSet.Columns[4].ColumnName = "Locality";
+                DataSet.Columns[5].ColumnName = "Medicare Reimbursement Rate";
+                
+                //copies over the definations, but not the data itself
+                System.Data.DataTable DataSubSet = DataSet.Copy();
+
+                int PageIndex = RatesGrid.CurrentPageIndex;
+                int PageSize = RatesGrid.PageSize;
+                int StartAt = PageIndex * PageSize;
+                int ItemCount = PageSize;
+                if (StartAt + ItemCount >= DataSet.Rows.Count)
+                    ItemCount = (DataSet.Rows.Count - StartAt);
+                int EndAt = StartAt + ItemCount;
+                //copy over the data
+                for (int Index = StartAt; Index < EndAt; Index++)
+                    DataSubSet.Rows.Add(DataSet.Rows[Index].ItemArray);
+                //add the subset to the view
+                RatesGrid.DataSource = DataSubSet;
+
+            }
+
         }
 
         private System.Drawing.Color Selected = System.Drawing.Color.LightGreen;

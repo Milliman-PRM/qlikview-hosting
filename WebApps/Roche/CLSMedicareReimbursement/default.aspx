@@ -124,7 +124,7 @@
         <h2>Medicare Reimbursment Rates</h2>
         </div>
         <div  style="width: 99%;height:100%">
-                <telerik:RadGrid RenderMode="Classic" ID="RatesGrid" runat="server" GridLines="Both" AllowSorting="true" AllowPaging="true" PageSize="250" Width="100%"  AllowCustomPaging="true" OnNeedDataSource="RatesGrid_NeedDataSource" PagerStyle-ShowPagerText="True" PagerStyle-Visible="False" OnSortCommand="RatesGrid_SortCommand">
+                <telerik:RadGrid RenderMode="Classic" ID="RatesGrid" runat="server" GridLines="Both" AllowSorting="true" AllowPaging="true" PageSize="250" Width="100%"  AllowCustomPaging="true" OnNeedDataSource="RatesGrid_NeedDataSource" PagerStyle-ShowPagerText="True" PagerStyle-Visible="True" OnSortCommand="RatesGrid_SortCommand">
                     <ClientSettings EnableRowHoverStyle="True" Resizing-AllowColumnResize="true" Resizing-EnableRealTimeResize="true" Resizing-ResizeGridOnColumnResize="false">
                         <Selecting CellSelectionMode="SingleCell" />
                         <Scrolling AllowScroll="True" UseStaticHeaders="True" SaveScrollPosition="true" EnableVirtualScrollPaging="true" ></Scrolling>

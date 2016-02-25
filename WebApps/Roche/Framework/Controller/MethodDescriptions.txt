@@ -22,3 +22,13 @@ public static List<string> getUniqueYears()
 		
 		}
 
+public static List<string> getAnalyzerNamesForSearchTerm( string SearchTermID )
+		{
+			Query the "search_terms" table to retrieve the row identified by SearchTermID,  and get the "fk_code_Id"
+			Query the "analyzer" table returning rows that have "fk_code_Id"
+			for each row save the "analyzer_name" column value into a list
+
+			return list of Analyzer names
+		}
+
+

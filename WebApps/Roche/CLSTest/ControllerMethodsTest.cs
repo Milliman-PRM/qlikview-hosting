@@ -67,6 +67,7 @@ namespace CLSTest
         [TestMethod]
         public void TestMethod_getEverything()
         {
+            CLSController.Test();
             var year = "2015";
             var objList = Convert.ToInt32(CLSController.getEverything(year));
             Assert.IsNotNull(objList);

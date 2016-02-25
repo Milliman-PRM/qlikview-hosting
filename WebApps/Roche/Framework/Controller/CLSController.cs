@@ -18,6 +18,7 @@ namespace Controller
             var objList = new List<Code>();
             using (CLSdbDataContext context = new CLSdbDataContext())
             {
+                
                 objList = (from aEntity in context.Codes
                            select new
                            { // select only columns you need
@@ -183,6 +184,30 @@ namespace Controller
                             select r.Rate;
 
             return everyThing.Count();
+        }
+
+        public class XClass
+        {
+            public string analyzer_name { get; set; }
+            public string description { get; set; }
+            public string code { get; set;  }
+            public string notes { get; set; }
+            public string locality_desc_shrt { get; set; }
+            public string rate { get; set;  }
+        }
+
+        public static void Test()
+        {
+            try
+            {
+                CLSdbDataContext context = new CLSdbDataContext();
+                string MegaQuery = "select analyzers.analyzer_name, code.description, code.code, analyzers.notes, localities.locality_desc_shrt, reimbursement_rates.rate from rmrrdb_20160222.reimbursement_rates JOIN rmrrdb_20160222.analyzers ON analyzers.fk_code_id = reimbursement_rates.fk_code_id JOIN rmrrdb_20160222.search_terms ON search_terms.fk_code_id = reimbursement_rates.fk_code_id JOIN rmrrdb_20160222.code ON code.id = reimbursement_rates.fk_code_id JOIN rmrrdb_20160222.localities ON localities.id = reimbursement_rates.fk_locality_id where analyzers.analyzer_name = 'Multichannel' OR analyzers.analyzer_name = 'Organ-Disease Panels' and reimbursement_rates.year = 2015 ORDER BY search_terms.search_desc, localities.locality_desc_shrt";
+                var X = context.ExecuteQuery<XClass>(MegaQuery);
+            }
+            catch (System.Exception ex)
+            {
+                string Msg = ex.ToString();
+            }
         }
     }
 }
