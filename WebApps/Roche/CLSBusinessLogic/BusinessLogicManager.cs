@@ -22,8 +22,8 @@ namespace CLSBusinessLogic
                 //for dev version always load fresh, don't cache
                 if (NEVER_CACHE)
                 {
-                    instance = null;
-                    instance = Load();
+                instance = null;
+                instance = Load();
                 }
                 else
                 {
@@ -139,6 +139,21 @@ namespace CLSBusinessLogic
             }
         }
 
+        private List<string> _UniqueYears;
+        public List<string> UniqueYears
+        {
+            get
+            {
+                return _UniqueYears;
+            }
+
+            set
+            {
+                _UniqueYears = value;
+            }
+        }
+
+
         private bool PreloadStaticItems()
         {
             _UniqueAnalyzers = Controller.CLSController.getUniqueAnalyzers();
@@ -146,8 +161,9 @@ namespace CLSBusinessLogic
             _UniqueLocalities = Controller.CLSController.getUniqueLocality();
             _FootNotes = Controller.CLSController.getUniqueFootnote();
             _WebURL = Controller.CLSController.getUniqueWeburl();
-            _AllData = FetchAllData();
+            _UniqueYears = Controller.CLSController.getUniqueYear();
 
+            _AllData = FetchAllData();
             return true;
         }
 
@@ -157,7 +173,7 @@ namespace CLSBusinessLogic
             foreach (string AnalyzerID in AnalyzerIDs)
             {
                 var codeID = System.Convert.ToInt32(AnalyzerID);
-                List<SearchTerm> Results = Controller.CLSController.getAssayDescriptionForSpecificAnalyzer(codeID);
+                List<SearchTerm> Results = Controller.CLSController.getSearchTermsForAnalyzerName(codeID);
                 if (Results != null)
                     Terms.AddRange(Results);
             }

@@ -29,7 +29,7 @@ namespace CLSMedicareReimbursement
                 //set current working set in memory "DataSet" for main view grid
                 Session["DataSet"] = BLM.AllData;
                 RatesGrid.VirtualItemCount = BLM.AllData.Rows.Count;
-                
+
                 AnalyzerCheckList.DataSource = BLM.UniqueAnalyzers;
                 AnalyzerCheckList.DataTextField = "AnalyzerName";
                 AnalyzerCheckList.DataValueField = "Id";
@@ -45,10 +45,9 @@ namespace CLSMedicareReimbursement
                 LocalityList.DataValueField = "Id";
                 LocalityList.DataBind();
 
-                YearDropdown.Items.Add("2015");
-                YearDropdown.Items.Add("2016");
-
-                
+                YearDropdown.DataSource = BLM.UniqueYears;
+                YearDropdown.DataBind();
+                YearDropdown.SelectedIndex = 0;
             }
         }
 
@@ -64,7 +63,7 @@ namespace CLSMedicareReimbursement
                 DataSet.Columns[3].ColumnName = "Notes";
                 DataSet.Columns[4].ColumnName = "Locality";
                 DataSet.Columns[5].ColumnName = "Medicare Reimbursement Rate";
-                
+
                 //copies over the definations, but not the data itself
                 System.Data.DataTable DataSubSet = DataSet.Copy();
 
@@ -80,9 +79,8 @@ namespace CLSMedicareReimbursement
                     DataSubSet.Rows.Add(DataSet.Rows[Index].ItemArray);
                 //add the subset to the view
                 RatesGrid.DataSource = DataSubSet;
-
             }
-
+          
         }
 
         private System.Drawing.Color Selected = System.Drawing.Color.LightGreen;

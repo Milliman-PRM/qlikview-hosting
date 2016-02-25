@@ -1,4 +1,5 @@
 ﻿using CLSdbContext;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -37,6 +38,13 @@ namespace Controller
 
             return objList;
         }
+        public static List<Code> getUniqueCodeByCodeName()
+        {
+            var context = new CLSdbDataContext();
+            var dboList = context.Codes.Distinct().ToList();
+            var resultList = dboList.GroupBy(x => x.Code1).Select(y => y.First()).ToList();
+            return resultList;
+        }
         #endregion
 
         #region Localitites
@@ -44,7 +52,8 @@ namespace Controller
         public static List<Locality> getUniqueLocality()
         {
             var context = new CLSdbDataContext();
-            var resultList = context.Localities.Distinct().ToList();
+            var dboList = context.Localities.Distinct().ToList();
+            var resultList = dboList.GroupBy(x => x.Locality1).Select(y => y.First()).ToList();
             return resultList;
         }
 
@@ -55,7 +64,8 @@ namespace Controller
         public static List<Footnote> getUniqueFootnote()
         {
             var context = new CLSdbDataContext();
-            var resultList = context.Footnotes.Distinct().ToList();
+            var dboList = context.Footnotes.Distinct().ToList();
+            var resultList = dboList.GroupBy(x => x.Footnote1).Select(y => y.First()).ToList();
             return resultList;
         }
 
@@ -66,18 +76,79 @@ namespace Controller
         public static List<Weburl> getUniqueWeburl()
         {
             var context = new CLSdbDataContext();
-            var resultList = context.Weburls.Distinct().ToList();
+            var dboList = context.Weburls.Distinct().ToList();
+            var resultList = dboList.GroupBy(x => x.Webaddressurl).Select(y => y.First()).ToList();
             return resultList;
         }
 
         #endregion
 
         #region Analyzer
-
+        /// <summary>
+        /// Returns list of unique analizers name from analyzer table
+        /// </summary>
+        /// <returns></returns>
         public static List<Analyzer> getUniqueAnalyzers()
         {
             var context = new CLSdbDataContext();
-            var resultList = context.Analyzers.Distinct().ToList();
+            var dboList = context.Analyzers.Distinct().ToList();
+            var resultList = dboList.GroupBy(x => x.AnalyzerName).Select(y => y.First()).ToList();
+            return resultList;
+        }
+
+        /// <summary>
+        /// Returns list of unique analyzerNames from analyzer table
+        /// </summary>
+        /// <returns></returns>
+        public static List<Analyzer> getUniqueAnalyzerNames()
+        {
+            var context = new CLSdbDataContext();
+            var dboList = context.Analyzers.Distinct().ToList();
+            var resultList = dboList.GroupBy(x => x.AnalyzerName).Select(y => y.First()).ToList();
+            return resultList;
+        }
+
+        /// <summary>
+        /// Returns the list of search term for a specific analyzer id
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        public static List<SearchTerm> getSearchTermsForAnalyzerName(int param)
+        {
+            var context = new CLSdbDataContext();
+
+            ////Query the analyzer table and get all rows where "analyzer_name" == AnalyzerName
+            //var analyzer = context.Analyzers.Where(a => a.AnalyzerName == param);
+
+            //var resultList = new List<SearchTerm>();
+            ////for each row item returned in query the searchterms table using the "fk_code_id"
+            ////for each row item returned from searchterm add to return list of search terms
+            //foreach (var a in analyzer)
+            //{
+            //    var searchTermsforAnalyzer = context.SearchTerms.Where<SearchTerm>(s => s.FkCodeId == a.FkCodeId).ToList();
+            //    foreach (var s in searchTermsforAnalyzer)
+            //    {
+            //        var searhTerm = context.SearchTerms.Select(sa => sa.FkCodeId == s.FkCodeId);
+            //        var searchTermEntity = new SearchTerm
+            //        {
+            //            Id = s.Id,
+            //            Code = s.Code,
+            //            FkCodeId = s.FkCodeId,
+            //            SearchDesc = s.SearchDesc
+            //        };
+            //        resultList.Add(searchTermEntity);
+            //    }
+            //}
+            
+            IQueryable<Analyzer> analyzer = context.Analyzers;
+            IQueryable<SearchTerm> searchTerms = context.SearchTerms;
+            var query = from s in searchTerms
+                        join a in analyzer on s.FkCodeId equals a.FkCodeId
+                        where a.Id == param
+                        select s;
+
+            var resultList = new List<SearchTerm>();
+            resultList = query.ToList();
             return resultList;
         }
 
@@ -105,10 +176,35 @@ namespace Controller
         public static List<ReimbursementRate> getUniqueReimbursementRate()
         {
             var context = new CLSdbDataContext();
-            var resultList = context.ReimbursementRates.Distinct().ToList();
+            var dboList = context.ReimbursementRates.Distinct().ToList();
+            var resultList = dboList.GroupBy(g => g.Rate).Select(y => y.First()).ToList();
+            return resultList;
+        }
+        public static List<ReimbursementRate> getAllReimbursementRates()
+        {
+            var context = new CLSdbDataContext();
+            var dboList = context.ReimbursementRates.Distinct().ToList();
+            var resultList = dboList.OrderBy(o => o.Year).ToList();
             return resultList;
         }
 
+        /// <summary>
+        /// Returns list of Year
+        /// </summary>
+        /// <returns></returns>
+        public static List<string> getUniqueYear()
+        {
+            //Query the reimbursmenet_rate table and return a list of unquie year values
+            var context = new CLSdbDataContext();
+            var dboList = context.ReimbursementRates.GroupBy(a => a.Year)
+                                  .Select(x => new
+                                  {
+                                      Year = x.Key.Value.ToString()
+                                  }).ToList();
+
+            var resultList = new List<string>(dboList.Select(s => s.Year.ToString()));
+            return resultList;
+        }
         #endregion
 
         #region Search Terms
@@ -116,16 +212,16 @@ namespace Controller
         public static List<SearchTerm> getUniqueSearchTerm()
         {
             var context = new CLSdbDataContext();
-            var resultList = context.SearchTerms.Distinct().ToList();
+            var dboList = context.SearchTerms.Distinct().ToList();
+            var resultList = dboList.GroupBy(x => x.SearchDesc).Select(y => y.First()).ToList();
             return resultList;
         }
-
         public static List<SearchTerm> getAssayDescriptionForSpecificAnalyzer(int param)
         {
             var context = new CLSdbDataContext();
-            var resultList = context.SearchTerms.ToList();
-            var result = resultList.Where(a => a.FkCodeId == param).ToList();
-            return result;
+            var dboList = context.SearchTerms.Distinct().ToList();
+            var resultList = dboList.Where(a => a.FkCodeId == param).ToList();
+            return resultList;
         }
         public static List<Analyzer> getAnalyzerForSpecificAssayDescription(string param)
         {
@@ -142,7 +238,6 @@ namespace Controller
             result = query.ToList();
             return result;
         }
-
 
         #endregion
 
@@ -184,30 +279,6 @@ namespace Controller
                             select r.Rate;
 
             return everyThing.Count();
-        }
-
-        public class XClass
-        {
-            public string analyzer_name { get; set; }
-            public string description { get; set; }
-            public string code { get; set;  }
-            public string notes { get; set; }
-            public string locality_desc_shrt { get; set; }
-            public string rate { get; set;  }
-        }
-
-        public static void Test()
-        {
-            try
-            {
-                CLSdbDataContext context = new CLSdbDataContext();
-                string MegaQuery = "select analyzers.analyzer_name, code.description, code.code, analyzers.notes, localities.locality_desc_shrt, reimbursement_rates.rate from rmrrdb_20160222.reimbursement_rates JOIN rmrrdb_20160222.analyzers ON analyzers.fk_code_id = reimbursement_rates.fk_code_id JOIN rmrrdb_20160222.search_terms ON search_terms.fk_code_id = reimbursement_rates.fk_code_id JOIN rmrrdb_20160222.code ON code.id = reimbursement_rates.fk_code_id JOIN rmrrdb_20160222.localities ON localities.id = reimbursement_rates.fk_locality_id where analyzers.analyzer_name = 'Multichannel' OR analyzers.analyzer_name = 'Organ-Disease Panels' and reimbursement_rates.year = 2015 ORDER BY search_terms.search_desc, localities.locality_desc_shrt";
-                var X = context.ExecuteQuery<XClass>(MegaQuery);
-            }
-            catch (System.Exception ex)
-            {
-                string Msg = ex.ToString();
-            }
         }
     }
 }
