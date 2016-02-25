@@ -26,7 +26,8 @@ namespace CLSMedicareReimbursement
                 FooterLink.Text = "[MISSING]" + "(" + BLM.WebURL[0].Webaddressurl + ")";
                 FooterLink.NavigateUrl = BLM.WebURL[0].Webaddressurl;
 
-                RatesGrid.VirtualItemCount = Data.RatesData.AllRates.Count();
+                //RatesGrid.VirtualItemCount = Data.RatesData.AllRates.Count();
+                RatesGrid.VirtualItemCount = BLM.ReimbursementRate.ToList().Count();
 
                 AnalyzerCheckList.DataSource = BLM.UniqueAnalyzers;
                 AnalyzerCheckList.DataTextField = "AnalyzerName";
@@ -43,24 +44,30 @@ namespace CLSMedicareReimbursement
                 LocalityList.DataValueField = "Id";
                 LocalityList.DataBind();
 
-                YearDropdown.Items.Add("2015");
-                YearDropdown.Items.Add("2016");
+                var year = BLM.Year;
+                foreach (var y in year)
+                {
+                    YearDropdown.Items.Add(y.ToString());
+                }
 
             }
         }
 
         protected void RatesGrid_NeedDataSource(object sender, Telerik.Web.UI.GridNeedDataSourceEventArgs e)
         {
+
+            CLSBusinessLogic.BusinessLogicManager BLM = CLSBusinessLogic.BusinessLogicManager.GetInstance();
             CLSPOCO.CLSPOCO Data = CLSPOCO.CLSPOCO.GetCLSDomainData();
             int PageIndex = RatesGrid.CurrentPageIndex;
             int PageSize = RatesGrid.PageSize;
             int StartAt = PageIndex * PageSize;
             int ItemCount = PageSize;
-            if (StartAt + ItemCount >= Data.RatesData.AllRates.Count())
-                ItemCount = (Data.RatesData.AllRates.Count() - StartAt);
+            if (StartAt + ItemCount >= BLM.ReimbursementRate.ToList().Count())
+                ItemCount = (BLM.ReimbursementRate.ToList().Count() - StartAt);
             RatesGrid.DataSource = Data.RatesData.AllRates.GetRange(StartAt, ItemCount );
-         
-          
+
+            //Added to get data from the accurate source
+            //RatesGrid.DataSource = BLM.ReimbursementRatesAllData;
         }
 
         private System.Drawing.Color Selected = System.Drawing.Color.LightGreen;

@@ -116,7 +116,48 @@ namespace CLSBusinessLogic
             }
         }
 
+        private List<CLSdbContext.ReimbursementRate> _ReimbursementRate;
+        public List<CLSdbContext.ReimbursementRate> ReimbursementRate
+        {
+            get
+            {
+                return _ReimbursementRate;
+            }
 
+            set
+            {
+                _ReimbursementRate = value;
+            }
+        }
+
+        private List<CLSdbContext.ReimbursementRate> _ReimbursementRatesAllData;
+        public List<ReimbursementRate> ReimbursementRatesAllData
+        {
+            get
+            {
+                return _ReimbursementRatesAllData;
+            }
+
+            set
+            {
+                _ReimbursementRatesAllData = value;
+            }
+        }
+
+        private List<string> _Year;
+        public List<string> Year
+        {
+            get
+            {
+                return _Year;
+            }
+
+            set
+            {
+                _Year = value;
+            }
+        }
+                
         private bool PreloadStaticItems()
         {
             _UniqueAnalyzers = Controller.CLSController.getUniqueAnalyzers();
@@ -124,7 +165,9 @@ namespace CLSBusinessLogic
             _UniqueLocalities = Controller.CLSController.getUniqueLocality();
             _FootNotes = Controller.CLSController.getUniqueFootnote();
             _WebURL = Controller.CLSController.getUniqueWeburl();
-            
+            _ReimbursementRate = Controller.CLSController.getUniqueReimbursementRate();
+            _ReimbursementRatesAllData = Controller.CLSController.getAllReimbursementRates();
+            _Year = Controller.CLSController.getUniqueYear();
             return true;
         }
 
@@ -134,7 +177,7 @@ namespace CLSBusinessLogic
             foreach (string AnalyzerID in AnalyzerIDs)
             {
                 var codeID = System.Convert.ToInt32(AnalyzerID);
-                List<SearchTerm> Results = Controller.CLSController.getAssayDescriptionForSpecificAnalyzer(codeID);
+                List<SearchTerm> Results = Controller.CLSController.getSearchTermsForAnalyzerName(codeID);
                 if (Results != null)
                     Terms.AddRange(Results);
             }
