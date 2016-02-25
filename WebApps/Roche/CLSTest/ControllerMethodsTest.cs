@@ -147,7 +147,7 @@ namespace CLSTest
         public void TestMethod_getSearchTermsForAnalyzerName()
         {
             var analyzer_name = "Roche_Hitachi Modular";
-            var objList = CLSController.getSearchTermsForAnalyzerName(analyzer_name);
+            var objList = CLSController.getSearchTermsForAnalyzerName(5);
             Assert.IsNotNull(objList);
         }
     }
