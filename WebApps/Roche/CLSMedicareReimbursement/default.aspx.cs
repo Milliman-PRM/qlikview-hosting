@@ -94,8 +94,13 @@ namespace CLSMedicareReimbursement
         protected void RatesGrid_SortCommand(object sender, Telerik.Web.UI.GridSortCommandEventArgs e)
         {
             string SortOnColumn = e.CommandName;
-            bool   SortAscending = (e.NewSortOrder == Telerik.Web.UI.GridSortOrder.Ascending);
+            string SortMethod = "DESC";
+            if (e.NewSortOrder == Telerik.Web.UI.GridSortOrder.Ascending)
+                SortMethod = "ASC";
 
+            //System.Data.DataTable CurrentTable = Session[SessionKey_DataSet] as System.Data.DataTable;
+
+            //CurrentTable.DefaultView.Sort = SortOnColumn + " " + SortMethod;
 
         }
 
