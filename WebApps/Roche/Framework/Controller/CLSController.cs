@@ -19,7 +19,7 @@ namespace Controller
             var objList = new List<Code>();
             using (CLSdbDataContext context = new CLSdbDataContext())
             {
-                
+
                 objList = (from aEntity in context.Codes
                            select new
                            { // select only columns you need
@@ -109,37 +109,33 @@ namespace Controller
         }
 
         /// <summary>
+        /// Returns the list of search term for a specific analyzer Name
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        public static List<SearchTerm> getSearchTermsForSpecificAnalyzerName(string param)
+        {
+            var context = new CLSdbDataContext();
+            IQueryable<Analyzer> analyzer = context.Analyzers;
+            IQueryable<SearchTerm> searchTerms = context.SearchTerms;
+            var query = from s in searchTerms
+                        join a in analyzer on s.FkCodeId equals a.FkCodeId
+                        where a.AnalyzerName == param
+                        select s;
+
+            var resultList = new List<SearchTerm>();
+            resultList = query.ToList();
+            return resultList;
+        }
+
+        /// <summary>
         /// Returns the list of search term for a specific analyzer id
         /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
-        public static List<SearchTerm> getSearchTermsForAnalyzerName(int param)
+        public static List<SearchTerm> getSearchTermsForSpecificAnalyzerId(int param)
         {
             var context = new CLSdbDataContext();
-
-            ////Query the analyzer table and get all rows where "analyzer_name" == AnalyzerName
-            //var analyzer = context.Analyzers.Where(a => a.AnalyzerName == param);
-
-            //var resultList = new List<SearchTerm>();
-            ////for each row item returned in query the searchterms table using the "fk_code_id"
-            ////for each row item returned from searchterm add to return list of search terms
-            //foreach (var a in analyzer)
-            //{
-            //    var searchTermsforAnalyzer = context.SearchTerms.Where<SearchTerm>(s => s.FkCodeId == a.FkCodeId).ToList();
-            //    foreach (var s in searchTermsforAnalyzer)
-            //    {
-            //        var searhTerm = context.SearchTerms.Select(sa => sa.FkCodeId == s.FkCodeId);
-            //        var searchTermEntity = new SearchTerm
-            //        {
-            //            Id = s.Id,
-            //            Code = s.Code,
-            //            FkCodeId = s.FkCodeId,
-            //            SearchDesc = s.SearchDesc
-            //        };
-            //        resultList.Add(searchTermEntity);
-            //    }
-            //}
-            
             IQueryable<Analyzer> analyzer = context.Analyzers;
             IQueryable<SearchTerm> searchTerms = context.SearchTerms;
             var query = from s in searchTerms
@@ -151,7 +147,7 @@ namespace Controller
             resultList = query.ToList();
             return resultList;
         }
-
+        
         public static void SaveAnalyzers(Analyzer obj)
         {
             var context = new CLSdbDataContext();
@@ -216,27 +212,75 @@ namespace Controller
             var resultList = dboList.GroupBy(x => x.SearchDesc).Select(y => y.First()).ToList();
             return resultList;
         }
-        public static List<SearchTerm> getAssayDescriptionForSpecificAnalyzer(int param)
+        public static List<SearchTerm> getAssayDescriptionForSpecificCodeId(int param)
         {
             var context = new CLSdbDataContext();
             var dboList = context.SearchTerms.Distinct().ToList();
             var resultList = dboList.Where(a => a.FkCodeId == param).ToList();
             return resultList;
         }
-        public static List<Analyzer> getAnalyzerForSpecificAssayDescription(string param)
+
+        /// <summary>
+        /// Returns list of Analyzers as an object for specific search term name
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        public static List<Analyzer> getAnalyzerForSpecificSearchTermDesc(string param)
         {
             var context = new CLSdbDataContext();
-
             IQueryable<Analyzer> analyzer = context.Analyzers;
             IQueryable<SearchTerm> searchTerms = context.SearchTerms;
             var query = from a in analyzer
                         join s in searchTerms on a.FkCodeId equals s.FkCodeId
-                        where s.SearchDesc == param.ToString()
+                        where s.SearchDesc == param
                         select a;
 
-            var result = new List<Analyzer>();
-            result = query.ToList();
-            return result;
+            var resultList = new List<Analyzer>();
+            resultList = query.ToList();
+            return resultList;
+        }
+
+        /// <summary>
+        /// Returns list of Analyzer for specific search term desc. The list is retured as string not an object
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        public static List<string> getAnalyzerNamesListForSpecificSearchTermDesc(string param)
+        {
+            var context = new CLSdbDataContext();
+            IQueryable<Analyzer> analyzer = context.Analyzers;
+            IQueryable<SearchTerm> searchTerms = context.SearchTerms;
+            var query = from a in analyzer
+                        join s in searchTerms on a.FkCodeId equals s.FkCodeId
+                        where s.SearchDesc == param
+                        select a;
+                        
+            var resultList = new List<Analyzer>();
+            resultList = query.ToList();
+
+            var analyzerNamesList = resultList.Select(l => l.AnalyzerName).ToList();
+
+            return analyzerNamesList;
+        }
+
+        /// <summary>
+        /// Returns the list of Analyzer for specifc serch term id
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        public static List<Analyzer> getAnalyzerNamesForSpecificSearchTermId(int param)
+        {
+            var context = new CLSdbDataContext();
+            IQueryable<Analyzer> analyzer = context.Analyzers;
+            IQueryable<SearchTerm> searchTerms = context.SearchTerms;
+            var query = from a in analyzer
+                        join s in searchTerms on a.FkCodeId equals s.FkCodeId
+                        where s.Id == param
+                        select a;
+
+            var resultList = new List<Analyzer>();
+            resultList = query.ToList();
+            return resultList;
         }
 
         #endregion
