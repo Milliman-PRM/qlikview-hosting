@@ -157,6 +157,13 @@
         <asp:HyperLink ID="FooterLink" runat="server" Target="_blank"></asp:HyperLink>
     </div>
 
+    <telerik:RadNotification RenderMode="Lightweight" ID="Toast" runat="server" VisibleOnPageLoad="false" Position="BottomRight"
+                             Width="330" Height="160" Animation="Slide" EnableRoundedCorners="true" EnableShadow="true"
+                             Title="Selections Restored" Text=""
+                             Style="z-index: 100000" AnimationDuration="5000" TitleIcon="">
+
+    </telerik:RadNotification>
+
     </form>
 
     <script type="text/javascript">

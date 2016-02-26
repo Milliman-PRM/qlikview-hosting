@@ -53,7 +53,15 @@ namespace CLSMedicareReimbursement
                 //set current working set in memory "DataSet" for main view grid
                 Session[SessionKey_DataSet] = BLM.DataByYear[YearDropdown.SelectedItem.Text];
                 RatesGrid.VirtualItemCount = BLM.DataByYear[YearDropdown.SelectedItem.Text].Rows.Count;
+
+                
             }
+        }
+
+        private void CheckForPreviousSelections()
+        {
+            Toast.Text = "Hi Van";
+            Toast.VisibleOnPageLoad = true;
         }
 
 
