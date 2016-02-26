@@ -9,50 +9,108 @@ namespace CLSBusinessLogic
 {
     //factory object used to hold instances of data that rarely change
 
-    public class BusinessLogicManager
+    public partial class BusinessLogicManager
     {
-        private static bool NEVER_CACHE = false;
-
-        private static BusinessLogicManager instance;
-        private static object instance_lock = new object();
-        public static BusinessLogicManager GetInstance()
+ 
+        //this class is maintained via reference in the session an contains all the user selections to date
+        public class CurrentSelections
         {
-            lock (instance_lock) //lock on gettting instance to protect against threading issues( good enough for now)
+            public enum QueryFieldNames { ALL, ANALYZERNAMES, ANALYZERIDS, ANALYZERSBYCODEID, SEARCHTERMDESCS, SEARCHTERMIDS, SEARCHTERMBYCODEIDS, LOCALATIES, LOCALATIESIDS, LOCALATIESBYDESCSHRT, YEARS, CPTCODES }
+            public List<string> AnalyzerNames { get; set; }
+            public List<string> AnalyzerIDs { get; set; }
+            public List<string> AnalyzersByCodeIDs { get; set; }
+            public List<string> SearchTermDescs { get; set; }
+            public List<string> SearchTermIDs { get; set; }
+            public List<string> SearchTermByCodeIDs { get; set; }
+            public List<string> Localaties { get; set; }
+            public List<string> LocalatiesIDs { get; set; }
+            public List<string> LocalatiesByDescShrt { get; set; }
+            public List<string> Years { get; set; }
+            public List<string> CPTCodes { get; set; }
+
+            public CurrentSelections()
             {
-                //for dev version always load fresh, don't cache
-                if (NEVER_CACHE)
+                AnalyzerNames = new List<string>();
+                AnalyzerIDs = new List<string>();
+                AnalyzersByCodeIDs = new List<string>();
+                SearchTermDescs = new List<string>();
+                SearchTermIDs = new List<string>();
+                SearchTermByCodeIDs = new List<string>();
+                Localaties = new List<string>();
+                LocalatiesIDs = new List<string>();
+                LocalatiesByDescShrt = new List<string>();
+                Years = new List<string>();
+                CPTCodes = new List<string>();
+            }
+            private List<string> FindListByFieldName(QueryFieldNames FieldName)
+            {
+                switch (FieldName)
                 {
-                instance = null;
-                instance = Load();
+                    case QueryFieldNames.ALL: return null;
+                    case QueryFieldNames.ANALYZERIDS: return AnalyzerIDs;
+                    case QueryFieldNames.ANALYZERNAMES: return AnalyzerNames;
+                    case QueryFieldNames.ANALYZERSBYCODEID: return AnalyzersByCodeIDs;
+                    case QueryFieldNames.CPTCODES: return CPTCodes;
+                    case QueryFieldNames.LOCALATIES: return Localaties;
+                    case QueryFieldNames.LOCALATIESBYDESCSHRT: return LocalatiesByDescShrt;
+                    case QueryFieldNames.LOCALATIESIDS: return LocalatiesIDs;
+                    case QueryFieldNames.SEARCHTERMBYCODEIDS: return SearchTermByCodeIDs;
+                    case QueryFieldNames.SEARCHTERMDESCS: return SearchTermDescs;
+                    case QueryFieldNames.SEARCHTERMIDS: return SearchTermIDs;
+                    case QueryFieldNames.YEARS: return Years;
+                }
+                return null;
+            }
+            public void Clear( QueryFieldNames FieldName )
+            {
+                if ( FieldName == QueryFieldNames.ALL )
+                {
+                    AnalyzerIDs.Clear();
+                    AnalyzerNames.Clear();
+                    AnalyzersByCodeIDs.Clear();
+                    CPTCodes.Clear();
+                    Localaties.Clear();
+                    LocalatiesByDescShrt.Clear();
+                    LocalatiesIDs.Clear();
+                    SearchTermByCodeIDs.Clear();
+                    SearchTermDescs.Clear();
+                    SearchTermIDs.Clear();
+                    Years.Clear();
                 }
                 else
                 {
-                    //production mode cache static result sets
-                    if (instance == null)
-                        instance = Load();
+                    FindListByFieldName(FieldName).Clear();
                 }
-                return instance;
             }
-        }
-        public static void KillInstance()
-        {
-            lock (instance_lock) //lock on gettting instance to protect against threading issues( good enough for now)
+
+            public void AddToList( QueryFieldNames FieldName, string Value )
             {
-                if (instance != null)
-                    instance = null;
+                if ( FieldName != QueryFieldNames.ALL )
+                {
+                    List<string> QueryList = FindListByFieldName(FieldName);
+                    if (QueryList.Contains(Value) == false)
+                        QueryList.Add(Value);
+                }
             }
-        }
-        //end singleton
 
-        public BusinessLogicManager()
-        { }
-
-        public static BusinessLogicManager Load()
-        {
-            BusinessLogicManager BLM = new BusinessLogicManager();
-            BLM.PreloadStaticItems();
-
-            return BLM;
+            /// <summary>
+            /// return true if no selections have been made,  this routine
+            /// does not take into account YEAR, it is always selected
+            /// </summary>
+            /// <returns></returns>
+            public bool NoSelectionsMade()
+            {
+                return (( AnalyzerIDs.Count() == 0) &&
+                ( AnalyzerNames.Count() == 0) &&
+                (AnalyzersByCodeIDs.Count() == 0) &&
+                (CPTCodes.Count() == 0) &&
+                (Localaties.Count() == 0) &&
+                (LocalatiesByDescShrt.Count() == 0) &&
+                (LocalatiesIDs.Count() == 0) &&
+                (SearchTermByCodeIDs.Count() == 0) &&
+                (SearchTermDescs.Count() == 0) &&
+                (SearchTermIDs.Count() == 0) );
+            }
         }
 
         private List<CLSdbContext.Analyzer> _UniqueAnalyzers;
@@ -125,17 +183,17 @@ namespace CLSBusinessLogic
             }
         }
 
-        private System.Data.DataTable _AllData;
-        public DataTable AllData
+        private Dictionary<string, System.Data.DataTable> _DataByYear;
+        public Dictionary<string, DataTable> DataByYear
         {
             get
             {
-                return _AllData;
+                return _DataByYear;
             }
 
             set
             {
-                _AllData = value;
+                _DataByYear = value;
             }
         }
 
@@ -153,20 +211,6 @@ namespace CLSBusinessLogic
             }
         }
 
-
-        private bool PreloadStaticItems()
-        {
-            _UniqueAnalyzers = Controller.CLSController.getUniqueAnalyzers();
-            _UniqueAssayDescriptions = Controller.CLSController.getUniqueSearchTerm();
-            _UniqueLocalities = Controller.CLSController.getUniqueLocality();
-            _FootNotes = Controller.CLSController.getUniqueFootnote();
-            _WebURL = Controller.CLSController.getUniqueWeburl();
-            _UniqueYears = Controller.CLSController.getUniqueYear();
-
-            _AllData = FetchAllData();
-            return true;
-        }
-
         public List<SearchTerm> FindAssayDescriptionForAnalyzer(List<string> AnalyzerIDs)
         {
             List<SearchTerm> Terms = new List<SearchTerm>();
@@ -180,153 +224,41 @@ namespace CLSBusinessLogic
             return Terms;
         }
 
-        //by default we request all data and store it, such that all users will have the page populated the first time with all 90,000
-        public System.Data.DataTable FetchAllData()
+        //we are going to cache each years's full data set once, that way all users will have fast access to all data per year
+        public Dictionary<string,System.Data.DataTable> FetchDataByYear()
+        {
+            Dictionary<string, System.Data.DataTable> DataByYear = new Dictionary<string, DataTable>();
+            int ExecuteTimeSeconds = 0;
+            int DataTableSizeMB = 0;
+            string Schema = string.Empty;
+            string ConnectionString = GetConnectionString(out Schema);
+
+            List<string> UniqueYearList = Controller.CLSController.getUniqueYear();
+            foreach( string Year in UniqueYearList )
+            {
+                List<string> YearAsList = new List<string>() { Year };
+                System.Data.DataTable ThisYearsData = DynamicDataTable(ConnectionString, MainTableQueryBuilder(Schema,null,null,null,null,null,null,null,null,null,YearAsList), out ExecuteTimeSeconds, out DataTableSizeMB);
+                DataByYear.Add(Year, ThisYearsData);
+            }
+            return DataByYear;
+
+        }
+
+        /// <summary>
+        /// call to get a new data set that matches the user selections
+        /// </summary>
+        /// <param name="Selections"></param>
+        /// <returns></returns>
+        public System.Data.DataTable FetchDataForSelections( CurrentSelections Selections )
         {
             int ExecuteTimeSeconds = 0;
             int DataTableSizeMB = 0;
-            return DynamicDataTable(GetConnectionString(), MainTableQueryBuilder(), out ExecuteTimeSeconds, out DataTableSizeMB);
+            string Schema = string.Empty;
+            string ConnectionString = GetConnectionString(out Schema);
+            return DynamicDataTable(ConnectionString, MainTableQueryBuilder(Schema, Selections.AnalyzerNames, Selections.AnalyzerIDs, Selections.AnalyzersByCodeIDs,
+                                                                                    Selections.SearchTermDescs, Selections.SearchTermIDs, Selections.SearchTermByCodeIDs,
+                                                                                    Selections.Localaties, Selections.LocalatiesIDs, Selections.LocalatiesByDescShrt,
+                                                                                    Selections.Years, Selections.CPTCodes), out ExecuteTimeSeconds, out DataTableSizeMB);
         }
-
-        #region DynamicQuery
-        //dynamic datatable queries
-
-        /// <summary>
-        /// Construct the where clause section of the query
-        /// </summary>
-        /// <param name="FieldName"></param>
-        /// <param name="Values"></param>
-        /// <param name="IsAdditionalWhereClause"></param>
-        /// <returns></returns>
-        private string WhereClauseBuilder(string FieldName, List<string> Values, bool IsAdditionalWhereClause)
-        {
-            if ((Values == null) || (Values.Count == 0))
-                return "";
-            string WhereTemplate = "_FIELD_ = '_VALUE_'";
-            WhereTemplate = WhereTemplate.Replace("_FIELD_", FieldName);
-            string AllWheres = string.Empty;
-            foreach (string Value in Values)
-            {
-                if (string.IsNullOrEmpty(AllWheres) == false)
-                    AllWheres += " OR ";
-                AllWheres += WhereTemplate.Replace("_VALUE_", Value);
-            }
-            string PrefixedAnd = " AND ";
-            if (IsAdditionalWhereClause == false)
-                PrefixedAnd = string.Empty;
-            return PrefixedAnd + AllWheres + " ";
-        }
-
-        /// <summary>
-        /// Build query is set to always return rows as defined by primary window
-        /// Analyzer    Assay Description              CPT Descriptor      Notes    Locality       Medicare Reimbursement Rate
-        /// </summary>
-        /// <param name="AnalyzerNames"></param>
-        /// <param name="AnalyzerIDs"></param>
-        /// <param name="AnalyzersByCodeIDs"></param>
-        /// <param name="SearchTermDescs"></param>
-        /// <param name="SearchTermIDs"></param>
-        /// <param name="SearchTermByCodeIDs"></param>
-        /// <param name="Localaties"></param>
-        /// <param name="LocalatiesIDs"></param>
-        /// <param name="LocalatiesByDescShrt"></param>
-        /// <param name="Years"></param>
-        /// <param name="CPTCodes"></param>
-        /// <returns></returns>
-        private string MainTableQueryBuilder(List<string> AnalyzerNames = null, List<string> AnalyzerIDs = null, List<string> AnalyzersByCodeIDs = null,
-                                               List<string> SearchTermDescs = null, List<string> SearchTermIDs = null, List<string> SearchTermByCodeIDs = null,
-                                               List<string> Localaties = null, List<string> LocalatiesIDs = null, List<string> LocalatiesByDescShrt = null,
-                                               List<string> Years = null,
-                                               List<string> CPTCodes = null)
-        {
-            //string QueryRoot = "select analyzers.analyzer_name, code.description, code.code, analyzers.notes, localities.locality_desc_shrt, reimbursement_rates.rate from rmrrdb_20160222.reimbursement_rates INNER JOIN rmrrdb_20160222.analyzers ON analyzers.fk_code_id = reimbursement_rates.fk_code_id INNER JOIN rmrrdb_20160222.code ON code.id = reimbursement_rates.fk_code_id INNER JOIN rmrrdb_20160222.localities ON localities.id = reimbursement_rates.fk_locality_id ";
-            string QueryRoot = "SELECT analyzers.analyzer_name, code.description, code.code, analyzers.notes, localities.locality_desc_shrt, reimbursement_rates.rate FROM rmrrdb_20160222.analyzers, rmrrdb_20160222.code, rmrrdb_20160222.reimbursement_rates, rmrrdb_20160222.localities WHERE reimbursement_rates.fk_code_id = code.id AND reimbursement_rates.fk_code_id = analyzers.fk_code_id AND reimbursement_rates.fk_locality_id = localities.id ";
-            string WhereClause = string.Empty;
-
-            if (AnalyzerNames != null)
-                WhereClause += WhereClauseBuilder("analyzers.analyzer_name", AnalyzerNames, !string.IsNullOrEmpty(WhereClause));
-            if (AnalyzerIDs != null)
-                WhereClause += WhereClauseBuilder("analyzers.id", AnalyzerIDs, !string.IsNullOrEmpty(WhereClause));
-            if (AnalyzersByCodeIDs != null)
-                WhereClause += WhereClauseBuilder("analyzers.fk_code_id", AnalyzersByCodeIDs, !string.IsNullOrEmpty(WhereClause));
-            if (SearchTermDescs != null)
-                WhereClause += WhereClauseBuilder("search_terms.search_desc", SearchTermDescs, !string.IsNullOrEmpty(WhereClause));
-            if (SearchTermIDs != null)
-                WhereClause += WhereClauseBuilder("search_terms.id", SearchTermIDs, !string.IsNullOrEmpty(WhereClause));
-            if (SearchTermByCodeIDs != null)
-                WhereClause += WhereClauseBuilder("search_terms.fk_code_id", SearchTermByCodeIDs, !string.IsNullOrEmpty(WhereClause));
-            if (Localaties != null)
-                WhereClause += WhereClauseBuilder("localities.locality", Localaties, !string.IsNullOrEmpty(WhereClause));
-            if (LocalatiesIDs != null)
-                WhereClause += WhereClauseBuilder("localities.id", LocalatiesIDs, !string.IsNullOrEmpty(WhereClause));
-            if (LocalatiesByDescShrt != null)
-                WhereClause += WhereClauseBuilder("localities.locality_desc_shrt", LocalatiesByDescShrt, !string.IsNullOrEmpty(WhereClause));
-            if (Years != null)
-                WhereClause += WhereClauseBuilder("reimbursement_rates.year", Years, !string.IsNullOrEmpty(WhereClause));
-            if (CPTCodes != null)
-                WhereClause += WhereClauseBuilder("code.code", CPTCodes, !string.IsNullOrEmpty(WhereClause));
-
-            if (string.IsNullOrEmpty(WhereClause) == false)
-                QueryRoot += WhereClause;
-
-            QueryRoot += " ORDER BY analyzers.analyzer_name, code.description, localities.locality_desc_shrt;";
-            return QueryRoot;
-        }
-        /// <summary>
-        /// Get the data from the DB server in a dynamic data table
-        /// </summary>
-        /// <param name="ConnectionString"></param>
-        /// <param name="Query"></param>
-        /// <returns></returns>
-        private System.Data.DataTable DynamicDataTable(string ConnectionString, string Query, out int ExecuteInSeconds, out int DataTableSizeMB)
-        {
-            try
-            {
-                ExecuteInSeconds = 0;
-                DataTableSizeMB = 0;
-
-                DateTime Start = DateTime.Now;
-                System.Data.DataTable dt = new System.Data.DataTable();
-                System.Data.DataSet ds = new System.Data.DataSet();
-
-                Npgsql.NpgsqlConnection conn = new Npgsql.NpgsqlConnection(ConnectionString);
-                conn.Open();
-
-                Npgsql.NpgsqlDataAdapter da = new Npgsql.NpgsqlDataAdapter(Query, conn);
-                ds.Reset();
-                da.Fill(ds);
-                dt = ds.Tables[0];
-                conn.Close();
-
-                DateTime Stop = DateTime.Now;
-                ExecuteInSeconds = ((Stop - Start).Minutes * 60) + (Stop - Start).Seconds;
-                //check size, this can be removed in future will speed things a up a little
-                System.IO.MemoryStream stream = new System.IO.MemoryStream();
-                System.Runtime.Serialization.Formatters.Binary.BinaryFormatter binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-                binaryFormatter.Serialize(stream, dt);
-                stream.Seek(0, 0);
-                byte[] result = stream.ToArray();
-                stream.Close();
-                DataTableSizeMB = (int)Math.Ceiling((double)result.Length / (double)1000000);
-                result = null;  //get rid of it, no longer needed
-                return dt;
-
-            }
-            catch (Exception msg)
-            {
-                // something went wrong, and you wanna know why
-                throw;
-            }
-
-        }
-
-        private string GetConnectionString()
-        {
-            string ConnString = System.Configuration.ConfigurationManager.ConnectionStrings["CLSdbDataContextConnectionStringNOSCHEMA"].ConnectionString;
-            return ConnString;
-        } 
-        #endregion
-  
-
     }
 }

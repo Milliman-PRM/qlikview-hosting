@@ -115,7 +115,7 @@
 
     <div id="section">
         <div style="margin-right:40px">
-        <asp:DropDownList ID="YearDropdown"  style="float:right;" runat="server" Width="100px"></asp:DropDownList>
+        <asp:DropDownList ID="YearDropdown"  style="float:right;" runat="server" Width="100px" AutoPostBack="True" OnSelectedIndexChanged="YearDropdown_SelectedIndexChanged"></asp:DropDownList>
 <%--        &nbsp;&nbsp;&nbsp;
         <asp:ImageButton style="float:right;" ID="ExportToExcel" runat="server" OnClientClick="PrintRatesGrid()" ImageUrl="~/Images/excel.png" ToolTip="Export to Excel" />
         <asp:ImageButton style="float:right;" ID="ExportToWord" runat="server" OnClientClick="PrintRatesGrid()" ImageUrl="~/Images/word.png" ToolTip="Export to Word" />
@@ -123,18 +123,20 @@
         <asp:ImageButton style="float:right;" ID="PrintRates" runat="server" OnClientClick="PrintRatesGrid()" ImageUrl="~/Images/print.png" ToolTip="Print Displayed Rates" />--%>
         <h2>Medicare Reimbursment Rates</h2>
         </div>
-        <div  style="width: 99%;height:100%">
-                <telerik:RadGrid RenderMode="Classic" ID="RatesGrid" runat="server" GridLines="Both" AllowSorting="true" AllowPaging="true" PageSize="250" Width="100%"  AllowCustomPaging="true" OnNeedDataSource="RatesGrid_NeedDataSource" PagerStyle-ShowPagerText="True" PagerStyle-Visible="True" OnSortCommand="RatesGrid_SortCommand">
-                    <ClientSettings EnableRowHoverStyle="True" Resizing-AllowColumnResize="true" Resizing-EnableRealTimeResize="true" Resizing-ResizeGridOnColumnResize="false">
-                        <Selecting CellSelectionMode="SingleCell" />
-                        <Scrolling AllowScroll="True" UseStaticHeaders="True" SaveScrollPosition="true" EnableVirtualScrollPaging="true" ></Scrolling>
-                        <ClientEvents OnGridCreated="GridCreated" />
-                    </ClientSettings>
-                    <MasterTableView AllowMultiColumnSorting="false" ></MasterTableView>
-                    <SortingSettings SortedBackColor="#FFF6D6" EnableSkinSortStyles="false"></SortingSettings>
-                    <HeaderStyle Font-Bold="True"></HeaderStyle>
-                </telerik:RadGrid>
-        </div>
+        <telerik:RadAjaxPanel ID="RadGridPanel" runat="server" OnAjaxRequest="RadGridPanel_AjaxRequest">
+            <div  style="width: 99%;height:100%">
+                    <telerik:RadGrid RenderMode="Classic" ID="RatesGrid" runat="server" GridLines="Both" AllowSorting="true" AllowPaging="true" PageSize="250" Width="100%"  AllowCustomPaging="true" OnNeedDataSource="RatesGrid_NeedDataSource" PagerStyle-ShowPagerText="True" PagerStyle-Visible="True" OnSortCommand="RatesGrid_SortCommand" ClientIDMode="AutoID">
+                        <ClientSettings EnableRowHoverStyle="True" Resizing-AllowColumnResize="true" Resizing-EnableRealTimeResize="true" Resizing-ResizeGridOnColumnResize="false">
+                            <Selecting CellSelectionMode="SingleCell" />
+                            <Scrolling AllowScroll="True" UseStaticHeaders="True" SaveScrollPosition="true" EnableVirtualScrollPaging="true" ></Scrolling>
+                            <ClientEvents OnGridCreated="GridCreated" />
+                        </ClientSettings>
+                        <MasterTableView AllowMultiColumnSorting="false" ></MasterTableView>
+                        <SortingSettings SortedBackColor="#FFF6D6" EnableSkinSortStyles="false"></SortingSettings>
+                        <HeaderStyle Font-Bold="True"></HeaderStyle>
+                    </telerik:RadGrid>
+            </div>
+        </telerik:RadAjaxPanel>
     </div>
 
     <div id="footer">
@@ -152,19 +154,20 @@
         function ShowMenu()
         {
             $(menu).show('slow');
-            $(menu).mouseleave(function () { $(menu).hide(); })
+            $(menu).mouseleave(function ()
+            {
+                $(menu).hide();
+                $find("<%= RadGridPanel.ClientID%>").ajaxRequestWithTarget("<%= RadGridPanel.UniqueID %>", "refresh");
+                
+            })
         }
         
         function ResizeGrid()
         {
-            var GridTop = $(RatesGrid).offset().top;
+            var grid = document.getElementById('<%=RatesGrid.ClientID %>');
+            var GridTop = $(grid).offset().top;
             var FooterTop = $(footer).offset().top;
-            $(RatesGrid).height((FooterTop - GridTop) - 10);
- <%--           var scrollArea = document.getElementById("<%= RatesGrid.ClientID %>" + "_GridData");
-            if(scrollArea)
-            {
-                scrollArea.style.height = $(RatesGrid).height() + "px";
-            }--%>
+            $(grid).height((FooterTop - GridTop) - 10);
         }
 
         function GridCreated(sender, args) {
@@ -190,6 +193,17 @@
             previewWnd.print();
             previewWnd.close();
         }
+
+        //intercept ajax request to keep grid from going to an odd size
+        (function (open) {
+            XMLHttpRequest.prototype.open = function (method, url, async, user, pass) {
+                this.addEventListener("readystatechange", function () {
+                    ResizeGrid();
+
+                }, false);
+                open.call(this, method, url, async, user, pass);
+            };
+        })(XMLHttpRequest.prototype.open);
 
 
         //resize the grid when window resizes

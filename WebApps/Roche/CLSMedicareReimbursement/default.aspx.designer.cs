@@ -121,6 +121,15 @@ namespace CLSMedicareReimbursement {
         protected global::System.Web.UI.WebControls.DropDownList YearDropdown;
         
         /// <summary>
+        /// RadGridPanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Telerik.Web.UI.RadAjaxPanel RadGridPanel;
+        
+        /// <summary>
         /// RatesGrid control.
         /// </summary>
         /// <remarks>

@@ -206,10 +206,6 @@
       <Project>{17f0126b-56fc-4e3d-a167-61a1e2d2bcdd}</Project>
       <Name>CLSBusinessLogic</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CLSPOCO\CLSPOCO.csproj">
-      <Project>{a71b1d6b-ef20-49ab-b625-850f24ccc160}</Project>
-      <Name>CLSPOCO</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Framework\CLSdbContext\CLSdbContext.csproj">
       <Project>{8290f3dd-ddaa-46bd-9adc-29d12dec1b56}</Project>
       <Name>CLSdbContext</Name>
@@ -241,7 +237,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties UseJQuerySupport="True" UseAjaxifiedTemplates="True" />
+      <UserProperties UseAjaxifiedTemplates="True" UseJQuerySupport="True" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
