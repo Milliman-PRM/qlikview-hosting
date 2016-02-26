@@ -65,23 +65,26 @@ namespace CLSTest
             Assert.IsNotNull(objList.Count > 0);
         }
 
-        //[TestMethod]
-        //public void TestMethod_getSearchTermsForAnalyzerName()
-        //{
-        //    var objList = new List<Analyzer>();
-        //    objList = CLSController.getSearchTermsForAnalyzerName();
-        //    Assert.IsNotNull(objList.Count > 0);
-        //}
-
-        /// <summary>
-        /// returns the distinct year list</summary>
         [TestMethod]
-        public void TestMethod_getUniqueYear()
+        public void TestMethod_getSearchTermsForSpecificAnalyzerName()
         {
-            var objList = CLSController.getUniqueYear();
-            Assert.IsNotNull(objList);
+            var objList = new List<SearchTerm>();
+            var aName = "COBAS 4000 A";
+            objList = CLSController.getSearchTermsForSpecificAnalyzerName(aName);
+            Assert.IsNotNull(objList.Count > 0);
         }
 
+        /// <summary>
+        /// Returns list of serach terms for analyzer
+        /// </summary>
+        [TestMethod]
+        public void TestMethod_getSearchTermsForSpecificAnalyzerId()
+        {
+            var aId = 5;// "Roche_Hitachi Modular";
+            var objList = CLSController.getSearchTermsForSpecificAnalyzerId(aId);
+            Assert.IsNotNull(objList);
+        }
+        
         /// <summary>
         /// Retrieves unique reimbursements records</summary>
         [TestMethod]
@@ -100,6 +103,15 @@ namespace CLSTest
             Assert.IsNotNull(objList);
         }
 
+        /// <summary>
+        /// returns the distinct year list</summary>
+        [TestMethod]
+        public void TestMethod_getUniqueYear()
+        {
+            var objList = CLSController.getUniqueYear();
+            Assert.IsNotNull(objList);
+        }
+
         [TestMethod]
         public void TestMethod_getUniqueSearchTerm()
         {
@@ -108,30 +120,50 @@ namespace CLSTest
             Assert.IsNotNull(objList.Count > 0);
         }
 
+        [TestMethod]
+        public void TestMethod_getAssayDescriptionForSpecificCodeId()
+        {
+            var objList = new List<SearchTerm>();
+            var codeId = 5;
+            objList = CLSController.getAssayDescriptionForSpecificCodeId(codeId);
+            Assert.IsNotNull(objList.Count > 0);
+        }
+
+        [TestMethod]
+        public void TestMethod_getAnalyzerForSpecificSearchTermDesc()
+        {
+            var objList = new List<Analyzer>();
+            var st = "Assay of procainamide";
+            objList = CLSController.getAnalyzerForSpecificSearchTermDesc(st);
+            Assert.IsNotNull(objList.Count == 10);
+        }
+
+        [TestMethod]
+        public void TestMethod_getAnalyzerNamesListForSpecificSearchTermDesc()
+        {
+            var objList = new List<string>();
+            var st = "Assay of procainamide";
+            objList = CLSController.getAnalyzerNamesListForSpecificSearchTermDesc(st);
+            Assert.IsNotNull(objList.Count == 10);
+        }
+
+        [TestMethod]
+        public void TestMethod_getAnalyzerNamesForSpecificSearchTermId()
+        {
+            var sId = 5;
+            var objList = CLSController.getAnalyzerNamesForSpecificSearchTermId(sId);
+            Assert.IsNotNull(objList);
+        }
 
         [TestMethod]
         public void TestMethod_getAssayDescriptionForSpecificAnalyzer()
         {
             var objList = new List<SearchTerm>();
-            var codeID = 5;
-            objList = CLSController.getAssayDescriptionForSpecificAnalyzer(codeID);
+            var codeId = 5;
+            objList = CLSController.getAssayDescriptionForSpecificCodeId(codeId);
             Assert.IsNotNull(objList.Count == 2);
         }
-        /// <summary>
-        /// Get a list of valid “analyzer”(s) for a specific “assay description”
-        /// </summary>
-        [TestMethod]
-        public void TestMethod_getAnalyzerForSpecificAssayDescription()
-        {
-            var objList = new List<Analyzer>();
-            var assayDesc = "Hepatitis b surface ag eia";
-            objList = CLSController.getAnalyzerForSpecificAssayDescription(assayDesc);
-            Assert.IsNotNull(objList.Count == 9);
-        }
 
-        /// <summary>
-        /// Retrieve primary data set on being provided a “list of analyzers”, “list of descriptions”, “list of locality” and the year
-        /// </summary>
         [TestMethod]
         public void TestMethod_getEverything()
         {
@@ -139,16 +171,7 @@ namespace CLSTest
             var objList = Convert.ToInt32(CLSController.getEverything(year));
             Assert.IsNotNull(objList);
         }
+        
 
-        /// <summary>
-        /// Retrieve primary data set on being provided a “list of analyzers”, “list of descriptions”, “list of locality” and the year
-        /// </summary>
-        [TestMethod]
-        public void TestMethod_getSearchTermsForAnalyzerName()
-        {
-            var analyzer_name = "Roche_Hitachi Modular";
-            var objList = CLSController.getSearchTermsForAnalyzerName(5);
-            Assert.IsNotNull(objList);
-        }
     }
 }

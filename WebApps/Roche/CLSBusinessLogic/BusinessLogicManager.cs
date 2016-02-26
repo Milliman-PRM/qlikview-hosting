@@ -216,8 +216,8 @@ namespace CLSBusinessLogic
             List<SearchTerm> Terms = new List<SearchTerm>();
             foreach (string AnalyzerID in AnalyzerIDs)
             {
-                var codeID = System.Convert.ToInt32(AnalyzerID);
-                List<SearchTerm> Results = Controller.CLSController.getSearchTermsForAnalyzerName(codeID);
+                var codeId = System.Convert.ToInt32(AnalyzerID);
+                List<SearchTerm> Results = Controller.CLSController.getSearchTermsForSpecificAnalyzerId(codeId);
                 if (Results != null)
                     Terms.AddRange(Results);
             }
