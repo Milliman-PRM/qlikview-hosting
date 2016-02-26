@@ -62,13 +62,7 @@ namespace CLSMedicareReimbursement
             System.Data.DataTable DataSet = Session[SessionKey_DataSet] as System.Data.DataTable;
             if (DataSet != null)
             {
-                //DataSet.Columns[0].ColumnName = "Analyzer";
-                //DataSet.Columns[1].ColumnName = "Assay Description";
-                //DataSet.Columns[2].ColumnName = "CPT Descriptor";
-                //DataSet.Columns[3].ColumnName = "Notes";
-                //DataSet.Columns[4].ColumnName = "Locality";
-                //DataSet.Columns[5].ColumnName = "Medicare Reimbursement Rate";
-
+                
                 //copies over the definations, but not the data itself
                 System.Data.DataTable DataSubSet = DataSet.Copy();
 
@@ -93,10 +87,10 @@ namespace CLSMedicareReimbursement
 
         protected void RatesGrid_SortCommand(object sender, Telerik.Web.UI.GridSortCommandEventArgs e)
         {
-            string SortOnColumn = e.CommandName;
-            string SortMethod = "DESC";
-            if (e.NewSortOrder == Telerik.Web.UI.GridSortOrder.Ascending)
-                SortMethod = "ASC";
+            //string SortOnColumn = e.CommandArgument.ToString();
+            //string SortMethod = "DESC";
+            //if (e.NewSortOrder == Telerik.Web.UI.GridSortOrder.Ascending)
+            //    SortMethod = "ASC";
 
             //System.Data.DataTable CurrentTable = Session[SessionKey_DataSet] as System.Data.DataTable;
 
