@@ -75,7 +75,7 @@ namespace CLSBusinessLogic
                     SearchTermByCodeIDs.Clear();
                     SearchTermDescs.Clear();
                     SearchTermIDs.Clear();
-                    Years.Clear();
+                    // Years.Clear();  never clear years, there is always one set
                 }
                 else
                 {
@@ -259,6 +259,11 @@ namespace CLSBusinessLogic
                                                                                     Selections.SearchTermDescs, Selections.SearchTermIDs, Selections.SearchTermByCodeIDs,
                                                                                     Selections.Localaties, Selections.LocalatiesIDs, Selections.LocalatiesByDescShrt,
                                                                                     Selections.Years, Selections.CPTCodes), out ExecuteTimeSeconds, out DataTableSizeMB);
+        }
+
+        public List<string> FindAnalyzersForAssayDescription(string AssayDescription )
+        {
+            return Controller.CLSController.getAnalyzerNamesListForSpecificSearchTermDesc(AssayDescription);
         }
     }
 }

@@ -125,6 +125,8 @@ namespace CLSMedicareReimbursement
             AssayDescriptionList.DataTextField = "SearchDesc";
             AssayDescriptionList.DataValueField = "Id";
             AssayDescriptionList.DataBind();
+
+            UnHighlightAnalyzers();  //turn off any entries highlighted
         }
 
         protected void AssayDescriptionList_SelectedIndexChanged(object sender, EventArgs e)
@@ -135,16 +137,35 @@ namespace CLSMedicareReimbursement
 
             if ( CurrentSels.NoSelectionsMade())
             {    //no selections have been made, so we need to look up the appropriate analyziers and set to checked
-
+                List<string> Analyzers = CLSBusinessLogic.BusinessLogicManager.GetInstance().FindAnalyzersForAssayDescription(AssayDescriptionList.SelectedItem.Text);
+                CurrentSels.Clear(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.ALL);
+                CurrentSels.AddToList(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.SEARCHTERMDESCS, AssayDescriptionList.SelectedItem.Text);
+                HighlightAnalyzers(Analyzers);
             }
             else
-            {   //selections have been made, we are narrowing the search down
+            {
+                UnHighlightAnalyzers();  //turn off any entries highlighted
+                //selections have been made, we are narrowing the search down
                 CurrentSels.Clear(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.SEARCHTERMIDS);
                 foreach (string SearchTermID in SearchTermIDs)
                     CurrentSels.AddToList(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.SEARCHTERMIDS, SearchTermID);
             }
         }
 
+        //Hilight or un-highlight entries in Analyzer list
+        private void UnHighlightAnalyzers()
+        {
+            foreach( ListItem LI in AnalyzerCheckList.Items)
+                LI.Attributes.Add("style", "font-weight:normal;color:black");
+        }
+        private void HighlightAnalyzers(List<string> ItemNames )
+        {
+            foreach (ListItem LI in AnalyzerCheckList.Items)
+            {
+                if (ItemNames.Contains(LI.Text))
+                    LI.Attributes.Add("style", "font-weight:bold;color:red");
+            }
+        }
         protected void LocalityList_SelectedIndexChanged(object sender, EventArgs e)
         {
             //get user selections
@@ -178,11 +199,7 @@ namespace CLSMedicareReimbursement
                 //change year, and requery
                 CurrentSels.Clear(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.YEARS);
                 CurrentSels.AddToList(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.YEARS, YearDropdown.SelectedItem.Text);
-                System.Data.DataTable ResultSet = CLSBusinessLogic.BusinessLogicManager.GetInstance().FetchDataForSelections(CurrentSels);
-                Session[SessionKey_DataSet] = ResultSet;
-                RatesGrid.VirtualItemCount = ResultSet.Rows.Count;
-                RatesGrid.DataSource = ResultSet;
-                RatesGrid.DataBind();
+                RebindPrimaryGrid(CurrentSels);
             }
         }
 
@@ -193,13 +210,65 @@ namespace CLSMedicareReimbursement
             switch ( e.Argument)
             {
                 case "refresh":
-                    System.Data.DataTable ResultSet = CLSBusinessLogic.BusinessLogicManager.GetInstance().FetchDataForSelections(CurrentSels);
-                    Session[SessionKey_DataSet] = ResultSet;
-                    RatesGrid.VirtualItemCount = ResultSet.Rows.Count;
-                    RatesGrid.DataSource = ResultSet;
-                    RatesGrid.DataBind();
+                    RebindPrimaryGrid(CurrentSels);
                     break;
             }
+        }
+
+        protected void RatesGrid_SelectedCellChanged(object sender, EventArgs e)
+        {
+            if (RatesGrid.SelectedCells.Count == 1)
+            {
+                CLSBusinessLogic.BusinessLogicManager.CurrentSelections CurrentSels = Session[SessionKey_Selections] as CLSBusinessLogic.BusinessLogicManager.CurrentSelections;
+
+                string SelectedValue = RatesGrid.SelectedCells[0].Text;
+                string SelectedColumn = RatesGrid.SelectedCells[0].Column.UniqueName;
+                //analyzer_name description locality_desc_shrt
+                switch ( SelectedColumn.ToLower())
+                {
+                    case "analyzer_name":
+                        CurrentSels.Clear(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.ANALYZERNAMES);
+                        CurrentSels.Clear(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.ANALYZERIDS);
+                        CurrentSels.AddToList(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.ANALYZERNAMES, SelectedValue);
+                        //RebindPrimaryGrid(CurrentSels);
+                        break; 
+                    case "description":
+                        CurrentSels.Clear(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.SEARCHTERMBYCODEIDS);
+                        CurrentSels.Clear(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.SEARCHTERMDESCS);
+                        CurrentSels.Clear(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.SEARCHTERMIDS);
+                        CurrentSels.AddToList(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.SEARCHTERMDESCS, SelectedValue);
+                        //RebindPrimaryGrid(CurrentSels);
+                        break;
+                    case "locality_desc_shrt":
+                        CurrentSels.Clear(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.LOCALATIES);
+                        CurrentSels.Clear(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.LOCALATIESBYDESCSHRT);
+                        CurrentSels.Clear(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.LOCALATIESIDS);
+                        CurrentSels.AddToList(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.LOCALATIESBYDESCSHRT, SelectedValue);
+                        //RebindPrimaryGrid(CurrentSels);
+                        break;
+                    default:
+                        RatesGrid.SelectedIndexes.Clear();  //not valid search columns
+                        break;
+                }
+            }
+        }
+
+        private bool RebindPrimaryGrid( CLSBusinessLogic.BusinessLogicManager.CurrentSelections CurrentSet )
+        {
+            try
+            {
+                System.Data.DataTable ResultSet = CLSBusinessLogic.BusinessLogicManager.GetInstance().FetchDataForSelections(CurrentSet);
+                Session[SessionKey_DataSet] = ResultSet;
+                RatesGrid.VirtualItemCount = ResultSet.Rows.Count;
+                RatesGrid.DataSource = ResultSet;
+                RatesGrid.DataBind();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                //report error
+            }
+            return false;
         }
     }
 }

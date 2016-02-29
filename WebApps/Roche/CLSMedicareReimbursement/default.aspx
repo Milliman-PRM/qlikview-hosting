@@ -127,8 +127,8 @@
         </div>
         <telerik:RadAjaxPanel ID="RadGridPanel" runat="server" OnAjaxRequest="RadGridPanel_AjaxRequest" LoadingPanelID="RadAjaxLoadingPanel1">
             <div  style="width: 99%;height:100%">
-                    <telerik:RadGrid RenderMode="Classic" ID="RatesGrid" runat="server" GridLines="Both" AllowSorting="true" AllowPaging="true" PageSize="250" Width="100%"  AllowCustomPaging="true" OnNeedDataSource="RatesGrid_NeedDataSource" PagerStyle-ShowPagerText="True" PagerStyle-Visible="True" OnSortCommand="RatesGrid_SortCommand" ClientIDMode="AutoID" AutoGenerateColumns="False">
-                        <ClientSettings EnableRowHoverStyle="True" Resizing-AllowColumnResize="true" Resizing-EnableRealTimeResize="true" Resizing-ResizeGridOnColumnResize="false">
+                    <telerik:RadGrid RenderMode="Classic" ID="RatesGrid" runat="server" GridLines="Both" AllowSorting="true" AllowPaging="true" PageSize="250" Width="100%"  AllowCustomPaging="true" OnNeedDataSource="RatesGrid_NeedDataSource" PagerStyle-ShowPagerText="True" PagerStyle-Visible="True" OnSortCommand="RatesGrid_SortCommand" ClientIDMode="AutoID" AutoGenerateColumns="False" OnSelectedCellChanged="RatesGrid_SelectedCellChanged">
+                        <ClientSettings EnableRowHoverStyle="True" Resizing-AllowColumnResize="true" Resizing-EnableRealTimeResize="true" Resizing-ResizeGridOnColumnResize="false" EnablePostBackOnRowClick="True">
                             <Selecting CellSelectionMode="SingleCell" />
                             <Scrolling AllowScroll="True" UseStaticHeaders="True" SaveScrollPosition="true" EnableVirtualScrollPaging="true" ></Scrolling>
                             <ClientEvents OnGridCreated="GridCreated" />
@@ -233,6 +233,14 @@
             };
         })(XMLHttpRequest.prototype.open);
 
+        function cellSelected(sender, args) {
+            var columnName = args.get_column().get_uniqueName();
+            alert(columnName);
+            //var customer = args.get_gridDataItem().getDataKeyValue("CustomerID")
+            //var cellInfo = "Cell: " + columnName + " for " + customer + " <b>selected</b><br/>";
+            //$get("cellSelectedEvents").innerHTML += cellInfo;
+            //$get("cellSelectedEvents").scrollTop = $get("cellSelectedEvents").scrollHeight;
+        }
 
         //resize the grid when window resizes
         $(window).resize(function () { ResizeGrid(); });
