@@ -84,7 +84,17 @@ namespace CLSTest
             var objList = CLSController.getSearchTermsForSpecificAnalyzerId(aId);
             Assert.IsNotNull(objList);
         }
-        
+        /// <summary>
+        /// Returns list of serach terms for analyzer
+        /// </summary>
+        [TestMethod]
+        public void TestMethod_getCodeIdsForSpecificAnalyzerName()
+        {
+            var aName = "AVL 9180";
+            var objList = CLSController.getAnalyzerIdsForSpecificAnalyzerName(aName);
+            Assert.IsNotNull(objList);
+        }
+
         /// <summary>
         /// Retrieves unique reimbursements records</summary>
         [TestMethod]
