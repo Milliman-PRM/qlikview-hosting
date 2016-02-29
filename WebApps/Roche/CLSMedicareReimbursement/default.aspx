@@ -68,7 +68,7 @@
 
     </style> 
 </head>
-<body>
+<body onload="Ready()">
     <form id="form1" runat="server">
      <telerik:RadScriptManager runat="server" ID="RadScriptManager1" />
         <telerik:RadSkinManager ID="RadSkinManager1" runat="server" ShowChooser="false" PersistenceKey="Telerik.Skin" Skin="Metro" />
@@ -87,14 +87,16 @@
      <div id="header">
          <table style="width:100%">
              <tr>
-                <td style="vertical-align:bottom;padding-bottom:5px"><asp:ImageButton ID="LaunchMenu" runat="server" ImageUrl="~/Images/settings.png" OnClientClick="ShowMenu(); return false;" /></td>
+<%--                <td style="vertical-align:bottom;padding-bottom:5px"><asp:ImageButton ID="LaunchMenu" runat="server" ImageUrl="~/Images/settings.png" OnClientClick="ShowMenu(); return false;" /></td>--%>
+                <td style="vertical-align:bottom;padding-bottom:5px"><asp:ImageButton ID="LaunchMenu" runat="server" ImageUrl="~/Images/settings.png" OnClick="LaunchMenu_Click" /></td>
+
                 <td><h2>Clinical Lab Systems Medicare Reimbursement</h2></td>
                 <td style="vertical-align:bottom;padding-bottom:5px" > <asp:Image ID="Brand" runat="server" ImageUrl="~/Images/roche.png"  Height="50px" /></td>
             </tr>
          </table>
     </div>
 
-    <div id="menu">
+    <div id="menu" runat="server" visible="false" >
             <telerik:RadAjaxPanel ID="menu_controls_panel" runat="server" LoadingPanelID="RadAjaxLoadingPanel1">
                  <div style="border:1px solid black;color:white;overflow:hidden;background-color:#046EBC;position:absolute;top:5px;left:5px;height:390px;width:256px">
                      <img src="Images/search.png" style="vertical-align: middle;float:right" />Analyzer
@@ -168,17 +170,18 @@
 
     <script type="text/javascript">
         //must hide menu via JQuery, or it may not un-hide when needed
-        $(menu).hide();
+       // $(menu).hide();
 
-        function ShowMenu()
+        function MenuEvents()
         {
-            $(menu).show('slow');
-            $(menu).mouseleave(function ()
-            {
-                $(menu).hide();
-                $find("<%= RadGridPanel.ClientID%>").ajaxRequestWithTarget("<%= RadGridPanel.UniqueID %>", "refresh");
-                
-            })
+            if (document.getElementById("menu") !== null) {
+                //$(menu).show('slow');
+                $(menu).mouseleave(function () {
+                    $(menu).hide();
+                    $find("<%= RadGridPanel.ClientID%>").ajaxRequestWithTarget("<%= RadGridPanel.UniqueID %>", "refresh");
+                    //__doPostBack('__Page', 'MenuClose');
+                })
+            }
         }
         
         var PaddingForFooter = 25;  //this is padding between bottom of grid and footer
@@ -223,6 +226,11 @@
             previewWnd.close();
         }
 
+        function Ready()
+        {
+            MenuEvents();
+        }
+
         //intercept ajax request to keep grid from going to an odd size
         (function (open) {
             XMLHttpRequest.prototype.open = function (method, url, async, user, pass) {
@@ -233,14 +241,6 @@
             };
         })(XMLHttpRequest.prototype.open);
 
-        function cellSelected(sender, args) {
-            var columnName = args.get_column().get_uniqueName();
-            alert(columnName);
-            //var customer = args.get_gridDataItem().getDataKeyValue("CustomerID")
-            //var cellInfo = "Cell: " + columnName + " for " + customer + " <b>selected</b><br/>";
-            //$get("cellSelectedEvents").innerHTML += cellInfo;
-            //$get("cellSelectedEvents").scrollTop = $get("cellSelectedEvents").scrollHeight;
-        }
 
         //resize the grid when window resizes
         $(window).resize(function () { ResizeGrid(); });

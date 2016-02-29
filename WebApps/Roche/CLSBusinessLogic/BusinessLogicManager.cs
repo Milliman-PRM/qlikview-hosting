@@ -265,5 +265,15 @@ namespace CLSBusinessLogic
         {
             return Controller.CLSController.getAnalyzerNamesListForSpecificSearchTermDesc(AssayDescription);
         }
+
+        public string FindAnalyzerIDFromName( string AnalyzerName )
+        {
+            foreach( CLSdbContext.Analyzer Analyze in _UniqueAnalyzers )
+            {
+                if (string.Compare(Analyze.AnalyzerName, AnalyzerName, true) == 0)
+                    return Analyze.FkCodeId.ToString();
+            }
+            return "";
+        }
     }
 }

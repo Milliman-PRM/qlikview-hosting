@@ -106,27 +106,51 @@ namespace CLSMedicareReimbursement
 
         }
 
+        /// <summary>
+        /// user clicked on analyzer list, see what changed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void AnalyzerCheckList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //get user selections
+            //get old user selections 
             CLSBusinessLogic.BusinessLogicManager.CurrentSelections CurrentSels = Session[SessionKey_Selections] as CLSBusinessLogic.BusinessLogicManager.CurrentSelections;
-
+            //update user selections
             List<string> SelectedAnalyzerNames = AnalyzerCheckList.Items.Cast<ListItem>().Where(n => n.Selected).Select(n => n.Text).ToList();
             //update the users selection object instance
             CurrentSels.Clear(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.ANALYZERNAMES);  
             foreach (string Selected in SelectedAnalyzerNames)
                 CurrentSels.AddToList(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.ANALYZERNAMES, Selected);
-
             AssayDescriptionList.Items.Clear();
 
-            List<string> SelectedAnalyzerIDs = AnalyzerCheckList.Items.Cast<ListItem>().Where(n => n.Selected).Select(n => n.Value).ToList();
-            List<CLSdbContext.SearchTerm> AssociatedAssayDescriptions = CLSBusinessLogic.BusinessLogicManager.GetInstance().FindAssayDescriptionForAnalyzer(SelectedAnalyzerIDs);
-            AssayDescriptionList.DataSource = AssociatedAssayDescriptions;
-            AssayDescriptionList.DataTextField = "SearchDesc";
-            AssayDescriptionList.DataValueField = "Id";
-            AssayDescriptionList.DataBind();
 
-            UnHighlightAnalyzers();  //turn off any entries highlighted
+            List<string> SelectedAnalyzerIDs = AnalyzerCheckList.Items.Cast<ListItem>().Where(n => n.Selected).Select(n => n.Value).ToList();
+            //SelectedAnalyzerIDs = new List<string>() { "12", "8", "9", "10", "11", "13", "14", "15", "16", "17" };
+            if (SelectedAnalyzerIDs.Count() > 0)  //user selected at least 1 analyzer, so update assay list
+            {
+                List<CLSdbContext.SearchTerm> AssociatedAssayDescriptions = CLSBusinessLogic.BusinessLogicManager.GetInstance().FindAssayDescriptionForAnalyzer(SelectedAnalyzerIDs);
+                AssayDescriptionList.DataSource = AssociatedAssayDescriptions;
+                AssayDescriptionList.DataTextField = "SearchDesc";
+                AssayDescriptionList.DataValueField = "Id";
+                AssayDescriptionList.DataBind();
+                UnHighlightAnalyzers(); //something selected so turn off highlights
+            }
+            else  //user un-selected, there are no analyzers selected, so re-show entire list, but highlight analyzer list items if 1 assay description is selected
+            {
+                //reset everything here to clear out system
+                CurrentSels.Clear(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.ALL);
+
+                //rebind to full list for display
+                AssayDescriptionList.DataSource = CLSBusinessLogic.BusinessLogicManager.GetInstance().UniqueAssayDescriptions;
+                AssayDescriptionList.DataTextField = "SearchDesc";
+                AssayDescriptionList.DataValueField = "Id";
+                AssayDescriptionList.DataBind();
+                //no analyzer, check to see if SINGLE assay description highlighted
+                NoAnalyzerSingleAssayDescriptionSelected();
+                if (CurrentSels.SearchTermDescs.Count() == 1)
+                    AssayDescriptionList.Items.FindByText(CurrentSels.SearchTermDescs[0]).Selected = true;
+            }
+
         }
 
         protected void AssayDescriptionList_SelectedIndexChanged(object sender, EventArgs e)
@@ -134,6 +158,9 @@ namespace CLSMedicareReimbursement
             //get user selections
             CLSBusinessLogic.BusinessLogicManager.CurrentSelections CurrentSels = Session[SessionKey_Selections] as CLSBusinessLogic.BusinessLogicManager.CurrentSelections;
             List<string> SearchTermIDs= AssayDescriptionList.Items.Cast<ListItem>().Where(n => n.Selected).Select(n => n.Value).ToList();
+
+            //test behavior that when we are here there can be only 1 selection
+            CurrentSels.Clear(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.SEARCHTERMDESCS);
 
             if ( CurrentSels.NoSelectionsMade())
             {    //no selections have been made, so we need to look up the appropriate analyziers and set to checked
@@ -269,6 +296,57 @@ namespace CLSMedicareReimbursement
                 //report error
             }
             return false;
+        }
+
+        protected void LaunchMenu_Click(object sender, ImageClickEventArgs e)
+        {
+            menu.Visible = true;
+            CLSBusinessLogic.BusinessLogicManager.CurrentSelections CurrentSels = Session[SessionKey_Selections] as CLSBusinessLogic.BusinessLogicManager.CurrentSelections;
+
+            List<CLSdbContext.SearchTerm> AssociatedAssayDescriptions = new List<CLSdbContext.SearchTerm>();
+            foreach ( string Analyzer in CurrentSels.AnalyzerNames)
+            {
+                ListItem LI = AnalyzerCheckList.Items.FindByText(Analyzer);
+                if (LI != null)
+                {
+                    LI.Selected = true;
+                }
+                //create a running list of all available
+                string AnalyzerID = CLSBusinessLogic.BusinessLogicManager.GetInstance().FindAnalyzerIDFromName(Analyzer);
+                AssociatedAssayDescriptions.AddRange(CLSBusinessLogic.BusinessLogicManager.GetInstance().FindAssayDescriptionForAnalyzer(new List<string>() { AnalyzerID }));
+            }
+
+            foreach(string SearchTerm in CurrentSels.SearchTermDescs )
+            { 
+                ListItem LI = AssayDescriptionList.Items.FindByText(SearchTerm);
+                if (LI != null)
+                    LI.Selected = true;
+                else
+                    AssayDescriptionList.Items.Add(SearchTerm);  //just add it
+            }
+
+            //set highlights if necessary
+            NoAnalyzerSingleAssayDescriptionSelected();
+
+            foreach ( string Locality in CurrentSels.Localaties )
+            {
+                ListItem LI = LocalityList.Items.FindByText(Locality);
+                if (LI != null)
+                    LI.Selected = true;
+            }
+        }
+
+        private void NoAnalyzerSingleAssayDescriptionSelected()
+        {
+            CLSBusinessLogic.BusinessLogicManager.CurrentSelections CurrentSels = Session[SessionKey_Selections] as CLSBusinessLogic.BusinessLogicManager.CurrentSelections;
+            if ((CurrentSels.AnalyzerIDs.Count() == 0) && (CurrentSels.AnalyzerNames.Count() == 0) && (CurrentSels.AnalyzersByCodeIDs.Count() == 0) && (CurrentSels.SearchTermDescs.Count() == 1))
+            {
+                string SelectedValue = CurrentSels.SearchTermDescs[0];
+                List<string> Analyzers = CLSBusinessLogic.BusinessLogicManager.GetInstance().FindAnalyzersForAssayDescription(SelectedValue);
+                HighlightAnalyzers(Analyzers);
+            }
+            else
+                UnHighlightAnalyzers();
         }
     }
 }
