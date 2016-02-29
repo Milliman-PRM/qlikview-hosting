@@ -147,7 +147,23 @@ namespace Controller
             resultList = query.ToList();
             return resultList;
         }
-        
+
+        public static List<string> getAnalyzerIdsForSpecificAnalyzerName(string param)
+        {
+            //Query the reimbursmenet_rate table and return a list of unquie year values
+            var context = new CLSdbDataContext();
+            var dboList = context.Analyzers.Where(a=>a.AnalyzerName == param)
+                                  .Select(x => new
+                                  {
+                                      AnalyzerIds = x.Id.ToString()
+                                  }).ToList();
+
+            var resultList = new List<string>(dboList.Select(s => s.AnalyzerIds.ToString()));
+            return resultList;
+        }
+
+
+
         public static void SaveAnalyzers(Analyzer obj)
         {
             var context = new CLSdbDataContext();
