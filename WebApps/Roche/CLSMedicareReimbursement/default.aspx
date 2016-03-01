@@ -129,13 +129,13 @@
         </div>
         <telerik:RadAjaxPanel ID="RadGridPanel" runat="server" OnAjaxRequest="RadGridPanel_AjaxRequest" LoadingPanelID="RadAjaxLoadingPanel1">
             <div  style="width: 99%;height:100%">
-                    <telerik:RadGrid RenderMode="Classic" ID="RatesGrid" runat="server" GridLines="Both" AllowSorting="true" AllowPaging="true" PageSize="250" Width="100%"  AllowCustomPaging="true" OnNeedDataSource="RatesGrid_NeedDataSource" PagerStyle-ShowPagerText="True" PagerStyle-Visible="True" OnSortCommand="RatesGrid_SortCommand" ClientIDMode="AutoID" AutoGenerateColumns="False" OnSelectedCellChanged="RatesGrid_SelectedCellChanged">
+                    <telerik:RadGrid RenderMode="Classic" ID="RatesGrid" runat="server" GridLines="Both" AllowSorting="true" AllowPaging="true" PageSize="250" Width="100%"  AllowCustomPaging="true" OnNeedDataSource="RatesGrid_NeedDataSource" PagerStyle-ShowPagerText="True" PagerStyle-Visible="True" OnSortCommand="RatesGrid_SortCommand" ClientIDMode="AutoID" AutoGenerateColumns="False" OnSelectedCellChanged="RatesGrid_SelectedCellChanged" >
                         <ClientSettings EnableRowHoverStyle="True" Resizing-AllowColumnResize="true" Resizing-EnableRealTimeResize="true" Resizing-ResizeGridOnColumnResize="false" EnablePostBackOnRowClick="True">
                             <Selecting CellSelectionMode="SingleCell" />
                             <Scrolling AllowScroll="True" UseStaticHeaders="True" SaveScrollPosition="true" EnableVirtualScrollPaging="true" ></Scrolling>
                             <ClientEvents OnGridCreated="GridCreated" />
                         </ClientSettings>
-                        <MasterTableView AllowMultiColumnSorting="false" >
+                        <MasterTableView AllowMultiColumnSorting="false" PagerStyle-AlwaysVisible="true" >
                             <Columns>
                                 <telerik:GridBoundColumn UniqueName="analyzer_name" DataField="analyzer_name" HeaderText="Analyzer" ReadOnly="True"></telerik:GridBoundColumn>
                                 <telerik:GridBoundColumn UniqueName="description" DataField="description" HeaderText="Assay Description" ReadOnly="True"></telerik:GridBoundColumn>
@@ -179,6 +179,9 @@
                 $(menu).mouseleave(function () {
                     $(menu).hide();
                     $find("<%= RadGridPanel.ClientID%>").ajaxRequestWithTarget("<%= RadGridPanel.UniqueID %>", "refresh");
+       <%--             var currentLoadingPanel = $find("<%= RadAjaxLoadingPanel1.ClientID %>");
+                    var currentGrid = $find("<%= RadGridPanel.ClientID%>")
+                    currentLoadingPanel.show(currentGrid);--%>
                     //__doPostBack('__Page', 'MenuClose');
                 })
             }

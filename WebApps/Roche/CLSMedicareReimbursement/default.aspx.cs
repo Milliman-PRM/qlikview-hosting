@@ -14,11 +14,11 @@ namespace CLSMedicareReimbursement
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if ( !IsPostBack)
+            if (!IsPostBack)
             {
 
                 //make a session holder for the users selections 
-                if ( Session[SessionKey_Selections] == null )
+                if (Session[SessionKey_Selections] == null)
                     Session[SessionKey_Selections] = new CLSBusinessLogic.BusinessLogicManager.CurrentSelections();
 
                 CLSBusinessLogic.BusinessLogicManager BLM = CLSBusinessLogic.BusinessLogicManager.GetInstance();
@@ -54,8 +54,30 @@ namespace CLSMedicareReimbursement
                 Session[SessionKey_DataSet] = BLM.DataByYear[YearDropdown.SelectedItem.Text];
                 RatesGrid.VirtualItemCount = BLM.DataByYear[YearDropdown.SelectedItem.Text].Rows.Count;
 
-                
+
             }
+            else
+            {
+                //since the year drop down is not in a ajax panel, it causes a postback which results
+                //in the menu being displayed, do check, if triggred by year drop down, then hide the menu
+                Control C = GetControlThatCausedPostBack(this);
+                if ( (C != null) && (string.Compare(C.ClientID,"yeardropdown", true) == 0))
+                    menu.Visible = false; //keep the menu hidden on postback from drop, its not in an ajax panel
+            }
+        }
+
+        private Control GetControlThatCausedPostBack(Page page)
+        {
+            //initialize a control and set it to null
+            Control ctrl = null;
+
+            //get the event target name and find the control
+            string ctrlName = page.Request.Params.Get("__EVENTTARGET");
+            if (!String.IsNullOrEmpty(ctrlName))
+                ctrl = page.FindControl(ctrlName);
+
+            //return the control to the calling method
+            return ctrl;
         }
 
         private void CheckForPreviousSelections()
@@ -70,7 +92,6 @@ namespace CLSMedicareReimbursement
             System.Data.DataTable DataSet = Session[SessionKey_DataSet] as System.Data.DataTable;
             if (DataSet != null)
             {
-                
                 //copies over the definations, but not the data itself
                 System.Data.DataTable DataSubSet = DataSet.Copy();
 
@@ -122,9 +143,12 @@ namespace CLSMedicareReimbursement
             foreach (string Selected in SelectedAnalyzerNames)
                 CurrentSels.AddToList(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.ANALYZERNAMES, Selected);
             AssayDescriptionList.Items.Clear();
+            System.Diagnostics.Debug.WriteLine("                          analyzer sel index changed start updated");
+            //need to get all the analyzers ids
+            List<string> SelectedAnalyzerIDs = new List<string>();
+            foreach (string AnalyzerName in SelectedAnalyzerNames)
+                SelectedAnalyzerIDs.AddRange(CLSBusinessLogic.BusinessLogicManager.GetInstance().FindAnalyzerIDsFromName(AnalyzerName));
 
-
-            List<string> SelectedAnalyzerIDs = AnalyzerCheckList.Items.Cast<ListItem>().Where(n => n.Selected).Select(n => n.Value).ToList();
             //SelectedAnalyzerIDs = new List<string>() { "12", "8", "9", "10", "11", "13", "14", "15", "16", "17" };
             if (SelectedAnalyzerIDs.Count() > 0)  //user selected at least 1 analyzer, so update assay list
             {
@@ -139,6 +163,7 @@ namespace CLSMedicareReimbursement
             {
                 //reset everything here to clear out system
                 CurrentSels.Clear(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.ALL);
+                LocalityList.ClearSelection();  //clear out all selections
 
                 //rebind to full list for display
                 AssayDescriptionList.DataSource = CLSBusinessLogic.BusinessLogicManager.GetInstance().UniqueAssayDescriptions;
@@ -150,6 +175,7 @@ namespace CLSMedicareReimbursement
                 if (CurrentSels.SearchTermDescs.Count() == 1)
                     AssayDescriptionList.Items.FindByText(CurrentSels.SearchTermDescs[0]).Selected = true;
             }
+            System.Diagnostics.Debug.WriteLine("                          analyzer sel index changed end update");
 
         }
 
@@ -158,6 +184,7 @@ namespace CLSMedicareReimbursement
             //get user selections
             CLSBusinessLogic.BusinessLogicManager.CurrentSelections CurrentSels = Session[SessionKey_Selections] as CLSBusinessLogic.BusinessLogicManager.CurrentSelections;
             List<string> SearchTermIDs= AssayDescriptionList.Items.Cast<ListItem>().Where(n => n.Selected).Select(n => n.Value).ToList();
+            List<string> SearchTermTexts = AssayDescriptionList.Items.Cast<ListItem>().Where(n => n.Selected).Select(n => n.Text).ToList();
 
             //test behavior that when we are here there can be only 1 selection
             CurrentSels.Clear(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.SEARCHTERMDESCS);
@@ -174,8 +201,10 @@ namespace CLSMedicareReimbursement
                 UnHighlightAnalyzers();  //turn off any entries highlighted
                 //selections have been made, we are narrowing the search down
                 CurrentSels.Clear(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.SEARCHTERMIDS);
-                foreach (string SearchTermID in SearchTermIDs)
-                    CurrentSels.AddToList(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.SEARCHTERMIDS, SearchTermID);
+                CurrentSels.Clear(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.SEARCHTERMDESCS);
+
+                foreach (string SearchTermText in SearchTermTexts)
+                    CurrentSels.AddToList(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.SEARCHTERMDESCS, SearchTermText);
             }
         }
 
@@ -257,22 +286,24 @@ namespace CLSMedicareReimbursement
                         CurrentSels.Clear(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.ANALYZERNAMES);
                         CurrentSels.Clear(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.ANALYZERIDS);
                         CurrentSels.AddToList(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.ANALYZERNAMES, SelectedValue);
-                        //RebindPrimaryGrid(CurrentSels);
+                        RebindPrimaryGrid(CurrentSels);
                         break; 
                     case "description":
                         CurrentSels.Clear(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.SEARCHTERMBYCODEIDS);
                         CurrentSels.Clear(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.SEARCHTERMDESCS);
                         CurrentSels.Clear(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.SEARCHTERMIDS);
                         CurrentSels.AddToList(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.SEARCHTERMDESCS, SelectedValue);
-                        //RebindPrimaryGrid(CurrentSels);
+                        RebindPrimaryGrid(CurrentSels);
                         break;
                     case "locality_desc_shrt":
                         CurrentSels.Clear(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.LOCALATIES);
                         CurrentSels.Clear(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.LOCALATIESBYDESCSHRT);
                         CurrentSels.Clear(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.LOCALATIESIDS);
                         CurrentSels.AddToList(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.LOCALATIESBYDESCSHRT, SelectedValue);
-                        //RebindPrimaryGrid(CurrentSels);
+                        RebindPrimaryGrid(CurrentSels);
                         break;
+                    //case "code":  we are supposed to query on this field too, but not yet, no way to clear it really
+                    //    break;
                     default:
                         RatesGrid.SelectedIndexes.Clear();  //not valid search columns
                         break;
@@ -284,12 +315,23 @@ namespace CLSMedicareReimbursement
         {
             try
             {
-                System.Data.DataTable ResultSet = CLSBusinessLogic.BusinessLogicManager.GetInstance().FetchDataForSelections(CurrentSet);
-                Session[SessionKey_DataSet] = ResultSet;
-                RatesGrid.VirtualItemCount = ResultSet.Rows.Count;
-                RatesGrid.DataSource = ResultSet;
-                RatesGrid.DataBind();
-                return true;
+                CLSBusinessLogic.BusinessLogicManager.CurrentSelections CurrentSels = Session[SessionKey_Selections] as CLSBusinessLogic.BusinessLogicManager.CurrentSelections;
+                if (CurrentSels.NoSelectionsMade() == false)
+                {
+                    System.Data.DataTable ResultSet = CLSBusinessLogic.BusinessLogicManager.GetInstance().FetchDataForSelections(CurrentSet);
+                    Session[SessionKey_DataSet] = ResultSet;
+                    RatesGrid.VirtualItemCount = ResultSet.Rows.Count;
+                    RatesGrid.DataSource = ResultSet;
+                    RatesGrid.DataBind();
+                    return true;
+                }
+                else //no selection return to original state
+                {
+                    Session[SessionKey_DataSet] = CLSBusinessLogic.BusinessLogicManager.GetInstance().DataByYear[YearDropdown.SelectedItem.Text];
+                    RatesGrid.VirtualItemCount = CLSBusinessLogic.BusinessLogicManager.GetInstance().DataByYear[YearDropdown.SelectedItem.Text].Rows.Count;
+                    RatesGrid.DataSource = CLSBusinessLogic.BusinessLogicManager.GetInstance().DataByYear[YearDropdown.SelectedItem.Text];
+                    RatesGrid.DataBind();
+                }
             }
             catch (Exception ex)
             {
@@ -327,10 +369,11 @@ namespace CLSMedicareReimbursement
 
             //set highlights if necessary
             NoAnalyzerSingleAssayDescriptionSelected();
-
-            foreach ( string Locality in CurrentSels.Localaties )
+            LocalityList.ClearSelection();  //clear out and restore localaties each time
+            foreach ( string LocalityID in CurrentSels.LocalatiesIDs )
             {
-                ListItem LI = LocalityList.Items.FindByText(Locality);
+                string LocalityText = CLSBusinessLogic.BusinessLogicManager.GetInstance().FindLocalityByID(LocalityID);
+                ListItem LI = LocalityList.Items.FindByText(LocalityText);
                 if (LI != null)
                     LI.Selected = true;
             }

@@ -126,7 +126,7 @@ namespace CLSBusinessLogic
                 throw new Exception("Required schema name was not provided for table reference.");
             }
 
-            string QueryRoot = "SELECT analyzers.analyzer_name, code.description, code.code, analyzers.notes, localities.locality_desc_shrt, reimbursement_rates.rate FROM _SCHEMA_.analyzers, _SCHEMA_.code, _SCHEMA_.reimbursement_rates, _SCHEMA_.localities _SEARCHTERMS_ WHERE reimbursement_rates.fk_code_id = code.id AND reimbursement_rates.fk_code_id = analyzers.fk_code_id AND reimbursement_rates.fk_locality_id = localities.id _SEARCHTERMCONDITIONS_ ";
+            string QueryRoot = "SELECT DISTINCT analyzers.analyzer_name, code.description, code.code, analyzers.notes, localities.locality_desc_shrt, reimbursement_rates.rate FROM _SCHEMA_.analyzers, _SCHEMA_.code, _SCHEMA_.reimbursement_rates, _SCHEMA_.localities _SEARCHTERMS_ WHERE reimbursement_rates.fk_code_id = code.id AND reimbursement_rates.fk_code_id = analyzers.fk_code_id AND reimbursement_rates.fk_locality_id = localities.id _SEARCHTERMCONDITIONS_ ";
             //if the query requires search terms we need to add it as a FROM clause
             if (((SearchTermDescs != null) && (SearchTermDescs.Count > 0)) || ((SearchTermIDs != null) && (SearchTermIDs.Count > 0)) || ((SearchTermByCodeIDs != null) && (SearchTermByCodeIDs.Count > 0)))
             {

@@ -275,5 +275,20 @@ namespace CLSBusinessLogic
             }
             return "";
         }
+
+        public List<string> FindAnalyzerIDsFromName( string AnalyzerName )
+        {
+            return Controller.CLSController.getAnalyzerIdsForSpecificAnalyzerName(AnalyzerName);
+        }
+
+        public string FindLocalityByID(string LocalityID)
+        {
+            foreach( Locality L in _UniqueLocalities )
+            {
+                if (L.Id == System.Convert.ToInt32(LocalityID))
+                    return L.LocalityDescLong;
+            }
+            return "";
+        }
     }
 }
