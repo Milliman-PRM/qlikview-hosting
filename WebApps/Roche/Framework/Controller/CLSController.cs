@@ -148,6 +148,40 @@ namespace Controller
             return resultList;
         }
 
+        /// <summary>
+        /// Returns the list of search term for a specific analyzer id
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        public static List<SearchTerm> getSearchTermsForSpecificAnalyzerIdListArray(string param)
+        {
+            var context = new CLSdbDataContext();
+            IQueryable<Analyzer> analyzer = context.Analyzers;
+            IQueryable<SearchTerm> searchTerms = context.SearchTerms;
+
+            //split ids
+            var splittedIds = param.Split(',').Select(str => int.Parse(str));
+            #region
+            //var query = (from s in searchTerms
+            //             join a in analyzer on s.FkCodeId equals a.FkCodeId
+            //             where splittedIds.Contains(a.Id)
+            //             select s);
+            #endregion
+            var query = analyzer                                // starting point - table in the "from" statement
+                       .Join(searchTerms,                       // the source table of the inner join
+                                  azTble => azTble.FkCodeId,     // Select the primary key (the first part of the "on" clause in an sql "join" statement)
+                                  stTble => stTble.FkCodeId,     // Select the foreign key (the second part of the "on" clause)
+                                  (azTble, stTble) =>
+                                      new {   Az = azTble,  St = stTble }
+                                   )    // selection
+                       .Where(sa => splittedIds.Contains(sa.Az.Id)) // where statement
+                       .Select(a=>a.St);    // seelct record set
+
+            var resultList = new List<SearchTerm>();
+            resultList = query.ToList();
+            return resultList;
+        }
+
         public static List<string> getAnalyzerIdsForSpecificAnalyzerName(string param)
         {
             //Query the reimbursmenet_rate table and return a list of unquie year values

@@ -84,6 +84,22 @@ namespace CLSTest
             var objList = CLSController.getSearchTermsForSpecificAnalyzerId(aId);
             Assert.IsNotNull(objList);
         }
+
+
+        /// <summary>
+        /// Returns list of serach terms for analyzer
+        /// </summary>
+        [TestMethod]
+        public void TestMethod_getSearchTermsForSpecificAnalyzerIdArray()
+        {
+            //create array
+            var array = new string[] { "807", "204", "59", "84", "345", "12", "379", "285", "54", "517" };
+            //convert an array of integers to a comma-separated string
+            var aray = string.Join(",", array);
+            var objList = CLSController.getSearchTermsForSpecificAnalyzerIdListArray(aray);
+            Assert.IsNotNull(objList);
+        }
+
         /// <summary>
         /// Returns list of serach terms for analyzer
         /// </summary>
