@@ -213,15 +213,15 @@ namespace CLSBusinessLogic
 
         public List<SearchTerm> FindAssayDescriptionForAnalyzer(List<string> AnalyzerIDs)
         {
-            List<SearchTerm> Terms = new List<SearchTerm>();
-            foreach (string AnalyzerID in AnalyzerIDs)
+            string AnalyzerIDList = "";
+            foreach( string AnalyzerID in AnalyzerIDs )
             {
-                var codeId = System.Convert.ToInt32(AnalyzerID);
-                List<SearchTerm> Results = Controller.CLSController.getSearchTermsForSpecificAnalyzerId(codeId);
-                if (Results != null)
-                    Terms.AddRange(Results);
+                if (AnalyzerIDList.Length > 0)
+                    AnalyzerIDList += ",";
+                AnalyzerIDList += AnalyzerID;
             }
-            return Terms;
+            
+            return Controller.CLSController.getSearchTermsForSpecificAnalyzerIdListArray(AnalyzerIDList);
         }
 
         //we are going to cache each years's full data set once, that way all users will have fast access to all data per year
