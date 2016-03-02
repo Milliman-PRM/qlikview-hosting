@@ -82,7 +82,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="CLSdbContext.Diagram1.view">
       <DependentUpon>CLSdbContext.lqml</DependentUpon>
     </None>
