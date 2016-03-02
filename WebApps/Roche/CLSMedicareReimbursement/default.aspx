@@ -1,18 +1,21 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="default.aspx.cs" Inherits="CLSMedicareReimbursement._default" %>
-
 <%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
 
 <!DOCTYPE html>
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    
-    <noscript>Javascript must be enabled to run the Clinical Lab Systems Medicare Reimbursement user interface.</noscript>
-
-    <script src="scripts/jquery-2.2.0.min.js"></script>
+      
+     <script src="scripts/jquery-1.12.1.min.js" type="text/javascript"></script>
+     <script type="text/javascript" >
+         if (typeof jQuery == 'undefined') {
+             alert("jQuery could not be loaded.....");
+         }
+     </script>
 
     <title>Clinical Lab Systems Medicare Reimbursement</title>
-    <style>
+    <style type="text/css">
     body {
         background-color:white;
         margin:0px;
@@ -28,7 +31,7 @@
         font-size:20px;
             }
     #section {
-        width:99%;
+        width:98%;
         height:100%;
         float:left;
         padding:10px; 
@@ -38,7 +41,8 @@
         font-family: Arial;
         font-size:12px;
         height:120px;
-        bottom:0;
+        bottom:0px;
+        left:10px;
         position:absolute;
         padding:5px; 
     }
@@ -168,7 +172,7 @@
 
     </form>
 
-    <script type="text/javascript">
+    <script type="text/javascript" >
         //must hide menu via JQuery, or it may not un-hide when needed
        // $(menu).hide();
 
@@ -235,23 +239,19 @@
         }
 
         //intercept ajax request to keep grid from going to an odd size
-        (function (open) {
-            XMLHttpRequest.prototype.open = function (method, url, async, user, pass) {
-                this.addEventListener("readystatechange", function () {
-                    ResizeGridDataArea();  //resize grid data
-                }, false);
-                open.call(this, method, url, async, user, pass);
-            };
-        })(XMLHttpRequest.prototype.open);
+        //(function (open) {
+        //    XMLHttpRequest.prototype.open = function (method, url, async, user, pass) {
+        //        this.addEventListener("readystatechange", function () {
+        //            ResizeGridDataArea();  //resize grid data
+        //        }, false);
+        //        open.call(this, method, url, async, user, pass);
+        //    };
+        //})(XMLHttpRequest.prototype.open);
 
 
         //resize the grid when window resizes
         $(window).resize(function () { ResizeGrid(); });
         $(document).ready(function () { ResizeGrid(); });
-
-        if (typeof jQuery == 'undefined') {
-            alert("jQuery could not be loaded.....");
-        } 
 
     </script>
 </body>

@@ -18,8 +18,9 @@ namespace CLSMedicareReimbursement
             {
 
                 //make a session holder for the users selections 
+                CLSBusinessLogic.BusinessLogicManager.CurrentSelections CurrentSelections = new CLSBusinessLogic.BusinessLogicManager.CurrentSelections();
                 if (Session[SessionKey_Selections] == null)
-                    Session[SessionKey_Selections] = new CLSBusinessLogic.BusinessLogicManager.CurrentSelections();
+                    Session[SessionKey_Selections] = CurrentSelections;
 
                 CLSBusinessLogic.BusinessLogicManager BLM = CLSBusinessLogic.BusinessLogicManager.GetInstance();
                 //get the footer data and bind it
@@ -49,6 +50,7 @@ namespace CLSMedicareReimbursement
                 YearDropdown.DataSource = BLM.UniqueYears.OrderByDescending(i => i);
                 YearDropdown.DataBind();
                 YearDropdown.SelectedIndex = 0;
+                CurrentSelections.AddToList(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.YEARS, YearDropdown.SelectedItem.Text);
 
                 //set current working set in memory "DataSet" for main view grid
                 Session[SessionKey_DataSet] = BLM.DataByYear[YearDropdown.SelectedItem.Text];
