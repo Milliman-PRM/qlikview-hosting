@@ -85,6 +85,15 @@ namespace CLSMedicareReimbursement {
         protected global::Telerik.Web.UI.RadAjaxPanel menu_controls_panel;
         
         /// <summary>
+        /// AnalyzerSearch control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Telerik.Web.UI.RadSearchBox AnalyzerSearch;
+        
+        /// <summary>
         /// AnalyzerCheckList control.
         /// </summary>
         /// <remarks>
@@ -94,6 +103,15 @@ namespace CLSMedicareReimbursement {
         protected global::System.Web.UI.WebControls.CheckBoxList AnalyzerCheckList;
         
         /// <summary>
+        /// AssayDescriptionSearch control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Telerik.Web.UI.RadSearchBox AssayDescriptionSearch;
+        
+        /// <summary>
         /// AssayDescriptionList control.
         /// </summary>
         /// <remarks>
@@ -101,6 +119,15 @@ namespace CLSMedicareReimbursement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ListBox AssayDescriptionList;
+        
+        /// <summary>
+        /// LocalitySearch control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Telerik.Web.UI.RadSearchBox LocalitySearch;
         
         /// <summary>
         /// LocalityList control.

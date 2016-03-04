@@ -14,6 +14,8 @@ namespace CLSMedicareReimbursement
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            CLSBusinessLogic.BusinessLogicManager BLM = CLSBusinessLogic.BusinessLogicManager.GetInstance();
+
             if (!IsPostBack)
             {
 
@@ -22,75 +24,84 @@ namespace CLSMedicareReimbursement
                 if (Session[SessionKey_Selections] == null)
                     Session[SessionKey_Selections] = CurrentSelections;
 
-                CLSBusinessLogic.BusinessLogicManager BLM = CLSBusinessLogic.BusinessLogicManager.GetInstance();
-
-                    //to remove special character "Â" from footnote
-                    var footNotes = new List<CLSdbContext.Footnote>();
-                    var newFootNote = new CLSdbContext.Footnote();
-                    foreach (var item in BLM.FootNotes)
+                //to remove special character "Â" from footnote
+                var footNotes = new List<CLSdbContext.Footnote>();
+                var newFootNote = new CLSdbContext.Footnote();
+                foreach (var item in BLM.FootNotes)
+                {
+                    if (item.Footnote1.Contains(@"Â"))
                     {
-                        if (item.Footnote1.Contains(@"Â"))
-                        {
-                            newFootNote.Id = item.Id;
-                            newFootNote.Footnote1 = item.Footnote1.Replace(@"Â", string.Empty);
-                        }
-                        else
-                        {
-                            newFootNote.Id = item.Id;
-                            newFootNote.Footnote1 = item.Footnote1;
-                        }
-                        footNotes.Add(newFootNote);
-                        newFootNote = new CLSdbContext.Footnote();
+                        newFootNote.Id = item.Id;
+                        newFootNote.Footnote1 = item.Footnote1.Replace(@"Â", string.Empty);
                     }
-            
-
-                    FooterList.DataSource = footNotes;
-                    FooterList.DataTextField = "Footnote1";
-                    FooterList.DataValueField = "Id";
-                    FooterList.DataBind();
-
-                    if (BLM.WebURL.Count > 0)
+                    else
                     {
-                        lblFooterLink.Text = BLM.WebURL[0].Displaytext;
-                        FooterLink.Text = BLM.WebURL[0].Webaddressurl;
-                        FooterLink.NavigateUrl = BLM.WebURL[0].Webaddressurl;
+                        newFootNote.Id = item.Id;
+                        newFootNote.Footnote1 = item.Footnote1;
                     }
-
-                    AnalyzerCheckList.DataSource = BLM.UniqueAnalyzers;
-                    AnalyzerCheckList.DataTextField = "AnalyzerName";
-                    AnalyzerCheckList.DataValueField = "Id";
-                    AnalyzerCheckList.DataBind();
-
-                    AssayDescriptionList.DataSource = BLM.UniqueAssayDescriptions;
-                    AssayDescriptionList.DataTextField = "SearchDesc";
-                    AssayDescriptionList.DataValueField = "Id";
-                    AssayDescriptionList.DataBind();
-
-                    LocalityList.DataSource = BLM.UniqueLocalities;
-                    LocalityList.DataTextField = "LocalityDescription";
-                    LocalityList.DataValueField = "Id";
-                    LocalityList.DataBind();
-
-                    YearDropdown.DataSource = BLM.UniqueYears.OrderByDescending(i => i);
-                    YearDropdown.DataBind();
-                    YearDropdown.SelectedIndex = 0;
-                    CurrentSelections.AddToList(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.YEARS, YearDropdown.SelectedItem.Text);
-
-                    //set current working set in memory "DataSet" for main view grid
-                    Session[SessionKey_DataSet] = BLM.DataByYear[YearDropdown.SelectedItem.Text];
-                    RatesGrid.VirtualItemCount = BLM.DataByYear[YearDropdown.SelectedItem.Text].Rows.Count;
-
-
+                    footNotes.Add(newFootNote);
+                    newFootNote = new CLSdbContext.Footnote();
                 }
+
+
+                FooterList.DataSource = footNotes;
+                FooterList.DataTextField = "Footnote1";
+                FooterList.DataValueField = "Id";
+                FooterList.DataBind();
+
+                if (BLM.WebURL.Count > 0)
+                {
+                    lblFooterLink.Text = BLM.WebURL[0].Displaytext;
+                    FooterLink.Text = BLM.WebURL[0].Webaddressurl;
+                    FooterLink.NavigateUrl = BLM.WebURL[0].Webaddressurl;
+                }
+
+                AnalyzerCheckList.DataSource = BLM.UniqueAnalyzers;
+                AnalyzerCheckList.DataTextField = "AnalyzerName";
+                AnalyzerCheckList.DataValueField = "Id";
+                AnalyzerCheckList.DataBind();
+
+                AssayDescriptionList.DataSource = BLM.UniqueAssayDescriptions;
+                AssayDescriptionList.DataTextField = "SearchDesc";
+                AssayDescriptionList.DataValueField = "Id";
+                AssayDescriptionList.DataBind();
+
+                LocalityList.DataSource = BLM.UniqueLocalities;
+                LocalityList.DataTextField = "LocalityDescription";
+                LocalityList.DataValueField = "Id";
+                LocalityList.DataBind();
+
+                YearDropdown.DataSource = BLM.UniqueYears.OrderByDescending(i => i);
+                YearDropdown.DataBind();
+                YearDropdown.SelectedIndex = 0;
+                CurrentSelections.AddToList(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.YEARS, YearDropdown.SelectedItem.Text);
+
+                //set current working set in memory "DataSet" for main view grid
+                Session[SessionKey_DataSet] = BLM.DataByYear[YearDropdown.SelectedItem.Text];
+                RatesGrid.VirtualItemCount = BLM.DataByYear[YearDropdown.SelectedItem.Text].Rows.Count;
+
+            }
             else
             {
-                    //since the year drop down is not in a ajax panel, it causes a postback which results
-                    //in the menu being displayed, do check, if triggred by year drop down, then hide the menu
-                    Control C = GetControlThatCausedPostBack(this);
-                    if ((C != null) && (string.Compare(C.ClientID, "yeardropdown", true) == 0))
-                        menu.Visible = false; //keep the menu hidden on postback from drop, its not in an ajax panel
-                }
+                //since the year drop down is not in a ajax panel, it causes a postback which results
+                //in the menu being displayed, do check, if triggred by year drop down, then hide the menu
+                Control C = GetControlThatCausedPostBack(this);
+                if ((C != null) && (string.Compare(C.ClientID, "yeardropdown", true) == 0))
+                    menu.Visible = false; //keep the menu hidden on postback from drop, its not in an ajax panel
             }
+
+            //these items have to be bound on each call
+            AnalyzerSearch.DataSource = BLM.UniqueAnalyzers;
+            AnalyzerSearch.DataBind();
+            //we always allow searching across all entries
+            if (BLM.UniqueAssayDescriptions.Count > 0)
+            {
+                AssayDescriptionSearch.DataSource = BLM.UniqueAssayDescriptions;
+                AssayDescriptionSearch.DataBind();
+            }
+            LocalitySearch.DataSource = BLM.UniqueLocalities;
+            LocalitySearch.DataBind();
+        }
 
         private Control GetControlThatCausedPostBack(Page page)
         {
@@ -134,7 +145,7 @@ namespace CLSMedicareReimbursement
                 //add the subset to the view
                 RatesGrid.DataSource = DataSubSet;
             }
-
+          
         }
 
         private System.Drawing.Color Selected = System.Drawing.Color.LightGreen;
@@ -165,11 +176,10 @@ namespace CLSMedicareReimbursement
             //update user selections
             List<string> SelectedAnalyzerNames = AnalyzerCheckList.Items.Cast<ListItem>().Where(n => n.Selected).Select(n => n.Text).ToList();
             //update the users selection object instance
-            CurrentSels.Clear(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.ANALYZERNAMES);
+            CurrentSels.Clear(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.ANALYZERNAMES);  
             foreach (string Selected in SelectedAnalyzerNames)
                 CurrentSels.AddToList(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.ANALYZERNAMES, Selected);
             AssayDescriptionList.Items.Clear();
-            System.Diagnostics.Debug.WriteLine("                          analyzer sel index changed start updated");
             //need to get all the analyzers ids
             List<string> SelectedAnalyzerIDs = new List<string>();
             foreach (string AnalyzerName in SelectedAnalyzerNames)
@@ -183,6 +193,7 @@ namespace CLSMedicareReimbursement
                 AssayDescriptionList.DataTextField = "SearchDesc";
                 AssayDescriptionList.DataValueField = "Id";
                 AssayDescriptionList.DataBind();
+
                 UnHighlightAnalyzers(); //something selected so turn off highlights
             }
             else  //user un-selected, there are no analyzers selected, so re-show entire list, but highlight analyzer list items if 1 assay description is selected
@@ -196,12 +207,12 @@ namespace CLSMedicareReimbursement
                 AssayDescriptionList.DataTextField = "SearchDesc";
                 AssayDescriptionList.DataValueField = "Id";
                 AssayDescriptionList.DataBind();
+
                 //no analyzer, check to see if SINGLE assay description highlighted
                 NoAnalyzerSingleAssayDescriptionSelected();
                 if (CurrentSels.SearchTermDescs.Count() == 1)
                     AssayDescriptionList.Items.FindByText(CurrentSels.SearchTermDescs[0]).Selected = true;
             }
-            System.Diagnostics.Debug.WriteLine("                          analyzer sel index changed end update");
 
         }
 
@@ -313,7 +324,7 @@ namespace CLSMedicareReimbursement
                         CurrentSels.Clear(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.ANALYZERIDS);
                         CurrentSels.AddToList(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.ANALYZERNAMES, SelectedValue);
                         RebindPrimaryGrid(CurrentSels);
-                        break;
+                        break; 
                     case "description":
                         CurrentSels.Clear(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.SEARCHTERMBYCODEIDS);
                         CurrentSels.Clear(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.SEARCHTERMDESCS);
@@ -385,7 +396,7 @@ namespace CLSMedicareReimbursement
             }
 
             foreach (string SearchTerm in CurrentSels.SearchTermDescs)
-            {
+            { 
                 ListItem LI = AssayDescriptionList.Items.FindByText(SearchTerm);
                 if (LI != null)
                     LI.Selected = true;
@@ -416,6 +427,56 @@ namespace CLSMedicareReimbursement
             }
             else
                 UnHighlightAnalyzers();
+        }
+
+        protected void AnalyzerSearch_Search(object sender, Telerik.Web.UI.SearchBoxEventArgs e)
+        {
+            //user selected from search
+            ListItem LI = AnalyzerCheckList.Items.FindByText(AnalyzerSearch.Text);
+            if (LI != null)
+            {
+                LI.Selected = true;
+                AnalyzerCheckList_SelectedIndexChanged(null, null);
+            }
+            AnalyzerSearch.Text = "";
+        }
+
+        protected void AssayDescriptionSearch_Search(object sender, Telerik.Web.UI.SearchBoxEventArgs e)
+        {
+            ListItem LI = AssayDescriptionList.Items.FindByText(AssayDescriptionSearch.Text);
+            if ( LI != null )
+            {
+                LI.Selected = true;
+                AssayDescriptionList_SelectedIndexChanged(null, null);
+            }
+            else
+            {
+                //special case,  they have selected a search item that is not in the current list so we clear search and reset back
+                //to a full search 
+
+                CLSBusinessLogic.BusinessLogicManager.CurrentSelections CurrentSels = Session[SessionKey_Selections] as CLSBusinessLogic.BusinessLogicManager.CurrentSelections;
+                CurrentSels.Clear(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.ALL);
+                CurrentSels.AddToList(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.SEARCHTERMDESCS, AssayDescriptionSearch.Text);
+                AssayDescriptionList.DataSource = CLSBusinessLogic.BusinessLogicManager.GetInstance().UniqueAssayDescriptions;
+                AssayDescriptionList.DataBind();
+                LI = AssayDescriptionList.Items.FindByText(AssayDescriptionSearch.Text);
+                LI.Selected = true;
+                AnalyzerCheckList.ClearSelection();
+                LocalityList.ClearSelection();
+                AssayDescriptionList_SelectedIndexChanged(null, null);
+            }
+            AssayDescriptionSearch.Text = "";
+        }
+
+        protected void LocalitySearch_Search(object sender, Telerik.Web.UI.SearchBoxEventArgs e)
+        {
+            ListItem LI = LocalityList.Items.FindByText(LocalitySearch.Text);
+            if ( LI != null )
+            {
+                LI.Selected = true;
+                LocalityList_SelectedIndexChanged(null, null);
+            }
+            LocalitySearch.Text = "";
         }
     }
 }
