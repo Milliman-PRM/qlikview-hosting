@@ -274,14 +274,14 @@
         }
 
         //intercept ajax request to keep grid from going to an odd size
-        (function (open) {
-            XMLHttpRequest.prototype.open = function (method, url, async, user, pass) {
-                this.addEventListener("readystatechange", function () {
-                    ResizeGridDataArea();  //resize grid data
-                }, false);
-                open.call(this, method, url, async, user, pass);
-            };
-        })(XMLHttpRequest.prototype.open);
+        //(function (open) {
+        //    XMLHttpRequest.prototype.open = function (method, url, async, user, pass) {
+        //        this.addEventListener("readystatechange", function () {
+        //            ResizeGridDataArea();  //resize grid data
+        //        }, false);
+        //        open.call(this, method, url, async, user, pass);
+        //    };
+        //})(XMLHttpRequest.prototype.open);
 
 
         //resize the grid when window resizes
