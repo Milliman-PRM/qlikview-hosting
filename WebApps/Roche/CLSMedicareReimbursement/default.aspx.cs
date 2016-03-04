@@ -14,6 +14,8 @@ namespace CLSMedicareReimbursement
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            CLSBusinessLogic.BusinessLogicManager BLM = CLSBusinessLogic.BusinessLogicManager.GetInstance();
+
             if (!IsPostBack)
             {
 
@@ -22,7 +24,6 @@ namespace CLSMedicareReimbursement
                 if (Session[SessionKey_Selections] == null)
                     Session[SessionKey_Selections] = CurrentSelections;
 
-                CLSBusinessLogic.BusinessLogicManager BLM = CLSBusinessLogic.BusinessLogicManager.GetInstance();
                 //get the footer data and bind it
                 FooterList.DataSource = BLM.FootNotes;
                 FooterList.DataTextField = "Footnote1";
@@ -56,7 +57,6 @@ namespace CLSMedicareReimbursement
                 Session[SessionKey_DataSet] = BLM.DataByYear[YearDropdown.SelectedItem.Text];
                 RatesGrid.VirtualItemCount = BLM.DataByYear[YearDropdown.SelectedItem.Text].Rows.Count;
 
-
             }
             else
             {
@@ -66,6 +66,16 @@ namespace CLSMedicareReimbursement
                 if ( (C != null) && (string.Compare(C.ClientID,"yeardropdown", true) == 0))
                     menu.Visible = false; //keep the menu hidden on postback from drop, its not in an ajax panel
             }
+
+            //these items have to be bound on each call
+            AnalyzerSearch.DataSource = BLM.UniqueAnalyzers;
+            AnalyzerSearch.DataBind();
+            //we always allow searching across all entries
+            AssayDescriptionSearch.DataSource = BLM.UniqueAssayDescriptions;
+            AssayDescriptionSearch.DataBind();
+
+            LocalitySearch.DataSource = BLM.UniqueLocalities;
+            LocalitySearch.DataBind();
         }
 
         private Control GetControlThatCausedPostBack(Page page)
@@ -145,7 +155,6 @@ namespace CLSMedicareReimbursement
             foreach (string Selected in SelectedAnalyzerNames)
                 CurrentSels.AddToList(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.ANALYZERNAMES, Selected);
             AssayDescriptionList.Items.Clear();
-            System.Diagnostics.Debug.WriteLine("                          analyzer sel index changed start updated");
             //need to get all the analyzers ids
             List<string> SelectedAnalyzerIDs = new List<string>();
             foreach (string AnalyzerName in SelectedAnalyzerNames)
@@ -159,6 +168,7 @@ namespace CLSMedicareReimbursement
                 AssayDescriptionList.DataTextField = "SearchDesc";
                 AssayDescriptionList.DataValueField = "Id";
                 AssayDescriptionList.DataBind();
+
                 UnHighlightAnalyzers(); //something selected so turn off highlights
             }
             else  //user un-selected, there are no analyzers selected, so re-show entire list, but highlight analyzer list items if 1 assay description is selected
@@ -172,12 +182,12 @@ namespace CLSMedicareReimbursement
                 AssayDescriptionList.DataTextField = "SearchDesc";
                 AssayDescriptionList.DataValueField = "Id";
                 AssayDescriptionList.DataBind();
+
                 //no analyzer, check to see if SINGLE assay description highlighted
                 NoAnalyzerSingleAssayDescriptionSelected();
                 if (CurrentSels.SearchTermDescs.Count() == 1)
                     AssayDescriptionList.Items.FindByText(CurrentSels.SearchTermDescs[0]).Selected = true;
             }
-            System.Diagnostics.Debug.WriteLine("                          analyzer sel index changed end update");
 
         }
 
@@ -392,6 +402,56 @@ namespace CLSMedicareReimbursement
             }
             else
                 UnHighlightAnalyzers();
+        }
+
+        protected void AnalyzerSearch_Search(object sender, Telerik.Web.UI.SearchBoxEventArgs e)
+        {
+            //user selected from search
+            ListItem LI = AnalyzerCheckList.Items.FindByText(AnalyzerSearch.Text);
+            if (LI != null)
+            {
+                LI.Selected = true;
+                AnalyzerCheckList_SelectedIndexChanged(null, null);
+            }
+            AnalyzerSearch.Text = "";
+        }
+
+        protected void AssayDescriptionSearch_Search(object sender, Telerik.Web.UI.SearchBoxEventArgs e)
+        {
+            ListItem LI = AssayDescriptionList.Items.FindByText(AssayDescriptionSearch.Text);
+            if ( LI != null )
+            {
+                LI.Selected = true;
+                AssayDescriptionList_SelectedIndexChanged(null, null);
+            }
+            else
+            {
+                //special case,  they have selected a search item that is not in the current list so we clear search and reset back
+                //to a full search 
+
+                CLSBusinessLogic.BusinessLogicManager.CurrentSelections CurrentSels = Session[SessionKey_Selections] as CLSBusinessLogic.BusinessLogicManager.CurrentSelections;
+                CurrentSels.Clear(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.ALL);
+                CurrentSels.AddToList(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.SEARCHTERMDESCS, AssayDescriptionSearch.Text);
+                AssayDescriptionList.DataSource = CLSBusinessLogic.BusinessLogicManager.GetInstance().UniqueAssayDescriptions;
+                AssayDescriptionList.DataBind();
+                LI = AssayDescriptionList.Items.FindByText(AssayDescriptionSearch.Text);
+                LI.Selected = true;
+                AnalyzerCheckList.ClearSelection();
+                LocalityList.ClearSelection();
+                AssayDescriptionList_SelectedIndexChanged(null, null);
+            }
+            AssayDescriptionSearch.Text = "";
+        }
+
+        protected void LocalitySearch_Search(object sender, Telerik.Web.UI.SearchBoxEventArgs e)
+        {
+            ListItem LI = LocalityList.Items.FindByText(LocalitySearch.Text);
+            if ( LI != null )
+            {
+                LI.Selected = true;
+                LocalityList_SelectedIndexChanged(null, null);
+            }
+            LocalitySearch.Text = "";
         }
     }
 }

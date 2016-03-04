@@ -69,7 +69,13 @@
        overflow-x:hidden !important;   
     }         
  
-
+    .RadSearchBox .rsbEmptyMessage {
+       color:#046EBC !important;
+       opacity:1.0;
+       font-weight:bolder !important;
+       font-style:normal !important;
+       outline:none; /* remove chrome defalt textbox outline */
+    }
     </style> 
 </head>
 <body onload="Ready()">
@@ -103,19 +109,22 @@
     <div id="menu" runat="server" visible="false" >
             <telerik:RadAjaxPanel ID="menu_controls_panel" runat="server" LoadingPanelID="RadAjaxLoadingPanel1">
                  <div style="border:1px solid black;color:white;overflow:hidden;background-color:#046EBC;position:absolute;top:5px;left:5px;height:390px;width:256px">
-                     <img src="Images/search.png" style="vertical-align: middle;float:right" />Analyzer
+                     <telerik:RadSearchBox runat="server" ID="AnalyzerSearch" EmptyMessage="Analyzer" Width="100%" DataTextField="AnalyzerName" DataValueField="Id" DropDownSettings-Height="370px" DropDownSettings-Width="255px" OnSearch="AnalyzerSearch_Search" OnClientSearch="OnClientSearch" RenderMode="Lightweight" >
+                     </telerik:RadSearchBox>
                      <div style="overflow:auto;width:100%;height:100%">
                         <asp:CheckBoxList ID="AnalyzerCheckList" runat="server"  BackColor="white" Width="100%" ForeColor="Black" AutoPostBack="True" OnSelectedIndexChanged="AnalyzerCheckList_SelectedIndexChanged" ViewStateMode="Enabled"></asp:CheckBoxList>
                     </div>
                 </div>
  
                 <div style="border:1px solid black;overflow:hidden;background-color:#046EBC;color:white;position:absolute;top:5px;left:266px;height:390px;width:512px">
-                    <img src="Images/search.png" style="vertical-align: middle;float:right" />Assay Description<br />
+                     <telerik:RadSearchBox runat="server" ID="AssayDescriptionSearch" EmptyMessage="Assay Description" Width="100%" DataTextField="SearchDesc" DataValueField="Id" DropDownSettings-Height="370px" DropDownSettings-Width="511px"  RenderMode="Lightweight" OnSearch="AssayDescriptionSearch_Search" OnClientSearch="OnClientSearch" >
+                     </telerik:RadSearchBox>
                    <asp:ListBox ID="AssayDescriptionList" runat="server" Width="100%" Height="375px" BackColor="White" ForeColor="Black" AutoPostBack="True" OnSelectedIndexChanged="AssayDescriptionList_SelectedIndexChanged" SelectionMode="Multiple" ViewStateMode="Enabled"></asp:ListBox>
                 </div>
 
                  <div style="border:1px solid black;overflow:hidden;background-color:#046EBC;color:white;position:absolute;top:5px;left:783px;height:390px;width:256px">
-                     <img src="Images/search.png" style="vertical-align: middle;float:right" />Locality
+                     <telerik:RadSearchBox runat="server" ID="LocalitySearch" EmptyMessage="Locality" Width="100%" DataTextField="LocalityDescLong" DataValueField="Id" DropDownSettings-Height="370px" DropDownSettings-Width="255px" RenderMode="Lightweight" OnSearch="LocalitySearch_Search" OnClientSearch="OnClientSearch" >
+                     </telerik:RadSearchBox>
                      <asp:ListBox ID="LocalityList" runat="server" Width="100%" Height="375px" BackColor="White" ForeColor="Black" AutoPostBack="True" OnSelectedIndexChanged="LocalityList_SelectedIndexChanged" SelectionMode="Multiple" ViewStateMode="Enabled"></asp:ListBox>
                 </div>
         </telerik:RadAjaxPanel>
@@ -179,10 +188,25 @@
         function MenuEvents()
         {
             if (document.getElementById("menu") !== null) {
-                //$(menu).show('slow');
+
                 $(menu).mouseleave(function () {
-                    $(menu).hide();
-                    $find("<%= RadGridPanel.ClientID%>").ajaxRequestWithTarget("<%= RadGridPanel.UniqueID %>", "refresh");
+                    //we have to check where the mouse is,  due to the implementation of some of the controls
+                    //we will get a mouseleave event, like when the search dropdown opens
+                    
+                    //we need to check these to make sure the drop down is not active
+                    var AnalyzerSearchNode = $telerik.$($find("AnalyzerSearch").get_childListElement());
+                    var AssaySearchNode = $telerik.$($find("AssayDescriptionSearch").get_childListElement());
+                    var LocalitySearchNode = $telerik.$($find("LocalitySearch").get_childListElement());
+                    if ((AnalyzerSearchNode.length == 0) && (AssaySearchNode.length == 0) && (LocalitySearchNode.length == 0)) {
+                        $(menu).hide();
+
+                        var currentLoadingPanel = $find("<%= RadAjaxLoadingPanel1.ClientID %>");
+                        var currentGrid = $find("<%= RadGridPanel.ClientID%>")
+                        currentLoadingPanel.show(currentGrid);
+                        $find("<%= RadGridPanel.ClientID%>").ajaxRequestWithTarget("<%= RadGridPanel.UniqueID %>", "refresh");
+
+                    }
+
        <%--             var currentLoadingPanel = $find("<%= RadAjaxLoadingPanel1.ClientID %>");
                     var currentGrid = $find("<%= RadGridPanel.ClientID%>")
                     currentLoadingPanel.show(currentGrid);--%>
@@ -233,20 +257,31 @@
             previewWnd.close();
         }
 
+
+        //dont allow a post back if nothing is selected
+        function OnClientSearch(sender, args) {
+
+            if (sender.get_text().length < 1) {
+
+                sender._element.control._postBackOnSearch = false;
+            }
+
+        }
+  
         function Ready()
         {
             MenuEvents();
         }
 
         //intercept ajax request to keep grid from going to an odd size
-        //(function (open) {
-        //    XMLHttpRequest.prototype.open = function (method, url, async, user, pass) {
-        //        this.addEventListener("readystatechange", function () {
-        //            ResizeGridDataArea();  //resize grid data
-        //        }, false);
-        //        open.call(this, method, url, async, user, pass);
-        //    };
-        //})(XMLHttpRequest.prototype.open);
+        (function (open) {
+            XMLHttpRequest.prototype.open = function (method, url, async, user, pass) {
+                this.addEventListener("readystatechange", function () {
+                    ResizeGridDataArea();  //resize grid data
+                }, false);
+                open.call(this, method, url, async, user, pass);
+            };
+        })(XMLHttpRequest.prototype.open);
 
 
         //resize the grid when window resizes
