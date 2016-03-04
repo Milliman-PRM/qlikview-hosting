@@ -90,6 +90,7 @@ namespace CLSMedicareReimbursement
                     menu.Visible = false; //keep the menu hidden on postback from drop, its not in an ajax panel
             }
 
+
             //these items have to be bound on each call
             AnalyzerSearch.DataSource = BLM.UniqueAnalyzers;
             AnalyzerSearch.DataBind();

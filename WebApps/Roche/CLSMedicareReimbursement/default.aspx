@@ -122,12 +122,14 @@
                 </div>
  
                 <div style="border:1px solid black;overflow:hidden;background-color:#046EBC;color:white;position:absolute;top:5px;left:266px;height:390px;width:512px">
-                    <img src="Images/search.png" style="vertical-align: middle;float:right" />Assay Description<br />
+                     <telerik:RadSearchBox runat="server" ID="AssayDescriptionSearch" EmptyMessage="Assay Description" Width="100%" DataTextField="SearchDesc" DataValueField="Id" DropDownSettings-Height="370px" DropDownSettings-Width="511px"  RenderMode="Lightweight" OnSearch="AssayDescriptionSearch_Search" OnClientSearch="OnClientSearch" >
+                     </telerik:RadSearchBox>
                    <asp:ListBox ID="AssayDescriptionList" runat="server" Width="100%" Height="375px" BackColor="White" ForeColor="Black" AutoPostBack="True" OnSelectedIndexChanged="AssayDescriptionList_SelectedIndexChanged" SelectionMode="Multiple" ViewStateMode="Enabled"></asp:ListBox>
                 </div>
 
                  <div style="border:1px solid black;overflow:hidden;background-color:#046EBC;color:white;position:absolute;top:5px;left:783px;height:390px;width:256px">
-                     <img src="Images/search.png" style="vertical-align: middle;float:right" />Locality
+                     <telerik:RadSearchBox runat="server" ID="LocalitySearch" EmptyMessage="Locality" Width="100%" DataTextField="LocalityDescLong" DataValueField="Id" DropDownSettings-Height="370px" DropDownSettings-Width="255px" RenderMode="Lightweight" OnSearch="LocalitySearch_Search" OnClientSearch="OnClientSearch" >
+                     </telerik:RadSearchBox>
                      <asp:ListBox ID="LocalityList" runat="server" Width="100%" Height="375px" BackColor="White" ForeColor="Black" AutoPostBack="True" OnSelectedIndexChanged="LocalityList_SelectedIndexChanged" SelectionMode="Multiple" ViewStateMode="Enabled"></asp:ListBox>
                 </div>
         </telerik:RadAjaxPanel>
@@ -254,6 +256,16 @@
             previewWnd.document.close(); 
             previewWnd.print();
             previewWnd.close();
+        }
+
+        //dont allow a post back if nothing is selected
+        function OnClientSearch(sender, args) {
+
+            if (sender.get_text().length < 1) {
+
+                sender._element.control._postBackOnSearch = false;
+            }
+
         }
 
         function Ready()
