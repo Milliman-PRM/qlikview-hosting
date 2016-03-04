@@ -126,7 +126,7 @@ namespace CLSBusinessLogic
                 throw new Exception("Required schema name was not provided for table reference.");
             }
 
-            string QueryRoot = "SELECT DISTINCT analyzers.analyzer_name, code.description, code.code, analyzers.notes, localities.locality_desc_shrt, reimbursement_rates.rate FROM _SCHEMA_.analyzers, _SCHEMA_.code, _SCHEMA_.reimbursement_rates, _SCHEMA_.localities _SEARCHTERMS_ WHERE reimbursement_rates.fk_code_id = code.id AND reimbursement_rates.fk_code_id = analyzers.fk_code_id AND reimbursement_rates.fk_locality_id = localities.id _SEARCHTERMCONDITIONS_ ";
+            string QueryRoot = "SELECT DISTINCT analyzers.analyzer_name, code.description, code.code, analyzers.notes, localities.locality_description, reimbursement_rates.rate FROM _SCHEMA_.analyzers, _SCHEMA_.code, _SCHEMA_.reimbursement_rates, _SCHEMA_.localities _SEARCHTERMS_ WHERE reimbursement_rates.fk_code_id = code.id AND reimbursement_rates.fk_code_id = analyzers.fk_code_id AND reimbursement_rates.fk_locality_id = localities.id _SEARCHTERMCONDITIONS_ ";
             //if the query requires search terms we need to add it as a FROM clause
             if (((SearchTermDescs != null) && (SearchTermDescs.Count > 0)) || ((SearchTermIDs != null) && (SearchTermIDs.Count > 0)) || ((SearchTermByCodeIDs != null) && (SearchTermByCodeIDs.Count > 0)))
             {
@@ -161,7 +161,7 @@ namespace CLSBusinessLogic
             if (LocalatiesIDs != null)
                 WhereClause += WhereClauseBuilder("localities.id", LocalatiesIDs);
             if (LocalatiesByDescShrt != null)
-                WhereClause += WhereClauseBuilder("localities.locality_desc_shrt", LocalatiesByDescShrt);
+                WhereClause += WhereClauseBuilder("localities.locality_description", LocalatiesByDescShrt);
             if (Years != null)
                 WhereClause += WhereClauseBuilder("reimbursement_rates.year", Years);
             if (CPTCodes != null)
@@ -170,7 +170,7 @@ namespace CLSBusinessLogic
             if (string.IsNullOrEmpty(WhereClause) == false)
                 QueryRoot += WhereClause;
 
-            QueryRoot += " ORDER BY analyzers.analyzer_name, code.description, localities.locality_desc_shrt;";
+            QueryRoot += " ORDER BY analyzers.analyzer_name, code.description, localities.locality_description;";
             return QueryRoot;
         }
         /// <summary>
@@ -228,7 +228,7 @@ namespace CLSBusinessLogic
         /// <returns></returns>
         private string GetConnectionString(out string Schema)
         {
-            //User Id=van.nanney;Host=indy-pgsql02;Database=Roche_Medicare_Reimbursement_Develop;Integrated Security=True;Initial Schema=rmrrdb_20160222
+            //User Id=van.nanney;Host=indy-pgsql02;Database=Roche_Medicare_Reimbursement_Develop;Integrated Security=True;Initial Schema=rmrrdb_20160304
             Schema = string.Empty;
             string ConnString = System.Configuration.ConfigurationManager.ConnectionStrings["CLSdbDataContextConnectionString"].ConnectionString;
             string SchemaKey = "initial schema";

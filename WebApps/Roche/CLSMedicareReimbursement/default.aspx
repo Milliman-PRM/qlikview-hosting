@@ -1,4 +1,5 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="default.aspx.cs" Inherits="CLSMedicareReimbursement._default" %>
+
 <%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
 
 <!DOCTYPE html>
@@ -6,80 +7,80 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-      
-     <script src="scripts/jquery-1.12.1.min.js" type="text/javascript"></script>
-     <script type="text/javascript" >
-         if (typeof jQuery == 'undefined') {
-             alert("jQuery could not be loaded.....");
-         }
-     </script>
+
+    <script src="scripts/jquery-1.12.1.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        if (typeof jQuery == 'undefined') {
+            alert("jQuery could not be loaded.....");
+        }
+    </script>
 
     <title>Clinical Lab Systems Medicare Reimbursement</title>
     <style type="text/css">
-    body {
-        background-color:white;
-        margin:0px;
-        overflow:hidden;
-    }
-    #header {
-        height:75px;
-        color:black;
-        text-align:center;
-        padding:5px;
-        border-bottom:3px solid #046EBC;
-        font-family: Arial;
-        font-size:20px;
-            }
-    #section {
-        width:98%;
-        height:100%;
-        float:left;
-        padding:10px; 
-    }
-    #footer {
-        text-align:left;
-        font-family: Arial;
-        font-size:12px;
-        height:120px;
-        bottom:0px;
-        left:10px;
-        position:absolute;
-        padding:5px; 
-    }
-    #menu {
-        text-align:left;
-        font-family: Arial;
-        font-size:12px;
-        height:400px;
-        width:1044px;
-        top:85px;
-        left:30px;
-        position:absolute;
-        visibility:visible;
-        background-color:white;
-        padding:0px; 
-        margin:0px;
-        border:3px solid #046EBC;
+        body {
+            background-color: white;
+            margin: 0px;
+            overflow: hidden;
+        }
 
-    }
+        #header {
+            height: 75px;
+            color: black;
+            text-align: center;
+            padding: 5px;
+            border-bottom: 3px solid #046EBC;
+            font-family: Arial;
+            font-size: 20px;
+        }
 
-    /*hide radgrid horizontal scroll*/ 
-    #RatesGrid_GridData   
-    {   
-       overflow-x:hidden !important;   
-    }         
- 
+        #section {
+            width: 98%;
+            height: 100%;
+            float: left;
+            padding: 10px;
+        }
 
-    </style> 
+        #footer {
+            text-align: left;
+            font-family: Arial;
+            font-size: 12px;
+            height: 120px;
+            bottom: 0px;
+            left: 10px;
+            position: absolute;
+            padding: 5px;
+        }
+
+        #menu {
+            text-align: left;
+            font-family: Arial;
+            font-size: 12px;
+            height: 400px;
+            width: 1044px;
+            top: 85px;
+            left: 30px;
+            position: absolute;
+            visibility: visible;
+            background-color: white;
+            padding: 0px;
+            margin: 0px;
+            border: 3px solid #046EBC;
+        }
+
+        /*hide radgrid horizontal scroll*/
+        #RatesGrid_GridData {
+            overflow-x: hidden !important;
+        }
+    </style>
 </head>
 <body onload="Ready()">
     <form id="form1" runat="server">
-     <telerik:RadScriptManager runat="server" ID="RadScriptManager1" />
+        <telerik:RadScriptManager runat="server" ID="RadScriptManager1" />
         <telerik:RadSkinManager ID="RadSkinManager1" runat="server" ShowChooser="false" PersistenceKey="Telerik.Skin" Skin="Metro" />
         <telerik:RadAjaxManager ID="RadAjaxManager1" runat="server">
             <AjaxSettings>
                 <%--<telerik:AjaxSetting AjaxControlID="RatesGrid">--%>
-                <telerik:AjaxSetting >
+                <telerik:AjaxSetting>
                     <UpdatedControls>
                         <telerik:AjaxUpdatedControl ControlID="RatesGrid"></telerik:AjaxUpdatedControl>
                         <telerik:AjaxUpdatedControl ControlID="menu_controls_panel"></telerik:AjaxUpdatedControl>
@@ -87,97 +88,98 @@
                 </telerik:AjaxSetting>
             </AjaxSettings>
         </telerik:RadAjaxManager>
-        <telerik:RadAjaxLoadingPanel runat="server" ID="RadAjaxLoadingPanel1" Transparency="60" BackColor="lightgray" Skin="Default" ></telerik:RadAjaxLoadingPanel>
-     <div id="header">
-         <table style="width:100%">
-             <tr>
-<%--                <td style="vertical-align:bottom;padding-bottom:5px"><asp:ImageButton ID="LaunchMenu" runat="server" ImageUrl="~/Images/settings.png" OnClientClick="ShowMenu(); return false;" /></td>--%>
-                <td style="vertical-align:bottom;padding-bottom:5px"><asp:ImageButton ID="LaunchMenu" runat="server" ImageUrl="~/Images/settings.png" OnClick="LaunchMenu_Click" /></td>
+        <telerik:RadAjaxLoadingPanel runat="server" ID="RadAjaxLoadingPanel1" Transparency="60" BackColor="lightgray" Skin="Default"></telerik:RadAjaxLoadingPanel>
+        <div id="header">
+            <table style="width: 100%">
+                <tr>
+                    <%--                <td style="vertical-align:bottom;padding-bottom:5px"><asp:ImageButton ID="LaunchMenu" runat="server" ImageUrl="~/Images/settings.png" OnClientClick="ShowMenu(); return false;" /></td>--%>
+                    <td style="vertical-align: bottom; padding-bottom: 5px">
+                        <asp:ImageButton ID="LaunchMenu" runat="server" ImageUrl="~/Images/settings.png" OnClick="LaunchMenu_Click" /></td>
 
-                <td><h2>Clinical Lab Systems Medicare Reimbursement</h2></td>
-                <td style="vertical-align:bottom;padding-bottom:5px" > <asp:Image ID="Brand" runat="server" ImageUrl="~/Images/roche.png"  Height="50px" /></td>
-            </tr>
-         </table>
-    </div>
+                    <td>
+                        <h2>Clinical Lab Systems Medicare Reimbursement</h2>
+                    </td>
+                </tr>
+            </table>
+        </div>
 
-    <div id="menu" runat="server" visible="false" >
+        <div id="menu" runat="server" visible="false">
             <telerik:RadAjaxPanel ID="menu_controls_panel" runat="server" LoadingPanelID="RadAjaxLoadingPanel1">
-                 <div style="border:1px solid black;color:white;overflow:hidden;background-color:#046EBC;position:absolute;top:5px;left:5px;height:390px;width:256px">
-                     <img src="Images/search.png" style="vertical-align: middle;float:right" />Analyzer
-                     <div style="overflow:auto;width:100%;height:100%">
-                        <asp:CheckBoxList ID="AnalyzerCheckList" runat="server"  BackColor="white" Width="100%" ForeColor="Black" AutoPostBack="True" OnSelectedIndexChanged="AnalyzerCheckList_SelectedIndexChanged" ViewStateMode="Enabled"></asp:CheckBoxList>
-                    </div>
-                </div>
- 
-                <div style="border:1px solid black;overflow:hidden;background-color:#046EBC;color:white;position:absolute;top:5px;left:266px;height:390px;width:512px">
-                    <img src="Images/search.png" style="vertical-align: middle;float:right" />Assay Description<br />
-                   <asp:ListBox ID="AssayDescriptionList" runat="server" Width="100%" Height="375px" BackColor="White" ForeColor="Black" AutoPostBack="True" OnSelectedIndexChanged="AssayDescriptionList_SelectedIndexChanged" SelectionMode="Multiple" ViewStateMode="Enabled"></asp:ListBox>
+                <div style="border: 1px solid black; color: white; overflow: hidden; background-color: #046EBC; position: absolute; top: 5px; left: 5px; height: 390px; width: 256px">
+                    <img src="Images/search.png" style="vertical-align: middle; float: right" />Analyzer
+                     <div style="overflow: auto; width: 100%; height: 100%">
+                         <asp:CheckBoxList ID="AnalyzerCheckList" runat="server" BackColor="white" Width="100%" ForeColor="Black" AutoPostBack="True" OnSelectedIndexChanged="AnalyzerCheckList_SelectedIndexChanged" ViewStateMode="Enabled"></asp:CheckBoxList>
+                     </div>
                 </div>
 
-                 <div style="border:1px solid black;overflow:hidden;background-color:#046EBC;color:white;position:absolute;top:5px;left:783px;height:390px;width:256px">
-                     <img src="Images/search.png" style="vertical-align: middle;float:right" />Locality
+                <div style="border: 1px solid black; overflow: hidden; background-color: #046EBC; color: white; position: absolute; top: 5px; left: 266px; height: 390px; width: 512px">
+                    <img src="Images/search.png" style="vertical-align: middle; float: right" />Assay Description<br />
+                    <asp:ListBox ID="AssayDescriptionList" runat="server" Width="100%" Height="375px" BackColor="White" ForeColor="Black" AutoPostBack="True" OnSelectedIndexChanged="AssayDescriptionList_SelectedIndexChanged" SelectionMode="Multiple" ViewStateMode="Enabled"></asp:ListBox>
+                </div>
+
+                <div style="border: 1px solid black; overflow: hidden; background-color: #046EBC; color: white; position: absolute; top: 5px; left: 783px; height: 390px; width: 256px">
+                    <img src="Images/search.png" style="vertical-align: middle; float: right" />Locality
                      <asp:ListBox ID="LocalityList" runat="server" Width="100%" Height="375px" BackColor="White" ForeColor="Black" AutoPostBack="True" OnSelectedIndexChanged="LocalityList_SelectedIndexChanged" SelectionMode="Multiple" ViewStateMode="Enabled"></asp:ListBox>
                 </div>
-        </telerik:RadAjaxPanel>
-    </div>
+            </telerik:RadAjaxPanel>
+        </div>
 
-    <div id="section">
-        <div style="margin-right:40px">
-        <asp:DropDownList ID="YearDropdown"  style="float:right;" runat="server" Width="100px" AutoPostBack="True" OnSelectedIndexChanged="YearDropdown_SelectedIndexChanged"></asp:DropDownList>
-<%--        &nbsp;&nbsp;&nbsp;
+        <div id="section">
+            <div style="margin-right: 40px">
+                <asp:DropDownList ID="YearDropdown" Style="float: right;" runat="server" Width="100px" AutoPostBack="True" OnSelectedIndexChanged="YearDropdown_SelectedIndexChanged"></asp:DropDownList>
+                <%--        &nbsp;&nbsp;&nbsp;
         <asp:ImageButton style="float:right;" ID="ExportToExcel" runat="server" OnClientClick="PrintRatesGrid()" ImageUrl="~/Images/excel.png" ToolTip="Export to Excel" />
         <asp:ImageButton style="float:right;" ID="ExportToWord" runat="server" OnClientClick="PrintRatesGrid()" ImageUrl="~/Images/word.png" ToolTip="Export to Word" />
         <asp:ImageButton style="float:right;" ID="ExportToPDF" runat="server" OnClientClick="PrintRatesGrid()" ImageUrl="~/Images/pdf.png" ToolTip="Export to PDF" />
         <asp:ImageButton style="float:right;" ID="PrintRates" runat="server" OnClientClick="PrintRatesGrid()" ImageUrl="~/Images/print.png" ToolTip="Print Displayed Rates" />--%>
-        <h2>Medicare Reimbursment Rates</h2>
-        </div>
-        <telerik:RadAjaxPanel ID="RadGridPanel" runat="server" OnAjaxRequest="RadGridPanel_AjaxRequest" LoadingPanelID="RadAjaxLoadingPanel1">
-            <div  style="width: 99%;height:100%">
-                    <telerik:RadGrid RenderMode="Classic" ID="RatesGrid" runat="server" GridLines="Both" AllowSorting="true" AllowPaging="true" PageSize="250" Width="100%"  AllowCustomPaging="true" OnNeedDataSource="RatesGrid_NeedDataSource" PagerStyle-ShowPagerText="True" PagerStyle-Visible="True" OnSortCommand="RatesGrid_SortCommand" ClientIDMode="AutoID" AutoGenerateColumns="False" OnSelectedCellChanged="RatesGrid_SelectedCellChanged" >
+                <h2>Medicare Reimbursment Rates</h2>
+            </div>
+            <telerik:RadAjaxPanel ID="RadGridPanel" runat="server" OnAjaxRequest="RadGridPanel_AjaxRequest" LoadingPanelID="RadAjaxLoadingPanel1">
+                <div style="width: 99%; height: 100%">
+                    <telerik:RadGrid RenderMode="Classic" ID="RatesGrid" runat="server" GridLines="Both" AllowSorting="true" AllowPaging="true" PageSize="250" Width="100%" AllowCustomPaging="true" OnNeedDataSource="RatesGrid_NeedDataSource" PagerStyle-ShowPagerText="True" PagerStyle-Visible="True" OnSortCommand="RatesGrid_SortCommand" ClientIDMode="AutoID" AutoGenerateColumns="False" OnSelectedCellChanged="RatesGrid_SelectedCellChanged">
                         <ClientSettings EnableRowHoverStyle="True" Resizing-AllowColumnResize="true" Resizing-EnableRealTimeResize="true" Resizing-ResizeGridOnColumnResize="false" EnablePostBackOnRowClick="True">
                             <Selecting CellSelectionMode="SingleCell" />
-                            <Scrolling AllowScroll="True" UseStaticHeaders="True" SaveScrollPosition="true" EnableVirtualScrollPaging="true" ></Scrolling>
+                            <Scrolling AllowScroll="True" UseStaticHeaders="True" SaveScrollPosition="true" EnableVirtualScrollPaging="true"></Scrolling>
                             <ClientEvents OnGridCreated="GridCreated" />
                         </ClientSettings>
-                        <MasterTableView AllowMultiColumnSorting="false" PagerStyle-AlwaysVisible="true" >
+                        <MasterTableView AllowMultiColumnSorting="false" PagerStyle-AlwaysVisible="true">
                             <Columns>
                                 <telerik:GridBoundColumn UniqueName="analyzer_name" DataField="analyzer_name" HeaderText="Analyzer" ReadOnly="True"></telerik:GridBoundColumn>
                                 <telerik:GridBoundColumn UniqueName="description" DataField="description" HeaderText="Assay Description" ReadOnly="True"></telerik:GridBoundColumn>
                                 <telerik:GridBoundColumn UniqueName="code" DataField="code" HeaderText="CPT Descriptor" ReadOnly="True"></telerik:GridBoundColumn>
                                 <telerik:GridBoundColumn UniqueName="notes" DataField="notes" HeaderText="Notes" ReadOnly="True"></telerik:GridBoundColumn>
-                                <telerik:GridBoundColumn UniqueName="locality_desc_shrt" DataField="locality_desc_shrt" HeaderText="Locality" ReadOnly="True"></telerik:GridBoundColumn>
+                                <telerik:GridBoundColumn UniqueName="locality_description" DataField="locality_description" HeaderText="Locality" ReadOnly="True"></telerik:GridBoundColumn>
                                 <telerik:GridBoundColumn UniqueName="rate" DataField="rate" HeaderText="Medicare Reimbursement Rate" DataFormatString="{0:C2}" ItemStyle-HorizontalAlign="Right" ReadOnly="True"></telerik:GridBoundColumn>
                             </Columns>
                         </MasterTableView>
-                       <%-- <SortingSettings SortedBackColor="#FFF6D6" EnableSkinSortStyles="true"></SortingSettings>--%>
-                         <SortingSettings SortedBackColor="#FFFAED" EnableSkinSortStyles="true"></SortingSettings>
+                        <%-- <SortingSettings SortedBackColor="#FFF6D6" EnableSkinSortStyles="true"></SortingSettings>--%>
+                        <SortingSettings SortedBackColor="#FFFAED" EnableSkinSortStyles="true"></SortingSettings>
                         <HeaderStyle Font-Bold="True"></HeaderStyle>
                     </telerik:RadGrid>
-            </div>
-        </telerik:RadAjaxPanel>
-    </div>
+                </div>
+            </telerik:RadAjaxPanel>
+        </div>
 
-    <div id="footer">
-        <asp:BulletedList style="margin-left:20px; padding-left:0px" ID="FooterList" runat="server" BulletStyle="Numbered"></asp:BulletedList>
-        <br />
-        <asp:HyperLink ID="FooterLink" runat="server" Target="_blank"></asp:HyperLink>
-    </div>
+        <div id="footer">
+            <asp:BulletedList Style="margin-left: 20px; padding-left: 0px" ID="FooterList" runat="server" BulletStyle="Numbered"></asp:BulletedList>
+            <br />
+            <asp:Label ID="lblFooterLink" AssociatedControlID="FooterLink" runat="server" Text=""></asp:Label>
+            <asp:HyperLink ID="FooterLink" CssClass="lane-link" runat="server" Target="_blank"></asp:HyperLink>
+        </div>
 
-    <telerik:RadNotification RenderMode="Lightweight" ID="Toast" runat="server" VisibleOnPageLoad="false" Position="BottomRight"
-                             Width="330" Height="160" Animation="Slide" EnableRoundedCorners="true" EnableShadow="true"
-                             Title="Selections Restored" Text=""
-                             Style="z-index: 100000" AnimationDuration="5000" TitleIcon="">
-
-    </telerik:RadNotification>
+        <telerik:RadNotification RenderMode="Lightweight" ID="Toast" runat="server" VisibleOnPageLoad="false" Position="BottomRight"
+            Width="330" Height="160" Animation="Slide" EnableRoundedCorners="true" EnableShadow="true"
+            Title="Selections Restored" Text=""
+            Style="z-index: 100000" AnimationDuration="5000" TitleIcon="">
+        </telerik:RadNotification>
 
     </form>
 
-    <script type="text/javascript" >
+    <script type="text/javascript">
         //must hide menu via JQuery, or it may not un-hide when needed
-       // $(menu).hide();
+        // $(menu).hide();
 
-        function MenuEvents()
-        {
+        function MenuEvents() {
             if (document.getElementById("menu") !== null) {
                 //$(menu).show('slow');
                 $(menu).mouseleave(function () {
@@ -190,11 +192,10 @@
                 })
             }
         }
-        
+
         var PaddingForFooter = 25;  //this is padding between bottom of grid and footer
         var GridDataSize = 0;  //set on resize and then used to restore on virtual scroll
-        function ResizeGrid()
-        {
+        function ResizeGrid() {
             var grid = document.getElementById('<%=RatesGrid.ClientID %>');
             var GridTop = $(grid).offset().top;
             var FooterTop = $(footer).offset().top;
@@ -204,8 +205,7 @@
             GridDataSize = Math.floor((FooterTop - $(griddata).offset().top) - PaddingForFooter);
         }
         //restore the grid data to correct size
-        function ResizeGridDataArea()
-        {
+        function ResizeGridDataArea() {
             if (GridDataSize > 0) {
                 var griddata = $get("RatesGrid_GridData");
                 $(griddata).height(GridDataSize);
@@ -220,21 +220,19 @@
             scrollArea.style.height = parent.clientHeight - gridHeader.clientHeight + "px";
         }
 
-        function PrintRatesGrid() 
-        { 
-            var previewWnd = window.open('about:blank', '', '', false); 
-            var sh = '<%= ClientScript.GetWebResourceUrl(RatesGrid.GetType(),String.Format("Telerik.Web.UI.Skins.{0}.Grid.{0}.css",RatesGrid.Skin)) %>'; 
-            var styleStr = "<html><head><link href = '" + sh + "' rel='stylesheet' type='text/css'></link></head>"; 
-            var htmlcontent = styleStr + "<body>" + $find('<%= RatesGrid.ClientID %>').get_element().outerHTML + "</body></html>"; 
-            previewWnd.document.open(); 
-            previewWnd.document.write(htmlcontent); 
-            previewWnd.document.close(); 
+        function PrintRatesGrid() {
+            var previewWnd = window.open('about:blank', '', '', false);
+            var sh = '<%= ClientScript.GetWebResourceUrl(RatesGrid.GetType(),String.Format("Telerik.Web.UI.Skins.{0}.Grid.{0}.css",RatesGrid.Skin)) %>';
+            var styleStr = "<html><head><link href = '" + sh + "' rel='stylesheet' type='text/css'></link></head>";
+            var htmlcontent = styleStr + "<body>" + $find('<%= RatesGrid.ClientID %>').get_element().outerHTML + "</body></html>";
+            previewWnd.document.open();
+            previewWnd.document.write(htmlcontent);
+            previewWnd.document.close();
             previewWnd.print();
             previewWnd.close();
         }
 
-        function Ready()
-        {
+        function Ready() {
             MenuEvents();
         }
 

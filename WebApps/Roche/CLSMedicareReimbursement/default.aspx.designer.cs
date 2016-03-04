@@ -67,15 +67,6 @@ namespace CLSMedicareReimbursement {
         protected global::System.Web.UI.WebControls.ImageButton LaunchMenu;
         
         /// <summary>
-        /// Brand control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Image Brand;
-        
-        /// <summary>
         /// menu control.
         /// </summary>
         /// <remarks>
@@ -164,7 +155,16 @@ namespace CLSMedicareReimbursement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HyperLink FooterLink;
-        
+
+        /// <summary>
+        /// FooterLink control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblFooterLink;
+
         /// <summary>
         /// Toast control.
         /// </summary>
