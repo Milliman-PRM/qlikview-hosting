@@ -94,11 +94,9 @@ namespace CLSMedicareReimbursement
             AnalyzerSearch.DataSource = BLM.UniqueAnalyzers;
             AnalyzerSearch.DataBind();
             //we always allow searching across all entries
-            if (BLM.UniqueAssayDescriptions.Count > 0)
-            {
-                AssayDescriptionSearch.DataSource = BLM.UniqueAssayDescriptions;
-                AssayDescriptionSearch.DataBind();
-            }
+            AssayDescriptionSearch.DataSource = BLM.UniqueAssayDescriptions;
+            AssayDescriptionSearch.DataBind();
+
             LocalitySearch.DataSource = BLM.UniqueLocalities;
             LocalitySearch.DataBind();
         }
