@@ -286,7 +286,7 @@ namespace CLSBusinessLogic
             foreach( Locality L in _UniqueLocalities )
             {
                 if (L.Id == System.Convert.ToInt32(LocalityID))
-                    return L.LocalityDescLong;
+                    return L.LocalityDescription;
             }
             return "";
         }

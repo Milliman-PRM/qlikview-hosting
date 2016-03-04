@@ -10,7 +10,7 @@ namespace CLSMedicareReimbursement
     public partial class _default : System.Web.UI.Page
     {
         private string SessionKey_Selections = @"CurrentSelections";
-        private string SessionKey_DataSet    = @"CurrentDataSet";
+        private string SessionKey_DataSet = @"CurrentDataSet";
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -24,14 +24,37 @@ namespace CLSMedicareReimbursement
                 if (Session[SessionKey_Selections] == null)
                     Session[SessionKey_Selections] = CurrentSelections;
 
-                //get the footer data and bind it
-                FooterList.DataSource = BLM.FootNotes;
+                //to remove special character "Â" from footnote
+                var footNotes = new List<CLSdbContext.Footnote>();
+                var newFootNote = new CLSdbContext.Footnote();
+                foreach (var item in BLM.FootNotes)
+                {
+                    if (item.Footnote1.Contains(@"Â"))
+                    {
+                        newFootNote.Id = item.Id;
+                        newFootNote.Footnote1 = item.Footnote1.Replace(@"Â", string.Empty);
+                    }
+                    else
+                    {
+                        newFootNote.Id = item.Id;
+                        newFootNote.Footnote1 = item.Footnote1;
+                    }
+                    footNotes.Add(newFootNote);
+                    newFootNote = new CLSdbContext.Footnote();
+                }
+
+
+                FooterList.DataSource = footNotes;
                 FooterList.DataTextField = "Footnote1";
                 FooterList.DataValueField = "Id";
                 FooterList.DataBind();
 
-                FooterLink.Text = "[MISSING]" + "(" + BLM.WebURL[0].Webaddressurl + ")";
-                FooterLink.NavigateUrl = BLM.WebURL[0].Webaddressurl;
+                if (BLM.WebURL.Count > 0)
+                {
+                    lblFooterLink.Text = BLM.WebURL[0].Displaytext;
+                    FooterLink.Text = BLM.WebURL[0].Webaddressurl;
+                    FooterLink.NavigateUrl = BLM.WebURL[0].Webaddressurl;
+                }
 
                 AnalyzerCheckList.DataSource = BLM.UniqueAnalyzers;
                 AnalyzerCheckList.DataTextField = "AnalyzerName";
@@ -44,7 +67,7 @@ namespace CLSMedicareReimbursement
                 AssayDescriptionList.DataBind();
 
                 LocalityList.DataSource = BLM.UniqueLocalities;
-                LocalityList.DataTextField = "LocalityDescLong";
+                LocalityList.DataTextField = "LocalityDescription";
                 LocalityList.DataValueField = "Id";
                 LocalityList.DataBind();
 
@@ -63,7 +86,7 @@ namespace CLSMedicareReimbursement
                 //since the year drop down is not in a ajax panel, it causes a postback which results
                 //in the menu being displayed, do check, if triggred by year drop down, then hide the menu
                 Control C = GetControlThatCausedPostBack(this);
-                if ( (C != null) && (string.Compare(C.ClientID,"yeardropdown", true) == 0))
+                if ((C != null) && (string.Compare(C.ClientID, "yeardropdown", true) == 0))
                     menu.Visible = false; //keep the menu hidden on postback from drop, its not in an ajax panel
             }
 
@@ -71,9 +94,11 @@ namespace CLSMedicareReimbursement
             AnalyzerSearch.DataSource = BLM.UniqueAnalyzers;
             AnalyzerSearch.DataBind();
             //we always allow searching across all entries
-            AssayDescriptionSearch.DataSource = BLM.UniqueAssayDescriptions;
-            AssayDescriptionSearch.DataBind();
-
+            if (BLM.UniqueAssayDescriptions.Count > 0)
+            {
+                AssayDescriptionSearch.DataSource = BLM.UniqueAssayDescriptions;
+                AssayDescriptionSearch.DataBind();
+            }
             LocalitySearch.DataSource = BLM.UniqueLocalities;
             LocalitySearch.DataBind();
         }
@@ -195,13 +220,13 @@ namespace CLSMedicareReimbursement
         {
             //get user selections
             CLSBusinessLogic.BusinessLogicManager.CurrentSelections CurrentSels = Session[SessionKey_Selections] as CLSBusinessLogic.BusinessLogicManager.CurrentSelections;
-            List<string> SearchTermIDs= AssayDescriptionList.Items.Cast<ListItem>().Where(n => n.Selected).Select(n => n.Value).ToList();
+            List<string> SearchTermIDs = AssayDescriptionList.Items.Cast<ListItem>().Where(n => n.Selected).Select(n => n.Value).ToList();
             List<string> SearchTermTexts = AssayDescriptionList.Items.Cast<ListItem>().Where(n => n.Selected).Select(n => n.Text).ToList();
 
             //test behavior that when we are here there can be only 1 selection
             CurrentSels.Clear(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.SEARCHTERMDESCS);
 
-            if ( CurrentSels.NoSelectionsMade())
+            if (CurrentSels.NoSelectionsMade())
             {    //no selections have been made, so we need to look up the appropriate analyziers and set to checked
                 List<string> Analyzers = CLSBusinessLogic.BusinessLogicManager.GetInstance().FindAnalyzersForAssayDescription(AssayDescriptionList.SelectedItem.Text);
                 CurrentSels.Clear(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.ALL);
@@ -223,10 +248,10 @@ namespace CLSMedicareReimbursement
         //Hilight or un-highlight entries in Analyzer list
         private void UnHighlightAnalyzers()
         {
-            foreach( ListItem LI in AnalyzerCheckList.Items)
+            foreach (ListItem LI in AnalyzerCheckList.Items)
                 LI.Attributes.Add("style", "font-weight:normal;color:black");
         }
-        private void HighlightAnalyzers(List<string> ItemNames )
+        private void HighlightAnalyzers(List<string> ItemNames)
         {
             foreach (ListItem LI in AnalyzerCheckList.Items)
             {
@@ -255,7 +280,7 @@ namespace CLSMedicareReimbursement
             if (CurrentSels.Years.Contains(YearDropdown.SelectedItem.Text) == true)
                 return;  //we are already showing data for this year
 
-            if ( CurrentSels.NoSelectionsMade() )
+            if (CurrentSels.NoSelectionsMade())
             {
                 System.Data.DataTable ResultSet = CLSBusinessLogic.BusinessLogicManager.GetInstance().DataByYear[YearDropdown.SelectedItem.Text];
                 RatesGrid.VirtualItemCount = ResultSet.Rows.Count;
@@ -275,7 +300,7 @@ namespace CLSMedicareReimbursement
         {
             CLSBusinessLogic.BusinessLogicManager.CurrentSelections CurrentSels = Session[SessionKey_Selections] as CLSBusinessLogic.BusinessLogicManager.CurrentSelections;
 
-            switch ( e.Argument)
+            switch (e.Argument)
             {
                 case "refresh":
                     RebindPrimaryGrid(CurrentSels);
@@ -291,8 +316,8 @@ namespace CLSMedicareReimbursement
 
                 string SelectedValue = RatesGrid.SelectedCells[0].Text;
                 string SelectedColumn = RatesGrid.SelectedCells[0].Column.UniqueName;
-                //analyzer_name description locality_desc_shrt
-                switch ( SelectedColumn.ToLower())
+                //analyzer_name description locality_description
+                switch (SelectedColumn.ToLower())
                 {
                     case "analyzer_name":
                         CurrentSels.Clear(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.ANALYZERNAMES);
@@ -307,7 +332,7 @@ namespace CLSMedicareReimbursement
                         CurrentSels.AddToList(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.SEARCHTERMDESCS, SelectedValue);
                         RebindPrimaryGrid(CurrentSels);
                         break;
-                    case "locality_desc_shrt":
+                    case "locality_description":
                         CurrentSels.Clear(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.LOCALATIES);
                         CurrentSels.Clear(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.LOCALATIESBYDESCSHRT);
                         CurrentSels.Clear(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.LOCALATIESIDS);
@@ -323,7 +348,7 @@ namespace CLSMedicareReimbursement
             }
         }
 
-        private bool RebindPrimaryGrid( CLSBusinessLogic.BusinessLogicManager.CurrentSelections CurrentSet )
+        private bool RebindPrimaryGrid(CLSBusinessLogic.BusinessLogicManager.CurrentSelections CurrentSet)
         {
             try
             {
@@ -358,7 +383,7 @@ namespace CLSMedicareReimbursement
             CLSBusinessLogic.BusinessLogicManager.CurrentSelections CurrentSels = Session[SessionKey_Selections] as CLSBusinessLogic.BusinessLogicManager.CurrentSelections;
 
             List<CLSdbContext.SearchTerm> AssociatedAssayDescriptions = new List<CLSdbContext.SearchTerm>();
-            foreach ( string Analyzer in CurrentSels.AnalyzerNames)
+            foreach (string Analyzer in CurrentSels.AnalyzerNames)
             {
                 ListItem LI = AnalyzerCheckList.Items.FindByText(Analyzer);
                 if (LI != null)
@@ -370,7 +395,7 @@ namespace CLSMedicareReimbursement
                 AssociatedAssayDescriptions.AddRange(CLSBusinessLogic.BusinessLogicManager.GetInstance().FindAssayDescriptionForAnalyzer(new List<string>() { AnalyzerID }));
             }
 
-            foreach(string SearchTerm in CurrentSels.SearchTermDescs )
+            foreach (string SearchTerm in CurrentSels.SearchTermDescs)
             { 
                 ListItem LI = AssayDescriptionList.Items.FindByText(SearchTerm);
                 if (LI != null)
@@ -382,7 +407,7 @@ namespace CLSMedicareReimbursement
             //set highlights if necessary
             NoAnalyzerSingleAssayDescriptionSelected();
             LocalityList.ClearSelection();  //clear out and restore localaties each time
-            foreach ( string LocalityID in CurrentSels.LocalatiesIDs )
+            foreach (string LocalityID in CurrentSels.LocalatiesIDs)
             {
                 string LocalityText = CLSBusinessLogic.BusinessLogicManager.GetInstance().FindLocalityByID(LocalityID);
                 ListItem LI = LocalityList.Items.FindByText(LocalityText);
