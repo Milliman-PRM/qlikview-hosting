@@ -175,14 +175,14 @@ namespace CLSMedicareReimbursement {
         protected global::System.Web.UI.WebControls.BulletedList FooterList;
         
         /// <summary>
-        /// FooterLink control.
+        /// lblFooterLink control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink FooterLink;
-
+        protected global::System.Web.UI.WebControls.Label lblFooterLink;
+        
         /// <summary>
         /// FooterLink control.
         /// </summary>
@@ -190,8 +190,8 @@ namespace CLSMedicareReimbursement {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblFooterLink;
-
+        protected global::System.Web.UI.WebControls.HyperLink FooterLink;
+        
         /// <summary>
         /// Toast control.
         /// </summary>
