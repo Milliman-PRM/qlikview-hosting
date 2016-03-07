@@ -1,241 +1,71 @@
-﻿<!DOCTYPE html>
-<html>
+﻿<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="robots" content="noindex">
-    <link rel="stylesheet prefetch" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css">
-    <link rel="stylesheet prefetch" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-    <style class="cp-pen-styles">
-        .table-editable {
-            position: relative;
+    <style>
+        .demo {
+            border: 1px solid #C0C0C0;
+            border-collapse: collapse;
+            padding: 5px;
         }
-
-            .table-editable .glyphicon {
-                font-size: 20px;
+            .demo th {
+                border: 1px solid #C0C0C0;
+                padding: 5px;
+                background: #F0F0F0;
             }
-
-        .table-remove {
-            color: #700;
-            cursor: pointer;
-        }
-
-            .table-remove:hover {
-                color: #f00;
+            .demo td {
+                border: 1px solid #C0C0C0;
+                padding: 5px;
             }
-
-        .table-up, .table-down {
-            color: #007;
-            cursor: pointer;
-        }
-
-            .table-up:hover, .table-down:hover {
-                color: #00f;
-            }
-
-        .table-add {
-            color: #070;
-            cursor: pointer;
-            position: absolute;
-            top: -22px;
-            right: 0;
-        }
-
-            .table-add:hover {
-                color: #0b0;
-            }
-
-        .col-wrapper {
-            width: 960px;
-            margin: 0 auto;
-        }
-
-        .col {
-            margin: 0 10px;
-            float: left;
-            display: inline;
-        }
-
-        .col-294 {
-            width: 294px;
-        }
-
-        .col-250 {
-            width: 250px;
-        }
-
-        ul, ol {
-            margin-top: 0;
-            margin-bottom: 10px;
-            font-family: cursive;
-            font-size: 14px;
-        }
     </style>
 </head>
-
 <body>
-
-    <!--<body>-->
-    <div class="container">
-        <h1>Roche UI Bugs List</h1>
-        <h4><b>Instructions</b></h4>
-        <ul id="problems">
-            <li>Enter ID</li>
-            <li>Enter Status</li>
-            <li>Export to Excel</li>
-            <li><i>Note:</i> This web page does not save data so please make sure to Export to Excel</li>
-        </ul>
-        <div style="height:20px;clear:both;"></div>
-
-
-        <div id="table" class="table-editable">
-            <span class="table-add glyphicon glyphicon-plus"></span>
-            <table id="myTable" class="table">
-                <tr>
-                    <th>Id</th>
-                    <th>Status</th>
-                    <th></th>
-                    <th></th>
-                </tr>
-                <tr>
-                    <td contenteditable="true">Id</td>
-                    <td contenteditable="true">Status</td>
-                    <td>
-                        <span class="table-remove glyphicon glyphicon-remove"></span>
-                    </td>
-                    <td>
-                        <span class="table-up glyphicon glyphicon-arrow-up"></span>
-                        <span class="table-down glyphicon glyphicon-arrow-down"></span>
-                    </td>
-                </tr>
-                <!-- This is our clonable table line -->
-                <tr class="hide">
-                    <td contenteditable="true">Id</td>
-                    <td contenteditable="true">Status</td>
-                    <td>
-                        <span class="table-remove glyphicon glyphicon-remove"></span>
-                    </td>
-                    <td>
-                        <span class="table-up glyphicon glyphicon-arrow-up"></span>
-                        <span class="table-down glyphicon glyphicon-arrow-down"></span>
-                    </td>
-                </tr>
-            </table>
-        </div>
-
-        <button id="export-btn" class="btn btn-primary" onclick="tableToExcel('myTable', 'Table')">Export Data</button>
-        <p id="export"></p>
-    </div>
-    <br />
-
-    <div class="container">
-        <div class="alert alert-success">
-            <strong>Note!</strong> Use this table but edit the rows in code behind
-        </div>
-        <table class="table table-striped" style="width: 500px;">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>531</td>
-                    <td>Fixed</td>
-                </tr>
-                <tr>
-                    <td>543</td>
-                    <td>Fixed</td>
-                </tr>
-                <tr>
-                    <td>503</td>
-                    <td>Fixed</td>
-                </tr>
-                <tr>
-                    <td>536</td>
-                    <td>Fixed</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
-    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore.js"></script>
-    <script>
-        var $TABLE = $('#table');
-        var $BTN = $('#export-btn');
-        //var $EXPORT = $('#export');
-
-        $('.table-add').click(function () {
-            var $clone = $TABLE.find('tr.hide').clone(true).removeClass('hide table-line');
-            $TABLE.find('table').append($clone);
-        });
-
-        $('.table-remove').click(function () {
-            $(this).parents('tr').detach();
-        });
-
-        $('.table-up').click(function () {
-            var $row = $(this).parents('tr');
-            if ($row.index() === 1) return; // Don't go above the header
-            $row.prev().before($row.get(0));
-        });
-
-        $('.table-down').click(function () {
-            var $row = $(this).parents('tr');
-            $row.next().after($row.get(0));
-        });
-
-        // A few jQuery helpers for exporting only
-        jQuery.fn.pop = [].pop;
-        jQuery.fn.shift = [].shift;
-
-        $BTN.click(function () {
-            var $rows = $TABLE.find('tr:not(:hidden)');
-            var headers = [];
-            var data = [];
-
-            // Get the headers (add special header logic here)
-            $($rows.shift()).find('th:not(:empty)').each(function () {
-                headers.push($(this).text().toLowerCase());
-            });
-
-            // Turn all existing rows into a loopable array
-            $rows.each(function () {
-                var $td = $(this).find('td');
-                var h = {};
-
-                // Use the headers from earlier to name our hash keys
-                headers.forEach(function (header, i) {
-                    h[header] = $td.eq(i).text();
-                });
-
-                data.push(h);
-            });
-
-            // Output the result
-            //$EXPORT.text(JSON.stringify(data));
-        });
-
-
-        var tableToExcel = (function () {
-            var uri = 'data:application/vnd.ms-excel;base64,'
-              , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--><meta http-equiv="content-type" content="text/plain; charset=UTF-8"/></head><body><table>{table}</table></body></html>'
-              , base64 = function (s) { return window.btoa(unescape(encodeURIComponent(s))) }
-              , format = function (s, c) { return s.replace(/{(\w+)}/g, function (m, p) { return c[p]; }) }
-            return function (table, name) {
-                if (!table.nodeType) table = document.getElementById(table)
-                var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML }
-                window.location.href = uri + base64(format(template, ctx))
-            }
-        })()
-
-        //# sourceURL=pen.js
-    </script>
+<table class="demo">
+    <caption>Corrected Issues/Notes</caption>
+    <thead>
+        <tr>
+            <td>Date</td>
+            <th>Issue ID (VSO)</th>
+            <th>Issue Description</th>
+            <th>Notes</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>3/4/2016</td>
+            <td>529</td>
+            <td>Remove Roche Logo</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>3/4/2016</td>
+            <td>531</td>
+            <td>Fix the "[MISSING]" label in the source link at the bottom</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>3/4/2016</td>
+            <td>543</td>
+            <td>Update Localities table</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>3/4/2016</td>
+            <td>503</td>
+            <td>Update Localities table</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>3/4/2016</td>
+            <td>527</td>
+            <td>Buglist.html addition</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>3/4/2016</td>
+            <td>&nbsp;</td>
+            <td></td>
+            <td>Initial version of search in menu items - not ready for testing yet</td>
+        </tr>
+    </tbody>
+</table>
 </body>
-
-
 </html>
