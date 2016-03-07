@@ -42,7 +42,7 @@ namespace Controller
         {
             var context = new CLSdbDataContext();
             var dboList = context.Codes.Distinct().ToList();
-            var resultList = dboList.GroupBy(x => x.Code1).Select(y => y.First()).ToList();
+            var resultList = dboList.GroupBy(x => x.Code1).Select(y => y.First()).OrderBy(a=>a.Code1).ToList();
             return resultList;
         }
         #endregion
@@ -53,7 +53,7 @@ namespace Controller
         {
             var context = new CLSdbDataContext();
             var dboList = context.Localities.Distinct().ToList();
-            var resultList = dboList.GroupBy(x => x.Locality1).Select(y => y.First()).ToList();
+            var resultList = dboList.GroupBy(x => x.Locality1).Select(y => y.First()).OrderBy(a=>a.LocalityDescription).ToList();
             return resultList;
         }
 
