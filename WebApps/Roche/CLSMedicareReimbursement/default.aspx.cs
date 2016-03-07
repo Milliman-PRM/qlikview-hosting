@@ -143,8 +143,14 @@ namespace CLSMedicareReimbursement
                     DataSubSet.Rows.Add(DataSet.Rows[Index].ItemArray);
                 //add the subset to the view
                 RatesGrid.DataSource = DataSubSet;
-            }
+           }
           
+        }
+
+        protected void RadAjaxManager1_AjaxRequest(object sender, Telerik.Web.UI.AjaxRequestEventArgs e)
+        {
+            RatesGrid.PageSize = 10 + RatesGrid.PageSize;
+            RatesGrid.Rebind();
         }
 
         private System.Drawing.Color Selected = System.Drawing.Color.LightGreen;
@@ -160,6 +166,7 @@ namespace CLSMedicareReimbursement
             //System.Data.DataTable CurrentTable = Session[SessionKey_DataSet] as System.Data.DataTable;
 
             //CurrentTable.DefaultView.Sort = SortOnColumn + " " + SortMethod;
+           
 
         }
 
