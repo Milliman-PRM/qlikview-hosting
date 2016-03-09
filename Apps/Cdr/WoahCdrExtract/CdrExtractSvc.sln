@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BayClinicExtractSvc", "BayClinicExtractSvc\BayClinicExtractSvc.csproj", "{AD5CF6FA-C2D4-432D-BAE8-549DE779D982}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BB25CF8D-FE21-4245-9811-8C0367445E42} = {BB25CF8D-FE21-4245-9811-8C0367445E42}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BayClinicEmrLib", "BayClinicEmrLib\BayClinicEmrLib.csproj", "{BB25CF8D-FE21-4245-9811-8C0367445E42}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CdrExtractTest", "BayClinicEmrTest\CdrExtractTest.csproj", "{1D002124-A718-4C3A-9EF1-3E408E1B54BE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NorthBendUnityLib", "NorthBendUnityLib\NorthBendUnityLib.csproj", "{23E04055-9E0E-488E-AFEC-D01D8B796D6A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MongoDbWrap", "..\..\AppsCommon\MongoDbWrap\MongoDbWrap.csproj", "{5FDFBD80-5D24-40A0-985F-C17F579D8517}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AD5CF6FA-C2D4-432D-BAE8-549DE779D982}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD5CF6FA-C2D4-432D-BAE8-549DE779D982}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD5CF6FA-C2D4-432D-BAE8-549DE779D982}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD5CF6FA-C2D4-432D-BAE8-549DE779D982}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB25CF8D-FE21-4245-9811-8C0367445E42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB25CF8D-FE21-4245-9811-8C0367445E42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB25CF8D-FE21-4245-9811-8C0367445E42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB25CF8D-FE21-4245-9811-8C0367445E42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D002124-A718-4C3A-9EF1-3E408E1B54BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D002124-A718-4C3A-9EF1-3E408E1B54BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D002124-A718-4C3A-9EF1-3E408E1B54BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D002124-A718-4C3A-9EF1-3E408E1B54BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23E04055-9E0E-488E-AFEC-D01D8B796D6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23E04055-9E0E-488E-AFEC-D01D8B796D6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23E04055-9E0E-488E-AFEC-D01D8B796D6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23E04055-9E0E-488E-AFEC-D01D8B796D6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FDFBD80-5D24-40A0-985F-C17F579D8517}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FDFBD80-5D24-40A0-985F-C17F579D8517}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FDFBD80-5D24-40A0-985F-C17F579D8517}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FDFBD80-5D24-40A0-985F-C17F579D8517}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
