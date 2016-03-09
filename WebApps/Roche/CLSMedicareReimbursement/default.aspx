@@ -89,10 +89,11 @@
 
         #gridLayOut {
             width: 99%;
-            height: 40%;
+            height: 640px;
             padding: 3px 3px 3px 3px;
             margin: 0 auto;
         }
+
     </style>
 </head>
 <body onload="Ready()">
@@ -198,6 +199,9 @@
 
             <%--grid section--%>
             <div id="section">
+                <div id="divStartOverButton">
+                    
+                </div>
                 <div style="margin-right: 40px">
                     <asp:DropDownList ID="YearDropdown" Style="float: right;" runat="server" Width="100px" AutoPostBack="True"
                         OnSelectedIndexChanged="YearDropdown_SelectedIndexChanged">
@@ -220,14 +224,13 @@
                             <PagerStyle Visible="false" />
                             <ClientSettings ReorderColumnsOnClient="true" AllowColumnsReorder="true" ColumnsReorderMethod="Reorder">
                                 <ClientEvents OnGridCreated="GridCreated" />
-                                <Virtualization EnableVirtualization="False" InitiallyCachedItemsCount="2000"  LoadingPanelID="RadAjaxLoadingPanel1" ItemsPerView="500" />
+                                <Virtualization EnableVirtualization="false" InitiallyCachedItemsCount="2000"  LoadingPanelID="RadAjaxLoadingPanel1" ItemsPerView="500" />
                                 <Selecting AllowRowSelect="true" />
-                                <%--<Scrolling ScrollHeight="620px" AllowScroll="True" EnableVirtualScrollPaging="true" UseStaticHeaders="true"  />--%>
-                                <Scrolling ScrollHeight="610px" AllowScroll="True" UseStaticHeaders="True" SaveScrollPosition="true" EnableVirtualScrollPaging="true"></Scrolling>
+                                <Scrolling ScrollHeight="480px" AllowScroll="True" UseStaticHeaders="True" SaveScrollPosition="true" EnableVirtualScrollPaging="false"></Scrolling>
                                 <Resizing AllowColumnResize="true" />
                             </ClientSettings>
 
-                            <MasterTableView AllowMultiColumnSorting="false" PagerStyle-AlwaysVisible="true">
+                            <MasterTableView AllowMultiColumnSorting="false" PagerStyle-AlwaysVisible="True">
                                 <Columns>
                                     <telerik:GridBoundColumn UniqueName="analyzer_name" DataField="analyzer_name" HeaderText="Analyzer" ReadOnly="True"></telerik:GridBoundColumn>
                                     <telerik:GridBoundColumn UniqueName="description" DataField="description" HeaderText="Assay Description" ReadOnly="True"></telerik:GridBoundColumn>
@@ -282,10 +285,6 @@
                         $find("<%= RadGridPanel.ClientID%>").ajaxRequestWithTarget("<%= RadGridPanel.UniqueID %>", "refresh");
                     }
 
-       <%--             var currentLoadingPanel = $find("<%= RadAjaxLoadingPanel1.ClientID %>");
-                    var currentGrid = $find("<%= RadGridPanel.ClientID%>")
-                    currentLoadingPanel.show(currentGrid);--%>
-                    //__doPostBack('__Page', 'MenuClose');
                 })
             }
         }
@@ -310,6 +309,7 @@
         }
 
         function GridCreated(sender, args) {
+            debugger;
             var scrollArea = sender.GridDataDiv;
             var parent = $get("RatesGrid");
             //alert(parent.clientHeight)
