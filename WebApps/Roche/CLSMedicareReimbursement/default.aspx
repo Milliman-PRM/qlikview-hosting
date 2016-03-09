@@ -58,6 +58,7 @@
             padding: 0px;
             margin: 0px;
             border: 3px solid #046EBC;
+    z-index: 2000;
         }
 
         /*hide radgrid horizontal scroll*/
@@ -106,7 +107,7 @@
                 <AjaxSettings>
                     <telerik:AjaxSetting AjaxControlID="RadGrid1">
                         <UpdatedControls>
-                            <telerik:AjaxUpdatedControl ControlID="RatesGrid"/>
+                            <telerik:AjaxUpdatedControl ControlID="RatesGrid" />
                         </UpdatedControls>
                     </telerik:AjaxSetting>
                     <%--<telerik:AjaxSetting AjaxControlID="RatesGrid">--%>
@@ -205,43 +206,35 @@
                 </div>
                 <telerik:RadAjaxPanel ID="RadGridPanel" runat="server" OnAjaxRequest="RadGridPanel_AjaxRequest" LoadingPanelID="RadAjaxLoadingPanel1">
                     <div id="gridLayOut">
-                        <telerik:RadGrid RenderMode="Classic" ID="RatesGrid" runat="server" 
-                            AutoGenerateColumns="False"
-                            AllowSorting="True" AllowPaging="True" PageSize="250" ClientIDMode="AutoID"
-                            OnNeedDataSource="RatesGrid_NeedDataSource" 
-                            OnSortCommand="RatesGrid_SortCommand" EnableSkinSortStyles="False"
-                            OnSelectedCellChanged="RatesGrid_SelectedCellChanged">
-                            <ClientSettings EnableRowHoverStyle="True" Resizing-AllowColumnResize="False" Resizing-EnableRealTimeResize="False"
-                                Resizing-ResizeGridOnColumnResize="False" EnablePostBackOnRowClick="True">
-                                <Selecting CellSelectionMode="SingleCell" />
-                                <Scrolling AllowScroll="True" UseStaticHeaders="True" SaveScrollPosition="True" EnableVirtualScrollPaging="False"
-                                    ScrollHeight="620px"  ></Scrolling>
-                                <ClientEvents OnGridCreated="GridCreated" OnScroll="HandleScrolling" />
+                        <telerik:RadGrid RenderMode="Classic" ID="RatesGrid" runat="server" GridLines="None"
+                            AllowSorting="true" AllowPaging="true" PageSize="250" 
+                            AllowCustomPaging="true" OnNeedDataSource="RatesGrid_NeedDataSource"
+                            PagerStyle-ShowPagerText="True" PagerStyle-Visible="True"
+                            OnSortCommand="RatesGrid_SortCommand" ClientIDMode="AutoID"
+                            AutoGenerateColumns="False" OnSelectedCellChanged="RatesGrid_SelectedCellChanged">
+                            <%--                        <ClientSettings EnableRowHoverStyle="True" Resizing-AllowColumnResize="true" Resizing-EnableRealTimeResize="true" Resizing-ResizeGridOnColumnResize="false" EnablePostBackOnRowClick="True">
+                            <Selecting CellSelectionMode="SingleCell" />
+                            <Scrolling AllowScroll="True" UseStaticHeaders="True" SaveScrollPosition="true" EnableVirtualScrollPaging="true"></Scrolling>
+                            <ClientEvents OnGridCreated="GridCreated" />
+                        </ClientSettings>--%>
+                            <PagerStyle Visible="false" />
+                            <ClientSettings ReorderColumnsOnClient="true" AllowColumnsReorder="true" ColumnsReorderMethod="Reorder">
+                                <ClientEvents OnGridCreated="GridCreated" />
+                                <Virtualization EnableVirtualization="False" InitiallyCachedItemsCount="2000"  LoadingPanelID="RadAjaxLoadingPanel1" ItemsPerView="500" />
+                                <Selecting AllowRowSelect="true" />
+                                <%--<Scrolling ScrollHeight="620px" AllowScroll="True" EnableVirtualScrollPaging="true" UseStaticHeaders="true"  />--%>
+                                <Scrolling ScrollHeight="610px" AllowScroll="True" UseStaticHeaders="True" SaveScrollPosition="true" EnableVirtualScrollPaging="true"></Scrolling>
+                                <Resizing AllowColumnResize="true" />
                             </ClientSettings>
-                            <PagerStyle Visible="False" />
-                            <SortingSettings EnableSkinSortStyles="False" />
-                            <MasterTableView  AllowMultiColumnSorting="False" TableLayout="Fixed" CurrentResetPageIndexAction="SetPageIndexToFirst" PageSize="250"
-                                 >
+
+                            <MasterTableView AllowMultiColumnSorting="false" PagerStyle-AlwaysVisible="true">
                                 <Columns>
-                                    <telerik:GridBoundColumn UniqueName="analyzer_name" DataField="analyzer_name" HeaderText="Analyzer" ReadOnly="True">
-                                        <HeaderStyle Width="30px" /><ItemStyle Width="30px" />
-                                    </telerik:GridBoundColumn>
-                                    <telerik:GridBoundColumn UniqueName="description" DataField="description" HeaderText="Assay Description" ReadOnly="True">
-                                        <HeaderStyle Width="50px" /><ItemStyle Width="50px" />
-                                    </telerik:GridBoundColumn>
-                                    <telerik:GridBoundColumn UniqueName="code" DataField="code" HeaderText="CPT Code" ReadOnly="True">
-                                        <HeaderStyle Width="10px" /><ItemStyle Width="10px" />
-                                    </telerik:GridBoundColumn>
-                                    <telerik:GridBoundColumn UniqueName="notes" DataField="notes" HeaderText="Notes" ReadOnly="True">
-                                        <HeaderStyle Width="10px" /><ItemStyle Width="10px" />
-                                    </telerik:GridBoundColumn>
-                                    <telerik:GridBoundColumn UniqueName="locality_description" DataField="locality_description" HeaderText="Locality" ReadOnly="True">
-                                        <HeaderStyle Width="30px" /><ItemStyle Width="30px" />
-                                    </telerik:GridBoundColumn>
-                                    <telerik:GridBoundColumn UniqueName="rate" DataField="rate"  HeaderText="Medicare Reimbursement Rate" DataFormatString="{0:C2}" 
-                                        ItemStyle-HorizontalAlign="Right" ReadOnly="True">
-                                        <HeaderStyle Width="25px" HorizontalAlign="Right"/><ItemStyle Width="25px" />
-                                    </telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn UniqueName="analyzer_name" DataField="analyzer_name" HeaderText="Analyzer" ReadOnly="True"></telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn UniqueName="description" DataField="description" HeaderText="Assay Description" ReadOnly="True"></telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn UniqueName="code" DataField="code" HeaderText="CPT Descriptor" ReadOnly="True"></telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn UniqueName="notes" DataField="notes" HeaderText="Notes" ReadOnly="True"></telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn UniqueName="locality_description" DataField="locality_description" HeaderText="Locality" ReadOnly="True"></telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn UniqueName="rate" DataField="rate" HeaderText="Medicare Reimbursement Rate" DataFormatString="{0:C2}" ItemStyle-HorizontalAlign="Right" ReadOnly="True"></telerik:GridBoundColumn>
                                 </Columns>
                             </MasterTableView>
                             <SortingSettings SortedBackColor="#FFFAED" EnableSkinSortStyles="true"></SortingSettings>
@@ -321,7 +314,7 @@
             var parent = $get("RatesGrid");
             //alert(parent.clientHeight)
             var gridHeader = sender.GridHeaderDiv;
-            //scrollArea.style.height = parent.clientHeight - gridHeader.clientHeight + "px";
+            scrollArea.style.height = parent.clientHeight - gridHeader.clientHeight + "px";
         }
 
         function PrintRatesGrid() {
@@ -347,38 +340,6 @@
             MenuEvents();
         }
 
-        //intercept ajax request to keep grid from going to an odd size
-        //(function (open) {
-        //    XMLHttpRequest.prototype.open = function (method, url, async, user, pass) {
-        //        this.addEventListener("readystatechange", function () {
-        //           // ResizeGrid();  //resize grid data
-        //        }, false);
-        //        open.call(this, method, url, async, user, pass);
-        //    };
-        //})(XMLHttpRequest.prototype.open);
-
-        function HandleScrolling(e) {
-            debugger;
-            var grid = $find("<%=RatesGrid.ClientID %>");
-            var scrollArea = document.getElementById("<%= RatesGrid.ClientID %>" + "_GridData");
-            if (IsScrolledToBottom(scrollArea)) {
-                var currentlyDisplayedRecords = grid.get_masterTableView().get_pageSize() * (grid.get_masterTableView().get_currentPageIndex() + 1);
-                //if the visible items are less than the entire record count       
-                //trigger an ajax request to increase them    
-                if (currentlyDisplayedRecords < 100)
-                {
-                    debugger;
-                    $find("<%= RadAjaxManager1.ClientID %>").ajaxRequest("LoadMoreRecords");
-                }
-            }
-        }
-        //calculate when the scroll bar is at the bottom    
-        function IsScrolledToBottom(scrollArea) {
-            var currentPosition = scrollArea.scrollTop + scrollArea.clientHeight;
-            return currentPosition == scrollArea.scrollHeight;
-        }
-
-        //alert('ready');
         //resize the grid when window resizes
         $(window).resize(function () { ResizeGrid(); });
         $(document).ready(function () { ResizeGrid(); });
