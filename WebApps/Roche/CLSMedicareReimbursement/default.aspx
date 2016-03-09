@@ -202,13 +202,14 @@
                     var AssaySearchNode = $telerik.$($find("AssayDescriptionSearch").get_childListElement());
                     var LocalitySearchNode = $telerik.$($find("LocalitySearch").get_childListElement());
                     if ((AnalyzerSearchNode.length == 0) && (AssaySearchNode.length == 0) && (LocalitySearchNode.length == 0)) {
-                    $(menu).hide();
 
-                        var currentLoadingPanel = $find("<%= RadAjaxLoadingPanel1.ClientID %>");
-                        var currentGrid = $find("<%= RadGridPanel.ClientID%>")
-                        currentLoadingPanel.show(currentGrid);
-                    $find("<%= RadGridPanel.ClientID%>").ajaxRequestWithTarget("<%= RadGridPanel.UniqueID %>", "refresh");
-
+                        if (OutsideOfMenu()) {
+                            $(menu).hide();
+                            var currentLoadingPanel = $find("<%= RadAjaxLoadingPanel1.ClientID %>");
+                            var currentGrid = $find("<%= RadGridPanel.ClientID%>")
+                            currentLoadingPanel.show(currentGrid);
+                            $find("<%= RadGridPanel.ClientID%>").ajaxRequestWithTarget("<%= RadGridPanel.UniqueID %>", "refresh");
+                        }
                     }
 
        <%--             var currentLoadingPanel = $find("<%= RadAjaxLoadingPanel1.ClientID %>");
@@ -222,13 +223,17 @@
         var PaddingForFooter = 25;  //this is padding between bottom of grid and footer
         var GridDataSize = 0;  //set on resize and then used to restore on virtual scroll
         function ResizeGrid() {
-            var grid = document.getElementById('<%=RatesGrid.ClientID %>');
-            var GridTop = $(grid).offset().top;
-            var FooterTop = $(footer).offset().top;
-            $(grid).height((FooterTop - GridTop) - PaddingForFooter);
-            //get the size of the data area
-            var griddata = $get("RatesGrid_GridData");
-            GridDataSize = Math.floor((FooterTop - $(griddata).offset().top) - PaddingForFooter);
+            try {
+                var grid = $get("RatesGrid_GridData");//document.getElementById('<%=RatesGrid.ClientID %>');
+                var GridTop = $(grid).offset().top;
+                var FooterTop = $(footer).offset().top;
+                $(grid).height((FooterTop - GridTop) - PaddingForFooter);
+                //get the size of the data area
+                var griddata = $get("RatesGrid_GridData");
+                GridDataSize = Math.floor((FooterTop - $(griddata).offset().top) - PaddingForFooter);
+            }
+            catch (err)  //do nothing just don't crash
+            { }
         }
         //restore the grid data to correct size
         function ResizeGridDataArea() {
@@ -283,11 +288,33 @@
         //    };
         //})(XMLHttpRequest.prototype.open);
 
-        //alert('ready');
         //resize the grid when window resizes
         $(window).resize(function () { ResizeGrid(); });
         $(document).ready(function () { ResizeGrid(); });
 
+        //this is ugly but keeps the grid the correct size
+        setInterval(function () { ResizeGrid(); }, 333);
+
+        //track the mouse mouse event
+        var MouseX = 0;
+        var MouseY = 0;
+        window.onmousemove = function (e) { MouseX = e.clientX; MouseY = e.clientY; }
+
+        function OutsideOfMenu()
+        {
+            var MenuBorderSensitiveAreaWidth = 5;
+            var MenuDivOffset = $get('menu');
+            if ( MenuDivOffset )
+            {
+                var MenuTop = $(MenuDivOffset).offset().top + MenuBorderSensitiveAreaWidth;
+                var MenuLeft = $(MenuDivOffset).offset().left + MenuBorderSensitiveAreaWidth;
+                var MenuWidth = $(MenuDivOffset).width() - MenuBorderSensitiveAreaWidth;
+                var MenuHeight = $(MenuDivOffset).height() - MenuBorderSensitiveAreaWidth;
+                if ((MouseX > MenuLeft) && (MouseX < (parseInt(MenuLeft) + parseInt(MenuWidth))) && (MouseY > MenuTop) && (MouseY < (parseInt(MenuTop) + parseInt(MenuHeight))))
+                    return false;  //we are within the rectangle of the menu
+            }
+            return true;
+        }
     </script>
 </body>
 </html>
