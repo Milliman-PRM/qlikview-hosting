@@ -54,7 +54,8 @@ namespace Controller
             var context = new CLSdbDataContext();
             var dboList = context.Localities.Distinct().ToList();
             var resultList = dboList.GroupBy(x => x.Locality1).Select(y => y.First()).OrderBy(a=>a.LocalityDescription).ToList();
-            return resultList;
+            var finallist = resultList.Where(l => !string.IsNullOrEmpty(l.LocalityDescription)).ToList();
+            return finallist;
         }
 
         #endregion
@@ -261,7 +262,8 @@ namespace Controller
             var context = new CLSdbDataContext();
             var dboList = context.SearchTerms.Distinct().ToList();
             var resultList = dboList.GroupBy(x => x.SearchDesc).Select(y => y.First()).OrderBy(a=>a.SearchDesc).ToList();
-            return resultList;
+            var finallist = resultList.Where(l => !string.IsNullOrEmpty(l.SearchDesc)).ToList();
+            return finallist;
         }
         public static List<SearchTerm> getAssayDescriptionForSpecificCodeId(int param)
         {

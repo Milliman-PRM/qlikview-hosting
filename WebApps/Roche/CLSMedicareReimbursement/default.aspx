@@ -59,7 +59,7 @@
             padding: 0px;
             margin: 0px;
             border: 3px solid #046EBC;
-    z-index: 2000;
+            z-index: 2000;
         }
 
         /*hide radgrid horizontal scroll*/
@@ -94,7 +94,6 @@
             padding: 3px 3px 3px 3px;
             margin: 0 auto;
         }
-
     </style>
 </head>
 <body onload="Ready()">
@@ -123,6 +122,9 @@
             </telerik:RadAjaxManager>
             <telerik:RadAjaxLoadingPanel runat="server" ID="RadAjaxLoadingPanel1" Transparency="60" BackColor="lightgray" Skin="Default"></telerik:RadAjaxLoadingPanel>
 
+            <div id="divStartOverButton">
+                <a href="default.aspx">Start Over</a>
+            </div>
             <%--header section--%>
             <div id="header">
                 <table style="width: 100%">
@@ -132,7 +134,9 @@
                         <td>
                             <h2>Clinical Lab Systems Medicare Reimbursement</h2>
                         </td>
+                        <td></td>
                     </tr>
+
                 </table>
             </div>
 
@@ -174,6 +178,12 @@
                         height: 390px;
                         width: 256px;
                     }
+
+                    .refreshLink {
+                        font-size: 11px;
+                        font-weight: bold;
+                        color: #777;
+                    }
                 </style>
                 <telerik:RadAjaxPanel ID="menu_controls_panel" runat="server" LoadingPanelID="RadAjaxLoadingPanel1">
                     <div class="divAnalyzerCheckList">
@@ -200,9 +210,7 @@
 
             <%--grid section--%>
             <div id="section">
-                <div id="divStartOverButton">
-                    
-                </div>
+
                 <div style="margin-right: 40px">
                     <asp:DropDownList ID="YearDropdown" Style="float: right;" runat="server" Width="100px" AutoPostBack="True"
                         OnSelectedIndexChanged="YearDropdown_SelectedIndexChanged">
@@ -212,33 +220,47 @@
                 <telerik:RadAjaxPanel ID="RadGridPanel" runat="server" OnAjaxRequest="RadGridPanel_AjaxRequest" LoadingPanelID="RadAjaxLoadingPanel1">
                     <div id="gridLayOut">
                         <telerik:RadGrid RenderMode="Classic" ID="RatesGrid" runat="server" GridLines="None"
-                            AllowSorting="true" AllowPaging="true" PageSize="250" 
+                            AllowSorting="true" AllowPaging="true" PageSize="250"
                             AllowCustomPaging="true" OnNeedDataSource="RatesGrid_NeedDataSource"
                             PagerStyle-ShowPagerText="True" PagerStyle-Visible="True"
                             OnSortCommand="RatesGrid_SortCommand" ClientIDMode="AutoID"
                             AutoGenerateColumns="False" OnSelectedCellChanged="RatesGrid_SelectedCellChanged">
-                            <%--                        <ClientSettings EnableRowHoverStyle="True" Resizing-AllowColumnResize="true" Resizing-EnableRealTimeResize="true" Resizing-ResizeGridOnColumnResize="false" EnablePostBackOnRowClick="True">
-                            <Selecting CellSelectionMode="SingleCell" />
-                            <Scrolling AllowScroll="True" UseStaticHeaders="True" SaveScrollPosition="true" EnableVirtualScrollPaging="true"></Scrolling>
-                            <ClientEvents OnGridCreated="GridCreated" />
-                        </ClientSettings>--%>
                             <PagerStyle Visible="false" />
-                            <ClientSettings ReorderColumnsOnClient="false" AllowColumnsReorder="false" ColumnsReorderMethod="Reorder"  EnablePostBackOnRowClick="True">
+                            <ClientSettings ReorderColumnsOnClient="false" AllowColumnsReorder="false" ColumnsReorderMethod="Reorder" EnablePostBackOnRowClick="True">
                                 <ClientEvents OnGridCreated="GridCreated" />
-                                <Virtualization EnableVirtualization="false" InitiallyCachedItemsCount="2000"  LoadingPanelID="RadAjaxLoadingPanel1" ItemsPerView="500" />
-                                 <Selecting CellSelectionMode="SingleCell" />
+                                <Virtualization EnableVirtualization="false" InitiallyCachedItemsCount="2000" LoadingPanelID="RadAjaxLoadingPanel1" ItemsPerView="500" />
+                                <Selecting CellSelectionMode="SingleCell" />
                                 <Scrolling ScrollHeight="480px" AllowScroll="True" UseStaticHeaders="True" SaveScrollPosition="true" EnableVirtualScrollPaging="true"></Scrolling>
                                 <Resizing AllowColumnResize="true" />
                             </ClientSettings>
 
                             <MasterTableView AllowMultiColumnSorting="false" PagerStyle-AlwaysVisible="True">
                                 <Columns>
-                                    <telerik:GridBoundColumn UniqueName="analyzer_name" DataField="analyzer_name" HeaderText="Analyzer" ReadOnly="True"></telerik:GridBoundColumn>
-                                    <telerik:GridBoundColumn UniqueName="description" DataField="description" HeaderText="Assay Description" ReadOnly="True"></telerik:GridBoundColumn>
-                                    <telerik:GridBoundColumn UniqueName="code" DataField="code" HeaderText="CPT Descriptor" ReadOnly="True"></telerik:GridBoundColumn>
-                                    <telerik:GridBoundColumn UniqueName="notes" DataField="notes" HeaderText="Notes" ReadOnly="True"></telerik:GridBoundColumn>
-                                    <telerik:GridBoundColumn UniqueName="locality_description" DataField="locality_description" HeaderText="Locality" ReadOnly="True"></telerik:GridBoundColumn>
-                                    <telerik:GridBoundColumn UniqueName="rate" DataField="rate" HeaderText="Medicare Reimbursement Rate" DataFormatString="{0:C2}" ItemStyle-HorizontalAlign="Right" ReadOnly="True"></telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn UniqueName="analyzer_name" DataField="analyzer_name" HeaderText="Analyzer" ReadOnly="True">
+                                        <HeaderStyle Width="30px" />
+                                        <ItemStyle Width="30px" />
+                                    </telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn UniqueName="description" DataField="description" HeaderText="Assay Description" ReadOnly="True">
+                                        <HeaderStyle Width="50px" />
+                                        <ItemStyle Width="50px" />
+                                    </telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn UniqueName="code" DataField="code" HeaderText="CPT Code" ReadOnly="True">
+                                        <HeaderStyle Width="10px" />
+                                        <ItemStyle Width="10px" />
+                                    </telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn UniqueName="notes" DataField="notes" HeaderText="Notes" ReadOnly="True">
+                                        <HeaderStyle Width="10px" />
+                                        <ItemStyle Width="10px" />
+                                    </telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn UniqueName="locality_description" DataField="locality_description" HeaderText="Locality" ReadOnly="True">
+                                        <HeaderStyle Width="30px" />
+                                        <ItemStyle Width="30px" />
+                                    </telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn UniqueName="rate" DataField="rate" HeaderText="Medicare Reimbursement Rate" DataFormatString="{0:C2}"
+                                        ItemStyle-HorizontalAlign="Right" ReadOnly="True">
+                                        <HeaderStyle Width="25px" HorizontalAlign="Right" />
+                                        <ItemStyle Width="25px" />
+                                    </telerik:GridBoundColumn>
                                 </Columns>
                             </MasterTableView>
                             <SortingSettings SortedBackColor="#FFFAED" EnableSkinSortStyles="true"></SortingSettings>
