@@ -42,7 +42,7 @@ namespace Controller
         {
             var context = new CLSdbDataContext();
             var dboList = context.Codes.Distinct().ToList();
-            var resultList = dboList.GroupBy(x => x.Code1).Select(y => y.First()).ToList();
+            var resultList = dboList.GroupBy(x => x.Code1).Select(y => y.First()).OrderBy(a=>a.Code1).ToList();
             return resultList;
         }
         #endregion
@@ -53,7 +53,7 @@ namespace Controller
         {
             var context = new CLSdbDataContext();
             var dboList = context.Localities.Distinct().ToList();
-            var resultList = dboList.GroupBy(x => x.Locality1).Select(y => y.First()).ToList();
+            var resultList = dboList.GroupBy(x => x.Locality1).Select(y => y.First()).OrderBy(a=>a.LocalityDescription).ToList();
             return resultList;
         }
 
@@ -92,7 +92,7 @@ namespace Controller
         {
             var context = new CLSdbDataContext();
             var dboList = context.Analyzers.Distinct().ToList();
-            var resultList = dboList.GroupBy(x => x.AnalyzerName).Select(y => y.First()).ToList();
+            var resultList = dboList.GroupBy(x => x.AnalyzerName).Select(y => y.First()).OrderBy(a=>a.AnalyzerName).ToList();
             return resultList;
         }
 
@@ -104,7 +104,7 @@ namespace Controller
         {
             var context = new CLSdbDataContext();
             var dboList = context.Analyzers.Distinct().ToList();
-            var resultList = dboList.GroupBy(x => x.AnalyzerName).Select(y => y.First()).ToList();
+            var resultList = dboList.GroupBy(x => x.AnalyzerName).Select(y => y.First()).OrderBy(a=>a.AnalyzerName).ToList();
             return resultList;
         }
 
@@ -175,10 +175,11 @@ namespace Controller
                                       new {   Az = azTble,  St = stTble }
                                    )    // selection
                        .Where(sa => splittedIds.Contains(sa.Az.Id)) // where statement
+                       .OrderBy(a=>a.St.SearchDesc)
                        .Select(a=>a.St);    // seelct record set
 
             var resultList = new List<SearchTerm>();
-            resultList = query.ToList();
+            resultList = query.OrderBy(a=>a.SearchDesc).ToList();
             return resultList;
         }
 
@@ -259,14 +260,14 @@ namespace Controller
         {
             var context = new CLSdbDataContext();
             var dboList = context.SearchTerms.Distinct().ToList();
-            var resultList = dboList.GroupBy(x => x.SearchDesc).Select(y => y.First()).ToList();
+            var resultList = dboList.GroupBy(x => x.SearchDesc).Select(y => y.First()).OrderBy(a=>a.SearchDesc).ToList();
             return resultList;
         }
         public static List<SearchTerm> getAssayDescriptionForSpecificCodeId(int param)
         {
             var context = new CLSdbDataContext();
             var dboList = context.SearchTerms.Distinct().ToList();
-            var resultList = dboList.Where(a => a.FkCodeId == param).ToList();
+            var resultList = dboList.Where(a => a.FkCodeId == param).OrderBy(a=>a.SearchDesc).ToList();
             return resultList;
         }
 
@@ -306,7 +307,7 @@ namespace Controller
                         select a;
                         
             var resultList = new List<Analyzer>();
-            resultList = query.ToList();
+            resultList = query.OrderBy(a=>a.AnalyzerName).ToList();
 
             var analyzerNamesList = resultList.Select(l => l.AnalyzerName).ToList();
 
