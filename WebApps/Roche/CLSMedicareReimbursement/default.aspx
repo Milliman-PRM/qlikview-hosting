@@ -16,6 +16,7 @@
     </script>
 
     <title>Clinical Lab Systems Medicare Reimbursement</title>
+    <meta name="ROBOTS" content="NOINDEX, NOFOLLOW" />
     <style type="text/css">
         body {
             background-color: white;
