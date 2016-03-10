@@ -345,8 +345,11 @@ namespace CLSMedicareReimbursement
                         CurrentSels.AddToList(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.LOCALATIESBYDESCSHRT, SelectedValue);
                         RebindPrimaryGrid(CurrentSels);
                         break;
-                    //case "code":  we are supposed to query on this field too, but not yet, no way to clear it really
-                    //    break;
+                    case "code":  //we are supposed to query on this field too, but not yet, no way to clear it really
+                        CurrentSels.Clear(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.CPTCODES);
+                        CurrentSels.AddToList(CLSBusinessLogic.BusinessLogicManager.CurrentSelections.QueryFieldNames.CPTCODES, SelectedValue);
+                        RebindPrimaryGrid(CurrentSels);
+                        break;
                     default:
                         RatesGrid.SelectedIndexes.Clear();  //not valid search columns
                         break;
@@ -413,9 +416,9 @@ namespace CLSMedicareReimbursement
             //set highlights if necessary
             NoAnalyzerSingleAssayDescriptionSelected();
             LocalityList.ClearSelection();  //clear out and restore localaties each time
-            foreach (string LocalityID in CurrentSels.LocalatiesIDs)
+            foreach (string LocalityID in CurrentSels.LocalatiesByDescShrt)
             {
-                string LocalityText = CLSBusinessLogic.BusinessLogicManager.GetInstance().FindLocalityByID(LocalityID);
+                string LocalityText = LocalityID;
                 ListItem LI = LocalityList.Items.FindByText(LocalityText);
                 if (LI != null)
                     LI.Selected = true;
