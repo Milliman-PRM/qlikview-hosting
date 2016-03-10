@@ -216,7 +216,7 @@
                             AllowCustomPaging="true" OnNeedDataSource="RatesGrid_NeedDataSource"
                             PagerStyle-ShowPagerText="True" PagerStyle-Visible="True"
                             OnSortCommand="RatesGrid_SortCommand" ClientIDMode="AutoID"
-                            AutoGenerateColumns="False" OnSelectedCellChanged="RatesGrid_SelectedCellChanged">
+                            AutoGenerateColumns="False" OnSelectedCellChanged="RatesGrid_SelectedCellChanged" >
                             <%--                        <ClientSettings EnableRowHoverStyle="True" Resizing-AllowColumnResize="true" Resizing-EnableRealTimeResize="true" Resizing-ResizeGridOnColumnResize="false" EnablePostBackOnRowClick="True">
                             <Selecting CellSelectionMode="SingleCell" />
                             <Scrolling AllowScroll="True" UseStaticHeaders="True" SaveScrollPosition="true" EnableVirtualScrollPaging="true"></Scrolling>
@@ -233,22 +233,22 @@
 
                             <MasterTableView AllowMultiColumnSorting="false" PagerStyle-AlwaysVisible="True">
                                 <Columns>
-                                    <telerik:GridBoundColumn UniqueName="analyzer_name" DataField="analyzer_name" HeaderText="Analyzer" ReadOnly="True">
+                                    <telerik:GridBoundColumn UniqueName="analyzer_name" DataField="analyzer_name" HeaderText="Analyzer" ReadOnly="True" SortedBackColor="Transparent">
                                         <HeaderStyle Width="10%" />
                                     </telerik:GridBoundColumn>
-                                    <telerik:GridBoundColumn UniqueName="description" DataField="description" HeaderText="Assay Description" ReadOnly="True">
+                                    <telerik:GridBoundColumn UniqueName="description" DataField="description" HeaderText="Assay Description" ReadOnly="True" SortedBackColor="Transparent">
                                         <HeaderStyle Width="50%" />
                                     </telerik:GridBoundColumn>
-                                    <telerik:GridBoundColumn UniqueName="code" DataField="code" HeaderText="CPT Descriptor" ReadOnly="True">
+                                    <telerik:GridBoundColumn UniqueName="code" DataField="code" HeaderText="CPT Descriptor" ReadOnly="True" SortedBackColor="Transparent">
                                         <HeaderStyle Width="10%" />
                                     </telerik:GridBoundColumn>
-                                    <telerik:GridBoundColumn UniqueName="notes" DataField="notes" HeaderText="Notes" ReadOnly="True">
+                                    <telerik:GridBoundColumn UniqueName="notes" DataField="notes" HeaderText="Notes" ReadOnly="True" SortedBackColor="Transparent">
                                         <HeaderStyle Width="10%" />
                                     </telerik:GridBoundColumn>
-                                    <telerik:GridBoundColumn UniqueName="locality_description" DataField="locality_description" HeaderText="Locality" ReadOnly="True">
+                                    <telerik:GridBoundColumn UniqueName="locality_description" DataField="locality_description" HeaderText="Locality" ReadOnly="True" SortedBackColor="Transparent">
                                         <HeaderStyle Width="10%" />
                                     </telerik:GridBoundColumn>
-                                    <telerik:GridBoundColumn UniqueName="rate" DataField="rate" HeaderText="Medicare Reimbursement Rate" DataFormatString="{0:C2}" ItemStyle-HorizontalAlign="Right" ReadOnly="True">
+                                    <telerik:GridBoundColumn UniqueName="rate" DataField="rate" HeaderText="Medicare Reimbursement Rate" DataFormatString="{0:C2}" ItemStyle-HorizontalAlign="Right" ReadOnly="True" SortedBackColor="Transparent">
                                         <HeaderStyle Width="10%" />
                                     </telerik:GridBoundColumn>
                                 </Columns>
