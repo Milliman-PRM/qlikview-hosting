@@ -190,7 +190,7 @@
                     </div>
 
                     <div class="divLocalityList">
-                        <telerik:RadSearchBox runat="server" ID="LocalitySearch" EmptyMessage="Locality" Width="100%" DataTextField="LocalityDescLong" DataValueField="Id" DropDownSettings-Height="370px" DropDownSettings-Width="255px" RenderMode="Lightweight" OnSearch="LocalitySearch_Search" OnClientSearch="OnClientSearch">
+                        <telerik:RadSearchBox runat="server" ID="LocalitySearch" EmptyMessage="Locality" Width="100%" DataTextField="LocalityDescription" DataValueField="Id" DropDownSettings-Height="370px" DropDownSettings-Width="255px" RenderMode="Lightweight" OnSearch="LocalitySearch_Search" OnClientSearch="OnClientSearch">
                         </telerik:RadSearchBox>
                         <asp:ListBox ID="LocalityList" runat="server" Width="100%" Height="375px" BackColor="White" ForeColor="Black" AutoPostBack="True" OnSelectedIndexChanged="LocalityList_SelectedIndexChanged" SelectionMode="Multiple" ViewStateMode="Enabled"></asp:ListBox>
                     </div>
