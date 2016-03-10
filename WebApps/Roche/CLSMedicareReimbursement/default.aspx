@@ -2,12 +2,12 @@
 
 <%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
 
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head runat="server">
-
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <script src="scripts/jquery-1.12.1.min.js" type="text/javascript"></script>
     <script type="text/javascript">
         if (typeof jQuery == 'undefined') {
@@ -101,8 +101,6 @@
 
     <form id="form1" runat="server">
 
-        <div id="divMain">
-
             <telerik:RadScriptManager runat="server" ID="RadScriptManager1" />
             <telerik:RadSkinManager ID="RadSkinManager1" runat="server" ShowChooser="false" PersistenceKey="Telerik.Skin" Skin="Metro" />
             <telerik:RadAjaxManager ID="RadAjaxManager1" runat="server" OnAjaxRequest="RadAjaxManager1_AjaxRequest">
@@ -123,6 +121,8 @@
             </telerik:RadAjaxManager>
             <telerik:RadAjaxLoadingPanel runat="server" ID="RadAjaxLoadingPanel1" Transparency="60" BackColor="lightgray" Skin="Default"></telerik:RadAjaxLoadingPanel>
 
+
+        <div id="divMain">
             <%--header section--%>
             <div id="header">
                 <table style="width: 100%">
@@ -223,8 +223,8 @@
                             <ClientEvents OnGridCreated="GridCreated" />
                         </ClientSettings>--%>
                             <PagerStyle Visible="false" />
-                            <ClientSettings ReorderColumnsOnClient="false" AllowColumnsReorder="false" ColumnsReorderMethod="Reorder"  EnablePostBackOnRowClick="True">
-                                <ClientEvents OnGridCreated="GridCreated" />
+                            <ClientSettings ReorderColumnsOnClient="false" AllowColumnsReorder="false"   EnablePostBackOnRowClick="True">
+                                <ClientEvents OnGridCreated="GridCreated"  />
                                 <Virtualization EnableVirtualization="false" InitiallyCachedItemsCount="2000"  LoadingPanelID="RadAjaxLoadingPanel1" ItemsPerView="500" />
                                  <Selecting CellSelectionMode="SingleCell" />
                                 <Scrolling ScrollHeight="480px" AllowScroll="True" UseStaticHeaders="True" SaveScrollPosition="true" EnableVirtualScrollPaging="true"></Scrolling>
@@ -233,12 +233,24 @@
 
                             <MasterTableView AllowMultiColumnSorting="false" PagerStyle-AlwaysVisible="True">
                                 <Columns>
-                                    <telerik:GridBoundColumn UniqueName="analyzer_name" DataField="analyzer_name" HeaderText="Analyzer" ReadOnly="True"></telerik:GridBoundColumn>
-                                    <telerik:GridBoundColumn UniqueName="description" DataField="description" HeaderText="Assay Description" ReadOnly="True"></telerik:GridBoundColumn>
-                                    <telerik:GridBoundColumn UniqueName="code" DataField="code" HeaderText="CPT Descriptor" ReadOnly="True"></telerik:GridBoundColumn>
-                                    <telerik:GridBoundColumn UniqueName="notes" DataField="notes" HeaderText="Notes" ReadOnly="True"></telerik:GridBoundColumn>
-                                    <telerik:GridBoundColumn UniqueName="locality_description" DataField="locality_description" HeaderText="Locality" ReadOnly="True"></telerik:GridBoundColumn>
-                                    <telerik:GridBoundColumn UniqueName="rate" DataField="rate" HeaderText="Medicare Reimbursement Rate" DataFormatString="{0:C2}" ItemStyle-HorizontalAlign="Right" ReadOnly="True"></telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn UniqueName="analyzer_name" DataField="analyzer_name" HeaderText="Analyzer" ReadOnly="True">
+                                        <HeaderStyle Width="10%" />
+                                    </telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn UniqueName="description" DataField="description" HeaderText="Assay Description" ReadOnly="True">
+                                        <HeaderStyle Width="50%" />
+                                    </telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn UniqueName="code" DataField="code" HeaderText="CPT Descriptor" ReadOnly="True">
+                                        <HeaderStyle Width="10%" />
+                                    </telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn UniqueName="notes" DataField="notes" HeaderText="Notes" ReadOnly="True">
+                                        <HeaderStyle Width="10%" />
+                                    </telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn UniqueName="locality_description" DataField="locality_description" HeaderText="Locality" ReadOnly="True">
+                                        <HeaderStyle Width="10%" />
+                                    </telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn UniqueName="rate" DataField="rate" HeaderText="Medicare Reimbursement Rate" DataFormatString="{0:C2}" ItemStyle-HorizontalAlign="Right" ReadOnly="True">
+                                        <HeaderStyle Width="10%" />
+                                    </telerik:GridBoundColumn>
                                 </Columns>
                             </MasterTableView>
                             <SortingSettings SortedBackColor="#FFFAED" EnableSkinSortStyles="true"></SortingSettings>
@@ -339,6 +351,10 @@
 
         function Ready() {
             MenuEvents();
+            //for menu items, scroll selections into view
+            //ScrollSelectionsIntoView('<%= AnalyzerCheckList.ClientID %>');  //check box list does not function same as listbox, needs research....
+            ScrollSelectionsIntoView('<%= AssayDescriptionList.ClientID %>');
+            ScrollSelectionsIntoView('<%= LocalityList.ClientID %>');
         }
 
         //resize the grid when window resizes
@@ -347,6 +363,20 @@
 
         //this is ugly but keeps the grid the correct size
         setInterval(function () { ResizeGrid(); }, 333);
+
+        //this function will scroll the listbox selections into view automatically
+        function ScrollSelectionsIntoView(ControlID) {
+            var listbox = document.getElementById(ControlID);
+            if (listbox != null) {
+                for (var i = 0; i < listbox.options.length; i++) {
+                    if (listbox.options[i].selected) {
+                        listbox.options[i].selected = false;
+                        listbox.options[i].selected = true;
+                    }
+                }
+            }
+            
+        }
 
     </script>
 </body>

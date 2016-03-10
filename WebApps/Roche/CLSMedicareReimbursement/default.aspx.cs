@@ -128,9 +128,6 @@ namespace CLSMedicareReimbursement
             System.Data.DataTable DataSet = Session[SessionKey_DataSet] as System.Data.DataTable;
             if (DataSet != null)
             {
-                //copies over the definations, but not the data itself
-                System.Data.DataTable DataSubSet = DataSet.Copy();
-
                 int PageIndex = RatesGrid.CurrentPageIndex;
                 int PageSize = RatesGrid.PageSize;
                 int StartAt = PageIndex * PageSize;
@@ -138,9 +135,14 @@ namespace CLSMedicareReimbursement
                 if (StartAt + ItemCount >= DataSet.Rows.Count)
                     ItemCount = (DataSet.Rows.Count - StartAt);
                 int EndAt = StartAt + ItemCount;
+
+                //copies over the definations, but not the data itself
+                System.Data.DataTable DataSubSet = DataSet.Clone();
                 //copy over the data
                 for (int Index = StartAt; Index < EndAt; Index++)
                     DataSubSet.Rows.Add(DataSet.Rows[Index].ItemArray);
+               
+
                 //add the subset to the view
                 RatesGrid.DataSource = DataSubSet;
            }
@@ -309,6 +311,7 @@ namespace CLSMedicareReimbursement
             switch (e.Argument)
             {
                 case "refresh":
+
                     RebindPrimaryGrid(CurrentSels);
                     break;
             }
