@@ -222,11 +222,11 @@
                             <ClientEvents OnGridCreated="GridCreated" />
                         </ClientSettings>--%>
                             <PagerStyle Visible="false" />
-                            <ClientSettings ReorderColumnsOnClient="true" AllowColumnsReorder="true" ColumnsReorderMethod="Reorder">
+                            <ClientSettings ReorderColumnsOnClient="false" AllowColumnsReorder="false" ColumnsReorderMethod="Reorder"  EnablePostBackOnRowClick="True">
                                 <ClientEvents OnGridCreated="GridCreated" />
                                 <Virtualization EnableVirtualization="false" InitiallyCachedItemsCount="2000"  LoadingPanelID="RadAjaxLoadingPanel1" ItemsPerView="500" />
-                                <Selecting AllowRowSelect="true" />
-                                <Scrolling ScrollHeight="480px" AllowScroll="True" UseStaticHeaders="True" SaveScrollPosition="true" EnableVirtualScrollPaging="false"></Scrolling>
+                                 <Selecting CellSelectionMode="SingleCell" />
+                                <Scrolling ScrollHeight="480px" AllowScroll="True" UseStaticHeaders="True" SaveScrollPosition="true" EnableVirtualScrollPaging="true"></Scrolling>
                                 <Resizing AllowColumnResize="true" />
                             </ClientSettings>
 
@@ -292,7 +292,7 @@
         var PaddingForFooter = 5;  //this is padding between bottom of grid and footer
         var GridDataSize = 0;  //set on resize and then used to restore on virtual scroll
         function ResizeGrid() {
-            var grid = document.getElementById('<%=RatesGrid.ClientID %>');
+            var grid = $get("RatesGrid_GridData");
             var GridTop = $(grid).offset().top;
             var FooterTop = $(footer).offset().top;
             $(grid).height((FooterTop - GridTop) - PaddingForFooter);
@@ -309,7 +309,7 @@
         }
 
         function GridCreated(sender, args) {
-            debugger;
+            //debugger;
             var scrollArea = sender.GridDataDiv;
             var parent = $get("RatesGrid");
             //alert(parent.clientHeight)
@@ -343,6 +343,9 @@
         //resize the grid when window resizes
         $(window).resize(function () { ResizeGrid(); });
         $(document).ready(function () { ResizeGrid(); });
+
+        //this is ugly but keeps the grid the correct size
+        setInterval(function () { ResizeGrid(); }, 333);
 
     </script>
 </body>
