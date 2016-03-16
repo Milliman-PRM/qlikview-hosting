@@ -184,33 +184,31 @@
             height: 100px;
         }
 
-        .close
-        {
+        .close {
             border: 1px solid #858585;
             border-radius: 8px 8px 8px 8px;
             cursor: pointer;
             float: right;
             height: 15px;
-            margin: -16px -14px 6px 8px;
+            /* margin: -16px -14px 6px 8px;*/
             padding: 0;
             width: 14px;
             -moz-border-radius: 8px;
             -webkit-border-radius: 8px;
             border-radius: 8px;
+            position: absolute;
+            left: 1176px;
+            top: 1px;
         }
-        /*select{
-          width: 150px;
-          height: 30px;
-          padding: 5px;
-          background-color:#046EBC;
+
+        select option:first-child {
+            color: green;
         }
-        select option {
-             color: green; 
-             background-color:green;
+
+        select:-internal-list-box option:checked {
+            background-color: #046EBC !important;
+            color: green;
         }
-        select option:first-child{
-          color: green;
-        }*/
     </style>
 </head>
 <body onload="Ready()">
@@ -264,7 +262,7 @@
                     <div class="divAssayDescriptionList">
                         <telerik:RadSearchBox runat="server" ID="AssayDescriptionSearch" EmptyMessage="Assay Description" Width="100%" DataTextField="SearchDesc" DataValueField="Id" DropDownSettings-Height="370px" DropDownSettings-Width="511px" RenderMode="Lightweight" OnSearch="AssayDescriptionSearch_Search" OnClientSearch="OnClientSearch">
                         </telerik:RadSearchBox>
-                      <%--  <div style="height: 2px;"></div>--%>
+                        <%--  <div style="height: 2px;"></div>--%>
                         <asp:ListBox ID="AssayDescriptionList" runat="server" Width="100%" Height="375px" BackColor="White" ForeColor="Black" AutoPostBack="True" OnSelectedIndexChanged="AssayDescriptionList_SelectedIndexChanged" SelectionMode="Multiple" ViewStateMode="Enabled" CssClass="mySelect"></asp:ListBox>
                     </div>
                     <div class="divLocalityList">
@@ -277,10 +275,9 @@
                         <asp:Button ID="btnClearLoad" runat="server" Text="Clear Selections" CssClass="btnCustom" Width="126px" ForeColor="Black" Font-Bold="true" BackColor="LightGray"
                             OnClick="btnClearLoad_Click" />
                     </div>
-<%--                    <div id="divCloseMenu" style="display: none;cursor: move;" onclick="hidePopup('menu'); __doPostBack('divCloseMenu','')">
-                        <img id="imgCancel" class="close" src="Images/cancel.png" alt="..."
-                                onclick="document.getElementById('divHowScreenMsg').style.display = 'none';" />
-                    </div>--%>
+                    <div id="divCloseMenu" style="display: block;">
+                        <img id="imgCancel" class="close" src="Images/cancel.png" alt="..." onclick="closeWindow('menu'); " />
+                    </div>
                 </telerik:RadAjaxPanel>
             </div>
 
@@ -295,11 +292,10 @@
                 <telerik:RadAjaxPanel ID="RadGridPanel" runat="server" OnAjaxRequest="RadGridPanel_AjaxRequest" LoadingPanelID="RadAjaxLoadingPanel1">
                     <div id="gridContainer">
                         <telerik:RadGrid RenderMode="Classic" ID="RatesGrid" runat="server" GridLines="None"
-                            AllowSorting="true" AllowPaging="true" PageSize="250"
-                            AllowCustomPaging="true" OnNeedDataSource="RatesGrid_NeedDataSource"
-                            PagerStyle-ShowPagerText="True" PagerStyle-Visible="True"
-                            OnSortCommand="RatesGrid_SortCommand" ClientIDMode="AutoID"
-                            AutoGenerateColumns="False" OnSelectedCellChanged="RatesGrid_SelectedCellChanged">
+                            AllowSorting="true" AllowPaging="true" PageSize="250" AllowCustomPaging="true" PagerStyle-ShowPagerText="True" PagerStyle-Visible="True"
+                            ClientIDMode="AutoID" AutoGenerateColumns="False"
+                            OnNeedDataSource="RatesGrid_NeedDataSource" OnSelectedCellChanged="RatesGrid_SelectedCellChanged"
+                            OnSortCommand="RatesGrid_SortCommand">
                             <PagerStyle Visible="false" />
                             <ClientSettings ReorderColumnsOnClient="false" AllowColumnsReorder="false" EnablePostBackOnRowClick="True">
                                 <ClientEvents OnGridCreated="GridCreated" />
@@ -309,7 +305,7 @@
                                 <Resizing AllowColumnResize="True" ClipCellContentOnResize="true" EnableRealTimeResize="true" ResizeGridOnColumnResize="true" />
                             </ClientSettings>
 
-                            <MasterTableView AllowMultiColumnSorting="false" PagerStyle-AlwaysVisible="True" Width="100%" TableLayout="Fixed">
+                            <MasterTableView AllowMultiColumnSorting="false" PagerStyle-AlwaysVisible="True" Width="100%" TableLayout="Fixed" Name="ownertableviewRatesGrid">
                                 <Columns>
                                     <telerik:GridBoundColumn UniqueName="analyzer_name" DataField="analyzer_name" HeaderText="Analyzer" ReadOnly="True" SortedBackColor="Transparent">
                                         <HeaderStyle Width="20%" />
@@ -326,7 +322,7 @@
                                     <telerik:GridBoundColumn UniqueName="locality_description" DataField="locality_description" HeaderText="Locality" ReadOnly="True" SortedBackColor="Transparent">
                                         <HeaderStyle Width="12%" />
                                     </telerik:GridBoundColumn>
-                                    <telerik:GridBoundColumn UniqueName="rate" DataField="rate" HeaderText="Medicare Reimbursement Rate" DataFormatString="{0:C2}" ItemStyle-HorizontalAlign="Right" ReadOnly="True" SortedBackColor="Transparent">
+                                    <telerik:GridBoundColumn UniqueName="rate" AllowFiltering="false" AllowSorting="false" AutoPostBackOnFilter="false" DataField="rate" HeaderText="Medicare Reimbursement Rate" DataFormatString="{0:C2}" ItemStyle-HorizontalAlign="Right" ReadOnly="True" SortedBackColor="Transparent">
                                         <HeaderStyle Width="15%" HorizontalAlign="Right" />
                                     </telerik:GridBoundColumn>
                                 </Columns>
@@ -353,54 +349,30 @@
         </div>
     </form>
     <script type="text/javascript">
-        //must hide menu via JQuery, or it may not un-hide when needed
-        // $(menu).hide();
 
-        //CHange the highlight color
-        $('#AssayDescriptionList').click(function () {
-            $("#AssayDescriptionList option:selected").css("background-color", "#046EBC");
-        });
-
-        $('#LocalityList').click(function () {
-            $("#LocalityList option:selected").css("background-color", "#046EBC");
-        });
-
-        var sel = document.getElementById('AssayDescriptionList');
-        sel.addEventListener('click', function (el) {
-            var options = this.children;
-            var selected = this.children[this.selectedIndex];
-            selected.style.backgroundColor = 'yellow';
-        }, false);
-
-        var sel = document.getElementById('LocalityList');
-        sel.addEventListener('click', function (el) {
-            var options = this.children;
-            var selected = this.children[this.selectedIndex];
-            selected.style.backgroundColor = 'yellow';
-        }, false);
+        function Ready() {
+            MenuEvents();
+        }
 
         function MenuEvents() {
-            if (document.getElementById("menu") !== null) {
+            //if (document.getElementById("menu") !== null) {
+            //    $(menu).mouseleave(function () {
+            //we have to check where the mouse is,  due to the implementation of some of the controls
+            //we will get a mouseleave event, like when the search dropdown opens
+            //we need to check these to make sure the drop down is not active
+            var AnalyzerSearchNode = $telerik.$($find("AnalyzerSearch").get_childListElement());
+            var AssaySearchNode = $telerik.$($find("AssayDescriptionSearch").get_childListElement());
+            var LocalitySearchNode = $telerik.$($find("LocalitySearch").get_childListElement());
 
-                $(menu).mouseleave(function () {
-                    //we have to check where the mouse is,  due to the implementation of some of the controls
-                    //we will get a mouseleave event, like when the search dropdown opens
-
-                    //we need to check these to make sure the drop down is not active
-                    var AnalyzerSearchNode = $telerik.$($find("AnalyzerSearch").get_childListElement());
-                    var AssaySearchNode = $telerik.$($find("AssayDescriptionSearch").get_childListElement());
-                    var LocalitySearchNode = $telerik.$($find("LocalitySearch").get_childListElement());
-
-                    if ((AnalyzerSearchNode.length == 0) && (AssaySearchNode.length == 0) && (LocalitySearchNode.length == 0)) {
-                        $(menu).hide();
-                        var currentLoadingPanel = $find("<%= RadAjaxLoadingPanel1.ClientID %>");
-                        var currentGrid = $find("<%= RadGridPanel.ClientID%>")
-                        currentLoadingPanel.show(currentGrid);
-                        $find("<%= RadGridPanel.ClientID%>").ajaxRequestWithTarget("<%= RadGridPanel.UniqueID %>", "refresh");
-                    }
-
-                })
+            if ((AnalyzerSearchNode.length == 0) && (AssaySearchNode.length == 0) && (LocalitySearchNode.length == 0)) {
+                //$(menu).hide();
+                var currentLoadingPanel = $find("<%= RadAjaxLoadingPanel1.ClientID %>");
+                var currentGrid = $find("<%= RadGridPanel.ClientID%>")
+                currentLoadingPanel.show(currentGrid);
+                $find("<%= RadGridPanel.ClientID%>").ajaxRequestWithTarget("<%= RadGridPanel.UniqueID %>", "refresh");
             }
+            //})
+            //}
         }
 
         var PaddingForFooter = 5;  //this is padding between bottom of grid and footer
@@ -424,12 +396,40 @@
         }
 
         function GridCreated(sender, args) {
-            //debugger;
             var scrollArea = sender.GridDataDiv;
             var parent = $get("RatesGrid");
             //alert(parent.clientHeight)
             var gridHeader = sender.GridHeaderDiv;
             scrollArea.style.height = parent.clientHeight - gridHeader.clientHeight + "px";
+        }
+        
+        //dont allow a post back if nothing is selected
+        function OnClientSearch(sender, args) {
+            if (sender.get_text().length < 1) {
+                sender._element.control._postBackOnSearch = false;
+            }
+        }
+
+        //resize the grid when window resizes
+        $(window).resize(function () { ResizeGrid(); });
+        $(document).ready(function () { ResizeGrid(); });
+
+        //this is ugly but keeps the grid the correct size
+        setInterval(function () { ResizeGrid(); }, 333);
+
+        //close the menu item
+        function closeWindow(divControl) {
+            var Control = document.getElementById(divControl);
+            MenuEvents();
+            //Slowly hide the Div
+            //Remove the div by slightly moving the div towards left
+            //$(Control).hide(600, function () {
+            //    $(Control).remove();
+            //});
+            //fast remove
+            $(Control).toggle();
+            //$(Control).hide(600);
+            //$(Control).slideUp(600);
         }
 
         function PrintRatesGrid() {
@@ -443,109 +443,6 @@
             previewWnd.print();
             previewWnd.close();
         }
-
-        //dont allow a post back if nothing is selected
-        function OnClientSearch(sender, args) {
-            if (sender.get_text().length < 1) {
-                sender._element.control._postBackOnSearch = false;
-            }
-        }
-
-        function Ready() {
-            MenuEvents();
-            //for menu items, scroll selections into view
-            //ScrollSelectionsIntoViewCheckBoxList('<%= AnalyzerCheckList.ClientID %>');  //check box list does not function same as listbox, needs research....
-            //scrollIntoView('<%= AnalyzerCheckList.ClientID %>', "#divAnalyzerCheckBox");
-            ScrollSelectionsIntoView('<%= AssayDescriptionList.ClientID %>');
-            ScrollSelectionsIntoView('<%= LocalityList.ClientID %>');
-        }
-
-        //resize the grid when window resizes
-        $(window).resize(function () { ResizeGrid(); });
-        $(document).ready(function () { ResizeGrid(); });
-
-        //this is ugly but keeps the grid the correct size
-        setInterval(function () { ResizeGrid(); }, 333);
-
-        //this function will scroll the listbox selections into view automatically
-        function ScrollSelectionsIntoView(ControlID) {
-            var listbox = document.getElementById(ControlID);
-            if (listbox != null) {
-                for (var i = 0; i < listbox.options.length; i++) {
-                    if (listbox.options[i].selected) {
-                        listbox.options[i].selected = false;
-                        listbox.options[i].selected = true;
-                    }
-                }
-            }
-        }
-
-        ////this function will scroll the listbox selections into view automatically
-        //function ScrollSelectionsIntoViewCheckBoxList(ControlID) {
-        //    debugger;
-        //    var listbox = document.getElementById(ControlID);
-        //    if ($('#AnalyzerCheckList :checkbox:checked').length > 0) {
-        //        listbox.scrollIntoView(false);
-        //    }
-        //}
-
-
-        //function scrollIntoView(element, container) {
-        //    debugger;
-        //    var containerTop = $(container).scrollTop();
-        //    var containerBottom = containerTop + $(container).height();
-        //    var elemTop = element.offsetTop;
-        //    var elemBottom = elemTop + $(element).height();
-        //    if (elemTop < containerTop) {
-        //        $(container).scrollTop(elemTop);
-        //    } else if (elemBottom > containerBottom) {
-        //        $(container).scrollTop(elemBottom - $(container).height());
-        //    }
-        //}
-
-        <%--function clearAll() {
-            debugger;
-            //clear test boxes
-            var searchBoxAnalyzerSearchinputBox = $find("<%=AnalyzerSearch.ClientID%>").get_inputElement();
-            searchBoxAnalyzerSearchinputBox.value = '';
-
-            var searchBoxAssayDescriptionSearchinputBox = $find("<%=AssayDescriptionSearch.ClientID%>").get_inputElement();
-            searchBoxAssayDescriptionSearchinputBox.value = '';
-
-            var searchBoxLocalitySearchinputBox = $find("<%= LocalitySearch.ClientID %>").get_inputElement();
-            searchBoxLocalitySearchinputBox.value = '';
-
-            //$('#AnalyzerCheckList:checked').removeAttr('checked');
-
-            //if ($('#AnalyzerCheckList :checkbox:checked').length > 0) {
-            //    $('#AnalyzerCheckList').attr('checked', 'unchecked');
-            //    //OR
-            //    $('#AnalyzerCheckList').prop('checked', false);
-            //}
-
-            $('#AnalyzerCheckList').attr('checked', false); // Unchecks it
-            $('#myCheckbox').prop('checked', false); // Unchecks it
-
-            // un select the element:
-            $("#AssayDescriptionList")[0].selectedIndex = -1;
-
-            // un select the element:
-            $("#LocalityList")[0].selectedIndex = -1;
-
-            //initiate postback to refresh
-            __doPostBack('YearDropdown', '');
-
-            return false;
-        }--%>
-
-        //function hidePopup(divControl) {
-        //    var Control = document.getElementById(divControl);
-        //    //Slowly hide the Div
-        //    //Remove the div by slightly moving the div towards left
-        //    $(Control).hide(2000, function () {
-        //        $(Control).remove();
-        //    });
-        //}
     </script>
 </body>
 </html>
