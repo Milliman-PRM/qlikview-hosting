@@ -171,7 +171,6 @@
                 cursor: pointer;
                 outline: none;
             }
-
         /*this css will prevent thead rad grid column alignment issue*/
         .rgHeaderWrapper .rgHeaderDiv {
             margin-right: 16px !important;
@@ -190,7 +189,6 @@
             cursor: pointer;
             float: right;
             height: 15px;
-            /* margin: -16px -14px 6px 8px;*/
             padding: 0;
             width: 14px;
             -moz-border-radius: 8px;
@@ -201,13 +199,10 @@
             top: 1px;
         }
 
-        select option:first-child {
-            color: green;
-        }
-
-        select:-internal-list-box option:checked {
-            background-color: #046EBC !important;
-            color: green;
+        /*selected items gray background color*/
+        select option:checked {
+            background: linear-gradient(#0066FF,#0066FF);
+            background-color: #0066FF !important; /* for IE */
         }
     </style>
 </head>
@@ -402,7 +397,7 @@
             var gridHeader = sender.GridHeaderDiv;
             scrollArea.style.height = parent.clientHeight - gridHeader.clientHeight + "px";
         }
-        
+
         //dont allow a post back if nothing is selected
         function OnClientSearch(sender, args) {
             if (sender.get_text().length < 1) {
