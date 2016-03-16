@@ -50,7 +50,7 @@
             font-family: Arial;
             font-size: 12px;
             height: 400px;
-            width: 1044px;
+            width: 1193px;
             top: 92px;
             left: 80px;
             position: absolute;
@@ -59,11 +59,11 @@
             padding: 0px;
             margin: 0px;
             border: 3px solid #046EBC;
-    z-index: 2000;
+            z-index: 2000;
         }
 
-        /*hide radgrid horizontal scroll*/
         #RatesGrid_GridData {
+            /*hide radgrid horizontal scroll*/
             overflow-x: hidden !important;
         }
 
@@ -72,7 +72,8 @@
             opacity: 1.0;
             font-weight: bolder !important;
             font-style: normal !important;
-            outline: none; /* remove chrome defalt textbox outline */
+            /* remove chrome defalt textbox outline */
+            outline: none;
         }
 
         #divMain {
@@ -88,38 +89,151 @@
             height: 8px;
         }
 
-        #gridLayOut {
+        #gridContainer {
             width: 99%;
             height: 640px;
             padding: 3px 3px 3px 3px;
             margin: 0 auto;
         }
 
+        .divAnalyzerCheckList {
+            border: 1px solid black;
+            color: white;
+            overflow: hidden;
+            background-color: #046EBC;
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            height: 389px;
+            width: 256px;
+        }
+
+        .divCB {
+            overflow: scroll;
+            height: 382px;
+        }
+
+        .divAssayDescriptionList {
+            border: 1px solid black;
+            overflow: hidden;
+            background-color: #046EBC;
+            color: white;
+            position: absolute;
+            top: 5px;
+            left: 266px;
+            height: 390px;
+            width: 512px;
+        }
+
+        .divLocalityList {
+            border: 1px solid black;
+            overflow: hidden;
+            background-color: #046EBC;
+            color: white;
+            position: absolute;
+            top: 5px;
+            left: 783px;
+            height: 390px;
+            width: 256px;
+        }
+
+        .divClearButton {
+            overflow: hidden;
+            color: white;
+            position: absolute;
+            top: 351px;
+            left: 1048px;
+            height: 43px;
+            width: 136px;
+        }
+
+        .btnCustom {
+            margin: 4px 3px 0px 6px;
+            border: solid 1px #bbb;
+            padding: 8px;
+            -moz-border-radius: 3px;
+            -webkit-border-radius: 3px;
+            border-radius: 3px;
+            -moz-box-shadow: 0px 0px 7px #bbb;
+            -webkit-box-shadow: #bbb 0px 0px 7px;
+            box-shadow: 0px 0px 7px #bbb;
+            color: #444;
+            font-size: 105%;
+            float: left;
+            background: #ddd;
+            text-shadow: 1px 1px #bbb;
+        }
+
+            .btnCustom:hover {
+                background-color: #ddd;
+                color: #333;
+                border: solid 1px #046ebc;
+                cursor: pointer;
+                outline: none;
+            }
+
+        /*this css will prevent thead rad grid column alignment issue*/
+        .rgHeaderWrapper .rgHeaderDiv {
+            margin-right: 16px !important;
+        }
+
+        /*P.S. To make the max-height cross-browser compatible, to set it as follows:*/
+        .checkBoxList {
+            max-height: 100px;
+            height: auto !important;
+            height: 100px;
+        }
+
+        .close
+        {
+            border: 1px solid #858585;
+            border-radius: 8px 8px 8px 8px;
+            cursor: pointer;
+            float: right;
+            height: 15px;
+            margin: -16px -14px 6px 8px;
+            padding: 0;
+            width: 14px;
+            -moz-border-radius: 8px;
+            -webkit-border-radius: 8px;
+            border-radius: 8px;
+        }
+        /*select{
+          width: 150px;
+          height: 30px;
+          padding: 5px;
+          background-color:#046EBC;
+        }
+        select option {
+             color: green; 
+             background-color:green;
+        }
+        select option:first-child{
+          color: green;
+        }*/
     </style>
 </head>
 <body onload="Ready()">
 
     <form id="form1" runat="server">
 
-            <telerik:RadScriptManager runat="server" ID="RadScriptManager1" />
-            <telerik:RadSkinManager ID="RadSkinManager1" runat="server" ShowChooser="false" PersistenceKey="Telerik.Skin" Skin="Metro" />
-            <telerik:RadAjaxManager ID="RadAjaxManager1" runat="server" OnAjaxRequest="RadAjaxManager1_AjaxRequest">
-                <AjaxSettings>
-                    <telerik:AjaxSetting AjaxControlID="RadGrid1">
-                        <UpdatedControls>
-                            <telerik:AjaxUpdatedControl ControlID="RatesGrid" />
-                        </UpdatedControls>
-                    </telerik:AjaxSetting>
-                    <%--<telerik:AjaxSetting AjaxControlID="RatesGrid">--%>
-                    <telerik:AjaxSetting>
-                        <UpdatedControls>
-                            <%--<telerik:AjaxUpdatedControl ControlID="RatesGrid"></telerik:AjaxUpdatedControl>--%>
-                            <telerik:AjaxUpdatedControl ControlID="menu_controls_panel"></telerik:AjaxUpdatedControl>
-                        </UpdatedControls>
-                    </telerik:AjaxSetting>
-                </AjaxSettings>
-            </telerik:RadAjaxManager>
-            <telerik:RadAjaxLoadingPanel runat="server" ID="RadAjaxLoadingPanel1" Transparency="60" BackColor="lightgray" Skin="Default"></telerik:RadAjaxLoadingPanel>
+        <telerik:RadScriptManager runat="server" ID="RadScriptManager1" />
+        <telerik:RadSkinManager ID="RadSkinManager1" runat="server" ShowChooser="false" PersistenceKey="Telerik.Skin" Skin="Metro" />
+        <telerik:RadAjaxManager ID="RadAjaxManager1" runat="server" OnAjaxRequest="RadAjaxManager1_AjaxRequest">
+            <AjaxSettings>
+                <telerik:AjaxSetting AjaxControlID="RadGrid1">
+                    <UpdatedControls>
+                        <telerik:AjaxUpdatedControl ControlID="RatesGrid" />
+                    </UpdatedControls>
+                </telerik:AjaxSetting>
+                <telerik:AjaxSetting>
+                    <UpdatedControls>
+                        <telerik:AjaxUpdatedControl ControlID="menu_controls_panel"></telerik:AjaxUpdatedControl>
+                    </UpdatedControls>
+                </telerik:AjaxSetting>
+            </AjaxSettings>
+        </telerik:RadAjaxManager>
+        <telerik:RadAjaxLoadingPanel runat="server" ID="RadAjaxLoadingPanel1" Transparency="60" BackColor="lightgray" Skin="Default"></telerik:RadAjaxLoadingPanel>
 
 
         <div id="divMain">
@@ -138,118 +252,82 @@
 
             <%--menu section--%>
             <div id="menu" runat="server" visible="false">
-                <style type="text/css">
-                    .divAnalyzerCheckList {
-                        border: 1px solid black;
-                        color: white;
-                        overflow: hidden;
-                        background-color: #046EBC;
-                        position: absolute;
-                        top: 5px;
-                        left: 5px;
-                        height: 390px;
-                        width: 256px;
-                    }
-
-                    .divAssayDescriptionList {
-                        border: 1px solid black;
-                        overflow: hidden;
-                        background-color: #046EBC;
-                        color: white;
-                        position: absolute;
-                        top: 5px;
-                        left: 266px;
-                        height: 390px;
-                        width: 512px;
-                    }
-
-                    .divLocalityList {
-                        border: 1px solid black;
-                        overflow: hidden;
-                        background-color: #046EBC;
-                        color: white;
-                        position: absolute;
-                        top: 5px;
-                        left: 783px;
-                        height: 390px;
-                        width: 256px;
-                    }
-                </style>
                 <telerik:RadAjaxPanel ID="menu_controls_panel" runat="server" LoadingPanelID="RadAjaxLoadingPanel1">
                     <div class="divAnalyzerCheckList">
                         <telerik:RadSearchBox runat="server" ID="AnalyzerSearch" EmptyMessage="Analyzer" Width="100%" DataTextField="AnalyzerName" DataValueField="Id" DropDownSettings-Height="370px" DropDownSettings-Width="255px" OnSearch="AnalyzerSearch_Search" OnClientSearch="OnClientSearch" RenderMode="Lightweight">
                         </telerik:RadSearchBox>
-                        <div style="overflow: auto; width: 100%; height: 100%">
+                        <%--<div style="height: 2px;"></div>--%>
+                        <div class="divCB">
                             <asp:CheckBoxList ID="AnalyzerCheckList" runat="server" BackColor="white" Width="100%" ForeColor="Black" AutoPostBack="True" OnSelectedIndexChanged="AnalyzerCheckList_SelectedIndexChanged" ViewStateMode="Enabled"></asp:CheckBoxList>
                         </div>
                     </div>
-
                     <div class="divAssayDescriptionList">
                         <telerik:RadSearchBox runat="server" ID="AssayDescriptionSearch" EmptyMessage="Assay Description" Width="100%" DataTextField="SearchDesc" DataValueField="Id" DropDownSettings-Height="370px" DropDownSettings-Width="511px" RenderMode="Lightweight" OnSearch="AssayDescriptionSearch_Search" OnClientSearch="OnClientSearch">
                         </telerik:RadSearchBox>
-                        <asp:ListBox ID="AssayDescriptionList" runat="server" Width="100%" Height="375px" BackColor="White" ForeColor="Black" AutoPostBack="True" OnSelectedIndexChanged="AssayDescriptionList_SelectedIndexChanged" SelectionMode="Multiple" ViewStateMode="Enabled"></asp:ListBox>
+                      <%--  <div style="height: 2px;"></div>--%>
+                        <asp:ListBox ID="AssayDescriptionList" runat="server" Width="100%" Height="375px" BackColor="White" ForeColor="Black" AutoPostBack="True" OnSelectedIndexChanged="AssayDescriptionList_SelectedIndexChanged" SelectionMode="Multiple" ViewStateMode="Enabled" CssClass="mySelect"></asp:ListBox>
                     </div>
-
                     <div class="divLocalityList">
                         <telerik:RadSearchBox runat="server" ID="LocalitySearch" EmptyMessage="Locality" Width="100%" DataTextField="LocalityDescription" DataValueField="Id" DropDownSettings-Height="370px" DropDownSettings-Width="255px" RenderMode="Lightweight" OnSearch="LocalitySearch_Search" OnClientSearch="OnClientSearch">
                         </telerik:RadSearchBox>
-                        <asp:ListBox ID="LocalityList" runat="server" Width="100%" Height="375px" BackColor="White" ForeColor="Black" AutoPostBack="True" OnSelectedIndexChanged="LocalityList_SelectedIndexChanged" SelectionMode="Multiple" ViewStateMode="Enabled"></asp:ListBox>
+                        <%--<div style="height: 2px;"></div>--%>
+                        <asp:ListBox ID="LocalityList" runat="server" Width="100%" Height="375px" BackColor="White" ForeColor="Black" AutoPostBack="True" OnSelectedIndexChanged="LocalityList_SelectedIndexChanged" SelectionMode="Multiple" ViewStateMode="Enabled" CssClass="mySelect"></asp:ListBox>
                     </div>
+                    <div class="divClearButton">
+                        <asp:Button ID="btnClearLoad" runat="server" Text="Clear Selections" CssClass="btnCustom" Width="126px" ForeColor="Black" Font-Bold="true" BackColor="LightGray"
+                            OnClick="btnClearLoad_Click" />
+                    </div>
+<%--                    <div id="divCloseMenu" style="display: none;cursor: move;" onclick="hidePopup('menu'); __doPostBack('divCloseMenu','')">
+                        <img id="imgCancel" class="close" src="Images/cancel.png" alt="..."
+                                onclick="document.getElementById('divHowScreenMsg').style.display = 'none';" />
+                    </div>--%>
                 </telerik:RadAjaxPanel>
             </div>
 
             <%--grid section--%>
             <div id="section">
-                <div id="divStartOverButton">
-                    
-                </div>
-                <div style="margin-right: 40px">
+                <div style="margin-right: 40px;">
                     <asp:DropDownList ID="YearDropdown" Style="float: right;" runat="server" Width="100px" AutoPostBack="True"
                         OnSelectedIndexChanged="YearDropdown_SelectedIndexChanged">
                     </asp:DropDownList>
                     <h2>Medicare Reimbursment Rates</h2>
                 </div>
                 <telerik:RadAjaxPanel ID="RadGridPanel" runat="server" OnAjaxRequest="RadGridPanel_AjaxRequest" LoadingPanelID="RadAjaxLoadingPanel1">
-                    <div id="gridLayOut">
+                    <div id="gridContainer">
                         <telerik:RadGrid RenderMode="Classic" ID="RatesGrid" runat="server" GridLines="None"
-                            AllowSorting="true" AllowPaging="true" PageSize="250" 
+                            AllowSorting="true" AllowPaging="true" PageSize="250"
                             AllowCustomPaging="true" OnNeedDataSource="RatesGrid_NeedDataSource"
                             PagerStyle-ShowPagerText="True" PagerStyle-Visible="True"
                             OnSortCommand="RatesGrid_SortCommand" ClientIDMode="AutoID"
-                            AutoGenerateColumns="False" OnSelectedCellChanged="RatesGrid_SelectedCellChanged" >
-                            <%--                        <ClientSettings EnableRowHoverStyle="True" Resizing-AllowColumnResize="true" Resizing-EnableRealTimeResize="true" Resizing-ResizeGridOnColumnResize="false" EnablePostBackOnRowClick="True">
-                            <Selecting CellSelectionMode="SingleCell" />
-                            <Scrolling AllowScroll="True" UseStaticHeaders="True" SaveScrollPosition="true" EnableVirtualScrollPaging="true"></Scrolling>
-                            <ClientEvents OnGridCreated="GridCreated" />
-                        </ClientSettings>--%>
+                            AutoGenerateColumns="False" OnSelectedCellChanged="RatesGrid_SelectedCellChanged">
                             <PagerStyle Visible="false" />
-                            <ClientSettings ReorderColumnsOnClient="false" AllowColumnsReorder="false"   EnablePostBackOnRowClick="True">
-                                <ClientEvents OnGridCreated="GridCreated"  />
-                                <Virtualization EnableVirtualization="false" InitiallyCachedItemsCount="2000"  LoadingPanelID="RadAjaxLoadingPanel1" ItemsPerView="500" />
-                                 <Selecting CellSelectionMode="SingleCell" />
+                            <ClientSettings ReorderColumnsOnClient="false" AllowColumnsReorder="false" EnablePostBackOnRowClick="True">
+                                <ClientEvents OnGridCreated="GridCreated" />
+                                <Virtualization EnableVirtualization="false" InitiallyCachedItemsCount="2000" LoadingPanelID="RadAjaxLoadingPanel1" ItemsPerView="500" />
+                                <Selecting CellSelectionMode="SingleCell" />
                                 <Scrolling ScrollHeight="480px" AllowScroll="True" UseStaticHeaders="True" SaveScrollPosition="true" EnableVirtualScrollPaging="true"></Scrolling>
-                                <Resizing AllowColumnResize="true" />
+                                <Resizing AllowColumnResize="True" ClipCellContentOnResize="true" EnableRealTimeResize="true" ResizeGridOnColumnResize="true" />
                             </ClientSettings>
 
-                            <MasterTableView AllowMultiColumnSorting="false" PagerStyle-AlwaysVisible="True">
+                            <MasterTableView AllowMultiColumnSorting="false" PagerStyle-AlwaysVisible="True" Width="100%" TableLayout="Fixed">
                                 <Columns>
                                     <telerik:GridBoundColumn UniqueName="analyzer_name" DataField="analyzer_name" HeaderText="Analyzer" ReadOnly="True" SortedBackColor="Transparent">
-                                        <HeaderStyle Width="10%" />
+                                        <HeaderStyle Width="20%" />
                                     </telerik:GridBoundColumn>
                                     <telerik:GridBoundColumn UniqueName="description" DataField="description" HeaderText="Assay Description" ReadOnly="True" SortedBackColor="Transparent">
-                                        <HeaderStyle Width="50%" />
+                                        <HeaderStyle Width="35%" />
                                     </telerik:GridBoundColumn>
-                                    <telerik:GridBoundColumn UniqueName="code" DataField="code" HeaderText="CPT Descriptor" ReadOnly="True" SortedBackColor="Transparent">
+                                    <telerik:GridBoundColumn UniqueName="code" DataField="code" HeaderText="CPT Code" ReadOnly="True" SortedBackColor="Transparent">
                                         <HeaderStyle Width="10%" />
                                     </telerik:GridBoundColumn>
                                     <telerik:GridBoundColumn UniqueName="notes" DataField="notes" HeaderText="Notes" ReadOnly="True" SortedBackColor="Transparent">
-                                        <HeaderStyle Width="10%" />
+                                        <HeaderStyle Width="7%" />
                                     </telerik:GridBoundColumn>
                                     <telerik:GridBoundColumn UniqueName="locality_description" DataField="locality_description" HeaderText="Locality" ReadOnly="True" SortedBackColor="Transparent">
-                                        <HeaderStyle Width="10%" />
+                                        <HeaderStyle Width="12%" />
                                     </telerik:GridBoundColumn>
                                     <telerik:GridBoundColumn UniqueName="rate" DataField="rate" HeaderText="Medicare Reimbursement Rate" DataFormatString="{0:C2}" ItemStyle-HorizontalAlign="Right" ReadOnly="True" SortedBackColor="Transparent">
-                                        <HeaderStyle Width="10%" />
+                                        <HeaderStyle Width="15%" HorizontalAlign="Right" />
                                     </telerik:GridBoundColumn>
                                 </Columns>
                             </MasterTableView>
@@ -278,6 +356,29 @@
         //must hide menu via JQuery, or it may not un-hide when needed
         // $(menu).hide();
 
+        //CHange the highlight color
+        $('#AssayDescriptionList').click(function () {
+            $("#AssayDescriptionList option:selected").css("background-color", "#046EBC");
+        });
+
+        $('#LocalityList').click(function () {
+            $("#LocalityList option:selected").css("background-color", "#046EBC");
+        });
+
+        var sel = document.getElementById('AssayDescriptionList');
+        sel.addEventListener('click', function (el) {
+            var options = this.children;
+            var selected = this.children[this.selectedIndex];
+            selected.style.backgroundColor = 'yellow';
+        }, false);
+
+        var sel = document.getElementById('LocalityList');
+        sel.addEventListener('click', function (el) {
+            var options = this.children;
+            var selected = this.children[this.selectedIndex];
+            selected.style.backgroundColor = 'yellow';
+        }, false);
+
         function MenuEvents() {
             if (document.getElementById("menu") !== null) {
 
@@ -289,9 +390,9 @@
                     var AnalyzerSearchNode = $telerik.$($find("AnalyzerSearch").get_childListElement());
                     var AssaySearchNode = $telerik.$($find("AssayDescriptionSearch").get_childListElement());
                     var LocalitySearchNode = $telerik.$($find("LocalitySearch").get_childListElement());
+
                     if ((AnalyzerSearchNode.length == 0) && (AssaySearchNode.length == 0) && (LocalitySearchNode.length == 0)) {
                         $(menu).hide();
-
                         var currentLoadingPanel = $find("<%= RadAjaxLoadingPanel1.ClientID %>");
                         var currentGrid = $find("<%= RadGridPanel.ClientID%>")
                         currentLoadingPanel.show(currentGrid);
@@ -313,6 +414,7 @@
             var griddata = $get("RatesGrid_GridData");
             GridDataSize = Math.floor((FooterTop - $(griddata).offset().top) - PaddingForFooter);
         }
+
         //restore the grid data to correct size
         function ResizeGridDataArea() {
             if (GridDataSize > 0) {
@@ -352,7 +454,8 @@
         function Ready() {
             MenuEvents();
             //for menu items, scroll selections into view
-            //ScrollSelectionsIntoView('<%= AnalyzerCheckList.ClientID %>');  //check box list does not function same as listbox, needs research....
+            //ScrollSelectionsIntoViewCheckBoxList('<%= AnalyzerCheckList.ClientID %>');  //check box list does not function same as listbox, needs research....
+            //scrollIntoView('<%= AnalyzerCheckList.ClientID %>', "#divAnalyzerCheckBox");
             ScrollSelectionsIntoView('<%= AssayDescriptionList.ClientID %>');
             ScrollSelectionsIntoView('<%= LocalityList.ClientID %>');
         }
@@ -375,9 +478,74 @@
                     }
                 }
             }
-            
         }
 
+        ////this function will scroll the listbox selections into view automatically
+        //function ScrollSelectionsIntoViewCheckBoxList(ControlID) {
+        //    debugger;
+        //    var listbox = document.getElementById(ControlID);
+        //    if ($('#AnalyzerCheckList :checkbox:checked').length > 0) {
+        //        listbox.scrollIntoView(false);
+        //    }
+        //}
+
+
+        //function scrollIntoView(element, container) {
+        //    debugger;
+        //    var containerTop = $(container).scrollTop();
+        //    var containerBottom = containerTop + $(container).height();
+        //    var elemTop = element.offsetTop;
+        //    var elemBottom = elemTop + $(element).height();
+        //    if (elemTop < containerTop) {
+        //        $(container).scrollTop(elemTop);
+        //    } else if (elemBottom > containerBottom) {
+        //        $(container).scrollTop(elemBottom - $(container).height());
+        //    }
+        //}
+
+        <%--function clearAll() {
+            debugger;
+            //clear test boxes
+            var searchBoxAnalyzerSearchinputBox = $find("<%=AnalyzerSearch.ClientID%>").get_inputElement();
+            searchBoxAnalyzerSearchinputBox.value = '';
+
+            var searchBoxAssayDescriptionSearchinputBox = $find("<%=AssayDescriptionSearch.ClientID%>").get_inputElement();
+            searchBoxAssayDescriptionSearchinputBox.value = '';
+
+            var searchBoxLocalitySearchinputBox = $find("<%= LocalitySearch.ClientID %>").get_inputElement();
+            searchBoxLocalitySearchinputBox.value = '';
+
+            //$('#AnalyzerCheckList:checked').removeAttr('checked');
+
+            //if ($('#AnalyzerCheckList :checkbox:checked').length > 0) {
+            //    $('#AnalyzerCheckList').attr('checked', 'unchecked');
+            //    //OR
+            //    $('#AnalyzerCheckList').prop('checked', false);
+            //}
+
+            $('#AnalyzerCheckList').attr('checked', false); // Unchecks it
+            $('#myCheckbox').prop('checked', false); // Unchecks it
+
+            // un select the element:
+            $("#AssayDescriptionList")[0].selectedIndex = -1;
+
+            // un select the element:
+            $("#LocalityList")[0].selectedIndex = -1;
+
+            //initiate postback to refresh
+            __doPostBack('YearDropdown', '');
+
+            return false;
+        }--%>
+
+        //function hidePopup(divControl) {
+        //    var Control = document.getElementById(divControl);
+        //    //Slowly hide the Div
+        //    //Remove the div by slightly moving the div towards left
+        //    $(Control).hide(2000, function () {
+        //        $(Control).remove();
+        //    });
+        //}
     </script>
 </body>
 </html>

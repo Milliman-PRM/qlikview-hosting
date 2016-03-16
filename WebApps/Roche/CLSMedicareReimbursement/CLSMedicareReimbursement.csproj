@@ -165,6 +165,7 @@
     <Content Include="BugList.html" />
     <Content Include="default.aspx" />
     <Content Include="Global.asax" />
+    <Content Include="Images\cancel.png" />
     <Content Include="Images\Excel.png" />
     <Content Include="Images\PDF.png" />
     <Content Include="Images\print.png" />
@@ -244,7 +245,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties UseAjaxifiedTemplates="True" UseJQuerySupport="True" />
+      <UserProperties UseJQuerySupport="True" UseAjaxifiedTemplates="True" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
