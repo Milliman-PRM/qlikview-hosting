@@ -54,7 +54,8 @@ namespace Controller
             var context = new CLSdbDataContext();
             var dboList = context.Localities.Distinct().ToList();
             var resultList = dboList.GroupBy(x => x.Locality1).Select(y => y.First()).OrderBy(a=>a.LocalityDescription).ToList();
-            var finallist = resultList.Where(l => !string.IsNullOrEmpty(l.LocalityDescription)).ToList();
+            var finallist = resultList.Where(l => !string.IsNullOrEmpty(l.LocalityDescription))
+                                    .OrderByDescending(x => x.LocalityDescription == "National Limit").ToList();
             return finallist;
         }
 
@@ -126,7 +127,11 @@ namespace Controller
 
             var resultList = new List<SearchTerm>();
             resultList = query.ToList();
-            return resultList;
+            //sort list by alphabatic order then by number
+            var orderedListByAlphabatsThenNumbers = resultList.OrderByDescending(x => x.SearchDesc.All(char.IsLetter))
+                                                    .ThenByDescending(x => x.SearchDesc.Any(char.IsDigit))
+                                                    .ToList();
+            return orderedListByAlphabatsThenNumbers;
         }
 
         /// <summary>
@@ -180,8 +185,12 @@ namespace Controller
                        .Select(a=>a.St);    // seelct record set
 
             var resultList = new List<SearchTerm>();
-            resultList = query.OrderBy(a=>a.SearchDesc).ToList();
-            return resultList;
+            resultList = query.ToList();
+            //sort list by alphabatic order then by number
+            var orderedListByAlphabatsThenNumbers = resultList.OrderByDescending(x => x.SearchDesc.All(char.IsLetter))
+                                                    .ThenByDescending(x => x.SearchDesc.Any(char.IsDigit))
+                                                    .ToList();
+            return orderedListByAlphabatsThenNumbers;
         }
 
         public static List<string> getAnalyzerIdsForSpecificAnalyzerName(string param)
@@ -261,9 +270,13 @@ namespace Controller
         {
             var context = new CLSdbDataContext();
             var dboList = context.SearchTerms.Distinct().ToList();
-            var resultList = dboList.GroupBy(x => x.SearchDesc).Select(y => y.First()).OrderBy(a=>a.SearchDesc).ToList();
+            var resultList = dboList.GroupBy(x => x.SearchDesc).Select(y => y.First()).OrderBy(a => a.SearchDesc).ToList();
             var finallist = resultList.Where(l => !string.IsNullOrEmpty(l.SearchDesc)).ToList();
-            return finallist;
+            //sort list by alphabatic order then by number
+            var orderedListByAlphabatsThenNumbers = finallist.OrderByDescending(x => x.SearchDesc.All(char.IsLetter))
+                                                .ThenByDescending(x => x.SearchDesc.Any(char.IsDigit))
+                                                .ToList();
+            return orderedListByAlphabatsThenNumbers;
         }
         public static List<SearchTerm> getAssayDescriptionForSpecificCodeId(int param)
         {

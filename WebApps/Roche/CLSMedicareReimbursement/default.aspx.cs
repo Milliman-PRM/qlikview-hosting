@@ -34,7 +34,7 @@ namespace CLSMedicareReimbursement
                 //in the menu being displayed, do check, if triggred by year drop down, then hide the menu
                 Control C = GetControlThatCausedPostBack(this);
                 if ((C != null) && (string.Compare(C.ClientID, "yeardropdown", true) == 0))
-                    menu.Visible = false; //keep the menu hidden on postback from drop, its not in an ajax panel               
+                    ContainerMenuList.Visible = false; //keep the menu hidden on postback from drop, its not in an ajax panel               
             }
 
             //these items have to be bound on each call
@@ -51,7 +51,7 @@ namespace CLSMedicareReimbursement
 
         protected void LaunchMenu_Click(object sender, ImageClickEventArgs e)
         {
-            menu.Visible = true;
+            ContainerMenuList.Visible = true;
             var CurrentSels = Session[SessionKey_Selections] as BusinessLogicManager.CurrentSelections;
 
             var AssociatedAssayDescriptions = new List<SearchTerm>();
@@ -92,12 +92,23 @@ namespace CLSMedicareReimbursement
             ScrollSelectedLocalityIntoView();
         }
 
+        protected void btnViewSelection_Click(object sender, EventArgs e)
+        {
+            //menu.Visible = false;
+            var CurrentSels = Session[SessionKey_Selections] as CLSBusinessLogic.BusinessLogicManager.CurrentSelections;         
+            RebindPrimaryGrid(CurrentSels);
+            //string message = "Message from server side";
+            //ClientScript.RegisterStartupScript(this.GetType(), "Popup", "closeWindow('menu');", true);
+            //ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "Popup", "closeWindow('menu');", true);
+            //Page.ClientScript.RegisterStartupScript(this.GetType(), "Popup", "closeWindow('menu');;return false;", true);
+        }
+
         /// <summary>
         /// Event for Page Inintilize
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        protected void btnClearLoad_Click(object sender, EventArgs e)
+        protected void btnClearSelection_Click(object sender, EventArgs e)
         {
             InitilizePageControls();
         }
@@ -777,6 +788,11 @@ namespace CLSMedicareReimbursement
             LocalityList.SelectedIndex = -1;
             LocalitySearch.Text = "";
 
+            var BLM = BusinessLogicManager.GetInstance();
+            PopulateAnalyzerCheckList(BLM);
+            PopulateAssayDescriptionList(BLM);
+            PopulateLocalityList(BLM);
+
             var ResultSet = BusinessLogicManager.GetInstance().DataByYear[YearDropdown.SelectedItem.Text];
             RatesGrid.VirtualItemCount = ResultSet.Rows.Count;
             RatesGrid.DataSource = ResultSet;
@@ -820,5 +836,7 @@ namespace CLSMedicareReimbursement
         }
 
         #endregion
+
+
     }
 }

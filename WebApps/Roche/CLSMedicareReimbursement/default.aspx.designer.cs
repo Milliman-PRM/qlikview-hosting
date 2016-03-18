@@ -67,13 +67,13 @@ namespace CLSMedicareReimbursement {
         protected global::System.Web.UI.WebControls.ImageButton LaunchMenu;
         
         /// <summary>
-        /// menu control.
+        /// ContainerMenuList control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl menu;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl ContainerMenuList;
         
         /// <summary>
         /// menu_controls_panel control.
@@ -118,7 +118,7 @@ namespace CLSMedicareReimbursement {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ListBox AssayDescriptionList;
+        protected global::System.Web.UI.WebControls.CheckBoxList AssayDescriptionList;
         
         /// <summary>
         /// LocalitySearch control.
@@ -136,16 +136,25 @@ namespace CLSMedicareReimbursement {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ListBox LocalityList;
+        protected global::System.Web.UI.WebControls.CheckBoxList LocalityList;
         
         /// <summary>
-        /// btnClearLoad control.
+        /// btnViewReport control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnClearLoad;
+        protected global::System.Web.UI.WebControls.Button btnViewReport;
+        
+        /// <summary>
+        /// btnClearSelection control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnClearSelection;
         
         /// <summary>
         /// YearDropdown control.
