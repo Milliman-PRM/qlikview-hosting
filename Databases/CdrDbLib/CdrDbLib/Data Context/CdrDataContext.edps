@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <EntityDeveloper Version="5.8.791.0">
-  <ModelSettings xmlns:ed="http://devart.com/schemas/EntityDeveloper/1.0" AppConnectionStringName="CdrContextConnectionString" ConnectionStringInAppConfig="True" RegenareteConnectionStringInAppConfig="True" DetectTPTInheritance="False">
+  <ModelSettings xmlns:ed="http://devart.com/schemas/EntityDeveloper/1.0" AppConnectionStringName="CdrContextConnectionString" ConnectionStringInAppConfig="True" RegenareteConnectionStringInAppConfig="True" TargetFramework="Net45" DetectTPTInheritance="False">
     <Generation>
       <GeneratedFiles>
         <File Name="CdrDataContext.CdrDataContext.cs" Project="CdrDbLib" ProjectFolder="Data Context" />
@@ -16,10 +16,30 @@
         <File Name="CdrDataContext.TelephoneNumber.Generated.cs" Project="CdrDbLib" ProjectFolder="Entities" />
         <File Name="CdrDataContext.DataFeed.cs" Project="CdrDbLib" ProjectFolder="Entities" OverwriteMode="None" />
         <File Name="CdrDataContext.DataFeed.Generated.cs" Project="CdrDbLib" ProjectFolder="Entities" />
+        <File Name="CdrDataContext.VisitEncounter.cs" Project="CdrDbLib" ProjectFolder="Entities" OverwriteMode="None" />
+        <File Name="CdrDataContext.VisitEncounter.Generated.cs" Project="CdrDbLib" ProjectFolder="Entities" />
+        <File Name="CdrDataContext.Charge.cs" Project="CdrDbLib" ProjectFolder="Entities" OverwriteMode="None" />
+        <File Name="CdrDataContext.Charge.Generated.cs" Project="CdrDbLib" ProjectFolder="Entities" />
+        <File Name="CdrDataContext.Measurement.cs" Project="CdrDbLib" ProjectFolder="Entities" OverwriteMode="None" />
+        <File Name="CdrDataContext.Measurement.Generated.cs" Project="CdrDbLib" ProjectFolder="Entities" />
+        <File Name="CdrDataContext.Medication.cs" Project="CdrDbLib" ProjectFolder="Entities" OverwriteMode="None" />
+        <File Name="CdrDataContext.Medication.Generated.cs" Project="CdrDbLib" ProjectFolder="Entities" />
+        <File Name="CdrDataContext.Immunization.cs" Project="CdrDbLib" ProjectFolder="Entities" OverwriteMode="None" />
+        <File Name="CdrDataContext.Immunization.Generated.cs" Project="CdrDbLib" ProjectFolder="Entities" />
+        <File Name="CdrDataContext.InsuranceCoverage.cs" Project="CdrDbLib" ProjectFolder="Entities" OverwriteMode="None" />
+        <File Name="CdrDataContext.InsuranceCoverage.Generated.cs" Project="CdrDbLib" ProjectFolder="Entities" />
+        <File Name="CdrDataContext.Diagnosis.cs" Project="CdrDbLib" ProjectFolder="Entities" OverwriteMode="None" />
+        <File Name="CdrDataContext.Diagnosis.Generated.cs" Project="CdrDbLib" ProjectFolder="Entities" />
+        <File Name="CdrDataContext.Problem.cs" Project="CdrDbLib" ProjectFolder="Entities" OverwriteMode="None" />
+        <File Name="CdrDataContext.Problem.Generated.cs" Project="CdrDbLib" ProjectFolder="Entities" />
         <File Name="CdrDataContext.Address.cs" Project="CdrDbLib" ProjectFolder="Entities" OverwriteMode="None" />
         <File Name="CdrDataContext.Address.Generated.cs" Project="CdrDbLib" ProjectFolder="Entities" />
         <File Name="CdrDataContext.PhoneNumber.cs" Project="CdrDbLib" ProjectFolder="Entities" OverwriteMode="None" />
         <File Name="CdrDataContext.PhoneNumber.Generated.cs" Project="CdrDbLib" ProjectFolder="Entities" />
+        <File Name="CdrDataContext.CodedEntry.cs" Project="CdrDbLib" ProjectFolder="Entities" OverwriteMode="None" />
+        <File Name="CdrDataContext.CodedEntry.Generated.cs" Project="CdrDbLib" ProjectFolder="Entities" />
+        <File Name="CdrDataContext.DentalDetail.cs" Project="CdrDbLib" ProjectFolder="Entities" OverwriteMode="None" />
+        <File Name="CdrDataContext.DentalDetail.Generated.cs" Project="CdrDbLib" ProjectFolder="Entities" />
         <File Name="CdrDataContext.Gender.cs" Project="CdrDbLib" ProjectFolder="Entities" />
         <File Name="CdrDataContext.PhoneType.cs" Project="CdrDbLib" ProjectFolder="Entities" />
         <File Name="CdrDataContext.MaritalStatus.cs" Project="CdrDbLib" ProjectFolder="Entities" />
@@ -30,7 +50,7 @@
       <Class UseSchemaAsPrefix="False" PluralizeCollectionNavigationPropertyName="True" RemoveUnderscores="True" RemoveInvalidCharacters="True" CodeCase="FirstLetterUppercase" AddPrefix="" AddSuffix="" RemovePrefixes="" RemoveSuffixes="" PluralizationName="Singularize" />
       <Property RemoveUnderscores="True" RemoveInvalidCharacters="True" CodeCase="FirstLetterUppercase" AddPrefix="" AddSuffix="" RemovePrefixes="" RemoveSuffixes="" PluralizationName="Unchanged" />
     </DatabaseFirstNamingRules>
-    <ModelFirst StorageSynchronizationEnabled="True" TargetSchema="public" ForeignKeyColumnRule="%master entity name%%master column name%">
+    <ModelFirst StorageSynchronizationEnabled="True" ForeignKeyColumnRule="%master entity name%%master column name%">
       <TargetServer Server="PostgreSQL" ServerVersion="9.5" />
       <ModelFirstNamingRules>
         <Table RemoveUnderscores="False" RemoveInvalidCharacters="True" CodeCase="Lower" AddPrefix="" AddSuffix="" RemovePrefixes="" RemoveSuffixes="" PluralizationName="Unchanged" />

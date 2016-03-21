@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BayClinicCdrAggregationLib"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NorthBendCdrAggregationLib", "NorthBendCdrAggregationLib\NorthBendCdrAggregationLib.csproj", "{26692E9C-2DD0-4DAB-8785-84736AE1EB82}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CdrDbLib", "..\..\..\Databases\CdrDbLib\CdrDbLib\CdrDbLib.csproj", "{CBEC3A92-5B09-4218-ACDB-286E61FF4CD8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{26692E9C-2DD0-4DAB-8785-84736AE1EB82}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{26692E9C-2DD0-4DAB-8785-84736AE1EB82}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{26692E9C-2DD0-4DAB-8785-84736AE1EB82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBEC3A92-5B09-4218-ACDB-286E61FF4CD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBEC3A92-5B09-4218-ACDB-286E61FF4CD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBEC3A92-5B09-4218-ACDB-286E61FF4CD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBEC3A92-5B09-4218-ACDB-286E61FF4CD8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
