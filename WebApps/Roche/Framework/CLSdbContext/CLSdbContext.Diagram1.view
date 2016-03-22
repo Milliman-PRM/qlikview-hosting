@@ -1068,7 +1068,7 @@
               </Port>
               <Port>
                 <Location>
-                  <X>Undefined</X>
+                  <X>0 px</X>
                   <Y>88.5 px</Y>
                 </Location>
                 <Anchors>Top Bottom</Anchors>
@@ -1110,7 +1110,7 @@
               <Port>
                 <Location>
                   <X>77 px</X>
-                  <Y>Undefined</Y>
+                  <Y>0 px</Y>
                 </Location>
                 <Anchors>Left Right</Anchors>
                 <Align>Top</Align>
@@ -1150,7 +1150,7 @@
               </Port>
               <Port>
                 <Location>
-                  <X>Undefined</X>
+                  <X>0 px</X>
                   <Y>88.5 px</Y>
                 </Location>
                 <Anchors>Top Bottom</Anchors>
@@ -1192,7 +1192,7 @@
               <Port>
                 <Location>
                   <X>77 px</X>
-                  <Y>Undefined</Y>
+                  <Y>0 px</Y>
                 </Location>
                 <Anchors>Left Right</Anchors>
                 <Align>Bottom</Align>
@@ -1214,8 +1214,8 @@
           <ScaleMode>Free</ScaleMode>
           <Scale>0.744648635</Scale>
           <Location>
-            <X>-220.23809805953 px</X>
-            <Y>5.37166205584907 px</Y>
+            <X>-220.238089305358 px</X>
+            <Y>5.37166676831089 px</Y>
           </Location>
         </ViewPort>
         <Oid xsi:type="SchemaModelOID">
