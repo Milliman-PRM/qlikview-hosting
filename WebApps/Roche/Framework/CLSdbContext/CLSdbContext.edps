@@ -8,14 +8,14 @@
         <File Name="CLSdbContext.Footnote.Generated.cs" Project="CLSdbContext" ProjectFolder="Entities" />
         <File Name="CLSdbContext.Weburl.cs" Project="CLSdbContext" ProjectFolder="Entities" OverwriteMode="None" />
         <File Name="CLSdbContext.Weburl.Generated.cs" Project="CLSdbContext" ProjectFolder="Entities" />
-        <File Name="CLSdbContext.Code.cs" Project="CLSdbContext" ProjectFolder="Entities" OverwriteMode="None" />
-        <File Name="CLSdbContext.Code.Generated.cs" Project="CLSdbContext" ProjectFolder="Entities" />
         <File Name="CLSdbContext.Analyzer.cs" Project="CLSdbContext" ProjectFolder="Entities" OverwriteMode="None" />
         <File Name="CLSdbContext.Analyzer.Generated.cs" Project="CLSdbContext" ProjectFolder="Entities" />
         <File Name="CLSdbContext.Locality.cs" Project="CLSdbContext" ProjectFolder="Entities" OverwriteMode="None" />
         <File Name="CLSdbContext.Locality.Generated.cs" Project="CLSdbContext" ProjectFolder="Entities" />
         <File Name="CLSdbContext.ReimbursementRate.cs" Project="CLSdbContext" ProjectFolder="Entities" OverwriteMode="None" />
         <File Name="CLSdbContext.ReimbursementRate.Generated.cs" Project="CLSdbContext" ProjectFolder="Entities" />
+        <File Name="CLSdbContext.Code.cs" Project="CLSdbContext" ProjectFolder="Entities" OverwriteMode="None" />
+        <File Name="CLSdbContext.Code.Generated.cs" Project="CLSdbContext" ProjectFolder="Entities" />
         <File Name="CLSdbContext.SearchTerm.cs" Project="CLSdbContext" ProjectFolder="Entities" OverwriteMode="None" />
         <File Name="CLSdbContext.SearchTerm.Generated.cs" Project="CLSdbContext" ProjectFolder="Entities" />
       </GeneratedFiles>
