@@ -16,6 +16,7 @@
         <Summary>This table holds the url of the CMS website where this data is available</Summary>
       </Documentation>
       <Column Name="id" Member="Id" Type="System.Int32" AutoSync="OnInsert" DbType="SERIAL NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" ed:ValidateRequired="true" ed:Guid="7d769f5b-4aef-4496-bd7f-c29075ea4c4b" />
+      <Column Name="displaytext" Member="Displaytext" Type="System.String" DbType="VARCHAR" CanBeNull="true" UpdateCheck="Never" Unicode="true" ed:ValidateRequired="false" ed:Guid="9c9b224b-e2f3-4edc-bc81-c19624dd6a85" />
       <Column Name="webaddressurl" Member="Webaddressurl" Type="System.String" DbType="VARCHAR" CanBeNull="true" UpdateCheck="Never" Unicode="true" ed:ValidateRequired="false" ed:Guid="93c9fb38-640c-4599-850a-dd7dccd9af68" />
     </Type>
   </Table>
@@ -52,7 +53,6 @@
       <Column Name="id" Member="Id" Type="System.Int32" AutoSync="OnInsert" DbType="SERIAL NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" ed:ValidateRequired="true" ed:Guid="2e4ac229-a47d-40ff-b25a-eac5575eca26" />
       <Column Name="locality" Member="Locality1" Type="System.String" DbType="VARCHAR" CanBeNull="true" UpdateCheck="Never" Unicode="true" ed:ValidateRequired="false" ed:Guid="d42eec8c-98ec-4f4a-a6d6-1dae998819bb" />
       <Column Name="locality_description" Member="LocalityDescription" Type="System.String" DbType="VARCHAR" CanBeNull="true" UpdateCheck="Never" Unicode="true" ed:ValidateRequired="false" ed:Guid="77e78ddc-70bf-4a4b-9b3c-fdab215c5bb6" />
-      <!--<Column Name="locality_description" Member="LocalityDescription" Type="System.String" DbType="VARCHAR" CanBeNull="true" UpdateCheck="Never" Unicode="true" ed:ValidateRequired="false" ed:Guid="ff31368d-fad6-4d96-ae7e-17349eed0e92" />-->
       <Association Name="Locality_ReimbursementRate" ed:AssociationGuid="ed4eb3e3-d4a8-407a-bfad-d26524d22cff" Member="ReimbursementRates" ed:Guid="ca1c2d9a-1584-4d70-a028-db09ec623e0c" ThisKey="Id" OtherKey="FkLocalityId" Type="ReimbursementRate" />
     </Type>
   </Table>
