@@ -22,15 +22,6 @@ namespace CLSConfiguration {
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
-        /// ProductionSchema control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label ProductionSchema;
-        
-        /// <summary>
         /// StagingSchema control.
         /// </summary>
         /// <remarks>
@@ -38,6 +29,15 @@ namespace CLSConfiguration {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label StagingSchema;
+        
+        /// <summary>
+        /// ProductionSchema control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label ProductionSchema;
         
         /// <summary>
         /// AllSchemas control.
@@ -85,7 +85,7 @@ namespace CLSConfiguration {
         protected global::System.Web.UI.WebControls.ImageButton TestProduction;
         
         /// <summary>
-        /// User control.
+        /// UserID control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.

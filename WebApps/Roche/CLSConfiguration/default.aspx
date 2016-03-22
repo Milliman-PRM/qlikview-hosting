@@ -22,7 +22,7 @@
             border-radius: 5px; 
             -moz-border-radius: 5px; 
             -webkit-border-radius: 5px; 
-            border: 1px solid #000000;
+            border: 1px solid lightgray;
             font-style:normal;
         }
     </style>
@@ -34,16 +34,16 @@
         <div id = "Content" style = "border:1px solid lightgray;width:800px;height:600px;visibility:hidden">
             <table style="width:100%;height:100%">
                 <tr>
-                    <td style="vertical-align: middle; text-align: center">
+                  <td style="vertical-align: middle; text-align: center">
                         <fieldset style="height:40px">
-                            <legend>Current Production Schema</legend>
-                            <asp:Label ID="ProductionSchema" runat="server" Text="rmrrdb_2016022_ab" Font-Bold="True"></asp:Label>
+                            <legend>Current Staging Schema</legend>
+                            <asp:Label ID="StagingSchema" runat="server" Text="rmrrdb_2016022_xy" Font-Bold="True"></asp:Label>
                          </fieldset>
                      </td>
                     <td style="vertical-align: middle; text-align: center">
                         <fieldset style="height:40px">
-                            <legend>Current Staging Schema</legend>
-                            <asp:Label ID="StagingSchema" runat="server" Text="rmrrdb_2016022_xy" Font-Bold="True"></asp:Label>
+                            <legend>Current Production Schema</legend>
+                            <asp:Label ID="ProductionSchema" runat="server" Text="rmrrdb_2016022_ab" Font-Bold="True"></asp:Label>
                          </fieldset>
                      </td>
                  </tr>
@@ -71,7 +71,7 @@
                                         <asp:Button ID="ActivateStaging" CssClass="roundedcorner" runat="server" Text="Set Active on 'STAGING' system" Width="250px" ToolTip="Make the selected schema active on the staging system" OnClick="ActivateStaging_Click" />
                                     </td>
                                     <td>
-                                        <asp:ImageButton ID="TestStaging" runat="server" ImageUrl="~/images/Tests-icon.png" ToolTip="Launch 'Lab Systems Handbook' on staging for verification/validation" OnClick="TestStaging_Click" />
+                                        <asp:ImageButton ID="TestStaging" runat="server" ImageUrl="~/images/Tests-icon.png" ToolTip="Launch 'Lab Systems Handbook' on staging for verification/validation"  />
                                     </td>
                                 </tr>
                                 <tr>
@@ -80,7 +80,7 @@
                                         <asp:Button ID="ActivateProduction" CssClass="roundedcorner" runat="server" Text="Set Active on 'PRODUCTION' system" Width="250px" ToolTip="Make the selected schema active on the production system" OnClientClick="return ConfirmMakeLive();" OnClick="ActivateProduction_Click" />
                                     </td>
                                     <td>
-                                        <asp:ImageButton ID="TestProduction" runat="server" ImageUrl="~/images/Tests-icon.png" ToolTip="Launch 'Lab Systems Handbook' on production for verification/validation" OnClick="TestProduction_Click" />
+                                        <asp:ImageButton ID="TestProduction" runat="server" ImageUrl="~/images/Tests-icon.png" ToolTip="Launch 'Lab Systems Handbook' on production for verification/validation" />
                                     </td>
                                 </tr>
                                 <tr>
