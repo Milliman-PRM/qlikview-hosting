@@ -10,7 +10,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <script src="scripts/jquery-1.12.1.min.js" type="text/javascript"></script>
 
-     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <script src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.9/jquery-ui.js" type="text/javascript"></script>
     <link href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.9/themes/start/jquery-ui.css"
         rel="stylesheet" type="text/css" />
@@ -151,6 +151,7 @@
             height: 390px;
             width: 162px;
         }
+
         .ContainerViewReport {
             overflow: hidden;
             color: white;
@@ -513,11 +514,11 @@
                                     <telerik:GridBoundColumn UniqueName="locality_description" DataField="locality_description" HeaderText="Locality" ReadOnly="True" SortedBackColor="Transparent">
                                         <HeaderStyle Width="13%" />
                                     </telerik:GridBoundColumn>
-                                    <telerik:GridBoundColumn UniqueName="rate" DataField="rate" HeaderText="Medicare Reimbursement Rate" AllowFiltering="false" AllowSorting="false" AutoPostBackOnFilter="false" DataFormatString="{0:C2}" ItemStyle-HorizontalAlign="Right" ReadOnly="True" SortedBackColor="Transparent">
-                                        <HeaderStyle Width="14%" HorizontalAlign="Right" />
-                                    </telerik:GridBoundColumn>
                                     <telerik:GridBoundColumn UniqueName="notes" DataField="notes" HeaderText="Notes" ReadOnly="True" AllowFiltering="false" AllowSorting="false" AutoPostBackOnFilter="false" SortedBackColor="Transparent">
                                         <HeaderStyle Width="8%" />
+                                    </telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn UniqueName="rate" DataField="rate" HeaderText="Medicare Reimbursement Rate" AllowFiltering="false" AllowSorting="false" AutoPostBackOnFilter="false" DataFormatString="{0:C2}" ItemStyle-HorizontalAlign="Right" ReadOnly="True" SortedBackColor="Transparent">
+                                        <HeaderStyle Width="14%" HorizontalAlign="Right" />
                                     </telerik:GridBoundColumn>
                                 </Columns>
                             </MasterTableView>
