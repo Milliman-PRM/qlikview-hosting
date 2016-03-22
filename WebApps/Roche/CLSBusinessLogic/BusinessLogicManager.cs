@@ -11,7 +11,7 @@ namespace CLSBusinessLogic
 
     public partial class BusinessLogicManager
     {
- 
+
         //this class is maintained via reference in the session an contains all the user selections to date
         public class CurrentSelections
         {
@@ -61,9 +61,9 @@ namespace CLSBusinessLogic
                 }
                 return null;
             }
-            public void Clear( QueryFieldNames FieldName )
+            public void Clear(QueryFieldNames FieldName)
             {
-                if ( FieldName == QueryFieldNames.ALL )
+                if (FieldName == QueryFieldNames.ALL)
                 {
                     AnalyzerIDs.Clear();
                     AnalyzerNames.Clear();
@@ -83,9 +83,9 @@ namespace CLSBusinessLogic
                 }
             }
 
-            public void AddToList( QueryFieldNames FieldName, string Value )
+            public void AddToList(QueryFieldNames FieldName, string Value)
             {
-                if ( FieldName != QueryFieldNames.ALL )
+                if (FieldName != QueryFieldNames.ALL)
                 {
                     List<string> QueryList = FindListByFieldName(FieldName);
                     if (QueryList.Contains(Value) == false)
@@ -100,8 +100,8 @@ namespace CLSBusinessLogic
             /// <returns></returns>
             public bool NoSelectionsMade()
             {
-                return (( AnalyzerIDs.Count() == 0) &&
-                ( AnalyzerNames.Count() == 0) &&
+                return ((AnalyzerIDs.Count() == 0) &&
+                (AnalyzerNames.Count() == 0) &&
                 (AnalyzersByCodeIDs.Count() == 0) &&
                 (CPTCodes.Count() == 0) &&
                 (Localaties.Count() == 0) &&
@@ -109,7 +109,7 @@ namespace CLSBusinessLogic
                 (LocalatiesIDs.Count() == 0) &&
                 (SearchTermByCodeIDs.Count() == 0) &&
                 (SearchTermDescs.Count() == 0) &&
-                (SearchTermIDs.Count() == 0) );
+                (SearchTermIDs.Count() == 0));
             }
         }
 
@@ -138,6 +138,20 @@ namespace CLSBusinessLogic
             set
             {
                 _UniqueAssayDescriptions = value;
+            }
+        }
+
+        private List<Code> _UniqueCPTCode;
+        public List<Code> UniqueCPTCode
+        {
+            get
+            {
+                return _UniqueCPTCode;
+            }
+
+            set
+            {
+                _UniqueCPTCode = value;
             }
         }
 
@@ -214,18 +228,31 @@ namespace CLSBusinessLogic
         public List<SearchTerm> FindAssayDescriptionForAnalyzer(List<string> AnalyzerIDs)
         {
             string AnalyzerIDList = "";
-            foreach( string AnalyzerID in AnalyzerIDs )
+            foreach (string AnalyzerID in AnalyzerIDs)
             {
                 if (AnalyzerIDList.Length > 0)
                     AnalyzerIDList += ",";
                 AnalyzerIDList += AnalyzerID;
             }
-            
+
             return Controller.CLSController.getSearchTermsForSpecificAnalyzerIdListArray(AnalyzerIDList);
         }
 
+        public List<Code> FindCodesForAnalyzer(List<string> analyzerIds)
+        {
+            string idList = "";
+            foreach (var item in analyzerIds)
+            {
+                if (idList.Length > 0)
+                    idList += ",";
+                idList += analyzerIds;
+            }
+
+            return Controller.CLSController.getCodesForSpecificAnalyzerIdListArray(idList);
+        }
+
         //we are going to cache each years's full data set once, that way all users will have fast access to all data per year
-        public Dictionary<string,System.Data.DataTable> FetchDataByYear()
+        public Dictionary<string, System.Data.DataTable> FetchDataByYear()
         {
             Dictionary<string, System.Data.DataTable> DataByYear = new Dictionary<string, DataTable>();
             int ExecuteTimeSeconds = 0;
@@ -234,10 +261,10 @@ namespace CLSBusinessLogic
             string ConnectionString = GetConnectionString(out Schema);
 
             List<string> UniqueYearList = Controller.CLSController.getUniqueYear();
-            foreach( string Year in UniqueYearList )
+            foreach (string Year in UniqueYearList)
             {
                 List<string> YearAsList = new List<string>() { Year };
-                System.Data.DataTable ThisYearsData = DynamicDataTable(ConnectionString, MainTableQueryBuilder(Schema,null,null,null,null,null,null,null,null,null,YearAsList), out ExecuteTimeSeconds, out DataTableSizeMB);
+                System.Data.DataTable ThisYearsData = DynamicDataTable(ConnectionString, MainTableQueryBuilder(Schema, null, null, null, null, null, null, null, null, null, YearAsList), out ExecuteTimeSeconds, out DataTableSizeMB);
                 DataByYear.Add(Year, ThisYearsData);
             }
             return DataByYear;
@@ -249,7 +276,7 @@ namespace CLSBusinessLogic
         /// </summary>
         /// <param name="Selections"></param>
         /// <returns></returns>
-        public System.Data.DataTable FetchDataForSelections( CurrentSelections Selections )
+        public System.Data.DataTable FetchDataForSelections(CurrentSelections Selections)
         {
             int ExecuteTimeSeconds = 0;
             int DataTableSizeMB = 0;
@@ -261,14 +288,14 @@ namespace CLSBusinessLogic
                                                                                     Selections.Years, Selections.CPTCodes), out ExecuteTimeSeconds, out DataTableSizeMB);
         }
 
-        public List<string> FindAnalyzersForAssayDescription(string AssayDescription )
+        public List<string> FindAnalyzersForAssayDescription(string AssayDescription)
         {
             return Controller.CLSController.getAnalyzerNamesListForSpecificSearchTermDesc(AssayDescription);
         }
 
-        public string FindAnalyzerIDFromName( string AnalyzerName )
+        public string FindAnalyzerIDFromName(string AnalyzerName)
         {
-            foreach( CLSdbContext.Analyzer Analyze in _UniqueAnalyzers )
+            foreach (CLSdbContext.Analyzer Analyze in _UniqueAnalyzers)
             {
                 if (string.Compare(Analyze.AnalyzerName, AnalyzerName, true) == 0)
                     return Analyze.FkCodeId.ToString();
@@ -276,19 +303,45 @@ namespace CLSBusinessLogic
             return "";
         }
 
-        public List<string> FindAnalyzerIDsFromName( string AnalyzerName )
+        public List<string> FindAnalyzerIDsFromName(string AnalyzerName)
         {
             return Controller.CLSController.getAnalyzerIdsForSpecificAnalyzerName(AnalyzerName);
         }
 
         public string FindLocalityByID(string LocalityID)
         {
-            foreach( Locality L in _UniqueLocalities )
+            foreach (Locality L in _UniqueLocalities)
             {
                 if (L.Id == System.Convert.ToInt32(LocalityID))
                     return L.LocalityDescription;
             }
             return "";
+        }
+
+        public List<Code> FindCptCodesForAnalyzer(List<string> analyzerIds)
+        {
+            string newIdList = "";
+            foreach (var item in analyzerIds)
+            {
+                if (newIdList.Length > 0)
+                    newIdList += ",";
+                newIdList += item;
+            }
+
+            return Controller.CLSController.getCptCodesListForAnalyzersIdListArray(newIdList);
+        }
+
+        public List<Code> GetCptCodeListForAssayDescription(string assayDesc)
+        {
+            return Controller.CLSController.getCptCodeListForAssayDescription(assayDesc);
+        }
+        public List<SearchTerm> GetAssayDescriptionListForCptCode(string cptCode)
+        {
+            return Controller.CLSController.getAssayDescriptionListForSpecificCptCode(cptCode);
+        }
+        public List<Analyzer> GetAnalyzerListForCptCode(string cptCode)
+        {
+            return Controller.CLSController.getAnalyzerNamesListForSpecificCptCode(cptCode);
         }
     }
 }

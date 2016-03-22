@@ -16,13 +16,13 @@ namespace CLSTest
             objList = CLSController.getUniqueCode();
             Assert.IsNotNull(objList.Count > 0);
         }
-        [TestMethod]
-        public void TestMethod_getUniqueCodeByCodeName()
-        {
-            var objList = new List<Code>();
-            objList = CLSController.getUniqueCodeByCodeName();
-            Assert.IsNotNull(objList.Count > 0);
-        }
+        //[TestMethod]
+        //public void TestMethod_getUniqueCodeByCodeName()
+        //{
+        //    var objList = new List<Code>();
+        //    objList = CLSController.getUniqueCodeByCodeName();
+        //    Assert.IsNotNull(objList.Count > 0);
+        //}
 
 
         [TestMethod]
@@ -57,33 +57,33 @@ namespace CLSTest
             Assert.IsNotNull(objList.Count > 0);
         }
 
-        [TestMethod]
-        public void TestMethod_getUniqueAnalyzerNames()
-        {
-            var objList = new List<Analyzer>();
-            objList = CLSController.getUniqueAnalyzerNames();
-            Assert.IsNotNull(objList.Count > 0);
-        }
+        //[TestMethod]
+        //public void TestMethod_getUniqueAnalyzerNames()
+        //{
+        //    var objList = new List<Analyzer>();
+        //    objList = CLSController.getUniqueAnalyzerNames();
+        //    Assert.IsNotNull(objList.Count > 0);
+        //}
 
-        [TestMethod]
-        public void TestMethod_getSearchTermsForSpecificAnalyzerName()
-        {
-            var objList = new List<SearchTerm>();
-            var aName = "COBAS 4000 A";
-            objList = CLSController.getSearchTermsForSpecificAnalyzerName(aName);
-            Assert.IsNotNull(objList.Count > 0);
-        }
+        //[TestMethod]
+        //public void TestMethod_getSearchTermsForSpecificAnalyzerName()
+        //{
+        //    var objList = new List<SearchTerm>();
+        //    var aName = "COBAS 4000 A";
+        //    objList = CLSController.getSearchTermsForSpecificAnalyzerName(aName);
+        //    Assert.IsNotNull(objList.Count > 0);
+        //}
 
-        /// <summary>
-        /// Returns list of serach terms for analyzer
-        /// </summary>
-        [TestMethod]
-        public void TestMethod_getSearchTermsForSpecificAnalyzerId()
-        {
-            var aId = 5;// "Roche_Hitachi Modular";
-            var objList = CLSController.getSearchTermsForSpecificAnalyzerId(aId);
-            Assert.IsNotNull(objList);
-        }
+        ///// <summary>
+        ///// Returns list of serach terms for analyzer
+        ///// </summary>
+        //[TestMethod]
+        //public void TestMethod_getSearchTermsForSpecificAnalyzerId()
+        //{
+        //    var aId = 5;// "Roche_Hitachi Modular";
+        //    var objList = CLSController.getSearchTermsForSpecificAnalyzerId(aId);
+        //    Assert.IsNotNull(objList);
+        //}
 
 
         /// <summary>
@@ -155,14 +155,14 @@ namespace CLSTest
             Assert.IsNotNull(objList.Count > 0);
         }
 
-        [TestMethod]
-        public void TestMethod_getAnalyzerForSpecificSearchTermDesc()
-        {
-            var objList = new List<Analyzer>();
-            var st = "Assay of procainamide";
-            objList = CLSController.getAnalyzerForSpecificSearchTermDesc(st);
-            Assert.IsNotNull(objList.Count == 10);
-        }
+        //[TestMethod]
+        //public void TestMethod_getAnalyzerForSpecificSearchTermDesc()
+        //{
+        //    var objList = new List<Analyzer>();
+        //    var st = "Assay of procainamide";
+        //    objList = CLSController.getAnalyzerForSpecificSearchTermDesc(st);
+        //    Assert.IsNotNull(objList.Count == 10);
+        //}
 
         [TestMethod]
         public void TestMethod_getAnalyzerNamesListForSpecificSearchTermDesc()
@@ -173,13 +173,13 @@ namespace CLSTest
             Assert.IsNotNull(objList.Count == 10);
         }
 
-        [TestMethod]
-        public void TestMethod_getAnalyzerNamesForSpecificSearchTermId()
-        {
-            var sId = 5;
-            var objList = CLSController.getAnalyzerNamesForSpecificSearchTermId(sId);
-            Assert.IsNotNull(objList);
-        }
+        //[TestMethod]
+        //public void TestMethod_getAnalyzerNamesForSpecificSearchTermId()
+        //{
+        //    var sId = 5;
+        //    var objList = CLSController.getAnalyzerNamesForSpecificSearchTermId(sId);
+        //    Assert.IsNotNull(objList);
+        //}
 
         [TestMethod]
         public void TestMethod_getAssayDescriptionForSpecificAnalyzer()
@@ -198,6 +198,15 @@ namespace CLSTest
             Assert.IsNotNull(objList);
         }
         
-
+        [TestMethod]
+        public void TestMehtod_getCodesForSpecificAnalyzerIdListArray()
+        {
+            //create array
+            var array = new string[] { "217", "499", "816", "544", "320", "677", "423", "444", "588", "611" };
+            //convert an array of integers to a comma-separated string
+            var aray = string.Join(",", array);
+            var objList = CLSController.getCodesForSpecificAnalyzerIdListArray(aray);
+            Assert.IsNotNull(objList);
+        }
     }
 }

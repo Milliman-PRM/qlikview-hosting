@@ -24,7 +24,7 @@ namespace CLSdbContext
     /// <summary>
     /// This table holds the url of the CMS website where this data is available
     /// </summary>
-    [Table(Name = @"rmrrdb_20160304.weburl")]
+    [Table(Name = @"weburl")]
     public partial class Weburl : INotifyPropertyChanging, INotifyPropertyChanged
     {
 

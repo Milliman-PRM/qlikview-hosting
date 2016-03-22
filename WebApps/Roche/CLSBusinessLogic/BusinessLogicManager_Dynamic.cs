@@ -62,7 +62,7 @@ namespace CLSBusinessLogic
             _FootNotes = Controller.CLSController.getUniqueFootnote();
             _WebURL = Controller.CLSController.getUniqueWeburl();
             _UniqueYears = Controller.CLSController.getUniqueYear();
-
+            _UniqueCPTCode = Controller.CLSController.getUniqueCode();
             _DataByYear = FetchDataByYear();
 
             return true;

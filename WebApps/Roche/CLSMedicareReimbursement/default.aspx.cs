@@ -34,7 +34,13 @@ namespace CLSMedicareReimbursement
                 //in the menu being displayed, do check, if triggred by year drop down, then hide the menu
                 Control C = GetControlThatCausedPostBack(this);
                 if ((C != null) && (string.Compare(C.ClientID, "yeardropdown", true) == 0))
-                    ContainerMenuList.Visible = false; //keep the menu hidden on postback from drop, its not in an ajax panel               
+                {
+                    ContainerMenuList.Visible = false; //keep the menu hidden on postback from drop, its not in an ajax panel  
+                    //ClientScript.RegisterStartupScript(this.GetType(), "Popup", "closeWindow('ContainerMenuList');", true);
+                    ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "Popup", "closeWindow('ContainerMenuList');", true);
+                    //Page.ClientScript.RegisterStartupScript(this.GetType(), "Popup", "closeWindow('ContainerMenuList');;return false;", true);
+                }
+
             }
 
             //these items have to be bound on each call
@@ -47,6 +53,8 @@ namespace CLSMedicareReimbursement
             LocalitySearch.DataSource = BLM.UniqueLocalities;
             LocalitySearch.DataBind();
 
+            CptCodeSearch.DataSource = BLM.UniqueCPTCode;
+            CptCodeSearch.DataBind();
         }
 
         protected void LaunchMenu_Click(object sender, ImageClickEventArgs e)
@@ -75,9 +83,7 @@ namespace CLSMedicareReimbursement
                 else
                     AssayDescriptionList.Items.Add(SearchTerm);  //just add it
             }
-
-            //set highlights if necessary
-            NoAnalyzerSingleAssayDescriptionSelected();
+            
             LocalityList.ClearSelection();  //clear out and restore localaties each time
             foreach (string LocalityID in CurrentSels.LocalatiesByDescShrt)
             {
@@ -87,20 +93,25 @@ namespace CLSMedicareReimbursement
                     LI.Selected = true;
             }
 
+            CptCodeList.ClearSelection();  //clear out and restore item each time
+            foreach (var item in CurrentSels.CPTCodes)
+            {
+                var cptCodeSearchText = item;
+                ListItem LI = CptCodeList.Items.FindByText(cptCodeSearchText);
+                if (LI != null)
+                    LI.Selected = true;
+            }
+            
             ScrollSelectedAnalyzerIntoView();
             ScrollSelectedAssayDescriptionIntoView();
+            ScrollSelectedCPTCodeIntoView();
             ScrollSelectedLocalityIntoView();
         }
 
         protected void btnViewSelection_Click(object sender, EventArgs e)
         {
-            //menu.Visible = false;
             var CurrentSels = Session[SessionKey_Selections] as CLSBusinessLogic.BusinessLogicManager.CurrentSelections;         
             RebindPrimaryGrid(CurrentSels);
-            //string message = "Message from server side";
-            //ClientScript.RegisterStartupScript(this.GetType(), "Popup", "closeWindow('menu');", true);
-            //ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "Popup", "closeWindow('menu');", true);
-            //Page.ClientScript.RegisterStartupScript(this.GetType(), "Popup", "closeWindow('menu');;return false;", true);
         }
 
         /// <summary>
@@ -145,22 +156,32 @@ namespace CLSMedicareReimbursement
                 AssayDescriptionList.DataValueField = "Id";
                 AssayDescriptionList.DataBind();
 
-                UnHighlightAnalyzers(); //something selected so turn off highlights
+                //get list of all cptcodes for analyzerids
+                var AssociatedCptCodess = BusinessLogicManager.GetInstance().FindCptCodesForAnalyzer(SelectedAnalyzerIDs);
+                CptCodeList.DataSource = AssociatedCptCodess;
+                CptCodeList.DataTextField = "Code1";
+                CptCodeList.DataValueField = "Id";
+                CptCodeList.DataBind();
+
             }
             else  //user un-selected, there are no analyzers selected, so re-show entire list, but highlight analyzer list items if 1 assay description is selected
             {
                 //reset everything here to clear out system
                 CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.ALL);
-                LocalityList.ClearSelection();  //clear out all selections
+                LocalityList.ClearSelection();  //clear out all selections                
+                CptCodeList.ClearSelection();  //clear out all selections
 
                 //rebind to full list for display
-                AssayDescriptionList.DataSource = BusinessLogicManager.GetInstance().UniqueAssayDescriptions;
-                AssayDescriptionList.DataTextField = "SearchDesc";
-                AssayDescriptionList.DataValueField = "Id";
-                AssayDescriptionList.DataBind();
+                //AssayDescriptionList.DataSource = BusinessLogicManager.GetInstance().UniqueAssayDescriptions;
+                //AssayDescriptionList.DataTextField = "SearchDesc";
+                //AssayDescriptionList.DataValueField = "Id";
+                //AssayDescriptionList.DataBind();
 
-                //no analyzer, check to see if SINGLE assay description highlighted
-                NoAnalyzerSingleAssayDescriptionSelected();
+                var BLM = BusinessLogicManager.GetInstance();
+                PopulateAssayDescriptionList(BLM);
+                PopulateCPTCodeList(BLM);
+                PopulateLocalityList(BLM);
+
                 if (CurrentSels.SearchTermDescs.Count() == 1)
                     AssayDescriptionList.Items.FindByText(CurrentSels.SearchTermDescs[0]).Selected = true;
             }
@@ -184,11 +205,15 @@ namespace CLSMedicareReimbursement
                 var Analyzers = BusinessLogicManager.GetInstance().FindAnalyzersForAssayDescription(AssayDescriptionList.SelectedItem.Text).ToList();
                 CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.ALL);
                 CurrentSels.AddToList(BusinessLogicManager.CurrentSelections.QueryFieldNames.SEARCHTERMDESCS, AssayDescriptionList.SelectedItem.Text);
-                HighlightAnalyzers(Analyzers);
+
+                //no selections have been made, so we need to look up the appropriate analyziers and set to checked
+                var cptCodes = BusinessLogicManager.GetInstance().GetCptCodeListForAssayDescription(AssayDescriptionList.SelectedItem.Text).ToList();
+                CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.ALL);
+                CurrentSels.AddToList(BusinessLogicManager.CurrentSelections.QueryFieldNames.CPTCODES, AssayDescriptionList.SelectedItem.Text);
             }
             else
             {
-                UnHighlightAnalyzers();  //turn off any entries highlighted
+               
                 //selections have been made, we are narrowing the search down
                 CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.SEARCHTERMIDS);
                 CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.SEARCHTERMDESCS);
@@ -212,6 +237,51 @@ namespace CLSMedicareReimbursement
                 CurrentSels.AddToList(BusinessLogicManager.CurrentSelections.QueryFieldNames.LOCALATIESBYDESCSHRT, SelectedLocalityShort);
 
             ScrollSelectedLocalityIntoView();
+        }
+
+        protected void CptCodeList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //get user selections
+            var CurrentSels = Session[SessionKey_Selections] as BusinessLogicManager.CurrentSelections;
+            var SelectedIDs = CptCodeList.Items.Cast<ListItem>().Where(n => n.Selected).Select(n => n.Value).ToList();
+            var SelectedText = CptCodeList.Items.Cast<ListItem>().Where(n => n.Selected).Select(n => n.Text).ToList();
+            CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.CPTCODES);
+            //update the users selection object instance
+            foreach (string item in SelectedText)
+                CurrentSels.AddToList(BusinessLogicManager.CurrentSelections.QueryFieldNames.CPTCODES, item);
+
+            ScrollSelectedCPTCodeIntoView();
+
+
+            ////get user selections
+            //var CurrentSels = Session[SessionKey_Selections] as BusinessLogicManager.CurrentSelections;
+            //var idValue = CptCodeList.Items.Cast<ListItem>().Where(n => n.Selected).Select(n => n.Value).ToList();
+            //var text = CptCodeList.Items.Cast<ListItem>().Where(n => n.Selected).Select(n => n.Text).ToList();
+
+            ////test behavior that when we are here there can be only 1 selection
+            //CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.CPTCODES);
+
+            //if (CurrentSels.NoSelectionsMade())
+            //{    //no selections have been made, so we need to look up the appropriate analyziers and set to checked
+            //    var Analyzers = BusinessLogicManager.GetInstance().GetAnalyzerListForCptCode(CptCodeList.SelectedItem.Text).ToList();
+            //    CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.ALL);
+            //    CurrentSels.AddToList(BusinessLogicManager.CurrentSelections.QueryFieldNames.CPTCODES, AnalyzerCheckList.SelectedItem.Text);
+
+            //    //no selections have been made, so we need to look up the appropriate analyziers and set to checked
+            //    var AssayDescription = BusinessLogicManager.GetInstance().GetAssayDescriptionListForCptCode(CptCodeList.SelectedItem.Text).ToList();
+            //    CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.ALL);
+            //    CurrentSels.AddToList(BusinessLogicManager.CurrentSelections.QueryFieldNames.CPTCODES, AssayDescriptionList.SelectedItem.Text);
+            //}
+            //else
+            //{
+            //    //selections have been made, we are narrowing the search down
+            //    CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.CPTCODES);
+
+            //    foreach (var value in text)
+            //        CurrentSels.AddToList(BusinessLogicManager.CurrentSelections.QueryFieldNames.CPTCODES, value);
+            //}
+
+            //ScrollSelectedCPTCodeIntoView();
         }
 
         protected void AnalyzerSearch_Search(object sender, Telerik.Web.UI.SearchBoxEventArgs e)
@@ -251,6 +321,7 @@ namespace CLSMedicareReimbursement
 
                 AnalyzerCheckList.ClearSelection();
                 LocalityList.ClearSelection();
+                CptCodeList.ClearSelection();
 
                 AssayDescriptionList_SelectedIndexChanged(null, null);
             }
@@ -267,6 +338,18 @@ namespace CLSMedicareReimbursement
             }
             LocalitySearch.Text = "";
         }
+
+        protected void CptCodeSearch_Search(object sender, SearchBoxEventArgs e)
+        {
+            ListItem LI = CptCodeList.Items.FindByText(CptCodeSearch.Text);
+            if (LI != null)
+            {
+                LI.Selected = true;
+                CptCodeList_SelectedIndexChanged(null, null);
+            }
+            CptCodeSearch.Text = "";
+        }
+
 
         protected void YearDropdown_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -469,15 +552,18 @@ namespace CLSMedicareReimbursement
 
             PopulateAnalyzerCheckList(BLM);
             PopulateAssayDescriptionList(BLM);
+            PopulateCPTCodeList(BLM);
             PopulateLocalityList(BLM);
             PopulateYearDropdown(BLM);
 
+            YearDropdown.DataSource = BLM.UniqueYears.OrderByDescending(i => i);
+            YearDropdown.DataBind();
+            YearDropdown.SelectedIndex = 0;
             CurrentSelections.AddToList(BusinessLogicManager.CurrentSelections.QueryFieldNames.YEARS, YearDropdown.SelectedItem.Text);
 
             //set current working set in memory "DataSet" for main view grid
             Session[SessionKey_DataSet] = BLM.DataByYear[YearDropdown.SelectedItem.Text];
             RatesGrid.VirtualItemCount = BLM.DataByYear[YearDropdown.SelectedItem.Text].Rows.Count;
-
         }
 
         private void PopulateFooterList(BusinessLogicManager BLM)
@@ -537,7 +623,14 @@ namespace CLSMedicareReimbursement
             AnalyzerCheckList.DataValueField = "Id";
             AnalyzerCheckList.DataBind();
         }
-
+        private void PopulateCPTCodeList(BusinessLogicManager BLM)
+        {
+            CptCodeList.DataSource = BLM.UniqueCPTCode;
+            CptCodeList.DataTextField = "Code1";
+            CptCodeList.DataValueField = "Id";
+            CptCodeList.DataBind();
+        }
+        
         private bool RebindPrimaryGrid(BusinessLogicManager.CurrentSelections CurrentSet)
         {
             try
@@ -678,6 +771,60 @@ namespace CLSMedicareReimbursement
             }
         }
 
+        private void ScrollSelectedCPTCodeIntoView()
+        {
+            //Code to sort Analyzer list
+            var dt = new DataTable();
+            dt.Columns.Add("Code1", typeof(string));
+            dt.Columns.Add("Id", typeof(string));
+            dt.Columns.Add("Selected", typeof(bool));
+            var holder = new ArrayList();
+
+            if (IsPostBack)
+            {
+                foreach (ListItem item in CptCodeList.Items)
+                {
+                    if (item.Selected == true)
+                    {
+                        dt.Rows.Add(item.Text, item.Value, true);
+                        CptCodeList.Items.FindByValue(item.Value).Selected = true;
+                        holder.Add(item.Value);
+                    }
+                    else
+                    {
+                        dt.Rows.Add(item.Text, item.Value, false);
+                    }
+                }
+            }
+            else
+            {
+                foreach (ListItem item in CptCodeList.Items)
+                {
+                    dt.Rows.Add(item.Text, item.Value, false);
+                }
+            }
+
+            var dv = new DataView(dt);
+            dv.Sort = "Selected DESC";
+            CptCodeList.DataSource = dv;
+            CptCodeList.DataTextField = "Code1";
+            CptCodeList.DataValueField = "Id";
+            CptCodeList.DataBind();
+
+            foreach (String hItem in holder)
+            {
+                CptCodeList.Items.FindByValue(hItem).Selected = true;
+            }
+
+            for (int i = 0; i < CptCodeList.Items.Count; i++)
+            {
+                if (CptCodeList.Items[i].Selected)
+                {
+                    CptCodeList.Items[i].Attributes.Add("style", "font-weight: bold;");
+                }
+            }
+        }
+
         private void ScrollSelectedLocalityIntoView()
         {
             //Code to sort Analyzer list
@@ -731,20 +878,7 @@ namespace CLSMedicareReimbursement
                 }
             }
         }
-
-        private void NoAnalyzerSingleAssayDescriptionSelected()
-        {
-            var CurrentSels = Session[SessionKey_Selections] as BusinessLogicManager.CurrentSelections;
-            if ((CurrentSels.AnalyzerIDs.Count() == 0) && (CurrentSels.AnalyzerNames.Count() == 0) && (CurrentSels.AnalyzersByCodeIDs.Count() == 0) && (CurrentSels.SearchTermDescs.Count() == 1))
-            {
-                string SelectedValue = CurrentSels.SearchTermDescs[0];
-                var Analyzers = BusinessLogicManager.GetInstance().FindAnalyzersForAssayDescription(SelectedValue).ToList();
-                HighlightAnalyzers(Analyzers);
-            }
-            else
-                UnHighlightAnalyzers();
-        }
-
+        
         /// <summary>
         /// Reset the page and clear session varibales
         /// </summary>
@@ -787,11 +921,22 @@ namespace CLSMedicareReimbursement
             LocalityList.ClearSelection();
             LocalityList.SelectedIndex = -1;
             LocalitySearch.Text = "";
+            
+            foreach (ListItem item in CptCodeList.Items)
+            {
+                //check anything out here
+                if (item.Selected)
+                    item.Selected = false;
+            }
+            CptCodeList.ClearSelection();
+            CptCodeList.SelectedIndex = -1;
+            CptCodeSearch.Text = "";
 
             var BLM = BusinessLogicManager.GetInstance();
             PopulateAnalyzerCheckList(BLM);
             PopulateAssayDescriptionList(BLM);
-            PopulateLocalityList(BLM);
+            PopulateCPTCodeList(BLM);
+            PopulateLocalityList(BLM);            
 
             var ResultSet = BusinessLogicManager.GetInstance().DataByYear[YearDropdown.SelectedItem.Text];
             RatesGrid.VirtualItemCount = ResultSet.Rows.Count;
@@ -813,12 +958,6 @@ namespace CLSMedicareReimbursement
             return ctrl;
         }
 
-        private void CheckForPreviousSelections()
-        {
-            Toast.Text = "Hi Van";
-            Toast.VisibleOnPageLoad = true;
-        }
-
         //Hilight or un-highlight entries in Analyzer list
         private void UnHighlightAnalyzers()
         {
@@ -833,10 +972,9 @@ namespace CLSMedicareReimbursement
                 if (ItemNames.Contains(LI.Text))
                     LI.Attributes.Add("style", "font-weight:bold;color:red");
             }
-        }
+        }        
 
         #endregion
-
-
+        
     }
 }
