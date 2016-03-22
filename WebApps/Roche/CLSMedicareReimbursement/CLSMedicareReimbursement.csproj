@@ -165,11 +165,16 @@
     <Content Include="BugList.html" />
     <Content Include="default.aspx" />
     <Content Include="Global.asax" />
+    <Content Include="Images\cancel.png" />
     <Content Include="Images\Excel.png" />
+    <Content Include="Images\Help-and-Support.png" />
+    <Content Include="Images\Help-Square.png" />
+    <Content Include="Images\Information.png" />
     <Content Include="Images\PDF.png" />
     <Content Include="Images\print.png" />
     <Content Include="Images\roche.png" />
     <Content Include="Images\search.png" />
+    <Content Include="Images\searchNew.png" />
     <Content Include="Images\settings.png" />
     <Content Include="Images\Word.png" />
     <Content Include="scripts\ai.0.15.0-build58334.js" />
