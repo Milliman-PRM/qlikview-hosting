@@ -229,6 +229,15 @@ namespace CLSMedicareReimbursement {
         protected global::System.Web.UI.WebControls.HyperLink FooterLink;
         
         /// <summary>
+        /// lblCopyrightYear control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblCopyrightYear;
+        
+        /// <summary>
         /// Toast control.
         /// </summary>
         /// <remarks>

@@ -35,7 +35,7 @@
             color: black;
             text-align: center;
             padding: 5px;
-            border-bottom: 3px solid #046EBC;
+            border-bottom: 3px solid #0072C6;
             font-family: Arial;
             font-size: 20px;
         }
@@ -53,7 +53,7 @@
             background-color: white;
             padding: 0px;
             margin: 0px;
-            border: 3px solid #046EBC;
+            border: 3px solid #0072C6;
             z-index: 2000;
         }
 
@@ -192,7 +192,7 @@
             .CustomButton:hover {
                 background-color: #ddd;
                 color: #333;
-                border: solid 1px #046ebc;
+                border: solid 1px #0072C6;
                 cursor: pointer;
                 outline: none;
             }
@@ -220,13 +220,15 @@
             cursor: pointer;
         }
 
-        .infoImage {
-            left: 1400px;
+        .ContainerInfoImage {
+            /*left: 1400px;*/
             position: absolute;
-            top: 70px;
+            top: 66px;
             width: 24px;
             height: 21px;
             cursor: pointer;
+            float:right;
+            right: 161px;
         }
         /*selected items gray background color*/
         select option:checked {
@@ -340,10 +342,23 @@
             line-height: 18px;
             margin-left: 29px;
         }
-
+        /*search box font-face color*/
+        .RadSearchBox .rsbEmptyMessage
+        {
+            color:#0072C6 !important;
+        }
         .table-condensed th,
         .table-condensed td {
             padding: 4px 5px;
+        }
+        #containerCopyright {
+            right: 50px;
+            bottom: 17px;
+            width: 154px;
+            text-align: center;
+            font-size: small;
+            float: right;
+            position:absolute;
         }
     </style>
 </head>
@@ -370,14 +385,16 @@
         <telerik:RadAjaxLoadingPanel runat="server" ID="RadAjaxLoadingPanel1" Transparency="60" BackColor="lightgray" Skin="Default"></telerik:RadAjaxLoadingPanel>
 
         <div id="ContainerUIMain">
-            <img id="imgInformation" class="infoImage" src="Images/Help-Square.png" alt="..." onclick="return showInformationWindow('ContainerInformation');" />
+            <div class="ContainerInfoImage">
+                <img id="imgInformation" width="24px" height="21px" src="Images/info_icon.png" alt="..." onclick="return showInformationWindow('ContainerInformation');" />
+            </div>
             <%--header section--%>
             <div id="ContainerHeaderSection">
                 <table style="width: 100%">
                     <tr>
                         <td></td>
                         <td style="vertical-align: bottom; padding-bottom: 5px">
-                            <asp:ImageButton ID="LaunchMenu" runat="server" CssClass="searchImage" ImageUrl="~/Images/searchNew.png" OnClick="LaunchMenu_Click" />
+                            <asp:ImageButton ID="LaunchMenu" runat="server" CssClass="searchImage" ImageUrl="~/Images/search_icon.png" OnClick="LaunchMenu_Click" />
                         </td>
                         <td>
                             <h2>Clinical Lab Systems Medicare Reimbursement</h2>
@@ -427,7 +444,6 @@
                         </table>
                     </div>
                 </div>
-
             </div>
 
             <%--menu section--%>
@@ -466,7 +482,7 @@
                         <asp:Button ID="btnViewReport" runat="server" Text="View Report" CssClass="CustomButton" Width="126px" ForeColor="Black" Font-Bold="true" BackColor="LightGray"
                             OnClientClick="return closeWindow('ContainerMenuList');" />
                     </div>
-                    <div class="ContainerClearButton">
+                    <div class="ContainerClearButton" >
                         <asp:Button ID="btnClearSelection" runat="server" Text="Clear Selections" CssClass="CustomButton" Width="126px" ForeColor="Black" Font-Bold="true" BackColor="LightGray"
                             OnClick="btnClearSelection_Click" />
                     </div>
@@ -484,7 +500,8 @@
                     </asp:DropDownList>
                     <h2>Medicare Reimbursment Rates</h2>
                 </div>
-                <telerik:RadAjaxPanel ID="RadGridPanel" runat="server" OnAjaxRequest="RadGridPanel_AjaxRequest" LoadingPanelID="RadAjaxLoadingPanel1">
+                <telerik:RadAjaxPanel ID="RadGridPanel" runat="server" OnAjaxRequest="RadGridPanel_AjaxRequest" LoadingPanelID="RadAjaxLoadingPanel1" ClientEvents-OnRequestStart="pnlRequestStarted">
+
                     <div id="ContainerGrid">
                         <telerik:RadGrid RenderMode="Classic" ID="RatesGrid" runat="server" GridLines="None"
                             AllowSorting="true" AllowPaging="true" PageSize="250" AllowCustomPaging="true" PagerStyle-ShowPagerText="True" PagerStyle-Visible="True"
@@ -493,7 +510,7 @@
                             OnSortCommand="RatesGrid_SortCommand">
                             <PagerStyle Visible="false" />
                             <ClientSettings ReorderColumnsOnClient="false" AllowColumnsReorder="false" EnablePostBackOnRowClick="True">
-                                <ClientEvents OnGridCreated="GridCreated" />
+                                <ClientEvents OnGridCreated="GridCreated" OnCellSelected="CellSelected" />
                                 <Virtualization EnableVirtualization="false" InitiallyCachedItemsCount="2000" LoadingPanelID="RadAjaxLoadingPanel1" ItemsPerView="500" />
                                 <Selecting CellSelectionMode="SingleCell" />
                                 <Scrolling ScrollHeight="480px" AllowScroll="True" UseStaticHeaders="True" SaveScrollPosition="true" EnableVirtualScrollPaging="true"></Scrolling>
@@ -534,6 +551,10 @@
                 <div style="height: 3px;"></div>
                 <asp:Label ID="lblFooterLink" AssociatedControlID="FooterLink" runat="server" Text=""></asp:Label>
                 <asp:HyperLink ID="FooterLink" CssClass="lane-link" runat="server" Target="_blank"></asp:HyperLink>
+            </div>
+            <div class="clear"></div>
+            <div id="containerCopyright">
+                <asp:Label ID="lblCopyrightYear" runat="server">Milliman PRM Analytics®</asp:Label>
             </div>
 
             <telerik:RadNotification RenderMode="Lightweight" ID="Toast" runat="server" VisibleOnPageLoad="false" Position="BottomRight"
@@ -629,6 +650,29 @@
             $(popUpControl).hide();
         }
 
+        var columnCellSelected = "";
+        //This event fires first
+        function CellSelected(sender, args) {
+            //get column name
+            columnCellSelected = args.get_column().get_uniqueName();
+        }
+
+        //this event is fired right after the above
+        function pnlRequestStarted(ajaxPanel, eventArgs) {
+            try {
+                if (eventArgs._eventTargetElement.control.UniqueID == "RatesGrid") {
+                    if (columnCellSelected == "rate" || columnCellSelected == "notes") {
+                        //$find('<%= RadAjaxManager1.ClientID %>').set_enableAJAX(false);
+                        //eventArgs.set_enableAjax(false);
+                        eventArgs.set_cancel(true)
+                    }
+                }
+                columnCellSelected = "";
+            }
+            catch (ex) {
+                alert("Error while data refresh: " + ex.message);
+            }
+        }
 
         function PrintRatesGrid() {
             var previewWnd = window.open('about:blank', '', '', false);

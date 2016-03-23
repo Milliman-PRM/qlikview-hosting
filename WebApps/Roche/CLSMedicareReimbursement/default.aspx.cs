@@ -22,96 +22,119 @@ namespace CLSMedicareReimbursement
         #region Page Events
         protected void Page_Load(object sender, EventArgs e)
         {
-            var BLM = BusinessLogicManager.GetInstance();
-
-            if (!IsPostBack)
+            try
             {
-                LoadData(BLM);
-            }
-            else
-            {
-                //since the year drop down is not in a ajax panel, it causes a postback which results
-                //in the menu being displayed, do check, if triggred by year drop down, then hide the menu
-                Control C = GetControlThatCausedPostBack(this);
-                if ((C != null) && (string.Compare(C.ClientID, "yeardropdown", true) == 0))
+                var BLM = BusinessLogicManager.GetInstance();
+                if (!IsPostBack)
                 {
-                    ContainerMenuList.Visible = false; //keep the menu hidden on postback from drop, its not in an ajax panel  
-                    //ClientScript.RegisterStartupScript(this.GetType(), "Popup", "closeWindow('ContainerMenuList');", true);
-                    ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "Popup", "closeWindow('ContainerMenuList');", true);
-                    //Page.ClientScript.RegisterStartupScript(this.GetType(), "Popup", "closeWindow('ContainerMenuList');;return false;", true);
+                    LoadData(BLM);
+                }
+                else
+                {
+                    //since the year drop down is not in a ajax panel, it causes a postback which results
+                    //in the menu being displayed, do check, if triggred by year drop down, then hide the menu
+                    Control C = GetControlThatCausedPostBack(this);
+                    if ((C != null) && (string.Compare(C.ClientID, "yeardropdown", true) == 0))
+                    {
+                        ContainerMenuList.Visible = false; //keep the menu hidden on postback from drop, its not in an ajax panel  
+                                                           //ClientScript.RegisterStartupScript(this.GetType(), "Popup", "closeWindow('ContainerMenuList');", true);
+                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "Popup", "closeWindow('ContainerMenuList');", true);
+                        //Page.ClientScript.RegisterStartupScript(this.GetType(), "Popup", "closeWindow('ContainerMenuList');;return false;", true);
+                    }
+
                 }
 
+                //these items have to be bound on each call
+                AnalyzerSearch.DataSource = BLM.UniqueAnalyzers;
+                AnalyzerSearch.DataBind();
+                //we always allow searching across all entries
+                AssayDescriptionSearch.DataSource = BLM.UniqueAssayDescriptions;
+                AssayDescriptionSearch.DataBind();
+
+                LocalitySearch.DataSource = BLM.UniqueLocalities;
+                LocalitySearch.DataBind();
+
+                CptCodeSearch.DataSource = BLM.UniqueCPTCode;
+                CptCodeSearch.DataBind();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Page_Load", ex);
             }
 
-            //these items have to be bound on each call
-            AnalyzerSearch.DataSource = BLM.UniqueAnalyzers;
-            AnalyzerSearch.DataBind();
-            //we always allow searching across all entries
-            AssayDescriptionSearch.DataSource = BLM.UniqueAssayDescriptions;
-            AssayDescriptionSearch.DataBind();
-
-            LocalitySearch.DataSource = BLM.UniqueLocalities;
-            LocalitySearch.DataBind();
-
-            CptCodeSearch.DataSource = BLM.UniqueCPTCode;
-            CptCodeSearch.DataBind();
         }
 
         protected void LaunchMenu_Click(object sender, ImageClickEventArgs e)
         {
-            ContainerMenuList.Visible = true;
-            var CurrentSels = Session[SessionKey_Selections] as BusinessLogicManager.CurrentSelections;
-
-            var AssociatedAssayDescriptions = new List<SearchTerm>();
-            foreach (string Analyzer in CurrentSels.AnalyzerNames)
+            try
             {
-                ListItem LI = AnalyzerCheckList.Items.FindByText(Analyzer);
-                if (LI != null)
+                ContainerMenuList.Visible = true;
+                var CurrentSels = Session[SessionKey_Selections] as BusinessLogicManager.CurrentSelections;
+
+                var AssociatedAssayDescriptions = new List<SearchTerm>();
+                foreach (string Analyzer in CurrentSels.AnalyzerNames)
                 {
-                    LI.Selected = true;
+                    ListItem LI = AnalyzerCheckList.Items.FindByText(Analyzer);
+                    if (LI != null)
+                    {
+                        LI.Selected = true;
+                    }
+                    //create a running list of all available
+                    var AnalyzerID = BusinessLogicManager.GetInstance().FindAnalyzerIDFromName(Analyzer);
+                    AssociatedAssayDescriptions.AddRange(BusinessLogicManager.GetInstance().FindAssayDescriptionForAnalyzer(new List<string>() { AnalyzerID }));
                 }
-                //create a running list of all available
-                var AnalyzerID = BusinessLogicManager.GetInstance().FindAnalyzerIDFromName(Analyzer);
-                AssociatedAssayDescriptions.AddRange(BusinessLogicManager.GetInstance().FindAssayDescriptionForAnalyzer(new List<string>() { AnalyzerID }));
-            }
 
-            foreach (string SearchTerm in CurrentSels.SearchTermDescs)
-            {
-                ListItem LI = AssayDescriptionList.Items.FindByText(SearchTerm);
-                if (LI != null)
-                    LI.Selected = true;
-                else
-                    AssayDescriptionList.Items.Add(SearchTerm);  //just add it
-            }
-            
-            LocalityList.ClearSelection();  //clear out and restore localaties each time
-            foreach (string LocalityID in CurrentSels.LocalatiesByDescShrt)
-            {
-                var LocalityText = LocalityID;
-                ListItem LI = LocalityList.Items.FindByText(LocalityText);
-                if (LI != null)
-                    LI.Selected = true;
-            }
+                foreach (string SearchTerm in CurrentSels.SearchTermDescs)
+                {
+                    ListItem LI = AssayDescriptionList.Items.FindByText(SearchTerm);
+                    if (LI != null)
+                        LI.Selected = true;
+                    else
+                        AssayDescriptionList.Items.Add(SearchTerm);  //just add it
+                }
 
-            CptCodeList.ClearSelection();  //clear out and restore item each time
-            foreach (var item in CurrentSels.CPTCodes)
-            {
-                var cptCodeSearchText = item;
-                ListItem LI = CptCodeList.Items.FindByText(cptCodeSearchText);
-                if (LI != null)
-                    LI.Selected = true;
+                LocalityList.ClearSelection();  //clear out and restore localaties each time
+                foreach (string LocalityID in CurrentSels.LocalatiesByDescShrt)
+                {
+                    var LocalityText = LocalityID;
+                    ListItem LI = LocalityList.Items.FindByText(LocalityText);
+                    if (LI != null)
+                        LI.Selected = true;
+                }
+
+                CptCodeList.ClearSelection();  //clear out and restore item each time
+                foreach (var item in CurrentSels.CPTCodes)
+                {
+                    var cptCodeSearchText = item;
+                    ListItem LI = CptCodeList.Items.FindByText(cptCodeSearchText);
+                    if (LI != null)
+                        LI.Selected = true;
+                }
+
+                ScrollSelectedAnalyzerIntoView();
+                ScrollSelectedAssayDescriptionIntoView();
+                ScrollSelectedCPTCodeIntoView();
+                ScrollSelectedLocalityIntoView();
             }
-            
-            ScrollSelectedAnalyzerIntoView();
-            ScrollSelectedAssayDescriptionIntoView();
-            ScrollSelectedCPTCodeIntoView();
-            ScrollSelectedLocalityIntoView();
+            catch (Exception ex)
+            {
+                throw new Exception("LaunchMenu_Click", ex);
+            }
         }
 
         protected void btnViewSelection_Click(object sender, EventArgs e)
         {
-            var CurrentSels = Session[SessionKey_Selections] as CLSBusinessLogic.BusinessLogicManager.CurrentSelections;         
-            RebindPrimaryGrid(CurrentSels);
+            try
+            {
+
+
+                var CurrentSels = Session[SessionKey_Selections] as CLSBusinessLogic.BusinessLogicManager.CurrentSelections;
+                RebindPrimaryGrid(CurrentSels);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("LaunchMenu_Click", ex);
+            }
         }
 
         /// <summary>
@@ -121,7 +144,15 @@ namespace CLSMedicareReimbursement
         /// <param name="e"></param>
         protected void btnClearSelection_Click(object sender, EventArgs e)
         {
-            InitilizePageControls();
+            try
+            {
+                InitilizePageControls();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("LaunchMenu_Click", ex);
+            }
+
         }
 
         /// <summary>
@@ -131,157 +162,152 @@ namespace CLSMedicareReimbursement
         /// <param name="e"></param>
         protected void AnalyzerCheckList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //get old user selections 
-            var CurrentSels = Session[SessionKey_Selections] as BusinessLogicManager.CurrentSelections;
-            //update user selections
-            var SelectedAnalyzerNames = AnalyzerCheckList.Items.Cast<ListItem>().Where(n => n.Selected).Select(n => n.Text).ToList();
-            //update the users selection object instance
-            CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.ANALYZERNAMES);
-
-            foreach (string Selected in SelectedAnalyzerNames)
-                CurrentSels.AddToList(BusinessLogicManager.CurrentSelections.QueryFieldNames.ANALYZERNAMES, Selected);
-            AssayDescriptionList.Items.Clear();
-
-            //need to get all the analyzers ids
-            var SelectedAnalyzerIDs = new List<string>();
-            foreach (string AnalyzerName in SelectedAnalyzerNames)
-                SelectedAnalyzerIDs.AddRange(BusinessLogicManager.GetInstance().FindAnalyzerIDsFromName(AnalyzerName));
-
-            //SelectedAnalyzerIDs = new List<string>() { "12", "8", "9", "10", "11", "13", "14", "15", "16", "17" };
-            if (SelectedAnalyzerIDs.Count() > 0)  //user selected at least 1 analyzer, so update assay list
+            try
             {
-                var AssociatedAssayDescriptions = BusinessLogicManager.GetInstance().FindAssayDescriptionForAnalyzer(SelectedAnalyzerIDs);
-                AssayDescriptionList.DataSource = AssociatedAssayDescriptions;
-                AssayDescriptionList.DataTextField = "SearchDesc";
-                AssayDescriptionList.DataValueField = "Id";
-                AssayDescriptionList.DataBind();
 
-                //get list of all cptcodes for analyzerids
-                var AssociatedCptCodess = BusinessLogicManager.GetInstance().FindCptCodesForAnalyzer(SelectedAnalyzerIDs);
-                CptCodeList.DataSource = AssociatedCptCodess;
-                CptCodeList.DataTextField = "Code1";
-                CptCodeList.DataValueField = "Id";
-                CptCodeList.DataBind();
 
+                //get old user selections 
+                var CurrentSels = Session[SessionKey_Selections] as BusinessLogicManager.CurrentSelections;
+                //update user selections
+                var SelectedAnalyzerNames = AnalyzerCheckList.Items.Cast<ListItem>().Where(n => n.Selected).Select(n => n.Text).ToList();
+                //update the users selection object instance
+                CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.ANALYZERNAMES);
+
+                foreach (string Selected in SelectedAnalyzerNames)
+                    CurrentSels.AddToList(BusinessLogicManager.CurrentSelections.QueryFieldNames.ANALYZERNAMES, Selected);
+                AssayDescriptionList.Items.Clear();
+
+                //need to get all the analyzers ids
+                var SelectedAnalyzerIDs = new List<string>();
+                foreach (string AnalyzerName in SelectedAnalyzerNames)
+                    SelectedAnalyzerIDs.AddRange(BusinessLogicManager.GetInstance().FindAnalyzerIDsFromName(AnalyzerName));
+
+                //SelectedAnalyzerIDs = new List<string>() { "12", "8", "9", "10", "11", "13", "14", "15", "16", "17" };
+                if (SelectedAnalyzerIDs.Count() > 0)  //user selected at least 1 analyzer, so update assay list
+                {
+                    var AssociatedAssayDescriptions = BusinessLogicManager.GetInstance().FindAssayDescriptionForAnalyzer(SelectedAnalyzerIDs);
+                    AssayDescriptionList.DataSource = AssociatedAssayDescriptions;
+                    AssayDescriptionList.DataTextField = "SearchDesc";
+                    AssayDescriptionList.DataValueField = "Id";
+                    AssayDescriptionList.DataBind();
+
+                    //get list of all cptcodes for analyzerids
+                    var AssociatedCptCodess = BusinessLogicManager.GetInstance().FindCptCodesForAnalyzer(SelectedAnalyzerIDs);
+                    CptCodeList.DataSource = AssociatedCptCodess;
+                    CptCodeList.DataTextField = "Code1";
+                    CptCodeList.DataValueField = "Id";
+                    CptCodeList.DataBind();
+
+                }
+                else  //user un-selected, there are no analyzers selected, so re-show entire list, but highlight analyzer list items if 1 assay description is selected
+                {
+                    //reset everything here to clear out system
+                    CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.ALL);
+                    LocalityList.ClearSelection();  //clear out all selections                
+                    CptCodeList.ClearSelection();  //clear out all selections
+
+                    //rebind to full list for display
+                    var BLM = BusinessLogicManager.GetInstance();
+                    PopulateAssayDescriptionList(BLM);
+                    PopulateCPTCodeList(BLM);
+                    PopulateLocalityList(BLM);
+
+                    if (CurrentSels.SearchTermDescs.Count() == 1)
+                        AssayDescriptionList.Items.FindByText(CurrentSels.SearchTermDescs[0]).Selected = true;
+                }
+
+                // Do unselected stuff
+                ScrollSelectedAnalyzerIntoView();
             }
-            else  //user un-selected, there are no analyzers selected, so re-show entire list, but highlight analyzer list items if 1 assay description is selected
+            catch (Exception ex)
             {
-                //reset everything here to clear out system
-                CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.ALL);
-                LocalityList.ClearSelection();  //clear out all selections                
-                CptCodeList.ClearSelection();  //clear out all selections
-
-                //rebind to full list for display
-                //AssayDescriptionList.DataSource = BusinessLogicManager.GetInstance().UniqueAssayDescriptions;
-                //AssayDescriptionList.DataTextField = "SearchDesc";
-                //AssayDescriptionList.DataValueField = "Id";
-                //AssayDescriptionList.DataBind();
-
-                var BLM = BusinessLogicManager.GetInstance();
-                PopulateAssayDescriptionList(BLM);
-                PopulateCPTCodeList(BLM);
-                PopulateLocalityList(BLM);
-
-                if (CurrentSels.SearchTermDescs.Count() == 1)
-                    AssayDescriptionList.Items.FindByText(CurrentSels.SearchTermDescs[0]).Selected = true;
+                throw new Exception("AnalyzerCheckList_SelectedIndexChanged", ex);
             }
-
-            // Do unselected stuff
-            ScrollSelectedAnalyzerIntoView();
         }
 
         protected void AssayDescriptionList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //get user selections
-            var CurrentSels = Session[SessionKey_Selections] as BusinessLogicManager.CurrentSelections;
-            var SearchTermIDs = AssayDescriptionList.Items.Cast<ListItem>().Where(n => n.Selected).Select(n => n.Value).ToList();
-            var SearchTermTexts = AssayDescriptionList.Items.Cast<ListItem>().Where(n => n.Selected).Select(n => n.Text).ToList();
-
-            //test behavior that when we are here there can be only 1 selection
-            CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.SEARCHTERMDESCS);
-
-            if (CurrentSels.NoSelectionsMade())
-            {    //no selections have been made, so we need to look up the appropriate analyziers and set to checked
-                var Analyzers = BusinessLogicManager.GetInstance().FindAnalyzersForAssayDescription(AssayDescriptionList.SelectedItem.Text).ToList();
-                CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.ALL);
-                CurrentSels.AddToList(BusinessLogicManager.CurrentSelections.QueryFieldNames.SEARCHTERMDESCS, AssayDescriptionList.SelectedItem.Text);
-
-                //no selections have been made, so we need to look up the appropriate analyziers and set to checked
-                var cptCodes = BusinessLogicManager.GetInstance().GetCptCodeListForAssayDescription(AssayDescriptionList.SelectedItem.Text).ToList();
-                CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.ALL);
-                CurrentSels.AddToList(BusinessLogicManager.CurrentSelections.QueryFieldNames.CPTCODES, AssayDescriptionList.SelectedItem.Text);
-            }
-            else
+            try
             {
-               
-                //selections have been made, we are narrowing the search down
-                CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.SEARCHTERMIDS);
+                //get user selections
+                var CurrentSels = Session[SessionKey_Selections] as BusinessLogicManager.CurrentSelections;
+                var SearchTermIDs = AssayDescriptionList.Items.Cast<ListItem>().Where(n => n.Selected).Select(n => n.Value).ToList();
+                var SearchTermTexts = AssayDescriptionList.Items.Cast<ListItem>().Where(n => n.Selected).Select(n => n.Text).ToList();
+
+                //test behavior that when we are here there can be only 1 selection
                 CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.SEARCHTERMDESCS);
 
-                foreach (string SearchTermText in SearchTermTexts)
-                    CurrentSels.AddToList(BusinessLogicManager.CurrentSelections.QueryFieldNames.SEARCHTERMDESCS, SearchTermText);
-            }
+                if (CurrentSels.NoSelectionsMade())
+                {    //no selections have been made, so we need to look up the appropriate analyziers and set to checked
+                    var Analyzers = BusinessLogicManager.GetInstance().FindAnalyzersForAssayDescription(AssayDescriptionList.SelectedItem.Text).ToList();
+                    CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.ALL);
+                    CurrentSels.AddToList(BusinessLogicManager.CurrentSelections.QueryFieldNames.SEARCHTERMDESCS, AssayDescriptionList.SelectedItem.Text);
 
-            ScrollSelectedAssayDescriptionIntoView();
+                    //no selections have been made, so we need to look up the appropriate analyziers and set to checked
+                    var cptCodes = BusinessLogicManager.GetInstance().GetCptCodeListForAssayDescription(AssayDescriptionList.SelectedItem.Text).ToList();
+                    CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.ALL);
+                    CurrentSels.AddToList(BusinessLogicManager.CurrentSelections.QueryFieldNames.CPTCODES, AssayDescriptionList.SelectedItem.Text);
+                }
+                else
+                {
+
+                    //selections have been made, we are narrowing the search down
+                    CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.SEARCHTERMIDS);
+                    CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.SEARCHTERMDESCS);
+
+                    foreach (string SearchTermText in SearchTermTexts)
+                        CurrentSels.AddToList(BusinessLogicManager.CurrentSelections.QueryFieldNames.SEARCHTERMDESCS, SearchTermText);
+                }
+
+                ScrollSelectedAssayDescriptionIntoView();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AssayDescriptionList_SelectedIndexChanged", ex);
+            }
         }
 
         protected void LocalityList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //get user selections
-            var CurrentSels = Session[SessionKey_Selections] as BusinessLogicManager.CurrentSelections;
-            var SelectedLocalityIDs = LocalityList.Items.Cast<ListItem>().Where(n => n.Selected).Select(n => n.Value).ToList();
-            var SelectedLocalityShorts = LocalityList.Items.Cast<ListItem>().Where(n => n.Selected).Select(n => n.Text).ToList();
-            CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.LOCALATIESBYDESCSHRT);
-            //update the users selection object instance
-            foreach (string SelectedLocalityShort in SelectedLocalityShorts)
-                CurrentSels.AddToList(BusinessLogicManager.CurrentSelections.QueryFieldNames.LOCALATIESBYDESCSHRT, SelectedLocalityShort);
+            try
+            {
+                //get user selections
+                var CurrentSels = Session[SessionKey_Selections] as BusinessLogicManager.CurrentSelections;
+                var SelectedLocalityIDs = LocalityList.Items.Cast<ListItem>().Where(n => n.Selected).Select(n => n.Value).ToList();
+                var SelectedLocalityShorts = LocalityList.Items.Cast<ListItem>().Where(n => n.Selected).Select(n => n.Text).ToList();
+                CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.LOCALATIESBYDESCSHRT);
+                //update the users selection object instance
+                foreach (string SelectedLocalityShort in SelectedLocalityShorts)
+                    CurrentSels.AddToList(BusinessLogicManager.CurrentSelections.QueryFieldNames.LOCALATIESBYDESCSHRT, SelectedLocalityShort);
 
-            ScrollSelectedLocalityIntoView();
+                ScrollSelectedLocalityIntoView();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("LocalityList_SelectedIndexChanged", ex);
+            }
         }
 
         protected void CptCodeList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //get user selections
-            var CurrentSels = Session[SessionKey_Selections] as BusinessLogicManager.CurrentSelections;
-            var SelectedIDs = CptCodeList.Items.Cast<ListItem>().Where(n => n.Selected).Select(n => n.Value).ToList();
-            var SelectedText = CptCodeList.Items.Cast<ListItem>().Where(n => n.Selected).Select(n => n.Text).ToList();
-            CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.CPTCODES);
-            //update the users selection object instance
-            foreach (string item in SelectedText)
-                CurrentSels.AddToList(BusinessLogicManager.CurrentSelections.QueryFieldNames.CPTCODES, item);
+            try
+            {
 
-            ScrollSelectedCPTCodeIntoView();
+                //get user selections
+                var CurrentSels = Session[SessionKey_Selections] as BusinessLogicManager.CurrentSelections;
+                var SelectedIDs = CptCodeList.Items.Cast<ListItem>().Where(n => n.Selected).Select(n => n.Value).ToList();
+                var SelectedText = CptCodeList.Items.Cast<ListItem>().Where(n => n.Selected).Select(n => n.Text).ToList();
+                CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.CPTCODES);
+                //update the users selection object instance
+                foreach (string item in SelectedText)
+                    CurrentSels.AddToList(BusinessLogicManager.CurrentSelections.QueryFieldNames.CPTCODES, item);
 
-
-            ////get user selections
-            //var CurrentSels = Session[SessionKey_Selections] as BusinessLogicManager.CurrentSelections;
-            //var idValue = CptCodeList.Items.Cast<ListItem>().Where(n => n.Selected).Select(n => n.Value).ToList();
-            //var text = CptCodeList.Items.Cast<ListItem>().Where(n => n.Selected).Select(n => n.Text).ToList();
-
-            ////test behavior that when we are here there can be only 1 selection
-            //CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.CPTCODES);
-
-            //if (CurrentSels.NoSelectionsMade())
-            //{    //no selections have been made, so we need to look up the appropriate analyziers and set to checked
-            //    var Analyzers = BusinessLogicManager.GetInstance().GetAnalyzerListForCptCode(CptCodeList.SelectedItem.Text).ToList();
-            //    CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.ALL);
-            //    CurrentSels.AddToList(BusinessLogicManager.CurrentSelections.QueryFieldNames.CPTCODES, AnalyzerCheckList.SelectedItem.Text);
-
-            //    //no selections have been made, so we need to look up the appropriate analyziers and set to checked
-            //    var AssayDescription = BusinessLogicManager.GetInstance().GetAssayDescriptionListForCptCode(CptCodeList.SelectedItem.Text).ToList();
-            //    CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.ALL);
-            //    CurrentSels.AddToList(BusinessLogicManager.CurrentSelections.QueryFieldNames.CPTCODES, AssayDescriptionList.SelectedItem.Text);
-            //}
-            //else
-            //{
-            //    //selections have been made, we are narrowing the search down
-            //    CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.CPTCODES);
-
-            //    foreach (var value in text)
-            //        CurrentSels.AddToList(BusinessLogicManager.CurrentSelections.QueryFieldNames.CPTCODES, value);
-            //}
-
-            //ScrollSelectedCPTCodeIntoView();
+                ScrollSelectedCPTCodeIntoView();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("CptCodeList_SelectedIndexChanged", ex);
+            }
         }
 
         protected void AnalyzerSearch_Search(object sender, Telerik.Web.UI.SearchBoxEventArgs e)
@@ -385,7 +411,6 @@ namespace CLSMedicareReimbursement
         protected void RadGridPanel_AjaxRequest(object sender, Telerik.Web.UI.AjaxRequestEventArgs e)
         {
             var CurrentSels = Session[SessionKey_Selections] as CLSBusinessLogic.BusinessLogicManager.CurrentSelections;
-
             switch (e.Argument)
             {
                 case "refresh":
@@ -397,44 +422,52 @@ namespace CLSMedicareReimbursement
 
         protected void RatesGrid_SelectedCellChanged(object sender, EventArgs e)
         {
-            if (RatesGrid.SelectedCells.Count == 1)
+            try
             {
-                var CurrentSels = Session[SessionKey_Selections] as CLSBusinessLogic.BusinessLogicManager.CurrentSelections;
 
-                var SelectedValue = RatesGrid.SelectedCells[0].Text;
-                var SelectedColumn = RatesGrid.SelectedCells[0].Column.UniqueName;
-                //analyzer_name description locality_description
-                switch (SelectedColumn.ToLower())
+                if (RatesGrid.SelectedCells.Count == 1)
                 {
-                    case "analyzer_name":
-                        CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.ANALYZERNAMES);
-                        CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.ANALYZERIDS);
-                        CurrentSels.AddToList(BusinessLogicManager.CurrentSelections.QueryFieldNames.ANALYZERNAMES, SelectedValue);
-                        RebindPrimaryGrid(CurrentSels);
-                        break;
-                    case "description":
-                        CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.SEARCHTERMBYCODEIDS);
-                        CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.SEARCHTERMDESCS);
-                        CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.SEARCHTERMIDS);
-                        CurrentSels.AddToList(BusinessLogicManager.CurrentSelections.QueryFieldNames.SEARCHTERMDESCS, SelectedValue);
-                        RebindPrimaryGrid(CurrentSels);
-                        break;
-                    case "locality_description":
-                        CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.LOCALATIES);
-                        CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.LOCALATIESBYDESCSHRT);
-                        CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.LOCALATIESIDS);
-                        CurrentSels.AddToList(BusinessLogicManager.CurrentSelections.QueryFieldNames.LOCALATIESBYDESCSHRT, SelectedValue);
-                        RebindPrimaryGrid(CurrentSels);
-                        break;
-                    case "code":  //we are supposed to query on this field too, but not yet, no way to clear it really
-                        CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.CPTCODES);
-                        CurrentSels.AddToList(BusinessLogicManager.CurrentSelections.QueryFieldNames.CPTCODES, SelectedValue);
-                        RebindPrimaryGrid(CurrentSels);
-                        break;
-                    default:
-                        RatesGrid.SelectedIndexes.Clear();  //not valid search columns
-                        break;
+                    var CurrentSels = Session[SessionKey_Selections] as CLSBusinessLogic.BusinessLogicManager.CurrentSelections;
+
+                    var SelectedValue = RatesGrid.SelectedCells[0].Text;
+                    var SelectedColumn = RatesGrid.SelectedCells[0].Column.UniqueName;
+                    //analyzer_name description locality_description
+                    switch (SelectedColumn.ToLower())
+                    {
+                        case "analyzer_name":
+                            CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.ANALYZERNAMES);
+                            CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.ANALYZERIDS);
+                            CurrentSels.AddToList(BusinessLogicManager.CurrentSelections.QueryFieldNames.ANALYZERNAMES, SelectedValue);
+                            RebindPrimaryGrid(CurrentSels);
+                            break;
+                        case "description":
+                            CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.SEARCHTERMBYCODEIDS);
+                            CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.SEARCHTERMDESCS);
+                            CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.SEARCHTERMIDS);
+                            CurrentSels.AddToList(BusinessLogicManager.CurrentSelections.QueryFieldNames.SEARCHTERMDESCS, SelectedValue);
+                            RebindPrimaryGrid(CurrentSels);
+                            break;
+                        case "locality_description":
+                            CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.LOCALATIES);
+                            CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.LOCALATIESBYDESCSHRT);
+                            CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.LOCALATIESIDS);
+                            CurrentSels.AddToList(BusinessLogicManager.CurrentSelections.QueryFieldNames.LOCALATIESBYDESCSHRT, SelectedValue);
+                            RebindPrimaryGrid(CurrentSels);
+                            break;
+                        case "code":  //we are supposed to query on this field too, but not yet, no way to clear it really
+                            CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.CPTCODES);
+                            CurrentSels.AddToList(BusinessLogicManager.CurrentSelections.QueryFieldNames.CPTCODES, SelectedValue);
+                            RebindPrimaryGrid(CurrentSels);
+                            break;
+                        default:
+                            RatesGrid.SelectedIndexes.Clear();  //not valid search columns
+                            break;
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("RatesGrid_SelectedCellChanged", ex);
             }
         }
 
@@ -456,8 +489,6 @@ namespace CLSMedicareReimbursement
                 //copy over the data
                 for (int Index = StartAt; Index < EndAt; Index++)
                     DataSubSet.Rows.Add(DataSet.Rows[Index].ItemArray);
-
-
                 //add the subset to the view
                 RatesGrid.DataSource = DataSubSet;
             }
@@ -475,62 +506,6 @@ namespace CLSMedicareReimbursement
 
             //CurrentTable.DefaultView.Sort = SortOnColumn + " " + SortMethod;            
         }
-
-        //protected void RatesGrid_ItemCreated(object sender, GridItemEventArgs e)
-        //{
-        //    if (e.Item is GridDataItem)
-        //    {
-        //        var dataItem = (GridDataItem)e.Item;
-        //        if (dataItem != null)
-        //        {
-        //            if (dataItem["rate"].Text != "")
-        //            {
-        //                dataItem.Attributes.Add("onclick", "onClick(" + dataItem.ItemIndex + ");");//Passing the Index
-        //            }
-        //        }
-        //    }
-        //}
-
-        //protected void RatesGrid_ItemDataBound(object sender, GridItemEventArgs e)
-        //{
-        //    //if (e.Item.ItemType != Telerik.Web.UI.GridItemType.Item &&
-        //    //    e.Item.ItemType != Telerik.Web.UI.GridItemType.AlternatingItem)
-        //    //    return;
-
-        //    //var dataItem = (GridDataItem)e.Item;
-        //    //if (dataItem != null)
-        //    //{
-        //    //    if (dataItem["rate"].Text != "")
-        //    //        dataItem["rate"].Enabled = false;
-        //    //    if (dataItem["rate"].Text != "")
-        //    //    {
-        //    //        for (int i = 0; i < dataItem.Controls.Count; i++)
-        //    //        {
-        //    //            (dataItem.Controls[i] as GridTableCell).Enabled = false;
-        //    //        }
-        //    //    }
-        //   // }
-
-        //    //if (e.Item is GridDataItem)
-        //    //{
-        //    //    foreach (GridDataItem item in this.RatesGrid.Items)
-        //    //    {
-        //    //        if (item.OwnerTableView.Name == "ownertableviewRatesGrid")
-        //    //        {
-        //    //            if ((item.GetDataKeyValue("rate") != null) &&  (item.GetDataKeyValue("rate") != ""))
-        //    //            {
-        //    //                item.Enabled = false;
-        //    //                item["rate"].Enabled = false;
-        //    //            }
-        //    //            if ((item.GetDataKeyValue("notes") != null) && (item.GetDataKeyValue("notes") != ""))
-        //    //            {
-        //    //                item.Enabled = false;
-        //    //                item["notes"].Enabled = false;
-        //    //            }
-        //    //        }
-        //    //    }
-        //    //}
-        //}
 
         #endregion
 
@@ -630,7 +605,7 @@ namespace CLSMedicareReimbursement
             CptCodeList.DataValueField = "Id";
             CptCodeList.DataBind();
         }
-        
+
         private bool RebindPrimaryGrid(BusinessLogicManager.CurrentSelections CurrentSet)
         {
             try
@@ -878,16 +853,17 @@ namespace CLSMedicareReimbursement
                 }
             }
         }
-        
+
         /// <summary>
         /// Reset the page and clear session varibales
         /// </summary>
         public void InitilizePageControls()
-        {
+        {            
             var CurrentSels = Session[SessionKey_Selections] as BusinessLogicManager.CurrentSelections;
             //reset everything here to clear out system
             CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.ALL);
 
+            Session[SessionKey_Selections] = null;
             Session[SessionKey_DataSet] = null;
             YearDropdown.SelectedIndex = 0;
 
@@ -921,7 +897,7 @@ namespace CLSMedicareReimbursement
             LocalityList.ClearSelection();
             LocalityList.SelectedIndex = -1;
             LocalitySearch.Text = "";
-            
+
             foreach (ListItem item in CptCodeList.Items)
             {
                 //check anything out here
@@ -933,15 +909,27 @@ namespace CLSMedicareReimbursement
             CptCodeSearch.Text = "";
 
             var BLM = BusinessLogicManager.GetInstance();
+            PopulateYearDropdown(BLM);
             PopulateAnalyzerCheckList(BLM);
             PopulateAssayDescriptionList(BLM);
             PopulateCPTCodeList(BLM);
-            PopulateLocalityList(BLM);            
+            PopulateLocalityList(BLM);
 
             var ResultSet = BusinessLogicManager.GetInstance().DataByYear[YearDropdown.SelectedItem.Text];
-            RatesGrid.VirtualItemCount = ResultSet.Rows.Count;
+            RatesGrid.VirtualItemCount = ResultSet.Rows.Count;            
             RatesGrid.DataSource = ResultSet;
             RatesGrid.DataBind();
+
+            CurrentSels = Session[SessionKey_Selections] as CLSBusinessLogic.BusinessLogicManager.CurrentSelections;
+            RebindPrimaryGrid(CurrentSels);
+            
+           //Add the necessary AJAX setting programmatically
+            RadAjaxManager1.AjaxSettings.AddAjaxSetting(RatesGrid, RadGridPanel, null);
+
+            //ContainerMenuList.Visible = false; //keep the menu hidden on postback from drop, its not in an ajax panel  
+            //ClientScript.RegisterStartupScript(this.GetType(), "Popup", "closeWindow('ContainerMenuList');", true);
+            //ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "Popup", "closeWindow('ContainerMenuList');", true);
+            //Page.ClientScript.RegisterStartupScript(this.GetType(), "Popup", "closeWindow('ContainerMenuList');;return false;", true);
         }
 
         private Control GetControlThatCausedPostBack(Page page)
@@ -972,9 +960,9 @@ namespace CLSMedicareReimbursement
                 if (ItemNames.Contains(LI.Text))
                     LI.Attributes.Add("style", "font-weight:bold;color:red");
             }
-        }        
+        }
 
         #endregion
-        
+
     }
 }
