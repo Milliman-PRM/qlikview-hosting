@@ -37,8 +37,8 @@ namespace CLSMedicareReimbursement
                     if ((C != null) && (string.Compare(C.ClientID, "yeardropdown", true) == 0))
                     {
                         ContainerMenuList.Visible = false; //keep the menu hidden on postback from drop, its not in an ajax panel  
-                                                           //ClientScript.RegisterStartupScript(this.GetType(), "Popup", "closeWindow('ContainerMenuList');", true);
-                        ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "Popup", "closeWindow('ContainerMenuList');", true);
+                        //ClientScript.RegisterStartupScript(this.GetType(), "Popup", "closeWindow('ContainerMenuList');", true);
+                        //ScriptManager.RegisterStartupScript(this.Page, this.Page.GetType(), "Popup", "closeWindow('ContainerMenuList');", true);
                         //Page.ClientScript.RegisterStartupScript(this.GetType(), "Popup", "closeWindow('ContainerMenuList');;return false;", true);
                     }
 
@@ -126,8 +126,6 @@ namespace CLSMedicareReimbursement
         {
             try
             {
-
-
                 var CurrentSels = Session[SessionKey_Selections] as CLSBusinessLogic.BusinessLogicManager.CurrentSelections;
                 RebindPrimaryGrid(CurrentSels);
             }
@@ -164,8 +162,6 @@ namespace CLSMedicareReimbursement
         {
             try
             {
-
-
                 //get old user selections 
                 var CurrentSels = Session[SessionKey_Selections] as BusinessLogicManager.CurrentSelections;
                 //update user selections
@@ -242,15 +238,9 @@ namespace CLSMedicareReimbursement
                     var Analyzers = BusinessLogicManager.GetInstance().FindAnalyzersForAssayDescription(AssayDescriptionList.SelectedItem.Text).ToList();
                     CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.ALL);
                     CurrentSels.AddToList(BusinessLogicManager.CurrentSelections.QueryFieldNames.SEARCHTERMDESCS, AssayDescriptionList.SelectedItem.Text);
-
-                    //no selections have been made, so we need to look up the appropriate analyziers and set to checked
-                    var cptCodes = BusinessLogicManager.GetInstance().GetCptCodeListForAssayDescription(AssayDescriptionList.SelectedItem.Text).ToList();
-                    CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.ALL);
-                    CurrentSels.AddToList(BusinessLogicManager.CurrentSelections.QueryFieldNames.CPTCODES, AssayDescriptionList.SelectedItem.Text);
                 }
                 else
                 {
-
                     //selections have been made, we are narrowing the search down
                     CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.SEARCHTERMIDS);
                     CurrentSels.Clear(BusinessLogicManager.CurrentSelections.QueryFieldNames.SEARCHTERMDESCS);
@@ -292,7 +282,6 @@ namespace CLSMedicareReimbursement
         {
             try
             {
-
                 //get user selections
                 var CurrentSels = Session[SessionKey_Selections] as BusinessLogicManager.CurrentSelections;
                 var SelectedIDs = CptCodeList.Items.Cast<ListItem>().Where(n => n.Selected).Select(n => n.Value).ToList();
