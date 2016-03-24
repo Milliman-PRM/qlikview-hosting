@@ -104,7 +104,7 @@
 
         .ContainerCheckBox {
             overflow: scroll;
-            height: 390px;
+            height: 382px;
             width: 265px;
         }
 
