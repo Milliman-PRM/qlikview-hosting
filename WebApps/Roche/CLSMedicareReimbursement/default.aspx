@@ -92,8 +92,6 @@
         }
 
         #ContainerGrid {
-            width: 99%;
-            height: 640px;
             padding: 3px 3px 3px 3px;
             margin: 0 auto;
         }
@@ -236,11 +234,6 @@
             background-color: #0066FF !important; /* for IE */
         }
 
-        /*this css will prevent thead rad grid column alignment issue*/
-        .rgHeaderWrapper .rgHeaderDiv {
-            margin-right: 16px !important;
-        }
-
         /* How this screen works?  popu Up */
         .messagePopUpWindow {
             background: none repeat scroll 0 0 white;
@@ -359,6 +352,27 @@
             font-size: small;
             float: right;
             position:absolute;
+        }
+
+        .RadGrid_Outlook
+        {
+            border: 1px solid #0072C6;
+        }
+        /*this css will prevent thead rad grid column alignment issue*/
+        .rgHeaderDivForChrome {
+            margin-right: 15px !important;
+        }
+        /*this css will prevent thead rad grid column alignment issue*/
+        .rgHeaderDivForIE {
+            margin-right: 16px !important;
+        }
+       /*this css will prevent thead rad grid column alignment issue*/
+        .rgHeaderDivForSpartan {
+            margin-right: 12px !important;
+        }
+        .rgHeaderDivForFireFox
+        {
+            margin-right:21px !important
         }
     </style>
 </head>
@@ -482,7 +496,7 @@
                         <asp:Button ID="btnViewReport" runat="server" Text="View Report" CssClass="CustomButton" Width="126px" ForeColor="Black" Font-Bold="true" BackColor="LightGray"
                             OnClientClick="return closeWindow('ContainerMenuList');" />
                     </div>
-                    <div class="ContainerClearButton" >
+                    <div class="ContainerClearButton">
                         <asp:Button ID="btnClearSelection" runat="server" Text="Clear Selections" CssClass="CustomButton" Width="126px" ForeColor="Black" Font-Bold="true" BackColor="LightGray"
                             OnClick="btnClearSelection_Click" />
                     </div>
@@ -493,7 +507,7 @@
             </div>
 
             <%--grid section--%>
-            <div id="section">
+            <div id="section" style="height: 693px;">
                 <div style="margin-right: 40px;">
                     <asp:DropDownList ID="YearDropdown" Style="float: right;" runat="server" Width="100px" AutoPostBack="True"
                         OnSelectedIndexChanged="YearDropdown_SelectedIndexChanged">
@@ -503,10 +517,12 @@
                 <telerik:RadAjaxPanel ID="RadGridPanel" runat="server" OnAjaxRequest="RadGridPanel_AjaxRequest" LoadingPanelID="RadAjaxLoadingPanel1" ClientEvents-OnRequestStart="pnlRequestStarted">
 
                     <div id="ContainerGrid">
-                        <telerik:RadGrid RenderMode="Classic" ID="RatesGrid" runat="server" GridLines="None"
+                        <telerik:RadGrid RenderMode="Lightweight" ID="RatesGrid" runat="server" ClientIDMode="AutoID"
+                            GridLines="None" AutoGenerateColumns="False" Skin="Outlook"
+                            Width="100%"
                             AllowSorting="true" AllowPaging="true" PageSize="250" AllowCustomPaging="true" PagerStyle-ShowPagerText="True" PagerStyle-Visible="True"
-                            ClientIDMode="AutoID" AutoGenerateColumns="False"
-                            OnNeedDataSource="RatesGrid_NeedDataSource" OnSelectedCellChanged="RatesGrid_SelectedCellChanged"
+                            OnNeedDataSource="RatesGrid_NeedDataSource"
+                            OnSelectedCellChanged="RatesGrid_SelectedCellChanged"
                             OnSortCommand="RatesGrid_SortCommand">
                             <PagerStyle Visible="false" />
                             <ClientSettings ReorderColumnsOnClient="false" AllowColumnsReorder="false" EnablePostBackOnRowClick="True">
@@ -613,29 +629,70 @@
             //alert(parent.clientHeight)
             var gridHeader = sender.GridHeaderDiv;
             scrollArea.style.height = parent.clientHeight - gridHeader.clientHeight + "px";
-        }
 
-        //dont allow a post back if nothing is selected
-        function OnClientSearch(sender, args) {
-            if (sender.get_text().length < 1) {
-                sender._element.control._postBackOnSearch = false;
+            if ($telerik.isIE) {
+<%--                var cols =document.getElementsByClassName('rgHeaderDiv');
+                for(i=0; i<cols.length; i++) {
+                    cols[i].style.marginRight ='12px !important;';
+                }--%>
+                $('.rgHeaderWrapper .rgHeaderDiv').addClass('rgHeaderDivForIE');
             }
+            if ($telerik.isSpartan) {
+<%--                var cols =document.getElementsByClassName('rgHeaderDiv');
+                for(i=0; i<cols.length; i++) {
+                    cols[i].style.marginRight ='12px !important;';
+                }
+
+                var element = document.getElementsByClassName('rgHeaderDiv');                
+                element.className += " rgHeaderDivForIE";--%>
+
+                $('.rgHeaderWrapper .rgHeaderDiv').addClass('rgHeaderDivForSpartan');
+
+            }
+            else if ($telerik.isFirefox)
+            {
+<%--                var cols =document.getElementsByClassName('rgHeaderDiv');
+                for(i=0; i<cols.length; i++) {
+                    cols[i].style.marginRight ='16px !important;';
+                }
+                $(".rgHeaderWrapper .rgHeaderDiv").css( { marginRight : "16px !important;" } );
+                    $find("RatesGrid").repaint();
+                 var element = document.getElementsByClassName('rgHeaderDiv');                
+                    element.className += " rgHeaderDivForAllBrowiser";--%>
+
+                $('.rgHeaderWrapper .rgHeaderDiv').addClass('rgHeaderDivForFireFox');
+            }
+            else if ($telerik.isChrome) {
+                $('.rgHeaderWrapper .rgHeaderDiv').addClass('rgHeaderDivForChrome');
+            }
+            //else
+            //{
+            //     $('.rgHeaderWrapper .rgHeaderDiv').addClass('rgHeaderDivForFireFox');
+            //}
+
+    }
+
+    //dont allow a post back if nothing is selected
+    function OnClientSearch(sender, args) {
+        if (sender.get_text().length < 1) {
+            sender._element.control._postBackOnSearch = false;
         }
+    }
 
-        //resize the grid when window resizes
-        $(window).resize(function () { ResizeGrid(); });
-        $(document).ready(function () { ResizeGrid(); });
+    //resize the grid when window resizes
+    $(window).resize(function () { ResizeGrid(); });
+    $(document).ready(function () { ResizeGrid(); });
 
-        //this is ugly but keeps the grid the correct size
-        setInterval(function () { ResizeGrid(); }, 333);
+    //this is ugly but keeps the grid the correct size
+    setInterval(function () { ResizeGrid(); }, 333);
 
-        //close the menu item
-        function closeWindow(divControl) {
-            var Control = document.getElementById(divControl);
-            LoadPageData();
-            //fast remove
-            $(Control).toggle();
-        }
+    //close the menu item
+    function closeWindow(divControl) {
+        var Control = document.getElementById(divControl);
+        LoadPageData();
+        //fast remove
+        $(Control).toggle();
+    }
 
         <%--modal window for the informaiton--%>
         function showInformationWindow(PopUpWindowDiv) {
