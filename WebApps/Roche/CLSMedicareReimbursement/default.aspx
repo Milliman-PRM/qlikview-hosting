@@ -358,15 +358,13 @@
         {
             border: 1px solid #0072C6;
         }
-        /*this css will prevent thead rad grid column alignment issue*/
+        /*These settings are for each broswer*/
         .rgHeaderDivForChrome {
             margin-right: 15px !important;
         }
-        /*this css will prevent thead rad grid column alignment issue*/
         .rgHeaderDivForIE {
-            margin-right: 16px !important;
+            margin-right: 17px !important;
         }
-       /*this css will prevent thead rad grid column alignment issue*/
         .rgHeaderDivForSpartan {
             margin-right: 12px !important;
         }
@@ -536,22 +534,22 @@
                             <MasterTableView AllowMultiColumnSorting="false" PagerStyle-AlwaysVisible="True" Width="100%" TableLayout="Fixed" Name="ownertableviewRatesGrid">
                                 <Columns>
                                     <telerik:GridBoundColumn UniqueName="analyzer_name" DataField="analyzer_name" HeaderText="Analyzer" ReadOnly="True" SortedBackColor="Transparent">
-                                        <HeaderStyle Width="20%" />
+                                        <HeaderStyle Width="18%" />
                                     </telerik:GridBoundColumn>
                                     <telerik:GridBoundColumn UniqueName="description" DataField="description" HeaderText="Assay Description" ReadOnly="True" SortedBackColor="Transparent">
-                                        <HeaderStyle Width="35%" />
+                                        <HeaderStyle Width="30%" />
                                     </telerik:GridBoundColumn>
                                     <telerik:GridBoundColumn UniqueName="code" DataField="code" HeaderText="CPT Code" ReadOnly="True" SortedBackColor="Transparent">
-                                        <HeaderStyle Width="10%" />
+                                        <HeaderStyle Width="9%" />
                                     </telerik:GridBoundColumn>
                                     <telerik:GridBoundColumn UniqueName="locality_description" DataField="locality_description" HeaderText="Locality" ReadOnly="True" SortedBackColor="Transparent">
-                                        <HeaderStyle Width="13%" />
+                                        <HeaderStyle Width="16%" />
                                     </telerik:GridBoundColumn>
                                     <telerik:GridBoundColumn UniqueName="notes" DataField="notes" HeaderText="Notes" ReadOnly="True" AllowFiltering="false" AllowSorting="false" AutoPostBackOnFilter="false" SortedBackColor="Transparent">
                                         <HeaderStyle Width="8%" />
                                     </telerik:GridBoundColumn>
                                     <telerik:GridBoundColumn UniqueName="rate" DataField="rate" HeaderText="Medicare Reimbursement Rate" AllowFiltering="false" AllowSorting="false" AutoPostBackOnFilter="false" DataFormatString="{0:C2}" ItemStyle-HorizontalAlign="Right" ReadOnly="True" SortedBackColor="Transparent">
-                                        <HeaderStyle Width="14%" HorizontalAlign="Right" />
+                                        <HeaderStyle Width="19%" HorizontalAlign="Right" />
                                     </telerik:GridBoundColumn>
                                 </Columns>
                             </MasterTableView>
@@ -623,78 +621,55 @@
             }
         }
 
-        function GridCreated(sender, args) {
+        function GridCreated(sender, args) 
+        {
             var scrollArea = sender.GridDataDiv;
             var parent = $get("RatesGrid");
             //alert(parent.clientHeight)
             var gridHeader = sender.GridHeaderDiv;
             scrollArea.style.height = parent.clientHeight - gridHeader.clientHeight + "px";
 
-            if ($telerik.isIE) {
-<%--                var cols =document.getElementsByClassName('rgHeaderDiv');
-                for(i=0; i<cols.length; i++) {
-                    cols[i].style.marginRight ='12px !important;';
-                }--%>
+             //settings for grid margin for each browiser
+            if ($telerik.isIE) 
+            {
                 $('.rgHeaderWrapper .rgHeaderDiv').addClass('rgHeaderDivForIE');
             }
-            if ($telerik.isSpartan) {
-<%--                var cols =document.getElementsByClassName('rgHeaderDiv');
-                for(i=0; i<cols.length; i++) {
-                    cols[i].style.marginRight ='12px !important;';
-                }
-
-                var element = document.getElementsByClassName('rgHeaderDiv');                
-                element.className += " rgHeaderDivForIE";--%>
-
+             else if ($telerik.isSpartan) {
                 $('.rgHeaderWrapper .rgHeaderDiv').addClass('rgHeaderDivForSpartan');
-
             }
             else if ($telerik.isFirefox)
             {
-<%--                var cols =document.getElementsByClassName('rgHeaderDiv');
-                for(i=0; i<cols.length; i++) {
-                    cols[i].style.marginRight ='16px !important;';
-                }
-                $(".rgHeaderWrapper .rgHeaderDiv").css( { marginRight : "16px !important;" } );
-                    $find("RatesGrid").repaint();
-                 var element = document.getElementsByClassName('rgHeaderDiv');                
-                    element.className += " rgHeaderDivForAllBrowiser";--%>
-
                 $('.rgHeaderWrapper .rgHeaderDiv').addClass('rgHeaderDivForFireFox');
             }
             else if ($telerik.isChrome) {
                 $('.rgHeaderWrapper .rgHeaderDiv').addClass('rgHeaderDivForChrome');
             }
-            //else
-            //{
-            //     $('.rgHeaderWrapper .rgHeaderDiv').addClass('rgHeaderDivForFireFox');
-            //}
 
-    }
-
-    //dont allow a post back if nothing is selected
-    function OnClientSearch(sender, args) {
-        if (sender.get_text().length < 1) {
-            sender._element.control._postBackOnSearch = false;
         }
-    }
 
-    //resize the grid when window resizes
-    $(window).resize(function () { ResizeGrid(); });
-    $(document).ready(function () { ResizeGrid(); });
+        //dont allow a post back if nothing is selected
+        function OnClientSearch(sender, args) 
+        {
+            if (sender.get_text().length < 1) {
+                sender._element.control._postBackOnSearch = false;
+            }
+        }
 
-    //this is ugly but keeps the grid the correct size
-    setInterval(function () { ResizeGrid(); }, 333);
+        //resize the grid when window resizes
+        $(window).resize(function () { ResizeGrid(); });
+        $(document).ready(function () { ResizeGrid(); });
 
-    //close the menu item
-    function closeWindow(divControl) {
-        var Control = document.getElementById(divControl);
-        LoadPageData();
-        //fast remove
-        $(Control).toggle();
-    }
+        //this is ugly but keeps the grid the correct size
+        setInterval(function () { ResizeGrid(); }, 333);
 
-        <%--modal window for the informaiton--%>
+            //close the menu item
+            function closeWindow(divControl) {
+                var Control = document.getElementById(divControl);
+                LoadPageData();
+                //fast remove
+                $(Control).toggle();
+            }
+
         function showInformationWindow(PopUpWindowDiv) {
             var popUpControl = document.getElementById(PopUpWindowDiv);
             $(popUpControl).show();
