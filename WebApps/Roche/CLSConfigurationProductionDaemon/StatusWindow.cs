@@ -49,8 +49,10 @@ namespace CLSConfigurationProductionDaemon
                 objeto_mail.IsBodyHtml = true;
                 objeto_mail.Priority = System.Net.Mail.MailPriority.High;
                 objeto_mail.Body = "<html><body>" + StatusMsg + "</body></html>";
+                client.Send(objeto_mail);
             }
 
+            Environment.Exit(0);
         }
     }
 }

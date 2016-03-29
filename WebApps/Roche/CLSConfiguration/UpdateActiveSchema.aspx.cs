@@ -55,9 +55,12 @@ namespace CLSConfiguration
                     Status.Text = "Pushing database/schema to production server.";
                     CLSConfigurationServices.CLSConfigurationServices Production = new CLSConfigurationServices.CLSConfigurationServices();
                     byte[] DumpFileContents = System.IO.File.ReadAllBytes(DumpFile);
-                    if ( Production.DatabaseRestore(InitialSchemaName, DumpFileContents) == true )
+                    if ( Production.DatabaseRestore(SchemaName, DumpFileContents) == true )
                     {
                         string OperatorEmail = HttpContext.Current.Request.ServerVariables["AUTH_USER"] + "@milliman.com";  //must be a milliman person
+                        if (OperatorEmail.Contains('\\'))
+                            OperatorEmail = OperatorEmail.Substring(OperatorEmail.IndexOf('\\') + 1);  //remove any domain that might be prefixed
+
                         if ( Production.MakeLive( SchemaName, OperatorEmail, DateTime.Now) )
                         {
                             Status.Text = "Production system database has been updated successfully.  On the next web site refresh cyle, the update will be made live to users.  You will recieve an email when the refresh cycle completes.";
@@ -67,6 +70,11 @@ namespace CLSConfiguration
                 Refresh.Visible = true;
             }
             
+        }
+
+        protected void Refresh_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("default.aspx");
         }
     }
 }

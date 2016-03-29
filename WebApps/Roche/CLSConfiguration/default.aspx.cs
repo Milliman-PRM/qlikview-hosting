@@ -71,10 +71,12 @@ namespace CLSConfiguration
                 try
                 {
                     System.IO.File.WriteAllText(WebConfig, NewWebConfig);
+                    StagingSchema.Text = SelectedSchema;
 
                 }
                 catch (Exception ex)
                 {
+                    CLSConfigurationCommon.Utilities.Log(CLSConfigurationCommon.Utilities.ReportType.Error, "", ex);
                 }
             }
 

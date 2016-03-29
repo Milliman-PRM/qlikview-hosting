@@ -20,9 +20,9 @@ namespace CLSConfigurationCommon
             int QuotesEndIndex = WebConfigContents.IndexOf('"', StartIndex);
             int SemicolonEndIndex = WebConfigContents.IndexOf(';', StartIndex);
             int EndIndex = QuotesEndIndex;
-            if (SemicolonEndIndex < QuotesEndIndex)  //could be ';' or '"' delimited
+            if ( (SemicolonEndIndex != -1) &&(SemicolonEndIndex < QuotesEndIndex))  //could be ';' or '"' delimited
                 EndIndex = SemicolonEndIndex;
-            string CandidateName = WebConfigContents.Substring(StartIndex, EndIndex - StartIndex);
+            string CandidateName = WebConfigContents.Substring(StartIndex+1, EndIndex - StartIndex);
             //a bit brute force, but still a fast way to check
             string validChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJLKMNOPQRSTUVWXYZ-_0123456789";
             foreach (char C in CandidateName)

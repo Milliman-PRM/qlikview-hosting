@@ -12,6 +12,8 @@ namespace CLSConfigurationServices
         public string OperatorEmail { get; set; }
         public DateTime MakeLiveDateTime { get; set; }
 
+        public Schema() { }
+
         public Schema ( string _SchemaName, string _OperatorEmail, DateTime _MakeLiveDateTime )
         {
             SchemaName = _SchemaName;
