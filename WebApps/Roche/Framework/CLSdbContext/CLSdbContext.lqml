@@ -1,84 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Database Name="Roche_Medicare_Reimbursement_Develop" EntityNamespace="CLSdbContext" ContextNamespace="CLSdbContext" Class="CLSdbDataContext" xmlns:ed="http://devart.com/schemas/EntityDeveloper/1.0" ed:Guid="ef7c0c14-9ffe-45b8-bbf0-31535bae8ea1" Provider="Devart.Data.PostgreSql.Linq.Provider.PgSqlDataProvider, Devart.Data.PostgreSql.Linq" Extended="true" xmlns="http://schemas.devart.com/linqconnect/mapping">
-  <Connection Mode="ConnectionString" ConnectionString="User Id=Afsheen.Khan;Host=indy-pgsql02;Database=Roche_Medicare_Reimbursement_Develop;Integrated Security=True;Initial Schema=rmrrdb_20160304" Provider="Devart.Data.PostgreSql" />
-  <Table Name="rmrrdb_20160304.footnotes" Member="Footnotes">
-    <Type Name="Footnote" ed:Guid="b90dd663-a3db-4440-b31d-6a3b683b048c">
+  <Connection Mode="ConnectionString" ConnectionString="User Id=Afsheen.Khan;Host=indy-pgsql02;Database=Roche_Medicare_Reimbursement_Develop;Integrated Security=True;Initial Schema=rmrrdb_20160322" Provider="Devart.Data.PostgreSql" />
+  <Table Name="footnotes" Member="Footnotes">
+    <Type Name="Footnote" ed:Guid="a551b079-e8ee-40c1-9867-c708896ca819">
       <Documentation>
         <Summary>This table holds information on the necessary footnotes</Summary>
       </Documentation>
-      <Column Name="id" Member="Id" Type="System.Int32" AutoSync="OnInsert" DbType="SERIAL NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" ed:ValidateRequired="true" ed:Guid="bc461764-b9b8-4d8c-bfb0-04708da26d94" />
-      <Column Name="footnote" Member="Footnote1" Type="System.String" DbType="TEXT" CanBeNull="true" UpdateCheck="Never" Unicode="true" ed:ValidateRequired="false" ed:Guid="97e45027-b635-40c9-a035-ca48d039c3ad" />
+      <Column Name="id" Member="Id" Type="System.Int32" AutoSync="OnInsert" DbType="SERIAL NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" ed:ValidateRequired="true" ed:Guid="32938d50-b57a-464c-9fe3-8f5caf6d907a" />
+      <Column Name="footnote" Member="Footnote1" Type="System.String" DbType="TEXT" CanBeNull="true" UpdateCheck="Never" Unicode="true" ed:ValidateRequired="false" ed:Guid="5d09cf68-962c-45e8-b0ac-0a066564ab9e" />
     </Type>
   </Table>
-  <Table Name="rmrrdb_20160304.weburl" Member="Weburls">
-    <Type Name="Weburl" ed:Guid="004dc02b-e1f1-4ce1-af07-537bb732236f">
+  <Table Name="weburl" Member="Weburls">
+    <Type Name="Weburl" ed:Guid="7e093a80-3032-40e3-881b-7c33eed25d78">
       <Documentation>
         <Summary>This table holds the url of the CMS website where this data is available</Summary>
       </Documentation>
-      <Column Name="id" Member="Id" Type="System.Int32" AutoSync="OnInsert" DbType="SERIAL NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" ed:ValidateRequired="true" ed:Guid="7d769f5b-4aef-4496-bd7f-c29075ea4c4b" />
-      <Column Name="webaddressurl" Member="Webaddressurl" Type="System.String" DbType="VARCHAR" CanBeNull="true" UpdateCheck="Never" Unicode="true" ed:ValidateRequired="false" ed:Guid="93c9fb38-640c-4599-850a-dd7dccd9af68" />
+      <Column Name="id" Member="Id" Type="System.Int32" AutoSync="OnInsert" DbType="SERIAL NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" ed:ValidateRequired="true" ed:Guid="6fd6b57e-ddb4-4a60-b07d-8ba256c80a52" />
+      <Column Name="displaytext" Member="Displaytext" Type="System.String" DbType="VARCHAR" CanBeNull="true" UpdateCheck="Never" Unicode="true" ed:ValidateRequired="false" ed:Guid="8d92c2a9-159b-45f3-9820-43f3882a7ab4" />
+      <Column Name="webaddressurl" Member="Webaddressurl" Type="System.String" DbType="VARCHAR" CanBeNull="true" UpdateCheck="Never" Unicode="true" ed:ValidateRequired="false" ed:Guid="c2dcb3f9-c416-45ff-b39c-70e3d90a5e81" />
     </Type>
   </Table>
-  <Table Name="rmrrdb_20160304.code" Member="Codes">
-    <Type Name="Code" ed:Guid="af79406d-d1f7-4c72-a1c1-9f3289b2c65b">
-      <Documentation>
-        <Summary>This table holds the lookup value for the code id</Summary>
-      </Documentation>
-      <Column Name="id" Member="Id" Type="System.Int32" AutoSync="OnInsert" DbType="SERIAL NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" ed:ValidateRequired="true" ed:Guid="9da9a4f9-3dbd-4d24-97b6-ac1aed931a5d" />
-      <Column Name="code" Member="Code1" Type="System.String" DbType="CHAR(5)" CanBeNull="true" UpdateCheck="Never" FixedLength="true" MaxLength="5" Unicode="true" ed:ValidateMaxLength="5" ed:ValidateRequired="false" ed:Guid="e950fe3c-d0d9-4a5b-8c4d-08e30c766fc9" />
-      <Column Name="description" Member="Description" Type="System.String" DbType="VARCHAR" CanBeNull="true" UpdateCheck="Never" Unicode="true" ed:ValidateRequired="false" ed:Guid="92069b74-b87c-4294-8f2b-705e15de800a" />
-      <Association Name="Code_Analyzer" ed:AssociationGuid="4e21a857-4504-41d3-941a-8fa46db67c6a" Member="Analyzers" ed:Guid="7445b7da-ab5c-42af-b329-396dcec2d75c" ThisKey="Id" OtherKey="FkCodeId" Type="Analyzer" />
-      <Association Name="Code_ReimbursementRate" ed:AssociationGuid="5edcce17-0210-42ab-99a1-9d58d70f2de9" Member="ReimbursementRates" ed:Guid="d5d9f963-512e-45b7-b03d-a56cff2f14c4" ThisKey="Id" OtherKey="FkCodeId" Type="ReimbursementRate" />
-      <Association Name="Code_SearchTerm" ed:AssociationGuid="f1a81368-6197-4c51-b6d5-f0a2bd6c67c0" Member="SearchTerms" ed:Guid="f4d4de5a-9028-4692-ae52-8710daee71ac" ThisKey="Id" OtherKey="FkCodeId" Type="SearchTerm" />
-    </Type>
-  </Table>
-  <Table Name="rmrrdb_20160304.analyzers" Member="Analyzers">
-    <Type Name="Analyzer" ed:Guid="8e705127-d9df-4b9d-8993-271076b15556">
+  <Table Name="analyzers" Member="Analyzers">
+    <Type Name="Analyzer" ed:Guid="c441672f-5b09-485b-8ab2-31881e41d434">
       <Documentation>
         <Summary>This table holds information on which tests are available for a given analyzer</Summary>
       </Documentation>
-      <Column Name="id" Member="Id" Type="System.Int32" AutoSync="OnInsert" DbType="SERIAL NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" ed:ValidateRequired="true" ed:Guid="3fe458b2-4379-43b4-913f-3f3efa4c6b5a" />
-      <Column Name="analyzer_name" Member="AnalyzerName" Type="System.String" DbType="VARCHAR" CanBeNull="true" UpdateCheck="Never" Unicode="true" ed:ValidateRequired="false" ed:Guid="f0be08e3-c7cc-4cb6-aee4-11e6ebd44df4" />
-      <Column Name="notes" Member="Notes" Type="System.String" DbType="VARCHAR" CanBeNull="true" UpdateCheck="Never" Unicode="true" ed:ValidateRequired="false" ed:Guid="903b5611-a040-4339-8e32-cfc54fa1f698" />
-      <Column Name="fk_code_id" Member="FkCodeId" Type="System.Int32" DbType="INT4" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="a61db887-1037-4b71-835c-450d3c7d0098" />
-      <Association Name="Code_Analyzer" ed:AssociationGuid="4e21a857-4504-41d3-941a-8fa46db67c6a" Member="Code" ed:Guid="3eb0a8e4-99d0-4cb3-ae78-e96c66079468" ThisKey="FkCodeId" OtherKey="Id" Type="Code" DeleteRule="NO ACTION" IsForeignKey="true" />
+      <Column Name="id" Member="Id" Type="System.Int32" AutoSync="OnInsert" DbType="SERIAL NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" ed:ValidateRequired="true" ed:Guid="4debb5ec-8b8f-4317-a672-ab2a38dbf23e" />
+      <Column Name="analyzer_name" Member="AnalyzerName" Type="System.String" DbType="VARCHAR" CanBeNull="true" UpdateCheck="Never" Unicode="true" ed:ValidateRequired="false" ed:Guid="cac4bbed-09c1-48eb-adcb-36ec545896f7" />
+      <Column Name="notes" Member="Notes" Type="System.String" DbType="VARCHAR" CanBeNull="true" UpdateCheck="Never" Unicode="true" ed:ValidateRequired="false" ed:Guid="d0dabaf2-906f-46f1-88f3-103095d4ef84" />
+      <Column Name="fk_code_id" Member="FkCodeId" Type="System.Int32" DbType="INT4" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="1cd8a608-5418-462a-aaf8-1280d4bd5be8" />
+      <Association Name="Code_Analyzer" ed:AssociationGuid="54cf0ab2-35d4-45ae-a61b-9f4852eb633a" Member="Code" ed:Guid="4cf5e9b3-9b1d-438e-8b64-d535f803dd11" ThisKey="FkCodeId" OtherKey="Id" Type="Code" DeleteRule="NO ACTION" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="rmrrdb_20160304.localities" Member="Localities">
-    <Type Name="Locality" ed:Guid="8b69f9d3-73a3-4a67-819a-80ae325e4356">
+  <Table Name="localities" Member="Localities">
+    <Type Name="Locality" ed:Guid="0695e47b-32ff-41bf-87c8-fe34691c8244">
       <Documentation>
         <Summary>This table holds information on the Roche Localities</Summary>
       </Documentation>
-      <Column Name="id" Member="Id" Type="System.Int32" AutoSync="OnInsert" DbType="SERIAL NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" ed:ValidateRequired="true" ed:Guid="2e4ac229-a47d-40ff-b25a-eac5575eca26" />
-      <Column Name="locality" Member="Locality1" Type="System.String" DbType="VARCHAR" CanBeNull="true" UpdateCheck="Never" Unicode="true" ed:ValidateRequired="false" ed:Guid="d42eec8c-98ec-4f4a-a6d6-1dae998819bb" />
-      <Column Name="locality_description" Member="LocalityDescription" Type="System.String" DbType="VARCHAR" CanBeNull="true" UpdateCheck="Never" Unicode="true" ed:ValidateRequired="false" ed:Guid="77e78ddc-70bf-4a4b-9b3c-fdab215c5bb6" />
-      <!--<Column Name="locality_description" Member="LocalityDescription" Type="System.String" DbType="VARCHAR" CanBeNull="true" UpdateCheck="Never" Unicode="true" ed:ValidateRequired="false" ed:Guid="ff31368d-fad6-4d96-ae7e-17349eed0e92" />-->
-      <Association Name="Locality_ReimbursementRate" ed:AssociationGuid="ed4eb3e3-d4a8-407a-bfad-d26524d22cff" Member="ReimbursementRates" ed:Guid="ca1c2d9a-1584-4d70-a028-db09ec623e0c" ThisKey="Id" OtherKey="FkLocalityId" Type="ReimbursementRate" />
+      <Column Name="id" Member="Id" Type="System.Int32" AutoSync="OnInsert" DbType="SERIAL NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" ed:ValidateRequired="true" ed:Guid="0aa85504-cd51-40ef-a5dc-922cd19554a7" />
+      <Column Name="locality" Member="Locality1" Type="System.String" DbType="VARCHAR" CanBeNull="true" UpdateCheck="Never" Unicode="true" ed:ValidateRequired="false" ed:Guid="813b707c-7cf2-4e5f-ae2f-c1cea5beabf4" />
+      <Column Name="locality_description" Member="LocalityDescription" Type="System.String" DbType="VARCHAR" CanBeNull="true" UpdateCheck="Never" Unicode="true" ed:ValidateRequired="false" ed:Guid="677c13a5-f4c5-40b2-91ad-45ce6dd3b923" />
+      <Association Name="Locality_ReimbursementRate" ed:AssociationGuid="f99f4076-8ed8-483b-88db-14efbff5b3ef" Member="ReimbursementRates" ed:Guid="bfb2d482-8ffb-4109-9765-55a8b7b02edf" ThisKey="Id" OtherKey="FkLocalityId" Type="ReimbursementRate" />
     </Type>
   </Table>
-  <Table Name="rmrrdb_20160304.reimbursement_rates" Member="ReimbursementRates">
-    <Type Name="ReimbursementRate" ed:Guid="79ca834c-3f35-4863-803d-114e001b77d2">
+  <Table Name="reimbursement_rates" Member="ReimbursementRates">
+    <Type Name="ReimbursementRate" ed:Guid="11d62850-2a74-43d0-8362-ef9d6af4cdd0">
       <Documentation>
         <Summary>This table holds information on the Medicare reimbursement rates for each test by locality</Summary>
       </Documentation>
-      <Column Name="id" Member="Id" Type="System.Int32" AutoSync="OnInsert" DbType="SERIAL NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" ed:ValidateRequired="true" ed:Guid="b81821e4-8827-4c25-9869-c32503ae2aa1" />
-      <Column Name="fk_code_id" Member="FkCodeId" Type="System.Int32" DbType="INT4" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="fac97fe6-3f68-4386-9b2c-087098dbbfbc" />
-      <Column Name="&quot;year&quot;" Member="Year" Type="System.Int32" DbType="INT4" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="69439b49-9d49-4544-b073-e229ab928251" />
-      <Column Name="rate" Member="Rate" Type="System.Double" DbType="FLOAT8" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="134e1acd-1b1a-4bd6-8875-8a16c1d24e64" />
-      <Column Name="fk_locality_id" Member="FkLocalityId" Type="System.Int32" DbType="INT4" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="786c2ba0-3433-4bf8-98ca-69dc04412e80" />
-      <Association Name="Code_ReimbursementRate" ed:AssociationGuid="5edcce17-0210-42ab-99a1-9d58d70f2de9" Member="Code" ed:Guid="916c21f0-3cd8-491e-9bde-af72a74c5264" ThisKey="FkCodeId" OtherKey="Id" Type="Code" DeleteRule="NO ACTION" IsForeignKey="true" />
-      <Association Name="Locality_ReimbursementRate" ed:AssociationGuid="ed4eb3e3-d4a8-407a-bfad-d26524d22cff" Member="Locality" ed:Guid="1e6a5c8b-3eee-48b4-aca5-cc015cdc0b76" ThisKey="FkLocalityId" OtherKey="Id" Type="Locality" DeleteRule="NO ACTION" IsForeignKey="true" />
+      <Column Name="id" Member="Id" Type="System.Int32" AutoSync="OnInsert" DbType="SERIAL NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" ed:ValidateRequired="true" ed:Guid="3ea22e6f-2a73-4662-b98f-2ddbef4e5d63" />
+      <Column Name="fk_code_id" Member="FkCodeId" Type="System.Int32" DbType="INT4" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="7d854570-e683-479a-a03d-6ede32eb84e1" />
+      <Column Name="&quot;year&quot;" Member="Year" Type="System.Int32" DbType="INT4" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="1899b89e-861b-4c33-8d09-f667aa3d5b7c" />
+      <Column Name="rate" Member="Rate" Type="System.Double" DbType="FLOAT8" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="6da1586a-29d5-4de0-9519-b7c25ad51ecb" />
+      <Column Name="fk_locality_id" Member="FkLocalityId" Type="System.Int32" DbType="INT4" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="a4fe5633-09ab-42c5-99b2-80818fbd6529" />
+      <Association Name="Code_ReimbursementRate" ed:AssociationGuid="457ad531-31f8-41b2-b785-79c9ee1f0776" Member="Code" ed:Guid="a64424ce-9063-4c97-8a70-6374a091143c" ThisKey="FkCodeId" OtherKey="Id" Type="Code" DeleteRule="NO ACTION" IsForeignKey="true" />
+      <Association Name="Locality_ReimbursementRate" ed:AssociationGuid="f99f4076-8ed8-483b-88db-14efbff5b3ef" Member="Locality" ed:Guid="9c00851f-75ef-4f6b-bd03-7d51faa90398" ThisKey="FkLocalityId" OtherKey="Id" Type="Locality" DeleteRule="NO ACTION" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="rmrrdb_20160304.search_terms" Member="SearchTerms">
-    <Type Name="SearchTerm" ed:Guid="977c501e-f972-4d1b-b215-2d5b5b72f75d">
+  <Table Name="code" Member="Codes">
+    <Type Name="Code" ed:Guid="99ed79d7-ae7a-48ac-b2ce-dfc441786b56">
+      <Documentation>
+        <Summary>This table holds the lookup value for the code id</Summary>
+      </Documentation>
+      <Column Name="id" Member="Id" Type="System.Int32" AutoSync="OnInsert" DbType="SERIAL NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" ed:ValidateRequired="true" ed:Guid="ab4d3b44-f9bf-4663-a9b9-066879c9d6dc" />
+      <Column Name="code" Member="Code1" Type="System.String" DbType="CHAR(5)" CanBeNull="true" UpdateCheck="Never" FixedLength="true" MaxLength="5" Unicode="true" ed:ValidateMaxLength="5" ed:ValidateRequired="false" ed:Guid="d3fdb252-89ee-4f26-a188-dc8002f73276" />
+      <Column Name="description" Member="Description" Type="System.String" DbType="VARCHAR" CanBeNull="true" UpdateCheck="Never" Unicode="true" ed:ValidateRequired="false" ed:Guid="5694923a-9f8f-4804-8c12-1394372ec27d" />
+      <Association Name="Code_Analyzer" ed:AssociationGuid="54cf0ab2-35d4-45ae-a61b-9f4852eb633a" Member="Analyzers" ed:Guid="e540f1ad-7f58-496e-a0c7-57c1e41d12b3" ThisKey="Id" OtherKey="FkCodeId" Type="Analyzer" />
+      <Association Name="Code_ReimbursementRate" ed:AssociationGuid="457ad531-31f8-41b2-b785-79c9ee1f0776" Member="ReimbursementRates" ed:Guid="a47238d0-d8be-461f-ad4d-9f883d3cec77" ThisKey="Id" OtherKey="FkCodeId" Type="ReimbursementRate" />
+      <Association Name="Code_SearchTerm" ed:AssociationGuid="17c5f1d0-0f91-4bef-8e0a-ffe7587d0bd7" Member="SearchTerms" ed:Guid="5132181e-1c41-491a-baf8-7119f4ced3c9" ThisKey="Id" OtherKey="FkCodeId" Type="SearchTerm" />
+    </Type>
+  </Table>
+  <Table Name="search_terms" Member="SearchTerms">
+    <Type Name="SearchTerm" ed:Guid="de4237c6-10a3-4c25-9457-37c9d808152b">
       <Documentation>
         <Summary>This table holds information on the available search terms for the given tests</Summary>
       </Documentation>
-      <Column Name="id" Member="Id" Type="System.Int32" AutoSync="OnInsert" DbType="SERIAL NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" ed:ValidateRequired="true" ed:Guid="dd038474-82df-4804-86a7-65a8e41e1cf7" />
-      <Column Name="search_desc" Member="SearchDesc" Type="System.String" DbType="VARCHAR" CanBeNull="true" UpdateCheck="Never" Unicode="true" ed:ValidateRequired="false" ed:Guid="a8ce15a9-0195-4ecd-9460-7028454c143e" />
-      <Column Name="fk_code_id" Member="FkCodeId" Type="System.Int32" DbType="INT4" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="21f3d6d5-d503-4ce9-a620-6d073fd12055" />
-      <Association Name="Code_SearchTerm" ed:AssociationGuid="f1a81368-6197-4c51-b6d5-f0a2bd6c67c0" Member="Code" ed:Guid="633805f4-a8f3-4a83-9bda-309497a859d8" ThisKey="FkCodeId" OtherKey="Id" Type="Code" DeleteRule="NO ACTION" IsForeignKey="true" />
+      <Column Name="id" Member="Id" Type="System.Int32" AutoSync="OnInsert" DbType="SERIAL NOT NULL" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" ed:ValidateRequired="true" ed:Guid="196b5819-c475-4fc4-9ca4-2e71d98e0e01" />
+      <Column Name="search_desc" Member="SearchDesc" Type="System.String" DbType="VARCHAR" CanBeNull="true" UpdateCheck="Never" Unicode="true" ed:ValidateRequired="false" ed:Guid="22caa9c3-57f7-4690-af17-49fa7554eb17" />
+      <Column Name="fk_code_id" Member="FkCodeId" Type="System.Int32" DbType="INT4" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="a1a60332-d245-43a5-bf81-a9346921c8e9" />
+      <Association Name="Code_SearchTerm" ed:AssociationGuid="17c5f1d0-0f91-4bef-8e0a-ffe7587d0bd7" Member="Code" ed:Guid="ea421a55-f5bb-49b1-9d2b-c62bc98f9c55" ThisKey="FkCodeId" OtherKey="Id" Type="Code" DeleteRule="NO ACTION" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

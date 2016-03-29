@@ -170,11 +170,13 @@
     <Content Include="Images\Help-and-Support.png" />
     <Content Include="Images\Help-Square.png" />
     <Content Include="Images\Information.png" />
+    <Content Include="Images\info_icon.png" />
     <Content Include="Images\PDF.png" />
     <Content Include="Images\print.png" />
     <Content Include="Images\roche.png" />
     <Content Include="Images\search.png" />
     <Content Include="Images\searchNew.png" />
+    <Content Include="Images\search_icon.png" />
     <Content Include="Images\settings.png" />
     <Content Include="Images\Word.png" />
     <Content Include="scripts\ai.0.15.0-build58334.js" />
@@ -249,7 +251,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties UseAjaxifiedTemplates="True" UseJQuerySupport="True" />
+      <UserProperties UseJQuerySupport="True" UseAjaxifiedTemplates="True" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />

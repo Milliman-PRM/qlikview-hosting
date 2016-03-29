@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <EntityDeveloper Version="5.8.762.0">
-  <ModelSettings xmlns:ed="http://devart.com/schemas/EntityDeveloper/1.0" AppConnectionStringName="CLSdbDataContextConnectionString" ConnectionStringInAppConfig="True" RegenareteConnectionStringInAppConfig="True" DetectTPTInheritance="False">
+  <ModelSettings xmlns:ed="http://devart.com/schemas/EntityDeveloper/1.0" AppConnectionStringName="CLSdbDataContextConnectionString" ConnectionStringInAppConfig="True" RegenareteConnectionStringInAppConfig="True" DetectTPTInheritance="False" PreserveSchemaName="False">
     <Generation>
       <GeneratedFiles>
         <File Name="CLSdbContext.CLSdbDataContext.cs" Project="CLSdbContext" ProjectFolder="Context" />
@@ -8,14 +8,14 @@
         <File Name="CLSdbContext.Footnote.Generated.cs" Project="CLSdbContext" ProjectFolder="Entities" />
         <File Name="CLSdbContext.Weburl.cs" Project="CLSdbContext" ProjectFolder="Entities" OverwriteMode="None" />
         <File Name="CLSdbContext.Weburl.Generated.cs" Project="CLSdbContext" ProjectFolder="Entities" />
-        <File Name="CLSdbContext.Code.cs" Project="CLSdbContext" ProjectFolder="Entities" OverwriteMode="None" />
-        <File Name="CLSdbContext.Code.Generated.cs" Project="CLSdbContext" ProjectFolder="Entities" />
         <File Name="CLSdbContext.Analyzer.cs" Project="CLSdbContext" ProjectFolder="Entities" OverwriteMode="None" />
         <File Name="CLSdbContext.Analyzer.Generated.cs" Project="CLSdbContext" ProjectFolder="Entities" />
         <File Name="CLSdbContext.Locality.cs" Project="CLSdbContext" ProjectFolder="Entities" OverwriteMode="None" />
         <File Name="CLSdbContext.Locality.Generated.cs" Project="CLSdbContext" ProjectFolder="Entities" />
         <File Name="CLSdbContext.ReimbursementRate.cs" Project="CLSdbContext" ProjectFolder="Entities" OverwriteMode="None" />
         <File Name="CLSdbContext.ReimbursementRate.Generated.cs" Project="CLSdbContext" ProjectFolder="Entities" />
+        <File Name="CLSdbContext.Code.cs" Project="CLSdbContext" ProjectFolder="Entities" OverwriteMode="None" />
+        <File Name="CLSdbContext.Code.Generated.cs" Project="CLSdbContext" ProjectFolder="Entities" />
         <File Name="CLSdbContext.SearchTerm.cs" Project="CLSdbContext" ProjectFolder="Entities" OverwriteMode="None" />
         <File Name="CLSdbContext.SearchTerm.Generated.cs" Project="CLSdbContext" ProjectFolder="Entities" />
       </GeneratedFiles>
@@ -25,7 +25,7 @@
       <Class UseSchemaAsPrefix="False" PluralizeCollectionNavigationPropertyName="True" RemoveUnderscores="True" RemoveInvalidCharacters="True" CodeCase="FirstLetterUppercase" AddPrefix="" AddSuffix="" RemovePrefixes="" RemoveSuffixes="" PluralizationName="Singularize" />
       <Property RemoveUnderscores="True" RemoveInvalidCharacters="True" CodeCase="FirstLetterUppercase" AddPrefix="" AddSuffix="" RemovePrefixes="" RemoveSuffixes="" PluralizationName="Unchanged" />
     </DatabaseFirstNamingRules>
-    <ModelFirst StorageSynchronizationEnabled="False" TargetSchema="rmrrdb_20160304">
+    <ModelFirst StorageSynchronizationEnabled="False">
       <TargetServer Server="PostgreSQL" ServerVersion="9.5" />
       <ModelFirstNamingRules>
         <Table RemoveUnderscores="False" RemoveInvalidCharacters="True" CodeCase="Unchanged" AddPrefix="" AddSuffix="" RemovePrefixes="" RemoveSuffixes="" PluralizationName="Pluralize" />

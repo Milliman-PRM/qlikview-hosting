@@ -35,7 +35,7 @@
             color: black;
             text-align: center;
             padding: 5px;
-            border-bottom: 3px solid #046EBC;
+            border-bottom: 3px solid #0072C6;
             font-family: Arial;
             font-size: 20px;
         }
@@ -45,15 +45,15 @@
             font-family: Arial;
             font-size: 12px;
             height: 400px;
-            width: 1193px;
-            top: 92px;
-            left: 80px;
+            width: 1121px;
+            top: 91px;
+            left: 104px;
             position: absolute;
             visibility: visible;
             background-color: white;
             padding: 0px;
             margin: 0px;
-            border: 3px solid #046EBC;
+            border: 3px solid #0072C6;
             z-index: 2000;
         }
 
@@ -92,8 +92,6 @@
         }
 
         #ContainerGrid {
-            width: 99%;
-            height: 640px;
             padding: 3px 3px 3px 3px;
             margin: 0 auto;
         }
@@ -102,45 +100,54 @@
             height: 8px;
         }
 
+        .ContainerCheckBox {
+            overflow: scroll;
+            height: 382px;
+            width: 265px;
+        }
+
         .ContainerAnalyzerCheckList {
-            border: 1px solid black;
+            border: 1px solid #808080;
             color: white;
             overflow: hidden;
-            background-color: #046EBC;
             position: absolute;
             top: 5px;
             left: 5px;
-            height: 389px;
-            width: 256px;
-        }
-
-        .ContainerCheckBox {
-            overflow: scroll;
-            height: 385px;
+            height: 390px;
+            width: 265px;
         }
 
         .ContainerAssayDescriptionList {
-            border: 1px solid black;
+            border: 1px solid #808080;
             overflow: hidden;
-            background-color: #046EBC;
             color: white;
             position: absolute;
             top: 5px;
-            left: 266px;
+            left: 275px;
             height: 390px;
-            width: 512px;
+            width: 265px;
         }
 
         .ContainerLocalityList {
-            border: 1px solid black;
+            border: 1px solid #808080;
             overflow: hidden;
-            background-color: #046EBC;
             color: white;
             position: absolute;
             top: 5px;
-            left: 783px;
+            left: 710px;
             height: 390px;
-            width: 256px;
+            width: 265px;
+        }
+
+        .ContainerCptCodeList {
+            border: 1px solid #808080;
+            overflow: hidden;
+            color: white;
+            position: absolute;
+            top: 5px;
+            left: 544px;
+            height: 390px;
+            width: 162px;
         }
 
         .ContainerViewReport {
@@ -148,7 +155,7 @@
             color: white;
             position: absolute;
             top: 308px;
-            left: 1048px;
+            left: 981px;
             height: 43px;
             width: 136px;
         }
@@ -158,12 +165,12 @@
             color: white;
             position: absolute;
             top: 351px;
-            left: 1048px;
+            left: 981px;
             height: 43px;
             width: 136px;
         }
 
-        .cssbtnCustom {
+        .CustomButton {
             margin: 4px 3px 0px 6px;
             border: solid 1px #bbb;
             padding: 8px;
@@ -180,17 +187,15 @@
             text-shadow: 1px 1px #bbb;
         }
 
-            .cssbtnCustom:hover {
+            .CustomButton:hover {
                 background-color: #ddd;
                 color: #333;
-                border: solid 1px #046ebc;
+                border: solid 1px #0072C6;
                 cursor: pointer;
                 outline: none;
             }
 
-        .csscloseImage {
-            border: 1px solid #858585;
-            border-radius: 8px 8px 8px 8px;
+        .closeImageMenu {
             cursor: pointer;
             float: right;
             height: 15px;
@@ -200,11 +205,11 @@
             -webkit-border-radius: 8px;
             border-radius: 8px;
             position: absolute;
-            left: 1176px;
+            left: 1104px;
             top: 1px;
         }
 
-        .csssearchImage {
+        .searchImage {
             left: 70px;
             position: absolute;
             top: 60px;
@@ -213,19 +218,15 @@
             cursor: pointer;
         }
 
-        .cssInfoImage {            
-            border-radius: 8px 8px 8px 8px;
-            cursor: pointer;
-            float: right;
-            height: 21px;
-            padding: 0;
-            width: 24px;
-            -moz-border-radius: 8px;
-            -webkit-border-radius: 8px;
-            border-radius: 8px;
+        .ContainerInfoImage {
+            /*left: 1400px;*/
             position: absolute;
-            left: 1426px;
-            top: 51px;
+            top: 66px;
+            width: 24px;
+            height: 21px;
+            cursor: pointer;
+            float:right;
+            right: 161px;
         }
         /*selected items gray background color*/
         select option:checked {
@@ -233,30 +234,11 @@
             background-color: #0066FF !important; /* for IE */
         }
 
-        /*this css will prevent thead rad grid column alignment issue*/
-        .rgHeaderWrapper .rgHeaderDiv {
-            margin-right: 16px !important;
-        }
-
         /* How this screen works?  popu Up */
-        #divHowScreenWorks {
-            display: block;
-            float: left;
-            font-size: 12px;
-            height: 28px;
-            margin: -22px 5px 4px 568px;
-        }
-
-        .popUpWindowText {
-            font-family: verdana,helvetica,arial,sans-serif; /*just for example */
-            font-weight: normal;
-            font-size: 11px;
-        }
-
         .messagePopUpWindow {
             background: none repeat scroll 0 0 white;
             border: 14px solid #CCC;
-            height: 450px;
+            height: 520px;
             left: 437px;
             overflow-x: hidden;
             padding: 17px;
@@ -264,28 +246,131 @@
             width: 580px;
             z-index: 12000;
             line-height: 14px;
-            position:absolute;
+            position: absolute;
+            -webkit-border-bottom-right-radius: 5px;
+            -webkit-border-bottom-left-radius: 5px;
+            -webkit-border-top-left-radius: 5px;
+            -webkit-border-top-right-radius: 5px;
+            -moz-border-radius-bottomright: 5px;
+            -moz-border-radius-bottomleft: 5px;
+            -moz-border-radius-topleft: 5px;
+            -moz-border-radius-topright: 5px;
+            border-bottom-right-radius: 5px;
+            border-bottom-left-radius: 5px;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
         }
-        .cssclsoeImageInfo {
+
+        .acc_container {
+            margin: 0 0 5px;
+            padding: 0;
+            overflow: hidden;
+            clear: both;
+            background: #f0f0f0;
+            border: 1px solid #d6d6d6;
+            border-top: none;
+        }
+
+            .acc_container .block {
+                padding: 4px 0px 0px 17px;
+            }
+
+        .clsoeImageInfo {
             border-radius: 8px 8px 8px 8px;
             cursor: pointer;
             float: right;
             height: 15px;
-            margin: -9px -3px 0px 0px;
+            margin: -18px -19px 0 0;
             padding: 3px;
             width: 14px;
             -moz-border-radius: 8px;
             -webkit-border-radius: 8px;
             border-radius: 8px;
         }
-        .notify
-        {
+
+        .notify {
             background: none repeat scroll 0 0 #FFFCCF;
             border: 1px solid #F4E889;
             display: block;
             padding: 5px;
-            width:158px;
-            margin:0 auto;
+            width: 217px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .tableLineItems {
+            list-style: none;
+            margin: 2px 0;
+            padding: 0;
+            width: 541px;
+            float: left;
+            background: #E7E8E9;
+        }
+
+        #tableCurrOutlines tr {
+            border: 0;
+        }
+
+        .shadowFont {
+            text-shadow: 0 1px 1px #F2F2F2;
+            font-weight: bold;
+            color: #333;
+            text-decoration: none;
+            font-family: Sans-Serif;
+            font-size: 12px;
+        }
+
+        .description {
+            font-size: 11px;
+            line-height: 15px;
+            font-family: arial,sans-serif;
+            font-weight: normal;
+        }
+
+        .lablePointer {
+            color: #5f5f5f;
+            content: " â˜›";
+            font-size: 13px;
+            font-weight: 700;
+            line-height: 18px;
+            margin-left: 29px;
+        }
+        /*search box font-face color*/
+        .RadSearchBox .rsbEmptyMessage
+        {
+            color:#0072C6 !important;
+        }
+        .table-condensed th,
+        .table-condensed td {
+            padding: 4px 5px;
+        }
+        #containerCopyright {
+            right: 50px;
+            bottom: 17px;
+            width: 154px;
+            text-align: center;
+            font-size: small;
+            float: right;
+            position:absolute;
+        }
+
+        .RadGrid_Outlook
+        {
+            border: 1px solid #0072C6;
+        }
+        /*These settings are for each broswer*/
+        .rgHeaderDivForChrome {
+            margin-right: 15px !important;
+        }
+        .rgHeaderDivForIE {
+            margin-right: 17px !important;
+        }
+        .rgHeaderDivForSpartan {
+            margin-right: 12px !important;
+        }
+        .rgHeaderDivForFireFox
+        {
+            margin-right:21px !important
         }
     </style>
 </head>
@@ -311,30 +396,17 @@
         </telerik:RadAjaxManager>
         <telerik:RadAjaxLoadingPanel runat="server" ID="RadAjaxLoadingPanel1" Transparency="60" BackColor="lightgray" Skin="Default"></telerik:RadAjaxLoadingPanel>
 
-        <%--        <script type="text/javascript">
-            $("[id*=imgInformation]").live("click", function () {
-                $("#dialog").dialog({
-                    title: "How this screen works?",
-                    buttons: {
-                        Close: function () {
-                            $(this).dialog('close');
-                        }
-                    }
-                });
-                return false;
-            });
-        </script>--%>
-
         <div id="ContainerUIMain">
+            <div class="ContainerInfoImage">
+                <img id="imgInformation" width="24px" height="21px" src="Images/info_icon.png" alt="..." onclick="return showInformationWindow('ContainerInformation');" />
+            </div>
             <%--header section--%>
             <div id="ContainerHeaderSection">
                 <table style="width: 100%">
                     <tr>
-                        <td>
-                            <img id="imgInformation" class="cssInfoImage" src="Images/Help-Square.png" alt="..." onclick="return showInformationWindow('divHowScreenMsg');" />
-                        </td>
+                        <td></td>
                         <td style="vertical-align: bottom; padding-bottom: 5px">
-                            <asp:ImageButton ID="LaunchMenu" runat="server" CssClass="csssearchImage" ImageUrl="~/Images/searchNew.png" OnClick="LaunchMenu_Click" />
+                            <asp:ImageButton ID="LaunchMenu" runat="server" CssClass="searchImage" ImageUrl="~/Images/search_icon.png" OnClick="LaunchMenu_Click" />
                         </td>
                         <td>
                             <h2>Clinical Lab Systems Medicare Reimbursement</h2>
@@ -343,42 +415,46 @@
                 </table>
             </div>
 
-            <script type="text/javascript">
-                function showInformationWindow(PopUpWindowDiv) {
-                    var popUpControl = document.getElementById(PopUpWindowDiv);
-                    $(popUpControl).show();
-                    //enable the div to drag
-                    $(popUpControl).draggable();
-                }
-
-                function hideInformationWindow(PopUpWindowDiv) {
-                    var popUpControl = document.getElementById(PopUpWindowDiv);
-                    $(popUpControl).hide();
-                }
-            </script>
-
-            <div id="divHowScreenMsg" class="messagePopUpWindow" style="display: none; cursor: move;">
-                <div id="divshow" onclick="return hideInformationWindow('divHowScreenMsg');">
-                    <img id="imageClose" class="cssclsoeImageInfo" src="Images/cancel.png" alt="..." onclick="return hideInformationWindow('divHowScreenMsg');" />
-                    <img id="imgCancelInformation" class="csscloseImage" src="Images/cancel.png" alt="..." onclick="return hideInformationWindow('divHowScreenMsg');" />
-                    <label  class="notify">How this screen works?</label>
-                    <br />
-                    <ul>
-                        <label for="a">Narrowing the results</label>
-                        <li><span class="popUpWindowText">Upon entering the Clinical Lab Systems Medicare Reimbursement Tool, the search menu will be displayed.  From this menu the user can narrow the selections by Analyzer, Assay Description, CPT Code, Locality, or any combination of these fields.  Once the desired selections have been made, the results can be viewed by either clicking on the “View Report” button on the right side of the menu, or by clicking on the exit button in the upper right-hand corner.  To make further selections, the user should open the search menu by clicking on the “Search” button at the upper left-hand corner of the tool.  Additionally, while viewing the result, it is possible to narrow the selections by selecting values directly in the rates table.</span></li>
-                    </ul>
-                    <ul>
-                        <label for="b">Viewing Rates from Previous Time Periods</label>
-                        <li><span class="popUpWindowText">To view the reimbursement rates from a previous time period, the user can select the desired period from the drop-down menu on the upper right-hand corner of the tool.  The rates displayed in the table below will be automatically updated based on that new selection.</span> </li>
-                    </ul>
-                    <ul>
-                        <label for="c">Sorting the Results</label>
-                        <li><span class="popUpWindowText">To sort the results in the rates table, the user should click on the column header text.  Clicking on the header once will cause the column to sort in ascending order, while clicking a second time will cause the column to sort in descending order.</span> </li>
-                    </ul>
-                    <ul>
-                        <label for="d">Clearing Selections</label>
-                        <li><span class="popUpWindowText">To reset the selections that have been made in the tool, the user should open up the search menu by clicking on the button at the upper left-hand corner of the tool that says “Search”.  Once the search menu has been opened, clicking the “Clear Selections” button in the lower right-hand corner of the menu will clear any selections that have been made, allowing the user to make new selections as desired.</span> </li>
-                    </ul>
+            <div id="ContainerInformation" class="messagePopUpWindow" style="display: none;">
+                <img id="imageClose" class="clsoeImageInfo" src="Images/cancel.png" alt="..." onclick="return hideInformationWindow('ContainerInformation');" />
+                <div id="ContainerShowMessage" class="acc_container">
+                    <div class="block">
+                        <label class="notify"><b>How to</b></label>
+                        <table id="tableCurrOutlines" class="table table-hover table-condensed">
+                            <tr class="tableLineItems">
+                                <td>
+                                    <em class="shadowFont">Narrowing the results</em>
+                                    <p class="description">
+                                        Upon entering the Clinical Lab Systems Medicare Reimbursement Tool, the search menu will be displayed.  From this menu the user can narrow the selections by Analyzer, Assay Description, CPT Code, Locality, or any combination of these fields.  Once the desired selections have been made, the results can be viewed by either clicking on the “View Report” button on the right side of the menu, or by clicking on the exit button in the upper right-hand corner.  To make further selections, the user should open the search menu by clicking on the “Search” button at the upper left-hand corner of the tool.  Additionally, while viewing the result, it is possible to narrow the selections by selecting values directly in the rates table.
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr class="tableLineItems">
+                                <td>
+                                    <em class="shadowFont">Viewing Rates from Previous Time Periods</em>
+                                    <p class="description">
+                                        To view the reimbursement rates from a previous time period, the user can select the desired period from the drop-down menu on the upper right-hand corner of the tool.  The rates displayed in the table below will be automatically updated based on that new selection.
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr class="tableLineItems">
+                                <td>
+                                    <em class="shadowFont">Sorting the Results</em>
+                                    <p class="description">
+                                        To sort the results in the rates table, the user should click on the column header text.  Clicking on the header once will cause the column to sort in ascending order, while clicking a second time will cause the column to sort in descending order.
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr class="tableLineItems">
+                                <td>
+                                    <em class="shadowFont">Clearing Selections</em>
+                                    <p class="description">
+                                        To reset the selections that have been made in the tool, the user should open up the search menu by clicking on the button at the upper left-hand corner of the tool that says “Search”.  Once the search menu has been opened, clicking the “Clear Selections” button in the lower right-hand corner of the menu will clear any selections that have been made, allowing the user to make new selections as desired.
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
             </div>
 
@@ -386,21 +462,28 @@
             <div id="ContainerMenuList" runat="server">
                 <telerik:RadAjaxPanel ID="menu_controls_panel" runat="server" LoadingPanelID="RadAjaxLoadingPanel1">
                     <div class="ContainerAnalyzerCheckList">
-                        <telerik:RadSearchBox runat="server" ID="AnalyzerSearch" EmptyMessage="Analyzer" Width="100%" DataTextField="AnalyzerName" DataValueField="Id" DropDownSettings-Height="370px" DropDownSettings-Width="255px" OnSearch="AnalyzerSearch_Search" OnClientSearch="OnClientSearch" RenderMode="Lightweight">
+                        <telerik:RadSearchBox runat="server" ID="AnalyzerSearch" EmptyMessage="Analyzer" Width="100%" DataTextField="AnalyzerName" DataValueField="Id" DropDownSettings-Height="370px" DropDownSettings-Width="265px" OnSearch="AnalyzerSearch_Search" OnClientSearch="OnClientSearch" RenderMode="Lightweight">
                         </telerik:RadSearchBox>
                         <div class="ContainerCheckBox">
                             <asp:CheckBoxList ID="AnalyzerCheckList" runat="server" BackColor="white" Width="100%" ForeColor="Black" AutoPostBack="True" OnSelectedIndexChanged="AnalyzerCheckList_SelectedIndexChanged" ViewStateMode="Enabled"></asp:CheckBoxList>
                         </div>
                     </div>
                     <div class="ContainerAssayDescriptionList">
-                        <telerik:RadSearchBox runat="server" ID="AssayDescriptionSearch" EmptyMessage="Assay Description" Width="100%" DataTextField="SearchDesc" DataValueField="Id" DropDownSettings-Height="370px" DropDownSettings-Width="511px" RenderMode="Lightweight" OnSearch="AssayDescriptionSearch_Search" OnClientSearch="OnClientSearch">
+                        <telerik:RadSearchBox runat="server" ID="AssayDescriptionSearch" EmptyMessage="Assay Description" Width="100%" DataTextField="SearchDesc" DataValueField="Id" DropDownSettings-Height="370px" DropDownSettings-Width="265px" RenderMode="Lightweight" OnSearch="AssayDescriptionSearch_Search" OnClientSearch="OnClientSearch">
                         </telerik:RadSearchBox>
                         <div class="ContainerCheckBox">
                             <asp:CheckBoxList ID="AssayDescriptionList" runat="server" BackColor="white" Width="100%" ForeColor="Black" AutoPostBack="True" OnSelectedIndexChanged="AssayDescriptionList_SelectedIndexChanged" ViewStateMode="Enabled"></asp:CheckBoxList>
                         </div>
                     </div>
+                    <div class="ContainerCptCodeList">
+                        <telerik:RadSearchBox runat="server" ID="CptCodeSearch" Width="100%" EmptyMessage="CPT Code" DataTextField="Code1" DataValueField="Id" DropDownSettings-Height="368px" DropDownSettings-Width="162px" RenderMode="Lightweight" OnSearch="CptCodeSearch_Search" OnClientSearch="OnClientSearch">
+                        </telerik:RadSearchBox>
+                        <div class="ContainerCheckBox" style="width: 162px;">
+                            <asp:CheckBoxList ID="CptCodeList" runat="server" BackColor="white" Width="100%" ForeColor="Black" AutoPostBack="True" OnSelectedIndexChanged="CptCodeList_SelectedIndexChanged" ViewStateMode="Enabled"></asp:CheckBoxList>
+                        </div>
+                    </div>
                     <div class="ContainerLocalityList">
-                        <telerik:RadSearchBox runat="server" ID="LocalitySearch" EmptyMessage="Locality" Width="100%" DataTextField="LocalityDescription" DataValueField="Id" DropDownSettings-Height="370px" DropDownSettings-Width="255px" RenderMode="Lightweight" OnSearch="LocalitySearch_Search" OnClientSearch="OnClientSearch">
+                        <telerik:RadSearchBox runat="server" ID="LocalitySearch" EmptyMessage="Locality" Width="100%" DataTextField="LocalityDescription" DataValueField="Id" DropDownSettings-Height="370px" DropDownSettings-Width="265px" RenderMode="Lightweight" OnSearch="LocalitySearch_Search" OnClientSearch="OnClientSearch">
                         </telerik:RadSearchBox>
                         <div class="ContainerCheckBox">
                             <asp:CheckBoxList ID="LocalityList" runat="server" BackColor="white" Width="100%" ForeColor="Black" AutoPostBack="True" OnSelectedIndexChanged="LocalityList_SelectedIndexChanged" ViewStateMode="Enabled"></asp:CheckBoxList>
@@ -408,37 +491,40 @@
                     </div>
                     <div class="ContainerViewReport">
                         <%--When user click on this button, it refreses the screen and close div. The Client side code is executed. if jquery function would return true, server side code would process. Returning false prevents the page from posting back to the server.--%>
-                        <asp:Button ID="btnViewReport" runat="server" Text="View Report" CssClass="cssbtnCustom" Width="126px" ForeColor="Black" Font-Bold="true" BackColor="LightGray"
+                        <asp:Button ID="btnViewReport" runat="server" Text="View Report" CssClass="CustomButton" Width="126px" ForeColor="Black" Font-Bold="true" BackColor="LightGray"
                             OnClientClick="return closeWindow('ContainerMenuList');" />
                     </div>
                     <div class="ContainerClearButton">
-                        <asp:Button ID="btnClearSelection" runat="server" Text="Clear Selections" CssClass="cssbtnCustom" Width="126px" ForeColor="Black" Font-Bold="true" BackColor="LightGray"
+                        <asp:Button ID="btnClearSelection" runat="server" Text="Clear Selections" CssClass="CustomButton" Width="126px" ForeColor="Black" Font-Bold="true" BackColor="LightGray"
                             OnClick="btnClearSelection_Click" />
                     </div>
                     <div id="ContainerCloseMenu" style="display: block;">
-                        <img id="imgCancel" class="csscloseImage" src="Images/cancel.png" alt="..." onclick="return closeWindow('ContainerMenuList');" />
+                        <img id="imgCancel" class="closeImageMenu" src="Images/cancel.png" alt="..." onclick="return closeWindow('ContainerMenuList');" />
                     </div>
                 </telerik:RadAjaxPanel>
             </div>
 
             <%--grid section--%>
-            <div id="section">
+            <div id="section" style="height: 693px;">
                 <div style="margin-right: 40px;">
                     <asp:DropDownList ID="YearDropdown" Style="float: right;" runat="server" Width="100px" AutoPostBack="True"
                         OnSelectedIndexChanged="YearDropdown_SelectedIndexChanged">
                     </asp:DropDownList>
                     <h2>Medicare Reimbursment Rates</h2>
                 </div>
-                <telerik:RadAjaxPanel ID="RadGridPanel" runat="server" OnAjaxRequest="RadGridPanel_AjaxRequest" LoadingPanelID="RadAjaxLoadingPanel1">
+                <telerik:RadAjaxPanel ID="RadGridPanel" runat="server" OnAjaxRequest="RadGridPanel_AjaxRequest" LoadingPanelID="RadAjaxLoadingPanel1" ClientEvents-OnRequestStart="pnlRequestStarted">
+
                     <div id="ContainerGrid">
-                        <telerik:RadGrid RenderMode="Classic" ID="RatesGrid" runat="server" GridLines="None"
+                        <telerik:RadGrid RenderMode="Lightweight" ID="RatesGrid" runat="server" ClientIDMode="AutoID"
+                            GridLines="None" AutoGenerateColumns="False" Skin="Outlook"
+                            Width="100%"
                             AllowSorting="true" AllowPaging="true" PageSize="250" AllowCustomPaging="true" PagerStyle-ShowPagerText="True" PagerStyle-Visible="True"
-                            ClientIDMode="AutoID" AutoGenerateColumns="False"
-                            OnNeedDataSource="RatesGrid_NeedDataSource" OnSelectedCellChanged="RatesGrid_SelectedCellChanged"
+                            OnNeedDataSource="RatesGrid_NeedDataSource"
+                            OnSelectedCellChanged="RatesGrid_SelectedCellChanged"
                             OnSortCommand="RatesGrid_SortCommand">
                             <PagerStyle Visible="false" />
                             <ClientSettings ReorderColumnsOnClient="false" AllowColumnsReorder="false" EnablePostBackOnRowClick="True">
-                                <ClientEvents OnGridCreated="GridCreated" />
+                                <ClientEvents OnGridCreated="GridCreated" OnCellSelected="CellSelected" />
                                 <Virtualization EnableVirtualization="false" InitiallyCachedItemsCount="2000" LoadingPanelID="RadAjaxLoadingPanel1" ItemsPerView="500" />
                                 <Selecting CellSelectionMode="SingleCell" />
                                 <Scrolling ScrollHeight="480px" AllowScroll="True" UseStaticHeaders="True" SaveScrollPosition="true" EnableVirtualScrollPaging="true"></Scrolling>
@@ -448,23 +534,22 @@
                             <MasterTableView AllowMultiColumnSorting="false" PagerStyle-AlwaysVisible="True" Width="100%" TableLayout="Fixed" Name="ownertableviewRatesGrid">
                                 <Columns>
                                     <telerik:GridBoundColumn UniqueName="analyzer_name" DataField="analyzer_name" HeaderText="Analyzer" ReadOnly="True" SortedBackColor="Transparent">
-                                        <HeaderStyle Width="20%" />
+                                        <HeaderStyle Width="18%" />
                                     </telerik:GridBoundColumn>
                                     <telerik:GridBoundColumn UniqueName="description" DataField="description" HeaderText="Assay Description" ReadOnly="True" SortedBackColor="Transparent">
-                                        <HeaderStyle Width="35%" />
+                                        <HeaderStyle Width="30%" />
                                     </telerik:GridBoundColumn>
                                     <telerik:GridBoundColumn UniqueName="code" DataField="code" HeaderText="CPT Code" ReadOnly="True" SortedBackColor="Transparent">
-                                        <HeaderStyle Width="10%" />
+                                        <HeaderStyle Width="9%" />
                                     </telerik:GridBoundColumn>
-
                                     <telerik:GridBoundColumn UniqueName="locality_description" DataField="locality_description" HeaderText="Locality" ReadOnly="True" SortedBackColor="Transparent">
-                                        <HeaderStyle Width="12%" />
+                                        <HeaderStyle Width="16%" />
                                     </telerik:GridBoundColumn>
-                                    <telerik:GridBoundColumn UniqueName="rate" DataField="rate" HeaderText="Medicare Reimbursement Rate" AllowFiltering="false" AllowSorting="false" AutoPostBackOnFilter="false" DataFormatString="{0:C2}" ItemStyle-HorizontalAlign="Right" ReadOnly="True" SortedBackColor="Transparent">
-                                        <HeaderStyle Width="15%" HorizontalAlign="Right" />
+                                    <telerik:GridBoundColumn UniqueName="notes" DataField="notes" HeaderText="Notes" ReadOnly="True" SortedBackColor="Transparent">
+                                        <HeaderStyle Width="8%" />
                                     </telerik:GridBoundColumn>
-                                    <telerik:GridBoundColumn UniqueName="notes" DataField="notes" HeaderText="Notes" ReadOnly="True" AllowFiltering="false" AllowSorting="false" AutoPostBackOnFilter="false" SortedBackColor="Transparent">
-                                        <HeaderStyle Width="7%" />
+                                    <telerik:GridBoundColumn UniqueName="rate" DataField="rate" HeaderText="Medicare Reimbursement Rate"  DataFormatString="{0:C2}" ItemStyle-HorizontalAlign="Right" ReadOnly="True" SortedBackColor="Transparent">
+                                        <HeaderStyle Width="19%" HorizontalAlign="Right" />
                                     </telerik:GridBoundColumn>
                                 </Columns>
                             </MasterTableView>
@@ -480,6 +565,10 @@
                 <div style="height: 3px;"></div>
                 <asp:Label ID="lblFooterLink" AssociatedControlID="FooterLink" runat="server" Text=""></asp:Label>
                 <asp:HyperLink ID="FooterLink" CssClass="lane-link" runat="server" Target="_blank"></asp:HyperLink>
+            </div>
+            <div class="clear"></div>
+            <div id="containerCopyright">
+                <asp:Label ID="lblCopyrightYear" runat="server">Milliman PRM Analytics®</asp:Label>
             </div>
 
             <telerik:RadNotification RenderMode="Lightweight" ID="Toast" runat="server" VisibleOnPageLoad="false" Position="BottomRight"
@@ -502,8 +591,9 @@
             var AnalyzerSearchNode = $telerik.$($find("AnalyzerSearch").get_childListElement());
             var AssaySearchNode = $telerik.$($find("AssayDescriptionSearch").get_childListElement());
             var LocalitySearchNode = $telerik.$($find("LocalitySearch").get_childListElement());
+            var CptCodeSearchNode = $telerik.$($find("CptCodeSearch").get_childListElement());
 
-            if ((AnalyzerSearchNode.length == 0) && (AssaySearchNode.length == 0) && (LocalitySearchNode.length == 0)) {
+            if ((AnalyzerSearchNode.length == 0) && (AssaySearchNode.length == 0) && (LocalitySearchNode.length == 0) && (CptCodeSearchNode.length == 0)) {
                 var currentLoadingPanel = $find("<%= RadAjaxLoadingPanel1.ClientID %>");
                 var currentGrid = $find("<%= RadGridPanel.ClientID%>")
                 currentLoadingPanel.show(currentGrid);
@@ -531,16 +621,35 @@
             }
         }
 
-        function GridCreated(sender, args) {
+        function GridCreated(sender, args) 
+        {
             var scrollArea = sender.GridDataDiv;
             var parent = $get("RatesGrid");
             //alert(parent.clientHeight)
             var gridHeader = sender.GridHeaderDiv;
             scrollArea.style.height = parent.clientHeight - gridHeader.clientHeight + "px";
+
+             //settings for grid margin for each browiser
+            if ($telerik.isIE) 
+            {
+                $('.rgHeaderWrapper .rgHeaderDiv').addClass('rgHeaderDivForIE');
+            }
+             else if ($telerik.isSpartan) {
+                $('.rgHeaderWrapper .rgHeaderDiv').addClass('rgHeaderDivForSpartan');
+            }
+            else if ($telerik.isFirefox)
+            {
+                $('.rgHeaderWrapper .rgHeaderDiv').addClass('rgHeaderDivForFireFox');
+            }
+            else if ($telerik.isChrome) {
+                $('.rgHeaderWrapper .rgHeaderDiv').addClass('rgHeaderDivForChrome');
+            }
+
         }
 
         //dont allow a post back if nothing is selected
-        function OnClientSearch(sender, args) {
+        function OnClientSearch(sender, args) 
+        {
             if (sender.get_text().length < 1) {
                 sender._element.control._postBackOnSearch = false;
             }
@@ -553,34 +662,48 @@
         //this is ugly but keeps the grid the correct size
         setInterval(function () { ResizeGrid(); }, 333);
 
-        //close the menu item
-        function closeWindow(divControl) {
-            var Control = document.getElementById(divControl);
-            LoadPageData();
-            //fast remove
-            $(Control).toggle();
-        }
+            //close the menu item
+            function closeWindow(divControl) {
+                var Control = document.getElementById(divControl);
+                LoadPageData();
+                //fast remove
+                $(Control).toggle();
+            }
 
-        function showPopup(PopUpWindowDiv) {
+        function showInformationWindow(PopUpWindowDiv) {
             var popUpControl = document.getElementById(PopUpWindowDiv);
-            //        popUpControl.visibility = "visibil";
-            //        popUpControl.style.display = "block";
-
-            $(popUpControl).animate({ "height": "toggle" }, { duration: 2000 });
+            $(popUpControl).show();
             //enable the div to drag
-            $(popUpControl).draggable();
-            //        $(popUpControl).slideToggle(1000);
+            $(popUpControl).draggable({ cursor: "move" });
         }
 
-        function hidePopup(PopUpWindowDiv) {
+        function hideInformationWindow(PopUpWindowDiv) {
             var popUpControl = document.getElementById(PopUpWindowDiv);
-            //Slowly hide the Div
-            //        $(popUpControl).animate({ opacity: 'hide' }, "slow");
-            //Remove the div by slightly moving the div towards left
-            $(popUpControl).hide(2000, function () {
-                $(popUpControl).remove();
-            });
+            $(popUpControl).hide();
+        }
 
+        var columnCellSelected = "";
+        //This event fires first
+        function CellSelected(sender, args) {
+            //get column name
+            columnCellSelected = args.get_column().get_uniqueName();
+        }
+
+        //this event is fired right after the above
+        function pnlRequestStarted(ajaxPanel, eventArgs) {
+            try {
+                if (eventArgs._eventTargetElement.control.UniqueID == "RatesGrid") {
+                    if (columnCellSelected == "rate" || columnCellSelected == "notes") {
+                        //$find('<%= RadAjaxManager1.ClientID %>').set_enableAJAX(false);
+                        //eventArgs.set_enableAjax(false);
+                        eventArgs.set_cancel(true)
+                    }
+                }
+                columnCellSelected = "";
+            }
+            catch (ex) {
+                alert("Error while data refresh: " + ex.message);
+            }
         }
 
         function PrintRatesGrid() {
