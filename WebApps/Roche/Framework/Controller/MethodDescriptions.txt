@@ -1,0 +1,34 @@
+﻿
+
+ public static List<string> getUniqueAnalyzerNames()
+        {
+            query the analyzers table and return a list 
+			of unique values from column "analyzer_name"
+        }
+
+
+public static List<SearchTerm> getSearchTermsForAnalyzerName( string AnalyzerName )
+        {
+            Query the analyzer table and get all rows where "analyzer_name" == AnalyzerName
+			for each row item returned in query the searchterms table using the "fk_code_id"
+				for each row item returned from searchterm add to return list of search terms
+
+			return list of searchterms
+        }
+
+public static List<string> getUniqueYears()
+		{
+			Query the reimbursmenet_rate table and return a list of unquie year values
+		
+		}
+
+public static List<string> getAnalyzerNamesForSearchTerm( string SearchTermID )
+		{
+			Query the "search_terms" table to retrieve the row identified by SearchTermID,  and get the "fk_code_Id"
+			Query the "analyzer" table returning rows that have "fk_code_Id"
+			for each row save the "analyzer_name" column value into a list
+
+			return list of Analyzer names
+		}
+
+

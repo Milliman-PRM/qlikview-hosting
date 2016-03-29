@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://labsystemshandbook.milliman.com/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://labsystemshandbook.milliman.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://labsystemshandbook.milliman.com/">
+      <s:element name="DatabaseRestore">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SchemaName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="DBBackup" type="s:base64Binary" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DatabaseRestoreResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="DatabaseRestoreResult" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MakeLive">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SchemaName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="OperatorEmail" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="GoLiveDateTime" type="s:dateTime" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MakeLiveResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="MakeLiveResult" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="NewSchemaIsReady">
+        <s:complexType />
+      </s:element>
+      <s:element name="NewSchemaIsReadyResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="NewSchemaIsReadyResult" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="SchemaName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="OperatorEmail" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetActiveSchemaName">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SchemaName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetActiveSchemaNameResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetActiveSchemaName">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetActiveSchemaNameResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetActiveSchemaNameResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="DatabaseRestoreSoapIn">
+    <wsdl:part name="parameters" element="tns:DatabaseRestore" />
+  </wsdl:message>
+  <wsdl:message name="DatabaseRestoreSoapOut">
+    <wsdl:part name="parameters" element="tns:DatabaseRestoreResponse" />
+  </wsdl:message>
+  <wsdl:message name="MakeLiveSoapIn">
+    <wsdl:part name="parameters" element="tns:MakeLive" />
+  </wsdl:message>
+  <wsdl:message name="MakeLiveSoapOut">
+    <wsdl:part name="parameters" element="tns:MakeLiveResponse" />
+  </wsdl:message>
+  <wsdl:message name="NewSchemaIsReadySoapIn">
+    <wsdl:part name="parameters" element="tns:NewSchemaIsReady" />
+  </wsdl:message>
+  <wsdl:message name="NewSchemaIsReadySoapOut">
+    <wsdl:part name="parameters" element="tns:NewSchemaIsReadyResponse" />
+  </wsdl:message>
+  <wsdl:message name="SetActiveSchemaNameSoapIn">
+    <wsdl:part name="parameters" element="tns:SetActiveSchemaName" />
+  </wsdl:message>
+  <wsdl:message name="SetActiveSchemaNameSoapOut">
+    <wsdl:part name="parameters" element="tns:SetActiveSchemaNameResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetActiveSchemaNameSoapIn">
+    <wsdl:part name="parameters" element="tns:GetActiveSchemaName" />
+  </wsdl:message>
+  <wsdl:message name="GetActiveSchemaNameSoapOut">
+    <wsdl:part name="parameters" element="tns:GetActiveSchemaNameResponse" />
+  </wsdl:message>
+  <wsdl:portType name="CLSConfigurationServicesSoap">
+    <wsdl:operation name="DatabaseRestore">
+      <wsdl:input message="tns:DatabaseRestoreSoapIn" />
+      <wsdl:output message="tns:DatabaseRestoreSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="MakeLive">
+      <wsdl:input message="tns:MakeLiveSoapIn" />
+      <wsdl:output message="tns:MakeLiveSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="NewSchemaIsReady">
+      <wsdl:input message="tns:NewSchemaIsReadySoapIn" />
+      <wsdl:output message="tns:NewSchemaIsReadySoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SetActiveSchemaName">
+      <wsdl:input message="tns:SetActiveSchemaNameSoapIn" />
+      <wsdl:output message="tns:SetActiveSchemaNameSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetActiveSchemaName">
+      <wsdl:input message="tns:GetActiveSchemaNameSoapIn" />
+      <wsdl:output message="tns:GetActiveSchemaNameSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="CLSConfigurationServicesSoap" type="tns:CLSConfigurationServicesSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="DatabaseRestore">
+      <soap:operation soapAction="http://labsystemshandbook.milliman.com/DatabaseRestore" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MakeLive">
+      <soap:operation soapAction="http://labsystemshandbook.milliman.com/MakeLive" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="NewSchemaIsReady">
+      <soap:operation soapAction="http://labsystemshandbook.milliman.com/NewSchemaIsReady" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetActiveSchemaName">
+      <soap:operation soapAction="http://labsystemshandbook.milliman.com/SetActiveSchemaName" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetActiveSchemaName">
+      <soap:operation soapAction="http://labsystemshandbook.milliman.com/GetActiveSchemaName" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="CLSConfigurationServicesSoap12" type="tns:CLSConfigurationServicesSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="DatabaseRestore">
+      <soap12:operation soapAction="http://labsystemshandbook.milliman.com/DatabaseRestore" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MakeLive">
+      <soap12:operation soapAction="http://labsystemshandbook.milliman.com/MakeLive" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="NewSchemaIsReady">
+      <soap12:operation soapAction="http://labsystemshandbook.milliman.com/NewSchemaIsReady" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetActiveSchemaName">
+      <soap12:operation soapAction="http://labsystemshandbook.milliman.com/SetActiveSchemaName" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetActiveSchemaName">
+      <soap12:operation soapAction="http://labsystemshandbook.milliman.com/GetActiveSchemaName" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="CLSConfigurationServices">
+    <wsdl:port name="CLSConfigurationServicesSoap" binding="tns:CLSConfigurationServicesSoap">
+      <soap:address location="http://localhost:2678/CLSConfigurationServices.asmx" />
+    </wsdl:port>
+    <wsdl:port name="CLSConfigurationServicesSoap12" binding="tns:CLSConfigurationServicesSoap12">
+      <soap12:address location="http://localhost:2678/CLSConfigurationServices.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
