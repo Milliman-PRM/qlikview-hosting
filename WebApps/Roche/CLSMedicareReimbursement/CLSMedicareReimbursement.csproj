@@ -182,6 +182,7 @@
     <Content Include="scripts\ai.0.15.0-build58334.js" />
     <Content Include="scripts\ai.0.15.0-build58334.min.js" />
     <Content Include="scripts\jquery-1.12.1.min.js" />
+    <Content Include="Time.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -196,6 +197,13 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Time.aspx.cs">
+      <DependentUpon>Time.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Time.aspx.designer.cs">
+      <DependentUpon>Time.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -219,6 +227,10 @@
     <ProjectReference Include="..\CLSBusinessLogic\CLSBusinessLogic.csproj">
       <Project>{17f0126b-56fc-4e3d-a167-61a1e2d2bcdd}</Project>
       <Name>CLSBusinessLogic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CLSConfigurationCommon\CLSConfigurationCommon.csproj">
+      <Project>{569bd6af-c743-458e-8df7-75e6b95b81ca}</Project>
+      <Name>CLSConfigurationCommon</Name>
     </ProjectReference>
     <ProjectReference Include="..\Framework\CLSdbContext\CLSdbContext.csproj">
       <Project>{8290f3dd-ddaa-46bd-9adc-29d12dec1b56}</Project>
@@ -251,7 +263,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties UseJQuerySupport="True" UseAjaxifiedTemplates="True" />
+      <UserProperties UseAjaxifiedTemplates="True" UseJQuerySupport="True" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
