@@ -65,8 +65,16 @@ namespace RedoxFeedHandler
                         Ret6 = Meta.Message;
                         Ret7 = Meta.Transmission;
                         Ret8 = Meta.FacilityCode;
+
+                        QueryInterface I = new QueryInterface();
+                        if (I.IsAuthenticated)
+                        {
+                            JObject PatientToQuery = new JObject();
+                            I.QueryForClinicalSummary(PatientToQuery);
+                        }
 #endregion
 
+                        var x = Meta.DataModel.Value.Value<string>();
                         StreamWriter OutFile = new StreamWriter(OutFileName);
 
                         // log all HTTP headers

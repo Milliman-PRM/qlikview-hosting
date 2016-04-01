@@ -91,6 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QueryInterface.cs" />
     <Compile Include="RedoxMeta.cs" />
     <Compile Include="WaterfallClinicViaRedox.ashx.cs">
       <DependentUpon>WaterfallClinicViaRedox.ashx</DependentUpon>
