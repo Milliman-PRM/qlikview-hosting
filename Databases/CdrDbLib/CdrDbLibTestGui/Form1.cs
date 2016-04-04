@@ -69,5 +69,13 @@ namespace CdrDbLibTestGui
             return prompt.ShowDialog() == DialogResult.OK ? textBox.Text : "";
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            foreach (Patient P in CdrDb.Patients)
+            {
+                System.Nullable<MaritalStatus> m = P.MaritalStatus;
+                string n = P.NameLast;
+            }
+        }
     }
 }

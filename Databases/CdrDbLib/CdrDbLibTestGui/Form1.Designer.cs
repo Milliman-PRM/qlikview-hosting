@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.buttonTest1 = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // buttonTest1
@@ -37,16 +38,27 @@
             this.buttonTest1.Name = "buttonTest1";
             this.buttonTest1.Size = new System.Drawing.Size(75, 23);
             this.buttonTest1.TabIndex = 0;
-            this.buttonTest1.Text = "Test 1";
+            this.buttonTest1.Text = "Insert";
             this.buttonTest1.UseVisualStyleBackColor = true;
             this.buttonTest1.UseWaitCursor = true;
             this.buttonTest1.Click += new System.EventHandler(this.buttonTest1_Click);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(13, 59);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "Query";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 262);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.buttonTest1);
             this.Name = "Form1";
             this.Text = "Form1";
@@ -57,6 +69,7 @@
         #endregion
 
         private System.Windows.Forms.Button buttonTest1;
+        private System.Windows.Forms.Button button1;
     }
 }
 

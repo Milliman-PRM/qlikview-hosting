@@ -50,7 +50,7 @@
       <Class UseSchemaAsPrefix="False" PluralizeCollectionNavigationPropertyName="True" RemoveUnderscores="True" RemoveInvalidCharacters="True" CodeCase="FirstLetterUppercase" AddPrefix="" AddSuffix="" RemovePrefixes="" RemoveSuffixes="" PluralizationName="Singularize" />
       <Property RemoveUnderscores="True" RemoveInvalidCharacters="True" CodeCase="FirstLetterUppercase" AddPrefix="" AddSuffix="" RemovePrefixes="" RemoveSuffixes="" PluralizationName="Unchanged" />
     </DatabaseFirstNamingRules>
-    <ModelFirst StorageSynchronizationEnabled="True" ForeignKeyColumnRule="%master entity name%%master column name%">
+    <ModelFirst StorageSynchronizationEnabled="True" TargetSchema="public" ForeignKeyColumnRule="%master entity name%%master column name%">
       <TargetServer Server="PostgreSQL" ServerVersion="9.5" />
       <ModelFirstNamingRules>
         <Table RemoveUnderscores="False" RemoveInvalidCharacters="True" CodeCase="Lower" AddPrefix="" AddSuffix="" RemovePrefixes="" RemoveSuffixes="" PluralizationName="Unchanged" />
