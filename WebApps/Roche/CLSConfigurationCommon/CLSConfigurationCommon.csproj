@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DatabaseConnectionStringParser.cs" />
+    <Compile Include="PerfomanceInfoData.cs" />
     <Compile Include="PostgresqlUtilities.cs" />
     <Compile Include="Utilities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

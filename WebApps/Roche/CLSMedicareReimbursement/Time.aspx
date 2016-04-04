@@ -33,7 +33,7 @@
             <legend>System Information</legend>
             <span class="title">Date:</span><asp:Label ID="lblSystemDate" runat="server"></asp:Label>
             <br />
-            <span class="title">Message:</span><asp:Label ID="lblMessage" runat="server"></asp:Label>
+            <span class="title">StatusCode:</span><asp:Label ID="lblStatusCode" runat="server"></asp:Label>
             <br />
             <span class="title">Disck Space:</span><asp:Label ID="lblDiskSpace" runat="server"></asp:Label>
             <br />
@@ -43,26 +43,10 @@
         </fieldset>        
         <fieldset>
             <legend>Server Info</legend>
-            <span class="title">Web Service:</span><asp:Label ID="lblWebServiceInfo" runat="server"></asp:Label>
-            <br />
             <span class="title">Database:</span><asp:Label ID="lblDbInfo" runat="server"></asp:Label>
             <br />
             <span class="title">Schema:</span><asp:Label ID="lblSchemaInfo" runat="server"></asp:Label>
-        </fieldset>
-        <fieldset>
-            <legend>Your Browser</legend>
-            <span class="title">Browser:</span><asp:Label ID="lblBrowserStuff" runat="server"></asp:Label>
-            <br />
-            <span class="title">Is Mobile:</span><asp:Label ID="lblIsMobile" runat="server"></asp:Label>
-            <br />
-            <span class="title">Screen:</span><asp:Label ID="lblScreen" runat="server"></asp:Label>
-            <br />
-            <span class="title">SupportS:</span><asp:Label ID="lblSupports" runat="server"></asp:Label>
-            <br />
-            <span class="title">Platform:</span><asp:Label ID="lblPlatform" runat="server"></asp:Label>
-            <br />
-            <span class="title">Needs Special VS:</span><asp:Label ID="lblNeedsSpecialVS" runat="server"></asp:Label>
-        </fieldset>
+        </fieldset>       
     </form>
 </body>
 </html>

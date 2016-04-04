@@ -31,13 +31,13 @@ namespace CLSMedicareReimbursement {
         protected global::System.Web.UI.WebControls.Label lblSystemDate;
         
         /// <summary>
-        /// lblMessage control.
+        /// lblStatusCode control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblMessage;
+        protected global::System.Web.UI.WebControls.Label lblStatusCode;
         
         /// <summary>
         /// lblDiskSpace control.
@@ -67,15 +67,6 @@ namespace CLSMedicareReimbursement {
         protected global::System.Web.UI.WebControls.Label lblSystemHealth;
         
         /// <summary>
-        /// lblWebServiceInfo control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblWebServiceInfo;
-        
-        /// <summary>
         /// lblDbInfo control.
         /// </summary>
         /// <remarks>
@@ -92,59 +83,5 @@ namespace CLSMedicareReimbursement {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblSchemaInfo;
-        
-        /// <summary>
-        /// lblBrowserStuff control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblBrowserStuff;
-        
-        /// <summary>
-        /// lblIsMobile control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblIsMobile;
-        
-        /// <summary>
-        /// lblScreen control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblScreen;
-        
-        /// <summary>
-        /// lblSupports control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblSupports;
-        
-        /// <summary>
-        /// lblPlatform control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblPlatform;
-        
-        /// <summary>
-        /// lblNeedsSpecialVS control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblNeedsSpecialVS;
     }
 }
