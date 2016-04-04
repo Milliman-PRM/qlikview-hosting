@@ -191,6 +191,14 @@ namespace RedoxFeedHandler
             }
         }
 
+        public long TransmissionNumber
+        {
+            get
+            {
+                return long.Parse(_Transmission["ID"]);
+            }
+        }
+
 
         public JProperty FacilityCode
         {

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database Name="redoxcache" EntityNamespace="RedoxCacheDbContext" ContextNamespace="RedoxCacheDbContext" Class="RedoxCacheContext" xmlns:ed="http://devart.com/schemas/EntityDeveloper/1.0" ed:Guid="4510108b-bfc5-426b-accd-f5ef155de53e" Provider="Devart.Data.PostgreSql.Linq.Provider.PgSqlDataProvider, Devart.Data.PostgreSql.Linq" Extended="true" xmlns="http://schemas.devart.com/linqconnect/mapping">
+  <Connection Mode="ConnectionString" ConnectionString="User Id=tom;Host=localhost;Port=5433;Database=redoxcache;Initial Schema=public" Provider="Devart.Data.PostgreSql" />
+  <Table Name="public.scheduling" Member="Schedulings">
+    <Type Name="Scheduling" ed:Guid="1eb107ab-42dd-4e92-ae31-91a7bb5d33b3">
+      <Column Name="transmissionnumber" Member="TransmissionNumber" Type="System.Int64" DbType="int8 NOT NULL" IsPrimaryKey="true" CanBeNull="false" UpdateCheck="Always" ed:ValidateRequired="true" ed:Guid="fbf63193-b602-4fd3-ba57-381fd8373306" />
+      <Column Name="meta" Member="Meta" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="1083b1b3-e503-4f15-9b3f-3e6fe11df3d6" />
+      <Column Name="content" Member="Content" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="f599d9a5-0023-4423-aea3-056f22f366e1" />
+    </Type>
+  </Table>
+</Database>

@@ -103,16 +103,18 @@ namespace RedoxFeedHandler
                     new JObject(
                         new JProperty("ID", "ffc486eff2b04b8^^^&1.3.6.1.4.1.21367.2005.13.20.1000&ISO"),
                         new JProperty("IDType", "NIST")
-                        // This is a hard coded test patient query straight from the Redox web site
+                        // This is a hard coded test patient query copied from the Redox web site
                     )
                 })
             ) );
 
             Patient = new JObject(MetaProp, PatientProp);
 
-            string test = JsonConvert.SerializeObject(Patient, Formatting.Indented);
+            //string test = JsonConvert.SerializeObject(Patient, Formatting.Indented);
 
             string PatientCcdString = PostJObjectToRedox(Uri, Patient, "application/json");
+
+            //  TODO Validate string as json before parsing
 
             JObject PatientCcdObject = JObject.Parse(PatientCcdString);
 #endregion test

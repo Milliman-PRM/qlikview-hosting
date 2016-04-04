@@ -3,11 +3,13 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Bson;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
+using RedoxCacheDbLib;
 
 namespace RedoxFeedHandler
 {
@@ -44,17 +46,38 @@ namespace RedoxFeedHandler
                     }
                     else
                     {
-                        string LogFolder = @"C:\RedoxFeedHandler\RedoxFeedTest";
-                        string OutFileName = Path.Combine(LogFolder, "Log.txt");
+                        if (context.Request.ContentType.IndexOf(@"application/json") == -1)
+                        {
+                            // TODO raise or record some kind of error
+                            return;
+                        }
 
+                        string LogFolder = @"C:\RedoxFeedHandler\RedoxFeedTest";
+                        string LogFileName = Path.Combine(LogFolder, "Log.txt");
+
+                        // Get the entire body of the POST into variable FullContentString
                         StreamReader ContentStream = new StreamReader(context.Request.InputStream);
-                        string ContentString = ContentStream.ReadToEnd();
+                        string FullContentString = ContentStream.ReadToEnd();
                         ContentStream.Close();
 
 #region Json parsing/handling test
-                        JObject DocJson = JObject.Parse(ContentString);
+                        JObject DocJson = JObject.Parse(FullContentString);
                         // or   DocJson = JsonConvert.DeserializeObject<JObject>(ContentString);
+
                         RedoxMeta Meta = new RedoxMeta(DocJson.Property("Meta"));
+
+                        #region Database Persistence
+                        JObject MetaObj = new JObject(DocJson.Property("Meta"));
+                        string MetaString = JsonConvert.SerializeObject(MetaObj, Formatting.Indented);
+                        DocJson.Remove("Meta");
+                        string ContentAsString = JsonConvert.SerializeObject(DocJson, Formatting.Indented);
+
+                        string cxnstr = ConfigurationManager.ConnectionStrings["RedoxCacheContextConnectionString1"].ConnectionString;
+                        RedoxCacheInterface Db = new RedoxCacheInterface(cxnstr);
+
+                        long Transmission = Meta.TransmissionNumber;
+                        long NewRecord = Db.InsertSchedulingRecord(Transmission, MetaString, ContentAsString);
+#endregion
 
                         JProperty Ret1, Ret2, Ret3, Ret4, Ret5, Ret6, Ret7, Ret8;
                         Ret1 = Meta.DataModel;
@@ -69,13 +92,15 @@ namespace RedoxFeedHandler
                         QueryInterface I = new QueryInterface();
                         if (I.IsAuthenticated)
                         {
-                            JObject PatientToQuery = new JObject();
-                            I.QueryForClinicalSummary(PatientToQuery);
+                            JObject PatientToQuery = new JObject();  // TODO populate this to drive the query
+                            JObject CcdJson = I.QueryForClinicalSummary(PatientToQuery);
+
+                            string IndentedCcd = JsonConvert.SerializeObject(CcdJson, Formatting.Indented);
                         }
 #endregion
 
                         var x = Meta.DataModel.Value.Value<string>();
-                        StreamWriter OutFile = new StreamWriter(OutFileName);
+                        StreamWriter OutFile = new StreamWriter(LogFileName);
 
                         // log all HTTP headers
                         foreach (string H in context.Request.Headers)
@@ -87,28 +112,28 @@ namespace RedoxFeedHandler
                         {
                             context.Response.Write  ("Received Unexpected ContentType header value: " + context.Request.ContentType);
                             OutFile.WriteLine       ("Received Unexpected ContentType header value: " + context.Request.ContentType);
-                            OutFile.WriteLine("Content: " + ContentString);
+                            OutFile.WriteLine("Content: " + FullContentString);
                             OutFile.Close();
                             context.Response.StatusCode = 200;
                             return;
                         }
 
-                        JToken Payload = JObject.Parse(ContentString);
+                        JToken Payload = JObject.Parse(FullContentString);
 
                         OutFile.Write("Content:\r\n" + JsonConvert.SerializeObject(Payload, Formatting.Indented) + "\n");
                         OutFile.Close();
 
                         string TransmissionNumber = Payload["Meta"]["Transmission"]["ID"].ToString();
 
-                        OutFileName = Path.Combine(LogFolder, TransmissionNumber + ".txt");
-                        OutFile = new StreamWriter(OutFileName);
+                        LogFileName = Path.Combine(LogFolder, TransmissionNumber + ".txt");
+                        OutFile = new StreamWriter(LogFileName);
 
                         OutFile.Write("Payload is: " + TransmissionNumber + "\n");
                         OutFile.Write("Patient LName is " + Payload["Patient"]["Demographics"]["LastName"].ToString() + "\n");
 
                         OutFile.Close();
 
-                        context.Response.Write(@"Stored message content to file " + OutFileName);
+                        context.Response.Write(@"Stored message content to file " + LogFileName);
 
                         context.Response.StatusCode = 200;
 

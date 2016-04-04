@@ -87,7 +87,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -96,6 +98,12 @@
     <Compile Include="WaterfallClinicViaRedox.ashx.cs">
       <DependentUpon>WaterfallClinicViaRedox.ashx</DependentUpon>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Databases\RedoxCacheDbLib\RedoxCacheDbLib.csproj">
+      <Project>{d6c6423b-7c74-4c8d-80ac-5c378d3b6a5d}</Project>
+      <Name>RedoxCacheDbLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
