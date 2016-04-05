@@ -29,81 +29,110 @@ namespace CLSMedicareReimbursement
             var dbError = "";
             //----------------------------bSystemHealth-------------------------------------------
             var bQuerStringExist = Request.Url.AbsoluteUri.IndexOf(@"NeverFail", StringComparison.Ordinal) >= 0 ? true : false;
-            
+
             //defaults
             lblMemory.Text = string.Format("<em>Un-Avalible</em>");
             lblDiskSpace.Text = string.Format("<em>Un-Avalible</em>");
             lblDbInfo.Text = string.Format("<em>Un-Avalible</em>");
             lblSchemaInfo.Text = string.Format("<em>Un-Avalible</em>");
 
-            ////Existing code exists to retrieve memory use
-            var PID = PsApiWrapper.GetPerformanceInfo();
-            var FreeMemoryPercentage = ((double)PID.PhysicalAvailableBytes / (double)PID.PhysicalTotalBytes) * 100.0;
-            var confMemory = (Convert.ToDouble(ConfigurationManager.AppSettings["Memory"].ToString()));
-            if (FreeMemoryPercentage >= confMemory)
+            try
             {
-                lblMemory.Text = string.Format("<em>Avalible</em>");
+                ////Existing code exists to retrieve memory use
+                var PID = PsApiWrapper.GetPerformanceInfo();
+                var FreeMemoryPercentage = ((double)PID.PhysicalAvailableBytes / (double)PID.PhysicalTotalBytes) * 100.0;
+                var confMemory = (Convert.ToDouble(ConfigurationManager.AppSettings["Memory"].ToString()));
+                if (FreeMemoryPercentage >= confMemory)
+                {
+                    lblMemory.Text = string.Format("<em>Avalible</em>");
+                }
+                else
+                {
+                    memoryError = "No memory (free memory < " + confMemory + " % (web.config)).";
+                    bSystemHealth = false;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                memoryError = "No disk space (free memory < " + confMemory + " % (web.config)  )";
+                memoryError = "An exception occured." + ex.InnerException.ToString();
                 bSystemHealth = false;
             }
 
-            //get the drives info
-            var diskDriveArray = ConfigurationManager.AppSettings["DiskDrives"].Split(',').ToArray();
-            //from config
-            var confDiskSpace = (Convert.ToDouble(ConfigurationManager.AppSettings["DiskSpace"].ToString()));
-
-            //loop through and find space
-            foreach (var item in diskDriveArray)
+            try
             {
-                var diskDive = item + ":";
-                if (isDriveExists(diskDive.ToString()))
+                //get the drives info
+                var diskDriveArray = ConfigurationManager.AppSettings["DiskDrives"].Split(',').ToArray();
+                //from config
+                var confDiskSpace = (Convert.ToDouble(ConfigurationManager.AppSettings["DiskSpace"].ToString()));
+
+                //loop through and find space
+                foreach (var item in diskDriveArray)
                 {
-                    var driveInfo = new DriveInfo(diskDive);
-                    var drivePercentFree = ((double)driveInfo.AvailableFreeSpace / (double)driveInfo.TotalSize) * 100.0;
-                    if (drivePercentFree >= confDiskSpace)
+                    var diskDive = item + ":";
+                    if (isDriveExists(diskDive.ToString()))
                     {
-                        lblDiskSpace.Text = string.Format("<em>Avalible</em>");
+                        var driveInfo = new DriveInfo(diskDive);
+                        var drivePercentFree = ((double)driveInfo.AvailableFreeSpace / (double)driveInfo.TotalSize) * 100.0;
+                        if (drivePercentFree >= confDiskSpace)
+                        {
+                            lblDiskSpace.Text = string.Format("<em>Avalible</em>");
+                        }
+                        else
+                        {
+                            spaceError = "No disk space (free space < " + confDiskSpace + " % (web.config)).";
+                            bSystemHealth = false;
+                        }
                     }
                     else
                     {
-                        spaceError = "No disk space (free space < " + confDiskSpace + " % (web.config) )";
+                        spaceError = "Drive " + item.ToString().ToUpper() + " does not exist.";
+                        bSystemHealth = false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                spaceError = "An exception occured." + ex.InnerException.ToString();
+                bSystemHealth = false;
+            }
+            //----------------------------Database-------------------------------------------
+            try
+            {
+                var stringConn = ConfigurationManager.ConnectionStrings["CLSdbDataContextConnectionString"].ToString();
+                var database = DatabaseConnectionStringParser.GetDatabaseName(stringConn.ToString());
+                var schema = DatabaseConnectionStringParser.GetSchemaName(stringConn.ToString());
+
+                if (!string.IsNullOrEmpty(database))
+                {
+                    var objList = CLSController.getUniqueYear();
+                    if (objList.Count > 0)
+                    {
+                        //test db query to see the results are coming back - Test db access
+                        lblDbInfo.Text = string.Format("<em>Avalible</em>");
+                    }
+                    else
+                    {
+                        dbError = ("Database not accessible.").ToString();
                         bSystemHealth = false;
                     }
                 }
                 else
                 {
-                    spaceError = "Drive " + item.ToString().ToUpper() + " does not exist.";
+                    dbError = ("Database not accessible.").ToString();
+                    bSystemHealth = false;
+                }
+                if (!string.IsNullOrEmpty(schema))
+                {
+                    lblSchemaInfo.Text = string.Format("\"{0}\"", schema);
+                }
+                else
+                {
                     bSystemHealth = false;
                 }
             }
-            //----------------------------Database-------------------------------------------
-            var stringConn = ConfigurationManager.ConnectionStrings["CLSdbDataContextConnectionString"].ToString();
-            var database = DatabaseConnectionStringParser.GetDatabaseName(stringConn.ToString());
-            var schema = DatabaseConnectionStringParser.GetSchemaName(stringConn.ToString());
-            
-            if (!string.IsNullOrEmpty(database))
+            catch (Exception ex)
             {
-                var objList = CLSController.getUniqueYear();
-                if (objList.Count>0)
-                {
-                    //test db query to see the results are coming back - Test db access
-                    lblDbInfo.Text = string.Format("<em>Avalible</em>");
-                }              
-            }
-            else
-            {
-                dbError = ("Database not accessible.").ToString();
-                bSystemHealth = false;
-            }
-            if (!string.IsNullOrEmpty(schema))
-            {
-                lblSchemaInfo.Text = string.Format("\"{0}\"", schema);
-            }
-            else
-            {
+                dbError = "An exception occured." + ex.InnerException.ToString();
                 bSystemHealth = false;
             }
 
@@ -119,7 +148,7 @@ namespace CLSMedicareReimbursement
                 if (bSystemHealth)
                     status = "200";
             }
-            lblStatusCode.Text =  status.ToString();
+            lblStatusCode.Text = status.ToString();
 
             if (!bSystemHealth)
             {
