@@ -12,13 +12,18 @@ using System.Web.Configuration;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Controller;
+using log4net;
+using log4net.Config;
 
 namespace CLSMedicareReimbursement
 {
     public partial class Time : System.Web.UI.Page
     {
+        public static ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         protected void Page_Load(object sender, EventArgs e)
         {
+            log.Info("Application is working");
             //----------------------------System Info-------------------------------------------
             var bSystemHealth = false;
 
@@ -54,7 +59,8 @@ namespace CLSMedicareReimbursement
             }
             catch (Exception ex)
             {
-                memoryError = "An exception occured." + ex.InnerException.ToString();
+                Logger(ex, "memoryError");
+                memoryError = "An exception occured, check excelption logging.";
                 bSystemHealth = false;
             }
 
@@ -92,7 +98,8 @@ namespace CLSMedicareReimbursement
             }
             catch (Exception ex)
             {
-                spaceError = "An exception occured." + ex.InnerException.ToString();
+                Logger(ex, "spaceError");
+                spaceError = "An exception occured, check excelption logging.";
                 bSystemHealth = false;
             }
             //----------------------------Database-------------------------------------------
@@ -132,7 +139,8 @@ namespace CLSMedicareReimbursement
             }
             catch (Exception ex)
             {
-                dbError = "An exception occured." + ex.InnerException.ToString();
+                Logger(ex, "dbError");
+                dbError = "An exception occured, check excelption logging.";
                 bSystemHealth = false;
             }
 
@@ -174,6 +182,11 @@ namespace CLSMedicareReimbursement
         {
             var compareToDrive = driveLetterWithColonAndSlash + @"\";
             return DriveInfo.GetDrives().Any(x => x.Name == compareToDrive.ToUpper());
+        }
+
+        public static void Logger(Exception ex, string message)
+        {
+            log.Fatal(DateTime.Now + "||" + message, ex);
         }
     }
 }
