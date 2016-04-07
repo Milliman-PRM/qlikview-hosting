@@ -6,6 +6,8 @@
         <File Name="RedoxCacheDb.RedoxCacheContext.cs" Project="RedoxCacheDbLib" ProjectFolder="Context" />
         <File Name="RedoxCacheDb.Scheduling.cs" Project="RedoxCacheDbLib" ProjectFolder="Entities" OverwriteMode="None" />
         <File Name="RedoxCacheDb.Scheduling.Generated.cs" Project="RedoxCacheDbLib" ProjectFolder="Entities" />
+        <File Name="RedoxCacheDb.SourceFeed.cs" Project="RedoxCacheDbLib" ProjectFolder="Entities" OverwriteMode="None" />
+        <File Name="RedoxCacheDb.SourceFeed.Generated.cs" Project="RedoxCacheDbLib" ProjectFolder="Entities" />
       </GeneratedFiles>
     </Generation>
     <DatabaseFirstNamingRules>

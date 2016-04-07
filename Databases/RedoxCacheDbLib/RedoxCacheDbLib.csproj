@@ -34,6 +34,10 @@
     <Reference Include="Devart.Data.Linq, Version=4.5.930.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL" />
     <Reference Include="Devart.Data.PostgreSql, Version=7.4.592.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL" />
     <Reference Include="Devart.Data.PostgreSql.Linq, Version=4.5.930.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL" />
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\Apps\Cdr\RedoxFeedHandler\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -50,8 +54,13 @@
     <Compile Include="Entities\RedoxCacheDb.Scheduling.Generated.cs">
       <DependentUpon>RedoxCacheDb.Scheduling.cs</DependentUpon>
     </Compile>
+    <Compile Include="Entities\RedoxCacheDb.SourceFeed.cs" />
+    <Compile Include="Entities\RedoxCacheDb.SourceFeed.Generated.cs">
+      <DependentUpon>RedoxCacheDb.SourceFeed.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RedoxCacheInterface.cs" />
+    <Compile Include="RedoxMeta.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -73,6 +82,7 @@
     <None Include="Context\RedoxCacheDb.RedoxCacheContextDiagram.view">
       <DependentUpon>RedoxCacheDb.lqml</DependentUpon>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

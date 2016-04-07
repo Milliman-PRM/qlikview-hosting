@@ -18,6 +18,7 @@ namespace RedoxFeedHandler
     /// </summary>
     public class WaterfallClinicViaRedox : IHttpHandler
     {
+        private string LogFileName = Path.Combine(@"C:\RedoxFeedHandler\RedoxFeedTest", "Log.txt");
 
         public void ProcessRequest(HttpContext context)
         {
@@ -34,109 +35,71 @@ namespace RedoxFeedHandler
             switch (context.Request.HttpMethod.ToUpper())
             {
                 case "POST":   // POST for actual data message
+                    StreamWriter LogFile = new StreamWriter(LogFileName);
+
                     if (ActualApplicationName != ExpectedApplicationName)
                     {
+                        LogFile.WriteLine("Header >application-name< not as expected.");
                         context.Response.Write("Header >application-name< not as expected.\n");
                         context.Response.StatusCode = 422;
                     }
                     else if (ActualVerificationToken != ExpectedVerificationToken)
                     {
+                        LogFile.WriteLine("Header >verification-token< not as expected.");
                         context.Response.Write("Header >verification-token< not as expected.\n");
                         context.Response.StatusCode = 422;
                     }
                     else
                     {
-                        if (context.Request.ContentType.IndexOf(@"application/json") == -1)
+                        // Get the entire body of the POST
+                        string FullContentString;
+                        using (StreamReader ContentStream = new StreamReader(context.Request.InputStream))
                         {
-                            // TODO raise or record some kind of error
-                            return;
+                            FullContentString = ContentStream.ReadToEnd();
                         }
 
-                        string LogFolder = @"C:\RedoxFeedHandler\RedoxFeedTest";
-                        string LogFileName = Path.Combine(LogFolder, "Log.txt");
-
-                        // Get the entire body of the POST into variable FullContentString
-                        StreamReader ContentStream = new StreamReader(context.Request.InputStream);
-                        string FullContentString = ContentStream.ReadToEnd();
-                        ContentStream.Close();
-
-#region Json parsing/handling test
-                        JObject DocJson = JObject.Parse(FullContentString);
-                        // or   DocJson = JsonConvert.DeserializeObject<JObject>(ContentString);
-
-                        RedoxMeta Meta = new RedoxMeta(DocJson.Property("Meta"));
-
-                        #region Database Persistence
-                        JObject MetaObj = new JObject(DocJson.Property("Meta"));
-                        string MetaString = JsonConvert.SerializeObject(MetaObj, Formatting.Indented);
-                        DocJson.Remove("Meta");
-                        string ContentAsString = JsonConvert.SerializeObject(DocJson, Formatting.Indented);
-
-                        string cxnstr = ConfigurationManager.ConnectionStrings["RedoxCacheContextConnectionString1"].ConnectionString;
-                        RedoxCacheInterface Db = new RedoxCacheInterface(cxnstr);
-
-                        long Transmission = Meta.TransmissionNumber;
-                        long NewRecord = Db.InsertSchedulingRecord(Transmission, MetaString, ContentAsString);
-#endregion
-
-                        JProperty Ret1, Ret2, Ret3, Ret4, Ret5, Ret6, Ret7, Ret8;
-                        Ret1 = Meta.DataModel;
-                        Ret2 = Meta.EventType;
-                        Ret3 = Meta.EventDateTime;
-                        Ret4 = Meta.Test;
-                        Ret5 = Meta.Source;
-                        Ret6 = Meta.Message;
-                        Ret7 = Meta.Transmission;
-                        Ret8 = Meta.FacilityCode;
-
-                        QueryInterface I = new QueryInterface();
-                        if (I.IsAuthenticated)
-                        {
-                            JObject PatientToQuery = new JObject();  // TODO populate this to drive the query
-                            JObject CcdJson = I.QueryForClinicalSummary(PatientToQuery);
-
-                            string IndentedCcd = JsonConvert.SerializeObject(CcdJson, Formatting.Indented);
-                        }
-#endregion
-
-                        var x = Meta.DataModel.Value.Value<string>();
-                        StreamWriter OutFile = new StreamWriter(LogFileName);
-
-                        // log all HTTP headers
+                        #region temporary code to log all received message content
+                        // log HTTP headers and body
                         foreach (string H in context.Request.Headers)
                         {
-                            OutFile.WriteLine("Header: " + H + ": " + context.Request.Headers[H]);
+                            LogFile.WriteLine("Header: " + H + ": " + context.Request.Headers[H]);
                         }
+                        LogFile.WriteLine("Body: " + FullContentString);
+                        LogFile.Flush();
+                        #endregion
 
+                        // test for appropriate message content type
                         if (context.Request.ContentType.IndexOf(@"application/json") == -1)
                         {
-                            context.Response.Write  ("Received Unexpected ContentType header value: " + context.Request.ContentType);
-                            OutFile.WriteLine       ("Received Unexpected ContentType header value: " + context.Request.ContentType);
-                            OutFile.WriteLine("Content: " + FullContentString);
-                            OutFile.Close();
+                            string Msg = "Received Unexpected ContentType header value: " + context.Request.ContentType;
+                            context.Response.AddHeader("Error", Msg);
+                            context.Response.Write(Msg);
+                            LogFile.WriteLine     (Msg);
+                            LogFile.Close();
                             context.Response.StatusCode = 200;
                             return;
                         }
 
-                        JToken Payload = JObject.Parse(FullContentString);
+                        // Extract needed metadata
+                        JObject DocJson = JObject.Parse(FullContentString);
+                        // or   DocJson = JsonConvert.DeserializeObject<JObject>(ContentString);
+                        RedoxMeta Meta = new RedoxMeta(DocJson.Property("Meta"));
+                        long Transmission = Meta.TransmissionNumber;
 
-                        OutFile.Write("Content:\r\n" + JsonConvert.SerializeObject(Payload, Formatting.Indented) + "\n");
-                        OutFile.Close();
+#region Database Persistence
+                        // Instantiate interface to database
+                        string CxStr = Environment.MachineName == "IN-PUCKETTT" ?
+                            ConfigurationManager.ConnectionStrings["RedoxCacheContextConnectionStringPort5433"].ConnectionString : 
+                            ConfigurationManager.ConnectionStrings["RedoxCacheContextConnectionStringPort5432"].ConnectionString ;
+                        RedoxCacheInterface Db = new RedoxCacheInterface(CxStr);
 
-                        string TransmissionNumber = Payload["Meta"]["Transmission"]["ID"].ToString();
+                        // Store this message to database
+                        long NewRecord = Db.InsertSchedulingRecord(Transmission, FullContentString);
+#endregion
 
-                        LogFileName = Path.Combine(LogFolder, TransmissionNumber + ".txt");
-                        OutFile = new StreamWriter(LogFileName);
-
-                        OutFile.Write("Payload is: " + TransmissionNumber + "\n");
-                        OutFile.Write("Patient LName is " + Payload["Patient"]["Demographics"]["LastName"].ToString() + "\n");
-
-                        OutFile.Close();
-
-                        context.Response.Write(@"Stored message content to file " + LogFileName);
+                        LogFile.Close();
 
                         context.Response.StatusCode = 200;
-
                     }
 
                     break;

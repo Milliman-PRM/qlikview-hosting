@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Threading;
 
-namespace RedoxFeedHandler
+namespace RedoxDataTaskSvc
 {
     public class QueryInterface
     {
@@ -81,45 +81,22 @@ namespace RedoxFeedHandler
             return true;
         }
 
-        public JObject QueryForClinicalSummary(JObject Patient)
+        public JObject QueryForClinicalSummary(JObject QueryObject)
         {
             string Uri = @"query";
+            //string test = JsonConvert.SerializeObject(QueryObject, Formatting.Indented);
 
-#region test
-            JProperty MetaProp = new JProperty("Meta", new JObject(
-                new JProperty("DataModel", "Clinical Summary"),
-                new JProperty("EventType", "Query"),
-                new JProperty("EventDateTime", DateTime.UtcNow),
-                new JProperty("Test", true),
-                new JProperty("Destinations", new JObject[] {
-                    new JObject(
-                        new JProperty("ID", "ef9e7448-7f65-4432-aa96-059647e9b357"),
-                        new JProperty("Name", "Clinical Summary Endpoint")
-                    )
-                }) 
-            ) );
-            JProperty PatientProp = new JProperty("Patient", new JObject(
-                new JProperty("Identifiers", new JObject[] {
-                    new JObject(
-                        new JProperty("ID", "ffc486eff2b04b8^^^&1.3.6.1.4.1.21367.2005.13.20.1000&ISO"),
-                        new JProperty("IDType", "NIST")
-                        // This is a hard coded test patient query copied from the Redox web site
-                    )
-                })
-            ) );
+            string PatientCcdString = PostJObjectToRedox(Uri, QueryObject, "application/json");
 
-            Patient = new JObject(MetaProp, PatientProp);
-
-            //string test = JsonConvert.SerializeObject(Patient, Formatting.Indented);
-
-            string PatientCcdString = PostJObjectToRedox(Uri, Patient, "application/json");
-
-            //  TODO Validate string as json before parsing
-
-            JObject PatientCcdObject = JObject.Parse(PatientCcdString);
-#endregion test
-
-            return PatientCcdObject;
+            try
+            {
+                JObject PatientCcdObject = JObject.Parse(PatientCcdString);
+                return PatientCcdObject;
+            }
+            catch (Exception /*e*/)
+            {
+                return new JObject();
+            }
         }
 
         private string PostJObjectToRedox(string Uri, JObject Payload, string AcceptContentType)

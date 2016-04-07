@@ -10,7 +10,7 @@ namespace RedoxCacheDbLib
 {
     public class RedoxCacheInterface
     {
-        RedoxCacheContext Db = new RedoxCacheContext();
+        RedoxCacheContext Db;
 
         public RedoxCacheInterface(string ConnectionString = null)
         {
@@ -24,19 +24,34 @@ namespace RedoxCacheDbLib
             ConnectionString = null;
         }
 
-        public long InsertSchedulingRecord(long TransmissionNumber, string MetaString, string ContentString)
+        public long InsertSchedulingRecord(long TransmissionNumber, string ContentString)
         {
             Scheduling S = new Scheduling
             {
-                TransmissionNumber = TransmissionNumber,
-                Meta = MetaString,
+                TransmissionId = TransmissionNumber,
                 Content = ContentString
             };
 
             Db.Schedulings.InsertOnSubmit(S);
             Db.SubmitChanges();
 
-            return S.TransmissionNumber;
+            return S.dbid;
+        }
+
+        public List<Scheduling> GetSchedulingRecords(bool Oldest = true, int MaxCount = 1)
+        {
+            List<Scheduling> ReturnList = Oldest ?
+                Db.Schedulings.OrderBy(x => x.TransmissionId).Take(MaxCount).ToList() :
+                Db.Schedulings.OrderByDescending(x => x.TransmissionId).Take(MaxCount).ToList();
+
+            return ReturnList;
+        }
+
+        public bool RemoveSchedulingRecord(Scheduling S)
+        {
+            Db.Schedulings.DeleteOnSubmit(S);
+            Db.SubmitChanges();
+            return true;
         }
     }
 }

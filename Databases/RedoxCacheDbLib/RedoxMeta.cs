@@ -5,17 +5,17 @@ using System.Text;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 
-namespace RedoxFeedHandler
+namespace RedoxCacheDbLib
 {
     /// <summary>
     /// TODO Figure out how to conveniently make this serialize/deserialize to/from JSON.  
     /// </summary>
     public class RedoxMeta
     {
-        private string _DataModel = "";
-        private string _EventType = "";
+        private string _DataModel = null;
+        private string _EventType = null;
         private Nullable<DateTime> _EventDateTime;
-        private bool _Test;
+        private Nullable<bool> _Test;
         private Dictionary<string,string> _Source = new Dictionary<string, string>();
         private Dictionary<string, string> _Message = new Dictionary<string, string>();
         private Dictionary<string, string> _Transmission = new Dictionary<string, string>();
@@ -98,9 +98,17 @@ namespace RedoxFeedHandler
         {
             set
             {
-                if (value.Type == JTokenType.Property && value.Name == "Test" && value.Value.Type == JTokenType.Boolean)
+                if (value.Type == JTokenType.Property && value.Name == "Test")
                 {
-                    _Test = value.Value.ToObject<bool>();
+                    switch (value.Value.Type)
+                    {
+                    case JTokenType.Boolean:
+                        _Test = value.Value.ToObject<bool>();
+                        break;
+                    case JTokenType.Null:
+                        _Test = null;
+                        break;
+                    }
                 }
                 else throw new Exception("Invalid JToken type for property Test");
             }
