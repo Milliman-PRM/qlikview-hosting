@@ -1,0 +1,7 @@
+﻿
+Update favorites & history to use user id & db context to save info - done
+Update launch to do auto login - done
+
+Integrated error handling
+TFS
+Cleanup of Cache files on session end/app end/app error and timer

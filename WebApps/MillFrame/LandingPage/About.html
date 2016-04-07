@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Milliman - About Us</title>
+    <link href="css/site.css" rel="stylesheet" />
+</head>
+<body>
+    <div id="body-wrapper">
+
+        <div id="header">
+            <div id="header-logo">
+                <img src="images/PRM-Analytics-Logo.png" alt="milliman-prm-analytics-logo" />
+            </div>
+            <div id="header-nav">
+                <table id="header-nav-menu">
+                    <tr>
+                        <td><a href="http://milliman.com" target="_blank">Milliman Worldwide</a></td>
+                        <td class="anchorDelimiter">|</td>
+                        <td><a href="Contact.html">Contact Us</a></td>
+                        <td class="anchorDelimiter">|</td>
+                        <td><a href="#">Client Login</a></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <hr />
+
+        <div id="content-wrapper">
+            <div id="sidebar-nav"></div>
+
+            <div class="vertRule height-530"></div>
+
+            <div id="overview">
+
+                <img src="images/milliman-prm-analytics.png" alt="prm-analytics" />
+                <p>
+                    <h2>About Us</h2>
+                </p>
+                <p>
+                    Milliman PRM Analytics<sup>&reg;</sup> offers industry leading ACO management strategies to the insurance industry. 
+                    Based in Indianapolis, Indiana, the PRM Analytics team offers patient-specific results. This is an important distinction 
+                    for the PRM as compared to metrics/factors developed from large databases.
+                </p>
+                <p>
+                    PRM Analytics is part of Milliman, Inc. based in Seattle, Washington. Milliman is among the world's largest providers of
+                    acturial and related products and services. Founded in 1947, Milliman is an independant firm with offices in major cities 
+                    around the globe. We are owned and managed by principals&#8212;senior consultants whose selection is based on their technical, 
+                    professional and business achievements.
+                </p>
+            </div>
+
+            <div class="vertRule height-530"></div>
+
+            <div id="sidebar-info"></div>
+        </div>
+
+        <div id="footer-nav"></div>
+
+        <script src="js/jquery-1.11.1.min.js"></script>
+        <script src="js/global.js"></script>
+        <script src="js/header-nav.js"></script>
+        <script src="js/footer-nav.js"></script>
+        <script src="js/sidebar-nav.js"></script>
+        <script src="js/sidebar-info.js"></script>
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                Milliman.SidebarNav.GetNavigtion('about', 'sidebar-nav');
+                Milliman.SidebarInfo.GetInfo('sidebar-info');
+                //Milliman.FooterNav.GetPageFooter('footer-nav');
+            });
+        </script>
+    </div>
+</body>
+</html>

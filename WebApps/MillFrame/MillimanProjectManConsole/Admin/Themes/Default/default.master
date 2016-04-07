@@ -1,0 +1,57 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" Inherits="admin_themes_default_default" Codebehind="default.master.cs" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1" runat="server">
+  <title></title>
+  <%-- favicon setup --%>
+  <link id="Link3" runat="server" rel="shortcut icon" href="~/favicon.gif" type="image/x-icon" />
+  <link id="Link4" runat="server" rel="icon" href="~/favicon.gif" type="image/ico" />
+  <%-- stylesheet --%>
+  <link href="default.css" rel="stylesheet" type="text/css" />
+  <asp:ContentPlaceHolder ID="head" runat="server" Visible="False">
+  </asp:ContentPlaceHolder>
+</head>
+<body style="margin:20px 3px 20px 10px">
+  <form id="form1" runat="server">
+      <asp:ScriptManager ID="ScriptManager1" runat="server" EnableViewState="False" ></asp:ScriptManager>
+       <div class="templatecontent">
+            <div class="header" style="height:100px;">
+                <table style="width:100%">
+                    <tr >
+                        <td style="width:120px">
+                            <a href="http://www.milliman.com"><img src="../images/PRMLogo_height80.png" style="border-width:0px;height:65px"/></a>
+                        </td>
+                    </tr>
+                    <tr style="height:25px" >
+                        <td valign="top"><%= DateTime.Now.ToLongDateString() %> <asp:Label runat="server" ID="ServerName" Font-Bold="True"></asp:Label></td>
+                        <td valign="top" style="width:80%" align="right" >
+                             <b>Welcome! <asp:Label runat="server" ID="UserName"></asp:Label></b> &nbsp&nbsp  
+                        </td>
+                        <td valign="top" style="width:30px;text-align:center" align="center">
+                            &nbsp&nbsp<b>|</b>&nbsp&nbsp
+                        </td>
+                        <td valign="top" style="width:200px;flex-align:center" align="center" width="200px">
+                            <asp:LoginStatus ID="LoginStatus1" runat="server" />
+                        </td>
+ 
+                    </tr>
+                </table>
+            </div>
+     
+            <div id="ContentDiv" style="display:block;overflow:hidden;position:absolute;top:110px;bottom:25px;left:5px; right:10px;background-color:aliceblue">  
+               <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                </asp:ContentPlaceHolder>
+            </div>
+        </div>
+         <div id="footer"  style="height:25px;bottom:0;position:absolute;left:10px;right:10px;overflow:hidden;vertical-align:bottom;background-image: url('themes/default/images/footer/gradient-bg.gif'); background-repeat:repeat-x;background-position-x:left;border-top:solid 1px lightgray">
+            <table style="width:100%;height:100%;overflow:hidden">
+                <tr>
+                    <td valign="middle"><center>Copyright &copy Milliman 2014</center></td>
+                </tr>
+            </table> 
+        </div>
+
+  </form>
+</body>
+</html>

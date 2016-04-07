@@ -1,0 +1,4 @@
+﻿
+Announcements file - All, User, Group or QVW assocaited
+
+Orange buttons on login/lost password use font Gisha 9pt bold with foreground #EEEEEE and background EE8A1E

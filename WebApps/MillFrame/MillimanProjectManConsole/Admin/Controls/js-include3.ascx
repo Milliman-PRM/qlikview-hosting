@@ -1,0 +1,2 @@
+﻿<%@ Control Language="C#" AutoEventWireup="true" Inherits="admin_controls_js_include3" Codebehind="js-include3.ascx.cs" %>
+<script src="../js/js/admin-help-sidebar.js" type="text/javascript"></script>

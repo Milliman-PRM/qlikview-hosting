@@ -1,0 +1,10 @@
+﻿<Complex name="Root" type="MillimanDev2.Announcements.Announcements, MillimanDev2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+  <Properties>
+    <Collection name="CurrentAnnouncements">
+      <Properties>
+        <Simple name="Capacity" value="4" />
+      </Properties>
+      <Items />
+    </Collection>
+  </Properties>
+</Complex>
