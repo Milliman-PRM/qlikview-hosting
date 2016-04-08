@@ -23,7 +23,7 @@ namespace CLSMedicareReimbursement
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            log.Info("Application is working");
+            log.Info(DateTime.Now + "||" + "Application is working.");
             //----------------------------System Info-------------------------------------------
             var bSystemHealth = false;
 
@@ -33,8 +33,7 @@ namespace CLSMedicareReimbursement
             var memoryError = "";
             var dbError = "";
             //----------------------------bSystemHealth-------------------------------------------
-            var bQuerStringExist = Request.Url.AbsoluteUri.IndexOf(@"NeverFail", StringComparison.Ordinal) >= 0 ? true : false;
-
+            var bQuerStringExist = Request.Url.AbsoluteUri.IndexOf("NeverFail") >= 0 ? true : false;
             //defaults
             lblMemory.Text = string.Format("<em>Un-Avalible</em>");
             lblDiskSpace.Text = string.Format("<em>Un-Avalible</em>");
@@ -45,15 +44,15 @@ namespace CLSMedicareReimbursement
             {
                 ////Existing code exists to retrieve memory use
                 var PID = PsApiWrapper.GetPerformanceInfo();
-                var FreeMemoryPercentage = ((double)PID.PhysicalAvailableBytes / (double)PID.PhysicalTotalBytes) * 100.0;
-                var confMemory = (Convert.ToDouble(ConfigurationManager.AppSettings["Memory"].ToString()));
-                if (FreeMemoryPercentage >= confMemory)
+                var FreeMemoryPercentage = (((double)PID.PhysicalAvailableBytes / (double)PID.PhysicalTotalBytes) * 100.0);
+                var configMemory = (Convert.ToDouble(ConfigurationManager.AppSettings["Memory"].ToString()));
+                if (FreeMemoryPercentage < (100 - configMemory))
                 {
                     lblMemory.Text = string.Format("<em>Avalible</em>");
                 }
                 else
                 {
-                    memoryError = "No memory (free memory < " + confMemory + " % (web.config)).";
+                    memoryError = "No memory (free memory < " + configMemory + " % (web.config)).";
                     bSystemHealth = false;
                 }
             }
@@ -69,7 +68,7 @@ namespace CLSMedicareReimbursement
                 //get the drives info
                 var diskDriveArray = ConfigurationManager.AppSettings["DiskDrives"].Split(',').ToArray();
                 //from config
-                var confDiskSpace = (Convert.ToDouble(ConfigurationManager.AppSettings["DiskSpace"].ToString()));
+                var configDiskSpace = (Convert.ToDouble(ConfigurationManager.AppSettings["DiskSpace"].ToString()));
 
                 //loop through and find space
                 foreach (var item in diskDriveArray)
@@ -78,14 +77,14 @@ namespace CLSMedicareReimbursement
                     if (isDriveExists(diskDive.ToString()))
                     {
                         var driveInfo = new DriveInfo(diskDive);
-                        var drivePercentFree = ((double)driveInfo.AvailableFreeSpace / (double)driveInfo.TotalSize) * 100.0;
-                        if (drivePercentFree >= confDiskSpace)
+                        var driveSpacePercentFree = (((double)driveInfo.AvailableFreeSpace / (double)driveInfo.TotalSize) * 100.0);//gives space in %
+                        if (driveSpacePercentFree >= (100 - configDiskSpace))
                         {
                             lblDiskSpace.Text = string.Format("<em>Avalible</em>");
                         }
                         else
                         {
-                            spaceError = "No disk space (free space < " + confDiskSpace + " % (web.config)).";
+                            spaceError = "No disk space (free space < " + configDiskSpace + " % (web.config)).";
                             bSystemHealth = false;
                         }
                     }
@@ -147,7 +146,7 @@ namespace CLSMedicareReimbursement
             var status = "";
             if (bQuerStringExist)
             {
-                status = "200";
+                status="200";
             }
             else
             {
@@ -156,7 +155,9 @@ namespace CLSMedicareReimbursement
                 if (bSystemHealth)
                     status = "200";
             }
+
             lblStatusCode.Text = status.ToString();
+            Response.StatusCode = int.Parse(status.ToString());
 
             if (!bSystemHealth)
             {
@@ -188,5 +189,6 @@ namespace CLSMedicareReimbursement
         {
             log.Fatal(DateTime.Now + "||" + message, ex);
         }
-    }
+
+   }
 }
