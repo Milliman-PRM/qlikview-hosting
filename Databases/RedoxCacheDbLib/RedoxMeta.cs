@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 namespace RedoxCacheDbLib
 {
     /// <summary>
-    /// TODO Figure out how to conveniently make this serialize/deserialize to/from JSON.  
+    /// Wrapper around the PostgreSQL database housing the task queue for clinical data extraction
     /// </summary>
     public class RedoxMeta
     {
@@ -36,6 +36,7 @@ namespace RedoxCacheDbLib
             }
             JObject Val = MetaProperty.Value.ToObject<JObject>();
 
+            // fill in all instance properties, using parsing code of each property setter
             DataModel = Val.Property("DataModel");
             EventType = Val.Property("EventType");
             EventDateTime = Val.Property("EventDateTime");

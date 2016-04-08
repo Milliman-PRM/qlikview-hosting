@@ -38,11 +38,28 @@ namespace RedoxCacheDbLib
             return S.dbid;
         }
 
-        public List<Scheduling> GetSchedulingRecords(bool Oldest = true, int MaxCount = 1)
+        /// <summary>
+        /// Performs a SELECT on the Scheduling task table in the database and returns a collection of entities representing the result
+        /// </summary>
+        /// <param name="Oldest">Set true to return the oldest records in the table, false for the newest</param>
+        /// <param name="MaxCount">Limits the number of records to return.  Default is no limit</param>
+        /// <returns></returns>
+        public List<Scheduling> GetSchedulingRecords(bool Oldest = true, int MaxCount = -1)
         {
-            List<Scheduling> ReturnList = Oldest ?
-                Db.Schedulings.OrderBy(x => x.TransmissionId).Take(MaxCount).ToList() :
-                Db.Schedulings.OrderByDescending(x => x.TransmissionId).Take(MaxCount).ToList();
+            List<Scheduling> ReturnList;
+
+            if (MaxCount == -1)  // Return all records
+            {
+                ReturnList = Oldest ?
+                    Db.Schedulings.OrderBy(x => x.TransmissionId).ToList() :
+                    Db.Schedulings.OrderByDescending(x => x.TransmissionId).ToList();
+            }
+            else  // The query will limit the number of returned records
+            {
+                ReturnList = Oldest ?
+                    Db.Schedulings.OrderBy(x => x.TransmissionId).Take(MaxCount).ToList() :
+                    Db.Schedulings.OrderByDescending(x => x.TransmissionId).Take(MaxCount).ToList();
+            }
 
             return ReturnList;
         }

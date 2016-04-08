@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using System.Configuration;
+using System.Diagnostics;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,47 +16,72 @@ namespace RedoxDataTaskSvc
 {
     public class SchedulingMsgProcessor
     {
+        int SecondsPauseBetweenQuery = 5;
         Thread Thd;
         RedoxCacheInterface Db;
+        Mutex Mutx;
         bool EndThreadSignal;
         QueryInterface I;
+        String OutputFolderName = @"C:\RedoxFeedHandler\RedoxFeedTest";
+        String OutputFileName = "test.txt";
 
         public SchedulingMsgProcessor()   // Constructor
         {
             Thd = new Thread(ThreadMain);
             I = new QueryInterface();
+            Mutx = new Mutex();
+
+            Directory.CreateDirectory(OutputFolderName);
         }
 
         public int StartThread()
         {
-            EndThreadSignal = false;
-            string CxStr = Environment.MachineName == "IN-PUCKETTT" ?
-                ConfigurationManager.ConnectionStrings["RedoxCacheContextConnectionStringPort5433"].ConnectionString :
-                ConfigurationManager.ConnectionStrings["RedoxCacheContextConnectionStringPort5432"].ConnectionString;
+            if (!Thd.IsAlive)
+            {
+                Mutx.WaitOne();
+                EndThreadSignal = false;
+                Mutx.ReleaseMutex();
 
-            Db = new RedoxCacheInterface(CxStr);
+                string CxStr = Environment.MachineName == "IN-PUCKETTT" ?
+                    ConfigurationManager.ConnectionStrings["RedoxCacheContextConnectionStringPort5433"].ConnectionString :
+                    ConfigurationManager.ConnectionStrings["RedoxCacheContextConnectionStringPort5432"].ConnectionString;
 
-            Thd.Start();  // if no argument is expected by thread entry point
-            //Thd.Start(4500);  // if argument is expected
+                Db = new RedoxCacheInterface(CxStr);
+
+                Thd.Start();  // if no argument is expected by thread entry point
+                //Thd.Start(4500);  // if argument is expected
+            }
 
             return Thd.ManagedThreadId;
         }
 
         public bool EndThread(int StopWaitTimeMs)
         {
-            // TODO Thread safety!  Mutex or other thread synchronization to isolate access to members, or maybe an atomic get/set operator
+            Mutx.WaitOne();
             EndThreadSignal = true;
-            return Thd.Join(StopWaitTimeMs);
+            Mutx.ReleaseMutex();
+
+            Thd.Join(StopWaitTimeMs);
+            if (Thd.IsAlive)
+            {
+                Thd.Abort();
+            }
+
+            return !Thd.IsAlive;
         }
 
         private void ThreadMain()
         // for argument, signature would be:> private void ThreadMain(Object Obj)   and pass value in Thd.Start(xyz)
         {
+            Mutx.WaitOne();
+
             // The worker thread begins here
             for ( ; !EndThreadSignal ; )
             {
+                Mutx.ReleaseMutex();
+
                 List<Scheduling> Messages = Db.GetSchedulingRecords(true, 2);  // Normally second arg should be 1 (default value)
-                System.Diagnostics.Trace.WriteLine("Query found " + Messages.Count.ToString() + " records from database query");
+                Trace.WriteLine("Query found " + Messages.Count.ToString() + " records from database query");
 
                 foreach (Scheduling S in Messages)
                 {
@@ -67,20 +93,22 @@ namespace RedoxDataTaskSvc
 
                     if (Success) 
                     {
-                        String FolderName = @"C:\RedoxFeedHandler\RedoxFeedTest";
-                        String FileName = "test.txt";
-
-                        using (StreamWriter Writer = new StreamWriter(Path.Combine(FolderName, FileName)))
+                        using (StreamWriter Writer = new StreamWriter(Path.Combine(OutputFolderName, OutputFileName)))
                         {
-                            string ClinicalSummaryString = JsonConvert.SerializeObject(ClinicalSummaryObject);
+                            string ClinicalSummaryString = JsonConvert.SerializeObject(ClinicalSummaryObject,Formatting.Indented);
                             Writer.Write(ClinicalSummaryString);
                         }
 
                         RemoveTask(S);
                     }
                 }
-                Thread.Sleep(5 * 1000);
+
+                Thread.Sleep(SecondsPauseBetweenQuery * 1000);
+
+                Mutx.WaitOne();  // need this so the for loop test condition can evaluate safely
             }
+
+            Mutx.ReleaseMutex();
         }
 
         public bool IsThreadAlive
@@ -130,11 +158,17 @@ namespace RedoxDataTaskSvc
 
         private bool GetClinicalSumamryResponseObject(JObject QueryPayloadObject, out JObject IndentedCcd)
         {
-            IndentedCcd = I.IsAuthenticated ?
-                IndentedCcd = I.QueryForClinicalSummary(QueryPayloadObject) :
-                new JObject();
+            try
+            {
+                IndentedCcd = I.QueryForClinicalSummary(QueryPayloadObject);
+            }
+            catch (Exception /*e*/)
+            {
+                IndentedCcd = new JObject();
+                return false;
+            }
 
-            return I.IsAuthenticated;
+            return true;
         }
 
         private bool RemoveTask(Scheduling S)
