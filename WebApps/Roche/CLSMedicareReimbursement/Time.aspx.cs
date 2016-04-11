@@ -25,7 +25,7 @@ namespace CLSMedicareReimbursement
         {
             log.Info(DateTime.Now + "||" + "Application is working.");
             //----------------------------System Info-------------------------------------------
-            var bSystemHealth = false;
+            var bSystemHealth = true;
 
             lblSystemDate.Text = DateTime.Now.ToString();
 
@@ -52,8 +52,17 @@ namespace CLSMedicareReimbursement
                 }
                 else
                 {
-                    memoryError = "No memory (free memory < " + configMemory + " % (web.config)).";
-                    bSystemHealth = false;
+                    if (FreeMemoryPercentage < 20)
+                    {
+                        memoryError = "No memory (free memory < " + configMemory + " % (web.config)).";
+                        bSystemHealth = false;
+                    }
+                    else
+                    {
+                        lblMemory.Text = string.Format("<em>Avalible</em>");
+                        bSystemHealth = true;
+                    }
+                    
                 }
             }
             catch (Exception ex)
