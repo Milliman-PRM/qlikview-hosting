@@ -23,10 +23,9 @@ namespace CLSMedicareReimbursement
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            log.Info(DateTime.Now + "||" + "Application is working.");
+            log.Info(DateTime.Now + "||" + "Health Check - Application is working.");
             //----------------------------System Info-------------------------------------------
             var bSystemHealth = true;
-
             lblSystemDate.Text = DateTime.Now.ToString();
 
             var spaceError = "";
@@ -52,17 +51,8 @@ namespace CLSMedicareReimbursement
                 }
                 else
                 {
-                    if (FreeMemoryPercentage < 20)
-                    {
-                        memoryError = "No memory (free memory < " + configMemory + " % (web.config)).";
-                        bSystemHealth = false;
-                    }
-                    else
-                    {
-                        lblMemory.Text = string.Format("<em>Avalible</em>");
-                        bSystemHealth = true;
-                    }
-                    
+                    memoryError = "No memory (free memory < " + configMemory + " % (web.config)).";
+                    bSystemHealth = false;                   
                 }
             }
             catch (Exception ex)
