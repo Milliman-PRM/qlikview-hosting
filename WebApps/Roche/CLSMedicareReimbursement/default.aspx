@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="default.aspx.cs" Inherits="CLSMedicareReimbursement._default" %>
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="default.aspx.cs" Inherits="CLSMedicareReimbursement._default" %>
 
 <%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
 
@@ -21,7 +21,7 @@
         }
     </script>
 
-    <title>Clinical Lab Systems Medicare Reimbursement</title>
+    <title>Roche Lab Systems Handbook</title>
     <meta name="ROBOTS" content="NOINDEX, NOFOLLOW" />
     <style type="text/css">
         body {
@@ -409,7 +409,7 @@
                             <asp:ImageButton ID="LaunchMenu" runat="server" CssClass="searchImage" ImageUrl="~/Images/search_icon.png" OnClick="LaunchMenu_Click" />
                         </td>
                         <td>
-                            <h2>Clinical Lab Systems Medicare Reimbursement</h2>
+                            <h2>Roche Lab Systems Handbook</h2>
                         </td>
                     </tr>
                 </table>
@@ -425,7 +425,7 @@
                                 <td>
                                     <em class="shadowFont">Narrowing the results</em>
                                     <p class="description">
-                                        Upon entering the Clinical Lab Systems Medicare Reimbursement Tool, the search menu will be displayed.  From this menu the user can narrow the selections by Analyzer, Assay Description, CPT Code, Locality, or any combination of these fields.  Once the desired selections have been made, the results can be viewed by either clicking on the “View Report” button on the right side of the menu, or by clicking on the exit button in the upper right-hand corner.  To make further selections, the user should open the search menu by clicking on the “Search” button at the upper left-hand corner of the tool.  Additionally, while viewing the result, it is possible to narrow the selections by selecting values directly in the rates table.
+                                        Upon entering the Roche Lab Systems Handbook, the search menu will be displayed.  From this menu the user can narrow the selections by Analyzer, Assay Description, CPT Code, Locality, or any combination of these fields.  Once the desired selections have been made, the results can be viewed by either clicking on the “View Report” button on the right side of the menu, or by clicking on the exit button in the upper right-hand corner.  To make further selections, the user should open the search menu by clicking on the “Search” button at the upper left-hand corner of the tool.  Additionally, while viewing the result, it is possible to narrow the selections by selecting values directly in the rates table.
                                     </p>
                                 </td>
                             </tr>
