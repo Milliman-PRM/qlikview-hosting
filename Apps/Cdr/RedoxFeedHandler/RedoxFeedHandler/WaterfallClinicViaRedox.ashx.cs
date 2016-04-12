@@ -56,9 +56,11 @@ namespace RedoxFeedHandler
                         using (StreamReader ContentStream = new StreamReader(context.Request.InputStream))
                         {
                             FullContentString = ContentStream.ReadToEnd();
+                            // switch to indent formatted text
+                            FullContentString = JsonConvert.SerializeObject(JObject.Parse(FullContentString), Formatting.Indented);
                         }
 
-                        #region temporary code to log all received message content
+#region temporary code to log all received message content
                         // log HTTP headers and body
                         foreach (string H in context.Request.Headers)
                         {
@@ -66,7 +68,7 @@ namespace RedoxFeedHandler
                         }
                         LogFile.WriteLine("Body: " + FullContentString);
                         LogFile.Flush();
-                        #endregion
+#endregion
 
                         // test for appropriate message content type
                         if (context.Request.ContentType.IndexOf(@"application/json") == -1)
@@ -85,6 +87,8 @@ namespace RedoxFeedHandler
                         // or   DocJson = JsonConvert.DeserializeObject<JObject>(ContentString);
                         RedoxMeta Meta = new RedoxMeta(DocJson.Property("Meta"));
                         long Transmission = Meta.TransmissionNumber;
+                        String SourceId = Meta.Source.Value["ID"].Value<String>();
+                        String SourceName = Meta.Source.Value["Name"].Value<String>();
 
 #region Database Persistence
                         // Instantiate interface to database
@@ -94,7 +98,7 @@ namespace RedoxFeedHandler
                         RedoxCacheInterface Db = new RedoxCacheInterface(CxStr);
 
                         // Store this message to database
-                        long NewRecord = Db.InsertSchedulingRecord(Transmission, FullContentString);
+                        long NewRecord = Db.InsertSchedulingRecord(Transmission, SourceId, SourceName, FullContentString);
 #endregion
 
                         LogFile.Close();

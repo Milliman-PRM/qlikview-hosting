@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Database Name="redoxcache" EntityNamespace="RedoxCacheDbContext" ContextNamespace="RedoxCacheDbContext" Class="RedoxCacheContext" xmlns:ed="http://devart.com/schemas/EntityDeveloper/1.0" ed:Guid="4510108b-bfc5-426b-accd-f5ef155de53e" Provider="Devart.Data.PostgreSql.Linq.Provider.PgSqlDataProvider, Devart.Data.PostgreSql.Linq" Extended="true" xmlns="http://schemas.devart.com/linqconnect/mapping">
-  <Connection Mode="ConnectionString" ConnectionString="User Id=tom;Host=PRMDev03.cloudapp.net;Port=5432;Database=redoxcache;Initial Schema=public" Provider="Devart.Data.PostgreSql" />
+  <Connection Mode="ConnectionString" ConnectionString="User Id=tom;Host=localhost;Port=5433;Database=redoxcache;Initial Schema=public" Provider="Devart.Data.PostgreSql" />
   <Table Name="public.scheduling" Member="Schedulings">
     <Type Name="Scheduling" ed:Guid="1eb107ab-42dd-4e92-ae31-91a7bb5d33b3">
       <Column Name="dbid" Type="System.Int64" AutoSync="OnInsert" DbType="bigserial NOT NULL" IsReadOnly="true" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" ed:ValidateRequired="true" ed:Guid="fbf63193-b602-4fd3-ba57-381fd8373306" />
       <Column Name="transmissionid" Member="TransmissionId" Type="System.Int64" DbType="int8 NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="a1625e39-b399-4e62-ae8f-3dedd470e190" />
-      <Column Name="facilitycode" Member="FacilityCode" Type="System.String" DbType="varchar" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="78cc01aa-1485-4cca-ba4b-0b45242fdede" />
       <Column Name="content" Member="Content" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="f599d9a5-0023-4423-aea3-056f22f366e1" />
-      <Association Name="SourceFeed_Scheduling" ed:AssociationGuid="130e5538-ea39-44bd-9230-eac1075c5e12" Member="SourceFeed" ed:Guid="bd93f77a-9b3e-439e-a00b-9917bc10c0f6" ThisKey="FacilityCode" OtherKey="FacilityCode" Type="SourceFeed" IsForeignKey="true" />
+      <Column Name="sourcefeedid" Member="SourceFeedId" Type="System.Guid" DbType="uuid NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="78cc01aa-1485-4cca-ba4b-0b45242fdede" />
+      <Column Name="sourcefeedname" Member="SourceFeedName" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="5ac0f38c-20ba-4b26-983f-7cd7019a566e" />
+      <Association Name="SourceFeed_Scheduling" ed:AssociationGuid="130e5538-ea39-44bd-9230-eac1075c5e12" Member="SourceFeed" ed:Guid="bd93f77a-9b3e-439e-a00b-9917bc10c0f6" ThisKey="SourceFeedId" OtherKey="SourceId" Type="SourceFeed" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="public.sourcefeed" Member="SourceFeeds">
     <Type Name="SourceFeed" ed:Guid="d562cbe7-82cd-4694-b2d1-939cb150c3b6">
-      <Column Name="facilitycode" Member="FacilityCode" Type="System.String" DbType="varchar" IsReadOnly="true" IsPrimaryKey="true" CanBeNull="false" UpdateCheck="Always" ed:ValidateRequired="true" ed:Guid="d6510ac6-475c-4753-a8cf-e302bb1c87f0" />
-      <Association Name="SourceFeed_Scheduling" ed:AssociationGuid="130e5538-ea39-44bd-9230-eac1075c5e12" Member="Schedulings" ed:Guid="09bc99e2-7951-4007-8b0e-5ca33f5f6dca" ThisKey="FacilityCode" OtherKey="FacilityCode" Type="Scheduling" />
+      <Column Name="sourceid" Member="SourceId" Type="System.Guid" DbType="uuid NOT NULL" IsPrimaryKey="true" CanBeNull="false" UpdateCheck="Always" ed:ValidateRequired="true" ed:Guid="d6510ac6-475c-4753-a8cf-e302bb1c87f0" />
+      <Column Name="sourcename" Member="SourceName" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="a057cc34-c110-4b99-a259-c6a5fbc91711" />
+      <Column Name="querydestinationid" Member="QueryDestinationId" Type="System.Guid" DbType="uuid NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="e4e233d2-231a-44a8-ab3e-f2da88ff91e5" />
+      <Column Name="querydestinationname" Member="QueryDestinationName" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="5e9a6c14-5306-4ea3-98e0-020cfe8882aa" />
+      <Column Name="bestidtype" Member="BestIdType" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="86e84bf3-4ab9-4526-8b6e-5f0a69c4fb5d" />
+      <Association Name="SourceFeed_Scheduling" ed:AssociationGuid="130e5538-ea39-44bd-9230-eac1075c5e12" Member="Schedulings" ed:Guid="09bc99e2-7951-4007-8b0e-5ca33f5f6dca" ThisKey="SourceId" OtherKey="SourceFeedId" Type="Scheduling" />
     </Type>
   </Table>
 </Database>

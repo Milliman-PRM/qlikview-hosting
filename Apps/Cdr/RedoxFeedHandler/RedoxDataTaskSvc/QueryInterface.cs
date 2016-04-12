@@ -17,8 +17,10 @@ namespace RedoxDataTaskSvc
         HttpClient client = new HttpClient();
 
         Uri RedoxDomain = new Uri(@"https://api.redoxengine.com/");
-        private string _ApiKey = @"317248c4-3b22-416b-80b8-9e6380d006f8";
-        private string _Secret = @"723A1313-84A2-44B2-95A0-B7BECB78E4D8";
+
+        // TODO The following should be obtained from configuration?
+        private string _ApiKey = @"317248c4-3b22-416b-80b8-9e6380d006f8";  // This is for Redox source "MillimanQuerySource"
+        private string _Secret = @"723A1313-84A2-44B2-95A0-B7BECB78E4D8";  // This is for Redox source "MillimanQuerySource"
 
         private string _AccessToken, _RefreshToken;
         private DateTime _Expires;

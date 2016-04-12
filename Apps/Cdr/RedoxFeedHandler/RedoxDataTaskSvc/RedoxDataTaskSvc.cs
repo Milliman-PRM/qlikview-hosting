@@ -26,7 +26,7 @@ namespace RedoxDataTaskSvc
         /// <param name="args"></param>
         protected override void OnStart(string[] args)
         {
-            int SecondsToPauseBeforeStarting = 12;
+            int SecondsToPauseBeforeStarting = 10;
             // Wait long enough for me to attach the debugger before launching the worker thread
             for (int i = 0; i < SecondsToPauseBeforeStarting ; i++)
             {

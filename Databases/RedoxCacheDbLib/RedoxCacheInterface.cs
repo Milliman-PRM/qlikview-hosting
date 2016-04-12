@@ -24,12 +24,14 @@ namespace RedoxCacheDbLib
             ConnectionString = null;
         }
 
-        public long InsertSchedulingRecord(long TransmissionNumber, string ContentString)
+        public long InsertSchedulingRecord(long TransmissionNumber, String SourceId, String SourceName, String ContentString)
         {
             Scheduling S = new Scheduling
             {
                 TransmissionId = TransmissionNumber,
-                Content = ContentString
+                Content = ContentString,
+                SourceFeedId = new Guid(SourceId),
+                SourceFeedName = SourceName
             };
 
             Db.Schedulings.InsertOnSubmit(S);

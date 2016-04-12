@@ -23,7 +23,6 @@ namespace RedoxDataTaskSvc
         bool EndThreadSignal;
         QueryInterface I;
         String OutputFolderName = @"C:\RedoxFeedHandler\RedoxFeedTest";
-        String OutputFileName = "test.txt";
 
         public SchedulingMsgProcessor()   // Constructor
         {
@@ -89,14 +88,23 @@ namespace RedoxDataTaskSvc
 
                     QueryPayloadObject = GetClinicalSummaryQueryObject(S);
 
+// TODO Temporary debug output
+                    using (StreamWriter W = new StreamWriter(Path.Combine(@"C:\RedoxFeedHandler\RedoxFeedTest", "Query.txt")))
+                    {
+                        W.WriteLine(JsonConvert.SerializeObject(QueryPayloadObject, Formatting.Indented));
+                    }
+
                     bool Success = GetClinicalSumamryResponseObject(QueryPayloadObject, out ClinicalSummaryObject);
 
                     if (Success) 
                     {
+                        String OutputFileName = CreateClinicalSummaryFileName(S, ClinicalSummaryObject);
+
                         using (StreamWriter Writer = new StreamWriter(Path.Combine(OutputFolderName, OutputFileName)))
                         {
-                            string ClinicalSummaryString = JsonConvert.SerializeObject(ClinicalSummaryObject,Formatting.Indented);
-                            Writer.Write(ClinicalSummaryString);
+                            //string ClinicalSummaryString = JsonConvert.SerializeObject(ClinicalSummaryObject,Formatting.Indented);
+                            JObject FileContentObj = new JObject(new JProperty("Scheduling", JObject.Parse(S.Content)), new JProperty("ClinicalSummary", ClinicalSummaryObject));
+                            Writer.Write(JsonConvert.SerializeObject(FileContentObj,Formatting.Indented ));
                         }
 
                         RemoveTask(S);
@@ -105,7 +113,7 @@ namespace RedoxDataTaskSvc
 
                 Thread.Sleep(SecondsPauseBetweenQuery * 1000);
 
-                Mutx.WaitOne();  // need this so the for loop test condition can evaluate safely
+                Mutx.WaitOne();  // need this so the for loop test condition (!EndThreadSignal) can evaluate safely
             }
 
             Mutx.ReleaseMutex();
@@ -121,37 +129,57 @@ namespace RedoxDataTaskSvc
 
         private JObject GetClinicalSummaryQueryObject(Scheduling S)
         {
-            long Transm = S.TransmissionId;
-            String FacilityCode = S.FacilityCode;
+            String QueryPatientId;
 
             JObject DocJson = JObject.Parse(S.Content);
             // or   DocJson = JsonConvert.DeserializeObject<JObject>(ContentString);
-            RedoxMeta Meta = new RedoxMeta(DocJson.Property("Meta"));
+
+            IEnumerable<JObject> PatientIdentifiersArray = DocJson.Property("Patient").Value["Identifiers"].Values<JObject>();
+            foreach (JObject IdentifierObj in PatientIdentifiersArray)
+            {
+                if (IdentifierObj.Value<String>("IDType") == S.SourceFeed.BestIdType)
+                {
+                    QueryPatientId = IdentifierObj.Value<String>("ID");
+                    break;
+                }
+                // TODO What if an ID with IDType of BestIdType is not found, how does this affect the query?
+            }
 
             // build Json query object
-            JProperty MetaProp = new JProperty("Meta", new JObject(
+            JProperty MetaPrpt = new JProperty("Meta", new JObject(
                 new JProperty("DataModel", "Clinical Summary"),
                 new JProperty("EventType", "Query"),
                 new JProperty("EventDateTime", DateTime.UtcNow),
 /*TODO update*/ new JProperty("Test", true),
                 new JProperty("Destinations", new JObject[] {
                     new JObject(
-/*TODO update*/         new JProperty("ID", "ef9e7448-7f65-4432-aa96-059647e9b357"),
-/*TODO update*/         new JProperty("Name", "Clinical Summary Endpoint")
-                    )
+#if true // This is the permanent code
+                        new JProperty("ID", S.SourceFeed.QueryDestinationId.ToString()),
+                        new JProperty("Name", S.SourceFeed.QueryDestinationName)
+#else
+/*TODO replace this*/   new JProperty("ID", "ef9e7448-7f65-4432-aa96-059647e9b357"),
+/*TODO replace this*/   new JProperty("Name", "Clinical Summary Endpoint")
+#endif              
+                    ) 
                 })
             ));
-            JProperty PatientProp = new JProperty("Patient", new JObject(
+            
+            JProperty PatientPrpt = new JProperty("Patient", new JObject(
                 new JProperty("Identifiers", new JObject[] {
                     new JObject(
-/*TODO update*/         new JProperty("ID", "ffc486eff2b04b8^^^&1.3.6.1.4.1.21367.2005.13.20.1000&ISO"),    // TODO change this for production
-/*TODO update*/         new JProperty("IDType", "NIST")     // TODO change this for production
+#if false
+                        new JProperty("ID", QueryPatientId),
+                        new JProperty("IDType", S.SourceFeed.BestIdType)
+#else
+/*TODO replace this*/   new JProperty("ID", "ffc486eff2b04b8^^^&1.3.6.1.4.1.21367.2005.13.20.1000&ISO"),    // TODO change this for production
+/*TODO replace this*/   new JProperty("IDType", "NIST")     // TODO change this for production
                         // This is a hard coded test patient query copied from the Redox web site
+#endif
                     )
                 })
             ));
 
-            JObject QueryPayloadObject = new JObject(MetaProp, PatientProp);
+            JObject QueryPayloadObject = new JObject(MetaPrpt, PatientPrpt);
 
             return QueryPayloadObject;
         }
@@ -174,6 +202,20 @@ namespace RedoxDataTaskSvc
         private bool RemoveTask(Scheduling S)
         {
             return Db.RemoveSchedulingRecord(S);
+        }
+
+        private String CreateClinicalSummaryFileName(Scheduling S, JObject ClinicalSummary)
+        {
+            JProperty ClinicalSummaryMeta = ClinicalSummary.Property("Meta");
+            JObject Transmission = ClinicalSummaryMeta.Value["Transmission"].Value<JObject>();
+            String Name = ClinicalSummaryMeta.Value["DataModel"].Value<String>().Replace(" ","");
+            Name += "_";
+            Name += S.SourceFeedName.Replace(" ","");
+            Name += "_";
+            Name += Transmission.Value<String>("ID");  // TODO Maybe this should be Message ID instead of Transmission ID
+            Name = Path.ChangeExtension(Name, "json");
+
+            return Name;
         }
     }
 }
