@@ -51,7 +51,7 @@ namespace CLSMedicareReimbursement
                 }
                 else
                 {
-                    memoryError = "No memory (free memory < " + configMemory + " % (web.config)).";
+                    memoryError = "No memory (free memory %  " + FreeMemoryPercentage + "  < " + configMemory + " % (web.config)).";
                     bSystemHealth = false;                   
                 }
             }
@@ -83,7 +83,7 @@ namespace CLSMedicareReimbursement
                         }
                         else
                         {
-                            spaceError = "No disk space (free space < " + configDiskSpace + " % (web.config)).";
+                            spaceError = "No disk space (free space %  " + driveSpacePercentFree  + "  < " + configDiskSpace + " % (web.config)).";
                             bSystemHealth = false;
                         }
                     }
