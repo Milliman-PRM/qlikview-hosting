@@ -23,7 +23,7 @@ namespace CLSMedicareReimbursement
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            log.Info(DateTime.Now + "||" + "Health Check - Application is working.");
+            log.Info(DateTime.Now + "||" + "Health Check - Application Started.");
             //----------------------------System Info-------------------------------------------
             var bSystemHealth = true;
             lblSystemDate.Text = DateTime.Now.ToString();
@@ -45,7 +45,7 @@ namespace CLSMedicareReimbursement
                 var PID = PsApiWrapper.GetPerformanceInfo();
                 var FreeMemoryPercentage = (((double)PID.PhysicalAvailableBytes / (double)PID.PhysicalTotalBytes) * 100.0);
                 var configMemory = (Convert.ToDouble(ConfigurationManager.AppSettings["Memory"].ToString()));
-                if (FreeMemoryPercentage < (100 - configMemory))
+                if (FreeMemoryPercentage >= (100 - configMemory))
                 {
                     lblMemory.Text = string.Format("<em>Avalible</em>");
                 }
