@@ -11,7 +11,7 @@ using System.Threading;
 
 namespace RedoxDataTaskSvc
 {
-    public class QueryInterface
+    public class RedoxQueryInterface
     {
         private Mutex Mutx;
         HttpClient client = new HttpClient();
@@ -38,7 +38,7 @@ namespace RedoxDataTaskSvc
             }
         }
 
-        public QueryInterface()
+        public RedoxQueryInterface()
         {
             Mutx = new Mutex();
             TimeSpan FourHours = new TimeSpan(4, 0, 0);

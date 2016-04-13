@@ -8,6 +8,7 @@
       <Column Name="content" Member="Content" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="f599d9a5-0023-4423-aea3-056f22f366e1" />
       <Column Name="sourcefeedid" Member="SourceFeedId" Type="System.Guid" DbType="uuid NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="78cc01aa-1485-4cca-ba4b-0b45242fdede" />
       <Column Name="sourcefeedname" Member="SourceFeedName" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="5ac0f38c-20ba-4b26-983f-7cd7019a566e" />
+      <Column Name="eventtype" Member="EventType" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="255631da-1776-4914-b5d4-aa39323d3263" />
       <Association Name="SourceFeed_Scheduling" ed:AssociationGuid="130e5538-ea39-44bd-9230-eac1075c5e12" Member="SourceFeed" ed:Guid="bd93f77a-9b3e-439e-a00b-9917bc10c0f6" ThisKey="SourceFeedId" OtherKey="SourceId" Type="SourceFeed" IsForeignKey="true" />
     </Type>
   </Table>

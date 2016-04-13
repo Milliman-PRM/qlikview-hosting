@@ -7,8 +7,9 @@ using Newtonsoft.Json;
 
 namespace RedoxCacheDbLib
 {
+
     /// <summary>
-    /// Wrapper around the PostgreSQL database housing the task queue for clinical data extraction
+    /// A data class representing the Meta property that is expected in unsolicited datamodel messages from Redox
     /// </summary>
     public class RedoxMeta
     {
@@ -24,6 +25,10 @@ namespace RedoxCacheDbLib
         public RedoxMeta()
         {}
 
+        /// <summary>
+        /// Constructor, parses Json and initializes member variables
+        /// </summary>
+        /// <param name="MetaProperty">A JProperty named 'Meta', containing serialized Json representation of message Meta information</param>
         public RedoxMeta(JProperty MetaProperty)
         {
             if (MetaProperty.Name != "Meta")
@@ -48,6 +53,9 @@ namespace RedoxCacheDbLib
             FacilityCode = Val.Property("FacilityCode");
         }
 
+        /// <summary>
+        /// Member that represents the DataModel property of the Redox message as JProperty type
+        /// </summary>
         public JProperty DataModel
         {
             set {
@@ -63,6 +71,20 @@ namespace RedoxCacheDbLib
             }
         }
 
+        /// <summary>
+        /// Getter that returns a string representation of the Redox datamodel as JProperty type
+        /// </summary>
+        public String DataModelString
+        {
+            get
+            {
+                return _DataModel;
+            }
+        }
+
+        /// <summary>
+        /// Member that represents the EventType property of the Redox message as JProperty type
+        /// </summary>
         public JProperty EventType
         {
             set
@@ -79,6 +101,9 @@ namespace RedoxCacheDbLib
             }
         }
 
+        /// <summary>
+        /// Member that represents the EventDateTime property of the Redox message as JProperty type
+        /// </summary>
         public JProperty EventDateTime
         {
             set
@@ -95,6 +120,9 @@ namespace RedoxCacheDbLib
             }
         }
 
+        /// <summary>
+        /// Member that represents the Test property of the Redox message as JProperty type
+        /// </summary>
         public JProperty Test
         {
             set
@@ -119,6 +147,9 @@ namespace RedoxCacheDbLib
             }
         }
 
+        /// <summary>
+        /// Member that represents the Source property of the Redox message as JProperty type
+        /// </summary>
         public JProperty Source
         {
             set
@@ -146,6 +177,9 @@ namespace RedoxCacheDbLib
             }
         }
 
+        /// <summary>
+        /// Member that represents the Message property of the Redox message as JProperty type
+        /// </summary>
         public JProperty Message
         {
             set
@@ -173,6 +207,9 @@ namespace RedoxCacheDbLib
             }
         }
 
+        /// <summary>
+        /// Member that represents the Transmission property of the Redox message as JProperty type
+        /// </summary>
         public JProperty Transmission
         {
             set
@@ -200,6 +237,9 @@ namespace RedoxCacheDbLib
             }
         }
 
+        /// <summary>
+        /// Getter that returns the Transmissioin Number property of the Redox message as long type
+        /// </summary>
         public long TransmissionNumber
         {
             get
@@ -208,7 +248,9 @@ namespace RedoxCacheDbLib
             }
         }
 
-
+        /// <summary>
+        /// Member that represents the FacilityCode property of the Redox message as JProperty type
+        /// </summary>
         public JProperty FacilityCode
         {
             set
@@ -233,7 +275,6 @@ namespace RedoxCacheDbLib
             }
         }
 
-
-    }
-}
+    }  // class
+}  // namespace
 

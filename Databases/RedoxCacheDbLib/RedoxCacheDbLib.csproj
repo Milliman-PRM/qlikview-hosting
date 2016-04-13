@@ -59,7 +59,7 @@
       <DependentUpon>RedoxCacheDb.SourceFeed.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RedoxCacheInterface.cs" />
+    <Compile Include="RedoxCacheDbInterface.cs" />
     <Compile Include="RedoxMeta.cs" />
   </ItemGroup>
   <ItemGroup>

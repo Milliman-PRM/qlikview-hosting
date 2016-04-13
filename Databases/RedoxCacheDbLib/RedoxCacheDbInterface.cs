@@ -5,14 +5,22 @@ using System.Configuration;
 using System.Text;
 using System.Threading.Tasks;
 using RedoxCacheDbContext;
+using Devart.Data.Linq;
 
 namespace RedoxCacheDbLib
 {
-    public class RedoxCacheInterface
+    /// <summary>
+    /// An api class to expose C# access to the database housing the Redox message/task queue.  
+    /// </summary>
+    public class RedoxCacheDbInterface
     {
         RedoxCacheContext Db;
 
-        public RedoxCacheInterface(string ConnectionString = null)
+        /// <summary>
+        /// Constructor, instantiates the encapsulated database context
+        /// </summary>
+        /// <param name="ConnectionString"></param>
+        public RedoxCacheDbInterface(string ConnectionString = null)
         {
             if (ConnectionString == null)
             {
@@ -24,14 +32,24 @@ namespace RedoxCacheDbLib
             ConnectionString = null;
         }
 
-        public long InsertSchedulingRecord(long TransmissionNumber, String SourceId, String SourceName, String ContentString)
+        /// <summary>
+        /// Creates and inserts a record to the scheduling entity (table) of the encapsulated database
+        /// </summary>
+        /// <param name="TransmissionNumber"></param>
+        /// <param name="SourceId"></param>
+        /// <param name="SourceName"></param>
+        /// <param name="ContentString"></param>
+        /// <param name="EventType"></param>
+        /// <returns>The primary key value of the inserted record upon successful INSERT</returns>
+        public long InsertSchedulingRecord(long TransmissionNumber, String SourceId, String SourceName, String ContentString, String EventType)
         {
             Scheduling S = new Scheduling
             {
                 TransmissionId = TransmissionNumber,
                 Content = ContentString,
                 SourceFeedId = new Guid(SourceId),
-                SourceFeedName = SourceName
+                SourceFeedName = SourceName,
+                EventType = EventType
             };
 
             Db.Schedulings.InsertOnSubmit(S);
@@ -66,10 +84,23 @@ namespace RedoxCacheDbLib
             return ReturnList;
         }
 
+        /// <summary>
+        /// Removes a record from the Scheduling entity collection/table
+        /// </summary>
+        /// <param name="S">Represents the object to be deleted from the context</param>
+        /// <returns>boolean indicating success of the remove operation</returns>
         public bool RemoveSchedulingRecord(Scheduling S)
         {
-            Db.Schedulings.DeleteOnSubmit(S);
-            Db.SubmitChanges();
+            try
+            {
+                Db.Schedulings.DeleteOnSubmit(S);
+                Db.SubmitChanges(ConflictMode.FailOnFirstConflict);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
             return true;
         }
     }
