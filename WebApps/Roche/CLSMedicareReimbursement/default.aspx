@@ -1,377 +1,62 @@
-<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="default.aspx.cs" Inherits="CLSMedicareReimbursement._default" %>
-
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="default.aspx.cs" Inherits="CLSMedicareReimbursement._default" %>
 <%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head runat="server">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <script src="scripts/jquery-1.12.1.min.js" type="text/javascript"></script>
-
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-    <script src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.9/jquery-ui.js" type="text/javascript"></script>
-    <link href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.9/themes/start/jquery-ui.css"
-        rel="stylesheet" type="text/css" />
-
+    <script src="http://code.jquery.com/jquery-1.9.1.js" type="text/javascript"></script>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js" type="text/javascript"></script>
     <script type="text/javascript">
         if (typeof jQuery == 'undefined') {
             alert("jQuery could not be loaded.....");
         }
     </script>
-
     <title>Roche Lab Systems Handbook</title>
     <meta name="ROBOTS" content="NOINDEX, NOFOLLOW" />
     <style type="text/css">
-        body {
-            background-color: white;
-            margin: 0px;
-            overflow: hidden;
-        }
-
-        #ContainerHeaderSection {
-            height: 75px;
-            color: black;
-            text-align: center;
-            padding: 5px;
-            border-bottom: 3px solid #0072C6;
-            font-family: Arial;
-            font-size: 20px;
-        }
-
-        #ContainerMenuList {
-            text-align: left;
-            font-family: Arial;
-            font-size: 12px;
-            height: 400px;
-            width: 1121px;
-            top: 91px;
-            left: 104px;
-            position: absolute;
-            visibility: visible;
-            background-color: white;
-            padding: 0px;
-            margin: 0px;
-            border: 3px solid #0072C6;
-            z-index: 2000;
-        }
-
-        #footer {
-            text-align: left;
-            font-family: Arial;
-            font-size: 12px;
-            height: 133px;
-            bottom: 0px;
-            left: 48px;
-            position: absolute;
-            padding: 2px;
-        }
-
-        #RatesGrid_GridData {
-            /*hide radgrid horizontal scroll*/
-            overflow-x: hidden !important;
-        }
-
-        .RadSearchBox .rsbEmptyMessage {
-            color: #046EBC !important;
-            opacity: 1.0;
-            font-weight: bolder !important;
-            font-style: normal !important;
-            /* remove chrome defalt textbox outline */
-            outline: none;
-        }
-
-        #ContainerUIMain {
-            margin: 0px auto;
-            padding: 6px;
-            border-image: none;
-            width: 95%;
-            color: rgb(88, 88, 88);
-            height: 890px;
-        }
-
-        #ContainerGrid {
-            padding: 3px 3px 3px 3px;
-            margin: 0 auto;
-        }
-
-        .clear {
-            height: 8px;
-        }
-
-        .ContainerCheckBox {
-            overflow: scroll;
-            height: 382px;
-            width: 265px;
-        }
-
-        .ContainerAnalyzerCheckList {
-            border: 1px solid #808080;
-            color: white;
-            overflow: hidden;
-            position: absolute;
-            top: 5px;
-            left: 5px;
-            height: 390px;
-            width: 265px;
-        }
-
-        .ContainerAssayDescriptionList {
-            border: 1px solid #808080;
-            overflow: hidden;
-            color: white;
-            position: absolute;
-            top: 5px;
-            left: 275px;
-            height: 390px;
-            width: 265px;
-        }
-
-        .ContainerLocalityList {
-            border: 1px solid #808080;
-            overflow: hidden;
-            color: white;
-            position: absolute;
-            top: 5px;
-            left: 710px;
-            height: 390px;
-            width: 265px;
-        }
-
-        .ContainerCptCodeList {
-            border: 1px solid #808080;
-            overflow: hidden;
-            color: white;
-            position: absolute;
-            top: 5px;
-            left: 544px;
-            height: 390px;
-            width: 162px;
-        }
-
-        .ContainerViewReport {
-            overflow: hidden;
-            color: white;
-            position: absolute;
-            top: 308px;
-            left: 981px;
-            height: 43px;
-            width: 136px;
-        }
-
-        .ContainerClearButton {
-            overflow: hidden;
-            color: white;
-            position: absolute;
-            top: 351px;
-            left: 981px;
-            height: 43px;
-            width: 136px;
-        }
-
-        .CustomButton {
-            margin: 4px 3px 0px 6px;
-            border: solid 1px #bbb;
-            padding: 8px;
-            -moz-border-radius: 3px;
-            -webkit-border-radius: 3px;
-            border-radius: 3px;
-            -moz-box-shadow: 0px 0px 7px #bbb;
-            -webkit-box-shadow: #bbb 0px 0px 7px;
-            box-shadow: 0px 0px 7px #bbb;
-            color: #444;
-            font-size: 105%;
-            float: left;
-            background: #ddd;
-            text-shadow: 1px 1px #bbb;
-        }
-
-            .CustomButton:hover {
-                background-color: #ddd;
-                color: #333;
-                border: solid 1px #0072C6;
-                cursor: pointer;
-                outline: none;
-            }
-
-        .closeImageMenu {
-            cursor: pointer;
-            float: right;
-            height: 15px;
-            padding: 0;
-            width: 14px;
-            -moz-border-radius: 8px;
-            -webkit-border-radius: 8px;
-            border-radius: 8px;
-            position: absolute;
-            left: 1104px;
-            top: 1px;
-        }
-
-        .searchImage {
-            left: 70px;
-            position: absolute;
-            top: 60px;
-            width: 90px;
-            height: 31px;
-            cursor: pointer;
-        }
-
-        .ContainerInfoImage {
-            /*left: 1400px;*/
-            position: absolute;
-            top: 66px;
-            width: 24px;
-            height: 21px;
-            cursor: pointer;
-            float:right;
-            right: 161px;
-        }
-        /*selected items gray background color*/
-        select option:checked {
-            background: linear-gradient(#0066FF,#0066FF);
-            background-color: #0066FF !important; /* for IE */
-        }
-
-        /* How this screen works?  popu Up */
-        .messagePopUpWindow {
-            background: none repeat scroll 0 0 white;
-            border: 14px solid #CCC;
-            height: 520px;
-            left: 437px;
-            overflow-x: hidden;
-            padding: 17px;
-            top: 80px;
-            width: 580px;
-            z-index: 12000;
-            line-height: 14px;
-            position: absolute;
-            -webkit-border-bottom-right-radius: 5px;
-            -webkit-border-bottom-left-radius: 5px;
-            -webkit-border-top-left-radius: 5px;
-            -webkit-border-top-right-radius: 5px;
-            -moz-border-radius-bottomright: 5px;
-            -moz-border-radius-bottomleft: 5px;
-            -moz-border-radius-topleft: 5px;
-            -moz-border-radius-topright: 5px;
-            border-bottom-right-radius: 5px;
-            border-bottom-left-radius: 5px;
-            border-top-left-radius: 5px;
-            border-top-right-radius: 5px;
-        }
-
-        .acc_container {
-            margin: 0 0 5px;
-            padding: 0;
-            overflow: hidden;
-            clear: both;
-            background: #f0f0f0;
-            border: 1px solid #d6d6d6;
-            border-top: none;
-        }
-
-            .acc_container .block {
-                padding: 4px 0px 0px 17px;
-            }
-
-        .clsoeImageInfo {
-            border-radius: 8px 8px 8px 8px;
-            cursor: pointer;
-            float: right;
-            height: 15px;
-            margin: -18px -19px 0 0;
-            padding: 3px;
-            width: 14px;
-            -moz-border-radius: 8px;
-            -webkit-border-radius: 8px;
-            border-radius: 8px;
-        }
-
-        .notify {
-            background: none repeat scroll 0 0 #FFFCCF;
-            border: 1px solid #F4E889;
-            display: block;
-            padding: 5px;
-            width: 217px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .tableLineItems {
-            list-style: none;
-            margin: 2px 0;
-            padding: 0;
-            width: 541px;
-            float: left;
-            background: #E7E8E9;
-        }
-
-        #tableCurrOutlines tr {
-            border: 0;
-        }
-
-        .shadowFont {
-            text-shadow: 0 1px 1px #F2F2F2;
-            font-weight: bold;
-            color: #333;
-            text-decoration: none;
-            font-family: Sans-Serif;
-            font-size: 12px;
-        }
-
-        .description {
-            font-size: 11px;
-            line-height: 15px;
-            font-family: arial,sans-serif;
-            font-weight: normal;
-        }
-
-        .lablePointer {
-            color: #5f5f5f;
-            content: " â˜›";
-            font-size: 13px;
-            font-weight: 700;
-            line-height: 18px;
-            margin-left: 29px;
-        }
-        /*search box font-face color*/
-        .RadSearchBox .rsbEmptyMessage
-        {
-            color:#0072C6 !important;
-        }
-        .table-condensed th,
-        .table-condensed td {
-            padding: 4px 5px;
-        }
-        #containerCopyright {
-            right: 50px;
-            bottom: 17px;
-            width: 154px;
-            text-align: center;
-            font-size: small;
-            float: right;
-            position:absolute;
-        }
-
-        .RadGrid_Outlook
-        {
-            border: 1px solid #0072C6;
-        }
-        /*These settings are for each broswer*/
-        .rgHeaderDivForChrome {
-            margin-right: 15px !important;
-        }
-        .rgHeaderDivForIE {
-            margin-right: 17px !important;
-        }
-        .rgHeaderDivForSpartan {
-            margin-right: 12px !important;
-        }
-        .rgHeaderDivForFireFox
-        {
-            margin-right:21px !important
-        }
+        body{background-color:white;margin:0px;overflow:hidden}
+        #ContainerHeaderSection{height:75px;color:black;text-align:center;padding:5px;border-bottom:3px solid #0072C6;font-family:Arial;font-size:20px}
+        #ContainerMenuList{text-align:left;font-family:Arial;font-size:12px;height:400px;width:1121px;top:91px;left:104px;position:absolute;visibility:visible;background-color:white;padding:0px;margin:0px;border:3px solid #0072C6;z-index:2000}
+        #footer{text-align:left;font-family:Arial;font-size:12px;height:133px;bottom:0px;left:48px;position:absolute;padding:2px}
+        #RatesGrid_GridData{overflow-x:hidden !important}
+        .RadSearchBox .rsbEmptyMessage{color:#046EBC !important;opacity:1.0;font-weight:bolder !important;font-style:normal !important;outline:none}
+        #ContainerUIMain{margin:0px auto;padding:6px;border-image:none;width:95%;color:rgb(88, 88, 88);height:890px}
+        #ContainerGrid{padding:3px 3px 3px 3px;margin:0 auto}
+        .clear{height:8px}        
+        .ContainerCheckBox{overflow:scroll;height:382px;width:265px}
+        .ContainerAnalyzerCheckList{border:1px solid #808080;color:white;overflow:hidden;position:absolute;top:5px;left:5px;height:390px;width:265px}
+        .ContainerAssayDescriptionList{border:1px solid #808080;overflow:hidden;color:white;position:absolute;top:5px;left:275px;height:390px;width:265px}
+        .ContainerLocalityList{border:1px solid #808080;overflow:hidden;color:white;position:absolute;top:5px;left:710px;height:390px;width:265px}
+        .ContainerCptCodeList{border:1px solid #808080;overflow:hidden;color:white;position:absolute;top:5px;left:544px;height:390px;width:162px}
+        .ContainerViewReport{overflow:hidden;color:white;position:absolute;top:308px;left:981px;height:43px;width:136px}
+        .ContainerClearButton{overflow:hidden;color:white;position:absolute;top:351px;left:981px;height:43px;width:136px}
+        .CustomButton{margin:4px 3px 0px 6px;border:solid 1px #bbb;padding:8px;-moz-border-radius:3px;-webkit-border-radius:3px;border-radius:3px;-moz-box-shadow:0px 0px 7px #bbb;-webkit-box-shadow:#bbb 0px 0px 7px;box-shadow:0px 0px 7px #bbb;color:#444;font-size:105%;float:left;background:#ddd;text-shadow:1px 1px #bbb}
+        .CustomButton:hover{background-color:#ddd;color:#333;border:solid 1px #0072C6;cursor:pointer;outline:none}
+        .closeImageMenu{cursor:pointer;float:right;height:15px;padding:0;width:14px;-moz-border-radius:8px;-webkit-border-radius:8px;border-radius:8px;position:absolute;left:1104px;top:1px}
+        .searchImage{left:70px;position:absolute;top:60px;width:90px;height:31px;cursor:pointer}
+        .ContainerInfoImage{position:absolute;top:66px;width:24px;height:21px;cursor:pointer;float:right;right:161px}
+        select option:checked{background:linear-gradient(#0066FF,#0066FF);background-color:#0066FF !important}
+        .messagePopUpWindow{background:none repeat scroll 0 0 white;border:14px solid #CCC;height:520px;left:437px;overflow-x:hidden;padding:17px;top:80px;width:580px;z-index:12000;line-height:14px;position:absolute;-webkit-border-bottom-right-radius:5px;-webkit-border-bottom-left-radius:5px;-webkit-border-top-left-radius:5px;-webkit-border-top-right-radius:5px;-moz-border-radius-bottomright:5px;-moz-border-radius-bottomleft:5px;-moz-border-radius-topleft:5px;-moz-border-radius-topright:5px;border-bottom-right-radius:5px;border-bottom-left-radius:5px;border-top-left-radius:5px;border-top-right-radius:5px}
+        .acc_container{margin:0 0 5px;padding:0;overflow:hidden;clear:both;background:#f0f0f0;border:1px solid #d6d6d6;border-top:none}
+        .acc_container .block{padding:4px 0px 0px 17px}
+        .clsoeImageInfo{border-radius:8px 8px 8px 8px;cursor:pointer;float:right;height:15px;margin:-18px -19px 0 0;padding:3px;width:14px;-moz-border-radius:8px;-webkit-border-radius:8px;border-radius:8px}
+        .notify{background:none repeat scroll 0 0 #FFFCCF;border:1px solid #F4E889;display:block;padding:5px;width:217px;margin:0 auto;text-align:center}
+        .tableLineItems{list-style:none;margin:2px 0;padding:0;width:541px;float:left;background:#E7E8E9}
+        #tableCurrOutlines tr{border:0}
+        .shadowFont{text-shadow:0 1px 1px #F2F2F2;font-weight:bold;color:#333;text-decoration:none;font-family:Sans-Serif;font-size:12px}
+        .description{font-size:11px;line-height:15px;font-family:arial,sans-serif;font-weight:normal}
+        .lablePointer{color:#5f5f5f;content:" â˜›";font-size:13px;font-weight:700;line-height:18px;margin-left:29px}
+        .RadSearchBox .rsbEmptyMessage{color:#0072C6 !important}
+        .table-condensed th,.table-condensed td{padding:4px 5px}
+        #containerCopyright{right:50px;bottom:17px;width:154px;text-align:center;font-size:small;float:right;position:absolute}
+        .RadGrid_Outlook{border:1px solid #0072C6}
+        .rgHeaderDivForChrome{margin-right:15px !important}
+        .rgHeaderDivForIE{margin-right:17px !important}
+        .rgHeaderDivForSpartan{margin-right:12px !important}
+        .rgHeaderDivForFireFox{margin-right:21px !important}
     </style>
 </head>
 <body onload="Ready()">
@@ -404,12 +89,11 @@
             <div id="ContainerHeaderSection">
                 <table style="width: 100%">
                     <tr>
-                        <td></td>
                         <td style="vertical-align: bottom; padding-bottom: 5px">
                             <asp:ImageButton ID="LaunchMenu" runat="server" CssClass="searchImage" ImageUrl="~/Images/search_icon.png" OnClick="LaunchMenu_Click" />
                         </td>
                         <td>
-                            <h2>Roche Lab Systems Handbook</h2>
+                            <h2>Clinical Lab Systems Medicare Reimbursement</h2>
                         </td>
                     </tr>
                 </table>
@@ -425,7 +109,7 @@
                                 <td>
                                     <em class="shadowFont">Narrowing the results</em>
                                     <p class="description">
-                                        Upon entering the Roche Lab Systems Handbook, the search menu will be displayed.  From this menu the user can narrow the selections by Analyzer, Assay Description, CPT Code, Locality, or any combination of these fields.  Once the desired selections have been made, the results can be viewed by either clicking on the “View Report” button on the right side of the menu, or by clicking on the exit button in the upper right-hand corner.  To make further selections, the user should open the search menu by clicking on the “Search” button at the upper left-hand corner of the tool.  Additionally, while viewing the result, it is possible to narrow the selections by selecting values directly in the rates table.
+                                        Upon entering the Clinical Lab Systems Medicare Reimbursement Tool, the search menu will be displayed.  From this menu the user can narrow the selections by Analyzer, Assay Description, CPT Code, Locality, or any combination of these fields.  Once the desired selections have been made, the results can be viewed by either clicking on the “View Report” button on the right side of the menu, or by clicking on the exit button in the upper right-hand corner.  To make further selections, the user should open the search menu by clicking on the “Search” button at the upper left-hand corner of the tool.  Additionally, while viewing the result, it is possible to narrow the selections by selecting values directly in the rates table.
                                     </p>
                                 </td>
                             </tr>
@@ -570,7 +254,6 @@
             <div id="containerCopyright">
                 <asp:Label ID="lblCopyrightYear" runat="server">Milliman PRM Analytics®</asp:Label>
             </div>
-
             <telerik:RadNotification RenderMode="Lightweight" ID="Toast" runat="server" VisibleOnPageLoad="false" Position="BottomRight"
                 Width="330" Height="160" Animation="Slide" EnableRoundedCorners="true" EnableShadow="true"
                 Title="Selections Restored" Text=""
@@ -580,14 +263,12 @@
     </form>
     <script type="text/javascript">
 
-        function Ready() {
-            LoadPageData();
-        }
+        function Ready() {LoadPageData();}
 
         function LoadPageData() {
-            //we have to check where the mouse is,  due to the implementation of some of the controls
-            //we will get a mouseleave event, like when the search dropdown opens
-            //we need to check these to make sure the drop down is not active
+            /*we have to check where the mouse is,  due to the implementation of some of the controls*/  
+            /*we will get a mouseleave event, like when the search dropdown opens*/
+            /*we need to check these to make sure the drop down is not active*/
             var AnalyzerSearchNode = $telerik.$($find("AnalyzerSearch").get_childListElement());
             var AssaySearchNode = $telerik.$($find("AssayDescriptionSearch").get_childListElement());
             var LocalitySearchNode = $telerik.$($find("LocalitySearch").get_childListElement());
@@ -601,19 +282,19 @@
             }
         }
 
-        var PaddingForFooter = 5;  //this is padding between bottom of grid and footer
-        var GridDataSize = 0;  //set on resize and then used to restore on virtual scroll
+        var PaddingForFooter = 5;  /*this is padding between bottom of grid and footer*/
+        var GridDataSize = 0;  /*set on resize and then used to restore on virtual scroll*/
         function ResizeGrid() {
             var grid = $get("RatesGrid_GridData");
             var GridTop = $(grid).offset().top;
             var FooterTop = $(footer).offset().top;
             $(grid).height((FooterTop - GridTop) - PaddingForFooter);
-            //get the size of the data area
+            /*get the size of the data area*/
             var griddata = $get("RatesGrid_GridData");
             GridDataSize = Math.floor((FooterTop - $(griddata).offset().top) - PaddingForFooter);
         }
 
-        //restore the grid data to correct size
+        /*restore the grid data to correct size*/
         function ResizeGridDataArea() {
             if (GridDataSize > 0) {
                 var griddata = $get("RatesGrid_GridData");
@@ -624,17 +305,16 @@
         function GridCreated(sender, args) 
         {
             var scrollArea = sender.GridDataDiv;
-            var parent = $get("RatesGrid");
-            //alert(parent.clientHeight)
+            var parent = $get("RatesGrid");            
             var gridHeader = sender.GridHeaderDiv;
             scrollArea.style.height = parent.clientHeight - gridHeader.clientHeight + "px";
 
-             //settings for grid margin for each browiser
+            /*settings for grid margin for each browiser*/
             if ($telerik.isIE) 
             {
                 $('.rgHeaderWrapper .rgHeaderDiv').addClass('rgHeaderDivForIE');
             }
-             else if ($telerik.isSpartan) {
+            else if ($telerik.isSpartan) {
                 $('.rgHeaderWrapper .rgHeaderDiv').addClass('rgHeaderDivForSpartan');
             }
             else if ($telerik.isFirefox)
@@ -644,36 +324,30 @@
             else if ($telerik.isChrome) {
                 $('.rgHeaderWrapper .rgHeaderDiv').addClass('rgHeaderDivForChrome');
             }
-
         }
 
-        //dont allow a post back if nothing is selected
-        function OnClientSearch(sender, args) 
-        {
-            if (sender.get_text().length < 1) {
-                sender._element.control._postBackOnSearch = false;
-            }
+        /*dont allow a post back if nothing is selected*/
+        function OnClientSearch(sender, args) {
+            if (sender.get_text().length < 1) {sender._element.control._postBackOnSearch = false;}
         }
 
-        //resize the grid when window resizes
+        /*resize the grid when window resizes*/
         $(window).resize(function () { ResizeGrid(); });
         $(document).ready(function () { ResizeGrid(); });
 
-        //this is ugly but keeps the grid the correct size
+        /*this is ugly but keeps the grid the correct size*/
         setInterval(function () { ResizeGrid(); }, 333);
 
-            //close the menu item
-            function closeWindow(divControl) {
-                var Control = document.getElementById(divControl);
-                LoadPageData();
-                //fast remove
-                $(Control).toggle();
-            }
+        /*close the menu item*/
+        function closeWindow(divControl) {
+            var Control = document.getElementById(divControl);
+            LoadPageData();
+            $(Control).toggle();
+        }
 
         function showInformationWindow(PopUpWindowDiv) {
             var popUpControl = document.getElementById(PopUpWindowDiv);
             $(popUpControl).show();
-            //enable the div to drag
             $(popUpControl).draggable({ cursor: "move" });
         }
 
@@ -683,19 +357,17 @@
         }
 
         var columnCellSelected = "";
-        //This event fires first
+        /*This event fires first*/
         function CellSelected(sender, args) {
-            //get column name
+            /*get column name*/
             columnCellSelected = args.get_column().get_uniqueName();
         }
 
-        //this event is fired right after the above
+        /*this event is fired right after the above*/
         function pnlRequestStarted(ajaxPanel, eventArgs) {
             try {
                 if (eventArgs._eventTargetElement.control.UniqueID == "RatesGrid") {
-                    if (columnCellSelected == "rate" || columnCellSelected == "notes") {
-                        //$find('<%= RadAjaxManager1.ClientID %>').set_enableAJAX(false);
-                        //eventArgs.set_enableAjax(false);
+                    if (columnCellSelected == "rate" || columnCellSelected == "notes") {                        
                         eventArgs.set_cancel(true)
                     }
                 }
