@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Milliman - Overview</title>
+    <link href="css/site.css" rel="stylesheet" />
+</head>
+<body>
+    <div id="body-wrapper">
+
+        <div id="header">
+            <div id="header-logo">
+                <img src="images/PRM-Analytics-Logo.png" alt="milliman-prm-analytics-logo" />
+            </div>
+            <div id="header-nav">
+                <table id="header-nav-menu">
+                    <tr>
+                        <td><a href="http://milliman.com" target="_blank">Milliman Worldwide</a></td>
+                        <td class="anchorDelimiter">|</td>
+                        <td><a href="Contact.html">Contact Us</a></td>
+                        <td class="anchorDelimiter">|</td>
+                        <td><a href="#">Client Login</a></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <hr />
+
+        <div id="content-wrapper">
+            <div id="sidebar-nav"></div>
+
+            <div class="vertRule height-500"></div>
+
+            <div id="overview">
+
+                <img src="images/milliman-prm-analytics.png" alt="prm-analytics"/>
+                <p>
+                    <h2>Data analytic capabilities just got stronger by a factor of two</h2>
+                </p>
+                <p>
+                    Milliman PRM Analytics<sup>&reg;</sup> platform employs an innovative predictive analytic that provides critical information
+                    about each attributed patient. It connects the clinical characteristics of the patient with the estimated financial
+                    value that may be derived from the management of that patient, allowing an entity to strategically select and
+                    manange patients for the best return on investment.
+                </p>
+                <p>
+                    Not all provider institutions and payers have the same level of population management skills or outcomes. Being able
+                    to pick out the differences, as done by PRM, is important for efficient healthcare management.
+                </p>
+            </div>
+
+            <div class="vertRule height-500"></div>
+
+            <div id="sidebar-info"></div>
+        </div>
+
+        <div id="footer-nav"></div>
+
+        <script src="js/jquery-1.11.1.min.js"></script>
+        <script src="js/global.js"></script>
+        <script src="js/header-nav.js"></script>
+        <script src="js/footer-nav.js"></script>
+        <script src="js/sidebar-nav.js"></script>
+        <script src="js/sidebar-info.js"></script>
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                Milliman.SidebarNav.GetNavigtion('overview', 'sidebar-nav');
+                Milliman.SidebarInfo.GetInfo('sidebar-info');
+                //Milliman.FooterNav.GetPageFooter('footer-nav');
+            });
+        </script>
+    </div>
+</body>
+</html>

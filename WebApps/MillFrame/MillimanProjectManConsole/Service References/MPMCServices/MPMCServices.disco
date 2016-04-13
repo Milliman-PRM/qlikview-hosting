@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<discovery xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.xmlsoap.org/disco/">
+  <contractRef ref="https://prm.milliman.com/prm_projectmanagementservices/MPMCServices.asmx?wsdl" docRef="https://prm.milliman.com/prm_projectmanagementservices/MPMCServices.asmx" xmlns="http://schemas.xmlsoap.org/disco/scl/" />
+  <soap address="https://prm.milliman.com/prm_projectmanagementservices/MPMCServices.asmx" xmlns:q1="http://HCIntel.Cloudapp.net/MPMCS" binding="q1:MPMCServicesSoap" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
+  <soap address="https://prm.milliman.com/prm_projectmanagementservices/MPMCServices.asmx" xmlns:q2="http://HCIntel.Cloudapp.net/MPMCS" binding="q2:MPMCServicesSoap12" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
+</discovery>
