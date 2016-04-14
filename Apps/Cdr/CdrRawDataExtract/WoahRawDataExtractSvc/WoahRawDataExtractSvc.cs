@@ -8,11 +8,11 @@ using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BayClinicExtractSvc
+namespace WoahRawDataExtractSvc
 {
-    public partial class Service1 : ServiceBase
+    public partial class WoahRawDataExtractSvc : ServiceBase
     {
-        public Service1()
+        public WoahRawDataExtractSvc()
         {
             InitializeComponent();
         }

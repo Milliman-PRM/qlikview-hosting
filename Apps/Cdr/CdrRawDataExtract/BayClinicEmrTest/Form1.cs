@@ -23,7 +23,7 @@ namespace CdrExtractTest
         private void btnBayClinic_Click(object sender, EventArgs e)
         {
             System.Diagnostics.Debug.WriteLine("Processing Bay Clinic data in folder: " + txtFolder.Text);
-            BayClinicEmrLib.RawDataParser Parser = new BayClinicEmrLib.RawDataParser(@"H:\.prm_config\.mongodb", @"BayClinicMongoCredentials");
+            BayClinicCernerExtractLib.RawDataParser Parser = new BayClinicCernerExtractLib.RawDataParser(@"H:\.prm_config\.mongodb", @"BayClinicMongoCredentials");
             if (! Directory.Exists(txtFolder.Text))
             {
                 Console.Beep();
@@ -43,7 +43,7 @@ namespace CdrExtractTest
         private void btnNorthBend_Click(object sender, EventArgs e)
         {
             System.Diagnostics.Debug.WriteLine("Processing North Bend data in folder: " + txtFolder.Text);
-            NorthBendUnityLib.RawDataParser Parser = new NorthBendUnityLib.RawDataParser(@"H:\.prm_config\.mongodb", @"NorthBendMongoCredentials");
+            NorthBendUnityExtractLib.RawDataParser Parser = new NorthBendUnityExtractLib.RawDataParser(@"H:\.prm_config\.mongodb", @"NorthBendMongoCredentials");
             if (!Directory.Exists(txtFolder.Text))
             {
                 Console.Beep();
@@ -78,5 +78,24 @@ namespace CdrExtractTest
             }
         }
 
+        private void btnRedox_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine("Processing North Bend data in folder: " + txtFolder.Text);
+            RedoxExtractLib.RawDataParser Parser = new RedoxExtractLib.RawDataParser(@"H:\.prm_config\.mongodb", @"NorthBendMongoCredentials");
+            if (!Directory.Exists(txtFolder.Text))
+            {
+                Console.Beep();
+                return;
+            }
+
+            try
+            {
+                Parser.MigrateRawToMongo(txtFolder.Text, chkMongoInsert.Checked);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
     }
 }

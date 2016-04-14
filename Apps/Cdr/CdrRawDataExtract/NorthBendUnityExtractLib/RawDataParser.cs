@@ -9,7 +9,7 @@ using MongoDbWrap;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace NorthBendUnityLib
+namespace NorthBendUnityExtractLib
 {
     public class RawDataParser
     {

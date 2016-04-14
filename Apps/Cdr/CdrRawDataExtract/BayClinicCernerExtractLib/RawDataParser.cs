@@ -7,7 +7,7 @@ using System.IO;
 using System.IO.Compression;
 using MongoDbWrap;
 
-namespace BayClinicEmrLib
+namespace BayClinicCernerExtractLib
 {
     /// <summary>
     /// class RawDataParser reads the Bay Clinic Cerner raw data exports and inserts documents to MongoDB collections

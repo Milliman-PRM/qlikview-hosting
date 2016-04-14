@@ -34,6 +34,7 @@
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.label1 = new System.Windows.Forms.Label();
             this.chkMongoInsert = new System.Windows.Forms.CheckBox();
+            this.btnRedox = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnBayClinic
@@ -83,11 +84,22 @@
             this.chkMongoInsert.Text = "Perform MongoDB Inserts";
             this.chkMongoInsert.UseVisualStyleBackColor = true;
             // 
+            // btnRedox
+            // 
+            this.btnRedox.Location = new System.Drawing.Point(12, 151);
+            this.btnRedox.Name = "btnRedox";
+            this.btnRedox.Size = new System.Drawing.Size(75, 23);
+            this.btnRedox.TabIndex = 5;
+            this.btnRedox.Text = "Redox";
+            this.btnRedox.UseVisualStyleBackColor = true;
+            this.btnRedox.Click += new System.EventHandler(this.btnRedox_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 262);
+            this.Controls.Add(this.btnRedox);
             this.Controls.Add(this.chkMongoInsert);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtFolder);
@@ -108,6 +120,7 @@
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox chkMongoInsert;
+        private System.Windows.Forms.Button btnRedox;
     }
 }
 

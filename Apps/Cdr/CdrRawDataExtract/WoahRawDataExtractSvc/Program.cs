@@ -5,7 +5,7 @@ using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BayClinicExtractSvc
+namespace WoahRawDataExtractSvc
 {
     static class Program
     {
@@ -17,7 +17,7 @@ namespace BayClinicExtractSvc
             ServiceBase[] ServicesToRun;
             ServicesToRun = new ServiceBase[] 
             { 
-                new Service1() 
+                new WoahRawDataExtractSvc() 
             };
             ServiceBase.Run(ServicesToRun);
         }

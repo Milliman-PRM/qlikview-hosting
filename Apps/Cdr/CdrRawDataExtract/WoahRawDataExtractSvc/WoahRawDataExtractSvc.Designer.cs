@@ -1,6 +1,6 @@
-﻿namespace BayClinicExtractSvc
+﻿namespace WoahRawDataExtractSvc
 {
-    partial class Service1
+    partial class WoahRawDataExtractSvc
     {
         /// <summary> 
         /// Required designer variable.
