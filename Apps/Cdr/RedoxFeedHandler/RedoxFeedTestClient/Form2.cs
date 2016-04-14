@@ -18,6 +18,9 @@ using Newtonsoft.Json.Linq;
 
 namespace RedoxFeedTestClient
 {
+    /// <summary>
+    /// GUI for stimulating the RedoxFeedHandler endpoint
+    /// </summary>
     public partial class Form2 : Form
     {
         public Form2()
@@ -28,6 +31,11 @@ namespace RedoxFeedTestClient
             comboBox1.Focus();
         }
 
+        /// <summary>
+        /// Handler for multiple buttons in the Form
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void button1_Click(object sender, EventArgs e)
         {
             using (var client = new HttpClient())
@@ -65,7 +73,7 @@ namespace RedoxFeedTestClient
 
                 System.Windows.Forms.Button Sender = sender.GetType() == typeof(System.Windows.Forms.Button) ? (System.Windows.Forms.Button) sender : null;
 
-                switch (Sender.Text)
+                switch (Sender.Text)  // Depending on which button is being handled here...
                 {
                     case "POST":
                         string x;

@@ -11,6 +11,9 @@ using System.Threading;
 
 namespace RedoxDataTaskSvc
 {
+    /// <summary>
+    /// Encapsulates query operations to a Redox "Source"
+    /// </summary>
     public class RedoxQueryInterface
     {
         private Mutex Mutx;
@@ -26,6 +29,9 @@ namespace RedoxDataTaskSvc
         private DateTime _Expires;
         private TimeSpan _TokenDuration = new TimeSpan(24,0,0);
 
+        /// <summary>
+        /// Property indicating whether a current access token exists for the Redox source
+        /// </summary>
         private bool AuthenticationIsCurrent
         {
             get
@@ -38,10 +44,13 @@ namespace RedoxDataTaskSvc
             }
         }
 
+        /// <summary>
+        /// Authenticates to the server and starts a timer that periodically refreshes the token
+        /// </summary>
         public RedoxQueryInterface()
         {
             Mutx = new Mutex();
-            TimeSpan FourHours = new TimeSpan(4, 0, 0);
+            TimeSpan RefreshTimeSpan = new TimeSpan(4, 0, 0);
 
             client.BaseAddress = RedoxDomain;
 
@@ -51,9 +60,13 @@ namespace RedoxDataTaskSvc
                 throw new Exception("Failed to authenticate to Redox source");
             }
 
-            Timer RefreshTimer = new Timer(RefreshAuthentication, null, FourHours, FourHours);
+            Timer RefreshTimer = new Timer(RefreshAuthentication, null, RefreshTimeSpan, RefreshTimeSpan);
         }
 
+        /// <summary>
+        /// Clears the access and refresh tokens and sets the expiration timestamp to a long time ago
+        /// </summary>
+        /// <param name="Arg"></param>
         private void UnAuthenticate(Object Arg = null)
         {
             Mutx.WaitOne();
@@ -65,6 +78,10 @@ namespace RedoxDataTaskSvc
             Mutx.ReleaseMutex();
         }
 
+        /// <summary>
+        /// Initiates an attempt to refresh authentication
+        /// </summary>
+        /// <param name="Arg"></param>
         private void RefreshAuthentication(Object Arg)
         {
             Authenticate(true);
@@ -73,8 +90,8 @@ namespace RedoxDataTaskSvc
         /// <summary>
         /// Authenticates to Redox service iff no prior authentication has occurred or the most recent authentication is expired
         /// </summary>
-        /// <param name="Refresh"></param>
-        /// <returns>boolean indicating whether a current token exists at the end of this method</returns>
+        /// <param name="Refresh">If true, forces attempt to refresh existing access token; if false authenticates from scratch</param>
+        /// <returns>boolean indicating whether an unexpired access token exists at the end of this method</returns>
         public bool Authenticate(bool DoRefresh = false)
         {
             string Uri;
@@ -130,16 +147,21 @@ namespace RedoxDataTaskSvc
             return AuthenticationIsCurrent;
         }
 
-        public JObject QueryForClinicalSummary(JObject QueryObject)
+        /// <summary>
+        /// Submits a POST to Redox using the supplied Json content in the request body
+        /// </summary>
+        /// <param name="QueryObject"></param>
+        /// <returns>Http response body as JObject</returns>
+        public JObject QueryRedox(JObject QueryObject)
         {
             string Uri = @"query";
 
-            string PatientCcdString = PostJObjectToRedox(Uri, QueryObject, "application/json");
+            string ResponseString = PostJObjectToRedox(Uri, QueryObject, "application/json");
 
             try
             {
-                JObject PatientCcdObject = JObject.Parse(PatientCcdString);
-                return PatientCcdObject;
+                JObject ResponseObject = JObject.Parse(ResponseString);
+                return ResponseObject;
             }
             catch (Exception /*e*/)
             {
@@ -147,12 +169,27 @@ namespace RedoxDataTaskSvc
             }
         }
 
+        /// <summary>
+        /// Submits a POST to a supplied Uri using a supplied Jobject as the source of request body
+        /// </summary>
+        /// <param name="Uri">The destination for the Http POST request</param>
+        /// <param name="Payload">The request body to send</param>
+        /// <param name="AcceptContentType">The expected type for the response body</param>
+        /// <returns>The response body as String type</returns>
         private string PostJObjectToRedox(string Uri, JObject Payload, string AcceptContentType)
         {
             string Body = JsonConvert.SerializeObject(Payload);
             return PostRequestToRedox(Uri, "application/json", Body, AcceptContentType);
         }
 
+        /// <summary>
+        /// Submits a POST to a supplied Uri using a supplied String as the request body
+        /// </summary>
+        /// <param name="Uri"></param>
+        /// <param name="ContentType">Describes the message content contained in the Body argument</param>
+        /// <param name="Body">The request body to send</param>
+        /// <param name="AcceptContentType">The expected type for the response body</param>
+        /// <returns></returns>
         private string PostRequestToRedox(string Uri, string ContentType, string Body, string AcceptContentType)
         {
             Uri FullUri = new Uri(this.RedoxDomain, Uri);

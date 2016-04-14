@@ -94,7 +94,7 @@ namespace RedoxFeedHandler
             LogFile.Flush();
 #endregion
 
-            // test for appropriate message content type, typically has 2 values so can't test for simple equality
+            // test for unsupported message ContentType, typically encoded as multiple values so can't test for simple equality
             if (context.Request.ContentType.IndexOf(@"application/json") == -1)
             {
                 string Msg = "Received unexpected ContentType header value: " + context.Request.ContentType;
@@ -129,8 +129,8 @@ namespace RedoxFeedHandler
                     long NewRecord = Db.InsertSchedulingRecord(Transmission, SourceId, SourceName, FullContentString, EventType);
                     break;
 
-                // case "other":
                 default:
+                    LogFile.WriteLine("Received unsupported message DataModel from Redox: {0}", Meta.DataModelString);
                     break;
             }
 #endregion
@@ -151,6 +151,9 @@ namespace RedoxFeedHandler
             context.Response.StatusCode = 200;
         }
 
+        /// <summary>
+        /// A class that implements IHttpHandler must provide this property.  
+        /// </summary>
         public bool IsReusable
         {
             get

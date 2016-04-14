@@ -195,8 +195,8 @@ namespace RedoxDataTaskSvc
                         new JProperty("ID", QueryPatientId),
                         new JProperty("IDType", S.SourceFeed.BestIdType)
 #else
-/*TODO replace this*/   new JProperty("ID", "ffc486eff2b04b8^^^&1.3.6.1.4.1.21367.2005.13.20.1000&ISO"),    // TODO change this for production
-/*TODO replace this*/   new JProperty("IDType", "NIST")     // TODO change this for production
+/*TODO replace this*/   new JProperty("ID", "ffc486eff2b04b8^^^&1.3.6.1.4.1.21367.2005.13.20.1000&ISO"),    // TODO change this for a real query
+/*TODO replace this*/   new JProperty("IDType", "NIST")     // TODO change this for a real query
                         // This is a hard coded test patient query copied from the Redox web site
 #endif
                     )
@@ -218,7 +218,7 @@ namespace RedoxDataTaskSvc
         {
             try
             {
-                IndentedCcd = RedoxQueryIfc.QueryForClinicalSummary(QueryPayloadObject);
+                IndentedCcd = RedoxQueryIfc.QueryRedox(QueryPayloadObject);
             }
             catch (Exception /*e*/)
             {

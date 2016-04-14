@@ -39,6 +39,7 @@
             // 
             // serviceInstaller1
             // 
+            this.serviceInstaller1.Description = "Processes items from the Redox task queue database";
             this.serviceInstaller1.ServiceName = "RedoxDataTaskProcessor";
             this.serviceInstaller1.StartType = System.ServiceProcess.ServiceStartMode.Automatic;
             // 

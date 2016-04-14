@@ -40,6 +40,9 @@ namespace RedoxDataTaskSvc
 
         }
 
+        /// <summary>
+        /// When the service is stopped this method is called to clean up resources/execution
+        /// </summary>
         protected override void OnStop()
         {
             int StopWaitTimeMs = 5 * 1000;
