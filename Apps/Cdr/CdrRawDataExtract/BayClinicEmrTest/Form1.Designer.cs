@@ -63,6 +63,7 @@
             this.txtFolder.Name = "txtFolder";
             this.txtFolder.Size = new System.Drawing.Size(259, 20);
             this.txtFolder.TabIndex = 2;
+            this.txtFolder.Text = "C:\\RedoxFeedHandler\\RedoxFeedTest";
             this.txtFolder.TextChanged += new System.EventHandler(this.txtFolder_TextChanged);
             // 
             // label1

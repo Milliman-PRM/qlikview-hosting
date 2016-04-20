@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Configuration;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -17,16 +18,22 @@ namespace CdrExtractTest
         {
             InitializeComponent();
 
+            txtFolder.Focus();
+
             this.txtFolder.DoubleClick += new System.EventHandler(this.txtFolder_DoubleClick);
+
+            var settings = ConfigurationManager.AppSettings;
+            var x = settings["RedoxRawFilePath"];
         }
 
         private void btnBayClinic_Click(object sender, EventArgs e)
         {
             System.Diagnostics.Debug.WriteLine("Processing Bay Clinic data in folder: " + txtFolder.Text);
             BayClinicCernerExtractLib.RawDataParser Parser = new BayClinicCernerExtractLib.RawDataParser(@"H:\.prm_config\.mongodb", @"BayClinicMongoCredentials");
-            if (! Directory.Exists(txtFolder.Text))
+            if (!Directory.Exists(txtFolder.Text))
             {
                 Console.Beep();
+                MessageBox.Show("Input folder not found");
                 return;
             }
 
@@ -47,6 +54,7 @@ namespace CdrExtractTest
             if (!Directory.Exists(txtFolder.Text))
             {
                 Console.Beep();
+                MessageBox.Show("Input folder not found");
                 return;
             }
 
@@ -80,11 +88,12 @@ namespace CdrExtractTest
 
         private void btnRedox_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("Processing North Bend data in folder: " + txtFolder.Text);
-            RedoxExtractLib.RawDataParser Parser = new RedoxExtractLib.RawDataParser(@"H:\.prm_config\.mongodb", @"NorthBendMongoCredentials");
+            System.Diagnostics.Debug.WriteLine("Processing Redox data in folder: " + txtFolder.Text);
+            RedoxExtractLib.RawDataParser Parser = new RedoxExtractLib.RawDataParser(@"H:\.prm_config\.mongodb", @"RedoxMongoCredentials");
             if (!Directory.Exists(txtFolder.Text))
             {
                 Console.Beep();
+                MessageBox.Show("Input folder not found");
                 return;
             }
 

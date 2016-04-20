@@ -115,14 +115,31 @@ namespace MongoDbWrap
 
         public bool InsertDocument(string CollectionName, Dictionary<string, string> Content)
         {
-            BsonDocument NewDoc = new BsonDocument(Content);
-
             // Insert the MongoDB document
             try
             {
+                BsonDocument NewDoc = new BsonDocument();
+                foreach (String Key in Content.Keys)
+                {
+                    NewDoc.Add(Key, Content[Key]);  // TODO get this value string parsed into a proper Bson type
+                }
                 _Db.GetCollection<BsonDocument>(CollectionName).InsertOneAsync(NewDoc);
             }
             catch (Exception)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public bool InsertDocument(string CollectionName, string JsonContentString)
+        {
+            try
+            {
+                BsonDocument NewDoc = BsonDocument.Parse(JsonContentString);
+                _Db.GetCollection<BsonDocument>(CollectionName).InsertOneAsync(NewDoc);
+            }
+            catch (Exception /*e*/)
             {
                 return false;
             }
