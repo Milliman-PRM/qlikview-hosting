@@ -15,28 +15,25 @@ namespace RedoxExtractLib
         Dictionary<String,MongoDbConnection> MongoConnections = new Dictionary<string, MongoDbConnection>();
         MongoDbConnectionParameters CxParams;
         bool DoMongoInsert;
-        String ArchiveFolder = @"C:\RedoxFeedHandler\RedoxFeedTest\Archive";
 
         public RawDataParser(string IniFile, string MongoCredentialSectionName)
         {
-            Directory.CreateDirectory(ArchiveFolder);
-
-            // Instantiate Mongo connection parameters, will throw if not available
+            // Instantiate Mongo connection parameters
             CxParams = new MongoDbConnectionParameters(IniFile, MongoCredentialSectionName);
         }
 
-        public void MigrateRawToMongo(string SearchFolder, bool InsertToMongo = false)
+        public void MigrateRawToMongo(String SearchFolder, String ArchiveFolder, bool InsertToMongo = false)
         {
             DoMongoInsert = InsertToMongo;
 
             foreach (string ClinicalSummaryFileName in Directory.GetFiles(SearchFolder, @"*.json").OrderBy(name => Directory.GetLastWriteTime(name)))
             {
-                ProcessClinicalSummaryFile(ClinicalSummaryFileName, InsertToMongo);
+                ProcessClinicalSummaryFile(ClinicalSummaryFileName, ArchiveFolder, InsertToMongo);
             }
 
         }
 
-        private bool ProcessClinicalSummaryFile(String JsonFileName, bool InsertToMongo)
+        private bool ProcessClinicalSummaryFile(String JsonFileName, String ArchiveFolder, bool InsertToMongo)
         {
             String SourceName;
             JObject FileContentObj;

@@ -99,7 +99,9 @@ namespace CdrExtractTest
 
             try
             {
-                Parser.MigrateRawToMongo(txtFolder.Text, chkMongoInsert.Checked);
+                String RedoxArchiveFilePath = Path.Combine(txtFolder.Text, "Archive");
+
+                Parser.MigrateRawToMongo(txtFolder.Text, RedoxArchiveFilePath, chkMongoInsert.Checked);
             }
             catch (Exception ex)
             {

@@ -14,6 +14,7 @@ namespace WoahRawDataExtractSvc
         Thread Thd;
         bool EndThreadSignal;
         Mutex Mutx;
+        ExtractionThreadParameters ThdParams;
 
         public RedoxRawDataExtractionManager()
         {
@@ -27,24 +28,43 @@ namespace WoahRawDataExtractSvc
         /// </summary>
         /// <param name="ThreadArgs">Normally not supplied, but caller can pass override values to modify behavior</param>
         /// <returns></returns>
-        public bool StartThread(Dictionary<String,String> ThreadArgs = null)
+        public bool StartThread(ExtractionThreadParameters Params = null)
         {
-            if (ThreadArgs == null) {
-                // normal initialization
-                ThreadArgs = new Dictionary<string, string>();
-                ThreadArgs["RedoxRawFilePath"] = ConfigurationManager.AppSettings["RedoxRawFilePath"];
-                ThreadArgs["RedoxMongoIniFileName"] = ConfigurationManager.AppSettings["RedoxMongoIniFileName"];
-                ThreadArgs["RedoxMongoIniFileSection"] = ConfigurationManager.AppSettings["RedoxMongoIniFileSection"];
-                ThreadArgs["RedoxSleepTimeMs"] = ConfigurationManager.AppSettings["RedoxSleepTimeMs"];
-                ThreadArgs["RedoxArchiveFilePath"] = ConfigurationManager.AppSettings["RedoxArchiveFilePath"];
-            }
+            Mutx.WaitOne();
 
-            if (!Directory.Exists(ThreadArgs["RedoxRawFilePath"]))
+            ThdParams = (Params == null) ?
+                new ExtractionThreadParameters
+                {
+                    RawFilePath = ConfigurationManager.AppSettings["RawFilePath"],
+                    ArchiveFilePath = ConfigurationManager.AppSettings["ArchiveFilePath"],
+                    MongoIniFileName = ConfigurationManager.AppSettings["MongoIniFileName"],
+                    MongoIniFileSection = ConfigurationManager.AppSettings["MongoIniFileSection"],
+                    SleepTimeMs = int.Parse(ConfigurationManager.AppSettings["SleepTimeMs"])
+                }
+                :
+                Params ;
+
+            try {
+                Directory.CreateDirectory(ThdParams.RawFilePath);
+                Directory.CreateDirectory(ThdParams.ArchiveFilePath);
+            }
+            catch (Exception /*e*/)
             {
+                Mutx.ReleaseMutex();
                 return false;
             }
 
-            Thd.Start(ThreadArgs);
+            // validate settings
+            if ( !Directory.Exists(ThdParams.RawFilePath) ||
+                 !Directory.Exists(ThdParams.ArchiveFilePath) ||
+                 !File.Exists(ThdParams.MongoIniFileName) )
+            {
+                Mutx.ReleaseMutex();
+                return false;
+            }
+            Mutx.ReleaseMutex();
+
+            Thd.Start();
 
             return true;
         }
@@ -67,23 +87,17 @@ namespace WoahRawDataExtractSvc
         /// Entry point for the worker thread managed by this class  
         /// </summary>
         /// <param name="Args">A Dictionary<string,string> with operating parameters for the thread</param>
-        public void ThreadMain(Object Arg)
+        public void ThreadMain()
         {
-            Dictionary<String, String> Args = (Dictionary<String, String>)Arg;
-            String RedoxRawFilePath = Args["RedoxRawFilePath"];
-            String RedoxMongoIniFileName = Args["RedoxMongoIniFileName"];
-            String RedoxMongoIniFileSection = Args["RedoxMongoIniFileSection"];
-            String RedoxArchiveFilePath = Args["RedoxArchiveFilePath"];
-            int RedoxSleepTimeMs = int.Parse(Args["RedoxSleepTimeMs"]);
+            Mutx.WaitOne();
+            RedoxExtractLib.RawDataParser Parser = new RedoxExtractLib.RawDataParser(ThdParams.MongoIniFileName, ThdParams.MongoIniFileSection);
+            Mutx.ReleaseMutex();
 
-            RedoxExtractLib.RawDataParser Parser = new RedoxExtractLib.RawDataParser(RedoxMongoIniFileName, RedoxMongoIniFileSection);
-
-            for (Mutx.WaitOne() ; !EndThreadSignal ; Thread.Sleep(RedoxSleepTimeMs), Mutx.WaitOne())
+            for (Mutx.WaitOne() ; !EndThreadSignal ; Thread.Sleep(ThdParams.SleepTimeMs), Mutx.WaitOne())
             {
                 Mutx.ReleaseMutex();
 
-                Parser.MigrateRawToMongo(RedoxRawFilePath, false);
-                //Parser.MigrateRawToMongo(RedoxRawFilePath, true);  // true to perform insert
+                Parser.MigrateRawToMongo(ThdParams.RawFilePath, ThdParams.ArchiveFilePath, true);
             }
             Mutx.ReleaseMutex();
         }

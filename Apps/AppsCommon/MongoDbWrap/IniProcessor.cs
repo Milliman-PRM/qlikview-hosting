@@ -29,8 +29,10 @@ namespace MongoDbWrap
             {
                 txt = File.ReadAllText(file); // this throws if file does not exist
             }
-            catch (Exception /*e*/)
-            {}
+            catch (Exception e)
+            {
+                String x = e.Message;
+            }
 
             // create a global section
             ini[""] = currentSection;
