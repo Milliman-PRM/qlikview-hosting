@@ -93,7 +93,7 @@
                             <asp:ImageButton ID="LaunchMenu" runat="server" CssClass="searchImage" ImageUrl="~/Images/search_icon.png" OnClick="LaunchMenu_Click" />
                         </td>
                         <td>
-                            <h2>Clinical Lab Systems Medicare Reimbursement</h2>
+                            <h2>Roche Lab Systems Handbook</h2>
                         </td>
                     </tr>
                 </table>
