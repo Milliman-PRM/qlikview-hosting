@@ -59,6 +59,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configs", "Configs", "{98B8
 	ProjectSection(SolutionItems) = preProject
 		App.config = App.config
 		ConnectionStrings.config = ConnectionStrings.config
+		log4net.config = log4net.config
 		SMTP.config = SMTP.config
 		Web.config = Web.config
 	EndProjectSection

@@ -31,6 +31,7 @@ namespace ConfigIt
             get { return (KeyValueConfigurationCollection)this["elements"]; }
         }
 
+        [ConfigurationCollection(typeof(JobElement))]
         public ApplicationSettingsSectionGroup AppSettingsGroup
         {
             get { return (ApplicationSettingsSectionGroup)base["applicationSettings"]; }
@@ -45,9 +46,9 @@ namespace ConfigIt
 
         #region Properties
         [ConfigurationProperty("CLSConfiguration.Properties.Settings")]
-        public CLSConfigurationPropertiesSettings CLSConfigPropertiesSettings
+        public ClientSettingsSection CLSConfigPropertiesSettings
         {
-            get { return (CLSConfigurationPropertiesSettings)base.Sections["CLSConfiguration.Properties.Settings"]; }
+            get { return (ClientSettingsSection)base.Sections["CLSConfiguration.Properties.Settings"]; }
         }
         #endregion
     }
@@ -55,8 +56,17 @@ namespace ConfigIt
     /// <summary>
     /// An example configuration section class.
     /// </summary>
-    public class CLSConfigurationPropertiesSettings : ConfigurationSection
+    public class ClientSettingsSection : ConfigurationSection
     {
+        #region Constructors
+        static ClientSettingsSection()
+        {
+            // Predefine properties here
+            _type = new ConfigurationProperty("type", typeof(string), null, ConfigurationPropertyOptions.None);
+            _requirePermission = new ConfigurationProperty("requirePermission", typeof(bool), false, ConfigurationPropertyOptions.None);
+        }
+        #endregion
+
         private static ConfigurationProperty _type;
         /// <summary>
         /// Gets the StringValue setting.
@@ -75,16 +85,7 @@ namespace ConfigIt
         public string RequirePermission
         {
             get { return (string)base[_requirePermission]; }
-        }
-
-        #region Constructors
-        static CLSConfigurationPropertiesSettings()
-        {
-            // Predefine properties here
-            _type = new ConfigurationProperty("type", typeof(string), null, ConfigurationPropertyOptions.None);
-            _requirePermission = new ConfigurationProperty("requirePermission",typeof(bool),false,ConfigurationPropertyOptions.None);
-        }
-        #endregion
+        }              
         
     }
 }
