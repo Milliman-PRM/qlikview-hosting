@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConfigIt;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -37,7 +38,7 @@ namespace CLSConfiguration
                                                                                             out InitialSchemaName,
                                                                                             out IntegratedSecurity) )
             {
-                string PGDump = System.Configuration.ConfigurationManager.AppSettings["PGDump"];
+                string PGDump = EnvironmentSettings.Elements["PGDump"].Value;
                 string DumpFile = System.IO.Path.Combine(System.IO.Path.GetTempPath(), SchemaName + ".backup");
                 System.IO.File.Delete(DumpFile);  //delete if already exists
                 bool Results = false;

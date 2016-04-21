@@ -55,6 +55,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "StagingWebSite", "StagingWe
 		ConnectionStringArchive\StagingWebSite\Web.config = ConnectionStringArchive\StagingWebSite\Web.config
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configs", "Configs", "{98B80358-4EEC-4F2D-8F72-396F92B740B9}"
+	ProjectSection(SolutionItems) = preProject
+		App.config = App.config
+		ConnectionStrings.config = ConnectionStrings.config
+		SMTP.config = SMTP.config
+		Web.config = Web.config
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ConfigIt", "ConfigIt", "{0383F016-A354-451C-A39B-4FFA5D9735D8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigIt", "ConfigIt\ConfigIt.csproj", "{C682960B-D596-4002-9AF3-F3CC2AD2454C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -97,6 +109,10 @@ Global
 		{AFAC7E7F-1B2E-4C06-A89D-E77186EFC55A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AFAC7E7F-1B2E-4C06-A89D-E77186EFC55A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AFAC7E7F-1B2E-4C06-A89D-E77186EFC55A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C682960B-D596-4002-9AF3-F3CC2AD2454C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C682960B-D596-4002-9AF3-F3CC2AD2454C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C682960B-D596-4002-9AF3-F3CC2AD2454C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C682960B-D596-4002-9AF3-F3CC2AD2454C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -109,5 +125,6 @@ Global
 		{9DF95B65-D077-4C78-A33D-622966D341F0} = {14D3B583-3327-4A89-87BB-8A4CEEDE3377}
 		{535CB21F-415D-40E7-A7C9-4E785061BA7F} = {14D3B583-3327-4A89-87BB-8A4CEEDE3377}
 		{B2C7AB0D-7088-4EFF-8486-134EB9DC9D26} = {14D3B583-3327-4A89-87BB-8A4CEEDE3377}
+		{C682960B-D596-4002-9AF3-F3CC2AD2454C} = {0383F016-A354-451C-A39B-4FFA5D9735D8}
 	EndGlobalSection
 EndGlobal

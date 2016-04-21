@@ -17,11 +17,10 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
 using System.Linq.Expressions;
+using ConfigIt;
 
 namespace CLSdbContext
-{
-
-    [DatabaseAttribute(Name = "Roche_Medicare_Reimbursement_Develop")]
+{    
     [ProviderAttribute(typeof(Devart.Data.PostgreSql.Linq.Provider.PgSqlDataProvider))]
     public partial class CLSdbDataContext : Devart.Data.Linq.DataContext
     {
@@ -70,10 +69,20 @@ namespace CLSdbContext
 
         private static string GetConnectionString(string connectionStringName)
         {
-            System.Configuration.ConnectionStringSettings connectionStringSettings = System.Configuration.ConfigurationManager.ConnectionStrings[connectionStringName];
-            if (connectionStringSettings == null)
-                throw new InvalidOperationException("Connection string \"" + connectionStringName +"\" could not be found in the configuration file.");
-            return connectionStringSettings.ConnectionString;
+            var connectionStringSettings = "";
+            try
+            {
+                var databaseName = "CLSdbDataContextConnectionString";
+                //var connectionStringSettings = ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString;
+                 connectionStringSettings = (EnvironmentSettings.ConnectionStrings[databaseName].ConnectionString);
+                if (connectionStringSettings == null)
+                    throw new InvalidOperationException("Connection string \"" + connectionStringName + "\" could not be found in the configuration file.");
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException(connectionStringSettings + "could not connext");
+            }            
+            return connectionStringSettings;
         }
 
         public CLSdbDataContext(string connection) :
