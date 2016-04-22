@@ -1,0 +1,1 @@
+<%@ Application Inherits="MillimanSupport.Global" Language="C#" %>

@@ -1,0 +1,17 @@
+﻿All current & master QVWs are stored in the QVDocuments folder
+All reduced files will reside in the QVDocumentsReduced folder which will be a reflection of the QVDocuments folder
+	layout structure, except at the leaf level there will be a MIMED folder for each user in which reduction was
+	required.  The MIMED folder name is the account name in BASE16 or BSE64.  In the folder will be the report which
+	has been reduced.  It's name will be the same as the master QVW, but appended with "_REDUCED_X"  in which X 
+	a sepecific reduction,  when a file has been reduced multiple times for the user (ie. user might see a QVW for
+	PhysicianA, PHYSICIANB and PHYSICIANC all reduced from the master QVW.  X will start with 0.
+Store along with the reduced QVW and with the same file name except file type ".XML".  This file will contain the settings
+	for reducing the file and will consist of
+		User id creating the reduction(auditing)
+		Reduction Date/Time
+		Reload Reduction Date/Time(  when PMC pushes it )
+		User id the reduction is being created for
+		ClientID
+		Qualified path and name of the Master QVW
+		Reduction keys used to reudce on
+

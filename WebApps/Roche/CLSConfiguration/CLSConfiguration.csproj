@@ -127,23 +127,14 @@
     <Content Include="scripts\ai.0.15.0-build58334.js" />
     <Content Include="scripts\ai.0.15.0-build58334.min.js" />
     <Content Include="scripts\jquery-1.12.1.min.js" />
-    <Content Include="..\Web.config">
-      <Link>Web.config</Link>
-    </Content>
-    <Content Include="..\ConnectionStrings.config">
-      <Link>ConnectionStrings.config</Link>
-    </Content>
-    <Content Include="..\SMTP.config">
-      <Link>SMTP.config</Link>
-    </Content>
-    <None Include="Properties\PublishProfiles\RocheConfigurationConfigs.pubxml" />
+    <None Include="Properties\PublishProfiles\CLSConfiguration.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <None Include="Web References\CLSConfigurationServices\CLSConfigurationServices.disco" />
     <Content Include="UpdateActiveSchema.aspx" />
-    <Content Include="Web2.config">
+    <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
@@ -179,19 +170,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-    <None Include="Properties\PublishProfiles\CLSConfigurationDebug.pubxml" />
     <None Include="Web References\CLSConfigurationServices\CLSConfigurationServices.wsdl" />
     <None Include="Web References\CLSConfigurationServices\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <None Include="Web.Debug.config" />
-    <None Include="Web.Release.config" />
-    <None Include="Web2.Debug.config">
-      <DependentUpon>Web2.config</DependentUpon>
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
     </None>
-    <None Include="Web2.Release.config">
-      <DependentUpon>Web2.config</DependentUpon>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -217,10 +205,6 @@
     <ProjectReference Include="..\CLSConfigurationCommon\CLSConfigurationCommon.csproj">
       <Project>{569bd6af-c743-458e-8df7-75e6b95b81ca}</Project>
       <Name>CLSConfigurationCommon</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ConfigIt\ConfigIt.csproj">
-      <Project>{c682960b-d596-4002-9af3-f3cc2ad2454c}</Project>
-      <Name>ConfigIt</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

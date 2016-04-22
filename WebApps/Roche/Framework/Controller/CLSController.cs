@@ -524,5 +524,24 @@ namespace Controller
 
             return everyThing.Count();
         }
+
+        public static void SaveAnalyzers(Analyzer obj)
+        {
+            var context = new CLSdbDataContext();
+            if (obj != null)
+            {
+                var codeObj = new Code();
+                codeObj.Code1 = "Test1";
+
+                context.Codes.InsertOnSubmit(codeObj);
+                context.SubmitChanges();
+
+                context = new CLSdbDataContext();
+                context.Analyzers.InsertOnSubmit(obj);
+                context.SubmitChanges();
+            }
+
+        }
+
     }
 }
