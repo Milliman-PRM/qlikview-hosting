@@ -51,7 +51,7 @@ namespace ConfigIt
         {
             get { return _applicationSettings; }
         }
-        
+
         #endregion
         //Constructor
         static EnvironmentSettings()
@@ -59,10 +59,13 @@ namespace ConfigIt
             try
             {
                 KeyValueConfigurationSection section = null;
+                //ConfigurationSectionGroup appGroup = null;
 
                 var config = WebConfigurationManager.OpenWebConfiguration("~");
                 //Next Get which environment we are in based off what the machine name this code is running on
                 section = config.GetSection("environmentConfiguration") as KeyValueConfigurationSection;
+
+                //appGroup = config.GetSectionGroup("applicationSettings") as ApplicationSettingsSectionGroup;
 
                 //based on machine name it sets environment
                 //var machineName = System.Environment.MachineName.ToLower();
@@ -72,6 +75,7 @@ namespace ConfigIt
                 //var applicationSettingSectionGroup = config.SectionGroups["applicationSettings"];
                 //var executableSection = applicationSettingSectionGroup.Sections["CLSConfigurationProductionDaemon.Properties.Settings"];
 
+                //_applicationSettings = (ApplicationSettingsSectionGroup)config.GetSectionGroup("applicationSettings"); 
                 _elements = ((KeyValueConfigurationSection)config.GetSection(_environment)).Elements;
                 _connectionStrings = ((KeyValueConfigurationSection)config.GetSection(_environment)).ConnectionStrings;
 
@@ -164,6 +168,18 @@ namespace ConfigIt
             var MakeLiveDirectory = _elements["MakeLiveDirectory"].Value;
             var PGDump = _elements["PGDump"].Value;
             var PGRestore = _elements["PGRestore"].Value;
-        }        
+        }
+
+        public class ConfigHelper
+        {
+            //public string GetUrl()
+            //{
+            //    var section = (ClientSettingsSection)ConfigurationManager.
+            //                        GetSection("applicationSettings/CLSConfiguration.Properties.Settings");
+            //    var url = section.Settings.Get("CLSConfiguration_CLSConfigurationServices_CLSConfigurationServices").Value.ValueXml.InnerText;
+            //    return url;
+            //}
+
+        }
     }
 }

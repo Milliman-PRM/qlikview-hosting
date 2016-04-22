@@ -12,7 +12,7 @@ namespace CLSMedicareReimbursement
 
         protected void Application_Start(object sender, EventArgs e)
         {
-            log4net.Config.XmlConfigurator.Configure();
+            //log4net.Config.XmlConfigurator.Configure();
         }
 
         protected void Session_Start(object sender, EventArgs e)

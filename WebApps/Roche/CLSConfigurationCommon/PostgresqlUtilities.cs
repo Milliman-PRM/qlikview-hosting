@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConfigIt;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -187,7 +188,10 @@ namespace CLSConfigurationCommon
 
         static private string GetConnectionString()
         {
-            string ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["DBConnectionString"].ConnectionString;
+            //can not use CLSdbDataContextConnectionString beaucse it has schema in connection string
+            //string ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["DBConnectionString"].ConnectionString;
+            string ConnectionString = EnvironmentSettings.ConnectionStrings["DBConnectionString"].ConnectionString;
+            Console.WriteLine("Con string is " + ConnectionString);
             return ConnectionString;
         }
 
@@ -204,7 +208,7 @@ namespace CLSConfigurationCommon
             string Query = "select schema_name, schema_owner from information_schema.schemata";
             //append valid users
             string ConnectionString = GetConnectionString();
-            string BlackList = System.Configuration.ConfigurationManager.AppSettings["PostgresSchemaBlackList"];
+            string BlackList = EnvironmentSettings.Elements["PostgresSchemaBlackList"].Value;
             string[] BlackListTokens = BlackList.Split(new char[] { '~' }, StringSplitOptions.RemoveEmptyEntries);
             string WhereClause = string.Empty;
             foreach (string BL in BlackListTokens)
@@ -220,6 +224,7 @@ namespace CLSConfigurationCommon
             System.Data.DataSet ds = new System.Data.DataSet();
 
             Npgsql.NpgsqlConnection conn = new Npgsql.NpgsqlConnection(ConnectionString);
+            Console.WriteLine("Con string is " + ConnectionString);
             conn.Open();
 
             Npgsql.NpgsqlDataAdapter da = new Npgsql.NpgsqlDataAdapter(Query, conn);
@@ -299,11 +304,13 @@ namespace CLSConfigurationCommon
             InitialSchemaName = string.Empty;
             IntegratedSecurity = true;
 
-            string ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["DBConnectionString"].ConnectionString;
+            //var databaseName = "CLSdbDataContextConnectionString";
+            //string ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["DBConnectionString"].ConnectionString;
+            string ConnectionString = EnvironmentSettings.ConnectionStrings["DBConnectionString"].ConnectionString;
 
             //User Id=postgres;Password:jellyfish;Host=localhost;Database=Roche_Medicare_Reimbursement_Develop;Integrated Security=True;Initial Schema=rmrrdb_20160304
 
-            List<string> ConnectionTokens = ConnectionString.Split(new char[] { '=', ';' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            List <string> ConnectionTokens = ConnectionString.Split(new char[] { '=', ';' }, StringSplitOptions.RemoveEmptyEntries).ToList();
             for (int Index = 0; Index < ConnectionTokens.Count; Index = Index + 2)
             {
                 if (string.Compare(ConnectionTokens[Index], "user id", true) == 0)

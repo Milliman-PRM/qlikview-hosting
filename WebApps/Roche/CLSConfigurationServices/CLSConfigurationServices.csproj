@@ -130,15 +130,20 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-    <Content Include="..\ConnectionStrings.config">
-      <Link>ConnectionStrings.config</Link>
-    </Content>
     <Content Include="..\Web.config">
       <Link>Web.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\ConnectionStrings.config">
+      <Link>ConnectionStrings.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="..\SMTP.config">
       <Link>SMTP.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Properties\PublishProfiles\CLSConfigurationServicesConfigs.pubxml" />
+    <None Include="Properties\PublishProfiles\RocheConfigurationServicesConfigs.pubxml" />
     <None Include="Properties\PublishProfiles\RocheServicesConfigs.pubxml" />
     <None Include="Web.Debug.config" />
     <None Include="Web.Release.config" />

@@ -4,33 +4,64 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <title></title>
+    <title>Configs Check</title>
+    <meta name="ROBOTS" content="NOINDEX, NOFOLLOW" />
+    <meta name="GOOGLEBOT" content="NOINDEX" />
+    <style type="text/css">
+        fieldset {
+            border: 1px dotted #ccc;
+            padding: 5px;
+            margin: 0 auto;
+            width: 75%;
+        }
+
+            fieldset legend {
+                margin: 7px;
+            }
+
+        .title {
+            float: left;
+            font-weight: bold;
+            padding: 0 5px 0 0;
+            width: 158px;
+        }
+    </style>
 </head>
 <body>
-        <form id="form1" runat="server">
-    <table>  
-        <tr><td>ConfigFile</td><td><asp:Label id="lblConfigFile" runat="server"></asp:Label></td></tr>      
-        <tr><td>ConfigurationUserLevelconfigPath</td><td><asp:Label id="lblConfigurationUserLevelconfigPath" runat="server"></asp:Label></td></tr>
-        <tr><td>ConfigurationGetExecutingAssembly</td><td><asp:Label id="lblConfigurationGetExecutingAssembly" runat="server"></asp:Label></td></tr>
-        <tr><td colspan="2"><b>The custom EnvirmentSettings</b></td></tr>
-        <tr><td>Enviroment</td><td><asp:Label id="lbEnvior" runat="server"></asp:Label></td></tr>
-        <tr><td>DB connection</td><td><asp:Label ID="lbEnvirSQL" runat="server"></asp:Label></td></tr>
-        <tr><td>SMTP Server</td><td><asp:Label ID="lbEnvirSMTP" runat="server"></asp:Label></td></tr>
-        <tr><td colspan="2">&nbsp;</td></tr>
-        <tr><td colspan="2"><b>From the WebConfigurationManager</b></td></tr>
-        <tr><td>DB Connection</td><td><asp:Label ID="lbWebConfigManSQL" runat="server"></asp:Label></td></tr>
-        <tr><td colspan="2">&nbsp;</td></tr>
-        <tr><td colspan="2"><b>From getting the web.config file directly</b></td></tr>
-        <tr><td>DB Connection</td><td><asp:Label id="lbWebConfigDirectSQL" runat="server"></asp:Label></td></tr>
-        <tr><td>SMTP Server</td><td><asp:Label ID="lbWebConfigDirectSMTP" runat="server"></asp:Label></td></tr>
-        <tr><td colspan="2">&nbsp;</td></tr>
-        <tr><td colspan="2"><b>From the ConfigurationManager (not suggested since this is a web app)</b></td></tr>
-        <tr><td>DB Connection</td><td><asp:Label ID="lbConfigManSQL" runat="server"></asp:Label></td></tr>
-        <tr><td>info</td><td><asp:Label ID="lblInfo" runat="server"></asp:Label></td></tr>
-        <tr><td>info</td><td><asp:Label ID="lblInfo2" runat="server"></asp:Label></td></tr>
-    </table>
-            
-
+    <form id="form2" runat="server">
+        <fieldset>
+            <legend>Custom EnvirmentSettings</legend>
+            <span class="title">Date:</span><asp:Label ID="lblSystemDate" runat="server"></asp:Label>
+            <br />
+            <span class="title">Config File:</span><asp:Label ID="lblConfigFile" runat="server"></asp:Label>
+            <br />
+            <span class="title">Enviroment:</span><asp:Label ID="lbEnvior" runat="server"></asp:Label>
+            <br />
+            <span class="title">DB connection:</span><asp:Label ID="lbEnvirSQL" runat="server"></asp:Label>
+            <br />
+            <span class="title">SMTP Server:</span><asp:Label ID="lbEnvirSMTP" runat="server"></asp:Label>
+        </fieldset>
+        <fieldset>
+            <legend>Web Configuration Manager</legend>
+            <span class="title">DB connection:</span><asp:Label ID="lbWebConfigManSQL" runat="server"></asp:Label>
+        </fieldset>
+        <fieldset>
+            <legend>web.config file directly</legend>
+            <span class="title">DB connection:</span><asp:Label ID="lbWebConfigDirectSQL" runat="server"></asp:Label>
+            <br />
+            <span class="title">SMTP Server:</span><asp:Label ID="lbWebConfigDirectSMTP" runat="server"></asp:Label>
+        </fieldset>
+        <fieldset>
+            <legend>ConfigurationManager (not suggested since this is a web app)</legend>
+            <span class="title">DB connection:</span><asp:Label ID="lbConfigManSQL" runat="server"></asp:Label>
+        </fieldset>
+        <fieldset>
+            <legend>Values Information</legend>
+            <span class="title">Config Values:</span><asp:Label ID="lblInfo" runat="server"></asp:Label>
+            <br />
+            <br />
+            <span class="title">Config Values:</span><asp:Label ID="lblInfo2" runat="server"></asp:Label>
+        </fieldset>
     </form>
 </body>
 </html>
