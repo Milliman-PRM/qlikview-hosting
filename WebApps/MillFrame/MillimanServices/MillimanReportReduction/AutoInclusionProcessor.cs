@@ -86,23 +86,26 @@ namespace MillimanReportReduction
             List<string> SubNodeCounts = new List<string>();
             string Working = string.Empty;
             int Count = 0;
-            int Levels = CurrentSelections[0].Count(x => x == '|');
-
-            foreach (string Current in CurrentSelections)
+            if (CurrentSelections.Count() > 0)
             {
-                Working = Current;
-                for (int LevelCount = 0; LevelCount < Levels; LevelCount++)
+                int Levels = CurrentSelections[0].Count(x => x == '|');
+
+                foreach (string Current in CurrentSelections)
                 {
-                    Working = Current.Substring(0, Working.LastIndexOf('|'));
-                    Count = 0;
-                    foreach (string ScanCurrent in CurrentSelections)
+                    Working = Current;
+                    for (int LevelCount = 0; LevelCount < Levels; LevelCount++)
                     {
-                        if (ScanCurrent.Contains(Working))
-                            Count++;
+                        Working = Current.Substring(0, Working.LastIndexOf('|'));
+                        Count = 0;
+                        foreach (string ScanCurrent in CurrentSelections)
+                        {
+                            if (ScanCurrent.Contains(Working))
+                                Count++;
+                        }
+                        string CountEntry = Working + "|" + Count.ToString();
+                        if (SubNodeCounts.Contains(CountEntry) == false)
+                            SubNodeCounts.Add(CountEntry);
                     }
-                    string CountEntry = Working + "|" + Count.ToString();
-                    if (SubNodeCounts.Contains(CountEntry) == false)
-                        SubNodeCounts.Add(CountEntry);
                 }
             }
             return SubNodeCounts;
@@ -189,16 +192,19 @@ namespace MillimanReportReduction
 
             }
 
-            //we are only interested in either the root selected, or leaves selected, don't care about any
-            //intermediate nodes, they will display correctly if we get leaves and/or root
-            int StandardTreeLevels = CurrentSelections[0].Count(x => x == '|') - 1; //sub 1, since we are getting nodes, with leaves
-            string CurrentSel = string.Empty;
-            for (int Index = FullySelectedNodes.Count() - 1; Index >= 0; Index--)
+            if (CurrentSelections.Count() > 0)
             {
-                CurrentSel = FullySelectedNodes[Index];
-                int LevelsCount = CurrentSel.Count(x => x == '|');
-                if ((LevelsCount != 0) && (LevelsCount != StandardTreeLevels))
-                    FullySelectedNodes.RemoveAt(Index);  //intermediate node
+                //we are only interested in either the root selected, or leaves selected, don't care about any
+                //intermediate nodes, they will display correctly if we get leaves and/or root
+                int StandardTreeLevels = CurrentSelections[0].Count(x => x == '|') - 1; //sub 1, since we are getting nodes, with leaves
+                string CurrentSel = string.Empty;
+                for (int Index = FullySelectedNodes.Count() - 1; Index >= 0; Index--)
+                {
+                    CurrentSel = FullySelectedNodes[Index];
+                    int LevelsCount = CurrentSel.Count(x => x == '|');
+                    if ((LevelsCount != 0) && (LevelsCount != StandardTreeLevels))
+                        FullySelectedNodes.RemoveAt(Index);  //intermediate node
+                }
             }
             return FullySelectedNodes;
         }
