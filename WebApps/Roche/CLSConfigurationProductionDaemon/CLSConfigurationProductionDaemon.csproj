@@ -72,10 +72,7 @@
     <EmbeddedResource Include="StatusWindow.resx">
       <DependentUpon>StatusWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="..\App.config">
-      <Link>App.config</Link>
-    </None>
-    <None Include="app3333.config" />
+    <None Include="App.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

@@ -118,7 +118,6 @@
     <Content Include="CLSConfigurationServices.asmx" />
     <Content Include="scripts\ai.0.15.0-build58334.js" />
     <Content Include="scripts\ai.0.15.0-build58334.min.js" />
-    <Content Include="Web2.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CLSConfigurationServices.asmx.cs">
@@ -130,29 +129,18 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-    <Content Include="..\Web.config">
-      <Link>Web.config</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="..\ConnectionStrings.config">
       <Link>ConnectionStrings.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\SMTP.config">
-      <Link>SMTP.config</Link>
+    <Content Include="..\Web.config">
+      <Link>Web.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <None Include="Properties\PublishProfiles\CLSConfigurationServicesConfigs.pubxml" />
-    <None Include="Properties\PublishProfiles\RocheConfigurationServicesConfigs.pubxml" />
-    <None Include="Properties\PublishProfiles\RocheServicesConfigs.pubxml" />
     <None Include="Web.Debug.config" />
     <None Include="Web.Release.config" />
-    <None Include="Web2.Debug.config">
-      <DependentUpon>Web2.config</DependentUpon>
-    </None>
-    <None Include="Web2.Release.config">
-      <DependentUpon>Web2.config</DependentUpon>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CLSConfigurationCommon\CLSConfigurationCommon.csproj">

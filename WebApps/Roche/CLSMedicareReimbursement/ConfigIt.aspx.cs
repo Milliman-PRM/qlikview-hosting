@@ -20,17 +20,11 @@ namespace CLSMedicareReimbursement
             var config = WebConfigurationManager.OpenWebConfiguration("~");
             lblConfigFile.Text = config.FilePath;
 
-            // var ConfigurationUserLevelconfigPath = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None).FilePath;
-            //lblConfigurationUserLevelconfigPath.Text = ConfigurationUserLevelconfigPath;
-
-            // var ConfigurationGetExecutingAssembly = System.Reflection.Assembly.GetExecutingAssembly().Location;
-            // lblConfigurationGetExecutingAssembly.Text = ConfigurationGetExecutingAssembly;
-            var databaseName = "CLSdbDataContextConnectionString";
-            
+            var databaseName = "CLSdbDataContextConnectionString";            
             //Getting config items from the EnvironmentSettings static var...
             lbEnvior.Text = "You are in || " + EnvironmentSettings.Environment.ToUpper() + " || Environment";
             lbEnvirSQL.Text = EnvironmentSettings.ConnectionStrings[databaseName].ConnectionString;
-            lbEnvirSMTP.Text = EnvironmentSettings.SystemNet.MailSettings.Smtp.Network.Host;
+            //lbEnvirSMTP.Text = EnvironmentSettings.SystemNet.MailSettings.Smtp.Network.Host;
 
             //Getting config items from WebConfigurationManager
             lbWebConfigManSQL.Text = WebConfigurationManager.ConnectionStrings[databaseName].ConnectionString;

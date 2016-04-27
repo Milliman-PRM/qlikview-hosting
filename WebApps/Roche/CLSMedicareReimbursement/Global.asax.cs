@@ -38,7 +38,9 @@ namespace CLSMedicareReimbursement
                 Session.Clear();  //just in case there is a session, clear it, otherwisse this will fail
             }
             catch (Exception)
-            { }
+            {
+
+            }
             Server.Transfer("default.aspx");  //force back to main page, probably session timeout
         }
 

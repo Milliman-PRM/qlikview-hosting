@@ -14,6 +14,7 @@ using System.Web.UI.WebControls;
 using Controller;
 using log4net;
 using log4net.Config;
+using ConfigIt;
 
 namespace CLSMedicareReimbursement
 {
@@ -44,7 +45,7 @@ namespace CLSMedicareReimbursement
                 ////Existing code exists to retrieve memory use
                 var PID = PsApiWrapper.GetPerformanceInfo();
                 var FreeMemoryPercentage = (((double)PID.PhysicalAvailableBytes / (double)PID.PhysicalTotalBytes) * 100.0);
-                var configMemory = (Convert.ToDouble(ConfigurationManager.AppSettings["Memory"].ToString()));
+                var configMemory = (Convert.ToDouble(EnvironmentSettings.Elements["Memory"].Value.ToString()));
                 if (FreeMemoryPercentage >= (100 - configMemory))
                 {
                     lblMemory.Text = string.Format("<em>Avalible</em>");
@@ -65,9 +66,9 @@ namespace CLSMedicareReimbursement
             try
             {
                 //get the drives info
-                var diskDriveArray = ConfigurationManager.AppSettings["DiskDrives"].Split(',').ToArray();
+                var diskDriveArray = EnvironmentSettings.Elements["DiskDrives"].Value.ToString().Split(',').ToArray();
                 //from config
-                var configDiskSpace = (Convert.ToDouble(ConfigurationManager.AppSettings["DiskSpace"].ToString()));
+                var configDiskSpace = (Convert.ToDouble(EnvironmentSettings.Elements["DiskSpace"].Value.ToString()));
 
                 //loop through and find space
                 foreach (var item in diskDriveArray)
@@ -103,7 +104,7 @@ namespace CLSMedicareReimbursement
             //----------------------------Database-------------------------------------------
             try
             {
-                var stringConn = ConfigurationManager.ConnectionStrings["CLSdbDataContextConnectionString"].ToString();
+                var stringConn = EnvironmentSettings.ConnectionStrings["CLSdbDataContextConnectionString"].ConnectionString;
                 var database = DatabaseConnectionStringParser.GetDatabaseName(stringConn.ToString());
                 var schema = DatabaseConnectionStringParser.GetSchemaName(stringConn.ToString());
 

@@ -51,6 +51,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ConfigIt\ConfigIt.csproj">
+      <Project>{c682960b-d596-4002-9af3-f3cc2ad2454c}</Project>
+      <Name>ConfigIt</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Framework\CLSdbContext\CLSdbContext.csproj">
       <Project>{8290f3dd-ddaa-46bd-9adc-29d12dec1b56}</Project>
       <Name>CLSdbContext</Name>

@@ -40,17 +40,11 @@ namespace ConfigIt
             get { return _connectionStrings; }
         }
 
-        private static System.Net.Configuration.NetSectionGroup _systemNet;
-        public static System.Net.Configuration.NetSectionGroup SystemNet
-        {
-            get { return _systemNet; }
-        }
-
-        private static ApplicationSettingsSectionGroup _applicationSettings;
-        public static ApplicationSettingsSectionGroup ApplicationSettings
-        {
-            get { return _applicationSettings; }
-        }
+        //private static System.Net.Configuration.NetSectionGroup _systemNet;
+        //public static System.Net.Configuration.NetSectionGroup SystemNet
+        //{
+        //    get { return _systemNet; }
+        //}
 
         #endregion
         //Constructor
@@ -59,59 +53,34 @@ namespace ConfigIt
             try
             {
                 KeyValueConfigurationSection section = null;
-                //ConfigurationSectionGroup appGroup = null;
 
                 var config = WebConfigurationManager.OpenWebConfiguration("~");
                 //Next Get which environment we are in based off what the machine name this code is running on
                 section = config.GetSection("environmentConfiguration") as KeyValueConfigurationSection;
-
-                //appGroup = config.GetSectionGroup("applicationSettings") as ApplicationSettingsSectionGroup;
-
+                
                 //based on machine name it sets environment
-                //var machineName = System.Environment.MachineName.ToLower();
+                var machineName = System.Environment.MachineName.ToLower();
                 /************************************************************************************/
                 _environment = section.Elements["EnvironmentSetUp"].Value.ToString();
-                /************************************************************************************/
-                //var applicationSettingSectionGroup = config.SectionGroups["applicationSettings"];
-                //var executableSection = applicationSettingSectionGroup.Sections["CLSConfigurationProductionDaemon.Properties.Settings"];
-
-                //_applicationSettings = (ApplicationSettingsSectionGroup)config.GetSectionGroup("applicationSettings"); 
+                /************************************************************************************/                
                 _elements = ((KeyValueConfigurationSection)config.GetSection(_environment)).Elements;
                 _connectionStrings = ((KeyValueConfigurationSection)config.GetSection(_environment)).ConnectionStrings;
 
                 //SetConfigurationElementsFromProperties();
                 SetConfigurationElementsFromConfigsElements();
 
-                //var CLSConfigurationProductionDaemon = ConfigurationManager.GetSection("CLSConfigurationProductionDaemon") as NameValueCollection;
-                //var CLSConfigurationProductionDaemon2 = ConfigurationManager.GetSection("CLSConfigurationProductionDaemon") as NameValueCollection;
-                //var set = EnvironmentSectionGroup.GetCustomSetting("applicationSettings/MyApp.Properties.Settings",
-                //                        "CLSConfigurationProductionDaemon_CLSConfigurationServices_CLSConfigurationServices");
-
                 //NOTE we only want to save the config file if something changed...
                 var somethingChanged = false;
 
-                
-                //ConfigurationSectionGroup appSettingsGroup = config.GetSectionGroup("applicationSettings");
-                //ClientSettingsSection clientSettings = (ClientSettingsSection)appSettingsGroup.Sections["CLSConfiguration.Properties.Settings"];
-                //ConfigurationElement element = clientSettings.Settings.Get("CLSConfiguration_CLSConfigurationServices_CLSConfigurationServices");
-                //var xml = ((SettingElement)element).Value.ValueXml.InnerXml;
-                //var xs = new XmlSerializer(typeof(string[]));
-                //string[] strings = (string[])xs.Deserialize(new XmlTextReader(xml, XmlNodeType.Element, null));
-                //foreach (string s in strings)
-                //{
-                //    //
-                //}
-                //_applicationSettings = (ConfigurationSectionGroup)config.GetSectionGroup("applicationSettings");
-
                 //Update the email stuff if environment specific value is different
-                _systemNet = (System.Net.Configuration.NetSectionGroup)config.GetSectionGroup("system.net");
-                if (_systemNet.MailSettings.Smtp.Network.Host != null
-                                        && _elements["SMTPServer"] != null
-                                        && _systemNet.MailSettings.Smtp.Network.Host != _elements["SMTPServer"].Value)
-                {
-                    _systemNet.MailSettings.Smtp.Network.Host = _elements["SMTPServer"].Value;
-                    somethingChanged = true;
-                }
+                //_systemNet = (System.Net.Configuration.NetSectionGroup)config.GetSectionGroup("system.net");
+                //if (_systemNet.MailSettings.Smtp.Network.Host != null
+                //                        && _elements["SMTPServer"] != null
+                //                        && _systemNet.MailSettings.Smtp.Network.Host != _elements["SMTPServer"].Value)
+                //{
+                //    _systemNet.MailSettings.Smtp.Network.Host = _elements["SMTPServer"].Value;
+                //    somethingChanged = true;
+                //}
 
                 //Update the connection strings if the environment specific value is different
                 foreach (ConnectionStringSettings cons in _connectionStrings)
@@ -143,13 +112,12 @@ namespace ConfigIt
                 if (somethingChanged)
                 {
                     config.Save(ConfigurationSaveMode.Modified);
-
                 }
 
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception("An error occured.", ex);
             }
         }
 
@@ -168,18 +136,6 @@ namespace ConfigIt
             var MakeLiveDirectory = _elements["MakeLiveDirectory"].Value;
             var PGDump = _elements["PGDump"].Value;
             var PGRestore = _elements["PGRestore"].Value;
-        }
-
-        public class ConfigHelper
-        {
-            //public string GetUrl()
-            //{
-            //    var section = (ClientSettingsSection)ConfigurationManager.
-            //                        GetSection("applicationSettings/CLSConfiguration.Properties.Settings");
-            //    var url = section.Settings.Get("CLSConfiguration_CLSConfigurationServices_CLSConfigurationServices").Value.ValueXml.InnerText;
-            //    return url;
-            //}
-
         }
     }
 }

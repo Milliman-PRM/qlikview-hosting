@@ -16,7 +16,6 @@ namespace ConfigIt
         {
             this["connectionStrings"] = new ConnectionStringSettingsCollection();
             this["elements"] = new KeyValueConfigurationCollection();
-            //this["applicationSettings"] = new KeyValueConfigurationCollection();
         }
 
         [ConfigurationProperty("connectionStrings")]
@@ -30,86 +29,5 @@ namespace ConfigIt
         {
             get { return (KeyValueConfigurationCollection)this["elements"]; }
         }
-
-        //public KeyValueConfigurationCollection AppSettingsGroup
-        //{
-        //    get { return (KeyValueConfigurationCollection)base["applicationSettings"]; }
-        //}
-    }
-
-
-    public class ApplicationSettingsSectionGroup : ConfigurationSectionGroup
-    {
-        #region Constructors
-        public ApplicationSettingsSectionGroup()
-        {
-
-
-        }
-        #endregion
-
-
-        #region Properties
-        [ConfigurationProperty("CLSConfiguration.Properties.Settings")]
-        public ClientSettingsSection CLSConfigPropertiesSettings
-        {
-            get { return (ClientSettingsSection)base.Sections["CLSConfiguration.Properties.Settings"]; }
-        }
-        #endregion
-    }
-    
-
-    //public class ApplicationSettingsSectionGroup : ConfigurationSectionGroup
-    //{
-    //    #region Constructors
-    //    public ApplicationSettingsSectionGroup() {
-
-
-    //    }
-    //    #endregion
-
-    //    #region Properties
-    //    [ConfigurationProperty("CLSConfiguration.Properties.Settings")]
-    //    public ClientSettingsSection CLSConfigPropertiesSettings
-    //    {
-    //        get { return (ClientSettingsSection)base.Sections["CLSConfiguration.Properties.Settings"]; }
-    //    }
-    //    #endregion
-    //}
-
-    ///// <summary>
-    ///// An example configuration section class.
-    ///// </summary>
-    //public class ClientSettingsSection : ConfigurationSection
-    //{
-    //    #region Constructors
-    //    static ClientSettingsSection()
-    //    {
-    //        // Predefine properties here
-    //        _type = new ConfigurationProperty("type", typeof(string), null, ConfigurationPropertyOptions.None);
-    //        _requirePermission = new ConfigurationProperty("requirePermission", typeof(bool), false, ConfigurationPropertyOptions.None);
-    //    }
-    //    #endregion
-
-    //    private static ConfigurationProperty _type;
-    //    /// <summary>
-    //    /// Gets the StringValue setting.
-    //    /// </summary>
-    //    [ConfigurationProperty("type", IsRequired = true)]
-    //    public string Type
-    //    {
-    //        get { return (string)base[_type]; }
-    //    }
-
-    //    private static ConfigurationProperty _requirePermission;
-    //    /// <summary>
-    //    /// Gets the StringValue setting.
-    //    /// </summary>
-    //    [ConfigurationProperty("requirePermission", IsRequired = true)]
-    //    public string RequirePermission
-    //    {
-    //        get { return (string)base[_requirePermission]; }
-    //    }              
-
-    //}
+    }    
 }
