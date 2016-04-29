@@ -72,7 +72,7 @@
     <EmbeddedResource Include="StatusWindow.resx">
       <DependentUpon>StatusWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="app.config" />
+    <None Include="App.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -114,6 +114,10 @@
     <ProjectReference Include="..\CLSConfigurationCommon\CLSConfigurationCommon.csproj">
       <Project>{569bd6af-c743-458e-8df7-75e6b95b81ca}</Project>
       <Name>CLSConfigurationCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ConfigIt\ConfigIt.csproj">
+      <Project>{c682960b-d596-4002-9af3-f3cc2ad2454c}</Project>
+      <Name>ConfigIt</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

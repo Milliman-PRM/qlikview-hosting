@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConfigIt;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -31,7 +32,8 @@ namespace CLSConfigurationServices
             try
             {
                 List<string> IPs = new List<string>();
-                string ValidIPS = System.Configuration.ConfigurationManager.AppSettings["ValidIPs"];
+                //string ValidIPS = System.Configuration.ConfigurationManager.AppSettings["ValidIPs"];
+                string ValidIPS = EnvironmentSettings.Elements["ValidIPs"].Value;
                 IPs.AddRange(ValidIPS.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList());
                 if (IPs.Contains("*"))
                     return true;  //we accept all
@@ -55,8 +57,9 @@ namespace CLSConfigurationServices
             if (IsValidConnection() == false)
                 return false;
 
-            string PGRestore = System.Configuration.ConfigurationManager.AppSettings["PGRestore"];
-          
+            //string PGRestore = System.Configuration.ConfigurationManager.AppSettings["PGRestore"];
+            string PGRestore = EnvironmentSettings.Elements["PGRestore"].Value;
+
             string DumpFile = System.IO.Path.Combine(System.IO.Path.GetTempPath(), SchemaName + ".backup");
             System.IO.File.WriteAllBytes(DumpFile, DBBackup);
 
@@ -94,7 +97,8 @@ namespace CLSConfigurationServices
             if (IsValidConnection() == false)
                 return false;
 
-            string MakeLiveDir = System.Configuration.ConfigurationManager.AppSettings["MakeLiveDirectory"];
+            //string MakeLiveDir = System.Configuration.ConfigurationManager.AppSettings["MakeLiveDirectory"];
+            string MakeLiveDir = EnvironmentSettings.Elements["MakeLiveDirectory"].Value;
             string MakeLiveFile = System.IO.Path.Combine(MakeLiveDir, PendingActiveSchemaFilename);
 
             Schema CurrentSchema = new Schema(SchemaName, OperatorEmail, GoLiveDateTime);
@@ -110,7 +114,7 @@ namespace CLSConfigurationServices
             if (IsValidConnection() == false)
                 return false;
 
-            string MakeLiveDir = System.Configuration.ConfigurationManager.AppSettings["MakeLiveDirectory"];
+            string MakeLiveDir = EnvironmentSettings.Elements["MakeLiveDirectory"].Value;
             string MakeLiveFile = System.IO.Path.Combine(MakeLiveDir, PendingActiveSchemaFilename);
             if ( System.IO.File.Exists(MakeLiveFile))
             {
@@ -125,7 +129,7 @@ namespace CLSConfigurationServices
         [WebMethod]
         public void SetActiveSchemaName( string SchemaName )
         {
-            string MakeLiveDir = System.Configuration.ConfigurationManager.AppSettings["MakeLiveDirectory"];
+            string MakeLiveDir = EnvironmentSettings.Elements["MakeLiveDirectory"].Value;
             string MakeLiveFile = System.IO.Path.Combine(MakeLiveDir, PendingActiveSchemaFilename);
             //production has made request active, so get rid of any pending requests
             System.IO.File.Delete(MakeLiveFile);
@@ -148,7 +152,7 @@ namespace CLSConfigurationServices
         [WebMethod]
         public string GetActiveSchemaName()
         {
-            string MakeLiveDir = System.Configuration.ConfigurationManager.AppSettings["MakeLiveDirectory"];
+            string MakeLiveDir = EnvironmentSettings.Elements["MakeLiveDirectory"].Value;
             string ActiveSchemaFile = System.IO.Path.Combine(MakeLiveDir, ActiveSchemaFilename);
             if ( System.IO.File.Exists(ActiveSchemaFile))
             {
