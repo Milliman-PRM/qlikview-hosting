@@ -35,11 +35,11 @@ namespace WoahRawDataExtractSvc
             ThdParams = (Params == null) ?
                 new ExtractionThreadParameters
                 {
-                    RawFilePath = ConfigurationManager.AppSettings["RawFilePath"],
-                    ArchiveFilePath = ConfigurationManager.AppSettings["ArchiveFilePath"],
-                    MongoIniFileName = ConfigurationManager.AppSettings["MongoIniFileName"],
-                    MongoIniFileSection = ConfigurationManager.AppSettings["MongoIniFileSection"],
-                    SleepTimeMs = int.Parse(ConfigurationManager.AppSettings["SleepTimeMs"])
+                    RawFilePath = ConfigurationManager.AppSettings["RedoxRawFilePath"],
+                    ArchiveFilePath = ConfigurationManager.AppSettings["RedoxArchiveFilePath"],
+                    MongoIniFileName = ConfigurationManager.AppSettings["RedoxMongoIniFileName"],
+                    MongoIniFileSection = ConfigurationManager.AppSettings["RedoxMongoIniFileSection"],
+                    SleepTimeMs = int.Parse(ConfigurationManager.AppSettings["RedoxSleepTimeMs"])
                 }
                 :
                 Params ;
