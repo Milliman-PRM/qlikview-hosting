@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Milliman - Overview</title>
+    <link href="css/site.css" rel="stylesheet" />
+</head>
+<body>
+    <div id="body-wrapper">
+
+        <div id="header">
+            <div id="header-logo">
+                <img src="images/PRM-Analytics-Logo.png" alt="milliman-prm-analytics-logo" />
+            </div>
+            <div id="header-nav">
+                <table id="header-nav-menu">
+                    <tr>
+                        <td><a href="http://milliman.com" target="_blank">Milliman Worldwide</a></td>
+                        <td class="anchorDelimiter">|</td>
+                        <td><a href="Contact.html">Contact Us</a></td>
+                        <td class="anchorDelimiter">|</td>
+                        <td><a href="#">Client Login</a></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <hr />
+
+        <div id="content-wrapper">
+            <div id="sidebar-nav"></div>
+
+            <div class="vertRule height-730"></div>
+
+            <div id="overview">
+
+                <img src="images/milliman-prm-analytics.png" alt="prm-analytics" />
+                <p>
+                    <h2>FAQ</h2>
+                </p>
+                <p>
+                    <strong>How does the Milliman PRM analytics algorythm work?</strong><br />
+                    The Milliman PRM Analytics algorythm is an inovative predicitive analytic that provides critical information
+                    about each attributed patient. It connects the clinical characteristics of the patient withe the estimated
+                    financial value that may be derived from the management of that patient, allowing an entity to strategically
+                    select and manage patients for the best return on investment. Each patient population analyzed using Milliman
+                    PRM will have unique results. The premise for ranking is that patients, whose healthcare expense volatility
+                    a potential for avoidable costs are the highest, should be ranked as a priority for additional care management
+                    as opposed to simply the highest cost patients or the highest risk patients.
+                </p>
+                <p>
+                    <strong>How does Milliman protect consumer privacy?</strong><br />
+                    Milliman PRM operates under HIPPA, whch establishes the requirements for the disclosure of Protected Health
+                    Information (PHI). The strict and comprehensive requirements are part of the legislation and are universally
+                    recognized throughout the insurance and healthcare industries.  Milliman PRM prides itself on our secure systems
+                    and state of the aret infrastructure that keeps consumer data confidential.
+                </p>
+            </div>
+
+            <div class="vertRule height-730"></div>
+
+            <div id="sidebar-info"></div>
+        </div>
+
+        <div id="footer-nav"></div>
+
+        <script src="js/jquery-1.11.1.min.js"></script>
+        <script src="js/global.js"></script>
+        <script src="js/header-nav.js"></script>
+        <script src="js/footer-nav.js"></script>
+        <script src="js/sidebar-nav.js"></script>
+        <script src="js/sidebar-info.js"></script>
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                Milliman.SidebarNav.GetNavigtion('faq', 'sidebar-nav');
+                Milliman.SidebarInfo.GetInfo('sidebar-info');
+                //Milliman.FooterNav.GetPageFooter('footer-nav');
+            });
+        </script>
+    </div>
+</body>
+</html>

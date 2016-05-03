@@ -1,0 +1,6 @@
+﻿
+Update for each new database added to the system
+Change appending QV name to path in rules to use \ instead of / to append
+
+Expire users after time - added UI changes but not stored
+Password expire after time - need UI changes

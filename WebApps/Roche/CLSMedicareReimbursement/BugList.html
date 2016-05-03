@@ -1,0 +1,127 @@
+﻿<html>
+<head>
+    <style>
+        .demo {
+            border: 1px solid #C0C0C0;
+            border-collapse: collapse;
+            padding: 5px;
+        }
+
+            .demo th {
+                border: 1px solid #C0C0C0;
+                padding: 5px;
+                background: #F0F0F0;
+            }
+
+            .demo td {
+                border: 1px solid #C0C0C0;
+                padding: 5px;
+            }
+    </style>
+</head>
+<body>
+
+
+    <table class="demo">
+        <caption>Corrected Issues/Notes</caption>
+        <thead>
+            <tr>
+                <td>Date</td>
+                <th>Issue ID (VSO)</th>
+                <th>Issue Description</th>
+                <th>Notes</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>03/10/2016</td>
+                <td>541</td>
+                <td>"Table disappeared"</td>
+                <td>Test on Chrome, FF, Edge and IE - was not able to re-create this behavior</td>
+            </tr>
+            <tr>
+                <td>03/10/2016</td>
+                <td>542</td>
+                <td>"Web.config Runtime Error"</td>
+                <td>Result of session expiration - has been corrected to reload the main page if your session has expired and you click on something</td>
+            </tr>
+            <tr>
+                <td>03/10/2016</td>
+                <td>547</td>
+                <td>"Remove coloring on sorted fields"</td>
+                <td>Sort color has been removed</td>
+            </tr>
+            <tr>
+                <td>03/10/2016</td>
+                <td>539</td>
+                <td>"Clicking on a value in a field that is sorted causes it to disappear."</td>
+                <td>could no longer re-produce issue on FF, Chrome, IE or Edge</td>
+            </tr>
+            <tr>
+                <td>03/10/2016</td>
+                <td>538</td>
+                <td>"Using the scrollbar in Chrome & Firefox causes the table to shorten significantly"</td>
+                <td>Corrected via setInterval timer to resize grid and ensure correct size</td>
+            </tr>
+            <tr>
+                <td>03/07/2016</td>
+                <td>540</td>
+                <td>"CPT Descriptor" should be changed to "CPT Code"</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>03/07/2016</td>
+                <td>537</td>
+                <td>Set Page Min width/height</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>03/07/2016</td>
+                <td>535</td>
+                <td>Add sorting for the list boxes in the menu</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>03/07/2016</td>
+                <td>534</td>
+                <td>Add some space under the source link at the bottom</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>03/07/2016</td>
+                <td>533</td>
+                <td>Right align the label for the Medicare Reimbursement Rate column</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>03/07/2016</td>
+                <td>530</td>
+                <td>Adjust column widths</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>03/07/2016</td>
+                <td>&nbsp;</td>
+                <td></td>
+                <td>Version 2</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!--<script type="text/javascript">
+        var    today = new Date(),
+                day = today.getDate(),
+                month = today.getMonth() + 1,
+                year = today.getFullYear();
+
+        today = month + "/" + day + "/" + year;
+
+        var list = document.querySelectorAll('.spanDate');
+        var n;
+        for (n = 0; n < list.length; ++n) {
+            list[n].textContent = today;           
+        }       
+        //document.querySelector('.spanDate').textContent = today;
+    </script>-->
+</body>
+</html>
