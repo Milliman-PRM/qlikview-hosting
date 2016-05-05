@@ -92,9 +92,9 @@ namespace FileProcessor
     /// </summary>
     public class BaseFileProcessor
     {
-        public static string _exceptionLoggerFileDirectory = FileFunctions.GetExceptionLoggerFileDirectory();
-        public static string _exceptionLoggerFileName = FileFunctions.GetExceptionLoggerFileName();
-
+        //switch to using the generic logger
+        public static log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.
+                                                                               MethodBase.GetCurrentMethod().DeclaringType);
         #region FileProcessed
 
         /// <summary>
@@ -120,46 +120,15 @@ namespace FileProcessor
         //Logs error. It will create file at the directory if file does not exist   
         public static void LogError(Exception ex, string message)
         {
-            if (ex != null && !string.IsNullOrEmpty(message))
+            if (!string.IsNullOrEmpty(message))
             {
-                LogExAndErr(ex, message);
+                log.Error(DateTime.Now + " Todays Exceptions: ~ " + "||-||" + message + "||-||", ex);
             }
-            else if (ex == null & (!string.IsNullOrEmpty(message)))
+            else
             {
-                LogError(message);
+                log.Error(DateTime.Now + " Todays Exceptions: ~ " + "||-||", ex);
             }
-            else if (ex != null & (string.IsNullOrEmpty(message)))
-            {
-                LogError(ex);
-            }
-        }
-        public static void LogError(Exception ex)
-        {
-            Logger.Instance.LogPath = _exceptionLoggerFileDirectory;
-            Logger.Instance.LogFileName = _exceptionLoggerFileName;
-            Logger.WriteLine(DateTime.Now + " Todays Exceptions: ~ " + "Exception Message: " + ex.Message.ToString() + "||-||"
-                                          + "Exception Trace : " + ex.StackTrace + "||-||"
-                                          + "Exception Target: " + ex.TargetSite.ToString() + "||-||"
-                                          + "Exception Source: " + ex.Source.ToString() + Environment.NewLine);
-        }
-        public static void LogError(string message)
-        {
-            Logger.Instance.LogPath = _exceptionLoggerFileDirectory;
-            Logger.Instance.LogFileName = _exceptionLoggerFileName;
-            Logger.WriteLine(DateTime.Now + " Todays Exceptions: ~ " + "||-||"
-                                          + " Exception Message: " + message + Environment.NewLine);
-        }
-        public static void LogExAndErr(Exception ex, string message)
-        {
-            Logger.Instance.LogPath = _exceptionLoggerFileDirectory;
-            Logger.Instance.LogFileName = _exceptionLoggerFileName;
-            Logger.WriteLine(DateTime.Now + " Todays Exceptions: ~ " + "||-||"
-                                          + message + "||-||"
-                                          + "Exception Message: " + ex.Message.ToString() + "||-||"
-                                          + "Exception Trace : " + ex.StackTrace + "||-||"
-                                          + "Exception Target: " + ex.TargetSite.ToString() + "||-||"
-                                          + "Exception Source: " + ex.Source.ToString() + Environment.NewLine);
-        }
+        }        
         #endregion        
     }
     #endregion

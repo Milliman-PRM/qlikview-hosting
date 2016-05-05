@@ -228,8 +228,8 @@ namespace ReportingTest
         
        [TestMethod]
         public void TestLogger()
-        {
-            BaseFileProcessor.LogError("This is Test  || DateTime: " + DateTime.Now );
+        {            
+            //BaseFileProcessor.LogError(ex,"This is Test  || DateTime: " + DateTime.Now,"" );
             var LoggerFileDirectory = ConfigurationManager.AppSettings["LoggerFileDirectory"];
             var LoggerFileName = ConfigurationManager.AppSettings["LoggerFileName"];
 

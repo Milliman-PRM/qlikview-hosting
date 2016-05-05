@@ -149,7 +149,6 @@ namespace FileProcessor
                         proxyLogEntry.Document = (!string.IsNullOrEmpty(docName)) ? docName.ToUpper().Trim() : string.Empty;
 
                         proxyLogEntry.IsReduced = entry.Document.IndexOf(@"\reducedcachedqvws", StringComparison.Ordinal) > -1;
-
                         //add entry to list
                         listProxyLogs.Add(proxyLogEntry);
                         proxyLogEntry = new ProxyAuditLog();
@@ -160,7 +159,7 @@ namespace FileProcessor
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, " Class ProcessQVAuditLogs. Method ProcessLogFile while sending the data to controller.");
+                BaseFileProcessor.LogError(ex, " Class ProcessQVAuditLogs. Method ProcessLogFile while sending the data to controller. File " + fileNameWithDirectory);
             }
 
             return blnSucessful;
@@ -190,7 +189,7 @@ namespace FileProcessor
             }
             catch (Exception ex)
             {
-                //LogError(ex, " Class ProcessQVAuditLogs. Method ParseFile. File name. " + filefullName);
+                BaseFileProcessor.LogError(ex, " Class ProcessQVAuditLogs. Method ParseFile. File name. " + filefullName);
             }
             return listLogFile;
         }

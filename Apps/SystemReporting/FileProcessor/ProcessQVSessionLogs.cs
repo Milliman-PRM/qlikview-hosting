@@ -163,7 +163,6 @@ namespace FileProcessor
                         proxyLogEntry.SessionLength = entry.SessionDuration.ToString();
                         proxyLogEntry.SessionEndReason = QlikviewSessionEvent.GetExitReason(entry.ExitReason).ToString();
                         proxyLogEntry.Browser = QlikviewSessionEvent.GetBrowser(entry.ClientType);
-
                         //add entry to list
                         listProxyLogs.Add(proxyLogEntry);
                         proxyLogEntry = new ProxySessionLog();

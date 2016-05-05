@@ -140,9 +140,29 @@ namespace FileProcessor
                         foreach (var item in repositoryUrls)
                         {
                             group = IisAccessEvent.DecodeUriQuery(entry.UriQuery, item);
-                            if (group != null)
-                                break;
+                            if (group != null && group != "")
+                            {
+                                if (group.ToLower().IndexOf("installedapplications", StringComparison.Ordinal) > -1)
+                                {
+                                    //go back to loop.
+                                }
+                                else
+                                {
+                                    break;
+                                }
+                            }
                         }
+                        if (group != null && group != "")
+                        {
+                            //if the group still has the installedapplicaiton then ignore
+                            if (group.ToLower().IndexOf("installedapplications", StringComparison.Ordinal) > -1)
+                                group = "";
+
+                            //substring(start postions,find last index of("_REDUCEDUSERQVWS) and remove everything after that occurance of _REDUCEDUSERQVWS
+                            if (group.IndexOf("_REDUCEDUSERQVWS", StringComparison.Ordinal) > -1)
+                                group = group.Substring(0, group.LastIndexOf("_REDUCEDUSERQVWS"));
+                        }
+
                         proxyLogEntry.Group = (!string.IsNullOrEmpty(group)) ? group : string.Empty;
                         //**************************************************************************************************//
                         proxyLogEntry.StatusCode = entry.Status != 0 ? entry.Status : 0;
@@ -184,13 +204,20 @@ namespace FileProcessor
                                                                         .Distinct();
 
                     var listProxyLogsFinal = listProxyExcludeDups.ToList();
-                    //process the list
-                    blnSucessful = ControllerIisLog.ProcessLogs(listProxyLogsFinal);
+                    if (listProxyLogsFinal.Count() == 0)
+                    {
+                        blnSucessful = true;//nothing to process
+                    }
+                    else
+                    {
+                        //process the list
+                        blnSucessful = ControllerIisLog.ProcessLogs(listProxyLogsFinal);
+                    }
                 }
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, " Class ProcessIisLogs. Method ProcessLogFile while sending the data to controller.");
+                BaseFileProcessor.LogError(ex, " Class ProcessIisLogs. Method ProcessLogFile while sending the data to controller. File " + fileNameWithDirectory);
             }
 
             return blnSucessful;
