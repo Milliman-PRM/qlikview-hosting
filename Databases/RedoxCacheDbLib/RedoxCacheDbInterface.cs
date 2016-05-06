@@ -17,18 +17,26 @@ namespace RedoxCacheDbLib
         RedoxCacheContext Db;
 
         /// <summary>
-        /// Constructor, instantiates the encapsulated database context
+        /// static factory method to instantiate this class
         /// </summary>
         /// <param name="ConnectionString"></param>
-        public RedoxCacheDbInterface(string ConnectionString = null)
+        /// <returns>The new constructed object</returns>
+        public static RedoxCacheDbInterface CreateNewInstance(string ConnectionStringName = null)
         {
-            if (ConnectionString == null)
-            {
-                ConnectionString = ConfigurationManager.ConnectionStrings["DefaultRedoxCacheConnectionString"].ConnectionString;
-            }
+            String ConnectionString = (ConnectionStringName != null) ?
+                ConfigurationManager.ConnectionStrings[ConnectionStringName].ConnectionString :
+                ConfigurationManager.ConnectionStrings["DefaultRedoxCacheContextConnectionString"].ConnectionString;
 
+            return new RedoxCacheDbInterface(ConnectionString);
+        }
+
+        /// <summary>
+        /// Private constructor!!  Use static CreateNewInstance(...) instead to instantiate.  
+        /// </summary>
+        /// <param name="ConnectionString"></param>
+        private RedoxCacheDbInterface(string ConnectionString)
+        {
             Db = new RedoxCacheContext(ConnectionString);
-
             ConnectionString = null;
         }
 

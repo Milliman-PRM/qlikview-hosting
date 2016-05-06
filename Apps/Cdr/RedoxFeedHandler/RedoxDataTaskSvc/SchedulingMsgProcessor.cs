@@ -24,9 +24,32 @@ namespace RedoxDataTaskSvc
         Thread Thd;
         RedoxCacheDbInterface Db;
         Mutex Mutx;
-        bool EndThreadSignal;
+        /// <summary>
+        /// use bool ThreadSafeEndThreadSignal property instead
+        /// </summary>
+        private bool _EndThreadSignal;
         RedoxQueryInterface RedoxQueryIfc;
         String OutputFolderName = @"C:\RedoxFeedHandler\RedoxFeedTest";
+
+        /// <summary>
+        /// public property with get/set to provide thread safe access to the underlying boolean variable
+        /// </summary>
+        bool ThreadSafeEndThreadSignal
+        {
+            set
+            {
+                Mutx.WaitOne();
+                _EndThreadSignal = value;
+                Mutx.ReleaseMutex();
+            }
+            get
+            {
+                Mutx.WaitOne();
+                bool ReturnVal = _EndThreadSignal;
+                Mutx.ReleaseMutex();
+                return ReturnVal;
+            }
+        }
 
         /// <summary>
         /// Constructor, instantiates / initializes member resources.  
@@ -48,15 +71,12 @@ namespace RedoxDataTaskSvc
         {
             if (!Thd.IsAlive)
             {
-                Mutx.WaitOne();
-                EndThreadSignal = false;
-                Mutx.ReleaseMutex();
+                ThreadSafeEndThreadSignal = false;
 
-                string CxStr = Environment.MachineName == "IN-PUCKETTT" ?
-                    ConfigurationManager.ConnectionStrings["RedoxCacheContextConnectionStringPort5433"].ConnectionString :
-                    ConfigurationManager.ConnectionStrings["RedoxCacheContextConnectionStringPort5432"].ConnectionString;
-
-                Db = new RedoxCacheDbInterface(CxStr);
+                // Use Different connection string if using Tom's PostgreSQL server
+                Db = (Environment.MachineName == "IN-PUCKETTT") ?
+                    RedoxCacheDbInterface.CreateNewInstance("RedoxCacheContextConnectionStringPort5433") :
+                    RedoxCacheDbInterface.CreateNewInstance("RedoxCacheContextConnectionStringPort5432");
 
                 Thd.Start();  // if no argument is expected by thread entry point
                 //Thd.Start(4500);  // if argument is expected
@@ -72,9 +92,7 @@ namespace RedoxDataTaskSvc
         /// <returns>bool indicating whether the thread is alive at the time of return</returns>
         public bool EndThread(int StopWaitTimeMs)
         {
-            Mutx.WaitOne();
-            EndThreadSignal = true;
-            Mutx.ReleaseMutex();
+            ThreadSafeEndThreadSignal = true;
 
             Thd.Join(StopWaitTimeMs);
             if (Thd.IsAlive)
@@ -91,14 +109,14 @@ namespace RedoxDataTaskSvc
         private void ThreadMain()
         // for argument, signature would be:> private void ThreadMain(Object Obj)   and pass value in Thd.Start(xyz)
         {
-            Mutx.WaitOne();
-
-            // The worker thread begins here
-            for ( ; !EndThreadSignal ; )
+            using (StreamWriter W = new StreamWriter(Path.Combine(OutputFolderName, "Query.txt")))
             {
-                Mutx.ReleaseMutex();
-
-                List<Scheduling> Messages = Db.GetSchedulingRecords(true, 2);  // Normally second arg should be 1 (default value)
+                W.WriteLine("In Threadmain()");
+            }
+            // The worker thread begins here
+            for ( ; !ThreadSafeEndThreadSignal ; )
+            {
+                List<Scheduling> Messages = Db.GetSchedulingRecords(true, 2);  // Normally second arg should be -1 (default value)
                 Trace.WriteLine("Query found " + Messages.Count.ToString() + " records from database query");
 
                 foreach (Scheduling S in Messages)
@@ -110,7 +128,7 @@ namespace RedoxDataTaskSvc
                     QueryPayloadObject = GetClinicalSummaryQueryObject(S);
 
                     // TODO Temporary debug output
-                    using (StreamWriter W = new StreamWriter(Path.Combine(@"C:\RedoxFeedHandler\RedoxFeedTest", "Query.txt")))
+                    using (StreamWriter W = new StreamWriter(Path.Combine(OutputFolderName, "Query.txt")))
                     {
                         W.WriteLine(JsonConvert.SerializeObject(QueryPayloadObject, Formatting.Indented));
                     }
@@ -133,11 +151,7 @@ namespace RedoxDataTaskSvc
                 }
 
                 Thread.Sleep(SecondsPauseBetweenQuery * 1000);
-
-                Mutx.WaitOne();  // need this so the for loop test condition (!EndThreadSignal) can evaluate safely
             }
-
-            Mutx.ReleaseMutex();
         }
 
         /// <summary>

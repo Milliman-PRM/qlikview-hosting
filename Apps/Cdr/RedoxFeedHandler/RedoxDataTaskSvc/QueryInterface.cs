@@ -8,6 +8,7 @@ using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Threading;
+using System.Net;
 
 namespace RedoxDataTaskSvc
 {
@@ -52,6 +53,7 @@ namespace RedoxDataTaskSvc
             Mutx = new Mutex();
             TimeSpan RefreshTimeSpan = new TimeSpan(4, 0, 0);
 
+            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
             client.BaseAddress = RedoxDomain;
 
             UnAuthenticate();

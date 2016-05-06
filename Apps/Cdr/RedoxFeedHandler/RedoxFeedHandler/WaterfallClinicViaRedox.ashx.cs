@@ -31,7 +31,7 @@ namespace RedoxFeedHandler
         /// <param name="context">An HttpContext instance that encapsulates the request and response</param>
         public void ProcessRequest(HttpContext context)
         {
-            context.Response.TrySkipIisCustomErrors = true;  // Discourage IIS from hijacking the entire response when an unsupported StatusCode is set
+            context.Response.TrySkipIisCustomErrors = true;  // Discourage IIS from replacing the response when an unsupported StatusCode is set
             context.Response.ContentType = "text/plain";
 
             string ActualVerificationToken = context.Request.Headers["verification-token"];
@@ -115,12 +115,14 @@ namespace RedoxFeedHandler
             String SourceName = Meta.Source.Value["Name"].Value<String>();
             String EventType = Meta.EventType.Value.Value<String>();
 
-#region Database Persistence
-            // Instantiate interface to database
+#region Task Queue Persistence
+            // For Dev/Test: If testing with Tom's PG server use the needed database connection string
             string CxStr = Environment.MachineName == "IN-PUCKETTT" ?
                 ConfigurationManager.ConnectionStrings["RedoxCacheContextConnectionStringPort5433"].ConnectionString :
                 ConfigurationManager.ConnectionStrings["RedoxCacheContextConnectionStringPort5432"].ConnectionString;
-            RedoxCacheDbInterface Db = new RedoxCacheDbInterface(CxStr);
+
+            // Instantiate interface to database
+            RedoxCacheDbInterface Db = RedoxCacheDbInterface.CreateNewInstance(CxStr);
 
             // store the received message appropriately depending on message type
             switch (Meta.DataModelString.ToUpper())
