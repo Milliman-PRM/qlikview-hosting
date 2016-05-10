@@ -112,6 +112,7 @@ namespace FileProcessor
                         proxyLogEntry.EventType = eventType.ToString();
 
                         //Do not process a record that is Unknown event or that does not have a user name associated with it
+
                         if ((eventType == IisAccessEvent.IisEventType.IIS_UNKNOWN_EVENT) || (entry.HasUserName() == false))
                             continue;
 
@@ -187,23 +188,79 @@ namespace FileProcessor
                         proxyLogEntry = new ProxyIisLog();
                     }
 
+                    // Sort with delegate
+                    listProxyLogs.Sort(delegate (ProxyIisLog lis1, ProxyIisLog lis2) {
+                        return lis1.EventType.CompareTo(lis2.EventType);
+                    });
+
                     //sort the list
                     var listProxyLogsOrdered = listProxyLogs.OrderBy(a => a.EventType)
                                                             .ThenBy(b => b.User)
-                                                            .ThenByDescending(c => c.Group);
+                                                            .ThenByDescending(d=> d.UserAccessDatetime);
 
-                    //give me distinct latest and last records based on the two fields UN (if there is any) & Event
-                    var listProxyLogsDistinctRecords = listProxyLogsOrdered.GroupBy(x => new { x.EventType, x.User, x.Group })
-                                                                        .Select(y => y.First())
-                                                                        .OrderBy(x => x.User).ThenByDescending(x => x.EventType)
-                                                                        .Distinct();
+                    var iisLogInEventsLogs = from a in listProxyLogsOrdered.ToList()
+                                             where a.EventType == IisAccessEvent.IisEventType.IIS_LOGIN.ToString()
+                                             select a;
 
-                    var listProxyExcludeDups = listProxyLogsDistinctRecords.GroupBy(x => new { x.User, x.EventType })
-                                                                        .Select(y => y.First())
-                                                                        .OrderBy(x => x.User).ThenByDescending(x => x.EventType)
-                                                                        .Distinct();
+                    var iisLastAccessEventsLogs = from a in listProxyLogsOrdered.ToList()
+                                                  where a.EventType == IisAccessEvent.IisEventType.IIS_LAST_ACCESS.ToString()
+                                                  select a;
 
-                    var listProxyLogsFinal = listProxyExcludeDups.ToList();
+                    var iisLogInEventsLogsExcludeDups = iisLogInEventsLogs.GroupBy(x => new { x.User, x.UserAccessDatetime })
+                                                    .Select(y => y.FirstOrDefault())
+                                                    .OrderBy(x => x.User).ThenByDescending(x => x.UserAccessDatetime)
+                                                    .Distinct();
+
+                    // Sort with delegate
+                    iisLogInEventsLogsExcludeDups.ToList().Sort(delegate (ProxyIisLog lis1, ProxyIisLog lis2) {
+                        return lis1.User.CompareTo(lis2.User);
+                    });
+
+                    // Sort with delegate
+                    iisLastAccessEventsLogs.ToList().Sort(delegate (ProxyIisLog lis1, ProxyIisLog lis2) {
+                        return lis1.User.CompareTo(lis2.User);
+                    });
+
+                    var listProxyLogsLastAccessEvents = new List<ProxyIisLog>();
+                    var entity = new ProxyIisLog();
+                    var logs = iisLastAccessEventsLogs.OrderBy(s => s.User).ThenByDescending(s => s.UserAccessDatetime);                   
+                    foreach (var a in logs)
+                    {
+                        var aDate = DateTime.Parse(a.UserAccessDatetime).ToString("MM/dd/yyyy HH:mm tt");
+                        //check if record exist in the listProxyLogsLastAccessEvents for user and time
+                        var existInLastAccessList = listProxyLogsLastAccessEvents.Any(l => l.User == a.User 
+                                                            && DateTime.Parse(l.UserAccessDatetime).ToString("MM/dd/yyyy HH:mm tt") == aDate);
+
+                        //check if record exist in the iisLogInEventsLogs for user and time
+                        var existInLogInList = iisLogInEventsLogsExcludeDups.Any(l => l.User == a.User
+                                            && DateTime.Parse(l.UserAccessDatetime).ToString("MM/dd/yyyy HH:mm tt") == aDate);
+
+                        //if the record does not exist in listProxyLogsLastAccessEvents but exist in iisLogInEventsLogs then add to new list
+                        if (!existInLastAccessList && existInLogInList)
+                        {
+                            entity.UserAccessDatetime = a.UserAccessDatetime;
+                            entity.ClientIpAddress = a.ClientIpAddress;
+                            entity.ServerIPAddress = a.ServerIPAddress;
+                            entity.PortNumber = a.PortNumber;
+                            entity.CommandSentMethod = a.CommandSentMethod;
+                            entity.StepURI = a.StepURI;
+                            entity.QueryURI = a.QueryURI;
+                            entity.StatusCode = a.StatusCode;
+                            entity.SubStatusCode = a.SubStatusCode;
+                            entity.Win32StatusCode = a.Win32StatusCode;
+                            entity.ResponseTime = a.ResponseTime;
+                            entity.UserAgent = a.UserAgent;
+                            entity.ClientReferer = a.ClientReferer;
+                            entity.Browser = a.Browser;
+                            entity.EventType = a.EventType;
+                            entity.User = a.User;
+                            listProxyLogsLastAccessEvents.Add(entity);
+                            entity = new ProxyIisLog();
+                        }
+                    }
+
+                    var listProxyLogsFF = iisLogInEventsLogsExcludeDups.Concat(listProxyLogsLastAccessEvents);
+                    var listProxyLogsFinal = listProxyLogsFF.ToList();
                     if (listProxyLogsFinal.Count() == 0)
                     {
                         blnSucessful = true;//nothing to process
