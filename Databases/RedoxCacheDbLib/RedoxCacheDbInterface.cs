@@ -37,6 +37,7 @@ namespace RedoxCacheDbLib
         private RedoxCacheDbInterface(string ConnectionString)
         {
             Db = new RedoxCacheContext(ConnectionString);
+
             ConnectionString = null;
         }
 
@@ -48,7 +49,7 @@ namespace RedoxCacheDbLib
         /// <param name="SourceName"></param>
         /// <param name="ContentString"></param>
         /// <param name="EventType"></param>
-        /// <returns>The primary key value of the inserted record upon successful INSERT</returns>
+        /// <returns>The primary key value of the inserted record upon successful INSERT or -1 if connection is not open</returns>
         public long InsertSchedulingRecord(long TransmissionNumber, String SourceId, String SourceName, String ContentString, String EventType)
         {
             Scheduling S = new Scheduling
@@ -60,8 +61,15 @@ namespace RedoxCacheDbLib
                 EventType = EventType
             };
 
-            Db.Schedulings.InsertOnSubmit(S);
-            Db.SubmitChanges();
+            try
+            {
+                Db.Schedulings.InsertOnSubmit(S);
+                Db.SubmitChanges();
+            }
+            catch (Exception /*e*/)
+            {
+                return -1;
+            }
 
             return S.dbid;
         }
@@ -71,22 +79,29 @@ namespace RedoxCacheDbLib
         /// </summary>
         /// <param name="Oldest">Set true to return the oldest records in the table, false for the newest</param>
         /// <param name="MaxCount">Limits the number of records to return.  Default is no limit</param>
-        /// <returns></returns>
+        /// <returns>List of returned Scheduling instances (empty if connection is not open)</returns>
         public List<Scheduling> GetSchedulingRecords(bool Oldest = true, int MaxCount = -1)
         {
             List<Scheduling> ReturnList;
 
-            if (MaxCount == -1)  // Return all records
+            try
             {
-                ReturnList = Oldest ?
-                    Db.Schedulings.OrderBy(x => x.TransmissionId).ToList() :
-                    Db.Schedulings.OrderByDescending(x => x.TransmissionId).ToList();
+                if (MaxCount == -1)  // Return all records
+                {
+                    ReturnList = Oldest ?
+                        Db.Schedulings.OrderBy(x => x.TransmissionId).ToList() :
+                        Db.Schedulings.OrderByDescending(x => x.TransmissionId).ToList();
+                }
+                else  // The query will limit the number of returned records
+                {
+                    ReturnList = Oldest ?
+                        Db.Schedulings.OrderBy(x => x.TransmissionId).Take(MaxCount).ToList() :
+                        Db.Schedulings.OrderByDescending(x => x.TransmissionId).Take(MaxCount).ToList();
+                }
             }
-            else  // The query will limit the number of returned records
+            catch (Exception /*e*/)
             {
-                ReturnList = Oldest ?
-                    Db.Schedulings.OrderBy(x => x.TransmissionId).Take(MaxCount).ToList() :
-                    Db.Schedulings.OrderByDescending(x => x.TransmissionId).Take(MaxCount).ToList();
+                return new List<Scheduling>();
             }
 
             return ReturnList;
@@ -111,5 +126,6 @@ namespace RedoxCacheDbLib
 
             return true;
         }
+
     }
 }

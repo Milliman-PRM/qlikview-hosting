@@ -50,8 +50,10 @@
             // 
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Items.AddRange(new object[] {
-            "http://PRMDev03.cloudapp.net/",
-            "http://localhost/"});
+            "https://PRMDev03.cloudapp.net/",
+            "https://localhost/",
+            "https://indy-prmdata-2.milliman.com/",
+            "https://10.46.101.25/"});
             this.comboBox1.Location = new System.Drawing.Point(65, 20);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(207, 21);

@@ -109,20 +109,42 @@ namespace RedoxDataTaskSvc
         private void ThreadMain()
         // for argument, signature would be:> private void ThreadMain(Object Obj)   and pass value in Thd.Start(xyz)
         {
-            using (StreamWriter W = new StreamWriter(Path.Combine(OutputFolderName, "Query.txt")))
-            {
-                W.WriteLine("In Threadmain()");
-            }
             // The worker thread begins here
             for ( ; !ThreadSafeEndThreadSignal ; )
             {
-                List<Scheduling> Messages = Db.GetSchedulingRecords(true, 2);  // Normally second arg should be -1 (default value)
+                using (StreamWriter W = new StreamWriter(Path.Combine(OutputFolderName, "Query.txt")))
+                {
+                    W.WriteLine("In SchedulingMsgProcessor.Threadmain() at {0}", DateTime.Now.ToString());
+                }
+
+                List<Scheduling> Messages = Db.GetSchedulingRecords(true, 2);  // TODO Normally second arg should be -1 (default value)
                 Trace.WriteLine("Query found " + Messages.Count.ToString() + " records from database query");
 
                 foreach (Scheduling S in Messages)
                 {
-                    // TODO Should there be a conditional test on S.EventType so selective handling or filtering is possible?
+#if false           // TODO A conditional switch on S.EventType so selective handling or filtering is possible?
+                    switch (S.EventType.ToUpper())
+                    {
+                        // not sure whether these values are correct or all inclusive
+                        case "NEW":
+                            break;
+                        case "UPDATE":
+                            break;
+                        case "RESCHEDULE":
+                            break;
+                        case "MODIFICATION":
+                            break;
+                        case "CANCEL":
+                            break;
+                        case "NOSHOW":
+                            break;
+                        default:
+                            String Msg = "Unsupported Scheduling event type encountered";
+                            break;
+                    }
+#endif
 
+#region Handle and remove task from queue
                     JObject QueryPayloadObject, ClinicalSummaryObject;
 
                     QueryPayloadObject = GetClinicalSummaryQueryObject(S);
@@ -133,21 +155,20 @@ namespace RedoxDataTaskSvc
                         W.WriteLine(JsonConvert.SerializeObject(QueryPayloadObject, Formatting.Indented));
                     }
 
-                    bool Success = GetClinicalSumamryResponseObject(QueryPayloadObject, out ClinicalSummaryObject);
+                    if (!GetClinicalSumamryResponseObject(QueryPayloadObject, out ClinicalSummaryObject))
+                        continue;
 
-                    if (Success) 
+                    String OutputFileName = CreateClinicalSummaryFileName(S, ClinicalSummaryObject);
+
+                    using (StreamWriter Writer = new StreamWriter(Path.Combine(OutputFolderName, OutputFileName)))
                     {
-                        String OutputFileName = CreateClinicalSummaryFileName(S, ClinicalSummaryObject);
-
-                        using (StreamWriter Writer = new StreamWriter(Path.Combine(OutputFolderName, OutputFileName)))
-                        {
-                            //string ClinicalSummaryString = JsonConvert.SerializeObject(ClinicalSummaryObject,Formatting.Indented);
-                            JObject FileContentObj = new JObject(new JProperty("Scheduling", JObject.Parse(S.Content)), new JProperty("ClinicalSummary", ClinicalSummaryObject));
-                            Writer.Write(JsonConvert.SerializeObject(FileContentObj,Formatting.Indented ));
-                        }
-
-                        RemoveTask(S);
+                        //string ClinicalSummaryString = JsonConvert.SerializeObject(ClinicalSummaryObject,Formatting.Indented);
+                        JObject FileContentObj = new JObject(new JProperty("Scheduling", JObject.Parse(S.Content)), new JProperty("ClinicalSummary", ClinicalSummaryObject));
+                        Writer.Write(JsonConvert.SerializeObject(FileContentObj,Formatting.Indented ));
                     }
+
+                    RemoveTask(S);
+#endregion
                 }
 
                 Thread.Sleep(SecondsPauseBetweenQuery * 1000);

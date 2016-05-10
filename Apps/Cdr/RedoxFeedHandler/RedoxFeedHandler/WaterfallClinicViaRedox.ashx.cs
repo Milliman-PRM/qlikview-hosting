@@ -118,8 +118,8 @@ namespace RedoxFeedHandler
 #region Task Queue Persistence
             // For Dev/Test: If testing with Tom's PG server use the needed database connection string
             string CxStr = Environment.MachineName == "IN-PUCKETTT" ?
-                ConfigurationManager.ConnectionStrings["RedoxCacheContextConnectionStringPort5433"].ConnectionString :
-                ConfigurationManager.ConnectionStrings["RedoxCacheContextConnectionStringPort5432"].ConnectionString;
+                "RedoxCacheContextConnectionStringPort5433" :
+                "RedoxCacheContextConnectionStringPort5432" ;
 
             // Instantiate interface to database
             RedoxCacheDbInterface Db = RedoxCacheDbInterface.CreateNewInstance(CxStr);
