@@ -128,6 +128,7 @@ namespace FileProcessor
         /// <returns></returns>
         public static List<string> GetFileToReadFromStatusFile(string filter, EnumFileProcessor.eFilePath eFilePath)
         {
+
             //status file name with directory
             var statusFileName = ConfigurationManager.AppSettings["statusFileName"];
             var statusFileAndDirectory = (GetStatusFileDirectory() + statusFileName + ".txt");
@@ -316,6 +317,45 @@ namespace FileProcessor
                 File.Copy(fileFullNameWithSourcePath, destinationDirectory, overwrite);
         }
 
+        /// <summary>
+        /// This method will delete files if there are any
+        /// </summary>
+        /// <param name="dir"></param>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        public static List<string> GetAllFilesInProcessingDirectroyThatAreNotDeleted()
+        {
+            //LogFileProcessor\IN
+            var destinationInDirectory = new System.IO.DirectoryInfo(FileFunctions.GetFileProcessingInDirectory());
+
+            var files = new List<string>();
+            var isEmpty = !System.IO.Directory.EnumerateFiles(destinationInDirectory.ToString()).Any();
+            if (!isEmpty)
+            {
+                var fileList = System.IO.Directory.GetFiles(destinationInDirectory.ToString());
+                foreach (var file in fileList)
+                {
+                    if (file.ToLower().IndexOf("u_ex", StringComparison.Ordinal) > -1)
+                    {
+                        BaseFileProcessor.LogError(null,DateTime.Now + "||" + "=== File is deleted from processing directory. ===" + file);
+                        System.IO.File.Delete(file);
+                    }
+                    if (file.ToLower().IndexOf("audit_", StringComparison.Ordinal) > -1)
+                    {
+                        BaseFileProcessor.LogError(null,DateTime.Now + "||" + "=== File is deleted from processing directory. ===" + file);
+                        System.IO.File.Delete(file);
+                    }
+                    if (file.ToLower().IndexOf("aessions_", StringComparison.Ordinal) > -1)
+                    {
+                        BaseFileProcessor.LogError(null,DateTime.Now + "||" + "=== File is deleted from processing directory. ===" + file);
+                        System.IO.File.Delete(file);
+                    }
+                }                
+
+            }
+
+            return files;
+        }
         #endregion
     }
 
