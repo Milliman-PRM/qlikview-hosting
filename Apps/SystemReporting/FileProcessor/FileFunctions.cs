@@ -345,7 +345,7 @@ namespace FileProcessor
                         BaseFileProcessor.LogError(null,DateTime.Now + "||" + "=== File is deleted from processing directory. ===" + file);
                         System.IO.File.Delete(file);
                     }
-                    if (file.ToLower().IndexOf("aessions_", StringComparison.Ordinal) > -1)
+                    if (file.ToLower().IndexOf("sessions_", StringComparison.Ordinal) > -1)
                     {
                         BaseFileProcessor.LogError(null,DateTime.Now + "||" + "=== File is deleted from processing directory. ===" + file);
                         System.IO.File.Delete(file);
