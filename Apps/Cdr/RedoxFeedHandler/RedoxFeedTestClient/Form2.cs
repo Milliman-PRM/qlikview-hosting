@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Windows.Forms;
@@ -38,6 +39,8 @@ namespace RedoxFeedTestClient
         /// <param name="e"></param>
         private async void button1_Click(object sender, EventArgs e)
         {
+            // Negotiate TLS version up to 1.2 for any secure URI
+            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
             using (HttpClient client = new HttpClient())
             {
                 if (comboBox1.SelectedText == comboBox1.Text)
@@ -49,7 +52,7 @@ namespace RedoxFeedTestClient
 
                 string Domain = comboBox1.GetItemText(comboBox1.SelectedItem);
                 Domain = comboBox1.Text;
-                string Uri = "RedoxMessageHandler/WaterfallClinicViaRedox.ashx";
+                string Uri = "RedoxMessageHandler/RedoxMessageHandler.ashx";
 
                 if (Domain.IndexOf("localhost") != -1)
                 {
@@ -88,6 +91,7 @@ namespace RedoxFeedTestClient
                         catch(Exception ex)
                         {
                             var y = ex;
+                            MessageBox.Show("Exception during POST:\n" + ex.Message  + "\n" + ex.StackTrace);
                             return;
                         }
                         x = await response.Content.ReadAsStringAsync();

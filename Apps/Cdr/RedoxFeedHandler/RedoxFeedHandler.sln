@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedoxFeedHandler", "RedoxFe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedoxFeedTestClient", "RedoxFeedTestClient\RedoxFeedTestClient.csproj", "{4F5B0B78-EAFF-4EDC-97E8-B597876AB2AA}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RedoxFeedTest", "RedoxFeedTest", "{DCE73AA8-AFA7-4372-BE56-3B4A26D2BFB4}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RedoxFeedHandler", "RedoxFeedHandler", "{DCE73AA8-AFA7-4372-BE56-3B4A26D2BFB4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedoxCacheDbLib", "..\..\..\Databases\RedoxCacheDbLib\RedoxCacheDbLib.csproj", "{D6C6423B-7C74-4C8D-80AC-5C378D3B6A5D}"
 EndProject

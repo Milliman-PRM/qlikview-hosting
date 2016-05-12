@@ -16,9 +16,11 @@ namespace RedoxFeedHandler
     /// <summary>
     /// A web endpoint that handles unsolicited scheduling messages.  Implements the requirements for a Redox "destination"
     /// </summary>
-    public class WaterfallClinicViaRedox : IHttpHandler
+    public class RedoxMessageHandler : IHttpHandler
     {
-        private string LogFileName = Path.Combine(@"C:\RedoxFeedHandler\RedoxFeedTest", "HandlerRequest.txt");
+        // TODO ? convert this to use Windows Event Log so no text files are mixed in with the json output
+        private static string DataFolder = @"C:\RedoxFeedHandler\RedoxFeedTest";
+        private static string LogFileName = Path.Combine(DataFolder, "HandlerRequest.txt");
 
         // The verification token is associated with the "destination" configured on the Redox web site
         // TODO Get this from configuration

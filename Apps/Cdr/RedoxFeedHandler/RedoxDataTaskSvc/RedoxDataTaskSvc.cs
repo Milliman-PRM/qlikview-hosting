@@ -18,6 +18,9 @@ namespace RedoxDataTaskSvc
         public RedoxDataTaskSvc()
         {
             InitializeComponent();
+
+            // The specified EventLog source (this.ServiceName) should always exist after this service is installed
+            GlobalResources.EventLog = new EventLog("Application", ".", ServiceName);
         }
     
         /// <summary>
@@ -49,7 +52,7 @@ namespace RedoxDataTaskSvc
 
             if (!SchedulingProcessor.EndThread(StopWaitTimeMs))
             {
-                // TODO Handle the failure to stop the worker thread
+                GlobalResources.EventLog.WriteEntry(String.Format("Service failed to end worker thread after {0} ms.", StopWaitTimeMs), EventLogEntryType.Warning, 0, 0);
             }
 
             SchedulingProcessor = null;
