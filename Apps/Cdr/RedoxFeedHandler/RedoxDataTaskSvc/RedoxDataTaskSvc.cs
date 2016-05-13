@@ -8,6 +8,7 @@ using System.ServiceProcess;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using ProcessGlobal;
 
 namespace RedoxDataTaskSvc
 {
@@ -20,7 +21,7 @@ namespace RedoxDataTaskSvc
             InitializeComponent();
 
             // The specified EventLog source (this.ServiceName) should always exist after this service is installed
-            GlobalResources.EventLog = new EventLog("Application", ".", ServiceName);
+            Global.EventLog = new EventLog("Application", ".", ServiceName);
         }
     
         /// <summary>
@@ -44,7 +45,7 @@ namespace RedoxDataTaskSvc
         }
 
         /// <summary>
-        /// When the service is stopped this method is called to clean up resources/execution
+        /// When service stop is requested this method is called to clean up resources/execution
         /// </summary>
         protected override void OnStop()
         {
@@ -52,7 +53,7 @@ namespace RedoxDataTaskSvc
 
             if (!SchedulingProcessor.EndThread(StopWaitTimeMs))
             {
-                GlobalResources.EventLog.WriteEntry(String.Format("Service failed to end worker thread after {0} ms.", StopWaitTimeMs), EventLogEntryType.Warning, 0, 0);
+                Global.EventLog.WriteEntry(String.Format("Service failed to end worker thread after {0} ms.", StopWaitTimeMs), EventLogEntryType.Warning, 0, 0);
             }
 
             SchedulingProcessor = null;

@@ -82,7 +82,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GlobalResources.cs" />
     <Compile Include="ProjectInstaller.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -121,6 +120,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Common\ProcessGlobal\ProcessGlobal.csproj">
+      <Project>{3c01535d-a7e3-4b11-8cd2-86df76f89755}</Project>
+      <Name>ProcessGlobal</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\Databases\RedoxCacheDbLib\RedoxCacheDbLib.csproj">
       <Project>{d6c6423b-7c74-4c8d-80ac-5c378d3b6a5d}</Project>
       <Name>RedoxCacheDbLib</Name>

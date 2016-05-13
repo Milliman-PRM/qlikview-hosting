@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Threading;
 using System.Net;
+using ProcessGlobal;
 
 namespace RedoxDataTaskSvc
 {
@@ -111,6 +112,8 @@ namespace RedoxDataTaskSvc
                 Uri = @"auth/authenticate";
                 ResponseBody = PostJObjectToRedox(Uri, new JObject(new JProperty("apiKey", _ApiKey), new JProperty("secret", _Secret)), "application/json");
             }
+
+            Global.EventLog.WriteEntry("Authentication to Redox done", EventLogEntryType.Information, 0, 0);
 
             JObject Response;
             try
