@@ -42,16 +42,16 @@ namespace FileProcessor
                         if (args.IndexOf("productionlogs", StringComparison.Ordinal) > -1)
                         {
                             var filename = Path.GetFileName(args);
-                            ProcessLogFileMove(efilePath,sourceDirectory, destinationInDirectory, filename);
+                            ProcessLogFileMove(efilePath, sourceDirectory, destinationInDirectory, filename);
                         }
                         else
-                        {                           
+                        {
                             var listFileToProcess = FileFunctions.GetFileToReadFromStatusFile(filter, efilePath);
                             if (listFileToProcess.Count > 0)
                             {
                                 foreach (var file in listFileToProcess)
                                 {
-                                    ProcessLogFileMove(efilePath,sourceDirectory, destinationInDirectory, file);
+                                    ProcessLogFileMove(efilePath, sourceDirectory, destinationInDirectory, file);
                                 }
                             }
                         }
@@ -188,15 +188,36 @@ namespace FileProcessor
                         proxyLogEntry = new ProxyIisLog();
                     }
 
+                    #region IISLogIns and IISLastAccessRecords ONly
+
+                    #region Description
+                    //**************************************************************************************************//
+                    // This block of code will extract the distinct records for IIS log ins and Last Access
+                    // For each IIS Login there should be at least one IIS last Acess
+                    // There may be some missing Last Access or there may be a situation where the file only has Last Access
+                    // 1.Create a list of all the IISLogIns -iisLogInEventsLogs
+                    // 2.Create a list of all the IISLastAcess -iisLastAccessEventsLogs
+                    // 3.Remove duplicate entries from the IISLogIns -iisLogInEventsLogsExcludeDups
+                    // 4.Sort logins list -iisLogInEventsLogsExcludeDups
+                    // 5.Sort the last access events lists - iisLastAccessEventsLogs
+                    // 6.Create a new iis last acess list(listProxyLogsLastAccessEvents) as follow
+                    // a.Loop though the records in last acess logs events list[iisLastAccessEventsLogs]
+                    // b.Find if the records for the user and time stamp(excluding the seconds from the timestamp value) exist in lon ins list[iisLogInEventsLogs], if the record exist then add to the final list. 
+                    // 7.Join the two distinct list for IISlogins and IILastAccess to create Final Processing List
+                    // 8.Add to DB the Final Processing List
+                    //**************************************************************************************************//
+                    #endregion
+
                     // Sort with delegate
-                    listProxyLogs.Sort(delegate (ProxyIisLog lis1, ProxyIisLog lis2) {
+                    listProxyLogs.Sort(delegate (ProxyIisLog lis1, ProxyIisLog lis2)
+                    {
                         return lis1.EventType.CompareTo(lis2.EventType);
                     });
 
                     //sort the list
                     var listProxyLogsOrdered = listProxyLogs.OrderBy(a => a.EventType)
                                                             .ThenBy(b => b.User)
-                                                            .ThenByDescending(d=> d.UserAccessDatetime);
+                                                            .ThenByDescending(d => d.UserAccessDatetime);                                      
 
                     var iisLogInEventsLogs = from a in listProxyLogsOrdered.ToList()
                                              where a.EventType == IisAccessEvent.IisEventType.IIS_LOGIN.ToString()
@@ -211,26 +232,28 @@ namespace FileProcessor
                                                     .OrderBy(x => x.User).ThenByDescending(x => x.UserAccessDatetime)
                                                     .Distinct();
 
-                    // Sort with delegate
-                    iisLogInEventsLogsExcludeDups.ToList().Sort(delegate (ProxyIisLog lis1, ProxyIisLog lis2) {
+                    //Sort with delegate
+                    iisLogInEventsLogsExcludeDups.ToList().Sort(delegate (ProxyIisLog lis1, ProxyIisLog lis2)
+                    {
                         return lis1.User.CompareTo(lis2.User);
                     });
 
                     // Sort with delegate
-                    iisLastAccessEventsLogs.ToList().Sort(delegate (ProxyIisLog lis1, ProxyIisLog lis2) {
+                    iisLastAccessEventsLogs.ToList().Sort(delegate (ProxyIisLog lis1, ProxyIisLog lis2)
+                    {
                         return lis1.User.CompareTo(lis2.User);
                     });
 
                     var listProxyLogsLastAccessEvents = new List<ProxyIisLog>();
                     var entity = new ProxyIisLog();
+
                     var logs = iisLastAccessEventsLogs.OrderBy(s => s.User).ThenByDescending(s => s.UserAccessDatetime);
 
-                    var aDate="";
+                    var aDate = "";
                     var existLastAccessList = false;
                     var existLogInList = false;
 
-                    //if there are IISlogin and IISlastlogIn records
-                    if (iisLogInEventsLogsExcludeDups.ToList().Count > 0  && iisLastAccessEventsLogs.ToList().Count > 0)
+                    if (iisLogInEventsLogsExcludeDups.ToList().Count > 0 && iisLastAccessEventsLogs.ToList().Count > 0)
                     {
                         foreach (var a in logs)
                         {
@@ -269,18 +292,21 @@ namespace FileProcessor
                     }
 
                     // If there are no IISlogin events but there are IISlastlogIn
-                    if (iisLogInEventsLogsExcludeDups.ToList().Count == 0 
-                                            && iisLastAccessEventsLogs.ToList().Count > 0 
-                                            && listProxyLogsLastAccessEvents.ToList().Count == 0)
-                    {                        
+                    if (iisLogInEventsLogsExcludeDups.ToList().Count == 0
+                                        && iisLastAccessEventsLogs.ToList().Count > 0
+                                        && listProxyLogsLastAccessEvents.ToList().Count == 0)
+                    {
                         //if there are only last access then get the distinct records based on user
                         listProxyLogsLastAccessEvents = iisLastAccessEventsLogs.Select(c => c.User)
-                                                         .Distinct()
-                                                         .Select(c => iisLastAccessEventsLogs.FirstOrDefault(r => r.User == c))
-                                                         .ToList();
+                                                            .Distinct()
+                                                            .Select(c => iisLastAccessEventsLogs.FirstOrDefault(r => r.User == c))
+                                                            .ToList();
                     }
 
-                    var listProxyLogsFF = iisLogInEventsLogsExcludeDups.Concat(listProxyLogsLastAccessEvents);
+                     var listProxyLogsFF = iisLogInEventsLogsExcludeDups.Concat(listProxyLogsLastAccessEvents);
+                    #endregion
+                    //**************************************************************************************************//
+
                     var listProxyLogsFinal = listProxyLogsFF.ToList();
                     if (listProxyLogsFinal.Count() == 0)
                     {
@@ -337,6 +363,47 @@ namespace FileProcessor
                 BaseFileProcessor.LogError(ex, " Class ProcessIisLogs. Method ParseFile. File name. " + filefullName);
             }
             return listLogFile;
+        }
+    }
+}
+public class UserDatesLastAccessEvents
+{
+    private string _userName;
+    public string UserName
+    {
+        get
+        {
+            return _userName;
+        }
+        set
+        {
+            _userName = value;
+        }
+    }
+
+    private DateTime _UserEventAccessDatetime;
+    public DateTime UserEventAccessDatetime
+    {
+        get
+        {
+            return _UserEventAccessDatetime;
+        }
+        set
+        {
+            _UserEventAccessDatetime = value;
+        }
+    }
+
+    private string _userEvent;
+    public string UserEvent
+    {
+        get
+        {
+            return _userEvent;
+        }
+        set
+        {
+            _userEvent = value;
         }
     }
 }

@@ -105,7 +105,7 @@ namespace FileProcessor
         public static void LogProcessedFile(string message)
         {
             Console.WriteLine("Processed file: {0}", message);
-            var fMessage = DateTime.Now + " ProcessedLogFileName:~ " + message + Environment.NewLine;
+            var fMessage = DateTime.Now + " ProcessedLogFileName:~ " + message;
             var filePath = FileFunctions.GetProcessedFileLogDirectory() + FileFunctions.GetProcessedFileLogFileName() + ".log";
             FileFunctions.FileCheck(filePath);           
             var aFile = new System.IO.FileStream(filePath, System.IO.FileMode.Append, System.IO.FileAccess.Write);

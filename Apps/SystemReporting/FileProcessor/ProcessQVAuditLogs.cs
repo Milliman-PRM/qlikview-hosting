@@ -137,6 +137,16 @@ namespace FileProcessor
                             if (entry.Document.ToLower().Contains(item.ToLower()))
                             {
                                 group = QlikviewEventBase.GetGroup(entry.Document, item);
+                                if (group != null && group != "")
+                                {
+                                    //if the group still has the installedapplicaiton then ignore
+                                    if (group.ToLower().IndexOf("installedapplications", StringComparison.Ordinal) > -1)
+                                        group = "";
+
+                                    //substring(start postions,find last index of("_REDUCEDUSERQVWS) and remove everything after that occurance of _REDUCEDUSERQVWS
+                                    if (group.IndexOf("_REDUCEDUSERQVWS", StringComparison.Ordinal) > -1)
+                                        group = group.Substring(0, group.LastIndexOf("_REDUCEDUSERQVWS"));
+                                }
                                 docName = entry.Document.ToLower().Replace(item.ToLower(),"");
                                 break;
                             }
