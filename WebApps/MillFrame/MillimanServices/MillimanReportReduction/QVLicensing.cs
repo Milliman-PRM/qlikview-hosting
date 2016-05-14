@@ -80,7 +80,7 @@ namespace MillimanReportReduction
                     }
                 }
             }
-            catch (System.Exception)
+            catch (System.Exception ex)
             {
                 return null;  //return null if failed
             }
@@ -326,7 +326,123 @@ namespace MillimanReportReduction
                 if (Client != null)
                     Client.Close();
             }
+        }
 
+        /// <summary>
+        /// Remove the user's document cal association with 'document'
+        /// Note: this method should be used with data acquired via method GetAllCALSOfTypeInUse
+        /// </summary>
+        /// <param name="User"></param>
+        /// <param name="Document"></param>
+        /// <returns></returns>
+        public bool RemoveUserDocCAL( string User, string Document )
+        {
+            QMSClient Client = null;
+            try
+            {
+                string QMS = "http://localhost:4799/QMS/Service";
+                Client = new QMSClient("BasicHttpBinding_IQMS", QMS);
+                string key = Client.GetTimeLimitedServiceKey();
+                ServiceKeyClientMessageInspector.ServiceKey = key;
+                ServiceInfo[] MyQVS = Client.GetServices(ServiceTypes.QlikViewServer);
+                Client.ClearQVSCache(QVSCacheObjects.All);
+                //purge doc licenses
+                DocumentNode[] allDocs = Client.GetUserDocuments(MyQVS[0].ID);
+                DocumentMetaData Meta;
+                for (int i = 0; i < allDocs.Length; i++)  //Loop through each document
+                {
+                    //Get the meta data for the current document
+                    Meta = Client.GetDocumentMetaData(allDocs[i], DocumentMetaDataScope.Licensing);
+                    string CurrentDocName = System.IO.Path.Combine(Meta.UserDocument.RelativePath, Meta.UserDocument.Name);
+                    //are we working on the correct document
+                    if (string.Compare(CurrentDocName, Document, true) == 0)
+                    {   //found correct document, now look at users
+                        bool IsDirty = false;
+                        //Extract the current list of Document CALs
+                        List<AssignedNamedCAL> currentCALs = Meta.Licensing.AssignedCALs.ToList();
+                        for (int x = currentCALs.Count - 1; x >= 0; x--)
+                        {
+                            //If the user matches the name then remove it from the list
+                            if ((currentCALs[x].QuarantinedUntil < System.DateTime.Now) && (string.Compare(User, currentCALs[x].UserName, true) == 0))
+                            {
+                                currentCALs.Remove(currentCALs[x]);
+                                IsDirty = true;
+                            }
+                        }
+                        if (IsDirty)
+                        {
+                            //Add the updated CALs list back to the meta data object
+                            Meta.Licensing.AssignedCALs = currentCALs.ToArray();
+                            //dec the cals allocated, otherwise silly QV still hangs on to license
+                            Meta.Licensing.CALsAllocated = currentCALs.Count();
+                            //Save the metadata back to the server
+                            Client.SaveDocumentMetaData(Meta);
+                        }
+                    }
+                }
+                //shutdown client connection
+                Client.Close();
+                Client = null;
+                return true;
+            }
+            catch (System.Exception ex)
+            {
+                MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "Failed to remove QV licenses", ex);
+                if (Client != null)
+                    Client.Close();
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Remove users named CAL associated with thier account
+        /// Note: this method should be used with data acquired via method GetAllCALSOfTypeInUse
+        /// </summary>
+        /// <param name="User"></param>
+        /// <returns></returns>
+        public bool RemoveNamedUserCAL(string User )
+        {
+            QMSClient Client = null;
+            try
+            {
+                string QMS = "http://localhost:4799/QMS/Service";
+                Client = new QMSClient("BasicHttpBinding_IQMS", QMS);
+                string key = Client.GetTimeLimitedServiceKey();
+                ServiceKeyClientMessageInspector.ServiceKey = key;
+                ServiceInfo[] MyQVS = Client.GetServices(ServiceTypes.QlikViewServer);
+                Client.ClearQVSCache(QVSCacheObjects.All);
+
+                CALConfiguration myCALs = Client.GetCALConfiguration(MyQVS[0].ID, CALConfigurationScope.NamedCALs);
+                List<AssignedNamedCAL> currentNamedCALs = myCALs.NamedCALs.AssignedCALs.ToList();
+                bool IsDirty = false;
+                for (int i = currentNamedCALs.Count - 1; i >= 0; i--)
+                {
+                    //find the user license in the list
+                    if ((currentNamedCALs[i].QuarantinedUntil < System.DateTime.Now) && (string.Compare(User, currentNamedCALs[i].UserName, true) == 0))
+                    {
+                        currentNamedCALs.RemoveAt(i);        
+                        //update the count of assigned license
+                        myCALs.NamedCALs.Assigned = currentNamedCALs.Count();
+                        IsDirty = true;
+                    }
+                }
+                //if we updated, the save config
+                if (IsDirty)
+                {
+                    myCALs.NamedCALs.AssignedCALs = currentNamedCALs.ToArray();
+                    Client.SaveCALConfiguration(myCALs);
+                }
+                Client.Close();
+                Client = null;
+                return true;
+            }
+            catch (System.Exception ex)
+            {
+                MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "Failed to delete named user license for account:" + User, ex);
+                if (Client != null)
+                    Client.Close();
+            }
+            return false;
         }
 
         /// <summary>

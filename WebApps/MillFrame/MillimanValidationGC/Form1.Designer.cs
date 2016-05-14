@@ -33,8 +33,8 @@
             this.Status = new System.Windows.Forms.TreeView();
             this.DirectoryTextbox = new System.Windows.Forms.TextBox();
             this.Browse = new System.Windows.Forms.Button();
-            this.Process = new System.Windows.Forms.Button();
             this.Apply = new System.Windows.Forms.Button();
+            this.Process = new System.Windows.Forms.Button();
             this.Subdirs = new System.Windows.Forms.CheckBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.Directory.SuspendLayout();
@@ -91,17 +91,6 @@
             this.Browse.UseVisualStyleBackColor = true;
             this.Browse.Click += new System.EventHandler(this.Browse_Click);
             // 
-            // Process
-            // 
-            this.Process.Location = new System.Drawing.Point(507, 281);
-            this.Process.Name = "Process";
-            this.Process.Size = new System.Drawing.Size(74, 23);
-            this.Process.TabIndex = 3;
-            this.Process.Text = "Process";
-            this.toolTip1.SetToolTip(this.Process, "Process the directory but do NOT  apply changes.");
-            this.Process.UseVisualStyleBackColor = true;
-            this.Process.Click += new System.EventHandler(this.Process_Click);
-            // 
             // Apply
             // 
             this.Apply.Location = new System.Drawing.Point(587, 281);
@@ -112,6 +101,17 @@
             this.toolTip1.SetToolTip(this.Apply, "Apply the displayed changes");
             this.Apply.UseVisualStyleBackColor = true;
             this.Apply.Click += new System.EventHandler(this.Apply_Click);
+            // 
+            // Process
+            // 
+            this.Process.Location = new System.Drawing.Point(507, 281);
+            this.Process.Name = "Process";
+            this.Process.Size = new System.Drawing.Size(74, 23);
+            this.Process.TabIndex = 3;
+            this.Process.Text = "Process";
+            this.toolTip1.SetToolTip(this.Process, "Process the directory but do NOT  apply changes.");
+            this.Process.UseVisualStyleBackColor = true;
+            this.Process.Click += new System.EventHandler(this.Process_Click);
             // 
             // Subdirs
             // 
