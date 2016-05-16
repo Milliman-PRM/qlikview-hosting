@@ -35,6 +35,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.chkMongoInsert = new System.Windows.Forms.CheckBox();
             this.btnRedox = new System.Windows.Forms.Button();
+            this.checkArchive = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // btnBayClinic
@@ -63,7 +64,7 @@
             this.txtFolder.Name = "txtFolder";
             this.txtFolder.Size = new System.Drawing.Size(259, 20);
             this.txtFolder.TabIndex = 2;
-            this.txtFolder.Text = "C:\\RedoxFeedHandler\\RedoxFeedTest";
+            this.txtFolder.Text = "C:\\Users\\Tom.Puckett\\Desktop\\BayClinicNewFeedTest";
             this.txtFolder.TextChanged += new System.EventHandler(this.txtFolder_TextChanged);
             // 
             // label1
@@ -95,11 +96,22 @@
             this.btnRedox.UseVisualStyleBackColor = true;
             this.btnRedox.Click += new System.EventHandler(this.btnRedox_Click);
             // 
+            // checkArchive
+            // 
+            this.checkArchive.AutoSize = true;
+            this.checkArchive.Location = new System.Drawing.Point(209, 233);
+            this.checkArchive.Name = "checkArchive";
+            this.checkArchive.Size = new System.Drawing.Size(62, 17);
+            this.checkArchive.TabIndex = 6;
+            this.checkArchive.Text = "Archive";
+            this.checkArchive.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 262);
+            this.Controls.Add(this.checkArchive);
             this.Controls.Add(this.btnRedox);
             this.Controls.Add(this.chkMongoInsert);
             this.Controls.Add(this.label1);
@@ -122,6 +134,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox chkMongoInsert;
         private System.Windows.Forms.Button btnRedox;
+        private System.Windows.Forms.CheckBox checkArchive;
     }
 }
 

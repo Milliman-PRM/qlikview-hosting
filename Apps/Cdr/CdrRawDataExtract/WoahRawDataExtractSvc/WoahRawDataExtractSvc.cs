@@ -31,6 +31,7 @@ namespace WoahRawDataExtractSvc
                 Thread.Sleep(1000);
             }
 
+#if false
             CredentialManagement.Credential c;
 
             c = new Credential("MyUserName1", "MyPassword", "uvw1", CredentialType.Generic);
@@ -73,7 +74,7 @@ namespace WoahRawDataExtractSvc
                 c3.Delete();
 
             }
-
+#endif
             RedoxExtractManager = new RedoxRawDataExtractionManager();
             RedoxExtractManager.StartThread();  // can override default settings, see signature
         }

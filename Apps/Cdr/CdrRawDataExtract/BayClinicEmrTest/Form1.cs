@@ -29,7 +29,7 @@ namespace CdrExtractTest
         private void btnBayClinic_Click(object sender, EventArgs e)
         {
             System.Diagnostics.Debug.WriteLine("Processing Bay Clinic data in folder: " + txtFolder.Text);
-            BayClinicCernerExtractLib.RawDataParser Parser = new BayClinicCernerExtractLib.RawDataParser(@"H:\.prm_config\.mongodb", @"BayClinicMongoCredentials");
+            BayClinicCernerExtractLib.RawDataParser Parser = new BayClinicCernerExtractLib.RawDataParser(@"H:\.prm_config\.mongodb", @"BayClinicTestMongoCredentials");
             if (!Directory.Exists(txtFolder.Text))
             {
                 Console.Beep();
@@ -39,7 +39,7 @@ namespace CdrExtractTest
 
             try
             {
-                Parser.MigrateRawToMongo(txtFolder.Text, chkMongoInsert.Checked);
+                Parser.MigrateFolderToMongo(txtFolder.Text, chkMongoInsert.Checked,Path.Combine(txtFolder.Text, "Archive"));
             }
             catch (Exception ex)
             {
