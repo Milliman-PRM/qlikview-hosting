@@ -1,4 +1,5 @@
-﻿using ReportingCommon;
+﻿using MoreLinq;
+using ReportingCommon;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -189,124 +190,40 @@ namespace FileProcessor
                     }
 
                     #region IISLogIns and IISLastAccessRecords ONly
+                  
+                    var pfinalList = listProxyLogs.ToList();                   
 
-                    #region Description
-                    //**************************************************************************************************//
-                    // This block of code will extract the distinct records for IIS log ins and Last Access
-                    // For each IIS Login there should be at least one IIS last Acess
-                    // There may be some missing Last Access or there may be a situation where the file only has Last Access
-                    // 1.Create a list of all the IISLogIns -iisLogInEventsLogs
-                    // 2.Create a list of all the IISLastAcess -iisLastAccessEventsLogs
-                    // 3.Remove duplicate entries from the IISLogIns -iisLogInEventsLogsExcludeDups
-                    // 4.Sort logins list -iisLogInEventsLogsExcludeDups
-                    // 5.Sort the last access events lists - iisLastAccessEventsLogs
-                    // 6.Create a new iis last acess list(listProxyLogsLastAccessEvents) as follow
-                    // a.Loop though the records in last acess logs events list[iisLastAccessEventsLogs]
-                    // b.Find if the records for the user and time stamp(excluding the seconds from the timestamp value) exist in lon ins list[iisLogInEventsLogs], if the record exist then add to the final list. 
-                    // 7.Join the two distinct list for IISlogins and IILastAccess to create Final Processing List
-                    // 8.Add to DB the Final Processing List
-                    //**************************************************************************************************//
-                    #endregion
-
-                    // Sort with delegate
-                    listProxyLogs.Sort(delegate (ProxyIisLog lis1, ProxyIisLog lis2)
+                    var hashActiveIisUserSessions = new HashSet<string>();
+                    for (var i = pfinalList.Count - 1; i >= 0; i--)
                     {
-                        return lis1.EventType.CompareTo(lis2.EventType);
-                    });
-
-                    //sort the list
-                    var listProxyLogsOrdered = listProxyLogs.OrderBy(a => a.EventType)
-                                                            .ThenBy(b => b.User)
-                                                            .ThenByDescending(d => d.UserAccessDatetime);                                      
-
-                    var iisLogInEventsLogs = from a in listProxyLogsOrdered.ToList()
-                                             where a.EventType == IisAccessEvent.IisEventType.IIS_LOGIN.ToString()
-                                             select a;
-
-                    var iisLastAccessEventsLogs = from a in listProxyLogsOrdered.ToList()
-                                                  where a.EventType == IisAccessEvent.IisEventType.IIS_LAST_ACCESS.ToString()
-                                                  select a;
-
-                    var iisLogInEventsLogsExcludeDups = iisLogInEventsLogs.GroupBy(x => new { x.User, x.UserAccessDatetime })
-                                                    .Select(y => y.FirstOrDefault())
-                                                    .OrderBy(x => x.User).ThenByDescending(x => x.UserAccessDatetime)
-                                                    .Distinct();
-
-                    //Sort with delegate
-                    iisLogInEventsLogsExcludeDups.ToList().Sort(delegate (ProxyIisLog lis1, ProxyIisLog lis2)
-                    {
-                        return lis1.User.CompareTo(lis2.User);
-                    });
-
-                    // Sort with delegate
-                    iisLastAccessEventsLogs.ToList().Sort(delegate (ProxyIisLog lis1, ProxyIisLog lis2)
-                    {
-                        return lis1.User.CompareTo(lis2.User);
-                    });
-
-                    var listProxyLogsLastAccessEvents = new List<ProxyIisLog>();
-                    var entity = new ProxyIisLog();
-
-                    var logs = iisLastAccessEventsLogs.OrderBy(s => s.User).ThenByDescending(s => s.UserAccessDatetime);
-
-                    var aDate = "";
-                    var existLastAccessList = false;
-                    var existLogInList = false;
-
-                    if (iisLogInEventsLogsExcludeDups.ToList().Count > 0 && iisLastAccessEventsLogs.ToList().Count > 0)
-                    {
-                        foreach (var a in logs)
+                        switch ((pfinalList[i]).EventType)
                         {
-                            aDate = DateTime.Parse(a.UserAccessDatetime).ToString("MM/dd/yyyy HH:mm tt");
-                            //check if record exist in the listProxyLogsLastAccessEvents for user and time
-                            existLastAccessList = listProxyLogsLastAccessEvents.Any(l => l.User == a.User
-                                                             && DateTime.Parse(l.UserAccessDatetime).ToString("MM/dd/yyyy HH:mm tt") == aDate);
-
-                            //check if record exist in the iisLogInEventsLogs for user and time
-                            existLogInList = iisLogInEventsLogsExcludeDups.Any(l => l.User == a.User
-                                                            && DateTime.Parse(l.UserAccessDatetime).ToString("MM/dd/yyyy HH:mm tt") == aDate);
-
-                            //if the record does not exist in listProxyLogsLastAccessEvents but exist in iisLogInEventsLogs then add to new list
-                            if (!existLastAccessList && existLogInList)
-                            {
-                                entity.UserAccessDatetime = a.UserAccessDatetime;
-                                entity.ClientIpAddress = a.ClientIpAddress;
-                                entity.ServerIPAddress = a.ServerIPAddress;
-                                entity.PortNumber = a.PortNumber;
-                                entity.CommandSentMethod = a.CommandSentMethod;
-                                entity.StepURI = a.StepURI;
-                                entity.QueryURI = a.QueryURI;
-                                entity.StatusCode = a.StatusCode;
-                                entity.SubStatusCode = a.SubStatusCode;
-                                entity.Win32StatusCode = a.Win32StatusCode;
-                                entity.ResponseTime = a.ResponseTime;
-                                entity.UserAgent = a.UserAgent;
-                                entity.ClientReferer = a.ClientReferer;
-                                entity.Browser = a.Browser;
-                                entity.EventType = a.EventType;
-                                entity.User = a.User;
-                                listProxyLogsLastAccessEvents.Add(entity);
-                                entity = new ProxyIisLog();
-                            }
+                            case "IIS_LOGIN":
+                                {
+                                    hashActiveIisUserSessions.Remove(pfinalList[i].User);
+                                    break;
+                                }
+                            case "IIS_LAST_ACCESS":
+                                {
+                                    if (hashActiveIisUserSessions.Contains(pfinalList[i].User))
+                                    {
+                                        pfinalList.RemoveAt(i);
+                                    }
+                                    else
+                                    {
+                                        hashActiveIisUserSessions.Add(pfinalList[i].User);
+                                    }
+                                    break;
+                                }
+                            default:
+                                {
+                                    break;
+                                }
                         }
                     }
-
-                    // If there are no IISlogin events but there are IISlastlogIn
-                    if (iisLogInEventsLogsExcludeDups.ToList().Count == 0
-                                        && iisLastAccessEventsLogs.ToList().Count > 0
-                                        && listProxyLogsLastAccessEvents.ToList().Count == 0)
-                    {
-                        //if there are only last access then get the distinct records based on user
-                        listProxyLogsLastAccessEvents = iisLastAccessEventsLogs.Select(c => c.User)
-                                                            .Distinct()
-                                                            .Select(c => iisLastAccessEventsLogs.FirstOrDefault(r => r.User == c))
-                                                            .ToList();
-                    }
-
-                     var listProxyLogsFF = iisLogInEventsLogsExcludeDups.Concat(listProxyLogsLastAccessEvents);
                     #endregion
-                    //**************************************************************************************************//
 
+                    var listProxyLogsFF = pfinalList;
                     var listProxyLogsFinal = listProxyLogsFF.ToList();
                     if (listProxyLogsFinal.Count() == 0)
                     {
