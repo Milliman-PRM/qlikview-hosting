@@ -113,6 +113,24 @@ namespace MongoDbWrap
             return CollectionNames;
         }
 
+        public bool DeleteDocuments(string CollectionName, Dictionary<string, string> Match)
+        {
+            try
+            {
+                BsonDocument MatchDoc = new BsonDocument();
+                foreach (String Key in Match.Keys)
+                {
+                    MatchDoc.Add(Key, Match[Key]);
+                }
+                _Db.GetCollection<BsonDocument>(CollectionName).DeleteManyAsync(MatchDoc).RunSynchronously();
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public bool InsertDocument(string CollectionName, Dictionary<string, string> Content)
         {
             // Insert the MongoDB document

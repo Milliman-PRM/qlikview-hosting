@@ -109,6 +109,12 @@ namespace BayClinicCernerExtractLib
                 MongoCxn = new MongoDbConnection(CxParams);
             }
 
+            {  // Remove any records previously inserted from this raw data file
+                Dictionary<string, string> DeleteCriteria = new Dictionary<string, string>();
+                DeleteCriteria.Add("ImportFile", TxtFileName);
+                MongoCxn.DeleteDocuments(CollectionName, DeleteCriteria);
+            }
+
             // Process all data lines from the rest of the stream
             while (Reader.Peek() >= 0)
             {
