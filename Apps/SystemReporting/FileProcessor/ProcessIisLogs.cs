@@ -190,7 +190,7 @@ namespace FileProcessor
                     }
 
                     #region IISLogIns and IISLastAccessRecords ONly
-                  
+                    // DO NOT SORT BY, ORDER BY or GROUP BY. The iis data is in specific order.. use as is
                     var pfinalList = listProxyLogs.ToList();                   
 
                     var hashActiveIisUserSessions = new HashSet<string>();
@@ -280,47 +280,6 @@ namespace FileProcessor
                 BaseFileProcessor.LogError(ex, " Class ProcessIisLogs. Method ParseFile. File name. " + filefullName);
             }
             return listLogFile;
-        }
-    }
-}
-public class UserDatesLastAccessEvents
-{
-    private string _userName;
-    public string UserName
-    {
-        get
-        {
-            return _userName;
-        }
-        set
-        {
-            _userName = value;
-        }
-    }
-
-    private DateTime _UserEventAccessDatetime;
-    public DateTime UserEventAccessDatetime
-    {
-        get
-        {
-            return _UserEventAccessDatetime;
-        }
-        set
-        {
-            _UserEventAccessDatetime = value;
-        }
-    }
-
-    private string _userEvent;
-    public string UserEvent
-    {
-        get
-        {
-            return _userEvent;
-        }
-        set
-        {
-            _userEvent = value;
         }
     }
 }
