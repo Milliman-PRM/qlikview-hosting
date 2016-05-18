@@ -106,21 +106,14 @@ namespace FileProcessor
                     //Time Zone for aduit log is true
                     var UseDaylightSavings = true;
                     //local time zone of the server
-                    var serverTimeZone = TimeZoneInfo.FindSystemTimeZoneById(TimeZoneInfo.Local.Id);
-                    var localDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, serverTimeZone);
+                    var serverTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
 
                     foreach (var entry in listLogFile)
                     {
                         if (entry.Timestamp != null)
                         {
                             if (UseDaylightSavings)
-                            {
-                                proxyLogEntry.UserAccessDatetime = TimeZoneInfo.ConvertTimeToUtc(entry.Timestamp, serverTimeZone).ToString("MM/dd/yy HH:mm:ss");
-                            }
-                            else
-                            {
-                                proxyLogEntry.UserAccessDatetime = (entry.Timestamp - serverTimeZone.BaseUtcOffset).ToString("MM/dd/yy HH:mm:ss");
-                            }
+                                proxyLogEntry.UserAccessDatetime = TimeZoneInfo.ConvertTimeToUtc(entry.Timestamp, serverTimeZone).ToString();
                         }
                         
                         proxyLogEntry.EventType = (!string.IsNullOrEmpty(entry.EventType)) ? entry.EventType.Trim() : string.Empty;
@@ -144,6 +137,16 @@ namespace FileProcessor
                             if (entry.Document.ToLower().Contains(item.ToLower()))
                             {
                                 group = QlikviewEventBase.GetGroup(entry.Document, item);
+                                if (group != null && group != "")
+                                {
+                                    //if the group still has the installedapplicaiton then ignore
+                                    if (group.ToLower().IndexOf("installedapplications", StringComparison.Ordinal) > -1)
+                                        group = "";
+
+                                    //substring(start postions,find last index of("_REDUCEDUSERQVWS) and remove everything after that occurance of _REDUCEDUSERQVWS
+                                    if (group.IndexOf("_REDUCEDUSERQVWS", StringComparison.Ordinal) > -1)
+                                        group = group.Substring(0, group.LastIndexOf("_REDUCEDUSERQVWS"));
+                                }
                                 docName = entry.Document.ToLower().Replace(item.ToLower(),"");
                                 break;
                             }
@@ -156,7 +159,6 @@ namespace FileProcessor
                         proxyLogEntry.Document = (!string.IsNullOrEmpty(docName)) ? docName.ToUpper().Trim() : string.Empty;
 
                         proxyLogEntry.IsReduced = entry.Document.IndexOf(@"\reducedcachedqvws", StringComparison.Ordinal) > -1;
-
                         //add entry to list
                         listProxyLogs.Add(proxyLogEntry);
                         proxyLogEntry = new ProxyAuditLog();
@@ -167,7 +169,7 @@ namespace FileProcessor
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, " Class ProcessQVAuditLogs. Method ProcessLogFile while sending the data to controller.");
+                BaseFileProcessor.LogError(ex, " Class ProcessQVAuditLogs. Method ProcessLogFile while sending the data to controller. File " + fileNameWithDirectory);
             }
 
             return blnSucessful;
@@ -197,7 +199,7 @@ namespace FileProcessor
             }
             catch (Exception ex)
             {
-                //LogError(ex, " Class ProcessQVAuditLogs. Method ParseFile. File name. " + filefullName);
+                BaseFileProcessor.LogError(ex, " Class ProcessQVAuditLogs. Method ParseFile. File name. " + filefullName);
             }
             return listLogFile;
         }

@@ -69,9 +69,9 @@ namespace ReportingCommon
         {
             return
                     (string.Compare(Method.ToLower(), "get", true) == 0) &&
-                    (string.Compare(UriStem.ToLower(), "/prm/default.aspx", true) == 0) &&
+                    (UriStem.ToLower().IndexOf(@"default.aspx", StringComparison.Ordinal) > -1) &&
                     (Port == 443) &&
-                    (string.Compare(Referer.ToLower(), "https://prm.milliman.com/prm/userlogin.aspx", true) == 0) &&
+                    (Referer.ToLower().IndexOf(@"userlogin.aspx", StringComparison.Ordinal) > -1) &&
                     (Status == 200);
         }
 

@@ -103,8 +103,7 @@ namespace FileProcessor
 
                     //Time Zone is false for session
                     var UseDaylightSavings = false;
-                    var serverTimeZone = TimeZoneInfo.FindSystemTimeZoneById(TimeZoneInfo.Local.Id);
-                    var localDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, serverTimeZone);
+                    var serverTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
 
                     foreach (var entry in listLogFile)
                     {                        
@@ -115,14 +114,8 @@ namespace FileProcessor
 
                         if (entry.SessionStart != null)
                         {
-                            if (serverTimeZone.SupportsDaylightSavingTime && !UseDaylightSavings)
-                            {
-                                proxyLogEntry.UserAccessDatetime = (entry.SessionStart - serverTimeZone.BaseUtcOffset).ToString();
-                            }
-                            else
-                            {
+                            if (!UseDaylightSavings)
                                 proxyLogEntry.UserAccessDatetime = TimeZoneInfo.ConvertTimeToUtc(entry.SessionStart, serverTimeZone).ToString();
-                            }
                         }
 
                         if (entry.SessionDuration != null)
@@ -156,6 +149,16 @@ namespace FileProcessor
                             if (entry.Document.ToLower().Contains(item.ToLower()))
                             {
                                 group = QlikviewEventBase.GetGroup(entry.Document, item);
+                                if (group != null && group != "")
+                                {
+                                    //if the group still has the installedapplicaiton then ignore
+                                    if (group.ToLower().IndexOf("installedapplications", StringComparison.Ordinal) > -1)
+                                        group = "";
+
+                                    //substring(start postions,find last index of("_REDUCEDUSERQVWS) and remove everything after that occurance of _REDUCEDUSERQVWS
+                                    if (group.IndexOf("_REDUCEDUSERQVWS", StringComparison.Ordinal) > -1)
+                                        group = group.Substring(0, group.LastIndexOf("_REDUCEDUSERQVWS"));
+                                }
                                 docNameNoPath = entry.Document.ToLower().Replace(item.ToLower(), "");
                                 break;
                             }
@@ -170,7 +173,6 @@ namespace FileProcessor
                         proxyLogEntry.SessionLength = entry.SessionDuration.ToString();
                         proxyLogEntry.SessionEndReason = QlikviewSessionEvent.GetExitReason(entry.ExitReason).ToString();
                         proxyLogEntry.Browser = QlikviewSessionEvent.GetBrowser(entry.ClientType);
-
                         //add entry to list
                         listProxyLogs.Add(proxyLogEntry);
                         proxyLogEntry = new ProxySessionLog();

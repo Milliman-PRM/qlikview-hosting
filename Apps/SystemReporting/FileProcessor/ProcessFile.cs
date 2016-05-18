@@ -53,7 +53,7 @@ namespace FileProcessor
                             newArgs[0] = args[0];
                             newArgs[1] = "Audit";
                         }
-                        else if (filename.IndexOf("aessions_", StringComparison.Ordinal) > -1)
+                        else if (filename.IndexOf("sessions_", StringComparison.Ordinal) > -1)
                         {
                             newArgs[0] = args[0];
                             newArgs[1] = "Session";
