@@ -86,6 +86,7 @@
       <Column Name="feedname" Member="FeedName" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="1020c863-e4be-4f2c-a39c-c977f8965052" />
       <Column Name="organizationdbid" Member="Organizationdbid" Type="System.Int64" AutoSync="Always" DbType="int8 NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="d4c69ce6-b447-47b3-99b4-9ffd44ba3102" />
       <Association Name="Organization_DataFeed" ed:AssociationGuid="2b9a0711-f79d-4e03-806f-d1a1f00a10fd" Member="Organization" ed:Guid="8260c14b-3f8e-48a6-897b-e8d78d32c5c7" ThisKey="Organizationdbid" OtherKey="dbid" Type="Organization" DeleteOnNull="true" IsForeignKey="true" />
+      <Association Name="DataFeed_AggregationLog" ed:AssociationGuid="461fe6f0-b612-47e4-a614-c31ad6f573dd" Member="AggregationLogs" ed:Guid="057aa22d-bc9a-4865-b261-c01fb89fdcfd" ThisKey="dbid" OtherKey="DataFeeddbid" Type="AggregationLog" />
     </Type>
   </Table>
   <Table Name="public.visitencounter" Member="VisitEncounters">
@@ -267,9 +268,37 @@
       <Column Name="begindatetime" Member="BeginDateTime" Type="System.DateTimeOffset" DbType="timestamp with time zone" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="260a181e-b0d2-48a6-8a50-d18574a2fab9" />
       <Column Name="enddatetime" Member="EndDateTime" Type="System.DateTimeOffset" DbType="timestamp with time zone" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="ee504587-94fb-45a7-9690-1f56b908a88d" />
       <Column Name="patientdbid" Member="Patientdbid" Type="System.Int64" AutoSync="Always" DbType="int8 NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="2ee27345-25c2-4e36-b405-577f2369fa35" />
-      <Column Name="visitencounterdbid" Member="VisitEncounterdbid" Type="System.Int64" AutoSync="Always" DbType="int8 NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="cd1eb497-2369-4d45-ae0d-649399b36ea2" />
+      <Column Name="visitencounterdbid" Member="VisitEncounterdbid" Type="System.Int64" AutoSync="Always" DbType="int8" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="cd1eb497-2369-4d45-ae0d-649399b36ea2" />
       <Association Name="Patient_Problem" ed:AssociationGuid="0db6fec7-42d6-4c31-a700-23812c71e8cd" Member="Patient" ed:Guid="5507db8d-42c0-4baa-b871-b65779a8054f" ThisKey="Patientdbid" OtherKey="dbid" Type="Patient" DeleteOnNull="true" IsForeignKey="true" />
       <Association Name="VisitEncounter_Problem" ed:AssociationGuid="05a0b74c-1d71-4eb1-b4fb-91a911e1492d" Member="VisitEncounter" ed:Guid="e79a3951-becf-485b-a55b-fb5dd5969a68" ThisKey="VisitEncounterdbid" OtherKey="dbid" Type="VisitEncounter" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="public.aggregationlog" Member="AggregationLogs">
+    <Type Name="AggregationLog" ed:Guid="02ebcf1c-7748-46e2-9337-66769c607172">
+      <Column Name="dbid" Type="System.Int64" AutoSync="OnInsert" DbType="bigserial NOT NULL" IsReadOnly="true" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" ed:ValidateRequired="true" ed:Guid="f6e01123-77c3-4c0d-9b6c-f23311caa645" />
+      <Column Name="aggregationrunid" Member="AggregationRunId" Type="System.Int64" AutoSync="OnInsert" DbType="bigserial NOT NULL" IsReadOnly="true" IsDbGenerated="true" CanBeNull="false" IsVersion="true" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="d24640e9-1b94-49e3-8f2e-80b20b18a5a8" />
+      <Column Name="statusflags" Member="StatusFlags" Type="System.Int32" DbType="int4 NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="6051d6fb-c111-4958-bace-202261af84ff">
+        <Documentation>
+          <Summary>Bit mask</Summary>
+          <LongDescription>Binary            Int     Meaning
+00000001       1         Value Reserved By Program
+00000010       2         Aggregation In Progress
+00000100       4         Complete
+00001000       8         future
+00010000      16        future 
+00100000      32         future
+01000000      64         future
+10000000     128         future
+
+
+
+
+
+</LongDescription>
+        </Documentation>
+      </Column>
+      <Column Name="datafeeddbid" Member="DataFeeddbid" Type="System.Int64" DbType="int8 NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="892ed29c-39b7-4c24-b726-9988a2f0b588" />
+      <Association Name="DataFeed_AggregationLog" ed:AssociationGuid="461fe6f0-b612-47e4-a614-c31ad6f573dd" Member="DataFeed" ed:Guid="193472bb-c149-4429-b6d0-55cdaf2ded1e" ThisKey="DataFeeddbid" OtherKey="dbid" Type="DataFeed" DeleteOnNull="true" IsForeignKey="true" />
     </Type>
   </Table>
   <Type Name="Address" ed:Guid="fd209b72-712b-4d63-adc7-4d32bf97fc3f">

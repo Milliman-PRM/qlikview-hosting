@@ -45,10 +45,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CdrDbInterface.cs" />
     <Compile Include="Data Context\CdrDataContext.CdrDataContext.cs" />
     <Compile Include="Entities\CdrDataContext.Address.cs" />
     <Compile Include="Entities\CdrDataContext.Address.Generated.cs">
       <DependentUpon>CdrDataContext.Address.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\CdrDataContext.AggregationLog.cs" />
+    <Compile Include="Entities\CdrDataContext.AggregationLog.Generated.cs">
+      <DependentUpon>CdrDataContext.AggregationLog.cs</DependentUpon>
     </Compile>
     <Compile Include="Entities\CdrDataContext.Charge.cs" />
     <Compile Include="Entities\CdrDataContext.Charge.Generated.cs">

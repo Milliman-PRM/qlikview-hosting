@@ -32,6 +32,8 @@
         <File Name="CdrDataContext.Diagnosis.Generated.cs" Project="CdrDbLib" ProjectFolder="Entities" />
         <File Name="CdrDataContext.Problem.cs" Project="CdrDbLib" ProjectFolder="Entities" OverwriteMode="None" />
         <File Name="CdrDataContext.Problem.Generated.cs" Project="CdrDbLib" ProjectFolder="Entities" />
+        <File Name="CdrDataContext.AggregationLog.cs" Project="CdrDbLib" ProjectFolder="Entities" OverwriteMode="None" />
+        <File Name="CdrDataContext.AggregationLog.Generated.cs" Project="CdrDbLib" ProjectFolder="Entities" />
         <File Name="CdrDataContext.Address.cs" Project="CdrDbLib" ProjectFolder="Entities" OverwriteMode="None" />
         <File Name="CdrDataContext.Address.Generated.cs" Project="CdrDbLib" ProjectFolder="Entities" />
         <File Name="CdrDataContext.PhoneNumber.cs" Project="CdrDbLib" ProjectFolder="Entities" OverwriteMode="None" />

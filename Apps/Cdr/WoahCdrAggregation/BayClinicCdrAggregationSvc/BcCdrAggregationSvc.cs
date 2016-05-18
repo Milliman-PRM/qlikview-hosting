@@ -14,7 +14,7 @@ namespace BayClinicCdrAggregationSvc
 {
     public partial class BcCdrAggregationSvc : ServiceBase
     {
-        BcCdrAggregationLib LibInstance = new BcCdrAggregationLib();
+        BayClinicCernerAmbulatoryExtractAggregator LibInstance = new BayClinicCernerAmbulatoryExtractAggregator();
 
         public BcCdrAggregationSvc()
         {

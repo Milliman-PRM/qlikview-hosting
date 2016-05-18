@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NorthBendCdrAggregationLib"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CdrDbLib", "..\..\..\Databases\CdrDbLib\CdrDbLib\CdrDbLib.csproj", "{CBEC3A92-5B09-4218-ACDB-286E61FF4CD8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MongoDbWrap", "..\..\AppsCommon\MongoDbWrap\MongoDbWrap.csproj", "{5FDFBD80-5D24-40A0-985F-C17F579D8517}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WoahCdrAggregationTestGui", "WoahCdrAggregationTestGui\WoahCdrAggregationTestGui.csproj", "{4F7B25B9-91DD-420B-B9C0-30F1E37E9E45}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,14 @@ Global
 		{CBEC3A92-5B09-4218-ACDB-286E61FF4CD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CBEC3A92-5B09-4218-ACDB-286E61FF4CD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CBEC3A92-5B09-4218-ACDB-286E61FF4CD8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FDFBD80-5D24-40A0-985F-C17F579D8517}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FDFBD80-5D24-40A0-985F-C17F579D8517}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FDFBD80-5D24-40A0-985F-C17F579D8517}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FDFBD80-5D24-40A0-985F-C17F579D8517}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F7B25B9-91DD-420B-B9C0-30F1E37E9E45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F7B25B9-91DD-420B-B9C0-30F1E37E9E45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F7B25B9-91DD-420B-B9C0-30F1E37E9E45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F7B25B9-91DD-420B-B9C0-30F1E37E9E45}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
