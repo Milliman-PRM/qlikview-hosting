@@ -11,7 +11,7 @@ using System.Linq.Expressions;
 namespace CdrContext
 {
 
-    public partial class AggregationLog
+    public partial class AggregationRun
     {
     }
 }

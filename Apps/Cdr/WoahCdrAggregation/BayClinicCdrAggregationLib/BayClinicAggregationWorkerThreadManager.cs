@@ -4,15 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using CdrDbLib;
-using CdrContext;
+using BayClinicCernerAmbulatory;
 
 namespace BayClinicCdrAggregationLib
 {
-    public class BayClinicCernerAmbulatoryExtractAggregator
+    public class BayClinicAggregationWorkerThreadManager
     {
         private bool _EndThreadSignal;
 
+        /// <summary>
+        /// Property that encapsulates thread safe access
+        /// </summary>
         private bool EndThreadSignal
         {
             set
@@ -32,31 +34,24 @@ namespace BayClinicCdrAggregationLib
 
         private Thread WorkerThd;
         private Mutex Mutx;
-        private CdrDbInterface CdrDb;
-        private const String FeedIdentity = "BayClinicCernerAmbulatoryExtract";
-        private const String PgConnectionStringName = "Cdr_WoahConnection";
 
         /// <summary>
         /// Instantiates member objects
         /// </summary>
-        public BayClinicCernerAmbulatoryExtractAggregator()
+        public BayClinicAggregationWorkerThreadManager()
         {
-            EndThreadSignal = false;
-            WorkerThd = new Thread(ThreadMain);
             Mutx = new Mutex();
+            WorkerThd = new Thread(ThreadMain);
+            EndThreadSignal = false;
         }
 
         /// <summary>
         /// Starts the encapsulated worker thread
         /// </summary>
-        public void StartThread(String PgConnectionName = PgConnectionStringName)
+        /// <param name="PgConnectionName">Name of a PostgreSQL connection string to use. If null, a value is taken from ConfigurationManager.AppSettings["CdrPostgreSQLConnectionString"]</param>
+        public void StartThread(String PgConnectionName = null)
         {
-            CdrDb = new CdrDbInterface(PgConnectionName, ConnectionArgumentType.ConnectionStringName);
-
-            DataFeed Feed = CdrDb.EnsureFeed(FeedIdentity);
-            long x = Feed.dbid;  // test
-
-            WorkerThd.Start();
+            WorkerThd.Start(PgConnectionName);
         }
 
         /// <summary>
@@ -73,17 +68,15 @@ namespace BayClinicCdrAggregationLib
 
         private void ThreadMain(object ThreadArg)
         {
-            DataFeed Feed = CdrDb.EnsureFeed(FeedIdentity);
-            long x = Feed.dbid;  // test
-
+            String PgCxnName = (String)ThreadArg;
             while (!EndThreadSignal)
             {
+                BayClinicCernerAmbulatoryBatchAggregator Aggregator = new BayClinicCernerAmbulatoryBatchAggregator(PgCxnName);
+                bool Success = Aggregator.Initialize();
+
+                // TODO this is where the meat and potatoes are delegated, use Aggregator for this processing
+
                 Thread.Sleep(3000);
-                Patient NewPatient = new Patient
-                {
-                    NameLast = "xyz"
-                };
-                
             }
         }
 

@@ -22,23 +22,24 @@ namespace CdrContext
 {
 
     /// <summary>
-    /// There are no comments for Gender in the schema.
+    /// There are no comments for AggregationRunStatus in the schema.
     /// </summary>
-    public enum Gender : short
+    [Flags]
+    public enum AggregationRunStatus : int
     {
     
         /// <summary>
-        /// There are no comments for Gender.Male in the schema.
+        /// There are no comments for AggregationRunStatus.RunNumberReserved in the schema.
         /// </summary>
-        Male,    
+        RunNumberReserved = 1,    
         /// <summary>
-        /// There are no comments for Gender.Female in the schema.
+        /// There are no comments for AggregationRunStatus.InProcess in the schema.
         /// </summary>
-        Female,    
+        InProcess = 2,    
         /// <summary>
-        /// There are no comments for Gender.Unspecified in the schema.
+        /// There are no comments for AggregationRunStatus.Complete in the schema.
         /// </summary>
-        Unspecified
+        Complete = 4
     }
 
 }

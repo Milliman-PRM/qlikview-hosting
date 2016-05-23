@@ -14,7 +14,7 @@ namespace WoahCdrAggregationTestGui
 {
     public partial class Form1 : Form
     {
-        public List<BayClinicCernerAmbulatoryExtractAggregator> BayClinicProcesses = new List<BayClinicCdrAggregationLib.BayClinicCernerAmbulatoryExtractAggregator>();
+        public List<BayClinicAggregationWorkerThreadManager> BayClinicProcesses = new List<BayClinicCdrAggregationLib.BayClinicAggregationWorkerThreadManager>();
 
         public Form1()
         {
@@ -27,7 +27,7 @@ namespace WoahCdrAggregationTestGui
             switch (SelectedRadio.Name)
             {
                 case "radioBayClinicCernerAmbulatory":
-                    BayClinicCernerAmbulatoryExtractAggregator BcLib = new BayClinicCernerAmbulatoryExtractAggregator();
+                    BayClinicAggregationWorkerThreadManager BcLib = new BayClinicAggregationWorkerThreadManager();
                     BcLib.StartThread();
                     BayClinicProcesses.Add(BcLib);
                     break;
@@ -42,7 +42,7 @@ namespace WoahCdrAggregationTestGui
 
         private void buttonEndAllThreads_Click(object sender, EventArgs e)
         {
-            foreach (BayClinicCernerAmbulatoryExtractAggregator B in BayClinicProcesses)
+            foreach (BayClinicAggregationWorkerThreadManager B in BayClinicProcesses)
             {
                 B.EndThread();
             }

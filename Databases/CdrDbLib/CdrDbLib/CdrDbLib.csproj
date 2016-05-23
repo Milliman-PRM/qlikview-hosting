@@ -51,10 +51,11 @@
     <Compile Include="Entities\CdrDataContext.Address.Generated.cs">
       <DependentUpon>CdrDataContext.Address.cs</DependentUpon>
     </Compile>
-    <Compile Include="Entities\CdrDataContext.AggregationLog.cs" />
-    <Compile Include="Entities\CdrDataContext.AggregationLog.Generated.cs">
-      <DependentUpon>CdrDataContext.AggregationLog.cs</DependentUpon>
+    <Compile Include="Entities\CdrDataContext.AggregationRun.cs" />
+    <Compile Include="Entities\CdrDataContext.AggregationRun.Generated.cs">
+      <DependentUpon>CdrDataContext.AggregationRun.cs</DependentUpon>
     </Compile>
+    <Compile Include="Entities\CdrDataContext.AggregationRunStatus.cs" />
     <Compile Include="Entities\CdrDataContext.Charge.cs" />
     <Compile Include="Entities\CdrDataContext.Charge.Generated.cs">
       <DependentUpon>CdrDataContext.Charge.cs</DependentUpon>

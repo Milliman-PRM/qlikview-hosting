@@ -86,7 +86,7 @@
       <Column Name="feedname" Member="FeedName" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="1020c863-e4be-4f2c-a39c-c977f8965052" />
       <Column Name="organizationdbid" Member="Organizationdbid" Type="System.Int64" AutoSync="Always" DbType="int8 NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="d4c69ce6-b447-47b3-99b4-9ffd44ba3102" />
       <Association Name="Organization_DataFeed" ed:AssociationGuid="2b9a0711-f79d-4e03-806f-d1a1f00a10fd" Member="Organization" ed:Guid="8260c14b-3f8e-48a6-897b-e8d78d32c5c7" ThisKey="Organizationdbid" OtherKey="dbid" Type="Organization" DeleteOnNull="true" IsForeignKey="true" />
-      <Association Name="DataFeed_AggregationLog" ed:AssociationGuid="461fe6f0-b612-47e4-a614-c31ad6f573dd" Member="AggregationLogs" ed:Guid="057aa22d-bc9a-4865-b261-c01fb89fdcfd" ThisKey="dbid" OtherKey="DataFeeddbid" Type="AggregationLog" />
+      <Association Name="DataFeed_AggregationRun" ed:AssociationGuid="461fe6f0-b612-47e4-a614-c31ad6f573dd" Member="AggregationRuns" ed:Guid="057aa22d-bc9a-4865-b261-c01fb89fdcfd" ThisKey="dbid" OtherKey="DataFeeddbid" Type="AggregationRun" />
     </Type>
   </Table>
   <Table Name="public.visitencounter" Member="VisitEncounters">
@@ -273,11 +273,10 @@
       <Association Name="VisitEncounter_Problem" ed:AssociationGuid="05a0b74c-1d71-4eb1-b4fb-91a911e1492d" Member="VisitEncounter" ed:Guid="e79a3951-becf-485b-a55b-fb5dd5969a68" ThisKey="VisitEncounterdbid" OtherKey="dbid" Type="VisitEncounter" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="public.aggregationlog" Member="AggregationLogs">
-    <Type Name="AggregationLog" ed:Guid="02ebcf1c-7748-46e2-9337-66769c607172">
+  <Table Name="public.aggregationrun" Member="AggregationRuns">
+    <Type Name="AggregationRun" ed:Guid="02ebcf1c-7748-46e2-9337-66769c607172">
       <Column Name="dbid" Type="System.Int64" AutoSync="OnInsert" DbType="bigserial NOT NULL" IsReadOnly="true" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" ed:ValidateRequired="true" ed:Guid="f6e01123-77c3-4c0d-9b6c-f23311caa645" />
-      <Column Name="aggregationrunid" Member="AggregationRunId" Type="System.Int64" AutoSync="OnInsert" DbType="bigserial NOT NULL" IsReadOnly="true" IsDbGenerated="true" CanBeNull="false" IsVersion="true" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="d24640e9-1b94-49e3-8f2e-80b20b18a5a8" />
-      <Column Name="statusflags" Member="StatusFlags" Type="System.Int32" DbType="int4 NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="6051d6fb-c111-4958-bace-202261af84ff">
+      <Column Name="statusflags" Member="StatusFlags" Type="AggregationRunStatus" DbType="int4 NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="6051d6fb-c111-4958-bace-202261af84ff">
         <Documentation>
           <Summary>Bit mask</Summary>
           <LongDescription>Binary            Int     Meaning
@@ -298,7 +297,7 @@
         </Documentation>
       </Column>
       <Column Name="datafeeddbid" Member="DataFeeddbid" Type="System.Int64" DbType="int8 NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="892ed29c-39b7-4c24-b726-9988a2f0b588" />
-      <Association Name="DataFeed_AggregationLog" ed:AssociationGuid="461fe6f0-b612-47e4-a614-c31ad6f573dd" Member="DataFeed" ed:Guid="193472bb-c149-4429-b6d0-55cdaf2ded1e" ThisKey="DataFeeddbid" OtherKey="dbid" Type="DataFeed" DeleteOnNull="true" IsForeignKey="true" />
+      <Association Name="DataFeed_AggregationRun" ed:AssociationGuid="461fe6f0-b612-47e4-a614-c31ad6f573dd" Member="DataFeed" ed:Guid="193472bb-c149-4429-b6d0-55cdaf2ded1e" ThisKey="DataFeeddbid" OtherKey="dbid" Type="DataFeed" DeleteOnNull="true" IsForeignKey="true" />
     </Type>
   </Table>
   <Type Name="Address" ed:Guid="fd209b72-712b-4d63-adc7-4d32bf97fc3f">
@@ -344,5 +343,10 @@
     <Member Name="Separated" ed:Guid="eec8265a-8552-41f9-944b-1f3b3f6940e5" />
     <Member Name="DomesticPartner" ed:Guid="e5854072-83c3-4d2f-9266-a58368eaf3ed" />
     <Member Name="Other" ed:Guid="5a995792-2847-4dbe-951d-8b6697657147" />
+  </EnumType>
+  <EnumType Name="AggregationRunStatus" IsFlags="true" Type="AggregationRunStatus" ed:Guid="8dd9d4ad-280c-4d27-a479-3c3d94b4b04f">
+    <Member Name="RunNumberReserved" Value="1" ed:Guid="d4f5de1f-baf8-491e-a368-bb3f924abb96" />
+    <Member Name="InProcess" Value="2" ed:Guid="b9294df7-bc9b-4a4c-a353-fa1bd7cc4207" />
+    <Member Name="Complete" Value="4" ed:Guid="4f6503b5-4eef-48cd-8285-3d92ed192dea" />
   </EnumType>
 </Database>

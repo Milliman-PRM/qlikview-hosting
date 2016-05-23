@@ -67,6 +67,7 @@ namespace CdrDbLib
                 };
                 Context.DataFeeds.InsertOnSubmit(NewFeed);
                 Context.SubmitChanges();
+
                 return NewFeed;
             }
         }
