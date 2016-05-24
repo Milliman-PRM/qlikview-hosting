@@ -6,7 +6,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace SystemReporting.Entities.Models
 {
     [Serializable()]
-    [Table("report", Schema = "public")]
     public class Report
     {
         [Key]

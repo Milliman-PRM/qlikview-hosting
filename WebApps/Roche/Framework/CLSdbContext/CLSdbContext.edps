@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<EntityDeveloper Version="5.8.762.0">
+  <ModelSettings xmlns:ed="http://devart.com/schemas/EntityDeveloper/1.0" AppConnectionStringName="CLSdbDataContextConnectionString" ConnectionStringInAppConfig="True" RegenareteConnectionStringInAppConfig="True" DetectTPTInheritance="False" PreserveSchemaName="False">
+    <Generation>
+      <GeneratedFiles>
+        <File Name="CLSdbContext.CLSdbDataContext.cs" Project="CLSdbContext" ProjectFolder="Context" />
+        <File Name="CLSdbContext.Footnote.cs" Project="CLSdbContext" ProjectFolder="Entities" OverwriteMode="None" />
+        <File Name="CLSdbContext.Footnote.Generated.cs" Project="CLSdbContext" ProjectFolder="Entities" />
+        <File Name="CLSdbContext.Weburl.cs" Project="CLSdbContext" ProjectFolder="Entities" OverwriteMode="None" />
+        <File Name="CLSdbContext.Weburl.Generated.cs" Project="CLSdbContext" ProjectFolder="Entities" />
+        <File Name="CLSdbContext.Analyzer.cs" Project="CLSdbContext" ProjectFolder="Entities" OverwriteMode="None" />
+        <File Name="CLSdbContext.Analyzer.Generated.cs" Project="CLSdbContext" ProjectFolder="Entities" />
+        <File Name="CLSdbContext.Locality.cs" Project="CLSdbContext" ProjectFolder="Entities" OverwriteMode="None" />
+        <File Name="CLSdbContext.Locality.Generated.cs" Project="CLSdbContext" ProjectFolder="Entities" />
+        <File Name="CLSdbContext.ReimbursementRate.cs" Project="CLSdbContext" ProjectFolder="Entities" OverwriteMode="None" />
+        <File Name="CLSdbContext.ReimbursementRate.Generated.cs" Project="CLSdbContext" ProjectFolder="Entities" />
+        <File Name="CLSdbContext.Code.cs" Project="CLSdbContext" ProjectFolder="Entities" OverwriteMode="None" />
+        <File Name="CLSdbContext.Code.Generated.cs" Project="CLSdbContext" ProjectFolder="Entities" />
+        <File Name="CLSdbContext.SearchTerm.cs" Project="CLSdbContext" ProjectFolder="Entities" OverwriteMode="None" />
+        <File Name="CLSdbContext.SearchTerm.Generated.cs" Project="CLSdbContext" ProjectFolder="Entities" />
+      </GeneratedFiles>
+    </Generation>
+    <DatabaseFirstNamingRules>
+      <EntitySet PluralizationName="Pluralize" />
+      <Class UseSchemaAsPrefix="False" PluralizeCollectionNavigationPropertyName="True" RemoveUnderscores="True" RemoveInvalidCharacters="True" CodeCase="FirstLetterUppercase" AddPrefix="" AddSuffix="" RemovePrefixes="" RemoveSuffixes="" PluralizationName="Singularize" />
+      <Property RemoveUnderscores="True" RemoveInvalidCharacters="True" CodeCase="FirstLetterUppercase" AddPrefix="" AddSuffix="" RemovePrefixes="" RemoveSuffixes="" PluralizationName="Unchanged" />
+    </DatabaseFirstNamingRules>
+    <ModelFirst StorageSynchronizationEnabled="False">
+      <TargetServer Server="PostgreSQL" ServerVersion="9.5" />
+      <ModelFirstNamingRules>
+        <Table RemoveUnderscores="False" RemoveInvalidCharacters="True" CodeCase="Unchanged" AddPrefix="" AddSuffix="" RemovePrefixes="" RemoveSuffixes="" PluralizationName="Pluralize" />
+        <Column RemoveUnderscores="False" RemoveInvalidCharacters="True" CodeCase="Unchanged" AddPrefix="" AddSuffix="" RemovePrefixes="" RemoveSuffixes="" PluralizationName="Unchanged" />
+      </ModelFirstNamingRules>
+    </ModelFirst>
+    <Diagrams>
+      <Diagram Name="Diagram1" DefaultDiagram="True" />
+    </Diagrams>
+    <Templates>
+      <Template Name="LinqConnect" Description="Use this template to generate a strongly-typed DataContext class and persistence-aware classes." Enabled="True" PredefinedTemplateName="LinqConnect C#">
+        <ed:Property Name="ValidationFramework" Type="EntityDeveloper.TemplateEngine.ValidationFramework, EntityDeveloper.Common, Version=5.8.762.0, Culture=neutral, PublicKeyToken=09af7300eec23701">
+          <ValidationFramework>None</ValidationFramework>
+        </ed:Property>
+        <ed:Property Name="ValidationErrorMessages" Type="EntityDeveloper.TemplateEngine.ValidationErrorMessages, EntityDeveloper.Common, Version=5.8.762.0, Culture=neutral, PublicKeyToken=09af7300eec23701">
+          <ValidationErrorMessages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+        </ed:Property>
+        <ed:Property Name="FilePerClass" Type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+          <boolean>true</boolean>
+        </ed:Property>
+        <ed:Property Name="ModelNameAsFilesPrefix" Type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+          <boolean>true</boolean>
+        </ed:Property>
+        <ed:Property Name="HeaderTimestampVersionControlTag" Type="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+          <string d6p1:nil="true" xmlns:d6p1="http://www.w3.org/2001/XMLSchema-instance" />
+        </ed:Property>
+        <ed:Property Name="EntitiesOutput" Type="EntityDeveloper.TemplateEngine.OutputInfo, EntityDeveloper.Common, Version=5.8.762.0, Culture=neutral, PublicKeyToken=09af7300eec23701">
+          <OutputInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <Project>CLSdbContext</Project>
+            <ProjectFolder>Entities</ProjectFolder>
+            <DestinationFolder />
+          </OutputInfo>
+        </ed:Property>
+        <ed:Property Name="ContextOutput" Type="EntityDeveloper.TemplateEngine.OutputInfo, EntityDeveloper.Common, Version=5.8.762.0, Culture=neutral, PublicKeyToken=09af7300eec23701">
+          <OutputInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <Project>CLSdbContext</Project>
+            <ProjectFolder>Context</ProjectFolder>
+            <DestinationFolder />
+          </OutputInfo>
+        </ed:Property>
+        <ed:Property Name="GeneratePartialClass" Type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+          <boolean>true</boolean>
+        </ed:Property>
+        <ed:Property Name="ImplementCloneable" Type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+          <boolean>false</boolean>
+        </ed:Property>
+        <ed:Property Name="UseCompiledQueryCache" Type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+          <boolean>true</boolean>
+        </ed:Property>
+        <ed:Property Name="GenerateDummyComments" Type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+          <boolean>false</boolean>
+        </ed:Property>
+      </Template>
+    </Templates>
+    <AttributeAssemblies />
+  </ModelSettings>
+</EntityDeveloper>

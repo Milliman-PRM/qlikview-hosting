@@ -76,7 +76,8 @@ namespace ReportingCommon
                         // query is not entirely hex characters
                         return "";
                     }
-                    query = ConvertHexToString(reduced).Replace(QvDocRoot, "");
+                    query = ConvertHexToString(reduced);
+                    query = query.ToLower().Replace(QvDocRoot, "");
 
                     string[] splitGroupNames = query.Split('\\');
                     splitGroupNames = splitGroupNames.Take(splitGroupNames.Count() - 1).ToArray();

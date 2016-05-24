@@ -1,0 +1,238 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{E02B1C1D-33E8-4565-934D-13E6D7C36869}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MillimanReportReduction</RootNamespace>
+    <AssemblyName>MillimanReportReduction</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Polenter.SharpSerializer">
+      <HintPath>..\..\MillimanCommon\bin\Debug\Polenter.SharpSerializer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AutoInclusionProcessor.cs" />
+    <Compile Include="QVLicensing.cs" />
+    <Compile Include="QVWCaching.cs" />
+    <Compile Include="QVWScriptRunner.cs" />
+    <Compile Include="QVSAPI.cs" />
+    <Compile Include="QVWHierarchy.cs" />
+    <Compile Include="QVWReductionProcessor.cs" />
+    <Compile Include="ReducedReportIndex.cs" />
+    <Compile Include="ReducedReportMasterIndex.cs" />
+    <Compile Include="ReportReduction.cs" />
+    <Compile Include="NVPairs.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QVWReducer.cs" />
+    <Compile Include="Service References\QMSAPIService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="ServiceSupport\ServiceKeyBehaviorExtensionElement.cs" />
+    <Compile Include="ServiceSupport\ServiceKeyClientMessageInspector.cs" />
+    <Compile Include="ServiceSupport\ServiceKeyEndpointBehavior.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Properties\DataSources\System.Data.DataSet.datasource" />
+    <None Include="Service References\QMSAPIService\MillimanReportReduction.QMSAPIService.CALConfiguration.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\QMSAPIService\MillimanReportReduction.QMSAPIService.Category.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\QMSAPIService\MillimanReportReduction.QMSAPIService.DirectoryServiceObject.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\QMSAPIService\MillimanReportReduction.QMSAPIService.DocumentFolder.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\QMSAPIService\MillimanReportReduction.QMSAPIService.DocumentMetaData.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\QMSAPIService\MillimanReportReduction.QMSAPIService.DocumentNode.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\QMSAPIService\MillimanReportReduction.QMSAPIService.DocumentTask.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\QMSAPIService\MillimanReportReduction.QMSAPIService.DSProvider.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\QMSAPIService\MillimanReportReduction.QMSAPIService.DSResource.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\QMSAPIService\MillimanReportReduction.QMSAPIService.EDXStatus.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\QMSAPIService\MillimanReportReduction.QMSAPIService.ExtensionUploadHandle.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\QMSAPIService\MillimanReportReduction.QMSAPIService.Field.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\QMSAPIService\MillimanReportReduction.QMSAPIService.FieldContent.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\QMSAPIService\MillimanReportReduction.QMSAPIService.License.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\QMSAPIService\MillimanReportReduction.QMSAPIService.QDSDocumentSession.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\QMSAPIService\MillimanReportReduction.QMSAPIService.QDSSettings.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\QMSAPIService\MillimanReportReduction.QMSAPIService.QVSMessage.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\QMSAPIService\MillimanReportReduction.QMSAPIService.QVSSettings.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\QMSAPIService\MillimanReportReduction.QMSAPIService.QVWSAuthentication.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\QMSAPIService\MillimanReportReduction.QMSAPIService.Report.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\QMSAPIService\MillimanReportReduction.QMSAPIService.SectionAccessTable.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\QMSAPIService\MillimanReportReduction.QMSAPIService.ServerObject.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\QMSAPIService\MillimanReportReduction.QMSAPIService.ServerObjectMetaData.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\QMSAPIService\MillimanReportReduction.QMSAPIService.ServiceInfo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\QMSAPIService\MillimanReportReduction.QMSAPIService.ServiceStatus.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\QMSAPIService\MillimanReportReduction.QMSAPIService.ServiceStatuseStatusFlag.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\QMSAPIService\MillimanReportReduction.QMSAPIService.TaskInfo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\QMSAPIService\MillimanReportReduction.QMSAPIService.TaskStatus.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\QMSAPIService\MillimanReportReduction.QMSAPIService.TaskStatusNode.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\QMSAPIService\MillimanReportReduction.QMSAPIService.TriggerEDXTaskResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\QMSAPIService\MillimanReportReduction.QMSAPIService.UserCALs.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\QMSAPIService\QMSBackendService.wsdl" />
+    <None Include="Service References\QMSAPIService\Service.wsdl" />
+    <None Include="Service References\QMSAPIService\Service.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\QMSAPIService\Service1.wsdl" />
+    <None Include="Service References\QMSAPIService\Service1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\QMSAPIService\Service10.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\QMSAPIService\Service2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\QMSAPIService\Service3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\QMSAPIService\Service4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\QMSAPIService\Service5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\QMSAPIService\Service6.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\QMSAPIService\Service7.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\QMSAPIService\Service8.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\QMSAPIService\Service9.xsd">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="HowItWorks.txt" />
+    <None Include="Service References\QMSAPIService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\QMSAPIService\configuration.svcinfo" />
+    <None Include="Service References\QMSAPIService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\QMSAPIService\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\MillimanCommon\MillimanCommon.csproj">
+      <Project>{4cf8c253-1952-4f25-a169-542feade27b4}</Project>
+      <Name>MillimanCommon</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace SystemReporting.Entities.Models
 {
     [Serializable()]
-    [Table("iislog", Schema = "public")]
     public class IisLog
     {
         // Primary key 

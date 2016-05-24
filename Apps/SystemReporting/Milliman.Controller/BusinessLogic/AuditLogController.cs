@@ -43,7 +43,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                     #region User/ Report / Group
 
                     ///Insert User
-                    if (!string.IsNullOrEmpty(entry.User.Trim()))
+                    if (!string.IsNullOrEmpty(entry.User))
                     {
                         var user = new User
                         {
@@ -58,7 +58,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                     }
 
                     //Insert Group
-                    if (!string.IsNullOrEmpty(entry.Group.Trim()))
+                    if (!string.IsNullOrEmpty(entry.Group))
                     {
                         var group = new Group
                         {
@@ -73,7 +73,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                     }
 
                     //Insert Report
-                    if (!string.IsNullOrEmpty(entry.Report.Trim()))
+                    if (!string.IsNullOrEmpty(entry.Report))
                     {
                         var report = new Report
                         {

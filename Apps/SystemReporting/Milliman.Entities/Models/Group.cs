@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 namespace SystemReporting.Entities.Models
 {
     [Serializable()]
-    [Table("group", Schema = "public")]
     public class Group
     {
         [Key]

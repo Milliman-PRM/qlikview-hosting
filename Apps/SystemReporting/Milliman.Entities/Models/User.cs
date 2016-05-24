@@ -6,7 +6,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace SystemReporting.Entities.Models
 {
     [Serializable()]
-    [Table("user", Schema = "public")]
     public class User
     {
         // Primary key

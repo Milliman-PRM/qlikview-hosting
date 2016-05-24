@@ -1,0 +1,55 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="SimpleUpdateVerify.aspx.cs" Inherits="ClientPublisher.SimpleUpdateVerify" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Project Update Verification</title>
+<style type="text/css">
+    .CenterMeHorVer{
+	    width:600px;
+	    height:150px;
+	    position:absolute;
+	    left:50%;
+	    top:50%;
+	    margin:-75px 0 0 -300px;
+        background-color:white;
+        font-size:14px;
+        border:1px solid black;
+        text-align:center;
+    }
+
+        body {
+            background:url("../images/watermark.png");
+        }
+</style>
+</head>
+<body>
+    <form id="form1" runat="server">
+      <asp:ScriptManager runat="server" ID="ScriptManager1"></asp:ScriptManager>
+   <div class="CenterMeHorVer">
+       <br />
+      <table style="width:600px">
+          <tr>
+              <td colspan="3"><asp:Panel runat="server"> Update project ' <asp:Label runat="server" ID="ProjectName"></asp:Label>' with the following new items</asp:Panel></td>
+          </tr>
+          <tr>
+               <td style="width:30%">&nbsp;</td>
+              <td style="width:40%"><asp:BulletedList runat="server" ID="NewItems"></asp:BulletedList></td>
+              <td style="width:30%">&nbsp;</td>
+          </tr>
+          <tr>
+               <td>&nbsp;</td>
+               <td>&nbsp;</td>
+               <td>&nbsp;</td>
+          </tr>
+          <tr>
+               <td>&nbsp;</td>
+               <td><telerik:RadButton runat="server" ID="ApplyUpdatesNow" Text="Apply Now" ToolTip="Apply the changes now.  Closing the window will result in updating the items for the project again." OnClick="ApplyUpdatesNow_Click"></telerik:RadButton></td>
+               <td>&nbsp;</td>
+          </tr>
+      </table>
+    </div>
+    </form>
+</body>
+</html>

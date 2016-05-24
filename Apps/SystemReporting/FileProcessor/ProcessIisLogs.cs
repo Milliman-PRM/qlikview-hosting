@@ -1,4 +1,5 @@
-﻿using ReportingCommon;
+﻿using MoreLinq;
+using ReportingCommon;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -42,16 +43,16 @@ namespace FileProcessor
                         if (args.IndexOf("productionlogs", StringComparison.Ordinal) > -1)
                         {
                             var filename = Path.GetFileName(args);
-                            ProcessLogFileMove(efilePath,sourceDirectory, destinationInDirectory, filename);
+                            ProcessLogFileMove(efilePath, sourceDirectory, destinationInDirectory, filename);
                         }
                         else
-                        {                           
+                        {
                             var listFileToProcess = FileFunctions.GetFileToReadFromStatusFile(filter, efilePath);
                             if (listFileToProcess.Count > 0)
                             {
                                 foreach (var file in listFileToProcess)
                                 {
-                                    ProcessLogFileMove(efilePath,sourceDirectory, destinationInDirectory, file);
+                                    ProcessLogFileMove(efilePath, sourceDirectory, destinationInDirectory, file);
                                 }
                             }
                         }
@@ -112,6 +113,7 @@ namespace FileProcessor
                         proxyLogEntry.EventType = eventType.ToString();
 
                         //Do not process a record that is Unknown event or that does not have a user name associated with it
+
                         if ((eventType == IisAccessEvent.IisEventType.IIS_UNKNOWN_EVENT) || (entry.HasUserName() == false))
                             continue;
 
@@ -140,9 +142,29 @@ namespace FileProcessor
                         foreach (var item in repositoryUrls)
                         {
                             group = IisAccessEvent.DecodeUriQuery(entry.UriQuery, item);
-                            if (group != null)
-                                break;
+                            if (group != null && group != "")
+                            {
+                                if (group.ToLower().IndexOf("installedapplications", StringComparison.Ordinal) > -1)
+                                {
+                                    //go back to loop.
+                                }
+                                else
+                                {
+                                    break;
+                                }
+                            }
                         }
+                        if (group != null && group != "")
+                        {
+                            //if the group still has the installedapplicaiton then ignore
+                            if (group.ToLower().IndexOf("installedapplications", StringComparison.Ordinal) > -1)
+                                group = "";
+
+                            //substring(start postions,find last index of("_REDUCEDUSERQVWS) and remove everything after that occurance of _REDUCEDUSERQVWS
+                            if (group.IndexOf("_REDUCEDUSERQVWS", StringComparison.Ordinal) > -1)
+                                group = group.Substring(0, group.LastIndexOf("_REDUCEDUSERQVWS"));
+                        }
+
                         proxyLogEntry.Group = (!string.IsNullOrEmpty(group)) ? group : string.Empty;
                         //**************************************************************************************************//
                         proxyLogEntry.StatusCode = entry.Status != 0 ? entry.Status : 0;
@@ -167,30 +189,56 @@ namespace FileProcessor
                         proxyLogEntry = new ProxyIisLog();
                     }
 
-                    //sort the list
-                    var listProxyLogsOrdered = listProxyLogs.OrderBy(a => a.EventType)
-                                                            .ThenBy(b => b.User)
-                                                            .ThenByDescending(c => c.Group);
+                    #region IISLogIns and IISLastAccessRecords ONly
+                    // DO NOT SORT BY, ORDER BY or GROUP BY. The iis data is in specific order.. use as is
+                    var pfinalList = listProxyLogs.ToList();                   
 
-                    //give me distinct latest and last records based on the two fields UN (if there is any) & Event
-                    var listProxyLogsDistinctRecords = listProxyLogsOrdered.GroupBy(x => new { x.EventType, x.User, x.Group })
-                                                                        .Select(y => y.First())
-                                                                        .OrderBy(x => x.User).ThenByDescending(x => x.EventType)
-                                                                        .Distinct();
-
-                    var listProxyExcludeDups = listProxyLogsDistinctRecords.GroupBy(x => new { x.User, x.EventType })
-                                                                        .Select(y => y.First())
-                                                                        .OrderBy(x => x.User).ThenByDescending(x => x.EventType)
-                                                                        .Distinct();
-
-                    var listProxyLogsFinal = listProxyExcludeDups.ToList();
-                    //process the list
-                    blnSucessful = ControllerIisLog.ProcessLogs(listProxyLogsFinal);
+                    var hashActiveIisUserSessions = new HashSet<string>();
+                    for (var i = pfinalList.Count - 1; i >= 0; i--)
+                    {
+                        switch ((pfinalList[i]).EventType)
+                        {
+                            case "IIS_LOGIN":
+                                {
+                                    hashActiveIisUserSessions.Remove(pfinalList[i].User);
+                                    break;
+                                }
+                            case "IIS_LAST_ACCESS":
+                                {
+                                    if (hashActiveIisUserSessions.Contains(pfinalList[i].User))
+                                    {
+                                        pfinalList.RemoveAt(i);
+                                    }
+                                    else
+                                    {
+                                        hashActiveIisUserSessions.Add(pfinalList[i].User);
+                                    }
+                                    break;
+                                }
+                            default:
+                                {
+                                    break;
+                                }
+                        }
+                    }
+                    #endregion
+            
+                    var listProxyLogsFF = pfinalList;
+                    var listProxyLogsFinal = listProxyLogsFF.ToList();
+                    if (listProxyLogsFinal.Count() == 0)
+                    {
+                        blnSucessful = true;//nothing to process
+                    }
+                    else
+                    {
+                        //process the list
+                        blnSucessful = ControllerIisLog.ProcessLogs(listProxyLogsFinal);
+                    }
                 }
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, " Class ProcessIisLogs. Method ProcessLogFile while sending the data to controller.");
+                BaseFileProcessor.LogError(ex, " Class ProcessIisLogs. Method ProcessLogFile while sending the data to controller. File " + fileNameWithDirectory);
             }
 
             return blnSucessful;

@@ -1,0 +1,181 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Milliman", "Milliman\Milliman\Milliman.csproj", "{A4E6BA79-3F26-4311-AB03-BCA27072EA18}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MillimanCommon", "MillimanCommon\MillimanCommon.csproj", "{4CF8C253-1952-4F25-A169-542FEADE27B4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MillimanSQLBrowser", "MillimanSQLBrowser\MillimanSQLBrowser.csproj", "{A3EA04A3-9995-480E-9D8C-2B58FB980DFF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MillimanSupport", "MillimanSupport\MillimanSupport\MillimanSupport.csproj", "{E22C2183-C3D4-42A2-B900-A00FC8A3E62B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MillimanProjectManConsole", "MillimanProjectManConsole\MillimanProjectManConsole.csproj", "{7C4C148E-778B-4AF1-B980-5D159028DC1C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{567257AE-B788-4C06-B687-0D4EFB504878} = {567257AE-B788-4C06-B687-0D4EFB504878}
+	EndProjectSection
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "MillimanUserAdmin", "MillimanUserAdmin\", "{308AAB17-DF36-478A-89CA-D4D2517B45FB}"
+	ProjectSection(WebsiteProperties) = preProject
+		SccProjectName = "SAK"
+		SccAuxPath = "SAK"
+		SccLocalPath = "SAK"
+		SccProvider = "SAK"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		ProjectReferences = "{4cf8c253-1952-4f25-a169-542feade27b4}|MillimanCommon.dll;"
+		Debug.AspNetCompiler.VirtualPath = "/MillimanUserAdmin"
+		Debug.AspNetCompiler.PhysicalPath = "MillimanUserAdmin\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\MillimanUserAdmin\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/MillimanUserAdmin"
+		Release.AspNetCompiler.PhysicalPath = "MillimanUserAdmin\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\MillimanUserAdmin\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "15332"
+		SlnRelativePath = "MillimanUserAdmin\"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MillimanProjectManagementConsoleServices", "MillimanProjectManagementConsoleServices\MillimanProjectManagementConsoleServices.csproj", "{567257AE-B788-4C06-B687-0D4EFB504878}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MillimanSignature", "MillimanSignature\MillimanSignature.csproj", "{A08ED3C1-C0E4-4669-8F58-98DEE889F6A1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MillimanReportReduction", "MillimanServices\MillimanReportReduction\MillimanReportReduction.csproj", "{E02B1C1D-33E8-4565-934D-13E6D7C36869}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MillimanServices", "MillimanServices\MillimanServices\MillimanServices.csproj", "{2B912551-FDE7-4BFC-820C-8AB0D6FC5CD5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MillimanServiceAppHarness", "MillimanServices\MillimanServiceTestHarness\MillimanServiceAppHarness.csproj", "{C83AF35D-C58A-46B4-9DDD-BC20E0E01959}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4CF8C253-1952-4F25-A169-542FEADE27B4} = {4CF8C253-1952-4F25-A169-542FEADE27B4}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MillimanServiceWEBTestHarness", "MillimanServices\MillimanServiceWEBTestHarness\MillimanServiceWEBTestHarness.csproj", "{5B7C067D-8554-47DE-86F2-84F579DA6C1A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MillimanClientUserAdmin", "MillimanClientUserAdmin\MillimanClientUserAdmin.csproj", "{1A8950D1-D532-4910-9A45-43A32F93FADD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LandingPage", "LandingPage", "{059115D5-22C1-41B0-8A37-F40AA74C75A9}"
+	ProjectSection(SolutionItems) = preProject
+		LandingPage\About.html = LandingPage\About.html
+		LandingPage\Contact.html = LandingPage\Contact.html
+		LandingPage\Faq.html = LandingPage\Faq.html
+		LandingPage\index.html = LandingPage\index.html
+		LandingPage\Solutions.html = LandingPage\Solutions.html
+		LandingPage\Web.config = LandingPage\Web.config
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3rdPartyAssemblies", "3rdPartyAssemblies", "{20C2822D-8EF3-443B-91B3-6B0234B97B7B}"
+	ProjectSection(SolutionItems) = preProject
+		3rdPartyAssemblies\AjaxControlToolkit.dll = 3rdPartyAssemblies\AjaxControlToolkit.dll
+		3rdPartyAssemblies\Ionic.Zip.dll = 3rdPartyAssemblies\Ionic.Zip.dll
+		3rdPartyAssemblies\Polenter.SharpSerializer.dll = 3rdPartyAssemblies\Polenter.SharpSerializer.dll
+		3rdPartyAssemblies\Telerik.Web.Design.dll = 3rdPartyAssemblies\Telerik.Web.Design.dll
+		3rdPartyAssemblies\Telerik.Web.UI.dll = 3rdPartyAssemblies\Telerik.Web.UI.dll
+		3rdPartyAssemblies\Telerik.Web.UI.Skins.dll = 3rdPartyAssemblies\Telerik.Web.UI.Skins.dll
+		3rdPartyAssemblies\Telerik.Web.UI.XML = 3rdPartyAssemblies\Telerik.Web.UI.XML
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MillimanSystemBackup", "MillimanSystemBackup\MillimanSystemBackup.csproj", "{7C5D905F-A4DD-4FF8-BF45-4F43ABE67733}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4CF8C253-1952-4F25-A169-542FEADE27B4} = {4CF8C253-1952-4F25-A169-542FEADE27B4}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MillimanValidationGC", "MillimanValidationGC\MillimanValidationGC.csproj", "{4DA8CD86-581A-4435-97DF-024C4F1F9171}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReportingCommon", "ReportingCommon\ReportingCommon.csproj", "{51F3D6D1-BE23-4950-B536-109864113C04}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4CF8C253-1952-4F25-A169-542FEADE27B4} = {4CF8C253-1952-4F25-A169-542FEADE27B4}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MillimanClientPublisher", "MillimanClientPublisher\MillimanClientPublisher.csproj", "{9B158955-C8EF-44F5-867E-0F41B76342F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MillimanQVLicenseCleaner", "..\..\Apps\MillimanQVLicenseCleaner\MillimanQVLicenseCleaner.csproj", "{AF11AB64-51FB-4936-8FCA-70DEA7CD2216}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A4E6BA79-3F26-4311-AB03-BCA27072EA18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4E6BA79-3F26-4311-AB03-BCA27072EA18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4E6BA79-3F26-4311-AB03-BCA27072EA18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4E6BA79-3F26-4311-AB03-BCA27072EA18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4CF8C253-1952-4F25-A169-542FEADE27B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CF8C253-1952-4F25-A169-542FEADE27B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CF8C253-1952-4F25-A169-542FEADE27B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CF8C253-1952-4F25-A169-542FEADE27B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3EA04A3-9995-480E-9D8C-2B58FB980DFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3EA04A3-9995-480E-9D8C-2B58FB980DFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3EA04A3-9995-480E-9D8C-2B58FB980DFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3EA04A3-9995-480E-9D8C-2B58FB980DFF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E22C2183-C3D4-42A2-B900-A00FC8A3E62B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E22C2183-C3D4-42A2-B900-A00FC8A3E62B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E22C2183-C3D4-42A2-B900-A00FC8A3E62B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E22C2183-C3D4-42A2-B900-A00FC8A3E62B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C4C148E-778B-4AF1-B980-5D159028DC1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C4C148E-778B-4AF1-B980-5D159028DC1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C4C148E-778B-4AF1-B980-5D159028DC1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C4C148E-778B-4AF1-B980-5D159028DC1C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{308AAB17-DF36-478A-89CA-D4D2517B45FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{308AAB17-DF36-478A-89CA-D4D2517B45FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{308AAB17-DF36-478A-89CA-D4D2517B45FB}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{308AAB17-DF36-478A-89CA-D4D2517B45FB}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{567257AE-B788-4C06-B687-0D4EFB504878}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{567257AE-B788-4C06-B687-0D4EFB504878}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{567257AE-B788-4C06-B687-0D4EFB504878}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{567257AE-B788-4C06-B687-0D4EFB504878}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A08ED3C1-C0E4-4669-8F58-98DEE889F6A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A08ED3C1-C0E4-4669-8F58-98DEE889F6A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A08ED3C1-C0E4-4669-8F58-98DEE889F6A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A08ED3C1-C0E4-4669-8F58-98DEE889F6A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E02B1C1D-33E8-4565-934D-13E6D7C36869}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E02B1C1D-33E8-4565-934D-13E6D7C36869}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E02B1C1D-33E8-4565-934D-13E6D7C36869}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E02B1C1D-33E8-4565-934D-13E6D7C36869}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B912551-FDE7-4BFC-820C-8AB0D6FC5CD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B912551-FDE7-4BFC-820C-8AB0D6FC5CD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B912551-FDE7-4BFC-820C-8AB0D6FC5CD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B912551-FDE7-4BFC-820C-8AB0D6FC5CD5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C83AF35D-C58A-46B4-9DDD-BC20E0E01959}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C83AF35D-C58A-46B4-9DDD-BC20E0E01959}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C83AF35D-C58A-46B4-9DDD-BC20E0E01959}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C83AF35D-C58A-46B4-9DDD-BC20E0E01959}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B7C067D-8554-47DE-86F2-84F579DA6C1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B7C067D-8554-47DE-86F2-84F579DA6C1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B7C067D-8554-47DE-86F2-84F579DA6C1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B7C067D-8554-47DE-86F2-84F579DA6C1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A8950D1-D532-4910-9A45-43A32F93FADD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A8950D1-D532-4910-9A45-43A32F93FADD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A8950D1-D532-4910-9A45-43A32F93FADD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A8950D1-D532-4910-9A45-43A32F93FADD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C5D905F-A4DD-4FF8-BF45-4F43ABE67733}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C5D905F-A4DD-4FF8-BF45-4F43ABE67733}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C5D905F-A4DD-4FF8-BF45-4F43ABE67733}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C5D905F-A4DD-4FF8-BF45-4F43ABE67733}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DA8CD86-581A-4435-97DF-024C4F1F9171}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DA8CD86-581A-4435-97DF-024C4F1F9171}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DA8CD86-581A-4435-97DF-024C4F1F9171}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DA8CD86-581A-4435-97DF-024C4F1F9171}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51F3D6D1-BE23-4950-B536-109864113C04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51F3D6D1-BE23-4950-B536-109864113C04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51F3D6D1-BE23-4950-B536-109864113C04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51F3D6D1-BE23-4950-B536-109864113C04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B158955-C8EF-44F5-867E-0F41B76342F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B158955-C8EF-44F5-867E-0F41B76342F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B158955-C8EF-44F5-867E-0F41B76342F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B158955-C8EF-44F5-867E-0F41B76342F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF11AB64-51FB-4936-8FCA-70DEA7CD2216}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF11AB64-51FB-4936-8FCA-70DEA7CD2216}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF11AB64-51FB-4936-8FCA-70DEA7CD2216}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF11AB64-51FB-4936-8FCA-70DEA7CD2216}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

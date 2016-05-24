@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Milliman - Overview</title>
+    <link href="css/site.css" rel="stylesheet" />
+</head>
+<body>
+    <div id="body-wrapper">
+
+        <div id="header">
+            <div id="header-logo">
+                <img src="images/PRM-Analytics-Logo.png" alt="milliman-prm-analytics-logo" />
+            </div>
+            <div id="header-nav">
+                <table id="header-nav-menu">
+                    <tr>
+                        <td><a href="http://milliman.com" target="_blank">Milliman Worldwide</a></td>
+                        <td class="anchorDelimiter">|</td>
+                        <td><a href="Contact.html">Contact Us</a></td>
+                        <td class="anchorDelimiter">|</td>
+                        <td><a href="#">Client Login</a></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <hr />
+
+        <div id="content-wrapper">
+            <div id="sidebar-nav"></div>
+
+            <div class="vertRule height-600"></div>
+
+            <div id="overview">
+
+                <img src="images/milliman-prm-analytics.png" alt="prm-analytics" />
+                <p>
+                    <h2>Care Coordinator Report</h2>
+                </p>
+                <p>
+                    Milliman PRM is used by care coordinators, medical directors, physicians, and other professionals who are
+                    responsible for population health management. PRM analyizes historic patient data (adminstrative claims
+                    data and clinical data, when available) and, using proprietary predicitve models, produces Opportunity 
+                    Prospective Scores - predicted estimates of a patient's  healthcare expenses and utilization over the 
+                    next six months, absent additional ambulatory management intervention.  The premise for ranking is that 
+                    patients, whose healthcare expenses volatility and potential for avoidable costs are the highest, should 
+                    be ranked as a priority for additional care management. PRM provides information at the population level, 
+                    and facilitates drill down to the individual patient level, allowing care managers the ability to understand 
+                    the clinical and non-clinical drivers of potentially avoidable healthcare expenditures for each patient.
+                </p>
+            </div>
+
+            <div class="vertRule height-600"></div>
+
+            <div id="sidebar-info"></div>
+        </div>
+
+        <div id="footer-nav"></div>
+
+        <script src="js/jquery-1.11.1.min.js"></script>
+        <script src="js/global.js"></script>
+        <script src="js/header-nav.js"></script>
+        <script src="js/footer-nav.js"></script>
+        <script src="js/sidebar-nav.js"></script>
+        <script src="js/sidebar-info.js"></script>
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                Milliman.SidebarNav.GetNavigtion('solutions', 'sidebar-nav');
+                Milliman.SidebarInfo.GetInfo('sidebar-info');
+                //Milliman.FooterNav.GetPageFooter('footer-nav');
+            });
+        </script>
+    </div>
+</body>
+</html>

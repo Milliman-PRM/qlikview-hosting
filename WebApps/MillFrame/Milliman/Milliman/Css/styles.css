@@ -1,0 +1,338 @@
+
+.templatecontent
+{
+	margin:0px;
+
+
+    padding: 0px 0px 0px 0px;
+    overflow:hidden;
+    position:absolute;
+    top:0px;
+    bottom:0px;
+    left:0px;
+    right:0px;
+}
+
+.logincontent
+{
+	margin:auto;
+	width: 800px;
+	background-color: White;
+	border: #999999 1px solid;
+	padding: 1px;
+   
+}
+
+.content
+{
+	margin: auto;
+	width: 280px;
+}
+
+.header
+{
+	padding-bottom: 10px;
+	border-bottom: #ECA920 1px solid;
+	margin-bottom: 0px;
+}
+
+.header img
+{
+	border-style: none;
+    border-color: inherit;
+    border-width: 0px;
+    margin: 10px 10px 0 0;
+    width: 291px;
+}
+
+body 
+{
+	font: 11px Tahoma;	
+	margin: auto;	
+	background-color: white;
+	padding: 10px;
+    min-width:800px;
+}
+
+ul
+{	
+	margin-top: 2px;	
+}
+
+li
+{
+	padding-left: 0px;	
+}
+
+.bodytext
+{
+	font: 11px Tahoma;	
+}
+
+.button, .button:hover,
+.okbutton, .okbutton:hover,
+.cancelbutton, .cancelbutton:hover
+{
+	padding: 0px;
+	border: 0px;
+	margin: 1px;
+	width: 92px;
+	color: black;
+	font-weight: normal;
+	height: 26px;
+	background-color: transparent;
+	text-align: center;
+	font-size: 11px;
+	vertical-align: middle;
+}
+
+.button, .okbutton, .cancelbutton
+{
+	background-image: url(btn.png);	
+}
+
+.button:hover, .okbutton:hover, .cancelbutton:hover
+{
+	background-image: url(btnact.png);
+}
+
+.textbox,.password,.dropdown,.listbox
+{
+	font: 11px Verdana;
+	width: 160px;
+}
+
+.textbox,.password,.dropdown,.listbox{
+    margin-left: 2px;
+    background-color: #F7F7F7;
+    border:1px solid;
+    border-color: #AFD1FF;
+}
+
+.textbox:focus,.password:focus,.dropdown:focus{
+	background-color: #FFFFFF;
+    border-color: #AFD1FF;
+}
+
+.checkbox
+{
+	font: 11px Tahoma;
+	color: black;
+}
+
+.radio
+{
+	font: 11px Tahoma;
+	color: black;
+}
+
+.bodytext
+{
+	font: 11px Tahoma;	
+	color: #000000;	
+}
+
+.bodytextb
+{
+	font: bold 11px Tahoma;
+	color: #000000;
+}
+
+.bodytexti
+{
+	font: italic 11px Tahoma;	
+	color: #000000;
+}
+
+.error-1
+{
+	font: 12px Tahoma;
+	color: #EE8A1E;
+	padding-left: 0px;
+    vertical-align:middle;
+}
+
+
+#cssmenu ul,
+#cssmenu li,
+#cssmenu span,
+#cssmenu a {
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+#cssmenu {
+  line-height: 1;
+  border-radius: 5px 5px 0 0;
+  -moz-border-radius: 5px 5px 0 0;
+  -webkit-border-radius: 5px 5px 0 0;
+  background: #F5F5F5; 
+  /*background: -moz-linear-gradient(top, #ffffff 0%, #ffffff 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffffff), color-stop(100%, #ffffff));
+  background: -webkit-linear-gradient(top, #ffffff 0%, #ffffff 100%);
+  background: -o-linear-gradient(top, #ffffff 0%, #ffffff 100%);
+  background: -ms-linear-gradient(top, #ffffff 0%, #ffffff 100%);
+  background: linear-gradient(to bottom, #ffffff 0%, #ffffff 100%);*/
+  border-bottom: 1px solid #ECA920;
+  width: 100%;
+}
+#cssmenu:after,
+#cssmenu ul:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+#cssmenu a {
+  background: #ffffff;
+  background: -moz-linear-gradient(top, #ffffff 0%, #ffffff 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffffff), color-stop(100%, #ffffff));
+  background: -webkit-linear-gradient(top, #ffffff 0%, #ffffff 100%);
+  background: -o-linear-gradient(top, #ffffff 0%, #ffffff 100%);
+  background: -ms-linear-gradient(top, #ffffff 0%, #ffffff 100%);
+  background: linear-gradient(to bottom, #ffffff 0%, #ffffff 100%);
+  color: #ffffff;
+  display: block;
+  font-family: Helvetica, Arial, Verdana, sans-serif;
+  padding: 10px 20px;
+  text-decoration: none;
+}
+#cssmenu ul {
+  list-style: none;
+}
+#cssmenu > ul > li {
+  display: inline-block;
+  float: left;
+  margin: 0;
+}
+#cssmenu.align-center {
+  text-align: center;
+}
+#cssmenu.align-center > ul > li {
+  float: none;
+}
+#cssmenu.align-center ul ul {
+  text-align: left;
+}
+#cssmenu.align-right > ul {
+  float: right;
+}
+#cssmenu.align-right ul ul {
+  text-align: right;
+}
+#cssmenu > ul > li > a {
+  color: #000000;
+  font-size: 12px;
+}
+#cssmenu > ul > li:hover:after {
+  content: '';
+  display: block;
+  width: 0;
+  height: 0;
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid #ECA920;
+  margin-left: -10px;
+}
+#cssmenu > ul > li:first-child > a {
+  border-radius: 5px 0 0 0;
+  -moz-border-radius: 5px 0 0 0;
+  -webkit-border-radius: 5px 0 0 0;
+}
+#cssmenu.align-right > ul > li:first-child > a,
+#cssmenu.align-center > ul > li:first-child > a {
+  border-radius: 0;
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+}
+#cssmenu.align-right > ul > li:last-child > a {
+  border-radius: 0 5px 0 0;
+  -moz-border-radius: 0 5px 0 0;
+  -webkit-border-radius: 0 5px 0 0;
+}
+#cssmenu > ul > li.active > a,
+#cssmenu > ul > li:hover > a {
+  color: #000000;
+  box-shadow: inset 0 0 3px #d9d9d9;
+  -moz-box-shadow: inset 0 0 3px #d9d9d9;
+  -webkit-box-shadow: inset 0 0 3px #d9d9d9;
+  background: #f2f2f2;
+  background: -moz-linear-gradient(top, #ffffff 0%, #f2f2f2 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffffff), color-stop(100%, #f2f2f2));
+  background: -webkit-linear-gradient(top, #ffffff 0%, #f2f2f2 100%);
+  background: -o-linear-gradient(top, #ffffff 0%, #f2f2f2 100%);
+  background: -ms-linear-gradient(top, #ffffff 0%, #f2f2f2 100%);
+  background: linear-gradient(to bottom, #ffffff 0%, #f2f2f2 100%);
+}
+#cssmenu > ul > li.noactive > a {
+    display: none;
+    }
+#cssmenu .has-sub {
+  z-index: 1;
+}
+#cssmenu .has-sub:hover > ul {
+  display: block;
+}
+#cssmenu .has-sub ul {
+  display: none;
+  position: absolute;
+  width: 200px;
+  top: 100%;
+  left: 0;
+}
+#cssmenu.align-right .has-sub ul {
+  left: auto;
+  right: 0;
+}
+#cssmenu .has-sub ul li {
+  *margin-bottom: -1px;
+}
+#cssmenu .has-sub ul li a {
+  background: #ECA920;
+  border-bottom: 1px dotted lightgray;
+  font-size: 11px;
+  filter: none;
+  display: block;
+  line-height: 120%;
+  padding: 10px;
+  color: #ffffff;
+}
+#cssmenu .has-sub ul li:hover a {
+  background: #ECA920;
+  opacity:0.75;
+}
+#cssmenu ul ul li:hover > a {
+  color: #ffffff;
+}
+#cssmenu .has-sub .has-sub:hover > ul {
+  display: block;
+}
+#cssmenu .has-sub .has-sub ul {
+  display: none;
+  position: absolute;
+  left: 100%;
+  top: 0;
+}
+#cssmenu.align-right .has-sub .has-sub ul,
+#cssmenu.align-right ul ul ul {
+  left: auto;
+  right: 100%;
+}
+#cssmenu .has-sub .has-sub ul li a {
+  background: #ECA920;
+  border-bottom: 1px dotted lightgray;
+}
+#cssmenu .has-sub .has-sub ul li a:hover {
+  background: #ECA920;
+  opacity:0.75;
+}
+#cssmenu ul ul li.last > a,
+#cssmenu ul ul li:last-child > a,
+#cssmenu ul ul ul li.last > a,
+#cssmenu ul ul ul li:last-child > a,
+#cssmenu .has-sub ul li:last-child > a,
+#cssmenu .has-sub ul li.last > a {
+  border-bottom: 0;
+}

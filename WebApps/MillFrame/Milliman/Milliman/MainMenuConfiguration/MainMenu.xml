@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Menu>
+  <Group Flow='Horizontal'>
+    <Item  Text='Products' Href='javascript:location.reload(true);'  Width='100px' Target='' LeftLogo="images/products.png" />
+    <Item Text='Profile' Href='javascript:OpenProfile();' Width='100px' LeftLogo="images/administrator-icon.png" />
+    <Item Text='Help' Width='100px'>
+      <Group Flow='Vertical'>
+        <Item Text='Support' Width='200px' Href="mailto:prm.support@milliman.com?Subject='Support%20Request'" Target='_blank'/>
+        <Item Text='About Milliman' Width='200px' Href='http://www.milliman.com' Target='_blank'  />
+      </Group>
+    </Item>
+    _INSERT_CLIENT_ADMIN_ITEM_
+    _INSERT_PUBLISHER_ADMIN_ITEM_
+    <Item Text='Logout' Value='Logout' Width='100px' PostBack='true' LeftLogo="images/users-exit-icon.png" />
+  </Group>
+</Menu> 

@@ -12,7 +12,8 @@ namespace SystemReporting.Utilities
 
         #region DB Namespace
 
-        public const string DB_POSTGRESQL_NAMESPACE = "public";
+        public const string DB_POSTGRESQL_NAMESPACE_PUBLIC = "public";
+        public const string DB_POSTGRESQL_NAMESPACE_SYSREPORTING = "schema_systemreporting";
         public const string DB_SQL_NAMESPACE = "dbo";
 
         #endregion
