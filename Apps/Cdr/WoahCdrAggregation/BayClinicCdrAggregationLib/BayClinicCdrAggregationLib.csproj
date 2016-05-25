@@ -34,6 +34,18 @@
     <Reference Include="Devart.Data.Linq, Version=4.5.986.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL" />
     <Reference Include="Devart.Data.PostgreSql, Version=7.5.649.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL" />
     <Reference Include="Devart.Data.PostgreSql.Linq, Version=4.5.986.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL" />
+    <Reference Include="MongoDB.Bson, Version=2.2.4.26, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MongoDB.Bson.2.2.4\lib\net45\MongoDB.Bson.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MongoDB.Driver, Version=2.2.4.26, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MongoDB.Driver.2.2.4\lib\net45\MongoDB.Driver.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MongoDB.Driver.Core, Version=2.2.4.26, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MongoDB.Driver.Core.2.2.4\lib\net45\MongoDB.Driver.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
@@ -47,6 +59,10 @@
   <ItemGroup>
     <Compile Include="BayClinicAggregationWorkerThreadManager.cs" />
     <Compile Include="BayclinicCernerAmbulatoryBatchAggregator.cs" />
+    <Compile Include="CernerReferencedCodeDictionaries.cs" />
+    <Compile Include="MongoDbEntities\MongodbIdentifierEntity.cs" />
+    <Compile Include="MongoDbEntities\MongodbPersonEntity.cs" />
+    <Compile Include="MongoDbEntities\MongodbRefCodeEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -58,6 +74,9 @@
       <Project>{5fdfbd80-5d24-40a0-985f-c17f579d8517}</Project>
       <Name>MongoDbWrap</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

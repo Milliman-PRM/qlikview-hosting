@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Bson.IO;
+using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
 
 namespace MongoDbWrap
@@ -99,25 +100,27 @@ namespace MongoDbWrap
             return true;
         }
 
+#if false
         public List<Dictionary<String, String>> GetDocuments(String CollectionName, Dictionary<String,String> SearchFilter)
         {
-            List<Dictionary<String, String>> ReturnValue = new List<Dictionary<String, String>>();
-            List<BsonDocument> ReturnValb = new List<BsonDocument>();
+            List<Dictionary<String, String>> ReturnDict = new List<Dictionary<String, String>>();
+            List<MongodbPersonEntity> ReturnPersons = new List<MongodbPersonEntity>();
 
             if (_Db != null)
             {
                 BsonDocument Filter = new BsonDocument(SearchFilter);
-                Filter = new BsonDocument { new BsonElement("last_name", new BsonString("{$ne: \"\"}")) };
+                Filter = new BsonDocument ( );
+                //Filter = new BsonDocument { new BsonElement("last_name", new BsonString(SearchFilter["last_name"])) };
                 ProjectionDefinition<Dictionary<String, String>> Proj = Builders<Dictionary<String, String>>.Projection.Exclude("_id");
 
-                ReturnValb = _Db.GetCollection<BsonDocument>(CollectionName).Find(x => x["last_name"] != "").ToList();
-                ReturnValb = _Db.GetCollection<BsonDocument>(CollectionName).Find(Filter).ToList();
-                //ReturnValue = _Db.GetCollection<Dictionary<String, String>>(CollectionName).Find(Filter).Project<Dictionary<String, String>>(Proj).ToList();
-                ReturnValue = _Db.GetCollection<Dictionary<String, String>>(CollectionName).Find(Filter).Project<Dictionary<String, String>>(Proj).ToList();
+                //ReturnValb = _Db.GetCollection<BsonDocument>(CollectionName).Find(x => x["last_name"] != "").ToList();
+                ReturnPersons = _Db.GetCollection<Person>(CollectionName).Find("{last_name: {$ne: \"\"}}").ToList();
+                ReturnDict = _Db.GetCollection<Dictionary<String, String>>(CollectionName).Find("{last_name: {$ne: \"\"}}").Project<Dictionary<String, String>>(Proj).ToList();
             }
 
-            return ReturnValue;
+            return ReturnDict;
         }
+#endif
 
         public List<string> GetCollectionNames()
         {
@@ -197,4 +200,5 @@ namespace MongoDbWrap
         }
 
     }
+
 }

@@ -71,12 +71,14 @@ namespace BayClinicCdrAggregationLib
             String PgCxnName = (String)ThreadArg;
             while (!EndThreadSignal)
             {
+                bool Success;
                 BayClinicCernerAmbulatoryBatchAggregator Aggregator = new BayClinicCernerAmbulatoryBatchAggregator(PgCxnName);
-                bool Success = Aggregator.Initialize();
+                Success = Aggregator.Initialize();
+                Success = Aggregator.AggregateAllAvailablePatients();
 
                 // TODO this is where the meat and potatoes are delegated, use Aggregator for this processing
 
-                Thread.Sleep(3000);
+                Thread.Sleep(5000);
             }
         }
 
