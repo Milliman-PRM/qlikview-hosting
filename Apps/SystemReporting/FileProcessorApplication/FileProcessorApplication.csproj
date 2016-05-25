@@ -66,9 +66,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="appsettings.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="appsettings_Prod.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
