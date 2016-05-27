@@ -78,7 +78,7 @@ namespace BayClinicCdrAggregationLib
 
                 // TODO this is where the meat and potatoes are delegated, use Aggregator for this processing
 
-                Thread.Sleep(5000);
+                Thread.Sleep(50000);
             }
         }
 

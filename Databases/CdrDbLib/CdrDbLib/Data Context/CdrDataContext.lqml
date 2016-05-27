@@ -343,6 +343,7 @@
     <Member Name="Separated" ed:Guid="eec8265a-8552-41f9-944b-1f3b3f6940e5" />
     <Member Name="DomesticPartner" ed:Guid="e5854072-83c3-4d2f-9266-a58368eaf3ed" />
     <Member Name="Other" ed:Guid="5a995792-2847-4dbe-951d-8b6697657147" />
+    <Member Name="Unspecified" ed:Guid="502b3523-e5c1-460a-aa8d-5a1b5714be55" />
   </EnumType>
   <EnumType Name="AggregationRunStatus" IsFlags="true" Type="AggregationRunStatus" ed:Guid="8dd9d4ad-280c-4d27-a479-3c3d94b4b04f">
     <Member Name="RunNumberReserved" Value="1" ed:Guid="d4f5de1f-baf8-491e-a368-bb3f924abb96" />

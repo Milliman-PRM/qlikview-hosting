@@ -91,5 +91,8 @@ namespace BayClinicCernerAmbulatory
 
         [BsonElement("ImportFile")]
         public String ImportFile;
+
+        [BsonElement("lastaggregationrun")]
+        public long LastAggregationRun;
     }
 }
