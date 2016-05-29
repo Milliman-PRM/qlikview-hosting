@@ -9,7 +9,7 @@ using MongoDB.Bson.Serialization.Attributes;
 namespace BayClinicCernerAmbulatory
 {
     [BsonIgnoreExtraElements]
-    class MongodbPhoneEntity
+    class MongodbAddressEntity
     {
 #pragma warning disable 0649
         [BsonElement("_id")]
@@ -30,23 +30,47 @@ namespace BayClinicCernerAmbulatory
         [BsonElement("entity_type")]
         public String EntityType;
 
-        [BsonElement("contact_method")]
-        public String ContactMethod;
+        [BsonElement("address_line_1")]
+        public String AddressLine1;
 
-        [BsonElement("extension")]
-        public String Extension;
+        [BsonElement("address_line_2")]
+        public String AddressLine2;
 
-        [BsonElement("phone_number")]
-        public String PhoneNumber;
+        [BsonElement("address_line_3")]
+        public String AddressLine3;
 
-        [BsonElement("description")]
-        public String Description;
+        [BsonElement("address_line_4")]
+        public String AddressLine4;
 
-        [BsonElement("contact")]
-        public String Contact;
+        [BsonElement("city_text")]
+        public String CityText;
 
-        [BsonElement("instruction")]
-        public String Instruction;
+        [BsonElement("city_code")]
+        public String CityCode;
+
+        [BsonElement("state_text")]
+        public String StateText;
+
+        [BsonElement("state_code")]
+        public String StateCode;
+
+        [BsonElement("zipcode")]
+        public String ZipCode;
+
+        [BsonElement("zipcode_key")]
+        public String ZipCodeKey;
+
+        [BsonElement("country_text")]
+        public String CountryText;
+
+        [BsonElement("country_code")]
+        public String CountryCode;
+
+        [BsonElement("county_text")]
+        public String CountyText;
+
+        [BsonElement("county_code")]
+        public String CountyCode;
 
         [BsonElement("active")]
         public String Active;
@@ -68,7 +92,6 @@ namespace BayClinicCernerAmbulatory
 
         [BsonElement("lastaggregationrun")]
         public long LastAggregationRun;
-
 #pragma warning restore 0649
     }
 }

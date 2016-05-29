@@ -60,6 +60,8 @@
     <Compile Include="BayClinicAggregationWorkerThreadManager.cs" />
     <Compile Include="BayclinicCernerAmbulatoryBatchAggregator.cs" />
     <Compile Include="CernerReferencedCodeDictionaries.cs" />
+    <Compile Include="MongoAggregationRunUpdater.cs" />
+    <Compile Include="MongoDbEntities\MongodbAddressEntity.cs" />
     <Compile Include="MongoDbEntities\MongodbIdentifierEntity.cs" />
     <Compile Include="MongoDbEntities\MongodbPersonEntity.cs" />
     <Compile Include="MongoDbEntities\MongodbPhoneEntity.cs" />

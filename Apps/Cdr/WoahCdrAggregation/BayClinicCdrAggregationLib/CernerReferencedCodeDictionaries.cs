@@ -10,6 +10,7 @@ using MongoDB.Bson.Serialization;
 using MongoDB.Bson.IO;
 using MongoDB.Driver;
 using CdrContext;
+using System.Media;
 
 namespace BayClinicCernerAmbulatory
 {
@@ -25,8 +26,10 @@ namespace BayClinicCernerAmbulatory
         public Dictionary<String, String> RaceCodeMeanings = new Dictionary<string, string>();
         public Dictionary<String, String> LanguageCodeMeanings = new Dictionary<string, string>();
         public Dictionary<String, String> EthnicityCodeMeanings = new Dictionary<string, string>();
+        public Dictionary<String, String> PhoneTypeCodeMeanings = new Dictionary<string, string>();
+        public Dictionary<String, String> AddressTypeCodeMeanings = new Dictionary<string, string>();
         //public Dictionary<String, String> ...CodeMeanings = new Dictionary<string, string>();
-
+        
         #region temporary validation functions
 
         private void ValidateRefCodeFieldList(String FileName, int TestCount)
@@ -42,7 +45,7 @@ namespace BayClinicCernerAmbulatory
                 Fields.Add(record.Key);
             }
 
-            Trace.WriteLineIf(Fields.Count > 0, FileName + " field list has fields: " + String.Join(", ", Fields));
+            //Trace.WriteLineIf(Fields.Count > 0, FileName + " field list has fields: " + String.Join(", ", Fields));
             if (Fields.Count != TestCount)
                 throw new Exception();
         }
@@ -56,19 +59,23 @@ namespace BayClinicCernerAmbulatory
             ValidateRefCodeFieldList("PERSON", 12);
 
             bool Success =
-                   InitializeCodeDictionary("PERSON", new String[] {"GENDER" },                  ref GenderCodeMeanings)
-                && InitializeCodeDictionary("PERSON", new String[] {"DECEASED" },                ref DeceasedCodeMeanings)
-                && InitializeCodeDictionary("PERSON", new String[] {"BIRTH_DATE_PRECISION" },    ref BirthDatePrecisionCodeMeanings)
-                && InitializeCodeDictionary("PERSON", new String[] {"DECEASED_DATE_PRECISION" }, ref DeceasedDatePrecisionCodeMeanings)
-                && InitializeCodeDictionary("PERSON", new String[] {"MARITAL_STATUS", "ADDITIONAL_MARITAL_STATUS" }, ref MaritalStatusCodeMeanings)
-                && InitializeCodeDictionary("PERSON", new String[] {"RACE",           "ADDITIONAL_RACE"           }, ref RaceCodeMeanings)
-                && InitializeCodeDictionary("PERSON", new String[] {"LANGUAGE",       "ADDITIONAL_LANGUAGE"       }, ref LanguageCodeMeanings)
-                && InitializeCodeDictionary("PERSON", new String[] {"ETHNICITY",      "ADDITIONAL_ETHNICITY"      }, ref EthnicityCodeMeanings)
-
+                   InitializeCodeDictionary("PERSON", new String[] {"GENDER"},                  ref GenderCodeMeanings)
+                && InitializeCodeDictionary("PERSON", new String[] {"DECEASED"},                ref DeceasedCodeMeanings)
+                && InitializeCodeDictionary("PERSON", new String[] {"BIRTH_DATE_PRECISION"},    ref BirthDatePrecisionCodeMeanings)
+                && InitializeCodeDictionary("PERSON", new String[] {"DECEASED_DATE_PRECISION"}, ref DeceasedDatePrecisionCodeMeanings)
+                && InitializeCodeDictionary("PERSON", new String[] {"MARITAL_STATUS", "ADDITIONAL_MARITAL_STATUS"}, ref MaritalStatusCodeMeanings)
+                && InitializeCodeDictionary("PERSON", new String[] {"RACE",           "ADDITIONAL_RACE"          }, ref RaceCodeMeanings)
+                && InitializeCodeDictionary("PERSON", new String[] {"LANGUAGE",       "ADDITIONAL_LANGUAGE"      }, ref LanguageCodeMeanings)
+                && InitializeCodeDictionary("PERSON", new String[] {"ETHNICITY",      "ADDITIONAL_ETHNICITY"     }, ref EthnicityCodeMeanings)
                 // Likely these won't be present in the ambulatory extract?
-                //...&& InitializeCodeDictionary("PERSON", "HOME_ADDRESS", ref CodeMeanings)
-                //...&& InitializeCodeDictionary("PERSON", "IDENTIFIERS", ref CodeMeanings)  // ???
-                //...&& InitializeCodeDictionary("PERSON", "STATUS", ref CodeMeanings)  // ???
+                //&& InitializeCodeDictionary("PERSON", "HOME_ADDRESS", ref CodeMeanings)
+                //&& InitializeCodeDictionary("PERSON", "IDENTIFIERS", ref CodeMeanings)  // ???
+                //&& InitializeCodeDictionary("PERSON", "STATUS", ref CodeMeanings)  // ???
+
+                && InitializeCodeDictionary("PHONE",   new String[] {"TYPE"}, ref PhoneTypeCodeMeanings)
+
+                && InitializeCodeDictionary("ADDRESS", new String[] {"TYPE"}, ref AddressTypeCodeMeanings)
+
                 ;
 
             return Success;
@@ -118,15 +125,68 @@ namespace BayClinicCernerAmbulatory
                         return Gender.Female;
                     case "male":
                         return Gender.Male;
+                    case "unspecified":
+                        return Gender.Unspecified;
                     default:
-                        Trace.WriteLine("Unsupported Patient-Gender encountered: " + GenderCodeMeanings[CernerCode]);
+                        Trace.WriteLine("Unsupported Patient-Gender encountered: " + GenderCodeMeanings[CernerCode] + " with code " + CernerCode);
                         return Gender.Unspecified;
                 }
             }
-            else
+
+            return Gender.Unspecified;
+        }
+
+        public AddressType GetCdrAddressTypeEnum(String CernerCode)
+        {
+            if (AddressTypeCodeMeanings.ContainsKey(CernerCode))
             {
-                return Gender.Unspecified;
+                switch (AddressTypeCodeMeanings[CernerCode].ToLower())
+                {
+                    case "unspecified":
+                        return AddressType.Unspecified;
+                    case "home":
+                        return AddressType.Home;
+                    case "business":
+                        return AddressType.Business;
+                    case "mailing":
+                        return AddressType.Mailing;
+                    case "eprescribing":
+                        return AddressType.ePrescribing;
+                    default:
+                        SystemSounds.Beep.Play();
+                        Trace.WriteLine("Unsupported Address-Type encountered: " + AddressTypeCodeMeanings[CernerCode] + " with code " + CernerCode);
+                        return AddressType.Unspecified;
+                }
             }
+
+            return AddressType.Unspecified;
+        }
+
+        public PhoneType GetCdrPhoneTypeEnum(String CernerCode)
+        {
+            if (PhoneTypeCodeMeanings.ContainsKey(CernerCode))
+            {
+                switch (PhoneTypeCodeMeanings[CernerCode].ToLower())
+                {
+                    case "unspecified":
+                        return PhoneType.Unspecified;
+                    case "home":
+                        return PhoneType.Home;
+                    case "cell":
+                        return PhoneType.Mobile;
+                    case "business":
+                        return PhoneType.Work;
+                    case "fax business":
+                        return PhoneType.Fax;
+                    case "internal secure":
+                        return PhoneType.Other;
+                    default:
+                        Trace.WriteLine("Unsupported Phone-Type encountered: " + PhoneTypeCodeMeanings[CernerCode] + " with code " + CernerCode);
+                        return PhoneType.Other;
+                }
+            }
+
+            return PhoneType.Unspecified;
         }
 
         public MaritalStatus GetCdrMaritalStatusEnum(String CernerCode)
@@ -155,16 +215,16 @@ namespace BayClinicCernerAmbulatory
                         return MaritalStatus.Other;
                     case "annulled":
                         return MaritalStatus.Divorced;
+                    case "unspecified":
+                        return MaritalStatus.Unspecified;
 
                     default:
-                        Trace.WriteLine("Unsupported Patient-MaritalStatus encountered: " + MaritalStatusCodeMeanings[CernerCode]);
+                        Trace.WriteLine("Unsupported Patient-MaritalStatus encountered: " + MaritalStatusCodeMeanings[CernerCode] + " with code " + CernerCode);
                         return MaritalStatus.Unspecified;
                 }
             }
-            else
-            {
-                return MaritalStatus.Unspecified;
-            }
+
+            return MaritalStatus.Unspecified;
         }
 
     }

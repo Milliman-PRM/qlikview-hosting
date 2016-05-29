@@ -46,6 +46,7 @@
         <File Name="CdrDataContext.PhoneType.cs" Project="CdrDbLib" ProjectFolder="Entities" />
         <File Name="CdrDataContext.MaritalStatus.cs" Project="CdrDbLib" ProjectFolder="Entities" />
         <File Name="CdrDataContext.AggregationRunStatus.cs" Project="CdrDbLib" ProjectFolder="Entities" />
+        <File Name="CdrDataContext.AddressType.cs" Project="CdrDbLib" ProjectFolder="Entities" />
       </GeneratedFiles>
     </Generation>
     <DatabaseFirstNamingRules>

@@ -22,35 +22,31 @@ namespace CdrContext
 {
 
     /// <summary>
-    /// There are no comments for PhoneType in the schema.
+    /// There are no comments for AddressType in the schema.
     /// </summary>
-    public enum PhoneType : short
+    public enum AddressType : short
     {
     
         /// <summary>
-        /// There are no comments for PhoneType.Unspecified in the schema.
+        /// There are no comments for AddressType.Unspecified in the schema.
         /// </summary>
         Unspecified,    
         /// <summary>
-        /// There are no comments for PhoneType.Home in the schema.
+        /// There are no comments for AddressType.Home in the schema.
         /// </summary>
         Home,    
         /// <summary>
-        /// There are no comments for PhoneType.Work in the schema.
+        /// There are no comments for AddressType.Business in the schema.
         /// </summary>
-        Work,    
+        Business,    
         /// <summary>
-        /// There are no comments for PhoneType.Mobile in the schema.
+        /// There are no comments for AddressType.Mailing in the schema.
         /// </summary>
-        Mobile,    
+        Mailing,    
         /// <summary>
-        /// There are no comments for PhoneType.Fax in the schema.
+        /// There are no comments for AddressType.ePrescribing in the schema.
         /// </summary>
-        Fax,    
-        /// <summary>
-        /// There are no comments for PhoneType.Other in the schema.
-        /// </summary>
-        Other
+        ePrescribing
     }
 
 }

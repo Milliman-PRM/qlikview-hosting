@@ -51,6 +51,7 @@
     <Compile Include="Entities\CdrDataContext.Address.Generated.cs">
       <DependentUpon>CdrDataContext.Address.cs</DependentUpon>
     </Compile>
+    <Compile Include="Entities\CdrDataContext.AddressType.cs" />
     <Compile Include="Entities\CdrDataContext.AggregationRun.cs" />
     <Compile Include="Entities\CdrDataContext.AggregationRun.Generated.cs">
       <DependentUpon>CdrDataContext.AggregationRun.cs</DependentUpon>
@@ -145,6 +146,7 @@
     <None Include="Data Context\CdrDataContext.lqml">
       <Generator>DevartLinqToSqlGenerator</Generator>
       <LastGenOutput>CdrDataContext.info</LastGenOutput>
+      <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

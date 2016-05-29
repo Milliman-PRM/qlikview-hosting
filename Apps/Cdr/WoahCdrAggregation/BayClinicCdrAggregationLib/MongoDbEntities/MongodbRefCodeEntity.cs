@@ -11,6 +11,7 @@ namespace BayClinicCernerAmbulatory
     [BsonIgnoreExtraElements]
     class MongodbRefCodeEntity
     {
+#pragma warning disable 0649
         [BsonElement("_id")]
         public ObjectId Id;
 
@@ -37,5 +38,6 @@ namespace BayClinicCernerAmbulatory
 
         [BsonElement("ImportFile")]
         public String ImportFile;
+#pragma warning restore 0649
     }
 }
