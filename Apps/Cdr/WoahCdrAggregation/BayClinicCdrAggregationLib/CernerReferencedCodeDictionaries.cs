@@ -10,6 +10,7 @@ using MongoDB.Bson.Serialization;
 using MongoDB.Bson.IO;
 using MongoDB.Driver;
 using CdrContext;
+using CdrDbLib;
 using System.Media;
 
 namespace BayClinicCernerAmbulatory
@@ -28,8 +29,11 @@ namespace BayClinicCernerAmbulatory
         public Dictionary<String, String> EthnicityCodeMeanings = new Dictionary<string, string>();
         public Dictionary<String, String> PhoneTypeCodeMeanings = new Dictionary<string, string>();
         public Dictionary<String, String> AddressTypeCodeMeanings = new Dictionary<string, string>();
+        public Dictionary<String, String> IdentifierTypeCodeMeanings = new Dictionary<string, string>();
+        public Dictionary<String, String> IdentifierGroupCodeMeanings = new Dictionary<string, string>();
+        public Dictionary<String, String> VisitLocationCodeMeanings = new Dictionary<string, string>();
         //public Dictionary<String, String> ...CodeMeanings = new Dictionary<string, string>();
-        
+
         #region temporary validation functions
 
         private void ValidateRefCodeFieldList(String FileName, int TestCount)
@@ -45,9 +49,12 @@ namespace BayClinicCernerAmbulatory
                 Fields.Add(record.Key);
             }
 
-            //Trace.WriteLineIf(Fields.Count > 0, FileName + " field list has fields: " + String.Join(", ", Fields));
+            Trace.WriteLineIf(Fields.Count > 0, FileName + " field list has fields: " + String.Join(", ", Fields));
+
+            /*
             if (Fields.Count != TestCount)
                 throw new Exception();
+            */
         }
 
         #endregion
@@ -76,7 +83,14 @@ namespace BayClinicCernerAmbulatory
 
                 && InitializeCodeDictionary("ADDRESS", new String[] {"TYPE"}, ref AddressTypeCodeMeanings)
 
+                && InitializeCodeDictionary("IDENTIFIERS", new String[] { "IDENTIFIER_TYPE" }, ref IdentifierTypeCodeMeanings)
+                && InitializeCodeDictionary("IDENTIFIERS", new String[] { "IDENTIFIER_GROUP" }, ref IdentifierGroupCodeMeanings)
+
+                && InitializeCodeDictionary("VISIT", new String[] { "LOCATION_CODE" }, ref VisitLocationCodeMeanings)
                 ;
+            
+            Trace.WriteLine("Identifier Typecodes dictionary has values: " + String.Join(", ", IdentifierTypeCodeMeanings));
+            Trace.WriteLine("Identifier Groupcodes dictionary has values: " + String.Join(", ", IdentifierGroupCodeMeanings));
 
             return Success;
         }
@@ -113,6 +127,17 @@ namespace BayClinicCernerAmbulatory
             }
 
             return true;
+        }
+
+        public Organization GetOrganizationEntityForVisitLocationCode(String CernerCode, ref CdrDbInterface CdrDb)
+        {
+            switch (VisitLocationCodeMeanings[CernerCode])
+            {
+                case "Bay Clinic":
+                    return CdrDb.EnsureOrganizationRecord(BayClinicCernerAmbulatoryBatchAggregator.WoahBayClinicOrganizationIdentity);
+                default:
+                    throw new Exception("Unsupported Visit location");
+            }
         }
 
         public Gender GetCdrGenderEnum(String CernerCode)

@@ -20,13 +20,16 @@ namespace BayClinicCernerAmbulatory
 {
     class BayClinicCernerAmbulatoryBatchAggregator
     {
+        public static readonly String WoahBayClinicOrganizationIdentity = "WOAH Bay Clinic";
         private const String FeedIdentity = "BayClinicCernerAmbulatoryExtract";
-        // TODO maybe some of these should be arguments from the caller, or handled another way? 
+
+        // TODO Some of these should be arguments from the caller, or sourced another way? 
         private String PgConnectionStringName = ConfigurationManager.AppSettings["CdrPostgreSQLConnectionString"];
         private String NewBayClinicAmbulatoryMongoCredentialConfigFile = ConfigurationManager.AppSettings["NewBayClinicAmbulatoryMongoCredentialConfigFile"];
         private String NewBayClinicAmbulatoryMongoCredentialSection = ConfigurationManager.AppSettings["NewBayClinicAmbulatoryMongoCredentialSection"];
 
         private CdrDbInterface CdrDb;
+        private Organization OrganizationObject;
         private DataFeed FeedObject;
         private AggregationRun ThisAggregationRun;
         private MongoDbConnection MongoCxn;
@@ -38,6 +41,8 @@ namespace BayClinicCernerAmbulatory
         IMongoCollection<MongodbRefCodeEntity> RefCodeCollection;
         IMongoCollection<MongodbPhoneEntity> PhoneCollection;
         IMongoCollection<MongodbAddressEntity> AddressCollection;
+        IMongoCollection<MongodbVisitEntity> VisitCollection;
+        IMongoCollection<MongodbChargeEntity> ChargeCollection;
 
         public BayClinicCernerAmbulatoryBatchAggregator(String PgConnectionName = null)
         {
@@ -61,6 +66,8 @@ namespace BayClinicCernerAmbulatory
             RefCodeCollection = MongoCxn.Db.GetCollection<MongodbRefCodeEntity>("referencecode");
             PhoneCollection = MongoCxn.Db.GetCollection<MongodbPhoneEntity>("phone");
             AddressCollection = MongoCxn.Db.GetCollection<MongodbAddressEntity>("address");
+            VisitCollection = MongoCxn.Db.GetCollection<MongodbVisitEntity>("visit");
+            ChargeCollection = MongoCxn.Db.GetCollection<MongodbChargeEntity>("charge");
 
             Initialized = ReferencedCodes.Initialize(RefCodeCollection);
             ThisAggregationRun = GetNewAggregationRun();
@@ -109,7 +116,7 @@ namespace BayClinicCernerAmbulatory
                 }
             }
 
-           ThisAggregationRun.StatusFlags = AggregationRunStatus.Complete;
+            ThisAggregationRun.StatusFlags = AggregationRunStatus.Complete;
             CdrDb.Context.SubmitChanges();
 
             Trace.WriteLine("Processed " + PatientCounter + " patients");
@@ -145,14 +152,12 @@ namespace BayClinicCernerAmbulatory
 
             MongoRunUpdater.PersonIdList.Add(PersonDocument.Id);
 
-            //            EntitySet<TelephoneNumber> _TelephoneNumbers;
+            // Related entities
             OverallSuccess &= AggregateTelephoneNumbers(PersonDocument, ThisPatient);
-
-            //            EntitySet<PhysicalAddress> _PhysicalAddresses;
             OverallSuccess &= AggregateAddresses(PersonDocument, ThisPatient);
+            OverallSuccess &= AggregateIdentifiers(PersonDocument, ThisPatient);
+            OverallSuccess &= AggregateVisits(PersonDocument, ThisPatient);
 
-            //            EntitySet<PatientIdentifier> _PatientIdentifiers;
-            //            EntitySet<VisitEncounter> _VisitEncounters;
             //            EntitySet<Measurement> _Measurements;
             //            EntitySet<Medication> _Medications;
             //            EntitySet<Immunization> _Immunizations;
@@ -186,6 +191,7 @@ namespace BayClinicCernerAmbulatory
                          x => x.EntityType == "PERSON"
                       && x.EntityIdentifier == MongoPerson.UniquePersonIdentifier
                       && !(x.LastAggregationRun > 0)     // not previously aggregated
+                      // TODO do we also want to match the extract date from MongoPerson.ImportFile?
                       );
 
             using (var PhoneCursor = PhoneCollection.Find<MongodbPhoneEntity>(PhoneFilterDef).ToCursor())
@@ -230,6 +236,7 @@ namespace BayClinicCernerAmbulatory
                          x => x.EntityType == "PERSON"
                       && x.EntityIdentifier == MongoPerson.UniquePersonIdentifier
                       && !(x.LastAggregationRun > 0)     // not previously aggregated
+                      // TODO do we also want to match the extract date from MongoPerson.ImportFile?
                       );
 
             using (var AddressCursor = AddressCollection.Find<MongodbAddressEntity>(AddressFilterDef).ToCursor())
@@ -272,9 +279,162 @@ namespace BayClinicCernerAmbulatory
             return true;
         }
 
+        private bool AggregateIdentifiers(MongodbPersonEntity MongoPerson, Patient PgPatient)
+        {
+            int IdentifierCounter = 0;
+
+            FilterDefinition<MongodbIdentifierEntity> IdentifierFilterDef = Builders<MongodbIdentifierEntity>.Filter
+                .Where(
+                         x => x.EntityType == "PERSON"
+                      && x.EntityIdentifier == MongoPerson.UniquePersonIdentifier
+                      && !(x.LastAggregationRun > 0)     // not previously aggregated
+                      // TODO do we also want to match the extract date from MongoPerson.ImportFile?
+                      );
+
+            using (var IdentifierCursor = IdentifierCollection.Find<MongodbIdentifierEntity>(IdentifierFilterDef).ToCursor())
+            {
+                while (IdentifierCursor.MoveNext())  // transfer the next batch of available documents from the query result cursor
+                {
+                    foreach (MongodbIdentifierEntity IdentifierDoc in IdentifierCursor.Current)
+                    {
+                        IdentifierCounter++;
+                        DateTime ActiveStatusDT;
+                        DateTime.TryParse(IdentifierDoc.ActiveStatusDateTime, out ActiveStatusDT);
+
+                        PatientIdentifier NewPgRecord = new PatientIdentifier
+                        {
+                            Identifier = IdentifierDoc.Identifier,
+                            IdentifierType = ReferencedCodes.IdentifierTypeCodeMeanings[IdentifierDoc.IdentifierType],
+                            Organization = OrganizationObject,
+                            Patient = PgPatient,
+                            DateFirstReported = ActiveStatusDT,
+                            DateLastReported = ActiveStatusDT
+                        };
+
+                        CdrDb.Context.PatientIdentifiers.InsertOnSubmit(NewPgRecord);
+                        CdrDb.Context.SubmitChanges();
+
+                        MongoRunUpdater.IdentifiersIdList.Add(IdentifierDoc.Id);
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        private bool AggregateVisits(MongodbPersonEntity MongoPerson, Patient PgPatient)
+        {
+            int VisitCounter = 0;
+
+            FilterDefinition<MongodbVisitEntity> VisitFilterDef = Builders<MongodbVisitEntity>.Filter
+                .Where(
+                         x => x.UniquePersonIdentifier == MongoPerson.UniquePersonIdentifier
+                      && !(x.LastAggregationRun > 0)     // not previously aggregated
+                      // TODO do we also want to match the extract date from MongoPerson.ImportFile?
+                      );
+
+            using (var VisitCursor = VisitCollection.Find<MongodbVisitEntity>(VisitFilterDef).ToCursor())
+            {
+                while (VisitCursor.MoveNext())  // transfer the next batch of available documents from the query result cursor
+                {
+                    foreach (MongodbVisitEntity VisitDoc in VisitCursor.Current)
+                    {
+                        DateTime BeginDateTime, EndDateTime, ActiveStatusDT;
+                        DateTime.TryParse(VisitDoc.EffectiveBeginDateTime, out BeginDateTime);        // Will be DateTime.MinValue on parse failure
+                        DateTime.TryParse(VisitDoc.EffectiveEndDateTime, out EndDateTime);        // Will be DateTime.MinValue on parse failure
+                        DateTime.TryParse(VisitDoc.ActiveStatusDateTime, out ActiveStatusDT);        // Will be DateTime.MinValue on parse failure
+
+                        VisitCounter++;
+
+                        VisitEncounter NewPgRecord = new VisitEncounter
+                        {
+                            EmrIdentifier = VisitDoc.UniqueVisitIdentifier,
+                            BeginDateTime = BeginDateTime,  // TODO Is this right?
+                            EndDateTime = EndDateTime,  // TODO Is this right?
+                            Status = VisitDoc.Active,
+                            StatusDateTime = ActiveStatusDT,  // TODO Is this right?
+                            Organization = ReferencedCodes.GetOrganizationEntityForVisitLocationCode(VisitDoc.LocationCode, ref CdrDb),
+                            Patient = PgPatient
+                        };
+
+                        CdrDb.Context.VisitEncounters.InsertOnSubmit(NewPgRecord);
+                        CdrDb.Context.SubmitChanges();
+
+                        MongoRunUpdater.VisitIdList.Add(VisitDoc.Id);
+
+                        AggregateCharges(VisitDoc, NewPgRecord);
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        private bool AggregateCharges(MongodbVisitEntity MongoVisit, VisitEncounter PgVisit)
+        {
+            int ChargeCounter = 0;
+
+            FilterDefinition<MongodbChargeEntity> ChargeFilterDef = Builders<MongodbChargeEntity>.Filter
+                .Where(
+                         x => x.UniqueVisitIdentifier == MongoVisit.UniqueVisitIdentifier
+                      && !(x.LastAggregationRun > 0)     // not previously aggregated
+                      // TODO do we also want to match the extract date from MongoPerson.ImportFile?
+                      );
+
+            using (var ChargeCursor = ChargeCollection.Find<MongodbChargeEntity>(ChargeFilterDef).ToCursor())
+            {
+                while (ChargeCursor.MoveNext())  // transfer the next batch of available documents from the query result cursor
+                {
+                    foreach (MongodbChargeEntity ChargeDoc in ChargeCursor.Current)
+                    {
+                        ChargeCounter++;
+                        DateTime ActiveStatusDT, ServiceDT, PostDT, UpdateDT;
+                        DateTime.TryParse(ChargeDoc.ActiveStatusDateTime, out ActiveStatusDT);
+                        DateTime.TryParse(ChargeDoc.ServiceDateTime, out ServiceDT);
+                        DateTime.TryParse(ChargeDoc.PostedDateTime, out PostDT);
+                        DateTime.TryParse(ChargeDoc.UpdateDateTime, out UpdateDT);
+
+                        String DescriptionFirstWord = ChargeDoc.Description.Split(' ').FirstOrDefault();
+
+                        // TODO may need to think about value of ChargeDoc.Type, some could be "no charge"
+                        // TODO may need to think about value of ChargeDoc.State, some could be "combined away" or "suspended"
+                        Charge NewPgRecord = new Charge
+                        {
+                            //DentalDetails = new DentalDetail {ToothNumber=0 ,ToothSurfaceCode="" },
+                            Cpt4Code = new CodedEntry { Code= DescriptionFirstWord, CodeSystem = "CPT-4", CodeSystemVersion="", CodeMeaning="", CodeModifier="", CodeModifierDescription="" },
+                            EmrIdentifier = ChargeDoc.UniqueChargeIdentifier,
+                            DateOfService = ServiceDT,
+                            Description = ChargeDoc.Description,  // If the ChargeDetail codes are not adequate, a cpt appears to be prepended to this field in raw data
+                            Comment = "",
+                            SubmittedDate = PostDT,
+                            Submitter = "",   // TODO What to do with this?
+                            State = ChargeDoc.State,  // TODO This is a coded reference, get the meaning string
+                            DateInfoLastUpdated = UpdateDT,
+                            VisitEncounter = PgVisit
+                            // Think about whether the ordering_physician_identifier or verifying_physician_identifier would be useful to add to the model
+                            // TODO Should we collect the type field?
+                        };
+                        // ChargeDoc.UniqueChargeItemIdentifier is the reference from related ChargeDetail documents
+                        // What is parent_charge_identifier?
+                        // What is offset_charge_identifier?
+
+                        CdrDb.Context.Charges.InsertOnSubmit(NewPgRecord);
+                        CdrDb.Context.SubmitChanges();
+
+                        MongoRunUpdater.ChargeIdList.Add(ChargeDoc.Id);
+
+                        // TODO if needed, add ChargeDetail processing here
+                    }
+                }
+            }
+
+            return true;
+        }
+
         private AggregationRun GetNewAggregationRun()
         {
-            FeedObject = CdrDb.EnsureFeed(FeedIdentity);
+            OrganizationObject = CdrDb.EnsureOrganizationRecord(WoahBayClinicOrganizationIdentity);
+            FeedObject = CdrDb.EnsureFeedRecord(FeedIdentity, OrganizationObject);
 
             AggregationRun NewRun = new AggregationRun
             {
@@ -297,13 +457,31 @@ namespace BayClinicCernerAmbulatory
 
         private void ClearAllMongoAggregationRunNumbers()
         {
+            UpdateResult Result;
+
             FilterDefinition<MongodbPersonEntity> PersonFilterDef = Builders<MongodbPersonEntity>.Filter.Where(x => x.LastAggregationRun > 0);
             UpdateDefinition<MongodbPersonEntity> PersonUpdateDef = Builders<MongodbPersonEntity>.Update.Unset(x => x.LastAggregationRun);
-            PersonCollection.UpdateMany(PersonFilterDef, PersonUpdateDef);
+            Result = PersonCollection.UpdateMany(PersonFilterDef, PersonUpdateDef);
 
             FilterDefinition<MongodbPhoneEntity> PhoneFilterDef = Builders<MongodbPhoneEntity>.Filter.Where(x => x.LastAggregationRun > 0);
             UpdateDefinition<MongodbPhoneEntity> PhoneUpdateDef = Builders<MongodbPhoneEntity>.Update.Unset(x => x.LastAggregationRun);
-            UpdateResult a = PhoneCollection.UpdateMany(PhoneFilterDef, PhoneUpdateDef);
+            Result = PhoneCollection.UpdateMany(PhoneFilterDef, PhoneUpdateDef);
+
+            FilterDefinition<MongodbAddressEntity> AddressFilterDef = Builders<MongodbAddressEntity>.Filter.Where(x => x.LastAggregationRun > 0);
+            UpdateDefinition<MongodbAddressEntity> AddressUpdateDef = Builders<MongodbAddressEntity>.Update.Unset(x => x.LastAggregationRun);
+            Result = AddressCollection.UpdateMany(AddressFilterDef, AddressUpdateDef);
+
+            FilterDefinition<MongodbIdentifierEntity> IdentifierFilterDef = Builders<MongodbIdentifierEntity>.Filter.Where(x => x.LastAggregationRun > 0);
+            UpdateDefinition<MongodbIdentifierEntity> IdentifierUpdateDef = Builders<MongodbIdentifierEntity>.Update.Unset(x => x.LastAggregationRun);
+            Result = IdentifierCollection.UpdateMany(IdentifierFilterDef, IdentifierUpdateDef);
+
+            FilterDefinition<MongodbVisitEntity> VisitFilterDef = Builders<MongodbVisitEntity>.Filter.Where(x => x.LastAggregationRun > 0);
+            UpdateDefinition<MongodbVisitEntity> VisitUpdateDef = Builders<MongodbVisitEntity>.Update.Unset(x => x.LastAggregationRun);
+            Result = VisitCollection.UpdateMany(VisitFilterDef, VisitUpdateDef);
+
+            FilterDefinition<MongodbChargeEntity> ChargeFilterDef = Builders<MongodbChargeEntity>.Filter.Where(x => x.LastAggregationRun > 0);
+            UpdateDefinition<MongodbChargeEntity> ChargeUpdateDef = Builders<MongodbChargeEntity>.Update.Unset(x => x.LastAggregationRun);
+            Result = ChargeCollection.UpdateMany(ChargeFilterDef, ChargeUpdateDef);
 
         }
 

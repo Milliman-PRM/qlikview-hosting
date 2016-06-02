@@ -44,31 +44,58 @@ namespace CdrDbLib
             Context = new CdrDataContext(ConnectionString);
         }
 
-        public DataFeed EnsureFeed(String FeedName)
+        public Organization EnsureOrganizationRecord(String OrganizationName)
         {
-            List<DataFeed> MatchingFeeds = Context.DataFeeds.Where(x => x.FeedName == FeedName).ToList();
+            List<Organization> MatchingOrganizations = Context.Organizations.Where(x => x.OrgName == OrganizationName).ToList();
 
-            if (MatchingFeeds.Count == 1)
+            if (MatchingOrganizations.Count == 1)  // normal case, the entity exists
+            {
+                return MatchingOrganizations.First();
+            }
+            else if (MatchingOrganizations.Count == 0)  // need to create the entity, probably the first time through
+            {
+                Organization NewOrganization = new Organization
+                {
+                    OrgName = OrganizationName,
+                    EmrIdentifier = ""  // TODO get this value from somewhere
+                };
+
+                Context.Organizations.InsertOnSubmit(NewOrganization);
+                Context.SubmitChanges();
+
+                return NewOrganization;
+            }
+            else  // something is wrong, this should never happen
+            {
+                return null;
+            }
+
+        }
+
+        public DataFeed EnsureFeedRecord(String FeedName, Organization LinkedOrganization)
+        {
+            List<DataFeed> MatchingFeeds = Context.DataFeeds.Where(x => x.FeedName == FeedName && x.Organizationdbid == LinkedOrganization.dbid).ToList();
+
+            if (MatchingFeeds.Count == 1)  // normal case, the feed entity exists
             {
                 return MatchingFeeds.First();
             }
-            else if (MatchingFeeds.Count > 1)
+            else if (MatchingFeeds.Count == 0)  // need to create the feed entity, probably the first time through
             {
-                // something is wrong
-                return null;
-            }
-            else
-            {
-                Organization BayClinicOrg = Context.Organizations.Where(x => x.OrgName == "Bay Clinic").FirstOrDefault();
                 DataFeed NewFeed = new DataFeed
                 {
-                    Organizationdbid = BayClinicOrg.dbid,
+                    Organizationdbid = LinkedOrganization.dbid,
                     FeedName = FeedName
                 };
+
                 Context.DataFeeds.InsertOnSubmit(NewFeed);
                 Context.SubmitChanges();
 
                 return NewFeed;
+            }
+            else  // something is wrong, this should never happen
+            {
+                return null;
             }
         }
     }

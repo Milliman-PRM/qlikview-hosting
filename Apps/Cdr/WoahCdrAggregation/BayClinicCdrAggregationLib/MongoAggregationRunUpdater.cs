@@ -13,7 +13,7 @@ namespace BayClinicCernerAmbulatory
         private long AggregationRunNumber;
         private IMongoDatabase Db;
 
-        public HashSet<ObjectId> AddressIdList; 
+        public HashSet<ObjectId> AddressIdList;     ////
         public HashSet<ObjectId> AllergyIdList;
         public HashSet<ObjectId> AllergyReactionIdList;
         public HashSet<ObjectId> AllergyReviewIdList;
@@ -21,7 +21,7 @@ namespace BayClinicCernerAmbulatory
         public HashSet<ObjectId> ChargeDetailIdList;
         public HashSet<ObjectId> DiagnosisIdList;
         public HashSet<ObjectId> FamilyHistoryIdList;
-        public HashSet<ObjectId> IdentifiersIdList;
+        public HashSet<ObjectId> IdentifiersIdList;    ////
         public HashSet<ObjectId> ImmunizationIdList;
         public HashSet<ObjectId> ImmunizationExpectIdList;
         public HashSet<ObjectId> ImmunizationPersonnelIdList;
@@ -35,10 +35,10 @@ namespace BayClinicCernerAmbulatory
         public HashSet<ObjectId> OrderDetailsIdList;
         public HashSet<ObjectId> OrdersIdList;
         public HashSet<ObjectId> PatientInfoIdList;
-        public HashSet<ObjectId> PersonIdList;
+        public HashSet<ObjectId> PersonIdList;    ////
         public HashSet<ObjectId> PersonEmploymentIdList;
         public HashSet<ObjectId> PersonInfoIdList;
-        public HashSet<ObjectId> PhoneIdList;
+        public HashSet<ObjectId> PhoneIdList;    ////
         public HashSet<ObjectId> ProblemIdList;
         public HashSet<ObjectId> ProcedureIdList;
         public HashSet<ObjectId> ProcedurePersonnelIdList;
@@ -60,7 +60,7 @@ namespace BayClinicCernerAmbulatory
         public HashSet<ObjectId> SocialHistoryIdList;
         public HashSet<ObjectId> SocialHistoryResponseIdList;
         public HashSet<ObjectId> SocialHistoryResponseDetailIdList;
-        public HashSet<ObjectId> VisitIdList;
+        public HashSet<ObjectId> VisitIdList;    ////
 
         public MongoAggregationRunUpdater(long RunNumber, IMongoDatabase Database)
         {
@@ -118,7 +118,7 @@ namespace BayClinicCernerAmbulatory
             SocialHistoryResponseIdList = new HashSet<ObjectId>();
             SocialHistoryResponseDetailIdList = new HashSet<ObjectId>();
             VisitIdList = new HashSet<ObjectId>();
-    }
+        }
 
         public void UpdateAll()
         {
@@ -141,6 +141,27 @@ namespace BayClinicCernerAmbulatory
                 FilterDefinition<MongodbAddressEntity> FilterDef = Builders<MongodbAddressEntity>.Filter.Where(x => x.Id == DocId);
                 UpdateDefinition<MongodbAddressEntity> UpdateDef = Builders<MongodbAddressEntity>.Update.Set(p => p.LastAggregationRun, AggregationRunNumber);
                 Db.GetCollection<MongodbAddressEntity>("address").UpdateOne(FilterDef, UpdateDef);  // record to MongoDB that this document has been aggregated
+            }
+
+            foreach (ObjectId DocId in IdentifiersIdList)
+            {
+                FilterDefinition<MongodbIdentifierEntity> FilterDef = Builders<MongodbIdentifierEntity>.Filter.Where(x => x.Id == DocId);
+                UpdateDefinition<MongodbIdentifierEntity> UpdateDef = Builders<MongodbIdentifierEntity>.Update.Set(p => p.LastAggregationRun, AggregationRunNumber);
+                Db.GetCollection<MongodbIdentifierEntity>("identifiers").UpdateOne(FilterDef, UpdateDef);  // record to MongoDB that this document has been aggregated
+            }
+
+            foreach (ObjectId DocId in VisitIdList)
+            {
+                FilterDefinition<MongodbVisitEntity> FilterDef = Builders<MongodbVisitEntity>.Filter.Where(x => x.Id == DocId);
+                UpdateDefinition<MongodbVisitEntity> UpdateDef = Builders<MongodbVisitEntity>.Update.Set(p => p.LastAggregationRun, AggregationRunNumber);
+                Db.GetCollection<MongodbVisitEntity>("visit").UpdateOne(FilterDef, UpdateDef);  // record to MongoDB that this document has been aggregated
+            }
+
+            foreach (ObjectId DocId in ChargeIdList)
+            {
+                FilterDefinition<MongodbChargeEntity> FilterDef = Builders<MongodbChargeEntity>.Filter.Where(x => x.Id == DocId);
+                UpdateDefinition<MongodbChargeEntity> UpdateDef = Builders<MongodbChargeEntity>.Update.Set(p => p.LastAggregationRun, AggregationRunNumber);
+                Db.GetCollection<MongodbChargeEntity>("charge").UpdateOne(FilterDef, UpdateDef);  // record to MongoDB that this document has been aggregated
             }
 
             Reset();

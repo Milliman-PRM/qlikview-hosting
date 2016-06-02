@@ -13,7 +13,7 @@
       <Column Name="race" Member="Race" Type="System.String" DbType="varchar" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="aef72210-3c4e-4ed5-b471-d9fb269b97dc" />
       <Column Name="ethnicity" Member="Ethnicity" Type="System.String" DbType="varchar" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="4dc14fd9-8ba4-4170-a70c-97e3d6997825" />
       <Column Name="maritalstatus" Member="MaritalStatus" Type="MaritalStatus" DbType="INT2" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="8ed0ac35-9190-4006-b7bf-dec7f01fba76" />
-      <Association Name="Patient_PatientIdentifier" ed:AssociationGuid="5f3fa80d-2b21-438d-9327-7d51d0dc62f9" Member="PatientIdentifiers" ed:Guid="aa3dab3d-585a-46c5-b4bb-388fd93a09e1" ThisKey="dbid" OtherKey="patientdbid" Type="PatientIdentifier" />
+      <Association Name="Patient_PatientIdentifier" ed:AssociationGuid="5f3fa80d-2b21-438d-9327-7d51d0dc62f9" Member="PatientIdentifiers" ed:Guid="aa3dab3d-585a-46c5-b4bb-388fd93a09e1" ThisKey="dbid" OtherKey="Patientdbid" Type="PatientIdentifier" />
       <Association Name="Patient_PatientAddress" ed:AssociationGuid="107a5c85-691f-4167-913a-e9d51b02cf89" Member="PhysicalAddresses" ed:Guid="d14e039a-9820-4f50-bfe1-2409c2ec6354" ThisKey="dbid" OtherKey="Patientdbid" Type="PhysicalAddress" />
       <Association Name="Patient_TelephoneNumber" ed:AssociationGuid="88c0c094-bc90-44d2-acf7-6c4ecc064fad" Member="TelephoneNumbers" ed:Guid="06bf4270-57c6-441f-8c1c-97eac2ab4cad" ThisKey="dbid" OtherKey="Patientdbid" Type="TelephoneNumber" />
       <Association Name="Patient_VisitEncounter" ed:AssociationGuid="28b57ba0-1ca8-4ecc-89f5-8334e9174dec" Member="VisitEncounters" ed:Guid="4fe3d789-49b4-41d5-b442-295ff7d512e2" ThisKey="dbid" OtherKey="Patientdbid" Type="VisitEncounter" />
@@ -37,13 +37,14 @@
   <Table Name="public.patientidentifier" Member="PatientIdentifiers">
     <Type Name="PatientIdentifier" ed:Guid="be7246fa-1eed-4467-9700-b48600aa53c5">
       <Column Name="dbid" Type="System.Int64" AutoSync="OnInsert" DbType="bigserial NOT NULL" IsReadOnly="true" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" ed:ValidateRequired="true" ed:Guid="26b71ac8-3a3a-40a6-83db-113b1fd92c27" />
-      <Column Name="id" Member="Id" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="48dbf5b8-f7d9-4ffc-96f9-8f12edc856a0" />
+      <Column Name="identifier" Member="Identifier" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="48dbf5b8-f7d9-4ffc-96f9-8f12edc856a0" />
+      <Column Name="identifiertype" Member="IdentifierType" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="f9c6e911-6b89-43e3-a26f-582054bbeda5" />
       <Column Name="datefirstreported" Member="DateFirstReported" Type="System.DateTime" DbType="timestamp" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="0cf1abc3-b9e8-4aa3-af03-97ba5c27d37a" />
       <Column Name="datelastreported" Member="DateLastReported" Type="System.DateTime" DbType="timestamp" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="145c58e9-6b63-454c-a626-c8a5aac858d9" />
-      <Column Name="patientdbid" Type="System.Int64" AutoSync="Always" DbType="int8 NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="4b7916a2-bce1-4fb9-9c78-914dd7dcedeb" />
+      <Column Name="patientdbid" Member="Patientdbid" Type="System.Int64" AutoSync="Always" DbType="int8 NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="4b7916a2-bce1-4fb9-9c78-914dd7dcedeb" />
       <Column Name="organizationdbid" Member="Organizationdbid" Type="System.Int64" AutoSync="Always" DbType="int8 NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="822ff744-376c-48de-a406-72b5d69f6a33" />
-      <Association Name="Patient_PatientIdentifier" ed:AssociationGuid="5f3fa80d-2b21-438d-9327-7d51d0dc62f9" Member="patient" ed:Guid="d809a7ea-f4e1-463f-b9c2-78dc53e0127c" ThisKey="patientdbid" OtherKey="dbid" Type="Patient" DeleteRule="NO ACTION" DeleteOnNull="true" IsForeignKey="true" />
-      <Association Name="Organization_PatientIdentifier" ed:AssociationGuid="117a3f02-9202-4471-ab6f-1775800e756d" Member="organization" ed:Guid="a82fe512-6f91-4bf3-9bc8-f1d48fd4e30d" ThisKey="Organizationdbid" OtherKey="dbid" Type="Organization" DeleteOnNull="true" IsForeignKey="true" />
+      <Association Name="Patient_PatientIdentifier" ed:AssociationGuid="5f3fa80d-2b21-438d-9327-7d51d0dc62f9" Member="Patient" ed:Guid="d809a7ea-f4e1-463f-b9c2-78dc53e0127c" ThisKey="Patientdbid" OtherKey="dbid" Type="Patient" DeleteRule="NO ACTION" DeleteOnNull="true" IsForeignKey="true" />
+      <Association Name="Organization_PatientIdentifier" ed:AssociationGuid="117a3f02-9202-4471-ab6f-1775800e756d" Member="Organization" ed:Guid="a82fe512-6f91-4bf3-9bc8-f1d48fd4e30d" ThisKey="Organizationdbid" OtherKey="dbid" Type="Organization" DeleteOnNull="true" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="public.physicaladdress" Member="PhysicalAddresses">
@@ -99,7 +100,6 @@
       <Column Name="status" Member="Status" Type="System.String" DbType="varchar" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="a9ac43c3-f1ed-4ca2-933a-83f5ce1da3b2" />
       <Column Name="statusdatetime" Member="StatusDateTime" Type="System.DateTime" DbType="TIMESTAMPTZ" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="54ccfd0a-e90b-4db1-bfc9-4473e25b1dc8" />
       <Column Name="organizationdbid" Member="Organizationdbid" Type="System.Int64" AutoSync="Always" DbType="int8 NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="6c05ffdd-7dbd-4381-94da-eb5a53c87bbe" />
-      <Column Name="chargedbid" Member="Chargedbid" Type="System.Int64" AutoSync="Always" DbType="int8 NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="c38dc69f-2ea5-46a2-9260-ca6e037c9121" />
       <Column Name="patientdbid" Member="Patientdbid" Type="System.Int64" AutoSync="Always" DbType="int8 NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="710d4f36-141e-4da8-ac4f-cfe05b945f82" />
       <Association Name="Patient_VisitEncounter" ed:AssociationGuid="28b57ba0-1ca8-4ecc-89f5-8334e9174dec" Member="Patient" ed:Guid="a43ba0dc-954c-4c0d-a612-7f32cd13a106" ThisKey="Patientdbid" OtherKey="dbid" Type="Patient" DeleteOnNull="true" IsForeignKey="true" />
       <Association Name="Organization_VisitEncounter" ed:AssociationGuid="47c312b2-12d4-4f5f-ba62-4af7c1877038" Member="Organization" ed:Guid="b04b2a6a-d51f-4811-bf7b-94328f7e9e60" ThisKey="Organizationdbid" OtherKey="dbid" Type="Organization" DeleteOnNull="true" IsForeignKey="true" />
@@ -115,21 +115,23 @@
     <Type Name="Charge" ed:Guid="ec572314-ef22-4539-907b-da4d4a6bc963">
       <Column Name="dbid" Type="System.Int64" AutoSync="OnInsert" DbType="bigserial NOT NULL" IsReadOnly="true" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" ed:ValidateRequired="true" ed:Guid="064ae1df-f89c-4ebe-81de-e6f75d21177c" />
       <Column Name="emridentifier" Member="EmrIdentifier" Type="System.String" DbType="varchar" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="a7d7fff9-e754-4fb2-8a06-8e20fdec4ddf" />
-      <Column Member="ChargeCode" Type="CodedEntry" IsValueType="True" ed:ValidateRequired="false" ed:Guid="e386ab85-e2a1-46a9-9ac9-e747f89721c7">
+      <Column Member="Cpt4Code" Type="CodedEntry" IsValueType="True" ed:ValidateRequired="false" ed:Guid="e386ab85-e2a1-46a9-9ac9-e747f89721c7">
         <TypeMapping>
           <Column Name="code" Member="Code" DbType="varchar NOT NULL" />
           <Column Name="codesystem" Member="CodeSystem" DbType="varchar NOT NULL" />
           <Column Name="codesystemversion" Member="CodeSystemVersion" DbType="varchar" />
           <Column Name="codemeaning" Member="CodeMeaning" DbType="varchar" />
+          <Column Name="codemodifier" Member="CodeModifier" DbType="varchar" />
+          <Column Name="codemodifierdescription" Member="CodeModifierDescription" DbType="varchar" />
         </TypeMapping>
       </Column>
       <Column Name="description" Member="Description" Type="System.String" DbType="varchar" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="116388b4-3832-4ae9-93a9-e370bb03390d" />
       <Column Name="comment" Member="Comment" Type="System.String" DbType="varchar" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="7a9a183a-971a-467d-a6d4-28e297c4c60b" />
       <Column Name="dateofservice" Member="DateOfService" Type="System.DateTime" DbType="TIMESTAMPTZ" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="b8ad734e-25e5-48dd-bf12-aca321ce491e" />
       <Column Name="submitteddate" Member="SubmittedDate" Type="System.DateTime" DbType="TIMESTAMPTZ" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="219e5a1e-919c-409b-8b9d-31031331c1c4" />
-      <Column Name="sumbitter" Member="Sumbitter" Type="System.String" DbType="varchar" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="1290427d-b858-44f4-919d-8453a52330b7" />
+      <Column Name="submitter" Member="Submitter" Type="System.String" DbType="varchar" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="1290427d-b858-44f4-919d-8453a52330b7" />
       <Column Name="dateinfolastupdated" Member="DateInfoLastUpdated" Type="System.DateTime" DbType="TIMESTAMPTZ" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="cf333401-4ca7-40b3-b2e5-d35e757ef577" />
-      <Column Name="status" Member="Status" Type="System.String" DbType="varchar" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="473653f3-6ef8-43c9-9ff5-7a755d9e4647" />
+      <Column Name="state" Member="State" Type="System.String" DbType="varchar" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="473653f3-6ef8-43c9-9ff5-7a755d9e4647" />
       <Column Member="DentalDetails" Type="DentalDetail" IsValueType="True" ed:ValidateRequired="false" ed:Guid="bb825692-f4d9-4a16-9cdd-ad69b30e598b">
         <TypeMapping>
           <Column Name="toothnumber" Member="ToothNumber" DbType="smallint" />
