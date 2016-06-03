@@ -62,11 +62,13 @@
     <Compile Include="CernerReferencedCodeDictionaries.cs" />
     <Compile Include="MongoAggregationRunUpdater.cs" />
     <Compile Include="MongoDbEntities\MongodbAddressEntity.cs" />
+    <Compile Include="MongoDbEntities\MongodbChargeDetailEntity.cs" />
     <Compile Include="MongoDbEntities\MongodbChargeEntity.cs" />
     <Compile Include="MongoDbEntities\MongodbIdentifierEntity.cs" />
     <Compile Include="MongoDbEntities\MongodbPersonEntity.cs" />
     <Compile Include="MongoDbEntities\MongodbPhoneEntity.cs" />
     <Compile Include="MongoDbEntities\MongodbRefCodeEntity.cs" />
+    <Compile Include="MongoDbEntities\MongodbResultEntity.cs" />
     <Compile Include="MongoDbEntities\MongodbVisitEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

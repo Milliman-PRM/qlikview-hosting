@@ -43,6 +43,8 @@ namespace BayClinicCernerAmbulatory
         IMongoCollection<MongodbAddressEntity> AddressCollection;
         IMongoCollection<MongodbVisitEntity> VisitCollection;
         IMongoCollection<MongodbChargeEntity> ChargeCollection;
+        IMongoCollection<MongodbChargeDetailEntity> ChargeDetailCollection;
+        IMongoCollection<MongodbResultEntity> ResultCollection;
 
         public BayClinicCernerAmbulatoryBatchAggregator(String PgConnectionName = null)
         {
@@ -68,6 +70,8 @@ namespace BayClinicCernerAmbulatory
             AddressCollection = MongoCxn.Db.GetCollection<MongodbAddressEntity>("address");
             VisitCollection = MongoCxn.Db.GetCollection<MongodbVisitEntity>("visit");
             ChargeCollection = MongoCxn.Db.GetCollection<MongodbChargeEntity>("charge");
+            ChargeDetailCollection = MongoCxn.Db.GetCollection<MongodbChargeDetailEntity>("chargedetail");
+            ResultCollection = MongoCxn.Db.GetCollection<MongodbResultEntity>("result");
 
             Initialized = ReferencedCodes.Initialize(RefCodeCollection);
             ThisAggregationRun = GetNewAggregationRun();
@@ -78,7 +82,7 @@ namespace BayClinicCernerAmbulatory
             return Initialized;
         }
 
-        public bool AggregateAllAvailablePatients()
+        public bool AggregateAllAvailablePatients(bool ClearRunNumbers = false)
         {
             bool OverallResult = true;
             int PatientCounter = 0;
@@ -88,9 +92,10 @@ namespace BayClinicCernerAmbulatory
                 return false;
             }
 
-            #region temporary code
-            ClearAllMongoAggregationRunNumbers();
-            #endregion
+            if (ClearRunNumbers)
+            {
+                ClearAllMongoAggregationRunNumbers();
+            }
 
             ThisAggregationRun.StatusFlags = AggregationRunStatus.InProcess;
             CdrDb.Context.SubmitChanges();
@@ -158,7 +163,6 @@ namespace BayClinicCernerAmbulatory
             OverallSuccess &= AggregateIdentifiers(PersonDocument, ThisPatient);
             OverallSuccess &= AggregateVisits(PersonDocument, ThisPatient);
 
-            //            EntitySet<Measurement> _Measurements;
             //            EntitySet<Medication> _Medications;
             //            EntitySet<Immunization> _Immunizations;
             //            EntitySet<InsuranceCoverage> _InsuranceCoverages;
@@ -322,13 +326,14 @@ namespace BayClinicCernerAmbulatory
             return true;
         }
 
-        private bool AggregateVisits(MongodbPersonEntity MongoPerson, Patient PgPatient)
+        private bool AggregateVisits(MongodbPersonEntity PersonDoc, Patient PatientRecord)
         {
+            bool OverallSuccess = true;
             int VisitCounter = 0;
 
             FilterDefinition<MongodbVisitEntity> VisitFilterDef = Builders<MongodbVisitEntity>.Filter
                 .Where(
-                         x => x.UniquePersonIdentifier == MongoPerson.UniquePersonIdentifier
+                         x => x.UniquePersonIdentifier == PersonDoc.UniquePersonIdentifier
                       && !(x.LastAggregationRun > 0)     // not previously aggregated
                       // TODO do we also want to match the extract date from MongoPerson.ImportFile?
                       );
@@ -354,7 +359,7 @@ namespace BayClinicCernerAmbulatory
                             Status = VisitDoc.Active,
                             StatusDateTime = ActiveStatusDT,  // TODO Is this right?
                             Organization = ReferencedCodes.GetOrganizationEntityForVisitLocationCode(VisitDoc.LocationCode, ref CdrDb),
-                            Patient = PgPatient
+                            Patient = PatientRecord
                         };
 
                         CdrDb.Context.VisitEncounters.InsertOnSubmit(NewPgRecord);
@@ -362,12 +367,13 @@ namespace BayClinicCernerAmbulatory
 
                         MongoRunUpdater.VisitIdList.Add(VisitDoc.Id);
 
-                        AggregateCharges(VisitDoc, NewPgRecord);
+                        OverallSuccess &= AggregateCharges(VisitDoc, NewPgRecord);
+                        OverallSuccess &= AggregateResults(PersonDoc, PatientRecord, VisitDoc, NewPgRecord);
                     }
                 }
             }
 
-            return true;
+            return OverallSuccess;
         }
 
         private bool AggregateCharges(MongodbVisitEntity MongoVisit, VisitEncounter PgVisit)
@@ -401,7 +407,6 @@ namespace BayClinicCernerAmbulatory
                         Charge NewPgRecord = new Charge
                         {
                             //DentalDetails = new DentalDetail {ToothNumber=0 ,ToothSurfaceCode="" },
-                            Cpt4Code = new CodedEntry { Code= DescriptionFirstWord, CodeSystem = "CPT-4", CodeSystemVersion="", CodeMeaning="", CodeModifier="", CodeModifierDescription="" },
                             EmrIdentifier = ChargeDoc.UniqueChargeIdentifier,
                             DateOfService = ServiceDT,
                             Description = ChargeDoc.Description,  // If the ChargeDetail codes are not adequate, a cpt appears to be prepended to this field in raw data
@@ -414,6 +419,9 @@ namespace BayClinicCernerAmbulatory
                             // Think about whether the ordering_physician_identifier or verifying_physician_identifier would be useful to add to the model
                             // TODO Should we collect the type field?
                         };
+                        NewPgRecord.ChargeCodes.Add(new ChargeCode { Code = new CodedEntry { Code = DescriptionFirstWord,
+                                                                                             CodeSystem = "Charge Description Prepend", }
+                                                                   });
                         // ChargeDoc.UniqueChargeItemIdentifier is the reference from related ChargeDetail documents
                         // What is parent_charge_identifier?
                         // What is offset_charge_identifier?
@@ -423,12 +431,88 @@ namespace BayClinicCernerAmbulatory
 
                         MongoRunUpdater.ChargeIdList.Add(ChargeDoc.Id);
 
-                        // TODO if needed, add ChargeDetail processing here
+                        AggregateChargeDetails(ChargeDoc, NewPgRecord);
                     }
                 }
             }
 
             return true;
+        }
+
+        private bool AggregateChargeDetails(MongodbChargeEntity ChargeDoc, Charge ChargeRecord)
+        {
+            int ChargeDetailCounter = 0;
+
+            FilterDefinition<MongodbChargeDetailEntity> ChargeDetailFilterDef = Builders<MongodbChargeDetailEntity>.Filter
+                .Where(
+                         x => x.UniqueChargeItemIdentifier == ChargeDoc.UniqueChargeItemIdentifier
+                      && !(x.LastAggregationRun > 0)     // not previously aggregated
+                                                         // TODO do we also want to match the extract date from MongoPerson.ImportFile?
+                      );
+
+            using (var ChargeDetailCursor = ChargeDetailCollection.Find<MongodbChargeDetailEntity>(ChargeDetailFilterDef).ToCursor())
+            {
+                while (ChargeDetailCursor.MoveNext())  // transfer the next batch of available documents from the query result cursor
+                {
+                    foreach (MongodbChargeDetailEntity ChargeDetailDoc in ChargeDetailCursor.Current)
+                    {
+                        ChargeDetailCounter++;
+
+                        ChargeCode NewPgRecord = new ChargeCode
+                        {
+                            Charge = ChargeRecord,
+                            Code = new CodedEntry
+                            {
+                                Code = ChargeDetailDoc.Code,
+                                CodeSystem = ReferencedCodes.ChargeDetailTypeCodeMeanings[ChargeDetailDoc.Type],
+                            }
+                        };
+
+                        CdrDb.Context.ChargeCodes.InsertOnSubmit(NewPgRecord);
+                        CdrDb.Context.SubmitChanges();
+
+                        MongoRunUpdater.ChargeDetailIdList.Add(ChargeDetailDoc.Id);
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        private bool AggregateResults(MongodbPersonEntity PersonDoc, Patient PatientRecord, MongodbVisitEntity VisitDoc, VisitEncounter VisitRecord)
+        {
+            bool Success = true;
+            int ResultCounter = 0;
+
+            FilterDefinition<MongodbResultEntity> ResultFilterDef = Builders<MongodbResultEntity>.Filter
+                .Where(x => 
+                       x.UniquePersonIdentifier == PersonDoc.UniquePersonIdentifier
+                    && x.UniqueVisitIdentifier == VisitDoc.UniqueVisitIdentifier
+                    && !(x.LastAggregationRun > 0)     // not previously aggregated
+                      // TODO do we also want to match the extract date from MongoPerson.ImportFile?
+                      );
+
+            using (var ResultCursor = ResultCollection.Find<MongodbResultEntity>(ResultFilterDef).ToCursor())
+            {
+                while (ResultCursor.MoveNext())  // transfer the next batch of available documents from the query result cursor
+                {
+                    foreach (MongodbResultEntity ResultDoc in ResultCursor.Current)
+                    {
+                        ResultCounter++;
+
+                        Measurement NewPgRecord = new Measurement
+                        {
+                        };
+
+                        CdrDb.Context.Measurements.InsertOnSubmit(NewPgRecord);
+                        CdrDb.Context.SubmitChanges();
+
+                        MongoRunUpdater.ResultIdList.Add(ResultDoc.Id);
+                    }
+                }
+            }
+
+            return Success;
         }
 
         private AggregationRun GetNewAggregationRun()
@@ -483,7 +567,12 @@ namespace BayClinicCernerAmbulatory
             UpdateDefinition<MongodbChargeEntity> ChargeUpdateDef = Builders<MongodbChargeEntity>.Update.Unset(x => x.LastAggregationRun);
             Result = ChargeCollection.UpdateMany(ChargeFilterDef, ChargeUpdateDef);
 
+            FilterDefinition<MongodbChargeDetailEntity> ChargeDetailFilterDef = Builders<MongodbChargeDetailEntity>.Filter.Where(x => x.LastAggregationRun > 0);
+            UpdateDefinition<MongodbChargeDetailEntity> ChargeDetailUpdateDef = Builders<MongodbChargeDetailEntity>.Update.Unset(x => x.LastAggregationRun);
+            Result = ChargeDetailCollection.UpdateMany(ChargeDetailFilterDef, ChargeDetailUpdateDef);
+
         }
 
     }
 }
+ 

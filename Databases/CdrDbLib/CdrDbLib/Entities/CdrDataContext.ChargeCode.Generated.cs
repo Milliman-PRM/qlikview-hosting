@@ -22,10 +22,10 @@ namespace CdrContext
 {
 
     /// <summary>
-    /// There are no comments for CdrContext.AggregationRun in the schema.
+    /// There are no comments for CdrContext.ChargeCode in the schema.
     /// </summary>
-    [Table(Name = @"public.aggregationrun")]
-    public partial class AggregationRun : INotifyPropertyChanging, INotifyPropertyChanged
+    [Table(Name = @"public.chargecode")]
+    public partial class ChargeCode : INotifyPropertyChanging, INotifyPropertyChanged
     {
 
         private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(System.String.Empty);
@@ -33,12 +33,12 @@ namespace CdrContext
 
         private long _dbid;
 
-        private AggregationRunStatus _StatusFlags;
+        private CodedEntry _Code;
 
-        private long _DataFeeddbid;
+        private long _Chargedbid;
         #pragma warning restore 0649
 
-        private EntityRef<DataFeed> _DataFeed;
+        private EntityRef<Charge> _Charge;
     
         #region Extensibility Method Definitions
 
@@ -47,15 +47,16 @@ namespace CdrContext
         partial void OnCreated();
         partial void OndbidChanging(long value);
         partial void OndbidChanged();
-        partial void OnStatusFlagsChanging(AggregationRunStatus value);
-        partial void OnStatusFlagsChanged();
-        partial void OnDataFeeddbidChanging(long value);
-        partial void OnDataFeeddbidChanged();
+        partial void OnCodeChanging(CodedEntry value);
+        partial void OnCodeChanged();
+        partial void OnChargedbidChanging(long value);
+        partial void OnChargedbidChanged();
         #endregion
 
-        public AggregationRun()
+        public ChargeCode()
         {
-            this._DataFeed  = default(EntityRef<DataFeed>);
+            this._Code = new CodedEntry();
+            this._Charge  = default(EntityRef<Charge>);
             OnCreated();
         }
 
@@ -74,107 +75,96 @@ namespace CdrContext
 
     
         /// <summary>
-        /// Bit mask
+        /// There are no comments for Code in the schema.
         /// </summary>
-        /// <LongDescription>
-        /// Binary            Int     Meaning
-        /// 00000001       1         Value Reserved By Program
-        /// 00000010       2         Aggregation In Progress
-        /// 00000100       4         Complete
-        /// 00001000       8         future
-        /// 00010000      16        future 
-        /// 00100000      32         future
-        /// 01000000      64         future
-        /// 10000000     128         future
-        /// 
-        /// 
-        /// 
-        /// 
-        /// 
-        /// 
-        /// </LongDescription>
-        [Column(Name = @"statusflags", Storage = "_StatusFlags", CanBeNull = false, DbType = "int4 NOT NULL", UpdateCheck = UpdateCheck.Never)]
-        public AggregationRunStatus StatusFlags
+        [Devart.Data.Linq.Mapping.ValueTypeProperty()]
+        [Devart.Data.Linq.Mapping.Column(Member = "Code", Name = @"code", Storage = "_Code", DbType = "varchar")]
+        [Devart.Data.Linq.Mapping.Column(Member = "CodeSystem", Name = @"codesystem", Storage = "_CodeSystem", DbType = "varchar")]
+        [Devart.Data.Linq.Mapping.Column(Member = "CodeSystemVersion", Name = @"codesystemversion", Storage = "_CodeSystemVersion", DbType = "varchar")]
+        [Devart.Data.Linq.Mapping.Column(Member = "CodeMeaning", Name = @"codemeaning", Storage = "_CodeMeaning", DbType = "varchar")]
+        [Devart.Data.Linq.Mapping.Column(Member = "CodeModifier", Name = @"codemodifier", Storage = "_CodeModifier", DbType = "varchar")]
+        [Devart.Data.Linq.Mapping.Column(Member = "CodeModifierDescription", Name = @"codemodifierdescription", Storage = "_CodeModifierDescription", DbType = "varchar")]
+        public CodedEntry Code
         {
             get
             {
-                return this._StatusFlags;
+                return this._Code;
             }
             set
             {
-                if (this._StatusFlags != value)
+                if (this._Code != value)
                 {
-                    this.OnStatusFlagsChanging(value);
+                    this.OnCodeChanging(value);
                     this.SendPropertyChanging();
-                    this._StatusFlags = value;
-                    this.SendPropertyChanged("StatusFlags");
-                    this.OnStatusFlagsChanged();
+                    this._Code = value;
+                    this.SendPropertyChanged("Code");
+                    this.OnCodeChanged();
                 }
             }
         }
 
     
         /// <summary>
-        /// There are no comments for DataFeeddbid in the schema.
+        /// There are no comments for Chargedbid in the schema.
         /// </summary>
-        [Column(Name = @"datafeeddbid", Storage = "_DataFeeddbid", CanBeNull = false, DbType = "int8 NOT NULL", UpdateCheck = UpdateCheck.Never)]
-        public long DataFeeddbid
+        [Column(Name = @"""Chargedbid""", Storage = "_Chargedbid", CanBeNull = false, DbType = "int8 NOT NULL", UpdateCheck = UpdateCheck.Never)]
+        public long Chargedbid
         {
             get
             {
-                return this._DataFeeddbid;
+                return this._Chargedbid;
             }
             set
             {
-                if (this._DataFeeddbid != value)
+                if (this._Chargedbid != value)
                 {
-                    if (this._DataFeed.HasLoadedOrAssignedValue)
+                    if (this._Charge.HasLoadedOrAssignedValue)
                     {
                         throw new ForeignKeyReferenceAlreadyHasValueException();
                     }
 
-                    this.OnDataFeeddbidChanging(value);
+                    this.OnChargedbidChanging(value);
                     this.SendPropertyChanging();
-                    this._DataFeeddbid = value;
-                    this.SendPropertyChanged("DataFeeddbid");
-                    this.OnDataFeeddbidChanged();
+                    this._Chargedbid = value;
+                    this.SendPropertyChanged("Chargedbid");
+                    this.OnChargedbidChanged();
                 }
             }
         }
 
     
         /// <summary>
-        /// There are no comments for DataFeed in the schema.
+        /// There are no comments for Charge in the schema.
         /// </summary>
-        [Devart.Data.Linq.Mapping.Association(Name="DataFeed_AggregationRun", Storage="_DataFeed", ThisKey="DataFeeddbid", OtherKey="dbid", IsForeignKey=true, DeleteOnNull=true)]
-        public DataFeed DataFeed
+        [Devart.Data.Linq.Mapping.Association(Name="Charge_ChargeCode", Storage="_Charge", ThisKey="Chargedbid", OtherKey="dbid", IsForeignKey=true, DeleteOnNull=true)]
+        public Charge Charge
         {
             get
             {
-                return this._DataFeed.Entity;
+                return this._Charge.Entity;
             }
             set
             {
-                DataFeed previousValue = this._DataFeed.Entity;
-                if ((previousValue != value) || (this._DataFeed.HasLoadedOrAssignedValue == false))
+                Charge previousValue = this._Charge.Entity;
+                if ((previousValue != value) || (this._Charge.HasLoadedOrAssignedValue == false))
                 {
                     this.SendPropertyChanging();
                     if (previousValue != null)
                     {
-                        this._DataFeed.Entity = null;
-                        previousValue.AggregationRuns.Remove(this);
+                        this._Charge.Entity = null;
+                        previousValue.ChargeCodes.Remove(this);
                     }
-                    this._DataFeed.Entity = value;
+                    this._Charge.Entity = value;
                     if (value != null)
                     {
-                        this._DataFeeddbid = value.dbid;
-                        value.AggregationRuns.Add(this);
+                        this._Chargedbid = value.dbid;
+                        value.ChargeCodes.Add(this);
                     }
                     else
                     {
-                        this._DataFeeddbid = default(long);
+                        this._Chargedbid = default(long);
                     }
-                    this.SendPropertyChanged("DataFeed");
+                    this.SendPropertyChanged("Charge");
                 }
             }
         }

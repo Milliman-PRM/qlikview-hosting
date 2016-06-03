@@ -73,7 +73,7 @@ namespace BayClinicCdrAggregationLib
             {
                 bool Success;
                 BayClinicCernerAmbulatoryBatchAggregator Aggregator = new BayClinicCernerAmbulatoryBatchAggregator(PgCxnName);
-                Success = Aggregator.AggregateAllAvailablePatients();
+                Success = Aggregator.AggregateAllAvailablePatients(true);  // TODO for production the argument should be false
 
                 if (EndThreadSignal)
                 {

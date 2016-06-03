@@ -32,6 +32,7 @@ namespace BayClinicCernerAmbulatory
         public Dictionary<String, String> IdentifierTypeCodeMeanings = new Dictionary<string, string>();
         public Dictionary<String, String> IdentifierGroupCodeMeanings = new Dictionary<string, string>();
         public Dictionary<String, String> VisitLocationCodeMeanings = new Dictionary<string, string>();
+        public Dictionary<String, String> ChargeDetailTypeCodeMeanings = new Dictionary<string, string>();
         //public Dictionary<String, String> ...CodeMeanings = new Dictionary<string, string>();
 
         #region temporary validation functions
@@ -87,10 +88,13 @@ namespace BayClinicCernerAmbulatory
                 && InitializeCodeDictionary("IDENTIFIERS", new String[] { "IDENTIFIER_GROUP" }, ref IdentifierGroupCodeMeanings)
 
                 && InitializeCodeDictionary("VISIT", new String[] { "LOCATION_CODE" }, ref VisitLocationCodeMeanings)
+
+                && InitializeCodeDictionary("CHARGEDETAIL", new String[] { "TYPE" }, ref ChargeDetailTypeCodeMeanings)
                 ;
             
             Trace.WriteLine("Identifier Typecodes dictionary has values: " + String.Join(", ", IdentifierTypeCodeMeanings));
             Trace.WriteLine("Identifier Groupcodes dictionary has values: " + String.Join(", ", IdentifierGroupCodeMeanings));
+            Trace.WriteLine("ChargeDetail Type dictionary has values: " + String.Join(", ", ChargeDetailTypeCodeMeanings));
 
             return Success;
         }

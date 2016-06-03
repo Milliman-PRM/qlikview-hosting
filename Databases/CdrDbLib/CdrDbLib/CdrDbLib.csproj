@@ -61,6 +61,10 @@
     <Compile Include="Entities\CdrDataContext.Charge.Generated.cs">
       <DependentUpon>CdrDataContext.Charge.cs</DependentUpon>
     </Compile>
+    <Compile Include="Entities\CdrDataContext.ChargeCode.cs" />
+    <Compile Include="Entities\CdrDataContext.ChargeCode.Generated.cs">
+      <DependentUpon>CdrDataContext.ChargeCode.cs</DependentUpon>
+    </Compile>
     <Compile Include="Entities\CdrDataContext.CodedEntry.cs" />
     <Compile Include="Entities\CdrDataContext.CodedEntry.Generated.cs">
       <DependentUpon>CdrDataContext.CodedEntry.cs</DependentUpon>
