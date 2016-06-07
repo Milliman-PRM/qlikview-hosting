@@ -120,7 +120,8 @@ namespace BayClinicCernerExtractLib
             {
                 // Lines after the first seem to have one more delimiter (at the end) than the header line, but no value after the last one.  
                 // So Values[] gets one additional element but with no bad consequence since the last one is not a real value.  
-                string[] Values = Reader.ReadLine().Replace("\"", "").Split('|');
+                String Line = Reader.ReadLine();
+                string[] Values = Line.Replace("\"", "").Split('|');
 
                 Dictionary<string, string> NewDocDictionary = new Dictionary<string, string>();
                 for (int i = 0; i < FieldNames.Length; i++)

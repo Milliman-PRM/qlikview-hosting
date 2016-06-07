@@ -158,7 +158,7 @@
       <Column Name="units" Member="Units" Type="System.String" DbType="varchar" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="6c81672a-971c-4ff7-9082-1178452e57ff" />
       <Column Name="normalrangelow" Member="NormalRangeLow" Type="System.String" DbType="varchar" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="dbecf61f-4ccc-4f4e-b50e-c183254cfb19" />
       <Column Name="normalrangehigh" Member="NormalRangeHigh" Type="System.String" DbType="varchar" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="20aced89-ae33-4be1-856f-994f3beacba7" />
-      <Column Name="abnormalflag" Member="AbnormalFlag" Type="System.Boolean" DbType="BOOL" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="9121cc47-7685-42b9-9c11-a9c858889636" />
+      <Column Name="normaltype" Member="NormalType" Type="ResultNormal" DbType="smallint" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="9121cc47-7685-42b9-9c11-a9c858889636" />
       <Column Name="patientdbid" Member="Patientdbid" Type="System.Int64" AutoSync="Always" DbType="int8 NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="713f6aa4-3917-4733-8073-0c142fe3fd3e" />
       <Column Name="visitencounterdbid" Member="VisitEncounterdbid" Type="System.Int64" AutoSync="Always" DbType="int8" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="ff2b6a66-382d-4d70-a996-cdd8736fa67a" />
       <Association Name="Patient_Measurement" ed:AssociationGuid="6946cc8f-e055-4653-bbb0-f25fc3fd22e9" Member="Patient" ed:Guid="2148c52b-ad49-494e-ae5d-ca23658bc83f" ThisKey="Patientdbid" OtherKey="dbid" Type="Patient" DeleteOnNull="true" IsForeignKey="true" />
@@ -371,5 +371,11 @@
     <Member Name="Business" ed:Guid="6b565ddb-c182-4a58-adf7-06a2fc09e5dd" />
     <Member Name="Mailing" ed:Guid="303fa9e3-16bd-404b-b68d-f383ed3ebbb5" />
     <Member Name="ePrescribing" ed:Guid="b4c88500-55d8-40d3-aac5-c33afaf64072" />
+  </EnumType>
+  <EnumType Name="ResultNormal" UnderlyingType="Int16" Type="ResultNormal" ed:Guid="f5772ebb-557e-4d6b-8cca-94a0256b9e30">
+    <Member Name="Unspecified" ed:Guid="0f7ff4bd-b3f4-464a-a57f-164d21cc93e1" />
+    <Member Name="Low" ed:Guid="8099edcd-ed38-494e-bcb5-73c4b1d7fb8d" />
+    <Member Name="High" ed:Guid="8f9743ca-30a6-4966-a794-3ddc1cd46c89" />
+    <Member Name="Abnormal" ed:Guid="d12ed5f3-f683-457a-813c-5eb3ddae687a" />
   </EnumType>
 </Database>

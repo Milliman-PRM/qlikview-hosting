@@ -33,6 +33,9 @@ namespace BayClinicCernerAmbulatory
         public Dictionary<String, String> IdentifierGroupCodeMeanings = new Dictionary<string, string>();
         public Dictionary<String, String> VisitLocationCodeMeanings = new Dictionary<string, string>();
         public Dictionary<String, String> ChargeDetailTypeCodeMeanings = new Dictionary<string, string>();
+        public Dictionary<String, String> ResultCodeCodeMeanings = new Dictionary<string, string>();
+        public Dictionary<String, String> ResultNormalCodeMeanings = new Dictionary<string, string>();
+        public Dictionary<String, String> ResultUnitsCodeMeanings = new Dictionary<string, string>();
         //public Dictionary<String, String> ...CodeMeanings = new Dictionary<string, string>();
 
         #region temporary validation functions
@@ -90,6 +93,10 @@ namespace BayClinicCernerAmbulatory
                 && InitializeCodeDictionary("VISIT", new String[] { "LOCATION_CODE" }, ref VisitLocationCodeMeanings)
 
                 && InitializeCodeDictionary("CHARGEDETAIL", new String[] { "TYPE" }, ref ChargeDetailTypeCodeMeanings)
+
+                && InitializeCodeDictionary("RESULT", new String[] { "CODE" }, ref ResultCodeCodeMeanings)
+                && InitializeCodeDictionary("RESULT", new String[] { "NORMAL_CODE" }, ref ResultNormalCodeMeanings)
+                && InitializeCodeDictionary("RESULT", new String[] { "UNITS" }, ref ResultUnitsCodeMeanings)
                 ;
             
             Trace.WriteLine("Identifier Typecodes dictionary has values: " + String.Join(", ", IdentifierTypeCodeMeanings));
@@ -256,5 +263,32 @@ namespace BayClinicCernerAmbulatory
             return MaritalStatus.Unspecified;
         }
 
+        public ResultNormal GetResultNormalCodeEnum(String CernerCode)
+        {
+            if (ResultNormalCodeMeanings.ContainsKey(CernerCode))
+            {
+                switch (ResultNormalCodeMeanings[CernerCode].ToLower())
+                {
+                    case "hhi":
+                        return ResultNormal.High;
+                    case "hi":
+                        return ResultNormal.High;
+                    case "llow":
+                        return ResultNormal.Low;
+                    case "low":
+                        return ResultNormal.Low;
+                    case "abn":
+                        return ResultNormal.Abnormal;
+                    case "":
+                        return ResultNormal.Unspecified;   // TODO This may indicate normal, have not tested this exhaustively
+
+                    default:
+                        Trace.WriteLine("Unsupported Result-Normal code encountered: " + ResultNormalCodeMeanings[CernerCode] + " with code " + CernerCode);
+                        return ResultNormal.Unspecified;
+                }
+            }
+
+            return ResultNormal.Unspecified;
+        }
     }
 }

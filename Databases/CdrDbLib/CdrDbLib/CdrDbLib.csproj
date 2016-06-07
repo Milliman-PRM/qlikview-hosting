@@ -30,10 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Devart.Data, Version=5.0.1384.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL" />
-    <Reference Include="Devart.Data.Linq, Version=4.5.930.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL" />
-    <Reference Include="Devart.Data.PostgreSql, Version=7.4.592.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL" />
-    <Reference Include="Devart.Data.PostgreSql.Linq, Version=4.5.930.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL" />
+    <Reference Include="Devart.Data, Version=5.0.1450.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL" />
+    <Reference Include="Devart.Data.Linq, Version=4.5.995.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL" />
+    <Reference Include="Devart.Data.PostgreSql.Linq, Version=4.5.995.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -124,6 +123,7 @@
     <Compile Include="Entities\CdrDataContext.Problem.Generated.cs">
       <DependentUpon>CdrDataContext.Problem.cs</DependentUpon>
     </Compile>
+    <Compile Include="Entities\CdrDataContext.ResultNormal.cs" />
     <Compile Include="Entities\CdrDataContext.TelephoneNumber.cs" />
     <Compile Include="Entities\CdrDataContext.TelephoneNumber.Generated.cs">
       <DependentUpon>CdrDataContext.TelephoneNumber.cs</DependentUpon>

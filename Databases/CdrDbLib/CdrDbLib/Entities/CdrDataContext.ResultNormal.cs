@@ -22,31 +22,27 @@ namespace CdrContext
 {
 
     /// <summary>
-    /// There are no comments for AddressType in the schema.
+    /// There are no comments for ResultNormal in the schema.
     /// </summary>
-    public enum AddressType : short
+    public enum ResultNormal : short
     {
     
         /// <summary>
-        /// There are no comments for AddressType.Unspecified in the schema.
+        /// There are no comments for ResultNormal.Unspecified in the schema.
         /// </summary>
         Unspecified,    
         /// <summary>
-        /// There are no comments for AddressType.Home in the schema.
+        /// There are no comments for ResultNormal.Low in the schema.
         /// </summary>
-        Home,    
+        Low,    
         /// <summary>
-        /// There are no comments for AddressType.Business in the schema.
+        /// There are no comments for ResultNormal.High in the schema.
         /// </summary>
-        Business,    
+        High,    
         /// <summary>
-        /// There are no comments for AddressType.Mailing in the schema.
+        /// There are no comments for ResultNormal.Abnormal in the schema.
         /// </summary>
-        Mailing,    
-        /// <summary>
-        /// There are no comments for AddressType.ePrescribing in the schema.
-        /// </summary>
-        ePrescribing
+        Abnormal
     }
 
 }

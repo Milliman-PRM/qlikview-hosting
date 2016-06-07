@@ -483,6 +483,7 @@ namespace BayClinicCernerAmbulatory
         {
             bool Success = true;
             int ResultCounter = 0;
+            DateTime PerformedDateTime;
 
             FilterDefinition<MongodbResultEntity> ResultFilterDef = Builders<MongodbResultEntity>.Filter
                 .Where(x => 
@@ -499,9 +500,23 @@ namespace BayClinicCernerAmbulatory
                     foreach (MongodbResultEntity ResultDoc in ResultCursor.Current)
                     {
                         ResultCounter++;
+                        DateTime.TryParse(ResultDoc.PerformedDateTime, out PerformedDateTime);
 
                         Measurement NewPgRecord = new Measurement
                         {
+                            Patientdbid = PatientRecord.dbid,
+                            VisitEncounterdbid = VisitRecord.dbid,
+                            EmrIdentifier = ResultDoc.UniqueResultIdentifier,
+                            Name = ReferencedCodes.ResultCodeCodeMeanings[ResultDoc.Code],
+                            Description = ResultDoc.Title,  // TODO get this right
+                            Comments = "",    // TODO get this right
+                            MeasurementCode = new CodedEntry { },    // TODO get this right
+                            AssessmentDateTime = PerformedDateTime,
+                            Value = ResultDoc.ResultValue,
+                            Units = ReferencedCodes.ResultUnitsCodeMeanings[ResultDoc.Units],
+                            NormalRangeLow = ResultDoc.NormalLow,
+                            NormalRangeHigh = ResultDoc.NormalHigh,
+                            NormalType = ReferencedCodes.GetResultNormalCodeEnum(ResultDoc.NormalCode)
                         };
 
                         CdrDb.Context.Measurements.InsertOnSubmit(NewPgRecord);
@@ -570,6 +585,10 @@ namespace BayClinicCernerAmbulatory
             FilterDefinition<MongodbChargeDetailEntity> ChargeDetailFilterDef = Builders<MongodbChargeDetailEntity>.Filter.Where(x => x.LastAggregationRun > 0);
             UpdateDefinition<MongodbChargeDetailEntity> ChargeDetailUpdateDef = Builders<MongodbChargeDetailEntity>.Update.Unset(x => x.LastAggregationRun);
             Result = ChargeDetailCollection.UpdateMany(ChargeDetailFilterDef, ChargeDetailUpdateDef);
+
+            FilterDefinition<MongodbResultEntity> ResultFilterDef = Builders<MongodbResultEntity>.Filter.Where(x => x.LastAggregationRun > 0);
+            UpdateDefinition<MongodbResultEntity> ResultUpdateDef = Builders<MongodbResultEntity>.Update.Unset(x => x.LastAggregationRun);
+            Result = ResultCollection.UpdateMany(ResultFilterDef, ResultUpdateDef);
 
         }
 
