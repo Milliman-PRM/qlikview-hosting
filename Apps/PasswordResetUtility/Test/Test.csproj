@@ -57,9 +57,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PasswordRestUtilityApplication\PasswordRestUtilityApplication.csproj">
+    <ProjectReference Include="..\PasswordResetUtilityApplication\PasswordResetUtilityApplication.csproj">
       <Project>{8637b909-7e2a-479e-a4c2-5305ee52230e}</Project>
-      <Name>PasswordRestUtilityApplication</Name>
+      <Name>PasswordResetUtilityApplication</Name>
     </ProjectReference>
     <ProjectReference Include="..\PasswordUtilityProcessor\PasswordUtilityProcessor.csproj">
       <Project>{4ce45ceb-8e9c-4792-bb1f-e6da59afa339}</Project>

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PasswordRestUtilityApplication
+namespace PasswordResetUtilityApplication
 {
     public class Program
     {
@@ -19,12 +19,12 @@ namespace PasswordRestUtilityApplication
                 //args = users;
                 if (CheckArgs(args))
                 {
-                    PasswordProcessor.ExecutePasswordRestUtility(args[0]);
+                    PasswordProcessor.ExecutePasswordResetUtility(args[0]);
                 }
                 else
                 {
                      var processAll = "All" ;
-                     PasswordProcessor.ExecutePasswordRestUtility(processAll);
+                     PasswordProcessor.ExecutePasswordResetUtility(processAll);
                 }
                 Environment.ExitCode = 0;
             }
@@ -95,8 +95,8 @@ namespace PasswordRestUtilityApplication
                 Console.WriteLine("Application and userEmail");
                 Console.WriteLine("Application only ");
                 Console.WriteLine(String.Empty);
-                Console.WriteLine("Ex: PasswordRestUtilityApplication.exe  'abs@somthing.com' ");
-                Console.WriteLine("Ex: PasswordRestUtilityApplication.exe");
+                Console.WriteLine("Ex: PasswordResetUtilityApplication.exe  'abs@somthing.com' ");
+                Console.WriteLine("Ex: PasswordResetUtilityApplication.exe");
                 Console.WriteLine("--------------------------------------------------");
             }
         }

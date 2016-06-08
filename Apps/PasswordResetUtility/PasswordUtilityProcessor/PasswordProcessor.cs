@@ -15,7 +15,7 @@ namespace PasswordUtilityProcessor
 {
     public class PasswordProcessor : BaseFileProcessor
     {
-        public static void ExecutePasswordRestUtility(string args)
+        public static void ExecutePasswordResetUtility(string args)
         {
             try
             {
@@ -23,7 +23,7 @@ namespace PasswordUtilityProcessor
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, "ExecutePasswordRestUtility || " + args.ToArray());
+                BaseFileProcessor.LogError(ex, "ExecutePasswordResetUtility || " + args.ToArray());
             }
         }
         private static void Process(string args)
@@ -122,15 +122,15 @@ namespace PasswordUtilityProcessor
             //get the log directory
             var userProfileDirectory = ConfigurationManager.AppSettings["UserProfileDirectory"];
             //write file
-            var userPasswordRestFileAndDirectory = (userProfileDirectory + providerUserKey.ToUpper() + ".rst");
+            var userPasswordResetFileAndDirectory = (userProfileDirectory + providerUserKey.ToUpper() + ".rst");
             //Check file
-            if (File.Exists(userPasswordRestFileAndDirectory))
+            if (File.Exists(userPasswordResetFileAndDirectory))
             {
-                File.Delete(userPasswordRestFileAndDirectory);
+                File.Delete(userPasswordResetFileAndDirectory);
             }
             //create the file name
             var message = (DateTime.Now + " || " + "User Needs to Reset Password. User Name: " + user.UserName);
-            File.WriteAllText(userPasswordRestFileAndDirectory, message);
+            File.WriteAllText(userPasswordResetFileAndDirectory, message);
         }
 
         #region Custom

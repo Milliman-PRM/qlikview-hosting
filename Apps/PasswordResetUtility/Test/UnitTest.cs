@@ -22,13 +22,13 @@ namespace Test
         public void TestMethod_Main()
         {
             var users = new string[] { "aadie@sjhnh.org" };            
-            PasswordRestUtilityApplication.Program.Main(users);
+            PasswordResetUtilityApplication.Program.Main(users);
         }
         [TestMethod]
         public void TestMethod_MainAll()
         {
             var users = new string[] { "All" };
-            PasswordRestUtilityApplication.Program.Main(users);
+            PasswordResetUtilityApplication.Program.Main(users);
         }
     }
 }
