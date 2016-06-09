@@ -80,7 +80,7 @@ namespace BayClinicCdrAggregationLib
                     break;
                 }
 
-                Thread.Sleep(180 * 1000);
+                Thread.Sleep(3 * 60 * 1000);  // milliseconds
             }
         }
 
