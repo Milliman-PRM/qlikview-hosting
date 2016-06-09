@@ -45,7 +45,7 @@ namespace BayClinicCernerAmbulatory
         IMongoCollection<MongodbChargeEntity> ChargeCollection;
         IMongoCollection<MongodbChargeDetailEntity> ChargeDetailCollection;
         IMongoCollection<MongodbResultEntity> ResultCollection;
-        IMongoCollection<MongodbInsuranceCoverageEntity> InsuranceCoverageCollection;
+        IMongoCollection<MongodbInsuranceEntity> InsuranceCollection;
 
         public BayClinicCernerAmbulatoryBatchAggregator(String PgConnectionName = null)
         {
@@ -73,7 +73,7 @@ namespace BayClinicCernerAmbulatory
             ChargeCollection = MongoCxn.Db.GetCollection<MongodbChargeEntity>("charge");
             ChargeDetailCollection = MongoCxn.Db.GetCollection<MongodbChargeDetailEntity>("chargedetail");
             ResultCollection = MongoCxn.Db.GetCollection<MongodbResultEntity>("result");
-            InsuranceCoverageCollection = MongoCxn.Db.GetCollection<MongodbInsuranceCoverageEntity>("insuranceconverage");
+            InsuranceCollection = MongoCxn.Db.GetCollection<MongodbInsuranceEntity>("insurance");
 
             Initialized = ReferencedCodes.Initialize(RefCodeCollection);
             ThisAggregationRun = GetNewAggregationRun();
@@ -536,7 +536,7 @@ namespace BayClinicCernerAmbulatory
         {
             int InsuranceCoverageCounter = 0;
 
-            FilterDefinition<MongodbInsuranceCoverageEntity> InsuranceCoverageFilterDef = Builders<MongodbInsuranceCoverageEntity>.Filter
+            FilterDefinition<MongodbInsuranceEntity> InsuranceCoverageFilterDef = Builders<MongodbInsuranceEntity>.Filter
                 .Where(
                          x => x.EntityType == "PERSON"
                       && x.UniqueEntityIdentifier == MongoPerson.UniquePersonIdentifier
@@ -544,11 +544,11 @@ namespace BayClinicCernerAmbulatory
                                                          // TODO do we also want to match the extract date from MongoPerson.ImportFile?
                       );
 
-            using (var InsuranceCoverageCursor = InsuranceCoverageCollection.Find<MongodbInsuranceCoverageEntity>(InsuranceCoverageFilterDef).ToCursor())
+            using (var InsuranceCoverageCursor = InsuranceCollection.Find<MongodbInsuranceEntity>(InsuranceCoverageFilterDef).ToCursor())
             {
                 while (InsuranceCoverageCursor.MoveNext())  // transfer the next batch of available documents from the query result cursor
                 {
-                    foreach (MongodbInsuranceCoverageEntity InsuranceCoverageDoc in InsuranceCoverageCursor.Current)
+                    foreach (MongodbInsuranceEntity InsuranceCoverageDoc in InsuranceCoverageCursor.Current)
                     {
                         InsuranceCoverageCounter++;
                         DateTime StartDate, EndDate;
@@ -562,7 +562,7 @@ namespace BayClinicCernerAmbulatory
                             StartDate = StartDate,
                             EndDate = EndDate,
                             PlanName = InsuranceCoverageDoc.UniqueHealthPlanIdentifier,
-                            Patient = PgPatient
+                            Patient = PgPatient            //Just adding the patientdbid might may improve runtime
                         };
 
                         CdrDb.Context.InsuranceCoverages.InsertOnSubmit(NewPgRecord);
@@ -635,9 +635,9 @@ namespace BayClinicCernerAmbulatory
             UpdateDefinition<MongodbResultEntity> ResultUpdateDef = Builders<MongodbResultEntity>.Update.Unset(x => x.LastAggregationRun);
             Result = ResultCollection.UpdateMany(ResultFilterDef, ResultUpdateDef);
 
-            FilterDefinition<MongodbInsuranceCoverageEntity> InsuranceCoverageFilterDef = Builders<MongodbInsuranceCoverageEntity>.Filter.Where(x => x.LastAggregationRun > 0);
-            UpdateDefinition<MongodbInsuranceCoverageEntity> InsuranceCoverageUpdateDef = Builders<MongodbInsuranceCoverageEntity>.Update.Unset(x => x.LastAggregationRun);
-            Result = InsuranceCoverageCollection.UpdateMany(InsuranceCoverageFilterDef, InsuranceCoverageUpdateDef);
+            FilterDefinition<MongodbInsuranceEntity> InsuranceFilterDef = Builders<MongodbInsuranceEntity>.Filter.Where(x => x.LastAggregationRun > 0);
+            UpdateDefinition<MongodbInsuranceEntity> InsuranceUpdateDef = Builders<MongodbInsuranceEntity>.Update.Unset(x => x.LastAggregationRun);
+            Result = InsuranceCollection.UpdateMany(InsuranceFilterDef, InsuranceUpdateDef);
 
         }
 
