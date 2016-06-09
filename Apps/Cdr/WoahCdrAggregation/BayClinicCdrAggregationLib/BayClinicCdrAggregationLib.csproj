@@ -64,6 +64,7 @@
     <Compile Include="MongoDbEntities\MongodbChargeDetailEntity.cs" />
     <Compile Include="MongoDbEntities\MongodbChargeEntity.cs" />
     <Compile Include="MongoDbEntities\MongodbIdentifierEntity.cs" />
+    <Compile Include="MongoDbEntities\MongodbInsuranceEntity.cs" />
     <Compile Include="MongoDbEntities\MongodbPersonEntity.cs" />
     <Compile Include="MongoDbEntities\MongodbPhoneEntity.cs" />
     <Compile Include="MongoDbEntities\MongodbRefCodeEntity.cs" />
