@@ -279,8 +279,10 @@ namespace BayClinicCernerAmbulatory
                         return ResultNormal.Low;
                     case "abn":
                         return ResultNormal.Abnormal;
-                    case "":
-                        return ResultNormal.Unspecified;   // TODO This may indicate normal, have not tested this exhaustively
+                    case "unspecified":     // TODO This may indicate normal, have not tested this exhaustively
+                        return ResultNormal.Unspecified;
+                    case "":                // TODO This may indicate normal, have not tested this exhaustively
+                        return ResultNormal.Unspecified;
 
                     default:
                         Trace.WriteLine("Unsupported Result-Normal code encountered: " + ResultNormalCodeMeanings[CernerCode] + " with code " + CernerCode);
