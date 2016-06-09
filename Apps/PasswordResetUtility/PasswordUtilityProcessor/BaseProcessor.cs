@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Security;
+using SystemReporting.Utilities.Email;
 
 namespace PasswordUtilityProcessor
 {
@@ -30,6 +31,11 @@ namespace PasswordUtilityProcessor
             {
                 log.Error("||-||", ex);
             }
+        }
+        private static void SendEmail(string message, string subject)
+        {
+            //send email
+            Notification.SendNotification(message, subject);
         }
         #endregion
     }

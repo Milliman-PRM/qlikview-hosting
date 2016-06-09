@@ -2,11 +2,15 @@
 using System.Net.Mail;
 using System.Configuration;
 using System.IO;
+using log4net;
 
 namespace SystemReporting.Utilities.Email
 {
     public class Notification
     {
+        //switch to using the generic logger
+        public static log4net.ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         public static void SendNotification(string message, string subject)
         {
             try
@@ -27,7 +31,7 @@ namespace SystemReporting.Utilities.Email
             }
             catch (Exception ex)
             {
-                //LogError(ex, "Notification.SendNotification. Failed to send email.");
+                log.Error("Notification.SendNotification. Failed to send email.", ex);
             }            
         }
         
@@ -52,7 +56,7 @@ namespace SystemReporting.Utilities.Email
             }
             catch (Exception ex)
             {
-                //Logger.WriteLine(ex, "Notification.SendNotification. Failed to send email." );
+                log.Error("Notification.SendNotification. Failed to send email.", ex );
             }
         }
 
