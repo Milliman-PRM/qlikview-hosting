@@ -45,6 +45,7 @@ namespace BayClinicCernerAmbulatory
         IMongoCollection<MongodbChargeEntity> ChargeCollection;
         IMongoCollection<MongodbChargeDetailEntity> ChargeDetailCollection;
         IMongoCollection<MongodbResultEntity> ResultCollection;
+        IMongoCollection<MongodbDiagnosisEntity> DiagnosisCollection;
 
         public BayClinicCernerAmbulatoryBatchAggregator(String PgConnectionName = null)
         {
@@ -72,6 +73,7 @@ namespace BayClinicCernerAmbulatory
             ChargeCollection = MongoCxn.Db.GetCollection<MongodbChargeEntity>("charge");
             ChargeDetailCollection = MongoCxn.Db.GetCollection<MongodbChargeDetailEntity>("chargedetail");
             ResultCollection = MongoCxn.Db.GetCollection<MongodbResultEntity>("result");
+            DiagnosisCollection = MongoCxn.Db.GetCollection<MongodbDiagnosisEntity>("diagnosis");
 
             Initialized = ReferencedCodes.Initialize(RefCodeCollection);
             ThisAggregationRun = GetNewAggregationRun();
@@ -166,7 +168,6 @@ namespace BayClinicCernerAmbulatory
             //            EntitySet<Medication> _Medications;
             //            EntitySet<Immunization> _Immunizations;
             //            EntitySet<InsuranceCoverage> _InsuranceCoverages;
-            //            EntitySet<Diagnosis> _Diagnoses;
             //            EntitySet<Problem> _Problems;
 
             if (OverallSuccess)
@@ -369,6 +370,7 @@ namespace BayClinicCernerAmbulatory
 
                         OverallSuccess &= AggregateCharges(VisitDoc, NewPgRecord);
                         OverallSuccess &= AggregateResults(PersonDoc, PatientRecord, VisitDoc, NewPgRecord);
+                        OverallSuccess &= AggregateDiagnoses(PersonDoc, PatientRecord, VisitDoc, NewPgRecord);
                     }
                 }
             }
@@ -523,6 +525,60 @@ namespace BayClinicCernerAmbulatory
                         CdrDb.Context.SubmitChanges();
 
                         MongoRunUpdater.ResultIdList.Add(ResultDoc.Id);
+                    }
+                }
+            }
+
+            return Success;
+        }
+
+        private bool AggregateDiagnoses(MongodbPersonEntity PersonDoc, Patient PatientRecord, MongodbVisitEntity VisitDoc, VisitEncounter VisitRecord)
+        {
+            bool Success = true;
+            int DiagnosisCounter = 0;
+
+            FilterDefinition<MongodbDiagnosisEntity> DiagnosisFilterDef = Builders<MongodbDiagnosisEntity>.Filter
+                .Where(x =>
+                       x.UniquePersonIdentifier == PersonDoc.UniquePersonIdentifier
+                    && x.UniqueVisitIdentifier == VisitDoc.UniqueVisitIdentifier
+                    && !(x.LastAggregationRun > 0)     // not previously aggregated
+                                                       // TODO do we also want to match the extract date from MongoPerson.ImportFile?
+                      );
+
+            using (var DiagnosisCursor = DiagnosisCollection.Find<MongodbDiagnosisEntity>(DiagnosisFilterDef).ToCursor())
+            {
+                while (DiagnosisCursor.MoveNext())  // transfer the next batch of available documents from the query result cursor
+                {
+                    foreach (MongodbDiagnosisEntity ResultDoc in DiagnosisCursor.Current)
+                    {
+                        DiagnosisCounter++;
+
+                        DateTime StartDateTime, EndDateTime, DiagDateTime, StatusDateTime;
+                        DateTime.TryParse(ResultDoc.EffectiveBeginDateTime, out StartDateTime);
+                        DateTime.TryParse(ResultDoc.EffectiveEndDateTime, out EndDateTime);
+                        DateTime.TryParse(ResultDoc.DiagnosisDateTime, out DiagDateTime);
+                        DateTime.TryParse(ResultDoc.ActiveStatusDateTime, out StatusDateTime);
+
+                        Diagnosis NewPgRecord = new Diagnosis
+                        {
+                            Patientdbid = PatientRecord.dbid,
+                            VisitEncounterdbid = VisitRecord.dbid,
+                            EmrIdentifier = ResultDoc.UniqueDiagnosisIdentifier,
+                            StartDateTime = StartDateTime,
+                            EndDateTime = EndDateTime,
+                            DeterminationDateTime = DiagDateTime,
+                            ShortDescription = "",
+                            LongDescription = "",
+                            DiagCode = new CodedEntry { },
+                            Status = "",
+                            StatusDateTime = StatusDateTime
+                            // TODO This block is not finished.  Get the member initializations right.  
+                        };
+
+                        CdrDb.Context.Diagnoses.InsertOnSubmit(NewPgRecord);
+                        CdrDb.Context.SubmitChanges();
+
+                        MongoRunUpdater.DiagnosisIdList.Add(ResultDoc.Id);
                     }
                 }
             }
