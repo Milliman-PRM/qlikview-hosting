@@ -45,6 +45,7 @@ namespace BayClinicCernerAmbulatory
         IMongoCollection<MongodbChargeEntity> ChargeCollection;
         IMongoCollection<MongodbChargeDetailEntity> ChargeDetailCollection;
         IMongoCollection<MongodbResultEntity> ResultCollection;
+        IMongoCollection<MongodbInsuranceCoverageEntity> InsuranceCoverageCollection;
 
         public BayClinicCernerAmbulatoryBatchAggregator(String PgConnectionName = null)
         {
@@ -72,6 +73,7 @@ namespace BayClinicCernerAmbulatory
             ChargeCollection = MongoCxn.Db.GetCollection<MongodbChargeEntity>("charge");
             ChargeDetailCollection = MongoCxn.Db.GetCollection<MongodbChargeDetailEntity>("chargedetail");
             ResultCollection = MongoCxn.Db.GetCollection<MongodbResultEntity>("result");
+            InsuranceCoverageCollection = MongoCxn.Db.GetCollection<MongodbInsuranceCoverageEntity>("insuranceconverage");
 
             Initialized = ReferencedCodes.Initialize(RefCodeCollection);
             ThisAggregationRun = GetNewAggregationRun();
@@ -162,10 +164,10 @@ namespace BayClinicCernerAmbulatory
             OverallSuccess &= AggregateAddresses(PersonDocument, ThisPatient);
             OverallSuccess &= AggregateIdentifiers(PersonDocument, ThisPatient);
             OverallSuccess &= AggregateVisits(PersonDocument, ThisPatient);
-
+            OverallSuccess &= AggregateInsuranceCoverages(PersonDocument, ThisPatient);
+            
             //            EntitySet<Medication> _Medications;
             //            EntitySet<Immunization> _Immunizations;
-            //            EntitySet<InsuranceCoverage> _InsuranceCoverages;
             //            EntitySet<Diagnosis> _Diagnoses;
             //            EntitySet<Problem> _Problems;
 
@@ -528,6 +530,48 @@ namespace BayClinicCernerAmbulatory
             }
 
             return Success;
+        }
+
+        private bool AggregateInsuranceCoverages(MongodbPersonEntity MongoPerson, Patient PgPatient)
+        {
+            int InsuranceCoverageCounter = 0;
+
+            FilterDefinition<MongodbInsuranceCoverageEntity> InsuranceCoverageFilterDef = Builders<MongodbInsuranceCoverageEntity>.Filter
+                .Where(
+                         x => x.EntityType == "PERSON"
+                      && x.UniqueEntityIdentifier == MongoPerson.UniquePersonIdentifier
+                      && !(x.LastAggregationRun > 0)     // not previously aggregated
+                                                         // TODO do we also want to match the extract date from MongoPerson.ImportFile?
+                      );
+
+            using (var InsuranceCoverageCursor = InsuranceCoverageCollection.Find<MongodbInsuranceCoverageEntity>(InsuranceCoverageFilterDef).ToCursor())
+            {
+                while (InsuranceCoverageCursor.MoveNext())  // transfer the next batch of available documents from the query result cursor
+                {
+                    foreach (MongodbInsuranceCoverageEntity InsuranceCoverageDoc in InsuranceCoverageCursor.Current)
+                    {
+                        InsuranceCoverageCounter++;
+                        DateTime StartDate, EndDate, ActiveStatusDT;
+                        DateTime.TryParse(InsuranceCoverageDoc.EffectiveBeginDateTime, out StartDate);        // Will be DateTime.MinValue on parse failure
+                        DateTime.TryParse(InsuranceCoverageDoc.EffectiveEndDateTime, out EndDate);        // Will be DateTime.MinValue on parse failure
+                        DateTime.TryParse(InsuranceCoverageDoc.ActiveStatusDateTime, out ActiveStatusDT);        // Will be DateTime.MinValue on parse failure
+
+                        InsuranceCoverage NewPgRecord = new InsuranceCoverage
+                        {
+                            Payer = InsuranceCoverageDoc.UniqueOrganizationIdentifier,            
+                            StartDate = StartDate,
+                            EndDate = EndDate,
+                            PlanName = InsuranceCoverageDoc.UniqueHealthPlanIdentifier
+                        };
+
+                        CdrDb.Context.InsuranceCoverages.InsertOnSubmit(NewPgRecord);
+                        CdrDb.Context.SubmitChanges();
+
+                        MongoRunUpdater.InsuranceIdList.Add(InsuranceCoverageDoc.Id);
+                    }
+                }
+            }
+                        return true;
         }
 
         private AggregationRun GetNewAggregationRun()
