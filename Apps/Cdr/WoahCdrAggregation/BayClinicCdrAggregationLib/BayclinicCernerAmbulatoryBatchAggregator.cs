@@ -634,6 +634,10 @@ namespace BayClinicCernerAmbulatory
             UpdateDefinition<MongodbResultEntity> ResultUpdateDef = Builders<MongodbResultEntity>.Update.Unset(x => x.LastAggregationRun);
             Result = ResultCollection.UpdateMany(ResultFilterDef, ResultUpdateDef);
 
+            FilterDefinition<MongodbInsuranceCoverageEntity> InsuranceCoverageFilterDef = Builders<MongodbInsuranceCoverageEntity>.Filter.Where(x => x.LastAggregationRun > 0);
+            UpdateDefinition<MongodbInsuranceCoverageEntity> InsuranceCoverageUpdateDef = Builders<MongodbInsuranceCoverageEntity>.Update.Unset(x => x.LastAggregationRun);
+            Result = InsuranceCoverageCollection.UpdateMany(InsuranceCoverageFilterDef, InsuranceCoverageUpdateDef);
+
         }
 
     }
