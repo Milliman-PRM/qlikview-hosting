@@ -561,7 +561,8 @@ namespace BayClinicCernerAmbulatory
                             Payer = InsuranceCoverageDoc.UniqueOrganizationIdentifier,            
                             StartDate = StartDate,
                             EndDate = EndDate,
-                            PlanName = InsuranceCoverageDoc.UniqueHealthPlanIdentifier
+                            PlanName = InsuranceCoverageDoc.UniqueHealthPlanIdentifier,
+                            Patient = PgPatient
                         };
 
                         CdrDb.Context.InsuranceCoverages.InsertOnSubmit(NewPgRecord);
