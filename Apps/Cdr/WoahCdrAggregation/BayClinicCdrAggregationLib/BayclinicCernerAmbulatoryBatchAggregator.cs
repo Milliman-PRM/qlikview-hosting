@@ -551,10 +551,10 @@ namespace BayClinicCernerAmbulatory
                     foreach (MongodbInsuranceCoverageEntity InsuranceCoverageDoc in InsuranceCoverageCursor.Current)
                     {
                         InsuranceCoverageCounter++;
-                        DateTime StartDate, EndDate, ActiveStatusDT;
+                        DateTime StartDate, EndDate;
                         DateTime.TryParse(InsuranceCoverageDoc.EffectiveBeginDateTime, out StartDate);        // Will be DateTime.MinValue on parse failure
                         DateTime.TryParse(InsuranceCoverageDoc.EffectiveEndDateTime, out EndDate);        // Will be DateTime.MinValue on parse failure
-                        DateTime.TryParse(InsuranceCoverageDoc.ActiveStatusDateTime, out ActiveStatusDT);        // Will be DateTime.MinValue on parse failure
+                       
 
                         InsuranceCoverage NewPgRecord = new InsuranceCoverage
                         {
@@ -572,7 +572,7 @@ namespace BayClinicCernerAmbulatory
                     }
                 }
             }
-                        return true;
+            return true;
         }
 
         private AggregationRun GetNewAggregationRun()
