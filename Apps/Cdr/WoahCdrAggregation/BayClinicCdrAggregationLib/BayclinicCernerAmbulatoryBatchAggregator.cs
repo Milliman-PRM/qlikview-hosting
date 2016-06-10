@@ -47,6 +47,7 @@ namespace BayClinicCernerAmbulatory
         IMongoCollection<MongodbResultEntity> ResultCollection;
         IMongoCollection<MongodbDiagnosisEntity> DiagnosisCollection;
         IMongoCollection<MongodbInsuranceEntity> InsuranceCollection;
+        IMongoCollection<MongodbImmunizationEntity> ImmunizationCollection;
 
         public BayClinicCernerAmbulatoryBatchAggregator(String PgConnectionName = null)
         {
@@ -76,6 +77,7 @@ namespace BayClinicCernerAmbulatory
             ResultCollection = MongoCxn.Db.GetCollection<MongodbResultEntity>("result");
             DiagnosisCollection = MongoCxn.Db.GetCollection<MongodbDiagnosisEntity>("diagnosis");
             InsuranceCollection = MongoCxn.Db.GetCollection<MongodbInsuranceEntity>("insurance");
+            ImmunizationCollection = MongoCxn.Db.GetCollection<MongodbImmunizationEntity>("immunization");
 
             Initialized = ReferencedCodes.Initialize(RefCodeCollection);
             ThisAggregationRun = GetNewAggregationRun();
@@ -188,7 +190,7 @@ namespace BayClinicCernerAmbulatory
 
             return OverallSuccess;
         }
-
+ 
         private bool AggregateTelephoneNumbers(MongodbPersonEntity MongoPerson, Patient PgPatient)
         {
             int PhoneCounter = 0;
@@ -373,6 +375,8 @@ namespace BayClinicCernerAmbulatory
                         OverallSuccess &= AggregateCharges(VisitDoc, NewPgRecord);
                         OverallSuccess &= AggregateResults(PersonDoc, PatientRecord, VisitDoc, NewPgRecord);
                         OverallSuccess &= AggregateDiagnoses(PersonDoc, PatientRecord, VisitDoc, NewPgRecord);
+                        OverallSuccess &= AggregateImmunizations(PersonDoc, PatientRecord, VisitDoc, NewPgRecord);
+
                     }
                 }
             }
@@ -588,6 +592,7 @@ namespace BayClinicCernerAmbulatory
             return Success;
         }
 
+
         private bool AggregateInsuranceCoverages(MongodbPersonEntity MongoPerson, Patient PgPatient)
         {
             int InsuranceCoverageCounter = 0;
@@ -630,6 +635,49 @@ namespace BayClinicCernerAmbulatory
             }
             return true;
         }
+
+        private bool AggregateImmunizations(MongodbPersonEntity PersonDoc, Patient PatientRecord, MongodbVisitEntity VisitDoc, VisitEncounter VisitRecord)
+        {
+            int ImmunizationCounter = 0;
+
+            FilterDefinition<MongodbImmunizationEntity> ImmunizationFilterDef = Builders<MongodbImmunizationEntity>.Filter
+                .Where(x =>
+                       x.UniquePersonIdentifier == PersonDoc.UniquePersonIdentifier
+                    && x.UniqueVisitIdentifier == VisitDoc.UniqueVisitIdentifier
+                    && !(x.LastAggregationRun > 0)     // not previously aggregated
+                                                       // TODO do we also want to match the extract date from MongoPerson.ImportFile?
+                      );
+
+            using (var ImmunizationCursor = ImmunizationCollection.Find<MongodbImmunizationEntity>(ImmunizationFilterDef).ToCursor())
+            {
+                while (ImmunizationCursor.MoveNext())  // transfer the next batch of available documents from the query result cursor
+                {
+                    foreach (MongodbImmunizationEntity ImmunizationDoc in ImmunizationCursor.Current)
+                    {
+                        ImmunizationCounter++;
+                        DateTime PerformedDateTime;
+                        DateTime.TryParse(ImmunizationDoc.PerformedDateTime, out PerformedDateTime);
+
+                        Immunization NewPgRecord = new Immunization
+                        {
+                            Patientdbid = PatientRecord.dbid,
+                            EmrIdentifier = ImmunizationDoc.UniqueOrderIdentifier,
+                            Description = "",              
+                            PerformedDateTime = PerformedDateTime,              
+                            ImmunizationCode = new CodedEntry
+                            {
+                                Code = ImmunizationDoc.Code,
+                                CodeMeaning = ReferencedCodes.ImmunizationCodeMeanings[ImmunizationDoc.Code],
+                            },
+                            VisitEncounterdbid = VisitRecord.dbid
+                        };
+                    }
+                }
+            }
+
+            return true;
+        }
+
 
         private AggregationRun GetNewAggregationRun()
         {
@@ -695,6 +743,9 @@ namespace BayClinicCernerAmbulatory
             UpdateDefinition<MongodbInsuranceEntity> InsuranceUpdateDef = Builders<MongodbInsuranceEntity>.Update.Unset(x => x.LastAggregationRun);
             Result = InsuranceCollection.UpdateMany(InsuranceFilterDef, InsuranceUpdateDef);
 
+            FilterDefinition<MongodbImmunizationEntity> ImmunizationFilterDef = Builders<MongodbImmunizationEntity>.Filter.Where(x => x.LastAggregationRun > 0);
+            UpdateDefinition<MongodbImmunizationEntity> ImmunizationUpdateDef = Builders<MongodbImmunizationEntity>.Update.Unset(x => x.LastAggregationRun);
+            Result = ImmunizationCollection.UpdateMany(ImmunizationFilterDef, ImmunizationUpdateDef);
         }
 
     }
