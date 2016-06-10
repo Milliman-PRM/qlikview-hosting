@@ -25,7 +25,7 @@ namespace PasswordResetUtilityApplication
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, "Main || Failed processing. || " + args.ToArray());
+                BaseFileProcessor.LogError(ex, "Main || Failed processing. || " + args, true);
             }
         }
         

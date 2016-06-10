@@ -21,18 +21,26 @@ namespace PasswordUtilityProcessor
         
         #region Error Log     
         //Logs error. It will create file at the directory if file does not exist   
-        public static void LogError(Exception ex, string message)
+        public static void LogError(Exception ex, string message, bool sendEmail)
         {
             if (!string.IsNullOrEmpty(message))
             {
-                log.Error("||-||" + message + "||-|| ", ex);
+                log.Error("||-||" + message + "||-|| ", ex);                
             }
             else
             {
                 log.Error("||-||", ex);
             }
+
+            if (sendEmail)
+            {
+                SendEmail("Exception file has a new exception recorded. Please cehck the file at the file locaion "
+                            + ConfigurationManager.AppSettings["ExceptionLoggerDirectory"],
+                                "Password Reset Utility Exception");
+            }
+            
         }
-        private static void SendEmail(string message, string subject)
+        public static void SendEmail(string message, string subject)
         {
             //send email
             Notification.SendNotification(message, subject);
