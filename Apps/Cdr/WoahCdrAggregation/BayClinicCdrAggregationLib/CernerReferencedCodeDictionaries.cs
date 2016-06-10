@@ -36,6 +36,7 @@ namespace BayClinicCernerAmbulatory
         public Dictionary<String, String> ResultCodeCodeMeanings = new Dictionary<string, string>();
         public Dictionary<String, String> ResultNormalCodeMeanings = new Dictionary<string, string>();
         public Dictionary<String, String> ResultUnitsCodeMeanings = new Dictionary<string, string>();
+        public Dictionary<String, String> TerminologyCodeMeanings = new Dictionary<string, string>();
         //public Dictionary<String, String> ...CodeMeanings = new Dictionary<string, string>();
 
         #region temporary validation functions
@@ -70,33 +71,35 @@ namespace BayClinicCernerAmbulatory
             ValidateRefCodeFieldList("PERSON", 12);
 
             bool Success =
-                   InitializeCodeDictionary("PERSON", new String[] {"GENDER"},                  ref GenderCodeMeanings)
-                && InitializeCodeDictionary("PERSON", new String[] {"DECEASED"},                ref DeceasedCodeMeanings)
-                && InitializeCodeDictionary("PERSON", new String[] {"BIRTH_DATE_PRECISION"},    ref BirthDatePrecisionCodeMeanings)
-                && InitializeCodeDictionary("PERSON", new String[] {"DECEASED_DATE_PRECISION"}, ref DeceasedDatePrecisionCodeMeanings)
-                && InitializeCodeDictionary("PERSON", new String[] {"MARITAL_STATUS", "ADDITIONAL_MARITAL_STATUS"}, ref MaritalStatusCodeMeanings)
-                && InitializeCodeDictionary("PERSON", new String[] {"RACE",           "ADDITIONAL_RACE"          }, ref RaceCodeMeanings)
-                && InitializeCodeDictionary("PERSON", new String[] {"LANGUAGE",       "ADDITIONAL_LANGUAGE"      }, ref LanguageCodeMeanings)
-                && InitializeCodeDictionary("PERSON", new String[] {"ETHNICITY",      "ADDITIONAL_ETHNICITY"     }, ref EthnicityCodeMeanings)
+                   InitializeReferenceCodeDictionary("PERSON", new String[] {"GENDER"},                  ref GenderCodeMeanings)
+                && InitializeReferenceCodeDictionary("PERSON", new String[] {"DECEASED"},                ref DeceasedCodeMeanings)
+                && InitializeReferenceCodeDictionary("PERSON", new String[] {"BIRTH_DATE_PRECISION"},    ref BirthDatePrecisionCodeMeanings)
+                && InitializeReferenceCodeDictionary("PERSON", new String[] {"DECEASED_DATE_PRECISION"}, ref DeceasedDatePrecisionCodeMeanings)
+                && InitializeReferenceCodeDictionary("PERSON", new String[] {"MARITAL_STATUS", "ADDITIONAL_MARITAL_STATUS"}, ref MaritalStatusCodeMeanings)
+                && InitializeReferenceCodeDictionary("PERSON", new String[] {"RACE",           "ADDITIONAL_RACE"          }, ref RaceCodeMeanings)
+                && InitializeReferenceCodeDictionary("PERSON", new String[] {"LANGUAGE",       "ADDITIONAL_LANGUAGE"      }, ref LanguageCodeMeanings)
+                && InitializeReferenceCodeDictionary("PERSON", new String[] {"ETHNICITY",      "ADDITIONAL_ETHNICITY"     }, ref EthnicityCodeMeanings)
                 // Likely these won't be present in the ambulatory extract?
                 //&& InitializeCodeDictionary("PERSON", "HOME_ADDRESS", ref CodeMeanings)
                 //&& InitializeCodeDictionary("PERSON", "IDENTIFIERS", ref CodeMeanings)  // ???
                 //&& InitializeCodeDictionary("PERSON", "STATUS", ref CodeMeanings)  // ???
 
-                && InitializeCodeDictionary("PHONE",   new String[] {"TYPE"}, ref PhoneTypeCodeMeanings)
+                && InitializeReferenceCodeDictionary("PHONE",   new String[] {"TYPE"}, ref PhoneTypeCodeMeanings)
 
-                && InitializeCodeDictionary("ADDRESS", new String[] {"TYPE"}, ref AddressTypeCodeMeanings)
+                && InitializeReferenceCodeDictionary("ADDRESS", new String[] {"TYPE"}, ref AddressTypeCodeMeanings)
 
-                && InitializeCodeDictionary("IDENTIFIERS", new String[] { "IDENTIFIER_TYPE" }, ref IdentifierTypeCodeMeanings)
-                && InitializeCodeDictionary("IDENTIFIERS", new String[] { "IDENTIFIER_GROUP" }, ref IdentifierGroupCodeMeanings)
+                && InitializeReferenceCodeDictionary("IDENTIFIERS", new String[] { "IDENTIFIER_TYPE" }, ref IdentifierTypeCodeMeanings)
+                && InitializeReferenceCodeDictionary("IDENTIFIERS", new String[] { "IDENTIFIER_GROUP" }, ref IdentifierGroupCodeMeanings)
 
-                && InitializeCodeDictionary("VISIT", new String[] { "LOCATION_CODE" }, ref VisitLocationCodeMeanings)
+                && InitializeReferenceCodeDictionary("VISIT", new String[] { "LOCATION_CODE" }, ref VisitLocationCodeMeanings)
 
-                && InitializeCodeDictionary("CHARGEDETAIL", new String[] { "TYPE" }, ref ChargeDetailTypeCodeMeanings)
+                && InitializeReferenceCodeDictionary("CHARGEDETAIL", new String[] { "TYPE" }, ref ChargeDetailTypeCodeMeanings)
 
-                && InitializeCodeDictionary("RESULT", new String[] { "CODE" }, ref ResultCodeCodeMeanings)
-                && InitializeCodeDictionary("RESULT", new String[] { "NORMAL_CODE" }, ref ResultNormalCodeMeanings)
-                && InitializeCodeDictionary("RESULT", new String[] { "UNITS" }, ref ResultUnitsCodeMeanings)
+                && InitializeReferenceCodeDictionary("RESULT", new String[] { "CODE" }, ref ResultCodeCodeMeanings)
+                && InitializeReferenceCodeDictionary("RESULT", new String[] { "NORMAL_CODE" }, ref ResultNormalCodeMeanings)
+                && InitializeReferenceCodeDictionary("RESULT", new String[] { "UNITS" }, ref ResultUnitsCodeMeanings)
+
+                && InitializeReferenceCodeDictionary("REFERENCETERMINOLOGY", new String[] { "TERMINOLOGY" }, ref TerminologyCodeMeanings)
                 ;
             
             Trace.WriteLine("Identifier Typecodes dictionary has values: " + String.Join(", ", IdentifierTypeCodeMeanings));
@@ -113,7 +116,7 @@ namespace BayClinicCernerAmbulatory
         /// <param name="Fields">The values of 0 or more case sensitive 'field' values to search</param>
         /// <param name="Dict">The dictionary<string,string> to be populated with query results</param>
         /// <returns></returns>
-        private bool InitializeCodeDictionary(String FileName, String[] Fields, ref Dictionary<String, String> Dict, bool AddZeroUnspecified = true)
+        private bool InitializeReferenceCodeDictionary(String FileName, String[] Fields, ref Dictionary<String, String> Dict, bool AddZeroUnspecified = true)
         {
             try
             {
@@ -133,7 +136,7 @@ namespace BayClinicCernerAmbulatory
             }
             catch (Exception e)
             {
-                Trace.WriteLine("Exception in InitializeCodeDictionary.CernerReferencedCodeDictionaries: " + e.Message);
+                Trace.WriteLine("Exception in CernerReferencedCodeDictionaries.InitializeCodeDictionary: " + e.Message);
                 return false;
             }
 

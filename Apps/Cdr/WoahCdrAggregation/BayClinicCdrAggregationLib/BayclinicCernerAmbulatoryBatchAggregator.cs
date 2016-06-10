@@ -47,6 +47,7 @@ namespace BayClinicCernerAmbulatory
         IMongoCollection<MongodbResultEntity> ResultCollection;
         IMongoCollection<MongodbDiagnosisEntity> DiagnosisCollection;
         IMongoCollection<MongodbInsuranceEntity> InsuranceCollection;
+        IMongoCollection<MongodbReferenceTerminologyEntity> ReferenceTerminologyCollection;
 
         public BayClinicCernerAmbulatoryBatchAggregator(String PgConnectionName = null)
         {
@@ -76,6 +77,7 @@ namespace BayClinicCernerAmbulatory
             ResultCollection = MongoCxn.Db.GetCollection<MongodbResultEntity>("result");
             DiagnosisCollection = MongoCxn.Db.GetCollection<MongodbDiagnosisEntity>("diagnosis");
             InsuranceCollection = MongoCxn.Db.GetCollection<MongodbInsuranceEntity>("insurance");
+            ReferenceTerminologyCollection = MongoCxn.Db.GetCollection<MongodbReferenceTerminologyEntity>("referenceterminology");
 
             Initialized = ReferencedCodes.Initialize(RefCodeCollection);
             ThisAggregationRun = GetNewAggregationRun();
@@ -551,36 +553,46 @@ namespace BayClinicCernerAmbulatory
             {
                 while (DiagnosisCursor.MoveNext())  // transfer the next batch of available documents from the query result cursor
                 {
-                    foreach (MongodbDiagnosisEntity ResultDoc in DiagnosisCursor.Current)
+                    foreach (MongodbDiagnosisEntity DiagnosisDoc in DiagnosisCursor.Current)
                     {
                         DiagnosisCounter++;
 
                         DateTime StartDateTime, EndDateTime, DiagDateTime, StatusDateTime;
-                        DateTime.TryParse(ResultDoc.EffectiveBeginDateTime, out StartDateTime);
-                        DateTime.TryParse(ResultDoc.EffectiveEndDateTime, out EndDateTime);
-                        DateTime.TryParse(ResultDoc.DiagnosisDateTime, out DiagDateTime);
-                        DateTime.TryParse(ResultDoc.ActiveStatusDateTime, out StatusDateTime);
+                        DateTime.TryParse(DiagnosisDoc.EffectiveBeginDateTime, out StartDateTime);
+                        DateTime.TryParse(DiagnosisDoc.EffectiveEndDateTime, out EndDateTime);
+                        DateTime.TryParse(DiagnosisDoc.DiagnosisDateTime, out DiagDateTime);
+                        DateTime.TryParse(DiagnosisDoc.ActiveStatusDateTime, out StatusDateTime);
 
+                        var Query = ReferenceTerminologyCollection.AsQueryable()
+                            .Where(x => x.UniqueTerminologyIdentifier.ToUpper() == DiagnosisDoc.UniqueTerminologyIdentifier)
+                            //.Select(x => new { x.Key.ElementCode, x.Key.Display })
+                            ;
+                        MongodbReferenceTerminologyEntity TerminologyRecord = Query.FirstOrDefault();
+                        
                         Diagnosis NewPgRecord = new Diagnosis
                         {
                             Patientdbid = PatientRecord.dbid,
                             VisitEncounterdbid = VisitRecord.dbid,
-                            EmrIdentifier = ResultDoc.UniqueDiagnosisIdentifier,
+                            EmrIdentifier = DiagnosisDoc.UniqueDiagnosisIdentifier,
                             StartDateTime = StartDateTime,
                             EndDateTime = EndDateTime,
                             DeterminationDateTime = DiagDateTime,
-                            ShortDescription = "",
-                            LongDescription = "",
-                            DiagCode = new CodedEntry { },
-                            Status = "",
+                            ShortDescription = DiagnosisDoc.Display,
+                            LongDescription = "",  // TODO Can I do better?  Maybe this field doesn't need to be here if there is no source of long description.  
+                            DiagCode = new CodedEntry {Code = TerminologyRecord.Code,
+                                                       CodeMeaning = TerminologyRecord.Text,
+                                                       CodeSystem = ReferencedCodes.TerminologyCodeMeanings[TerminologyRecord.Terminology]
+                                                       // TODO Handle variability in codes (e.g. snomed codes are not correct in the "code" field, but are correct in concept. May require custom interpreter/handler
+                                                      },
+                            Status = "",  // TODO If this is just active and inactive maybe I don't need it.  Study.  
                             StatusDateTime = StatusDateTime
-                            // TODO This block is not finished.  Get the member initializations right.  
+                            // TODO There is a coded "type" field with values Discharge and Billing.  Figure out whether this should be used/interpreted
                         };
 
                         CdrDb.Context.Diagnoses.InsertOnSubmit(NewPgRecord);
                         CdrDb.Context.SubmitChanges();
 
-                        MongoRunUpdater.DiagnosisIdList.Add(ResultDoc.Id);
+                        MongoRunUpdater.DiagnosisIdList.Add(DiagnosisDoc.Id);
                     }
                 }
             }
