@@ -190,7 +190,7 @@ namespace BayClinicCernerAmbulatory
 
             return OverallSuccess;
         }
-
+ 
         private bool AggregateTelephoneNumbers(MongodbPersonEntity MongoPerson, Patient PgPatient)
         {
             int PhoneCounter = 0;
@@ -375,6 +375,8 @@ namespace BayClinicCernerAmbulatory
                         OverallSuccess &= AggregateCharges(VisitDoc, NewPgRecord);
                         OverallSuccess &= AggregateResults(PersonDoc, PatientRecord, VisitDoc, NewPgRecord);
                         OverallSuccess &= AggregateDiagnoses(PersonDoc, PatientRecord, VisitDoc, NewPgRecord);
+                        OverallSuccess &= AggregateImmunizations(PersonDoc, PatientRecord, VisitDoc, NewPgRecord);
+
                     }
                 }
             }
@@ -660,17 +662,22 @@ namespace BayClinicCernerAmbulatory
                         {
                             Patientdbid = PatientRecord.dbid,
                             EmrIdentifier = ImmunizationDoc.UniqueOrderIdentifier,
-                            Description = "",         // No descriptions available in the data
+                            Description = "",         // No description is found in the data
                             PerformedDateTime = PerformedDateTime,
-                            ImmunizationCode = new CodedEntry { },      //TODO get this right
+                            ImmunizationCode = new CodedEntry
+                            {
+                                Code = ImmunizationDoc.Code,
+                                CodeMeaning = ReferencedCodes.ImmunizationCodeMeanings[ImmunizationDoc.Code],
+                            },
                             VisitEncounterdbid = VisitRecord.dbid
                         };
                     }
                 }
             }
 
-                        return true;
+            return true;
         }
+
 
         private AggregationRun GetNewAggregationRun()
         {
