@@ -662,8 +662,8 @@ namespace BayClinicCernerAmbulatory
                         {
                             Patientdbid = PatientRecord.dbid,
                             EmrIdentifier = ImmunizationDoc.UniqueOrderIdentifier,
-                            Description = ImmunizationDoc.ProductName,
-                            PerformedDateTime = PerformedDateTime,
+                            Description = "",              
+                            PerformedDateTime = PerformedDateTime,              
                             ImmunizationCode = new CodedEntry
                             {
                                 Code = ImmunizationDoc.Code,
