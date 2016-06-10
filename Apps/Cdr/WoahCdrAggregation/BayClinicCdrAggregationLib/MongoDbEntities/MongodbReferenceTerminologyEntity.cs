@@ -9,7 +9,7 @@ using MongoDB.Bson.Serialization.Attributes;
 namespace BayClinicCernerAmbulatory
 {
     [BsonIgnoreExtraElements]
-    class MongodbReferenceTerminologyEntity
+    public class MongodbReferenceTerminologyEntity
     {
 #pragma warning disable 0649
         [BsonElement("_id")]
