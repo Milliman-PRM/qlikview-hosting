@@ -49,6 +49,11 @@ namespace BayClinicCernerAmbulatory
         IMongoCollection<MongodbInsuranceEntity> InsuranceCollection;
         IMongoCollection<MongodbReferenceTerminologyEntity> ReferenceTerminologyCollection;
         IMongoCollection<MongodbImmunizationEntity> ImmunizationCollection;
+        IMongoCollection<MongodbMedicationEntity> MedicationCollection;
+        IMongoCollection<MongodbMedicationReconciliationDetailEntity> MedicationReconciliationDetailCollection;
+
+
+        //TODO Insert Mongo collection for medicationreconciliation
 
         public BayClinicCernerAmbulatoryBatchAggregator(String PgConnectionName = null)
         {
@@ -80,6 +85,9 @@ namespace BayClinicCernerAmbulatory
             InsuranceCollection = MongoCxn.Db.GetCollection<MongodbInsuranceEntity>("insurance");
             ReferenceTerminologyCollection = MongoCxn.Db.GetCollection<MongodbReferenceTerminologyEntity>("referenceterminology");
             ImmunizationCollection = MongoCxn.Db.GetCollection<MongodbImmunizationEntity>("immunization");
+            MedicationCollection = MongoCxn.Db.GetCollection<MongodbMedicationEntity>("medication");
+            MedicationReconciliationDetailCollection = MongoCxn.Db.GetCollection<MongodbMedicationReconciliationDetailEntity>("medicationreconciliationendetail");
+            // TODO initialize collection
 
             Initialized = ReferencedCodes.Initialize(RefCodeCollection);
             ThisAggregationRun = GetNewAggregationRun();
@@ -172,8 +180,6 @@ namespace BayClinicCernerAmbulatory
             OverallSuccess &= AggregateVisits(PersonDocument, ThisPatient);
             OverallSuccess &= AggregateInsuranceCoverages(PersonDocument, ThisPatient);
             
-            //            EntitySet<Medication> _Medications;
-            //            EntitySet<Immunization> _Immunizations;
             //            EntitySet<Problem> _Problems;
 
             if (OverallSuccess)
@@ -202,7 +208,7 @@ namespace BayClinicCernerAmbulatory
                          x => x.EntityType == "PERSON"
                       && x.EntityIdentifier == MongoPerson.UniquePersonIdentifier
                       && !(x.LastAggregationRun > 0)     // not previously aggregated
-                      // TODO do we also want to match the extract date from MongoPerson.ImportFile?
+                      && (x.ImportFile.StartsWith(MongoPerson.ImportFile.Substring(0, 12)))  // match the extract date from PersonDoc.ImportFile 
                       );
 
             using (var PhoneCursor = PhoneCollection.Find<MongodbPhoneEntity>(PhoneFilterDef).ToCursor())
@@ -247,7 +253,7 @@ namespace BayClinicCernerAmbulatory
                          x => x.EntityType == "PERSON"
                       && x.EntityIdentifier == MongoPerson.UniquePersonIdentifier
                       && !(x.LastAggregationRun > 0)     // not previously aggregated
-                      // TODO do we also want to match the extract date from MongoPerson.ImportFile?
+                      && (x.ImportFile.StartsWith(MongoPerson.ImportFile.Substring(0, 12)))  // match the extract date from PersonDoc.ImportFile 
                       );
 
             using (var AddressCursor = AddressCollection.Find<MongodbAddressEntity>(AddressFilterDef).ToCursor())
@@ -299,7 +305,7 @@ namespace BayClinicCernerAmbulatory
                          x => x.EntityType == "PERSON"
                       && x.EntityIdentifier == MongoPerson.UniquePersonIdentifier
                       && !(x.LastAggregationRun > 0)     // not previously aggregated
-                      // TODO do we also want to match the extract date from MongoPerson.ImportFile?
+                      && (x.ImportFile.StartsWith(MongoPerson.ImportFile.Substring(0, 12)))  // match the extract date from PersonDoc.ImportFile 
                       );
 
             using (var IdentifierCursor = IdentifierCollection.Find<MongodbIdentifierEntity>(IdentifierFilterDef).ToCursor())
@@ -342,7 +348,7 @@ namespace BayClinicCernerAmbulatory
                 .Where(
                          x => x.UniquePersonIdentifier == PersonDoc.UniquePersonIdentifier
                       && !(x.LastAggregationRun > 0)     // not previously aggregated
-                      // TODO do we also want to match the extract date from MongoPerson.ImportFile?
+                      && (x.ImportFile.StartsWith(PersonDoc.ImportFile.Substring(0, 12)))  // match the extract date from PersonDoc.ImportFile 
                       );
 
             using (var VisitCursor = VisitCollection.Find<MongodbVisitEntity>(VisitFilterDef).ToCursor())
@@ -378,6 +384,7 @@ namespace BayClinicCernerAmbulatory
                         OverallSuccess &= AggregateResults(PersonDoc, PatientRecord, VisitDoc, NewPgRecord);
                         OverallSuccess &= AggregateDiagnoses(PersonDoc, PatientRecord, VisitDoc, NewPgRecord);
                         OverallSuccess &= AggregateImmunizations(PersonDoc, PatientRecord, VisitDoc, NewPgRecord);
+                        OverallSuccess &= AggregateMedications(PersonDoc, PatientRecord, VisitDoc, NewPgRecord);
 
                     }
                 }
@@ -394,7 +401,7 @@ namespace BayClinicCernerAmbulatory
                 .Where(
                          x => x.UniqueVisitIdentifier == MongoVisit.UniqueVisitIdentifier
                       && !(x.LastAggregationRun > 0)     // not previously aggregated
-                      // TODO do we also want to match the extract date from MongoPerson.ImportFile?
+                      && (x.ImportFile.StartsWith(MongoVisit.ImportFile.Substring(0, 12)))  // match the extract date from PersonDoc.ImportFile 
                       );
 
             using (var ChargeCursor = ChargeCollection.Find<MongodbChargeEntity>(ChargeFilterDef).ToCursor())
@@ -457,7 +464,7 @@ namespace BayClinicCernerAmbulatory
                 .Where(
                          x => x.UniqueChargeItemIdentifier == ChargeDoc.UniqueChargeItemIdentifier
                       && !(x.LastAggregationRun > 0)     // not previously aggregated
-                                                         // TODO do we also want to match the extract date from MongoPerson.ImportFile?
+                      && (x.ImportFile.StartsWith(ChargeDoc.ImportFile.Substring(0, 12)))  // match the extract date from PersonDoc.ImportFile 
                       );
 
             using (var ChargeDetailCursor = ChargeDetailCollection.Find<MongodbChargeDetailEntity>(ChargeDetailFilterDef).ToCursor())
@@ -500,7 +507,7 @@ namespace BayClinicCernerAmbulatory
                        x.UniquePersonIdentifier == PersonDoc.UniquePersonIdentifier
                     && x.UniqueVisitIdentifier == VisitDoc.UniqueVisitIdentifier
                     && !(x.LastAggregationRun > 0)     // not previously aggregated
-                      // TODO do we also want to match the extract date from MongoPerson.ImportFile?
+                   && (x.ImportFile.StartsWith(PersonDoc.ImportFile.Substring(0, 12)))  // match the extract date from PersonDoc.ImportFile 
                       );
 
             using (var ResultCursor = ResultCollection.Find<MongodbResultEntity>(ResultFilterDef).ToCursor())
@@ -550,7 +557,7 @@ namespace BayClinicCernerAmbulatory
                        x.UniquePersonIdentifier == PersonDoc.UniquePersonIdentifier
                     && x.UniqueVisitIdentifier == VisitDoc.UniqueVisitIdentifier
                     && !(x.LastAggregationRun > 0)     // not previously aggregated
-                                                       // TODO do we also want to match the extract date from MongoPerson.ImportFile?
+                    && (x.ImportFile.StartsWith(PersonDoc.ImportFile.Substring(0, 12)))  // match the extract date from PersonDoc.ImportFile 
                       );
 
             using (var DiagnosisCursor = DiagnosisCollection.Find<MongodbDiagnosisEntity>(DiagnosisFilterDef).ToCursor())
@@ -614,7 +621,7 @@ namespace BayClinicCernerAmbulatory
                          x => x.EntityType == "PERSON"
                       && x.UniqueEntityIdentifier == MongoPerson.UniquePersonIdentifier
                       && !(x.LastAggregationRun > 0)     // not previously aggregated
-                                                         // TODO do we also want to match the extract date from MongoPerson.ImportFile?
+                      && (x.ImportFile.StartsWith(MongoPerson.ImportFile.Substring(0, 12)))  // match the extract date from PersonDoc.ImportFile 
                       );
 
             using (var InsuranceCoverageCursor = InsuranceCollection.Find<MongodbInsuranceEntity>(InsuranceCoverageFilterDef).ToCursor())
@@ -657,7 +664,7 @@ namespace BayClinicCernerAmbulatory
                        x.UniquePersonIdentifier == PersonDoc.UniquePersonIdentifier
                     && x.UniqueVisitIdentifier == VisitDoc.UniqueVisitIdentifier
                     && !(x.LastAggregationRun > 0)     // not previously aggregated
-                                                       // TODO do we also want to match the extract date from MongoPerson.ImportFile?
+                    && (x.ImportFile.StartsWith(PersonDoc.ImportFile.Substring(0, 12)))  // match the extract date from PersonDoc.ImportFile 
                       );
 
             using (var ImmunizationCursor = ImmunizationCollection.Find<MongodbImmunizationEntity>(ImmunizationFilterDef).ToCursor())
@@ -683,12 +690,111 @@ namespace BayClinicCernerAmbulatory
                             },
                             VisitEncounterdbid = VisitRecord.dbid
                         };
+
+
+                        CdrDb.Context.Immunizations.InsertOnSubmit(NewPgRecord);
+                        CdrDb.Context.SubmitChanges();
+
+                        MongoRunUpdater.InsuranceIdList.Add(ImmunizationDoc.Id);
                     }
                 }
             }
 
             return true;
         }
+
+        private bool AggregateMedications(MongodbPersonEntity PersonDoc, Patient PatientRecord, MongodbVisitEntity VisitDoc, VisitEncounter VisitRecord)
+        {
+            int MedicationCounter = 0;
+
+            FilterDefinition<MongodbMedicationEntity> MedicationFilterDef = Builders<MongodbMedicationEntity>.Filter
+                .Where(x =>
+                       x.UniquePersonIdentifier == PersonDoc.UniquePersonIdentifier
+                    && x.UniqueVisitIdentifier == VisitDoc.UniqueVisitIdentifier
+                    && !(x.LastAggregationRun > 0)     // not previously aggregated
+                    && (x.ImportFile.StartsWith(PersonDoc.ImportFile.Substring(0, 12)))  // match the extract date from PersonDoc.ImportFile 
+                      );
+
+            using (var MedicationCursor = MedicationCollection.Find<MongodbMedicationEntity>(MedicationFilterDef).ToCursor())
+            {
+                while (MedicationCursor.MoveNext())  // transfer the next batch of available documents from the query result cursor
+                {
+                    foreach (MongodbMedicationEntity MedicationDoc in MedicationCursor.Current)
+                    {
+                        string MedicationInstructions;
+                        MedicationCounter++;
+                        DateTime PrescriptionDate, StartDate, StopDate, StatusDateTime;
+                        DateTime.TryParse(MedicationDoc.OriginalOrderedDateTime, out PrescriptionDate);
+                        DateTime.TryParse(MedicationDoc.StartDateTime, out StartDate);
+                        DateTime.TryParse(MedicationDoc.StopDateTime, out StopDate);
+                        DateTime.TryParse(MedicationDoc.ActiveStatusDateTime, out StatusDateTime);
+
+
+
+                        var MedicationReconciliationDetailQuery = MedicationReconciliationDetailCollection.AsQueryable()
+                                                                    .Where(x => x.UniqueMedicationIdentifier.ToUpper() == MedicationDoc.UniqueMedicationIdentifier);
+
+                        MongodbMedicationReconciliationDetailEntity MedicationReconciliationDetailRecord = MedicationReconciliationDetailQuery.FirstOrDefault();
+
+                        if (MedicationReconciliationDetailRecord == null)
+                        {
+                            MedicationReconciliationDetailRecord = new MongodbMedicationReconciliationDetailEntity { ClinicalDisplay = "" };
+                        }
+
+
+                        /*
+                         * Date fields may be empty so it checks to make sure there is content
+                         * TODO A check may need to be implemented to see if all fields are empty. But no instances of this have been found in the data so far
+                         */ 
+                        if (MedicationReconciliationDetailRecord.ClinicalDisplay != "")
+                        {
+                            MedicationInstructions = MedicationReconciliationDetailRecord.ClinicalDisplay;
+                        }
+                        else if (MedicationReconciliationDetailRecord.ClinicalDisplay == "" && MedicationReconciliationDetailRecord.SimplifiedDisplay == null)
+                        {
+                            MedicationInstructions = "";
+                        }
+                        else if(MedicationReconciliationDetailRecord.ClinicalDisplay == "" && MedicationReconciliationDetailRecord.SimplifiedDisplay != "")
+                        {
+                            MedicationInstructions = MedicationReconciliationDetailRecord.SimplifiedDisplay;
+                        }
+                        else
+                        {
+                            MedicationInstructions = MedicationReconciliationDetailRecord.Mnemonic;
+                        }
+
+
+                        Medication NewPgRecord = new Medication
+                        {
+
+                            EmrIdentifier = MedicationDoc.UniqueMedicationIdentifier,
+                            PrescriptionDate = PrescriptionDate,
+                            FillDate = StartDate,                                   //Going to be the same as the start date
+                            Description = MedicationDoc.OrderedAs,
+                            StartDate = StartDate,
+                            StopDate = StopDate,
+                            Status = MedicationDoc.Status,
+                            StatusDateTime = StatusDateTime,
+                            Patientdbid = PatientRecord.dbid,
+                            VisitEncounterdbid = VisitRecord.dbid,
+
+                            Code = new CodedEntry { Code = MedicationReconciliationDetailRecord.UniqueMedicationIdentifier,
+                                                    CodeMeaning = MedicationInstructions
+                                                    }
+
+                        };
+
+                        CdrDb.Context.Medications.InsertOnSubmit(NewPgRecord);
+                        CdrDb.Context.SubmitChanges();
+
+                        MongoRunUpdater.InsuranceIdList.Add(MedicationDoc.Id);
+                    }
+                }
+            }
+
+            return true;
+        }
+                
 
 
         private AggregationRun GetNewAggregationRun()
@@ -763,8 +869,13 @@ namespace BayClinicCernerAmbulatory
             UpdateDefinition<MongodbDiagnosisEntity> DiagnosisUpdateDef = Builders<MongodbDiagnosisEntity>.Update.Unset(x => x.LastAggregationRun);
             Result = DiagnosisCollection.UpdateMany(DiagnosisFilterDef, DiagnosisUpdateDef);
 
+            FilterDefinition<MongodbMedicationEntity> MedicationFilterDef = Builders<MongodbMedicationEntity>.Filter.Where(x => x.LastAggregationRun > 0);
+            UpdateDefinition<MongodbMedicationEntity> MedicationUpdateDef = Builders<MongodbMedicationEntity>.Update.Unset(x => x.LastAggregationRun);
+            Result = MedicationCollection.UpdateMany(MedicationFilterDef, MedicationUpdateDef);
+
         }
 
     }
 }
+ 
  
