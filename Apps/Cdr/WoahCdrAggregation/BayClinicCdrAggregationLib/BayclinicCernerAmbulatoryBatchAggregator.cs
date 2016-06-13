@@ -744,7 +744,6 @@ namespace BayClinicCernerAmbulatory
 
                         /*
                          * Date fields may be empty so it checks to make sure there is content
-                         * TODO A check may need to be implemented to see if all fields are empty. But no instances of this have been found in the data so far
                          */ 
                         if (MedicationReconciliationDetailRecord.ClinicalDisplay != "")
                         {
@@ -787,7 +786,7 @@ namespace BayClinicCernerAmbulatory
                         CdrDb.Context.Medications.InsertOnSubmit(NewPgRecord);
                         CdrDb.Context.SubmitChanges();
 
-                        MongoRunUpdater.InsuranceIdList.Add(MedicationDoc.Id);
+                        MongoRunUpdater.MedicationsIdList.Add(MedicationDoc.Id);
                     }
                 }
             }
