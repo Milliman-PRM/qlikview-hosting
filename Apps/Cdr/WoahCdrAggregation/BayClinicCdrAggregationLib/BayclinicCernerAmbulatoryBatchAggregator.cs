@@ -746,22 +746,18 @@ namespace BayClinicCernerAmbulatory
 
                         if (MedicationReconciliationDetailRecord == null)
                         {
-                            MedicationReconciliationDetailRecord = new MongodbMedicationReconciliationDetailEntity { ClinicalDisplay = "" };
+                            MedicationReconciliationDetailRecord = new MongodbMedicationReconciliationDetailEntity { ClinicalDisplay = "", SimplifiedDisplay = "" };
                         }
 
 
                         /*
                          * Date fields may be empty so it checks to make sure there is content
                          */ 
-                        if (MedicationReconciliationDetailRecord.ClinicalDisplay.Length > 0)
+                        if (!string.IsNullOrEmpty(MedicationReconciliationDetailRecord.ClinicalDisplay))
                         {
                             MedicationInstructions = MedicationReconciliationDetailRecord.ClinicalDisplay;
                         }
-                        else if (MedicationReconciliationDetailRecord.ClinicalDisplay == "" && MedicationReconciliationDetailRecord.SimplifiedDisplay == null)
-                        {
-                            MedicationInstructions = "";
-                        }
-                        else if(MedicationReconciliationDetailRecord.ClinicalDisplay == "" && MedicationReconciliationDetailRecord.SimplifiedDisplay != "")
+                        else if (string.IsNullOrEmpty(MedicationReconciliationDetailRecord.ClinicalDisplay) && !string.IsNullOrEmpty(MedicationReconciliationDetailRecord.SimplifiedDisplay))
                         {
                             MedicationInstructions = MedicationReconciliationDetailRecord.SimplifiedDisplay;
                         }
@@ -769,6 +765,7 @@ namespace BayClinicCernerAmbulatory
                         {
                             MedicationInstructions = "";
                         }
+                        
 
 
                         Medication NewPgRecord = new Medication
