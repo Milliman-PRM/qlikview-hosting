@@ -52,6 +52,7 @@ namespace BayClinicCernerAmbulatory
         IMongoCollection<MongodbProblemEntity> ProblemCollection;
         IMongoCollection<MongodbMedicationEntity> MedicationCollection;
         IMongoCollection<MongodbMedicationReconciliationDetailEntity> MedicationReconciliationDetailCollection;
+        IMongoCollection<MongodbReferenceMedicationEntity> ReferenceMedicationCollection;
 
 
         //TODO Insert Mongo collection for medicationreconciliation
@@ -89,6 +90,7 @@ namespace BayClinicCernerAmbulatory
             ProblemCollection = MongoCxn.Db.GetCollection<MongodbProblemEntity>("problem");
             MedicationCollection = MongoCxn.Db.GetCollection<MongodbMedicationEntity>("medications");
             MedicationReconciliationDetailCollection = MongoCxn.Db.GetCollection<MongodbMedicationReconciliationDetailEntity>("medicationreconciliationdetail");
+            ReferenceMedicationCollection = MongoCxn.Db.GetCollection<MongodbReferenceMedicationEntity>("referencemedication");
             // TODO initialize collection
 
             Initialized = ReferencedCodes.Initialize(RefCodeCollection);
@@ -738,7 +740,7 @@ namespace BayClinicCernerAmbulatory
                         DateTime.TryParse(MedicationDoc.ActiveStatusDateTime, out StatusDateTime);
 
 
-
+                        //Get instructions
                         var MedicationReconciliationDetailQuery = MedicationReconciliationDetailCollection.AsQueryable()
                                                                     .Where(x => x.UniqueMedicationIdentifier == MedicationDoc.UniqueMedicationIdentifier);
 
@@ -762,7 +764,16 @@ namespace BayClinicCernerAmbulatory
                         {
                             MedicationInstructions = "";
                         }
-                        
+
+                        //Get rxnorm codes
+                        var ReferenceMedicationQuery = ReferenceMedicationCollection.AsQueryable()
+                                                                   .Where(x => x.UniqueSynonymIdentifier == MedicationDoc.UniqueSynonymIdentifier);
+
+                        MongodbReferenceMedicationEntity ReferenceMedicationRecord = ReferenceMedicationQuery.FirstOrDefault();
+                        if (ReferenceMedicationRecord == null)
+                        {
+                            ReferenceMedicationRecord = new MongodbReferenceMedicationEntity { RxNorm = "" };
+                        }
 
 
                         Medication NewPgRecord = new Medication
@@ -778,11 +789,9 @@ namespace BayClinicCernerAmbulatory
                             StatusDateTime = StatusDateTime,
                             Patientdbid = PatientRecord.dbid,
                             VisitEncounterdbid = VisitRecord.dbid,
-
-                            Code = new CodedEntry { Code = MedicationReconciliationDetailRecord.UniqueMedicationIdentifier,
-                                                    CodeMeaning = MedicationInstructions
-                                                    }
-
+                            Instructions = MedicationInstructions,
+                            Code = new CodedEntry { Code = ReferenceMedicationRecord.RxNorm,
+                                                    CodeSystem = "RxNorm" }
                         };
 
                         CdrDb.Context.Medications.InsertOnSubmit(NewPgRecord);
