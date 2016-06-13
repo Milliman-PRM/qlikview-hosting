@@ -730,7 +730,8 @@ namespace BayClinicCernerAmbulatory
                     {
                         string MedicationInstructions;
                         MedicationCounter++;
-                        DateTime PrescriptionDate, StartDate, StopDate, StatusDateTime;
+                        DateTime PrescriptionDate, StartDate, StopDate, StatusDateTime, FillDate;
+                        DateTime.TryParse("", out FillDate);
                         DateTime.TryParse(MedicationDoc.OriginalOrderedDateTime, out PrescriptionDate);
                         DateTime.TryParse(MedicationDoc.StartDateTime, out StartDate);
                         DateTime.TryParse(MedicationDoc.StopDateTime, out StopDate);
@@ -752,7 +753,7 @@ namespace BayClinicCernerAmbulatory
                         /*
                          * Date fields may be empty so it checks to make sure there is content
                          */ 
-                        if (MedicationReconciliationDetailRecord.ClinicalDisplay != "")
+                        if (MedicationReconciliationDetailRecord.ClinicalDisplay.Length > 0)
                         {
                             MedicationInstructions = MedicationReconciliationDetailRecord.ClinicalDisplay;
                         }
@@ -775,7 +776,7 @@ namespace BayClinicCernerAmbulatory
 
                             EmrIdentifier = MedicationDoc.UniqueMedicationIdentifier,
                             PrescriptionDate = PrescriptionDate,
-                            FillDate = StartDate,                                   //Going to be the same as the start date
+                            FillDate = FillDate,                                   //Going to be the same as the start date
                             Description = MedicationDoc.OrderedAs,
                             StartDate = StartDate,
                             StopDate = StopDate,
