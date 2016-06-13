@@ -88,7 +88,7 @@ namespace BayClinicCernerAmbulatory
             ImmunizationCollection = MongoCxn.Db.GetCollection<MongodbImmunizationEntity>("immunization");
             ProblemCollection = MongoCxn.Db.GetCollection<MongodbProblemEntity>("problem");
             MedicationCollection = MongoCxn.Db.GetCollection<MongodbMedicationEntity>("medications");
-            MedicationReconciliationDetailCollection = MongoCxn.Db.GetCollection<MongodbMedicationReconciliationDetailEntity>("medicationreconciliationendetail");
+            MedicationReconciliationDetailCollection = MongoCxn.Db.GetCollection<MongodbMedicationReconciliationDetailEntity>("medicationreconciliationdetail");
             // TODO initialize collection
 
             Initialized = ReferencedCodes.Initialize(RefCodeCollection);
