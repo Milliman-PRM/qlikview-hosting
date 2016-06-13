@@ -760,7 +760,7 @@ namespace BayClinicCernerAmbulatory
                         }
                         else
                         {
-                            MedicationInstructions = MedicationReconciliationDetailRecord.Mnemonic;
+                            MedicationInstructions = "";
                         }
 
 
