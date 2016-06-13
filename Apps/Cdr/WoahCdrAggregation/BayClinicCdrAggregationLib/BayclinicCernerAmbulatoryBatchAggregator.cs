@@ -731,7 +731,7 @@ namespace BayClinicCernerAmbulatory
                         string MedicationInstructions;
                         MedicationCounter++;
                         DateTime PrescriptionDate, StartDate, StopDate, StatusDateTime, FillDate;
-                        DateTime.TryParse("", out FillDate);
+                        DateTime.TryParse("", out FillDate);                                    //Data does not include fill date
                         DateTime.TryParse(MedicationDoc.OriginalOrderedDateTime, out PrescriptionDate);
                         DateTime.TryParse(MedicationDoc.StartDateTime, out StartDate);
                         DateTime.TryParse(MedicationDoc.StopDateTime, out StopDate);
@@ -740,7 +740,7 @@ namespace BayClinicCernerAmbulatory
 
 
                         var MedicationReconciliationDetailQuery = MedicationReconciliationDetailCollection.AsQueryable()
-                                                                    .Where(x => x.UniqueMedicationIdentifier.ToUpper() == MedicationDoc.UniqueMedicationIdentifier);
+                                                                    .Where(x => x.UniqueMedicationIdentifier == MedicationDoc.UniqueMedicationIdentifier);
 
                         MongodbMedicationReconciliationDetailEntity MedicationReconciliationDetailRecord = MedicationReconciliationDetailQuery.FirstOrDefault();
 
@@ -750,9 +750,6 @@ namespace BayClinicCernerAmbulatory
                         }
 
 
-                        /*
-                         * Date fields may be empty so it checks to make sure there is content
-                         */ 
                         if (!string.IsNullOrEmpty(MedicationReconciliationDetailRecord.ClinicalDisplay))
                         {
                             MedicationInstructions = MedicationReconciliationDetailRecord.ClinicalDisplay;
