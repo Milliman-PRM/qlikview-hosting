@@ -49,6 +49,7 @@ namespace BayClinicCernerAmbulatory
         IMongoCollection<MongodbInsuranceEntity> InsuranceCollection;
         IMongoCollection<MongodbReferenceTerminologyEntity> ReferenceTerminologyCollection;
         IMongoCollection<MongodbImmunizationEntity> ImmunizationCollection;
+        IMongoCollection<MongodbProblemEntity> ProblemCollection;
 
         public BayClinicCernerAmbulatoryBatchAggregator(String PgConnectionName = null)
         {
@@ -80,6 +81,7 @@ namespace BayClinicCernerAmbulatory
             InsuranceCollection = MongoCxn.Db.GetCollection<MongodbInsuranceEntity>("insurance");
             ReferenceTerminologyCollection = MongoCxn.Db.GetCollection<MongodbReferenceTerminologyEntity>("referenceterminology");
             ImmunizationCollection = MongoCxn.Db.GetCollection<MongodbImmunizationEntity>("immunization");
+            ProblemCollection = MongoCxn.Db.GetCollection<MongodbProblemEntity>("problem");
 
             Initialized = ReferencedCodes.Initialize(RefCodeCollection);
             ThisAggregationRun = GetNewAggregationRun();
@@ -171,7 +173,8 @@ namespace BayClinicCernerAmbulatory
             OverallSuccess &= AggregateIdentifiers(PersonDocument, ThisPatient);
             OverallSuccess &= AggregateVisits(PersonDocument, ThisPatient);
             OverallSuccess &= AggregateInsuranceCoverages(PersonDocument, ThisPatient);
-            
+            OverallSuccess &= AggregateProblems(PersonDocument, ThisPatient);
+
             //            EntitySet<Medication> _Medications;
             //            EntitySet<Immunization> _Immunizations;
             //            EntitySet<Problem> _Problems;
@@ -572,7 +575,11 @@ namespace BayClinicCernerAmbulatory
                             //.Select(x => new { x.Key.ElementCode, x.Key.Display })
                             ;
                         MongodbReferenceTerminologyEntity TerminologyRecord = Query.FirstOrDefault();
-                        
+                        if (TerminologyRecord == null)
+                        {
+                            TerminologyRecord = new MongodbReferenceTerminologyEntity {Code = "", Text = "", Terminology = "0" };
+                        }
+
                         Diagnosis NewPgRecord = new Diagnosis
                         {
                             Patientdbid = PatientRecord.dbid,
@@ -673,7 +680,7 @@ namespace BayClinicCernerAmbulatory
                         Immunization NewPgRecord = new Immunization
                         {
                             Patientdbid = PatientRecord.dbid,
-                            EmrIdentifier = ImmunizationDoc.UniqueOrderIdentifier,
+                            EmrIdentifier = ImmunizationDoc.UniqueOrderIdentifier,  // TODO This is probably not the right value to assign
                             Description = "",              
                             PerformedDateTime = PerformedDateTime,              
                             ImmunizationCode = new CodedEntry
@@ -683,6 +690,62 @@ namespace BayClinicCernerAmbulatory
                             },
                             VisitEncounterdbid = VisitRecord.dbid
                         };
+                    }
+                }
+            }
+
+            return true;
+        }
+
+
+        private bool AggregateProblems(MongodbPersonEntity PersonDoc, Patient PatientRecord, MongodbVisitEntity VisitDoc = null, VisitEncounter VisitRecord = null)
+        {
+            int ProblemCounter = 0;
+
+            FilterDefinitionBuilder<MongodbProblemEntity> ProblemFilterBuilder = Builders<MongodbProblemEntity>.Filter;
+
+            FilterDefinition<MongodbProblemEntity> ProblemFilterDef = ProblemFilterBuilder.Where(x =>
+                       x.UniquePersonIdentifier == PersonDoc.UniquePersonIdentifier
+                    && !(x.LastAggregationRun > 0)     // not previously aggregated
+                    && (x.ImportFile.StartsWith(PersonDoc.ImportFile.Substring(0,12)))  // match the extract date from PersonDoc.ImportFile
+                      );
+
+            // Following will be relevant only for Allscripts
+            //if (VisitDoc != null)
+            //    ProblemFilterDef = ProblemFilterDef & ProblemFilterBuilder.Where(x => x.UniqueVisitIdentifier == VisitDoc.UniqueVisitIdentifier);
+
+            using (var ProblemCursor = ProblemCollection.Find<MongodbProblemEntity>(ProblemFilterDef).ToCursor())
+            {
+                while (ProblemCursor.MoveNext())  // transfer the next batch of available documents from the query result cursor
+                {
+                    foreach (MongodbProblemEntity ProblemDoc in ProblemCursor.Current)
+                    {
+                        ProblemCounter++;
+                        DateTime BeginDateTime, EndDateTime, ActiveStatusDateTime;
+                        DateTime.TryParse(ProblemDoc.EffectiveBeginDateTime, out BeginDateTime);
+                        DateTime.TryParse(ProblemDoc.EffectiveEndDateTime, out EndDateTime);
+                        DateTime.TryParse(ProblemDoc.EffectiveEndDateTime, out ActiveStatusDateTime);
+
+                        Problem NewPgRecord = new Problem
+                        {
+                            Patientdbid = PatientRecord.dbid,
+                            EmrIdentifier = ProblemDoc.UniqueProblemIdentifier,
+                            Description = ProblemDoc.Display,  // TODO Think about adding a Problem field for terminology code reference
+                            BeginDateTime = BeginDateTime,
+                            EndDateTime = EndDateTime,
+                            EffectiveDateTime = ActiveStatusDateTime,
+                        };
+
+                        // Following is relevant only for Allscripts, not Cerner
+                        //if (VisitRecord != null)  // not relevant for Cerner but probably relevant for Allscripts
+                        //{
+                        //    NewPgRecord.VisitEncounterdbid = VisitRecord.dbid;
+                        //}
+
+                        CdrDb.Context.Problems.InsertOnSubmit(NewPgRecord);
+                        CdrDb.Context.SubmitChanges();
+
+                        MongoRunUpdater.ProblemIdList.Add(ProblemDoc.Id);
                     }
                 }
             }
@@ -762,6 +825,10 @@ namespace BayClinicCernerAmbulatory
             FilterDefinition<MongodbDiagnosisEntity> DiagnosisFilterDef = Builders<MongodbDiagnosisEntity>.Filter.Where(x => x.LastAggregationRun > 0);
             UpdateDefinition<MongodbDiagnosisEntity> DiagnosisUpdateDef = Builders<MongodbDiagnosisEntity>.Update.Unset(x => x.LastAggregationRun);
             Result = DiagnosisCollection.UpdateMany(DiagnosisFilterDef, DiagnosisUpdateDef);
+
+            FilterDefinition<MongodbProblemEntity> ProblemFilterDef = Builders<MongodbProblemEntity>.Filter.Where(x => x.LastAggregationRun > 0);
+            UpdateDefinition<MongodbProblemEntity> ProblemUpdateDef = Builders<MongodbProblemEntity>.Update.Unset(x => x.LastAggregationRun);
+            Result = ProblemCollection.UpdateMany(ProblemFilterDef, ProblemUpdateDef);
 
         }
 
