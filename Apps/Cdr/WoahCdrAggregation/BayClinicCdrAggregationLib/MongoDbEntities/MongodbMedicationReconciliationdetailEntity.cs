@@ -21,7 +21,7 @@ namespace BayClinicCernerAmbulatory
         [BsonElement("unique_medication_reconciliation_identifier")]
         public String UniqueMedicationReconciliationIdentifier;
 
-        [BsonElement("uniqe_medication_identifier")]
+        [BsonElement("unique_medication_identifier")]
         public String UniqueMedicationIdentifier;
 
         [BsonElement("clinical_display")]
