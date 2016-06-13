@@ -173,7 +173,8 @@ namespace BayClinicCernerAmbulatory
             OverallSuccess &= AggregateIdentifiers(PersonDocument, ThisPatient);
             OverallSuccess &= AggregateVisits(PersonDocument, ThisPatient);
             OverallSuccess &= AggregateInsuranceCoverages(PersonDocument, ThisPatient);
-            
+            OverallSuccess &= AggregateProblems(PersonDocument, ThisPatient);
+
             //            EntitySet<Medication> _Medications;
             //            EntitySet<Immunization> _Immunizations;
             //            EntitySet<Problem> _Problems;
@@ -380,7 +381,6 @@ namespace BayClinicCernerAmbulatory
                         OverallSuccess &= AggregateResults(PersonDoc, PatientRecord, VisitDoc, NewPgRecord);
                         OverallSuccess &= AggregateDiagnoses(PersonDoc, PatientRecord, VisitDoc, NewPgRecord);
                         OverallSuccess &= AggregateImmunizations(PersonDoc, PatientRecord, VisitDoc, NewPgRecord);
-                        OverallSuccess &= AggregateProblems(PersonDoc, PatientRecord, VisitDoc, NewPgRecord);
 
                     }
                 }
@@ -702,13 +702,17 @@ namespace BayClinicCernerAmbulatory
         {
             int ProblemCounter = 0;
 
-            FilterDefinition<MongodbProblemEntity> ProblemFilterDef = Builders<MongodbProblemEntity>.Filter
-                .Where(x =>
+            FilterDefinitionBuilder<MongodbProblemEntity> ProblemFilterBuilder = Builders<MongodbProblemEntity>.Filter;
+
+            FilterDefinition<MongodbProblemEntity> ProblemFilterDef = ProblemFilterBuilder.Where(x =>
                        x.UniquePersonIdentifier == PersonDoc.UniquePersonIdentifier
-                    //&& x.UniqueVisitIdentifier == VisitDoc.UniqueVisitIdentifier
                     && !(x.LastAggregationRun > 0)     // not previously aggregated
-                                                       // TODO do we also want to match the extract date from MongoPerson.ImportFile?
+                    && (x.ImportFile.StartsWith(PersonDoc.ImportFile.Substring(0,12)))  // match the extract date from PersonDoc.ImportFile
                       );
+
+            // Following will be relevant only for Allscripts
+            //if (VisitDoc != null)
+            //    ProblemFilterDef = ProblemFilterDef & ProblemFilterBuilder.Where(x => x.UniqueVisitIdentifier == VisitDoc.UniqueVisitIdentifier);
 
             using (var ProblemCursor = ProblemCollection.Find<MongodbProblemEntity>(ProblemFilterDef).ToCursor())
             {
@@ -717,23 +721,31 @@ namespace BayClinicCernerAmbulatory
                     foreach (MongodbProblemEntity ProblemDoc in ProblemCursor.Current)
                     {
                         ProblemCounter++;
-                        DateTime BeginDateTime, EndDateTime;
+                        DateTime BeginDateTime, EndDateTime, ActiveStatusDateTime;
                         DateTime.TryParse(ProblemDoc.EffectiveBeginDateTime, out BeginDateTime);
                         DateTime.TryParse(ProblemDoc.EffectiveEndDateTime, out EndDateTime);
+                        DateTime.TryParse(ProblemDoc.EffectiveEndDateTime, out ActiveStatusDateTime);
 
                         Problem NewPgRecord = new Problem
                         {
                             Patientdbid = PatientRecord.dbid,
                             EmrIdentifier = ProblemDoc.UniqueProblemIdentifier,
-                            Description = "",  // TODO set something real
+                            Description = ProblemDoc.Display,  // TODO Think about adding a Problem field for terminology code reference
                             BeginDateTime = BeginDateTime,
                             EndDateTime = EndDateTime,
-                            EffectiveDateTime = 
+                            EffectiveDateTime = ActiveStatusDateTime,
                         };
-                        if (VisitRecord != null)
-                        {
-                            NewPgRecord.VisitEncounterdbid = VisitRecord.dbid
-                        }
+
+                        // Following is relevant only for Allscripts, not Cerner
+                        //if (VisitRecord != null)  // not relevant for Cerner but probably relevant for Allscripts
+                        //{
+                        //    NewPgRecord.VisitEncounterdbid = VisitRecord.dbid;
+                        //}
+
+                        CdrDb.Context.Problems.InsertOnSubmit(NewPgRecord);
+                        CdrDb.Context.SubmitChanges();
+
+                        MongoRunUpdater.ProblemIdList.Add(ProblemDoc.Id);
                     }
                 }
             }
