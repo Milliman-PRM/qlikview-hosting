@@ -81,9 +81,9 @@ namespace BayClinicCernerAmbulatory
                 && InitializeReferenceCodeDictionary("PERSON", new String[] {"LANGUAGE",       "ADDITIONAL_LANGUAGE"      }, ref LanguageCodeMeanings)
                 && InitializeReferenceCodeDictionary("PERSON", new String[] {"ETHNICITY",      "ADDITIONAL_ETHNICITY"     }, ref EthnicityCodeMeanings)
                 // Likely these won't be present in the ambulatory extract?
-                //&& InitializeCodeDictionary("PERSON", "HOME_ADDRESS", ref CodeMeanings)
-                //&& InitializeCodeDictionary("PERSON", "IDENTIFIERS", ref CodeMeanings)  // ???
-                //&& InitializeCodeDictionary("PERSON", "STATUS", ref CodeMeanings)  // ???
+                //&& InitializeReferenceCodeDictionary("PERSON", "HOME_ADDRESS", ref CodeMeanings)
+                //&& InitializeReferenceCodeDictionary("PERSON", "IDENTIFIERS", ref CodeMeanings)  // ???
+                //&& InitializeReferenceCodeDictionary("PERSON", "STATUS", ref CodeMeanings)  // ???
 
                 && InitializeReferenceCodeDictionary("PHONE",   new String[] {"TYPE"}, ref PhoneTypeCodeMeanings)
 
