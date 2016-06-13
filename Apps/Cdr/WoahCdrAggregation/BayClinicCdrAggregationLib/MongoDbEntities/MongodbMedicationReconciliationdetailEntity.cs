@@ -18,8 +18,8 @@ namespace BayClinicCernerAmbulatory
         [BsonElement("record_identifier")]
         public String RecordIdentifier;
 
-        [BsonElement("unique_reconciliation_identifier")]
-        public String ImportFile;
+        [BsonElement("unique_medication_reconciliation_identifier")]
+        public String UniqueMedicationReconciliationIdentifier;
 
         [BsonElement("uniqe_medication_identifier")]
         public String UniqueMedicationIdentifier;
@@ -41,6 +41,9 @@ namespace BayClinicCernerAmbulatory
 
         [BsonElement("update_date_time")]
         public String UpdateDateTime;
+
+        [BsonElement("ImportFile")]
+        public String ImportFile;
 
         [BsonElement("lastaggregationrun")]
         public long LastAggregationRun;
