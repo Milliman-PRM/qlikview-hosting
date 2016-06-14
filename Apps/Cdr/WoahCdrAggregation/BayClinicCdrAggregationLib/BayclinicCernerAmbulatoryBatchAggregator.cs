@@ -183,9 +183,8 @@ namespace BayClinicCernerAmbulatory
             OverallSuccess &= AggregateIdentifiers(PersonDocument, ThisPatient);
             OverallSuccess &= AggregateVisits(PersonDocument, ThisPatient);
             OverallSuccess &= AggregateInsuranceCoverages(PersonDocument, ThisPatient);
-            
+            OverallSuccess &= AggregateProblems(PersonDocument, ThisPatient);
 
-            //            EntitySet<Problem> _Problems;
 
             if (OverallSuccess)
             {
@@ -778,10 +777,9 @@ namespace BayClinicCernerAmbulatory
 
                         Medication NewPgRecord = new Medication
                         {
-
                             EmrIdentifier = MedicationDoc.UniqueMedicationIdentifier,
                             PrescriptionDate = PrescriptionDate,
-                            FillDate = FillDate,                                   //Going to be the same as the start date
+                            FillDate = FillDate, 
                             Description = MedicationDoc.OrderedAs,
                             StartDate = StartDate,
                             StopDate = StopDate,
