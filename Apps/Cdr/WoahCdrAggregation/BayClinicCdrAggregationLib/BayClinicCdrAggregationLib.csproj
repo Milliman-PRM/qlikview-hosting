@@ -60,6 +60,7 @@
     <Compile Include="BayclinicCernerAmbulatoryBatchAggregator.cs" />
     <Compile Include="CernerReferencedCodeDictionaries.cs" />
     <Compile Include="MongoAggregationRunUpdater.cs" />
+    <Compile Include="MongoDbEntities\MongodbMedicationEntity.cs" />
     <Compile Include="MongoDbEntities\MongodbImmunizationEntity.cs" />
     <Compile Include="MongoDbEntities\MongodbAddressEntity.cs" />
     <Compile Include="MongoDbEntities\MongodbChargeDetailEntity.cs" />
@@ -67,10 +68,12 @@
     <Compile Include="MongoDbEntities\MongodbDiagnosisEntity.cs" />
     <Compile Include="MongoDbEntities\MongodbIdentifierEntity.cs" />
     <Compile Include="MongoDbEntities\MongodbInsuranceEntity.cs" />
+    <Compile Include="MongoDbEntities\MongodbMedicationReconciliationDetailEntity.cs" />
     <Compile Include="MongoDbEntities\MongodbPersonEntity.cs" />
     <Compile Include="MongoDbEntities\MongodbPhoneEntity.cs" />
     <Compile Include="MongoDbEntities\MongodbProblemEntity.cs" />
     <Compile Include="MongoDbEntities\MongodbRefCodeEntity.cs" />
+    <Compile Include="MongoDbEntities\MongodbReferenceMedicationEntity.cs" />
     <Compile Include="MongoDbEntities\MongodbReferenceTerminologyEntity.cs" />
     <Compile Include="MongoDbEntities\MongodbResultEntity.cs" />
     <Compile Include="MongoDbEntities\MongodbVisitEntity.cs" />
