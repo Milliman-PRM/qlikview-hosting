@@ -28,21 +28,25 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.groupFeedSelection = new System.Windows.Forms.GroupBox();
             this.radioNBMCAllscriptsViaIntelliware = new System.Windows.Forms.RadioButton();
             this.radioBayClinicCernerAmbulatory = new System.Windows.Forms.RadioButton();
             this.buttonAggregate = new System.Windows.Forms.Button();
             this.buttonEndAllThreads = new System.Windows.Forms.Button();
+            this.labelBcPatientsCompleted = new System.Windows.Forms.Label();
+            this.timerUiUpdate = new System.Windows.Forms.Timer(this.components);
             this.groupFeedSelection.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupFeedSelection
             // 
+            this.groupFeedSelection.Controls.Add(this.labelBcPatientsCompleted);
             this.groupFeedSelection.Controls.Add(this.radioNBMCAllscriptsViaIntelliware);
             this.groupFeedSelection.Controls.Add(this.radioBayClinicCernerAmbulatory);
             this.groupFeedSelection.Location = new System.Drawing.Point(12, 12);
             this.groupFeedSelection.Name = "groupFeedSelection";
-            this.groupFeedSelection.Size = new System.Drawing.Size(204, 329);
+            this.groupFeedSelection.Size = new System.Drawing.Size(318, 329);
             this.groupFeedSelection.TabIndex = 0;
             this.groupFeedSelection.TabStop = false;
             this.groupFeedSelection.Text = "Feed Selection";
@@ -89,6 +93,19 @@
             this.buttonEndAllThreads.UseVisualStyleBackColor = true;
             this.buttonEndAllThreads.Click += new System.EventHandler(this.buttonEndAllThreads_Click);
             // 
+            // labelBcPatientsCompleted
+            // 
+            this.labelBcPatientsCompleted.AutoSize = true;
+            this.labelBcPatientsCompleted.Location = new System.Drawing.Point(246, 22);
+            this.labelBcPatientsCompleted.Name = "labelBcPatientsCompleted";
+            this.labelBcPatientsCompleted.Size = new System.Drawing.Size(13, 13);
+            this.labelBcPatientsCompleted.TabIndex = 3;
+            this.labelBcPatientsCompleted.Text = "0";
+            // 
+            // timerUiUpdate
+            // 
+            this.timerUiUpdate.Tick += new System.EventHandler(this.timerUiUpdate_Tick);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -112,6 +129,8 @@
         private System.Windows.Forms.RadioButton radioBayClinicCernerAmbulatory;
         private System.Windows.Forms.Button buttonAggregate;
         private System.Windows.Forms.Button buttonEndAllThreads;
+        private System.Windows.Forms.Label labelBcPatientsCompleted;
+        private System.Windows.Forms.Timer timerUiUpdate;
     }
 }
 

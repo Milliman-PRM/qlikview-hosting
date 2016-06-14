@@ -11,6 +11,7 @@ namespace BayClinicCdrAggregationLib
     public class BayClinicAggregationWorkerThreadManager
     {
         private bool _EndThreadSignal;
+        BayClinicCernerAmbulatoryBatchAggregator Aggregator = null;
 
         /// <summary>
         /// Property that encapsulates thread safe access
@@ -66,13 +67,23 @@ namespace BayClinicCdrAggregationLib
             return WorkerThd.Join(WaitMs);
         }
 
+        public long GetNumberOfPatientsDone()
+        {
+            if (Aggregator != null)
+            {
+                return Aggregator.PatientCounter;
+            }
+
+            return 0;
+        }
+
         private void ThreadMain(object ThreadArg)
         {
             String PgCxnName = (String)ThreadArg;
             while (!EndThreadSignal)
             {
                 bool Success;
-                BayClinicCernerAmbulatoryBatchAggregator Aggregator = new BayClinicCernerAmbulatoryBatchAggregator(PgCxnName);
+                Aggregator = new BayClinicCernerAmbulatoryBatchAggregator(PgCxnName);
                 Success = Aggregator.AggregateAllAvailablePatients(true);  // TODO for production the argument should be false
 
                 if (EndThreadSignal)

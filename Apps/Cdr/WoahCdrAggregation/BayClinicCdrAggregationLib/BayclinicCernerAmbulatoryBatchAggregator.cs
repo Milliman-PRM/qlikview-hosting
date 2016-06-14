@@ -54,8 +54,19 @@ namespace BayClinicCernerAmbulatory
         IMongoCollection<MongodbMedicationReconciliationDetailEntity> MedicationReconciliationDetailCollection;
         IMongoCollection<MongodbReferenceMedicationEntity> ReferenceMedicationCollection;
 
-
-        //TODO Insert Mongo collection for medicationreconciliation
+        public int PatientCounter;
+        public int PhoneCounter;
+        public int AddressCounter;
+        public int IdentifierCounter;
+        public int VisitCounter;
+        public int ChargeCounter;
+        public int ChargeDetailCounter;
+        public int ResultCounter;
+        public int DiagnosisCounter;
+        public int InsuranceCoverageCounter;
+        public int ImmunizationCounter;
+        public int MedicationCounter;
+        public int ProblemCounter;
 
         public BayClinicCernerAmbulatoryBatchAggregator(String PgConnectionName = null)
         {
@@ -97,6 +108,9 @@ namespace BayClinicCernerAmbulatory
             ThisAggregationRun = GetNewAggregationRun();
             Initialized &= ThisAggregationRun.dbid > 0;
 
+            PatientCounter = PhoneCounter = AddressCounter = IdentifierCounter = VisitCounter = ChargeCounter = ChargeDetailCounter = 
+                ResultCounter = DiagnosisCounter = InsuranceCoverageCounter = ImmunizationCounter = MedicationCounter = ProblemCounter = 0;
+
             MongoRunUpdater = new MongoAggregationRunUpdater(ThisAggregationRun.dbid, MongoCxn.Db);
 
             return Initialized;
@@ -105,7 +119,6 @@ namespace BayClinicCernerAmbulatory
         public bool AggregateAllAvailablePatients(bool ClearRunNumbers = false)
         {
             bool OverallResult = true;
-            int PatientCounter = 0;
 
             if (!InitializeRun())
             {
@@ -205,8 +218,6 @@ namespace BayClinicCernerAmbulatory
  
         private bool AggregateTelephoneNumbers(MongodbPersonEntity MongoPerson, Patient PgPatient)
         {
-            int PhoneCounter = 0;
-
             FilterDefinition<MongodbPhoneEntity> PhoneFilterDef = Builders<MongodbPhoneEntity>.Filter
                 .Where(
                          x => x.EntityType == "PERSON"
@@ -250,8 +261,6 @@ namespace BayClinicCernerAmbulatory
 
         private bool AggregateAddresses(MongodbPersonEntity MongoPerson, Patient PgPatient)
         {
-            int AddressCounter = 0;
-
             FilterDefinition<MongodbAddressEntity> AddressFilterDef = Builders<MongodbAddressEntity>.Filter
                 .Where(
                          x => x.EntityType == "PERSON"
@@ -302,8 +311,6 @@ namespace BayClinicCernerAmbulatory
 
         private bool AggregateIdentifiers(MongodbPersonEntity MongoPerson, Patient PgPatient)
         {
-            int IdentifierCounter = 0;
-
             FilterDefinition<MongodbIdentifierEntity> IdentifierFilterDef = Builders<MongodbIdentifierEntity>.Filter
                 .Where(
                          x => x.EntityType == "PERSON"
@@ -346,7 +353,6 @@ namespace BayClinicCernerAmbulatory
         private bool AggregateVisits(MongodbPersonEntity PersonDoc, Patient PatientRecord)
         {
             bool OverallSuccess = true;
-            int VisitCounter = 0;
 
             FilterDefinition<MongodbVisitEntity> VisitFilterDef = Builders<MongodbVisitEntity>.Filter
                 .Where(
@@ -399,8 +405,6 @@ namespace BayClinicCernerAmbulatory
 
         private bool AggregateCharges(MongodbVisitEntity MongoVisit, VisitEncounter PgVisit)
         {
-            int ChargeCounter = 0;
-
             FilterDefinition<MongodbChargeEntity> ChargeFilterDef = Builders<MongodbChargeEntity>.Filter
                 .Where(
                          x => x.UniqueVisitIdentifier == MongoVisit.UniqueVisitIdentifier
@@ -462,8 +466,6 @@ namespace BayClinicCernerAmbulatory
 
         private bool AggregateChargeDetails(MongodbChargeEntity ChargeDoc, Charge ChargeRecord)
         {
-            int ChargeDetailCounter = 0;
-
             FilterDefinition<MongodbChargeDetailEntity> ChargeDetailFilterDef = Builders<MongodbChargeDetailEntity>.Filter
                 .Where(
                          x => x.UniqueChargeItemIdentifier == ChargeDoc.UniqueChargeItemIdentifier
@@ -503,7 +505,6 @@ namespace BayClinicCernerAmbulatory
         private bool AggregateResults(MongodbPersonEntity PersonDoc, Patient PatientRecord, MongodbVisitEntity VisitDoc, VisitEncounter VisitRecord)
         {
             bool Success = true;
-            int ResultCounter = 0;
             DateTime PerformedDateTime;
 
             FilterDefinition<MongodbResultEntity> ResultFilterDef = Builders<MongodbResultEntity>.Filter
@@ -554,7 +555,6 @@ namespace BayClinicCernerAmbulatory
         private bool AggregateDiagnoses(MongodbPersonEntity PersonDoc, Patient PatientRecord, MongodbVisitEntity VisitDoc, VisitEncounter VisitRecord)
         {
             bool Success = true;
-            int DiagnosisCounter = 0;
 
             FilterDefinition<MongodbDiagnosisEntity> DiagnosisFilterDef = Builders<MongodbDiagnosisEntity>.Filter
                 .Where(x =>
@@ -622,8 +622,6 @@ namespace BayClinicCernerAmbulatory
 
         private bool AggregateInsuranceCoverages(MongodbPersonEntity MongoPerson, Patient PgPatient)
         {
-            int InsuranceCoverageCounter = 0;
-
             FilterDefinition<MongodbInsuranceEntity> InsuranceCoverageFilterDef = Builders<MongodbInsuranceEntity>.Filter
                 .Where(
                          x => x.EntityType == "PERSON"
@@ -665,8 +663,6 @@ namespace BayClinicCernerAmbulatory
 
         private bool AggregateImmunizations(MongodbPersonEntity PersonDoc, Patient PatientRecord, MongodbVisitEntity VisitDoc, VisitEncounter VisitRecord)
         {
-            int ImmunizationCounter = 0;
-
             FilterDefinition<MongodbImmunizationEntity> ImmunizationFilterDef = Builders<MongodbImmunizationEntity>.Filter
                 .Where(x =>
                        x.UniquePersonIdentifier == PersonDoc.UniquePersonIdentifier
@@ -713,8 +709,6 @@ namespace BayClinicCernerAmbulatory
 
         private bool AggregateMedications(MongodbPersonEntity PersonDoc, Patient PatientRecord, MongodbVisitEntity VisitDoc, VisitEncounter VisitRecord)
         {
-            int MedicationCounter = 0;
-
             FilterDefinition<MongodbMedicationEntity> MedicationFilterDef = Builders<MongodbMedicationEntity>.Filter
                 .Where(x =>
                        x.UniquePersonIdentifier == PersonDoc.UniquePersonIdentifier
@@ -808,8 +802,6 @@ namespace BayClinicCernerAmbulatory
 
         private bool AggregateProblems(MongodbPersonEntity PersonDoc, Patient PatientRecord, MongodbVisitEntity VisitDoc = null, VisitEncounter VisitRecord = null)
         {
-            int ProblemCounter = 0;
-
             FilterDefinitionBuilder<MongodbProblemEntity> ProblemFilterBuilder = Builders<MongodbProblemEntity>.Filter;
 
             FilterDefinition<MongodbProblemEntity> ProblemFilterDef = ProblemFilterBuilder.Where(x =>

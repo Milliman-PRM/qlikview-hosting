@@ -19,6 +19,7 @@ namespace WoahCdrAggregationTestGui
         public Form1()
         {
             InitializeComponent();
+            timerUiUpdate.Interval = 1000;
         }
 
         private void buttonAggregate_Click(object sender, EventArgs e)
@@ -30,6 +31,7 @@ namespace WoahCdrAggregationTestGui
                     BayClinicAggregationWorkerThreadManager BcLib = new BayClinicAggregationWorkerThreadManager();
                     BcLib.StartThread();
                     BayClinicProcesses.Add(BcLib);
+                    timerUiUpdate.Start();
                     break;
 
                 case "radioNBMCAllscriptsViaIntelliware":
@@ -46,6 +48,11 @@ namespace WoahCdrAggregationTestGui
             {
                 B.EndThread();
             }
+        }
+
+        private void timerUiUpdate_Tick(object sender, EventArgs e)
+        {
+            labelBcPatientsCompleted.Text = BayClinicProcesses[0].GetNumberOfPatientsDone().ToString();
         }
     }
 }
