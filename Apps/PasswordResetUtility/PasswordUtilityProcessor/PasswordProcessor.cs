@@ -77,17 +77,19 @@ namespace PasswordUtilityProcessor
 
                     if (isFileGenerateCounterNumeric)
                     {
+                        int filesToGenerateCounter = 0;
+
                         // 2. find out count of files in the directory, if there are any files then we need to subtract that from the fileGenerateCounter
                         var existingFilesInDir = GetAllFileNamesFromDirectory(GetFolderPath());
 
+                        // If there are files in dir
                         if (existingFilesInDir != null && existingFilesInDir.Count > 0)
                         {
                             // ******Check if the file in dir is more than or equal to the FileGenerateCounter. if files in directory are less then generate files ********//
                             if (existingFilesInDir.Count < fileGenerateCounter)
                             {
                                 // 4. How many files we need to generate => *Subtract the existing files that exist in the directory and generate the "difference"
-                                int filesToGenerateCounter = (fileGenerateCounter - existingFilesInDir.Count);
-
+                                filesToGenerateCounter = (fileGenerateCounter - existingFilesInDir.Count);
                                 // *****Check to remove users that has files in Dir *******//
                                 //5. generate list of user ProviderUserKey only [generate a list of ProviderUserKey]
                                 var listUsersProviderKey = Membership.GetAllUsers().OfType<MembershipUser>().Select(s => s.ProviderUserKey.ToString().ToUpper()).ToList();
@@ -130,7 +132,18 @@ namespace PasswordUtilityProcessor
                                 }
                             }
                         }
-
+                        else
+                        {
+                            filesToGenerateCounter = (fileGenerateCounter);
+                            if (fileGenerateCounter > 0)
+                            {
+                                //All files
+                                foreach (MembershipUser user in usersCollection)
+                                {
+                                    ProcessUser(user.UserName);
+                                }
+                            }
+                        }
                     }
 
                 }
