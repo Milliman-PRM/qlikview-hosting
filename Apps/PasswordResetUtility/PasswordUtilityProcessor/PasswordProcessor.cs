@@ -83,64 +83,51 @@ namespace PasswordUtilityProcessor
                         var existingFilesInDir = GetAllFileNamesFromDirectory(GetFolderPath());
 
                         // If there are files in dir
-                        if (existingFilesInDir != null && existingFilesInDir.Count > 0)
+                        //if (existingFilesInDir != null && existingFilesInDir.Count > 0)
+                        //{
+                        // ******Check if the file in dir is more than or equal to the FileGenerateCounter. if files in directory are less then generate files ********//
+                        if (existingFilesInDir.Count < fileGenerateCounter)
                         {
-                            // ******Check if the file in dir is more than or equal to the FileGenerateCounter. if files in directory are less then generate files ********//
-                            if (existingFilesInDir.Count < fileGenerateCounter)
+                            // 4. How many files we need to generate => *Subtract the existing files that exist in the directory and generate the "difference"
+                            filesToGenerateCounter = (fileGenerateCounter - existingFilesInDir.Count);
+                            // *****Check to remove users that has files in Dir *******//
+                            //5. generate list of user ProviderUserKey only [generate a list of ProviderUserKey]
+                            var listUsersProviderKey = Membership.GetAllUsers().OfType<MembershipUser>().Select(s => s.ProviderUserKey.ToString().ToUpper()).ToList();
+
+                            //6. generate list of users ProviderUserKey form existing files in directory and remove the .rst extention
+                            var existingFilesInDirWithoutExt = existingFilesInDir.Select(s => s.Replace(".rst", "").Trim()).ToList();
+
+                            if (listUsersProviderKey.Count > 0)
                             {
-                                // 4. How many files we need to generate => *Subtract the existing files that exist in the directory and generate the "difference"
-                                filesToGenerateCounter = (fileGenerateCounter - existingFilesInDir.Count);
-                                // *****Check to remove users that has files in Dir *******//
-                                //5. generate list of user ProviderUserKey only [generate a list of ProviderUserKey]
-                                var listUsersProviderKey = Membership.GetAllUsers().OfType<MembershipUser>().Select(s => s.ProviderUserKey.ToString().ToUpper()).ToList();
+                                //7. From the user provider key, remove the existing files provider key
+                                var usersTobeProcessed = listUsersProviderKey.Except(existingFilesInDirWithoutExt).ToList();
 
-                                //6. generate list of users ProviderUserKey form existing files in directory and remove the .rst extention
-                                var existingFilesInDirWithoutExt = existingFilesInDir.Select(s => s.Replace(".rst", "").Trim()).ToList();
-
-                                if (listUsersProviderKey.Count > 0 && existingFilesInDirWithoutExt.Count > 0)
+                                //8. Convert back to Membership class 
+                                var finalUserList = new List<MembershipUser>();
+                                foreach (var membershipUser in usersTobeProcessed)
                                 {
-                                    //7. From the user provider key, remove the existing files provider key
-                                    var usersTobeProcessed = listUsersProviderKey.Except(existingFilesInDirWithoutExt).ToList();
+                                    finalUserList.Add((Membership.GetUser(new Guid(membershipUser))));
+                                }
 
-                                    //8. Convert back to Membership class 
-                                    var finalUserList = new List<MembershipUser>();
-                                    foreach (var membershipUser in usersTobeProcessed)
+                                // 11. From the above user list [finalUserList], process users count equal to the filesCounter .. 
+                                #region Example
+                                // Example: Assume the fileGenerateCounter is 10 and we have existingFilesInDir equal to 4 (means there are 4 files in dir)
+                                // - we need to fist figure out how many total files we need to generate [filesToGenerateCounter = 10-4=6]
+                                // - we get list of exisitng files without extention [existingFilesInDirWithoutExt]
+                                // - We need to exclude the existing files [6] from user list to get a clean user list [usersTobeProcessed=listUsersProviderKey-existingFilesInDirWithoutExt]
+                                // - convert usersTobeProcessed provider key to MembershipUser
+                                // - get the users to be processed from finalUserList for exact count as filesToGenerateCounter
+                                #endregion
+                                if (finalUserList.Count > 0)
+                                {
+                                    var userToProcessCountedList = finalUserList.OrderBy(i => i.UserName).Take(filesToGenerateCounter + 1).ToList();
+                                    if (userToProcessCountedList.Count > 0)
                                     {
-                                        finalUserList.Add((Membership.GetUser(new Guid(membershipUser))));
-                                    }
-
-                                    // 11. From the above user list [finalUserList], process users count equal to the filesCounter .. 
-                                    #region Example
-                                    // Example: Assume the fileGenerateCounter is 10 and we have existingFilesInDir equal to 4 (means there are 4 files in dir)
-                                    // - we need to fist figure out how many total files we need to generate [filesToGenerateCounter = 10-4=6]
-                                    // - we get list of exisitng files without extention [existingFilesInDirWithoutExt]
-                                    // - We need to exclude the existing files [6] from user list to get a clean user list [usersTobeProcessed=listUsersProviderKey-existingFilesInDirWithoutExt]
-                                    // - convert usersTobeProcessed provider key to MembershipUser
-                                    // - get the users to be processed from finalUserList for exact count as filesToGenerateCounter
-                                    #endregion
-                                    if (finalUserList.Count > 0)
-                                    {
-                                        var userToProcessCountedList = finalUserList.OrderBy(i => i.UserName).Take(filesToGenerateCounter + 1).ToList();
-                                        if (userToProcessCountedList.Count > 0)
+                                        foreach (var item in userToProcessCountedList)
                                         {
-                                            for (int recordCount = 0; recordCount < userToProcessCountedList.Count; recordCount++)
-                                            {
-                                                ProcessUser(userToProcessCountedList[recordCount].UserName);
-                                            }
+                                            ProcessUser(item.UserName);
                                         }
                                     }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            filesToGenerateCounter = (fileGenerateCounter);
-                            if (fileGenerateCounter > 0)
-                            {
-                                //All files
-                                foreach (MembershipUser user in usersCollection)
-                                {
-                                    ProcessUser(user.UserName);
                                 }
                             }
                         }
