@@ -169,16 +169,10 @@
     <Type Name="Medication" ed:Guid="db68cdbb-bcb7-4dd5-9b27-59929342fff1">
       <Column Name="dbid" Type="System.Int64" AutoSync="OnInsert" DbType="bigserial NOT NULL" IsReadOnly="true" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" ed:ValidateRequired="true" ed:Guid="ffc58a3f-4193-42ff-8703-4f09c5114f8e" />
       <Column Name="emridentifier" Member="EmrIdentifier" Type="System.String" DbType="varchar" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="5509e902-65de-4c66-94f2-85530b43c86b" />
-      <Column Member="Code" Type="CodedEntry" IsValueType="True" ed:ValidateRequired="false" ed:Guid="325f9f1b-6567-4fce-8edd-0fcba03a350d">
-        <TypeMapping>
-          <Column Name="code" Member="Code" DbType="varchar" />
-          <Column Name="codesystem" Member="CodeSystem" DbType="varchar" />
-          <Column Name="codesystemversion" Member="CodeSystemVersion" DbType="varchar" />
-          <Column Name="codemeaning" Member="CodeMeaning" DbType="varchar" />
-          <Column Name="codemodifier" Member="CodeModifier" DbType="varchar" />
-          <Column Name="codemodifierdescription" Member="CodeModifierDescription" DbType="varchar" />
-        </TypeMapping>
-      </Column>
+      <Column Name="rxnorm" Member="RxNorm" Type="System.String" DbType="varchar" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="325f9f1b-6567-4fce-8edd-0fcba03a350d" />
+      <Column Name="ndc" Member="NDC" Type="System.String" DbType="varchar" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="b4b4ff6e-1309-4718-8389-29fbd8da1da0" />
+      <Column Name="dnum" Member="Dnum" Type="System.String" DbType="varchar" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="bc00a68a-8e5a-41ed-8f1c-ab52c3ebb81f" />
+      <Column Name="catalogcki" Member="CatalogCKI" Type="System.String" DbType="varchar" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="71211ed1-0e67-41a5-b183-da41e3941e9b" />
       <Column Name="prescriptiondate" Member="PrescriptionDate" Type="System.DateTime" DbType="TIMESTAMPTZ" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="227c42ef-c733-4fd4-9914-efe40c19353f" />
       <Column Name="filldate" Member="FillDate" Type="System.DateTime" DbType="TIMESTAMPTZ" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="61e1e7a3-89f9-47c2-a8d4-fb09dfcab608" />
       <Column Name="instructions" Member="Instructions" Type="System.String" DbType="varchar" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="43671e16-6dc0-4c9d-a71f-daac6c759ed8" />

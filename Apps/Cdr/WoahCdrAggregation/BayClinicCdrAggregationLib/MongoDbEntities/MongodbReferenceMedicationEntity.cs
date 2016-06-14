@@ -19,13 +19,13 @@ namespace BayClinicCernerAmbulatory
         public String UniqueSynonymIdentifier;
 
         [BsonElement("ndc")]
-        public String Ndc;
+        public String NDC;
 
         [BsonElement("dnum")]
         public String Dnum;
 
         [BsonElement("catalog_cki")]
-        public String CatalogCki;
+        public String CatalogCKI;
 
         [BsonElement("rxnorm")]
         public String RxNorm;

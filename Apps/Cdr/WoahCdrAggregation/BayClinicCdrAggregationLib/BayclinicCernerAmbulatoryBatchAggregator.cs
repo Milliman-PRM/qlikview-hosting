@@ -771,7 +771,7 @@ namespace BayClinicCernerAmbulatory
                         MongodbReferenceMedicationEntity ReferenceMedicationRecord = ReferenceMedicationQuery.FirstOrDefault();
                         if (ReferenceMedicationRecord == null)
                         {
-                            ReferenceMedicationRecord = new MongodbReferenceMedicationEntity { RxNorm = "" };
+                            ReferenceMedicationRecord = new MongodbReferenceMedicationEntity { RxNorm = "", CatalogCKI = "", Dnum = "", NDC = "" };
                         }
 
 
@@ -788,8 +788,10 @@ namespace BayClinicCernerAmbulatory
                             Patientdbid = PatientRecord.dbid,
                             VisitEncounterdbid = VisitRecord.dbid,
                             Instructions = MedicationInstructions,
-                            Code = new CodedEntry { Code = ReferenceMedicationRecord.RxNorm,
-                                                    CodeSystem = "RxNorm" }
+                            RxNorm = ReferenceMedicationRecord.RxNorm,
+                            CatalogCKI = ReferenceMedicationRecord.CatalogCKI,
+                            Dnum = ReferenceMedicationRecord.Dnum,
+                            NDC = ReferenceMedicationRecord.NDC
                         };
 
                         CdrDb.Context.Medications.InsertOnSubmit(NewPgRecord);
