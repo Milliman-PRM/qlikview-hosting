@@ -68,6 +68,10 @@ namespace BayClinicCernerAmbulatory
         public int MedicationCounter;
         public int ProblemCounter;
 
+        /// <summary>
+        /// Constructor, instantiates member objects and stores the connection string name (default if not provided by caller)
+        /// </summary>
+        /// <param name="PgConnectionName"></param>
         public BayClinicCernerAmbulatoryBatchAggregator(String PgConnectionName = null)
         {
             if (String.IsNullOrEmpty(PgConnectionName))
@@ -80,6 +84,10 @@ namespace BayClinicCernerAmbulatory
             ReferencedCodes = new CernerReferencedCodeDictionaries();
         }
 
+        /// <summary>
+        /// Initializes member instance variables to support this aggregation run
+        /// </summary>
+        /// <returns>boolean indicating success</returns>
         private bool InitializeRun()
         {
             bool Initialized;
@@ -102,20 +110,26 @@ namespace BayClinicCernerAmbulatory
             MedicationCollection = MongoCxn.Db.GetCollection<MongodbMedicationEntity>("medications");
             MedicationReconciliationDetailCollection = MongoCxn.Db.GetCollection<MongodbMedicationReconciliationDetailEntity>("medicationreconciliationdetail");
             ReferenceMedicationCollection = MongoCxn.Db.GetCollection<MongodbReferenceMedicationEntity>("referencemedication");
-            // TODO initialize collection
+
+            // reset all counters to 0
+            PatientCounter = PhoneCounter = AddressCounter = IdentifierCounter = VisitCounter = ChargeCounter = ChargeDetailCounter =
+                ResultCounter = DiagnosisCounter = InsuranceCoverageCounter = ImmunizationCounter = MedicationCounter = ProblemCounter =
+                0;
 
             Initialized = ReferencedCodes.Initialize(RefCodeCollection);
             ThisAggregationRun = GetNewAggregationRun();
             Initialized &= ThisAggregationRun.dbid > 0;
-
-            PatientCounter = PhoneCounter = AddressCounter = IdentifierCounter = VisitCounter = ChargeCounter = ChargeDetailCounter = 
-                ResultCounter = DiagnosisCounter = InsuranceCoverageCounter = ImmunizationCounter = MedicationCounter = ProblemCounter = 0;
 
             MongoRunUpdater = new MongoAggregationRunUpdater(ThisAggregationRun.dbid, MongoCxn.Db);
 
             return Initialized;
         }
 
+        /// <summary>
+        /// Main callable method, iterates over all available patients in MongoDB to aggregate into PostgreSQL
+        /// </summary>
+        /// <param name="ClearRunNumbers">if true, resets all documents in MongoDB so they are processed</param>
+        /// <returns></returns>
         public bool AggregateAllAvailablePatients(bool ClearRunNumbers = false)
         {
             bool OverallResult = true;
@@ -134,9 +148,9 @@ namespace BayClinicCernerAmbulatory
             CdrDb.Context.SubmitChanges();
             
             FilterDefinition<MongodbPersonEntity> PatientFilterDef = Builders<MongodbPersonEntity>.Filter
-                .Where(  // TODO get criteria right
-                           x => x.LastName != ""           // must have a last name
-                        && x.UniquePersonIdentifier != ""  // has an identifier to be referenced from other txt files
+                .Where(x =>
+                           //x.LastName != "" &&           // must have a last name
+                           x.UniquePersonIdentifier != ""  // has an identifier to be referenced from other txt files
                         && !(x.LastAggregationRun > 0)     // not previously aggregated
                       );
 
@@ -161,6 +175,11 @@ namespace BayClinicCernerAmbulatory
             return OverallResult;
         }
 
+        /// <summary>
+        /// Aggregate all data related to one patient document from Mongo and manage the PostgreSQL storage transaction
+        /// </summary>
+        /// <param name="PersonDocument"></param>
+        /// <returns></returns>
         private bool AggregateOnePatient(MongodbPersonEntity PersonDocument)
         {
             DateTime ParsedDateTime;
@@ -190,14 +209,13 @@ namespace BayClinicCernerAmbulatory
 
             MongoRunUpdater.PersonIdList.Add(PersonDocument.Id);
 
-            // Related entities
+            // Aggregate entities that are linked to this patient (entities linked to patient and visit are called from the visit aggregation method)
             OverallSuccess &= AggregateTelephoneNumbers(PersonDocument, ThisPatient);
             OverallSuccess &= AggregateAddresses(PersonDocument, ThisPatient);
             OverallSuccess &= AggregateIdentifiers(PersonDocument, ThisPatient);
             OverallSuccess &= AggregateVisits(PersonDocument, ThisPatient);
             OverallSuccess &= AggregateInsuranceCoverages(PersonDocument, ThisPatient);
-            OverallSuccess &= AggregateProblems(PersonDocument, ThisPatient);
-
+            OverallSuccess &= AggregateProblems(PersonDocument, ThisPatient);  // Bay Clinic does not have links between problem and a visit
 
             if (OverallSuccess)
             {
@@ -215,8 +233,14 @@ namespace BayClinicCernerAmbulatory
 
             return OverallSuccess;
         }
- 
-        private bool AggregateTelephoneNumbers(MongodbPersonEntity MongoPerson, Patient PgPatient)
+
+        /// <summary>
+        /// Aggregate the telephone numbers associated with a specified patient
+        /// </summary>
+        /// <param name="MongoPerson"></param>
+        /// <param name="PgPatient"></param>
+        /// <returns></returns>
+         private bool AggregateTelephoneNumbers(MongodbPersonEntity MongoPerson, Patient PgPatient)
         {
             FilterDefinition<MongodbPhoneEntity> PhoneFilterDef = Builders<MongodbPhoneEntity>.Filter
                 .Where(
@@ -259,6 +283,12 @@ namespace BayClinicCernerAmbulatory
             return true;
         }
 
+        /// <summary>
+        /// Aggregate the address data associated with a specified patient
+        /// </summary>
+        /// <param name="MongoPerson"></param>
+        /// <param name="PgPatient"></param>
+        /// <returns></returns>
         private bool AggregateAddresses(MongodbPersonEntity MongoPerson, Patient PgPatient)
         {
             FilterDefinition<MongodbAddressEntity> AddressFilterDef = Builders<MongodbAddressEntity>.Filter
@@ -309,6 +339,12 @@ namespace BayClinicCernerAmbulatory
             return true;
         }
 
+        /// <summary>
+        /// Aggregate the identifiers associated with a specified patient
+        /// </summary>
+        /// <param name="MongoPerson"></param>
+        /// <param name="PgPatient"></param>
+        /// <returns></returns>
         private bool AggregateIdentifiers(MongodbPersonEntity MongoPerson, Patient PgPatient)
         {
             FilterDefinition<MongodbIdentifierEntity> IdentifierFilterDef = Builders<MongodbIdentifierEntity>.Filter
@@ -350,6 +386,12 @@ namespace BayClinicCernerAmbulatory
             return true;
         }
 
+        /// <summary>
+        /// Aggregate the visit data associated with a specified patient
+        /// </summary>
+        /// <param name="PersonDoc"></param>
+        /// <param name="PatientRecord"></param>
+        /// <returns></returns>
         private bool AggregateVisits(MongodbPersonEntity PersonDoc, Patient PatientRecord)
         {
             bool OverallSuccess = true;
@@ -390,6 +432,7 @@ namespace BayClinicCernerAmbulatory
 
                         MongoRunUpdater.VisitIdList.Add(VisitDoc.Id);
 
+                        // Aggregate entities that are linked to this visit
                         OverallSuccess &= AggregateCharges(VisitDoc, NewPgRecord);
                         OverallSuccess &= AggregateResults(PersonDoc, PatientRecord, VisitDoc, NewPgRecord);
                         OverallSuccess &= AggregateDiagnoses(PersonDoc, PatientRecord, VisitDoc, NewPgRecord);
@@ -403,6 +446,12 @@ namespace BayClinicCernerAmbulatory
             return OverallSuccess;
         }
 
+        /// <summary>
+        /// Aggregate the charge data associated with a specified visit
+        /// </summary>
+        /// <param name="MongoVisit"></param>
+        /// <param name="PgVisit"></param>
+        /// <returns></returns>
         private bool AggregateCharges(MongodbVisitEntity MongoVisit, VisitEncounter PgVisit)
         {
             FilterDefinition<MongodbChargeEntity> ChargeFilterDef = Builders<MongodbChargeEntity>.Filter
@@ -464,6 +513,12 @@ namespace BayClinicCernerAmbulatory
             return true;
         }
 
+        /// <summary>
+        /// Aggregate the charge detail data associated with a specified visit
+        /// </summary>
+        /// <param name="ChargeDoc"></param>
+        /// <param name="ChargeRecord"></param>
+        /// <returns></returns>
         private bool AggregateChargeDetails(MongodbChargeEntity ChargeDoc, Charge ChargeRecord)
         {
             FilterDefinition<MongodbChargeDetailEntity> ChargeDetailFilterDef = Builders<MongodbChargeDetailEntity>.Filter
@@ -502,6 +557,14 @@ namespace BayClinicCernerAmbulatory
             return true;
         }
 
+        /// <summary>
+        /// Aggregate the result data associated with a specified patient and visit
+        /// </summary>
+        /// <param name="PersonDoc"></param>
+        /// <param name="PatientRecord"></param>
+        /// <param name="VisitDoc"></param>
+        /// <param name="VisitRecord"></param>
+        /// <returns></returns>
         private bool AggregateResults(MongodbPersonEntity PersonDoc, Patient PatientRecord, MongodbVisitEntity VisitDoc, VisitEncounter VisitRecord)
         {
             bool Success = true;
@@ -552,6 +615,14 @@ namespace BayClinicCernerAmbulatory
             return Success;
         }
 
+        /// <summary>
+        /// Aggregate the diagnosis data associated with a specified patient and visit
+        /// </summary>
+        /// <param name="PersonDoc"></param>
+        /// <param name="PatientRecord"></param>
+        /// <param name="VisitDoc"></param>
+        /// <param name="VisitRecord"></param>
+        /// <returns></returns>
         private bool AggregateDiagnoses(MongodbPersonEntity PersonDoc, Patient PatientRecord, MongodbVisitEntity VisitDoc, VisitEncounter VisitRecord)
         {
             bool Success = true;
@@ -620,6 +691,12 @@ namespace BayClinicCernerAmbulatory
         }
 
 
+        /// <summary>
+        /// Aggregate the insurance associated with a specified patient
+        /// </summary>
+        /// <param name="MongoPerson"></param>
+        /// <param name="PgPatient"></param>
+        /// <returns></returns>
         private bool AggregateInsuranceCoverages(MongodbPersonEntity MongoPerson, Patient PgPatient)
         {
             FilterDefinition<MongodbInsuranceEntity> InsuranceCoverageFilterDef = Builders<MongodbInsuranceEntity>.Filter
@@ -661,6 +738,14 @@ namespace BayClinicCernerAmbulatory
             return true;
         }
 
+        /// <summary>
+        /// Aggregate the immunization data associated with a specified patient and visit
+        /// </summary>
+        /// <param name="PersonDoc"></param>
+        /// <param name="PatientRecord"></param>
+        /// <param name="VisitDoc"></param>
+        /// <param name="VisitRecord"></param>
+        /// <returns></returns>
         private bool AggregateImmunizations(MongodbPersonEntity PersonDoc, Patient PatientRecord, MongodbVisitEntity VisitDoc, VisitEncounter VisitRecord)
         {
             FilterDefinition<MongodbImmunizationEntity> ImmunizationFilterDef = Builders<MongodbImmunizationEntity>.Filter
@@ -707,6 +792,14 @@ namespace BayClinicCernerAmbulatory
             return true;
         }
 
+        /// <summary>
+        /// Aggregate the medication data associated with a specified patient and visit
+        /// </summary>
+        /// <param name="PersonDoc"></param>
+        /// <param name="PatientRecord"></param>
+        /// <param name="VisitDoc"></param>
+        /// <param name="VisitRecord"></param>
+        /// <returns></returns>
         private bool AggregateMedications(MongodbPersonEntity PersonDoc, Patient PatientRecord, MongodbVisitEntity VisitDoc, VisitEncounter VisitRecord)
         {
             FilterDefinition<MongodbMedicationEntity> MedicationFilterDef = Builders<MongodbMedicationEntity>.Filter
@@ -798,8 +891,15 @@ namespace BayClinicCernerAmbulatory
 
             return true;
         }
-                
 
+        /// <summary>
+        /// Aggregate the problem data associated with a specified patient
+        /// </summary>
+        /// <param name="PersonDoc"></param>
+        /// <param name="PatientRecord"></param>
+        /// <param name="VisitDoc"></param>
+        /// <param name="VisitRecord"></param>
+        /// <returns></returns>
         private bool AggregateProblems(MongodbPersonEntity PersonDoc, Patient PatientRecord, MongodbVisitEntity VisitDoc = null, VisitEncounter VisitRecord = null)
         {
             FilterDefinitionBuilder<MongodbProblemEntity> ProblemFilterBuilder = Builders<MongodbProblemEntity>.Filter;
@@ -810,7 +910,7 @@ namespace BayClinicCernerAmbulatory
                     && (x.ImportFile.StartsWith(PersonDoc.ImportFile.Substring(0,12)))  // match the extract date from PersonDoc.ImportFile
                       );
 
-            // Following will be relevant only for Allscripts
+            // Following logic will be relevant for Allscripts, not Cerner
             //if (VisitDoc != null)
             //    ProblemFilterDef = ProblemFilterDef & ProblemFilterBuilder.Where(x => x.UniqueVisitIdentifier == VisitDoc.UniqueVisitIdentifier);
 
@@ -836,7 +936,7 @@ namespace BayClinicCernerAmbulatory
                             EffectiveDateTime = ActiveStatusDateTime,
                         };
 
-                        // Following is relevant only for Allscripts, not Cerner
+                        // Following logic will be relevant for Allscripts, not Cerner
                         //if (VisitRecord != null)  // not relevant for Cerner but probably relevant for Allscripts
                         //{
                         //    NewPgRecord.VisitEncounterdbid = VisitRecord.dbid;
@@ -854,6 +954,10 @@ namespace BayClinicCernerAmbulatory
         }
 
 
+        /// <summary>
+        /// Establishes, stores, and returns a new aggregation run record for the current run
+        /// </summary>
+        /// <returns></returns>
         private AggregationRun GetNewAggregationRun()
         {
             OrganizationObject = CdrDb.EnsureOrganizationRecord(WoahBayClinicOrganizationIdentity);
@@ -878,6 +982,9 @@ namespace BayClinicCernerAmbulatory
             return NewRun;
         }
 
+        /// <summary>
+        /// Clears all aggregation run numbers from documents in MongoDB in order to permit a full database aggregation
+        /// </summary>
         private void ClearAllMongoAggregationRunNumbers()
         {
             UpdateResult Result;

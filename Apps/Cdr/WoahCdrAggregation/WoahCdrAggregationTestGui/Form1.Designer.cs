@@ -30,17 +30,20 @@
         {
             this.components = new System.ComponentModel.Container();
             this.groupFeedSelection = new System.Windows.Forms.GroupBox();
+            this.labelNbmcPatientsCompleted = new System.Windows.Forms.Label();
+            this.labelBcPatientsCompleted = new System.Windows.Forms.Label();
             this.radioNBMCAllscriptsViaIntelliware = new System.Windows.Forms.RadioButton();
             this.radioBayClinicCernerAmbulatory = new System.Windows.Forms.RadioButton();
             this.buttonAggregate = new System.Windows.Forms.Button();
             this.buttonEndAllThreads = new System.Windows.Forms.Button();
-            this.labelBcPatientsCompleted = new System.Windows.Forms.Label();
             this.timerUiUpdate = new System.Windows.Forms.Timer(this.components);
+            this.labelElapsedTime = new System.Windows.Forms.Label();
             this.groupFeedSelection.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupFeedSelection
             // 
+            this.groupFeedSelection.Controls.Add(this.labelNbmcPatientsCompleted);
             this.groupFeedSelection.Controls.Add(this.labelBcPatientsCompleted);
             this.groupFeedSelection.Controls.Add(this.radioNBMCAllscriptsViaIntelliware);
             this.groupFeedSelection.Controls.Add(this.radioBayClinicCernerAmbulatory);
@@ -50,6 +53,24 @@
             this.groupFeedSelection.TabIndex = 0;
             this.groupFeedSelection.TabStop = false;
             this.groupFeedSelection.Text = "Feed Selection";
+            // 
+            // labelNbmcPatientsCompleted
+            // 
+            this.labelNbmcPatientsCompleted.AutoSize = true;
+            this.labelNbmcPatientsCompleted.Location = new System.Drawing.Point(246, 44);
+            this.labelNbmcPatientsCompleted.Name = "labelNbmcPatientsCompleted";
+            this.labelNbmcPatientsCompleted.Size = new System.Drawing.Size(13, 13);
+            this.labelNbmcPatientsCompleted.TabIndex = 4;
+            this.labelNbmcPatientsCompleted.Text = "0";
+            // 
+            // labelBcPatientsCompleted
+            // 
+            this.labelBcPatientsCompleted.AutoSize = true;
+            this.labelBcPatientsCompleted.Location = new System.Drawing.Point(246, 22);
+            this.labelBcPatientsCompleted.Name = "labelBcPatientsCompleted";
+            this.labelBcPatientsCompleted.Size = new System.Drawing.Size(13, 13);
+            this.labelBcPatientsCompleted.TabIndex = 3;
+            this.labelBcPatientsCompleted.Text = "0";
             // 
             // radioNBMCAllscriptsViaIntelliware
             // 
@@ -93,24 +114,25 @@
             this.buttonEndAllThreads.UseVisualStyleBackColor = true;
             this.buttonEndAllThreads.Click += new System.EventHandler(this.buttonEndAllThreads_Click);
             // 
-            // labelBcPatientsCompleted
-            // 
-            this.labelBcPatientsCompleted.AutoSize = true;
-            this.labelBcPatientsCompleted.Location = new System.Drawing.Point(246, 22);
-            this.labelBcPatientsCompleted.Name = "labelBcPatientsCompleted";
-            this.labelBcPatientsCompleted.Size = new System.Drawing.Size(13, 13);
-            this.labelBcPatientsCompleted.TabIndex = 3;
-            this.labelBcPatientsCompleted.Text = "0";
-            // 
             // timerUiUpdate
             // 
             this.timerUiUpdate.Tick += new System.EventHandler(this.timerUiUpdate_Tick);
+            // 
+            // labelElapsedTime
+            // 
+            this.labelElapsedTime.AutoSize = true;
+            this.labelElapsedTime.Location = new System.Drawing.Point(336, 175);
+            this.labelElapsedTime.Name = "labelElapsedTime";
+            this.labelElapsedTime.Size = new System.Drawing.Size(13, 13);
+            this.labelElapsedTime.TabIndex = 3;
+            this.labelElapsedTime.Text = "0";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(508, 390);
+            this.Controls.Add(this.labelElapsedTime);
             this.Controls.Add(this.buttonEndAllThreads);
             this.Controls.Add(this.buttonAggregate);
             this.Controls.Add(this.groupFeedSelection);
@@ -119,6 +141,7 @@
             this.groupFeedSelection.ResumeLayout(false);
             this.groupFeedSelection.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -131,6 +154,8 @@
         private System.Windows.Forms.Button buttonEndAllThreads;
         private System.Windows.Forms.Label labelBcPatientsCompleted;
         private System.Windows.Forms.Timer timerUiUpdate;
+        private System.Windows.Forms.Label labelNbmcPatientsCompleted;
+        private System.Windows.Forms.Label labelElapsedTime;
     }
 }
 
