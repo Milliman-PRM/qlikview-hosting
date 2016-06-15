@@ -120,7 +120,7 @@ namespace PasswordUtilityProcessor
                                 #endregion
                                 if (finalUserList.Count > 0)
                                 {
-                                    var userToProcessCountedList = finalUserList.OrderBy(i => i.UserName).Take(filesToGenerateCounter + 1).ToList();
+                                    var userToProcessCountedList = finalUserList.OrderBy(i => i.UserName).Take(filesToGenerateCounter).ToList();
                                     if (userToProcessCountedList.Count > 0)
                                     {
                                         foreach (var item in userToProcessCountedList)
@@ -175,26 +175,24 @@ namespace PasswordUtilityProcessor
                     if (int.TryParse(GetPasswordExpirationDurationCounter(), out passwordExpiresInDays))
                     {
                         //validate the user
-                        if (Membership.ValidateUser(user.UserName, user.GetPassword()))
-                        {
-                            //Timespan gets the difference in days between Today and the last time the user changed his password(LastPasswordChangedDate) 
-                            TimeSpan ts = DateTime.Today - user.LastPasswordChangedDate;
 
-                            //Check if the TimeSpan.TotalDays is greater than the PasswordExpiresInDays setting we got from the app.config file. If true the user must change his password and we log the entry for that user 
-                            if (ts.TotalDays > passwordExpiresInDays)
+                        //Timespan gets the difference in days between Today and the last time the user changed his password(LastPasswordChangedDate) 
+                        TimeSpan ts = DateTime.Today - user.LastPasswordChangedDate;
+
+                        //Check if the TimeSpan.TotalDays is greater than the PasswordExpiresInDays setting we got from the app.config file. If true the user must change his password and we log the entry for that user 
+                        if (ts.TotalDays > passwordExpiresInDays)
+                        {
+                            //get user unique provider Key
+                            var providerUserKey = user.ProviderUserKey;
+                            //check if providerUserKey exist
+                            if (providerUserKey == null)
                             {
-                                //get user unique provider Key
-                                var providerUserKey = user.ProviderUserKey;
-                                //check if providerUserKey exist
-                                if (providerUserKey == null)
-                                {
-                                    //log error
-                                    BaseFileProcessor.LogError(null, "ProcessUser || Invalid user. System could not find the providerUserKey | " + providerUserKey + " | in database. Check the 'UserId' in [aspnet_Users] for the userName " + user.UserName + ".", false);
-                                    SendEmail();
-                                    return;
-                                }
-                                WrtiePasswordResetFile(user);
+                                //log error
+                                BaseFileProcessor.LogError(null, "ProcessUser || Invalid user. System could not find the providerUserKey | " + providerUserKey + " | in database. Check the 'UserId' in [aspnet_Users] for the userName " + user.UserName + ".", false);
+                                SendEmail();
+                                return;
                             }
+                            WrtiePasswordResetFile(user);
                         }
                     }
                 }
