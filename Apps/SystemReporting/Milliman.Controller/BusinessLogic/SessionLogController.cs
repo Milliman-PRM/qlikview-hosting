@@ -109,6 +109,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
             {
                 dbService.Dispose();
                 log.Fatal("Class SessionLogController. Method ProcessLogs.",ex);
+                SendEmail("Exception Raised", "Session log Controller Exception");
             }
             return blnSucessful;
         }

@@ -104,6 +104,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
             {
                 dbService.Dispose();
                 log.Fatal("Class IisLogController. Method ProcessLogs.", ex);
+                SendEmail("Exception Raised", "IisLog Controller Exception");
             }
             return blnSucessful;
         }        

@@ -53,6 +53,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
             {
                 dbService.Dispose();
                 log.Fatal("Class SessionLogController. Method ProcessLogs.", ex);
+                SendEmail("Exception Raised", "Common Controller Exception");
             }
 
             return obj;
@@ -93,6 +94,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
             {
                 dbService.Dispose();
                 log.Fatal("Class SessionLogController. Method ProcessLogs.", ex);
+                SendEmail("Exception Raised", "Common Controller Exception");
             }
 
             return obj;
@@ -133,6 +135,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
             {
                 dbService.Dispose();
                 log.Fatal("Class SessionLogController. Method ProcessLogs.", ex);
+                SendEmail("Exception Raised", "Common Controller Exception");
             }
 
             return obj;

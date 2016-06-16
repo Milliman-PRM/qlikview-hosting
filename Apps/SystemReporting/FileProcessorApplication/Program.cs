@@ -25,7 +25,7 @@ namespace FileProcessorApplication
                 else
                 {
                     var argsProcessAll = new string[] { "Iis", "Audit", "Session" };
-                    for (int i = 0; i < argsProcessAll.Length; i++)
+                    for (int i = 0; i < argsProcessAll.Length-1; i++)
                     {
                         FileProcessor.ProcessFile.ExecuteProcessFile(new string[] { argsProcessAll[i] });
                     }
@@ -34,7 +34,7 @@ namespace FileProcessorApplication
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, "ProcessFile: Failed processing file. || " + args.ToArray());
+                BaseFileProcessor.LogError(ex, "ProcessFile: Failed processing file. || " + args.ToArray(), true);
             }
         }
 

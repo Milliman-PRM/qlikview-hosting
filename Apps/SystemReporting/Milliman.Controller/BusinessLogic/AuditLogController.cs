@@ -102,8 +102,10 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
             {
                 dbService.Dispose();
                 log.Error("Class AuditLogController. Method ProcessLogs.", ex);
+                SendEmail("Exception Raised", "Audit Log Controller Exception");         
             }
             return blnSucessful;
-        }                
+        }            
+            
     }
 }
