@@ -185,7 +185,16 @@ namespace BayClinicCernerAmbulatory
             DateTime ParsedDateTime;
             bool OverallSuccess = true;
 
-            Patient ThisPatient = new Patient();
+            // Figure out whether this patient is already in the database
+            var query = from Pat in CdrDb.Context.Patients
+                        where Pat.EmrIdentifier == PersonDocument.UniquePersonIdentifier
+                        select Pat;
+            Patient ExistingRecord = query.FirstOrDefault();
+
+            Patient ThisPatient = (ExistingRecord == null) ? new Patient() : ExistingRecord;
+
+            // TODO convert the following assignments to merge field values from PersonDocument and ExistingRecord
+            ThisPatient.EmrIdentifier = PersonDocument.UniquePersonIdentifier;
             ThisPatient.NameLast = PersonDocument.LastName;
             ThisPatient.NameFirst = PersonDocument.FirstName;
             ThisPatient.NameMiddle = PersonDocument.MiddleName;
@@ -204,7 +213,10 @@ namespace BayClinicCernerAmbulatory
             CdrDb.Context.Connection.Open();
             CdrDb.Context.Transaction = CdrDb.Context.Connection.BeginTransaction();
 
-            CdrDb.Context.Patients.InsertOnSubmit(ThisPatient);
+            if (ExistingRecord == null)
+            {
+                CdrDb.Context.Patients.InsertOnSubmit(ThisPatient);
+            }
             CdrDb.Context.SubmitChanges();  // TODO Is it possible that only one SubmitChanges call for the entire transaction is more efficient?  
 
             MongoRunUpdater.PersonIdList.Add(PersonDocument.Id);
