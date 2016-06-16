@@ -25,7 +25,7 @@ namespace FileProcessorApplication
                 else
                 {
                     var argsProcessAll = new string[] { "Iis", "Audit", "Session" };
-                    for (int i = 0; i < argsProcessAll.Length-1; i++)
+                    for (int i = 0; i < argsProcessAll.Length; i++)
                     {
                         FileProcessor.ProcessFile.ExecuteProcessFile(new string[] { argsProcessAll[i] });
                     }
