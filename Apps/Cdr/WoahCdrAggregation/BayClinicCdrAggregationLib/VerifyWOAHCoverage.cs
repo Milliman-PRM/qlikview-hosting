@@ -17,11 +17,11 @@ namespace SasDataSetLib
         public Boolean isMedicare(MongodbPersonEntity person, OleDbDataReader reader)
         {
             //TODO add birthday as part of check
-            string PersonKey = person.LastName + ", " + person.FirstName;
+            string PersonKey = person.LastName.ToLower() + ", " + person.FirstName.ToLower();
 
             while (reader.Read())
             {
-                if (PersonKey == reader.GetString(4))
+                if (PersonKey == reader.GetString(4).ToLower())
                 {
                     return true;
                 }
