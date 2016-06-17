@@ -15,6 +15,12 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.IO;
 using MongoDB.Driver;
+using BayClinicCernerAmbulatory;
+using BayClinicCdrAggregationLib;
+using System.Data.OleDb;
+using System.Data;
+using System.IO;
+using SasDataSetLib;
 
 namespace BayClinicCernerAmbulatory
 {
@@ -28,6 +34,9 @@ namespace BayClinicCernerAmbulatory
         private String NewBayClinicAmbulatoryMongoCredentialConfigFile = ConfigurationManager.AppSettings["NewBayClinicAmbulatoryMongoCredentialConfigFile"];
         private String NewBayClinicAmbulatoryMongoCredentialSection = ConfigurationManager.AppSettings["NewBayClinicAmbulatoryMongoCredentialSection"];
 
+        //Init the the conncetion to the sas dataset
+        SasDataSetConnection connect = new SasDataSetConnection();
+
         private CdrDbInterface CdrDb;
         private Organization OrganizationObject;
         private DataFeed FeedObject;
@@ -35,6 +44,7 @@ namespace BayClinicCernerAmbulatory
         private MongoDbConnection MongoCxn;
         private CernerReferencedCodeDictionaries ReferencedCodes;
         private MongoAggregationRunUpdater MongoRunUpdater;
+        private OleDbDataReader reader;
 
         IMongoCollection<MongodbIdentifierEntity> IdentifierCollection;
         IMongoCollection<MongodbPersonEntity> PersonCollection;
@@ -67,6 +77,7 @@ namespace BayClinicCernerAmbulatory
             CdrDb = new CdrDbInterface(PgConnectionName, ConnectionArgumentType.ConnectionStringName);
             MongoCxn = new MongoDbConnection(NewBayClinicAmbulatoryMongoCredentialConfigFile, NewBayClinicAmbulatoryMongoCredentialSection);
             ReferencedCodes = new CernerReferencedCodeDictionaries();
+            OleDbDataReader reader = connect.makeConnection();
         }
 
         private bool InitializeRun()
@@ -106,6 +117,7 @@ namespace BayClinicCernerAmbulatory
         {
             bool OverallResult = true;
             int PatientCounter = 0;
+            int MedicarePatientCounter = 0;
 
             if (!InitializeRun())
             {
@@ -134,9 +146,15 @@ namespace BayClinicCernerAmbulatory
                     foreach (MongodbPersonEntity PersonDocument in PersonCursor.Current)
                     {
                         PatientCounter++;
+                        VerifyWOAHCoverage CheckForCoverage = new VerifyWOAHCoverage();
 
-                        bool ThisPatientAggregationResult = AggregateOnePatient(PersonDocument);
-                        OverallResult &= ThisPatientAggregationResult;
+                        if (CheckForCoverage.isMedicare(PersonDocument, reader))
+                        {
+                            MedicarePatientCounter++;
+                            bool ThisPatientAggregationResult = AggregateOnePatient(PersonDocument);
+                            OverallResult &= ThisPatientAggregationResult;
+                        }
+
                     }
                 }
             }
