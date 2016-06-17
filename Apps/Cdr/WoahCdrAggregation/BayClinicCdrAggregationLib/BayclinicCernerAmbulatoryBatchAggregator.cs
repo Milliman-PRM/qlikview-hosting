@@ -147,14 +147,14 @@ namespace BayClinicCernerAmbulatory
             ThisAggregationRun.StatusFlags = AggregationRunStatus.InProcess;
             CdrDb.Context.SubmitChanges();
             
-            FilterDefinition<MongodbPersonEntity> PatientFilterDef = Builders<MongodbPersonEntity>.Filter
-                .Where(x =>
-                           //x.LastName != "" &&           // must have a last name
+            FilterDefinition<MongodbPersonEntity> PatientFilterDef = Builders<MongodbPersonEntity>.Filter.Where(x =>
                            x.UniquePersonIdentifier != ""  // has an identifier to be referenced from other txt files
                         && !(x.LastAggregationRun > 0)     // not previously aggregated
                       );
 
-            using (var PersonCursor = PersonCollection.Find<MongodbPersonEntity>(PatientFilterDef)/*.Project<MongodbPersonEntity>(Proj)*/.ToCursor())
+            using (var PersonCursor = PersonCollection.Find<MongodbPersonEntity>(PatientFilterDef)
+                                                      .SortBy(x=>x.ImportFileDate)
+                                                      .ToCursor())
             {
                 while (PersonCursor.MoveNext())  // transfer the next batch of available documents from the query result cursor
                 {
@@ -182,52 +182,42 @@ namespace BayClinicCernerAmbulatory
         /// <returns></returns>
         private bool AggregateOnePatient(MongodbPersonEntity PersonDocument)
         {
-            DateTime ParsedDateTime;
+            //DateTime ParsedDateTime;
             bool OverallSuccess = true;
 
             // Figure out whether this patient is already in the database
             var query = from Pat in CdrDb.Context.Patients
                         where Pat.EmrIdentifier == PersonDocument.UniquePersonIdentifier
                         select Pat;
-            Patient ExistingRecord = query.FirstOrDefault();
-
-            Patient ThisPatient = (ExistingRecord == null) ? new Patient() : ExistingRecord;
-
-            // TODO convert the following assignments to merge field values from PersonDocument and ExistingRecord
-            ThisPatient.EmrIdentifier = PersonDocument.UniquePersonIdentifier;
-            ThisPatient.NameLast = PersonDocument.LastName;
-            ThisPatient.NameFirst = PersonDocument.FirstName;
-            ThisPatient.NameMiddle = PersonDocument.MiddleName;
-            DateTime.TryParse(PersonDocument.BirthDateTime, out ParsedDateTime);        // Will be DateTime.MinValue on parse failure
-            ThisPatient.BirthDate = ParsedDateTime;
-            ThisPatient.Gender = ReferencedCodes.GetCdrGenderEnum(PersonDocument.Gender);
-            DateTime.TryParse(PersonDocument.DeceasedDateTime, out ParsedDateTime);        // Will be DateTime.MinValue on parse failure
-            ThisPatient.DeathDate = ParsedDateTime;
-            ThisPatient.Race = ReferencedCodes.RaceCodeMeanings[PersonDocument.Race];  // coded
-            ThisPatient.Ethnicity = ReferencedCodes.EthnicityCodeMeanings[PersonDocument.Ethnicity];  // coded
-            ThisPatient.MaritalStatus = ReferencedCodes.GetCdrMaritalStatusEnum(PersonDocument.MaritalStatus);  // coded
-
-            // TODO maybe do a quality check on Patient before proceeding to aggregate the referencing entities.  
+            Patient PatientRecord = query.FirstOrDefault();  // Returns existing record or null
 
             #region PostgreSQL transaction to process all data for one patient
             CdrDb.Context.Connection.Open();
             CdrDb.Context.Transaction = CdrDb.Context.Connection.BeginTransaction();
 
-            if (ExistingRecord == null)
+            // Store to database
+            if (PersonDocument.MergeWithExistingPatient(ref PatientRecord, ReferencedCodes))
             {
-                CdrDb.Context.Patients.InsertOnSubmit(ThisPatient);
+                // Record changes will persist by SubmitChanges()
+                int i = 42;  // debugging breakpoint
+            }
+            else
+            {
+                CdrDb.Context.Patients.InsertOnSubmit(PatientRecord);
             }
             CdrDb.Context.SubmitChanges();  // TODO Is it possible that only one SubmitChanges call for the entire transaction is more efficient?  
 
             MongoRunUpdater.PersonIdList.Add(PersonDocument.Id);
 
+            // TODO maybe do a quality check on PatientRecord before proceeding to aggregate the referencing entities.  
+
             // Aggregate entities that are linked to this patient (entities linked to patient and visit are called from the visit aggregation method)
-            OverallSuccess &= AggregateTelephoneNumbers(PersonDocument, ThisPatient);
-            OverallSuccess &= AggregateAddresses(PersonDocument, ThisPatient);
-            OverallSuccess &= AggregateIdentifiers(PersonDocument, ThisPatient);
-            OverallSuccess &= AggregateVisits(PersonDocument, ThisPatient);
-            OverallSuccess &= AggregateInsuranceCoverages(PersonDocument, ThisPatient);
-            OverallSuccess &= AggregateProblems(PersonDocument, ThisPatient);  // Bay Clinic does not have links between problem and a visit
+            OverallSuccess &= AggregateTelephoneNumbers(PersonDocument, PatientRecord);
+            OverallSuccess &= AggregateAddresses(PersonDocument, PatientRecord);
+            OverallSuccess &= AggregateIdentifiers(PersonDocument, PatientRecord);
+            OverallSuccess &= AggregateVisits(PersonDocument, PatientRecord);
+            OverallSuccess &= AggregateInsuranceCoverages(PersonDocument, PatientRecord);
+            OverallSuccess &= AggregateProblems(PersonDocument, PatientRecord);  // Bay Clinic does not have links between problem and a visit
 
             if (OverallSuccess)
             {
@@ -241,7 +231,7 @@ namespace BayClinicCernerAmbulatory
             }
 
             CdrDb.Context.Connection.Close();
-            #endregion  PostgreSQL transaction to process all data for one patient
+#endregion  PostgreSQL transaction to process all data for one patient
 
             return OverallSuccess;
         }

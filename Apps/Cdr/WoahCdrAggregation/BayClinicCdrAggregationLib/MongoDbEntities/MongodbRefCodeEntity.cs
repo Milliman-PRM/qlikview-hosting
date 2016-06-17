@@ -9,7 +9,7 @@ using MongoDB.Bson.Serialization.Attributes;
 namespace BayClinicCernerAmbulatory
 {
     [BsonIgnoreExtraElements]
-    class MongodbRefCodeEntity
+    internal class MongodbRefCodeEntity
     {
 #pragma warning disable 0649
         [BsonElement("_id")]
@@ -38,6 +38,10 @@ namespace BayClinicCernerAmbulatory
 
         [BsonElement("ImportFile")]
         public String ImportFile;
+
+        [BsonElement("ImportFileDate")]
+        public String ImportFileDate;
+
 #pragma warning restore 0649
     }
 }

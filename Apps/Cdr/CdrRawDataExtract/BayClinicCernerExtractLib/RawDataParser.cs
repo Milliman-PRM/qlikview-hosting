@@ -141,6 +141,7 @@ namespace BayClinicCernerExtractLib
                     NewDocDictionary.Add(FieldNames[i], Values[i]);
                 }
                 NewDocDictionary.Add("ImportFile", TxtFileName);
+                NewDocDictionary.Add("ImportFileDate", TxtFileName.Substring(8, 4) + TxtFileName.Substring(4, 2) + TxtFileName.Substring(6, 2));
 
                 // Insert the MongoDB document
                 if (InsertToMongo)

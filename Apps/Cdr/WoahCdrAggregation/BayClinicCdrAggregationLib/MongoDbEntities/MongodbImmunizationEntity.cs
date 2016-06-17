@@ -9,8 +9,9 @@ using MongoDB.Bson.Serialization.Attributes;
 namespace BayClinicCernerAmbulatory
 {
     [BsonIgnoreExtraElements]
-    class MongodbImmunizationEntity
+    internal class MongodbImmunizationEntity
     {
+#pragma warning disable 0649
         [BsonElement("_id")]
         public ObjectId Id;
 
@@ -113,9 +114,12 @@ namespace BayClinicCernerAmbulatory
         [BsonElement("ImportFile")]
         public String ImportFile;
 
+        [BsonElement("ImportFileDate")]
+        public String ImportFileDate;
+
         [BsonElement("lastaggregationrun")]
         public long LastAggregationRun;
-
+#pragma warning restore 0649
 
     }
 }
