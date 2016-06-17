@@ -77,7 +77,7 @@ namespace BayClinicCernerAmbulatory
             CdrDb = new CdrDbInterface(PgConnectionName, ConnectionArgumentType.ConnectionStringName);
             MongoCxn = new MongoDbConnection(NewBayClinicAmbulatoryMongoCredentialConfigFile, NewBayClinicAmbulatoryMongoCredentialSection);
             ReferencedCodes = new CernerReferencedCodeDictionaries();
-            OleDbDataReader reader = connect.makeConnection();
+            reader = connect.makeConnection();
         }
 
         private bool InitializeRun()

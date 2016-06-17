@@ -20,7 +20,7 @@ namespace SasDataSetLib
 
 
             var directory = new DirectoryInfo(@"K:\PHI\0273WOH\3.005-0273WOH06\5-Support_files");
-            var mostRecentFile = directory.GetDirectories().OrderByDescending(f => f.Name).Last();
+            var mostRecentFile = directory.GetDirectories().OrderByDescending(f => f.Name).First();
 
             OleDbCommand sascmd = cn.CreateCommand();
             sascmd.CommandType = CommandType.Text;
