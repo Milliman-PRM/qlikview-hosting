@@ -148,7 +148,7 @@ namespace BayClinicCernerAmbulatory
                         PatientCounter++;
                         VerifyWOAHCoverage CheckForCoverage = new VerifyWOAHCoverage();
 
-                        if (CheckForCoverage.isMedicare(PersonDocument, reader))
+                        if (CheckForCoverage.isCovered(PersonDocument, reader))
                         {
                             MedicarePatientCounter++;
                             bool ThisPatientAggregationResult = AggregateOnePatient(PersonDocument);

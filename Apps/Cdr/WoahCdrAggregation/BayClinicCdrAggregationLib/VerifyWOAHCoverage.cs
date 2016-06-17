@@ -14,7 +14,7 @@ namespace SasDataSetLib
     public class VerifyWOAHCoverage
     {
 
-        public Boolean isMedicare(MongodbPersonEntity person, OleDbDataReader reader)
+        public Boolean isCovered(MongodbPersonEntity person, OleDbDataReader reader)
         {
             //TODO add birthday as part of check
             string PersonKey = person.LastName.ToLower() + ", " + person.FirstName.ToLower();
