@@ -1,4 +1,5 @@
 ﻿using BayClinicCernerAmbulatory;
+using Devart.Data.SQLite;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -9,23 +10,21 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace SasDataSetLib
+namespace CoverageVerification
 {
     public class VerifyWOAHCoverage
     {
-        DateTime SasBase = new DateTime(1960, 1, 1);
-        public Boolean isCovered(MongodbPersonEntity person, OleDbDataReader reader)
+
+        public Boolean isCovered(MongodbPersonEntity person, SQLiteDataReader reader)
         {
             string PersonKey = person.LastName.ToLower() + ", " + person.FirstName.ToLower();
-
-            DateTime ConvertedPersonDateTime = Convert.ToDateTime(person.BirthDateTime);
-            int ConvertedDays = (int)(ConvertedPersonDateTime - SasBase).TotalDays;
+            string DOBKey = person.BirthDateTime.Split(' ')[0];
 
             while (reader.Read())
             {
-                if (PersonKey == reader.GetString(4).ToLower())
+                if (PersonKey == reader[0].ToString().ToLower())
                 {
-                    if(ConvertedDays.ToString() == reader.GetValue(10).ToString())        
+                    if(DOBKey == reader[1].ToString())        
                         return true;
                 }
             }

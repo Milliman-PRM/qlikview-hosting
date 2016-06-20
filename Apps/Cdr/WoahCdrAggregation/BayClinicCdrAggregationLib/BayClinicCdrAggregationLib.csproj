@@ -33,6 +33,7 @@
     <Reference Include="Devart.Data, Version=5.0.1450.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL" />
     <Reference Include="Devart.Data.Linq, Version=4.5.995.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL" />
     <Reference Include="Devart.Data.PostgreSql.Linq, Version=4.5.995.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL" />
+    <Reference Include="Devart.Data.SQLite, Version=5.5.658.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL" />
     <Reference Include="MongoDB.Bson, Version=2.2.4.26, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MongoDB.Bson.2.2.4\lib\net45\MongoDB.Bson.dll</HintPath>
       <Private>True</Private>
@@ -92,6 +93,10 @@
     <ProjectReference Include="..\ClassLibrary1\SasDataSetLib.csproj">
       <Project>{22b8eaf5-b70c-4064-b4e6-979df14f6709}</Project>
       <Name>SasDataSetLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ClassLibrary2\SQLiteLib.csproj">
+      <Project>{d5149a31-d65e-4064-a4f4-cf68069ec55c}</Project>
+      <Name>SQLiteLib</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -20,7 +20,9 @@ using BayClinicCdrAggregationLib;
 using System.Data.OleDb;
 using System.Data;
 using System.IO;
-using SasDataSetLib;
+using SQLiteConnect;
+using Devart.Data.SQLite;
+using CoverageVerification;
 
 namespace BayClinicCernerAmbulatory
 {
@@ -35,7 +37,7 @@ namespace BayClinicCernerAmbulatory
         private String NewBayClinicAmbulatoryMongoCredentialSection = ConfigurationManager.AppSettings["NewBayClinicAmbulatoryMongoCredentialSection"];
 
         //Init the the conncetion to the sas dataset
-        SasDataSetConnection connect = new SasDataSetConnection();
+         SQLiteDatabaseConnection connect = new SQLiteDatabaseConnection();
 
         private CdrDbInterface CdrDb;
         private Organization OrganizationObject;
@@ -44,7 +46,7 @@ namespace BayClinicCernerAmbulatory
         private MongoDbConnection MongoCxn;
         private CernerReferencedCodeDictionaries ReferencedCodes;
         private MongoAggregationRunUpdater MongoRunUpdater;
-        private OleDbDataReader reader;
+        private SQLiteDataReader reader;
 
         IMongoCollection<MongodbIdentifierEntity> IdentifierCollection;
         IMongoCollection<MongodbPersonEntity> PersonCollection;
@@ -146,9 +148,9 @@ namespace BayClinicCernerAmbulatory
                     foreach (MongodbPersonEntity PersonDocument in PersonCursor.Current)
                     {
                         PatientCounter++;
-                        VerifyWOAHCoverage CheckForCoverage = new VerifyWOAHCoverage();
+                        VerifyWOAHCoverage CoverageVerification = new VerifyWOAHCoverage();
 
-                        if (CheckForCoverage.isCovered(PersonDocument, reader))
+                        if (CoverageVerification.isCovered(PersonDocument, reader))
                         {
                             MedicarePatientCounter++;
                             bool ThisPatientAggregationResult = AggregateOnePatient(PersonDocument);
