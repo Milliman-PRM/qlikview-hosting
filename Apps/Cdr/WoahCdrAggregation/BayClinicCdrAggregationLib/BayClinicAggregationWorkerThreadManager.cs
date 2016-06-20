@@ -66,6 +66,10 @@ namespace BayClinicCdrAggregationLib
         public bool EndThread(int WaitMs = 0)
         {
             EndThreadSignal = true;
+            if (Aggregator != null)
+            {
+                Aggregator.EndThreadSignal = true;
+            }
 
             return WorkerThd.Join(WaitMs);
         }
@@ -93,16 +97,24 @@ namespace BayClinicCdrAggregationLib
             String PgCxnName = (String)ThreadArg;
             bool Success;
 
+#if true // do once
+            Aggregator = new BayClinicCernerAmbulatoryBatchAggregator(PgCxnName);
+            Success = Aggregator.AggregateAllAvailablePatients(true);  // TODO for production the argument should be false
+            Aggregator = null;
+
+#else  // repeat
             while (!EndThreadSignal)
             {
-                Aggregator = new BayClinicCernerAmbulatoryBatchAggregator(PgCxnName);
+            Aggregator = new BayClinicCernerAmbulatoryBatchAggregator(PgCxnName);
                 Success = Aggregator.AggregateAllAvailablePatients(true);  // TODO for production the argument should be false
-
+                Aggregator = null;
                 if (!EndThreadSignal)
                 {
                     Thread.Sleep(1 * 60 * 1000);  // milliseconds
                 }
             }
+#endif
+
         }
 
     }

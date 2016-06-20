@@ -22,9 +22,16 @@ namespace BayClinicCernerExtractLib
             CxParams = new MongoDbConnectionParameters(IniFile, SectionName);
         }
 
-        public void MigrateFolderToMongo(string zipFolder, bool InsertToMongo = false, String ArchiveFolder = null, bool DoArchive = false)
+        /// <summary>
+        /// Oversees the migration of all raw data from zip files in a specified folder
+        /// </summary>
+        /// <param name="zipFolder">Folder to be processed</param>
+        /// <param name="InsertToMongo">set true to import data to MongoDB.  Otherwise the raw data is parsed only. </param>
+        /// <param name="ArchiveFolder">Destination folder to move zip files after successful import.  Default or null to skip archiving</param>
+        public void MigrateFolderToMongo(string zipFolder, bool InsertToMongo = false, String ArchiveFolder = null)
         {
             MongoDbConnection MongoCxn = new MongoDbConnection(CxParams);
+            String ImportedZipsCollectionName = "importedzips";
 
             if (!MongoCxn.TestDatabaseAccess())
             {
@@ -38,7 +45,7 @@ namespace BayClinicCernerExtractLib
                 if (InsertToMongo)
                 {
                     InsertDict.Add("zipfile", Path.GetFileName(Zip));
-                    if (MongoCxn.DocumentExists("importedzips", InsertDict))
+                    if (MongoCxn.DocumentExists(ImportedZipsCollectionName, InsertDict))
                     {
                         continue;
                     }
@@ -48,7 +55,7 @@ namespace BayClinicCernerExtractLib
 
                 if (InsertToMongo)
                 {
-                    MongoCxn.InsertDocument("importedzips", InsertDict);
+                    MongoCxn.InsertDocument(ImportedZipsCollectionName, InsertDict);
                 }
             }
 
@@ -56,7 +63,14 @@ namespace BayClinicCernerExtractLib
             MongoCxn = null;
         }
 
-        public void MigrateZipFileToMongo(string ZipFileName, bool InsertToMongo = false, String ArchiveFolder = null, MongoDbConnection MongoCxn = null, bool DoArchive = false)
+        /// <summary>
+        /// Oversees the parsing and import of the contents of one zip file to MongoDB, and optional archiving of the zip file. 
+        /// </summary>
+        /// <param name="ZipFileName">Full path of file to process.</param>
+        /// <param name="InsertToMongo">Specifies whether to perform inserts, default false.</param>
+        /// <param name="ArchiveFolder">Destination folder to move zip file after successful processing.  Default or null to skip archiving.</param>
+        /// <param name="MongoCxn">Optional connection object.  Created internally if not provided.</param>
+        public void MigrateZipFileToMongo(string ZipFileName, bool InsertToMongo = false, String ArchiveFolder = null, MongoDbConnection MongoCxn = null)
         {
             bool CreateLocalMongoConnection = (MongoCxn == null && InsertToMongo);
             if (CreateLocalMongoConnection)
@@ -82,7 +96,7 @@ namespace BayClinicCernerExtractLib
             }
 
             // Archive zip file to specified folder name
-            if (DoArchive && !String.IsNullOrEmpty(ArchiveFolder) && Directory.Exists(ArchiveFolder))
+            if (!String.IsNullOrEmpty(ArchiveFolder) && Directory.Exists(ArchiveFolder))
             {
                 File.Move(ZipFileName, Path.Combine(ArchiveFolder, Path.GetFileName(ZipFileName)));
             }
@@ -95,6 +109,12 @@ namespace BayClinicCernerExtractLib
 
         }
 
+        /// <summary>
+        /// Oversees processing of one text file contained in a zip
+        /// </summary>
+        /// <param name="Entry"></param>
+        /// <param name="InsertToMongo">Specifies whether to perform inserts, default false.</param>
+        /// <param name="MongoCxn"></param>
         private void MigrateZipEntryToMongo(ZipArchiveEntry Entry, bool InsertToMongo = false, MongoDbConnection MongoCxn = null)
         {
             if (Entry.Name.EndsWith(".txt", StringComparison.OrdinalIgnoreCase))
@@ -105,6 +125,13 @@ namespace BayClinicCernerExtractLib
             }
         }
 
+        /// <summary>
+        /// Parses and optionally imports contents of one raw data file (via. provided StreamReader) to MongoDB
+        /// </summary>
+        /// <param name="Reader"></param>
+        /// <param name="TxtFileName"></param>
+        /// <param name="InsertToMongo">Specifies whether to perform inserts, default false.</param>
+        /// <param name="MongoCxn">Optional connection object.  Created internally if not provided.</param>
         public void MigrateIndividualFileContentToMongo(StreamReader Reader, String TxtFileName, bool InsertToMongo = false, MongoDbConnection MongoCxn = null)
         {
             // Figure out the appropriate collection name

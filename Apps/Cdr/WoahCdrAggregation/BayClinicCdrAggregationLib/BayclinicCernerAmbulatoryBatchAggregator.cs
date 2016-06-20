@@ -23,6 +23,29 @@ namespace BayClinicCernerAmbulatory
         public static readonly String WoahBayClinicOrganizationIdentity = "WOAH Bay Clinic";
         private const String FeedIdentity = "BayClinicCernerAmbulatoryExtract";
 
+        private Mutex Mutx;
+        private bool _EndThreadSignal;
+
+        /// <summary>
+        /// Property that encapsulates thread safe access to the end thread signal
+        /// </summary>
+        public bool EndThreadSignal
+        {
+            set
+            {
+                Mutx.WaitOne();
+                _EndThreadSignal = value;
+                Mutx.ReleaseMutex();
+            }
+            get
+            {
+                Mutx.WaitOne();
+                bool ReturnVal = _EndThreadSignal;
+                Mutx.ReleaseMutex();
+                return ReturnVal;
+            }
+        }
+
         // TODO Some of these should be arguments from the caller, or sourced another way? 
         private String PgConnectionStringName = ConfigurationManager.AppSettings["CdrPostgreSQLConnectionString"];
         private String NewBayClinicAmbulatoryMongoCredentialConfigFile = ConfigurationManager.AppSettings["NewBayClinicAmbulatoryMongoCredentialConfigFile"];
@@ -91,6 +114,8 @@ namespace BayClinicCernerAmbulatory
         private bool InitializeRun()
         {
             bool Initialized;
+
+            EndThreadSignal = false;
 
             // Initialize MongoDb Collections
             IdentifierCollection = MongoCxn.Db.GetCollection<MongodbIdentifierEntity>("identifiers");
@@ -164,10 +189,16 @@ namespace BayClinicCernerAmbulatory
 
                         bool ThisPatientAggregationResult = AggregateOnePatient(PersonDocument);
                         OverallResult &= ThisPatientAggregationResult;
+
+                        if (EndThreadSignal)
+                        {
+                            goto EndProcessing;
+                        }
                     }
                 }
             }
 
+        EndProcessing:
             ThisAggregationRun.StatusFlags = AggregationRunStatus.Complete;
             CdrDb.Context.SubmitChanges();
 
