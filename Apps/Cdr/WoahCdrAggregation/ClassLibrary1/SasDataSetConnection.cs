@@ -24,8 +24,8 @@ namespace SasDataSetLib
             Console.WriteLine("SAS Server Version " + cn.ServerVersion);
 
 
-            var directory = new DirectoryInfo(Directory);
-            var mostRecentFile = directory.GetDirectories().OrderByDescending(f => f.Name).First();
+            var getDirectory = new DirectoryInfo(Directory);
+            var mostRecentFile = getDirectory.GetDirectories().OrderByDescending(f => f.Name).First();
 
             OleDbCommand sascmd = cn.CreateCommand();
             sascmd.CommandType = CommandType.Text;

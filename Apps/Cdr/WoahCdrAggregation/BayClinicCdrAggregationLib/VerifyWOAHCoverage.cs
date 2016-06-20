@@ -13,17 +13,20 @@ namespace SasDataSetLib
 {
     public class VerifyWOAHCoverage
     {
-
+        DateTime SasBase = new DateTime(1960, 1, 1);
         public Boolean isCovered(MongodbPersonEntity person, OleDbDataReader reader)
         {
-            //TODO add birthday as part of check
             string PersonKey = person.LastName.ToLower() + ", " + person.FirstName.ToLower();
+
+            DateTime ConvertedPersonDateTime = Convert.ToDateTime(person.BirthDateTime);
+            int ConvertedDays = (int)(ConvertedPersonDateTime - SasBase).TotalDays;
 
             while (reader.Read())
             {
                 if (PersonKey == reader.GetString(4).ToLower())
                 {
-                    return true;
+                    if(ConvertedDays.ToString() == reader.GetValue(10).ToString())        
+                        return true;
                 }
             }
 
