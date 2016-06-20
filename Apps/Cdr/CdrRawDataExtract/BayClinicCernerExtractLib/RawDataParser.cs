@@ -33,7 +33,23 @@ namespace BayClinicCernerExtractLib
 
             foreach (string Zip in Directory.GetFiles(zipFolder, @"*.zip").OrderBy(name => Directory.GetLastWriteTime(name)))
             {
+                Dictionary<String, String> InsertDict = new Dictionary<string, string>();
+
+                if (InsertToMongo)
+                {
+                    InsertDict.Add("zipfile", Path.GetFileName(Zip));
+                    if (MongoCxn.DocumentExists("importedzips", InsertDict))
+                    {
+                        continue;
+                    }
+                }
+
                 MigrateZipFileToMongo(Zip, InsertToMongo, ArchiveFolder, MongoCxn);
+
+                if (InsertToMongo)
+                {
+                    MongoCxn.InsertDocument("importedzips", InsertDict);
+                }
             }
 
             MongoCxn.Disconnect();

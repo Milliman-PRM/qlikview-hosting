@@ -192,11 +192,42 @@ namespace MongoDbWrap
                 BsonDocument NewDoc = BsonDocument.Parse(JsonContentString);
                 _Db.GetCollection<BsonDocument>(CollectionName).InsertOneAsync(NewDoc);
             }
-            catch (Exception /*e*/)
+            catch (Exception e)
             {
+                String Msg = e.Message;
                 return false;
             }
             return true;
+        }
+
+        public bool DocumentExists(string CollectionName, Dictionary<string, string> Match)
+        {
+            long HowManyMatches;
+
+            try
+            {
+                //FilterDefinition<BsonDocument> FindFilterDef = Builders<BsonDocument>.Filter.Empty;
+                FilterDefinition<BsonDocument> FindFilterDef = null;
+                foreach (KeyValuePair<String,String> Criterion in Match)
+                {
+                    if (FindFilterDef == null)
+                    {
+                        FindFilterDef = Builders<BsonDocument>.Filter.AnyEq(Criterion.Key, Criterion.Value);
+                    }
+                    else
+                    {
+                        FindFilterDef = FindFilterDef & Builders<BsonDocument>.Filter.AnyEq(Criterion.Key, Criterion.Value);
+                    }
+                }
+
+                HowManyMatches = _Db.GetCollection<BsonDocument>(CollectionName).Find(FindFilterDef).Count();
+            }
+            catch (Exception e)
+            {
+                String Msg = e.Message;
+                return false;
+            }
+            return HowManyMatches > 0;
         }
 
     }
