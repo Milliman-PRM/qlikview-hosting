@@ -14,23 +14,18 @@ namespace PasswordResetUtilityApplication
             try
             {
                 DisplayInfo();
-                //** One user Test by Providing UserName * //
-                //var users = new string[] { "aadie@sjhnh.org" };
-                //args = users;
+                //Lets only process//
+                var process = new string[] { "Process" };
+                args = process;
                 if (CheckArgs(args))
                 {
                     PasswordProcessor.ExecutePasswordResetUtility(args[0]);
-                }
-                else
-                {
-                     var processAll = "All" ;
-                     PasswordProcessor.ExecutePasswordResetUtility(processAll);
-                }
+                }                
                 Environment.ExitCode = 0;
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, "Main || Failed processing. || " + args.ToArray());
+                BaseFileProcessor.LogError(ex, "Main || Failed processing. || " + args, true);
             }
         }
         
