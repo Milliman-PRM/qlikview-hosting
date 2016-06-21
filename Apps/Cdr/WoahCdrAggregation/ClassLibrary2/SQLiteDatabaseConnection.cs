@@ -29,25 +29,34 @@ namespace SQLiteConnect
         public SQLiteConnection GetConnection()
         {
             SQLiteConnection Conn = null;
+            DirectoryInfo RootDirectoryInfo;
+            string Source;
 
-            if (_Customer == CustomerEnum.WOAH) { 
-                var getDirectory = new DirectoryInfo(@"K:\PHI\0273WOH\3.005-0273WOH06\5-Support_files\");
-                var mostRecentDirectory = getDirectory.GetDirectories().OrderByDescending(f => f.Name).First();
+            switch (_Customer) {
+                case CustomerEnum.WOAH:
+                    RootDirectoryInfo = new DirectoryInfo(@"K:\PHI\0273WOH\3.005-0273WOH06\5-Support_files\");
+                    var mostRecentDirectory = RootDirectoryInfo.GetDirectories().OrderByDescending(f => f.Name).First();
+                    Source = mostRecentDirectory.FullName + @"\035_Staging_Membership\Members_3.005-0273WOH06.sqlite";
+                    break;
 
-                string source = @"K:\PHI\0273WOH\3.005-0273WOH06\5-Support_files\" + mostRecentDirectory + @"\035_Staging_Membership\Members_3.005-0273WOH06.sqlite";
-
-                Conn = new SQLiteConnection("Data Source=" + source);
+                default:
+                    return null;
             }
 
+            Conn = new SQLiteConnection("Data Source=" + Source);
 
             return Conn;
         }
 
-        public SQLiteCommand GetCommand(SQLiteConnection connection, string Columns, string Table)
+        public SQLiteCommand GetCommand(SQLiteConnection connection, string Columns, string Table, string WhereConditions=null)
         {
             SQLiteCommand cmd = connection.CreateCommand();
 
-            cmd.CommandText = "select " + Columns + " from " + Table;
+            cmd.CommandText = "SELECT " + Columns + " FROM " + Table;
+            if (!String.IsNullOrEmpty(WhereConditions))
+            {
+                cmd.CommandText += " WHERE " + WhereConditions;
+            }
             cmd.CommandType = CommandType.Text;
 
             return cmd;
