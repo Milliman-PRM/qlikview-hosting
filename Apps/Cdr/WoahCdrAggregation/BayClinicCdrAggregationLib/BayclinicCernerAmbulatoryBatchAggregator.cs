@@ -21,8 +21,8 @@ using System.Data.OleDb;
 using System.Data;
 using System.IO;
 using SQLiteConnect;
-using Devart.Data.SQLite;
-using CoverageVerification;
+
+
 
 namespace BayClinicCernerAmbulatory
 {
@@ -30,14 +30,16 @@ namespace BayClinicCernerAmbulatory
     {
         public static readonly String WoahBayClinicOrganizationIdentity = "WOAH Bay Clinic";
         private const String FeedIdentity = "BayClinicCernerAmbulatoryExtract";
+        VerifyWOAHCoverage VerifyCoverage = new VerifyWOAHCoverage();
 
         // TODO Some of these should be arguments from the caller, or sourced another way? 
         private String PgConnectionStringName = ConfigurationManager.AppSettings["CdrPostgreSQLConnectionString"];
         private String NewBayClinicAmbulatoryMongoCredentialConfigFile = ConfigurationManager.AppSettings["NewBayClinicAmbulatoryMongoCredentialConfigFile"];
         private String NewBayClinicAmbulatoryMongoCredentialSection = ConfigurationManager.AppSettings["NewBayClinicAmbulatoryMongoCredentialSection"];
 
+        private int WOAHPatientCounter = 0;
         //Init the the conncetion to the sas dataset
-         SQLiteDatabaseConnection connect = new SQLiteDatabaseConnection();
+        SQLiteDatabaseConnection Connect = new SQLiteDatabaseConnection(CustomerEnum.WOAH, "member_id, mem_name, dob", "member");
 
         private CdrDbInterface CdrDb;
         private Organization OrganizationObject;
@@ -46,7 +48,6 @@ namespace BayClinicCernerAmbulatory
         private MongoDbConnection MongoCxn;
         private CernerReferencedCodeDictionaries ReferencedCodes;
         private MongoAggregationRunUpdater MongoRunUpdater;
-        private SQLiteDataReader reader;
 
         IMongoCollection<MongodbIdentifierEntity> IdentifierCollection;
         IMongoCollection<MongodbPersonEntity> PersonCollection;
@@ -79,7 +80,7 @@ namespace BayClinicCernerAmbulatory
             CdrDb = new CdrDbInterface(PgConnectionName, ConnectionArgumentType.ConnectionStringName);
             MongoCxn = new MongoDbConnection(NewBayClinicAmbulatoryMongoCredentialConfigFile, NewBayClinicAmbulatoryMongoCredentialSection);
             ReferencedCodes = new CernerReferencedCodeDictionaries();
-            reader = connect.makeConnection();
+
         }
 
         private bool InitializeRun()
@@ -119,7 +120,7 @@ namespace BayClinicCernerAmbulatory
         {
             bool OverallResult = true;
             int PatientCounter = 0;
-            int MedicarePatientCounter = 0;
+            
 
             if (!InitializeRun())
             {
@@ -148,14 +149,11 @@ namespace BayClinicCernerAmbulatory
                     foreach (MongodbPersonEntity PersonDocument in PersonCursor.Current)
                     {
                         PatientCounter++;
-                        VerifyWOAHCoverage CoverageVerification = new VerifyWOAHCoverage();
 
-                        if (CoverageVerification.isCovered(PersonDocument, reader))
-                        {
-                            MedicarePatientCounter++;
+                           
                             bool ThisPatientAggregationResult = AggregateOnePatient(PersonDocument);
                             OverallResult &= ThisPatientAggregationResult;
-                        }
+                        
 
                     }
                 }
@@ -165,6 +163,7 @@ namespace BayClinicCernerAmbulatory
             CdrDb.Context.SubmitChanges();
 
             Trace.WriteLine("Processed " + PatientCounter + " patients");
+            Trace.WriteLine("Processed " + WOAHPatientCounter + "WOAH covered patients");
             return OverallResult;
         }
 
@@ -208,6 +207,7 @@ namespace BayClinicCernerAmbulatory
 
             if (OverallSuccess)
             {
+                WOAHPatientCounter++;
                 CdrDb.Context.Transaction.Commit();
                 MongoRunUpdater.UpdateAll();
             }
@@ -662,7 +662,15 @@ namespace BayClinicCernerAmbulatory
                         DateTime StartDate, EndDate;
                         DateTime.TryParse(InsuranceCoverageDoc.EffectiveBeginDateTime, out StartDate);        // Will be DateTime.MinValue on parse failure
                         DateTime.TryParse(InsuranceCoverageDoc.EffectiveEndDateTime, out EndDate);        // Will be DateTime.MinValue on parse failure
-                       
+
+                        //Verify that the patient is on Medicade
+                        if (InsuranceCoverageDoc.Type != "24198546")
+                            return false;
+
+                        //Verify patient is in our WOAH Database
+                        if(!VerifyCoverage.IsCovered(Connect, InsuranceCoverageDoc.MemberNumber, MongoPerson.LastName, MongoPerson.FirstName, MongoPerson.BirthDateTime))
+                            return false;
+                        
 
                         InsuranceCoverage NewPgRecord = new InsuranceCoverage
                         {
@@ -670,8 +678,11 @@ namespace BayClinicCernerAmbulatory
                             StartDate = StartDate,
                             EndDate = EndDate,
                             PlanName = InsuranceCoverageDoc.UniqueHealthPlanIdentifier,
-                            Patient = PgPatient            //Just adding the patientdbid might may improve runtime
+                            Patient = PgPatient,            //Just adding the patientdbid might may improve runtime
+                            CoverageType = InsuranceCoverageDoc.Type,
+                            MemberID = InsuranceCoverageDoc.MemberNumber
                         };
+
 
                         CdrDb.Context.InsuranceCoverages.InsertOnSubmit(NewPgRecord);
                         CdrDb.Context.SubmitChanges();

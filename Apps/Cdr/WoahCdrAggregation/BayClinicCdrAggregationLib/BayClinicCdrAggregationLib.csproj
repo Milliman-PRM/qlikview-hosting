@@ -79,7 +79,6 @@
     <Compile Include="MongoDbEntities\MongodbResultEntity.cs" />
     <Compile Include="MongoDbEntities\MongodbVisitEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="VerifyWOAHCoverage.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Databases\CdrDbLib\CdrDbLib\CdrDbLib.csproj">
