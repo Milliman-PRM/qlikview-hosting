@@ -14,7 +14,7 @@ namespace SQLiteConnect
             string PersonKey = LastName.ToLower() + ", " + FirstName.ToLower();
             string DOBKey = DOB.Split(' ')[0];
 
-            SQLiteDataReader Reader = Connection.reader;
+            SQLiteDataReader Reader = Connection.Reader;
             while (Reader.Read())
             {
                 if(MemberID == Reader[0].ToString())
