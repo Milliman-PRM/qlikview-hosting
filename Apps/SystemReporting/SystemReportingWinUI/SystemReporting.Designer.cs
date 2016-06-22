@@ -85,7 +85,7 @@
             // 
             // grpLog
             // 
-            this.grpLog.BackColor = System.Drawing.Color.Bisque;
+            this.grpLog.BackColor = System.Drawing.Color.DarkSalmon;
             this.grpLog.Controls.Add(this.groupBox2);
             this.grpLog.Controls.Add(this.groupBox1);
             this.grpLog.Controls.Add(this.btnGenerateReport);
