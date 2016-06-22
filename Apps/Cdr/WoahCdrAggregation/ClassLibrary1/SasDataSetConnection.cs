@@ -57,8 +57,8 @@ namespace SasDataSetLib
             {
                 ConnectToSasDataSet();
 
-            } catch(Exception e) { 
-                Console.WriteLine(e);
+            } catch(Exception E) { 
+                Console.WriteLine(E);
                 return false;
             }
 

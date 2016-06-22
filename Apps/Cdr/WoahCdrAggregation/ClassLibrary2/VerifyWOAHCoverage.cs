@@ -9,21 +9,21 @@ namespace SQLiteConnect
 {
     public class VerifyWOAHCoverage
     {
-        public Boolean IsCovered(SQLiteDatabaseConnection Connection, string memberid, string FirstName, string LastName, string DOB)
+        public Boolean IsCovered(SQLiteDatabaseConnection Connection, string MemberID, string FirstName, string LastName, string DOB)
         {
             string PersonKey = LastName.ToLower() + ", " + FirstName.ToLower();
             string DOBKey = DOB.Split(' ')[0];
 
-            SQLiteDataReader reader = Connection.reader;
-            while (reader.Read())
+            SQLiteDataReader Reader = Connection.reader;
+            while (Reader.Read())
             {
-                if(memberid == reader[0].ToString())
+                if(MemberID == Reader[0].ToString())
                 {
                     return true;
                 }
-                if (PersonKey == reader[0].ToString().ToLower())
+                if (PersonKey == Reader[0].ToString().ToLower())
                 {
-                    if (DOBKey == reader[1].ToString())
+                    if (DOBKey == Reader[1].ToString())
                         return true;
                 }
             }

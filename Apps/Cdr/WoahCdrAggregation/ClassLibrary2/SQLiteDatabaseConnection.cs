@@ -17,7 +17,7 @@ namespace SQLiteConnect
     public class SQLiteDatabaseConnection
     {
         public CustomerEnum _Customer;
-        public SQLiteDataReader reader;
+        public SQLiteDataReader Reader;
 
         public SQLiteDatabaseConnection(CustomerEnum  Customer, string Columns, string Table)
         {
@@ -35,8 +35,8 @@ namespace SQLiteConnect
             switch (_Customer) {
                 case CustomerEnum.WOAH:
                     RootDirectoryInfo = new DirectoryInfo(@"K:\PHI\0273WOH\3.005-0273WOH06\5-Support_files\");
-                    var mostRecentDirectory = RootDirectoryInfo.GetDirectories().OrderByDescending(f => f.Name).First();
-                    Source = mostRecentDirectory.FullName + @"\035_Staging_Membership\Members_3.005-0273WOH06.sqlite";
+                    var MostRecentDirectory = RootDirectoryInfo.GetDirectories().OrderByDescending(f => f.Name).First();
+                    Source = MostRecentDirectory.FullName + @"\035_Staging_Membership\Members_3.005-0273WOH06.sqlite";
                     break;
 
                 default:
@@ -48,27 +48,27 @@ namespace SQLiteConnect
             return Conn;
         }
 
-        public SQLiteCommand GetCommand(SQLiteConnection connection, string Columns, string Table, string WhereConditions=null)
+        public SQLiteCommand GetCommand(SQLiteConnection Connection, string Columns, string Table, string WhereConditions=null)
         {
-            SQLiteCommand cmd = connection.CreateCommand();
+            SQLiteCommand Cmd = Connection.CreateCommand();
 
-            cmd.CommandText = "SELECT " + Columns + " FROM " + Table;
+            Cmd.CommandText = "SELECT " + Columns + " FROM " + Table;
             if (!String.IsNullOrEmpty(WhereConditions))
             {
-                cmd.CommandText += " WHERE " + WhereConditions;
+                Cmd.CommandText += " WHERE " + WhereConditions;
             }
-            cmd.CommandType = CommandType.Text;
+            Cmd.CommandType = CommandType.Text;
 
-            return cmd;
+            return Cmd;
 
         }
         public void ConnectToDatabase(string Columns, string Table) {
 
-            SQLiteConnection myConn = GetConnection();
+            SQLiteConnection MyConn = GetConnection();
 
-            SQLiteCommand command = GetCommand(myConn, Columns, Table);
+            SQLiteCommand Command = GetCommand(MyConn, Columns, Table);
 
-            this.reader = command.ExecuteReader();
+            this.Reader = Command.ExecuteReader();
 
         }
 
