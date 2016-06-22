@@ -11,36 +11,59 @@ namespace SasDataSetLib
 {
     public class SasDataSetConnection
     {
-        string ConnectionString = "Provider=sas.IOMProvider; Data Source =_LOCAL_";
-        string Directory = @"K:\PHI\0273WOH\3.005-0273WOH06\5-Support_files";
-        string libname = "saslib";
-        string TableName = "member";
+        //ConnectionString = "Provider=sas.IOMProvider; Data Source =_LOCAL_"
 
-        public OleDbDataReader makeConnection()
+        public enum CustomerEnum { WOAH };
+
+        CustomerEnum Customer;
+        public string TableName;
+        OleDbConnection Connection;
+        OleDbDataReader Reader;
+        OleDbCommand SasCommand;
+
+
+        public void ConnectToSasDataSet()
         {
-            OleDbConnection cn = new OleDbConnection();
-            cn.ConnectionString = ConnectionString;
-            cn.Open();
-            Console.WriteLine("SAS Server Version " + cn.ServerVersion);
+            switch (Customer)
+            {
+                case CustomerEnum.WOAH:
+                        Connection = new OleDbConnection();
+                        Connection.ConnectionString = "Provider=sas.IOMProvider; Data Source =_LOCAL_";
+                        var SasRootDirectoryInfo = new DirectoryInfo(@"K:\PHI\0273WOH\3.005-0273WOH06\5-Support_files");
+                        var MostRecentDirectory = SasRootDirectoryInfo.GetDirectories().OrderByDescending(f => f.Name).First();
 
+                        SasCommand = Connection.CreateCommand();
+                        SasCommand.CommandType = CommandType.Text;
+                        SasCommand.CommandText = "libname saslib  'K:\\PHI\\0273WOH\\3.005-0273WOH06\\5-Support_files\\" + MostRecentDirectory + "\\035_Staging_Membership\\'";
 
-            var getDirectory = new DirectoryInfo(Directory);
-            var mostRecentFile = getDirectory.GetDirectories().OrderByDescending(f => f.Name).First();
+                    break;
+                default:
+                    break;
+            }
 
-            OleDbCommand sascmd = cn.CreateCommand();
-            sascmd.CommandType = CommandType.Text;
-            sascmd.CommandText = "libname " + libname + "  'K:\\PHI\\0273WOH\\3.005-0273WOH06\\5-Support_files\\" + mostRecentFile + "\\035_Staging_Membership\\'";
-            sascmd.ExecuteNonQuery();
-
-
-            sascmd.CommandType = CommandType.TableDirect;
-            sascmd.CommandText = libname + "." + TableName;
-
-
-            OleDbDataReader reader = sascmd.ExecuteReader();
-
-            return reader;
-
+            SasCommand.ExecuteNonQuery();
+            SasCommand.CommandType = CommandType.TableDirect;
+            SasCommand.CommandText = "saslib." + TableName;
+            Reader = SasCommand.ExecuteReader();
+            Connection.Open();
         }
+
+        public Boolean Connect(CustomerEnum Customer, string TableName)
+        {
+            this.Customer = Customer;
+            this.TableName = TableName;
+
+            try
+            {
+                ConnectToSasDataSet();
+
+            } catch(Exception e) { 
+                Console.WriteLine(e);
+                return false;
+            }
+
+            return true;
+        }
+
     }
 }

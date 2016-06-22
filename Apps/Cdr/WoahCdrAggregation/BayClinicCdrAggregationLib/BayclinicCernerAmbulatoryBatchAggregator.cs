@@ -149,12 +149,8 @@ namespace BayClinicCernerAmbulatory
                     foreach (MongodbPersonEntity PersonDocument in PersonCursor.Current)
                     {
                         PatientCounter++;
-
-                           
-                            bool ThisPatientAggregationResult = AggregateOnePatient(PersonDocument);
-                            OverallResult &= ThisPatientAggregationResult;
-                        
-
+                        bool ThisPatientAggregationResult = AggregateOnePatient(PersonDocument);
+                        OverallResult &= ThisPatientAggregationResult;
                     }
                 }
             }

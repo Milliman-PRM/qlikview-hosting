@@ -12,7 +12,7 @@ namespace SQLiteConnect
         public Boolean IsCovered(SQLiteDatabaseConnection Connection, string memberid, string FirstName, string LastName, string DOB)
         {
             string PersonKey = LastName.ToLower() + ", " + FirstName.ToLower();
-            string DOBKey = DOB;
+            string DOBKey = DOB.Split(' ')[0];
 
             SQLiteDataReader reader = Connection.reader;
             while (reader.Read())
