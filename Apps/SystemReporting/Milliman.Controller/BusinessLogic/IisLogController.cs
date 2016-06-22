@@ -107,6 +107,93 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                 SendEmail("Exception Raised", "IisLog Controller Exception");
             }
             return blnSucessful;
-        }        
+        }
+
+        /// <summary>
+        /// get session log report by Group name
+        /// </summary>
+        /// <param name="date"></param>
+        /// <param name="reportName"></param>
+        /// <param name="startDate">todo: describe startDate parameter on GetSessionLogListForGroup</param>
+        /// <param name="endDate">todo: describe endDate parameter on GetSessionLogListForGroup</param>
+        /// <returns></returns>
+        public List<IisLog> GetIisLogListForGroup(string startDate, string endDate, string reportName)
+        {
+            var dbService = new MillimanService();
+            var listResult = new List<IisLog>();
+
+            var obj = dbService.GetGroups<Group>(a => a.GroupName.Contains(reportName)).FirstOrDefault();
+
+            DateTime? dtStartDate = DateTime.Parse(startDate);
+            DateTime? dtEndDate = DateTime.Parse(endDate);
+
+            if (obj != null)
+            {
+                listResult = dbService.GetIisLogs<IisLog>(s => s.fk_user_id == obj.Id
+                                                &&
+                                                s.UserAccessDatetime.Value > dtStartDate
+                                                &&
+                                                s.UserAccessDatetime.Value <= dtEndDate)
+                                                .OrderBy(a => a.UserAccessDatetime).ToList();
+            }
+            return listResult;
+        }
+        /// <summary>
+        /// get session log report by ReportName
+        /// </summary>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        /// <param name="reportName"></param>
+        /// <returns></returns>
+        public List<IisLog> GetIisLogListForReport(string startDate, string endDate, string reportName)
+        {
+            var dbService = new MillimanService();
+            var listResult = new List<IisLog>();
+
+            var obj = dbService.GetReports<Report>(a => a.ReportName.Contains(reportName)).FirstOrDefault();
+
+            DateTime? dtStartDate = DateTime.Parse(startDate);
+            DateTime? dtEndDate = DateTime.Parse(endDate);
+
+            if (obj != null)
+            {
+                listResult = dbService.GetIisLogs<IisLog>(s => s.fk_user_id == obj.Id
+                                                &&
+                                                s.UserAccessDatetime.Value > dtStartDate
+                                                &&
+                                                s.UserAccessDatetime.Value <= dtEndDate)
+                                                .OrderBy(a => a.UserAccessDatetime).ToList();
+            }
+            return listResult;
+        }
+
+        /// <summary>
+        /// get a session log report by user
+        /// </summary>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        /// <param name="reportName"></param>
+        /// <returns></returns>
+        public  List<IisLog> GetIisLogListForUser(string startDate, string endDate, string reportName)
+        {
+            var dbService = new MillimanService();
+            var listResult = new List<IisLog>();
+
+            var obj = dbService.GetUsers<User>(a => a.UserName.Contains(reportName)).FirstOrDefault();
+
+            DateTime? dtStartDate = DateTime.Parse(startDate);
+            DateTime? dtEndDate = DateTime.Parse(endDate);
+
+            if (obj != null)
+            {
+                listResult = dbService.GetIisLogs<IisLog>(s => s.fk_user_id == obj.Id
+                                                &&
+                                                s.UserAccessDatetime.Value > dtStartDate
+                                                &&
+                                                s.UserAccessDatetime.Value <= dtEndDate)
+                                                .OrderBy(a => a.UserAccessDatetime).ToList();
+            }
+            return listResult;
+        }
     }
 }

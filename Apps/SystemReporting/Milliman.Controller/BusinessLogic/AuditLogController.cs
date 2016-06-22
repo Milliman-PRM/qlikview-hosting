@@ -105,7 +105,93 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                 SendEmail("Exception Raised", "Audit Log Controller Exception");         
             }
             return blnSucessful;
-        }            
-            
-    }
+        }
+
+        /// <summary>
+        /// get session log report by Group name
+        /// </summary>
+        /// <param name="date"></param>
+        /// <param name="reportName"></param>
+        /// <param name="startDate">todo: describe startDate parameter on GetSessionLogListForGroup</param>
+        /// <param name="endDate">todo: describe endDate parameter on GetSessionLogListForGroup</param>
+        /// <returns></returns>
+        public List<AuditLog> GetAuditLogListForGroup(string startDate, string endDate, string reportName)
+        {
+            var dbService = new MillimanService();
+            var listResult = new List<AuditLog>();
+
+            var obj = dbService.GetGroups<Group>(a => a.GroupName.Contains(reportName)).FirstOrDefault();
+
+            DateTime? dtStartDate = DateTime.Parse(startDate);
+            DateTime? dtEndDate = DateTime.Parse(endDate);
+
+            if (obj != null)
+            {
+                listResult = dbService.GetAuditLogs<AuditLog>(s => s.fk_group_id == obj.Id
+                                                &&
+                                                s.UserAccessDatetime.Value > dtStartDate
+                                                &&
+                                                s.UserAccessDatetime.Value <= dtEndDate)
+                                                .OrderBy(a => a.UserAccessDatetime).ToList();
+            }
+            return listResult;
+        }
+        /// <summary>
+        /// get session log report by ReportName
+        /// </summary>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        /// <param name="reportName"></param>
+        /// <returns></returns>
+        public List<AuditLog> GetAuditLogListForReport(string startDate, string endDate, string reportName)
+        {
+            var dbService = new MillimanService();
+            var listResult = new List<AuditLog>();
+
+            var obj = dbService.GetReports<Report>(a => a.ReportName.Contains(reportName)).FirstOrDefault();
+
+            DateTime? dtStartDate = DateTime.Parse(startDate);
+            DateTime? dtEndDate = DateTime.Parse(endDate);
+
+            if (obj != null)
+            {
+                listResult = dbService.GetAuditLogs<AuditLog>(s => s.fk_report_id == obj.Id
+                                                &&
+                                                s.UserAccessDatetime.Value > dtStartDate
+                                                &&
+                                                s.UserAccessDatetime.Value <= dtEndDate)
+                                                .OrderBy(a => a.UserAccessDatetime).ToList();
+            }
+            return listResult;
+        }
+
+        /// <summary>
+        /// get a session log report by user
+        /// </summary>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        /// <param name="reportName"></param>
+        /// <returns></returns>
+        public List<AuditLog> GetAuditLogListForUser(string startDate, string endDate, string reportName)
+        {
+            var dbService = new MillimanService();
+            var listResult = new List<AuditLog>();
+
+            var obj = dbService.GetUsers<User>(a => a.UserName.Contains(reportName)).FirstOrDefault();
+
+            DateTime? dtStartDate = DateTime.Parse(startDate);
+            DateTime? dtEndDate = DateTime.Parse(endDate);
+
+            if (obj != null)
+            {
+                listResult = dbService.GetAuditLogs<AuditLog>(s => s.fk_user_id == obj.Id
+                                                &&
+                                                s.UserAccessDatetime.Value > dtStartDate
+                                                &&
+                                                s.UserAccessDatetime.Value <= dtEndDate)
+                                                .OrderBy(a => a.UserAccessDatetime).ToList();
+            }
+            return listResult;
+        }
+    }    
 }

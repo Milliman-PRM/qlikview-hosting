@@ -1,13 +1,7 @@
 ﻿using SystemReporting.Controller;
 using SystemReporting.Controller.BusinessLogic.Controller;
-using SystemReporting.Utilities;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SystemReporting.Utilities.File;
 using SystemReporting.Utilities.Email;
 
 namespace FileProcessor
