@@ -11,7 +11,6 @@ namespace SasDataSetLib
 {
     public class SasDataSetConnection
     {
-        //ConnectionString = "Provider=sas.IOMProvider; Data Source =_LOCAL_"
 
         public enum CustomerEnum { WOAH };
 
