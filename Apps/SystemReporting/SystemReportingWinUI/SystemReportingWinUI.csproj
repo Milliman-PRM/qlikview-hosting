@@ -63,6 +63,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="frmHowTo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmHowTo.Designer.cs">
+      <DependentUpon>frmHowTo.cs</DependentUpon>
+    </Compile>
     <Compile Include="SystemReporting.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -71,6 +77,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="frmHowTo.resx">
+      <DependentUpon>frmHowTo.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SystemReporting.resx">
       <DependentUpon>SystemReporting.cs</DependentUpon>
     </EmbeddedResource>

@@ -95,7 +95,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
             var obj = new List<User>();
             try
             {
-                var exists = dbService.GetUsers<User>().ToList();
+                var exists = dbService.GetUsers<User>().OrderBy(o => o.UserName).ToList(); 
                 if (exists.Count > 0)
                 {
                     obj = exists;
@@ -208,7 +208,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
             var obj = new List<Report>();
             try
             {
-                var exists = dbService.GetReports<Report>().ToList();
+                var exists = dbService.GetReports<Report>().OrderBy(o => o.ReportName).ToList(); 
                 if (exists.Count>0)
                 {
                     obj = exists;
@@ -269,13 +269,13 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
         {
             //initiate service
             var dbService = new MillimanService();
-            var obj = new List<Group>();
+            var objList = new List<Group>();
             try
             {
-                var exists = dbService.GetGroups<Group>().ToList();
-                if (exists.Count > 0)
+                var list = dbService.GetGroups<Group>().OrderBy(o=>o.GroupName).ToList();
+                if (list.Count > 0)
                 {
-                    obj = exists;
+                    objList = list;
                 }
                 dbService.Dispose();
             }
@@ -286,7 +286,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                 SendEmail("Exception Raised", "Common Controller Exception");
             }
 
-            return obj;
+            return objList;
         }
         #endregion
     }

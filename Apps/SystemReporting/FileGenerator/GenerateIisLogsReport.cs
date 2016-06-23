@@ -21,7 +21,7 @@ namespace ReportFileGenerator
                     ProcessReportGenerateForGroupName(startDateValue, endDateValue, reportName, outputType, fileNameWithFolderPath);
                     break;
                 case Enumerations.eReportType.Report:
-                    ProcessReportGenerateForReportName(startDateValue, endDateValue, reportName, outputType, fileNameWithFolderPath);
+                    //ProcessReportGenerateForReportName(startDateValue, endDateValue, reportName, outputType, fileNameWithFolderPath);
                     break;
                 case Enumerations.eReportType.User:
                     ProcessReportGenerateForUserName(startDateValue, endDateValue, reportName,outputType, fileNameWithFolderPath);
@@ -55,30 +55,30 @@ namespace ReportFileGenerator
                     throw new ApplicationException("Output type not supported");
             }
         }
-        public static void ProcessReportGenerateForReportName(DateTime? startDateValue, DateTime? endDateValue,
-                                                                string reportName, string outputType,string fileNameWithFolderPath)
-        {
-            var ca = new ControllerAccess();
-            var list = ca.ControllerIisLog.GetIisLogListForReport(startDateValue.Value.ToString(),
-                                                                    endDateValue.Value.ToString(), 
-                                                                    reportName);
+        //public static void ProcessReportGenerateForReportName(DateTime? startDateValue, DateTime? endDateValue,
+        //                                                        string reportName, string outputType,string fileNameWithFolderPath)
+        //{
+        //    var ca = new ControllerAccess();
+        //    var list = ca.ControllerIisLog.GetIisLogListForReport(startDateValue.Value.ToString(),
+        //                                                            endDateValue.Value.ToString(), 
+        //                                                            reportName);
 
-            var outputTypeEum = (Enumerations.eOutputType)Enum.Parse(typeof(Enumerations.eOutputType), outputType);
-            switch (outputTypeEum)
-            {
-                case Enumerations.eOutputType.CSV:
-                    GenerateCSVFileForReportName(list, fileNameWithFolderPath);
-                    break;
-                case Enumerations.eOutputType.EXCEL:
-                    GenerateExcelFileForReportName(list, fileNameWithFolderPath);
-                    break;
-                case Enumerations.eOutputType.TEXT:
-                    GenerateTxtFileForReportName(list, fileNameWithFolderPath);
-                    break;
-                default:
-                    throw new ApplicationException("Output type not supported");
-            }
-        }
+        //    var outputTypeEum = (Enumerations.eOutputType)Enum.Parse(typeof(Enumerations.eOutputType), outputType);
+        //    switch (outputTypeEum)
+        //    {
+        //        case Enumerations.eOutputType.CSV:
+        //            GenerateCSVFileForReportName(list, fileNameWithFolderPath);
+        //            break;
+        //        case Enumerations.eOutputType.EXCEL:
+        //            GenerateExcelFileForReportName(list, fileNameWithFolderPath);
+        //            break;
+        //        case Enumerations.eOutputType.TEXT:
+        //            GenerateTxtFileForReportName(list, fileNameWithFolderPath);
+        //            break;
+        //        default:
+        //            throw new ApplicationException("Output type not supported");
+        //    }
+        //}
         public static void ProcessReportGenerateForUserName(DateTime? startDateValue, DateTime? endDateValue,
                                                                 string reportName, string outputType, string fileNameWithFolderPath)
         {
@@ -101,6 +101,85 @@ namespace ReportFileGenerator
                     break;
                 default:
                     throw new ApplicationException("Output type not supported");
+            }
+        }
+
+        private static void GenerateExcel(List<IisLog> list, string fileNameWithFolderPath)
+        {
+            var dt = ExtensionMethods.ToDataTable(list);
+
+            if (dt != null)
+            {
+                //somehow the system adds thre columns like dt.Columns[21]	{ListAuditLog},dt.Columns[22]	{ListSessionLog},dt.Columns[20]	{ListIisLog} and then by removing the iis log all rest are remove
+
+                //dt.Columns.Remove("ListIisLog");
+                //dt.Columns.RemoveAt(20);
+
+                //dt.Columns.Remove("ListSessionLog");
+                //dt.Columns.RemoveAt(20);
+
+                dt.Columns.Remove("ListIisLog");
+                dt.Columns.Remove("ListSessionLog");
+                dt.Columns.Remove("ListAuditLog");
+
+                var file = string.Empty;
+                if (string.IsNullOrEmpty(fileNameWithFolderPath))
+                {
+                    //Save Back To File
+                    file = GetFileDirectroy() + "Iis" + "_" + DateTime.Now.ToString("MMdd_hhmm") + ".xls";
+                }
+                else
+                {
+                    file = fileNameWithFolderPath;
+                }
+
+                ExtensionMethods.ExportToExcel(dt, file);
+            }
+        }
+
+        private static void GenerateCSV(List<IisLog> list, string fileNameWithFolderPath)
+        {
+            var resultsList = new List<string>();
+
+            //Date/Time,QVW,Action,User,Action Activity
+            foreach (IisLog curData in list)
+                resultsList.Add(
+                                    (curData.UserAccessDatetime.HasValue ? curData.UserAccessDatetime.Value.ToString() : "NULL").ToString() + "," +
+                                    (!string.IsNullOrEmpty(curData.EventType) ? curData.EventType.ToString() : "NULL").ToString() + "," +
+                                    (!string.IsNullOrEmpty(curData.UserAgent) ? curData.UserAgent.ToString() : "NULL").ToString() + "," +
+                                    (!string.IsNullOrEmpty(curData.User.UserName) ? curData.User.UserName.ToString() : "NULL").ToString() + "," +
+                                    (!string.IsNullOrEmpty(curData.Group.GroupName) ? curData.Group.GroupName.ToString() : "NULL").ToString() + "," +
+                                    (!string.IsNullOrEmpty(curData.QueryURI) ? curData.QueryURI.ToString() : "NULL").ToString()
+                                );
+
+            var file = string.Empty;
+            if (string.IsNullOrEmpty(fileNameWithFolderPath))
+            {
+                //Save Back To File
+                file = GetFileDirectroy() + "Iis" + "_" + DateTime.Now.ToString("MMdd_hhmm") + ".csv";
+            }
+            else
+            {
+                file = fileNameWithFolderPath;
+            }
+
+            //write file
+            if (!File.Exists(file))
+                File.WriteAllLines(file, resultsList.ToArray());
+
+            //now add the header
+            var path = file;
+            string str;
+            using (StreamReader sreader = new StreamReader(path))
+            {
+                str = sreader.ReadToEnd();
+            }
+
+            File.Delete(path);
+            using (StreamWriter swriter = new StreamWriter(path, false))
+            {
+                str = "Date/Time,EventType,UserAgent,UserName,GroupName,QueryURI" + Environment.NewLine + str;
+                swriter.Write(str);
             }
         }
 
@@ -167,38 +246,25 @@ namespace ReportFileGenerator
         /// <param name="fileNameWithFolderPath"></param>
         public static void GenerateExcelFileForGroupName(List<IisLog> list, string fileNameWithFolderPath)
         {
-
-            var dt = ExtensionMethods.ConvertToDataTable(list);
-
-            var file = string.Empty;
-            if (string.IsNullOrEmpty(fileNameWithFolderPath))
-            {
-                //Save Back To File
-                file = GetFileDirectroy() + "Iis" + "_" + DateTime.Now.ToString("MMdd_hhmm") + ".xls";
-            }
-            else
-            {
-                file = fileNameWithFolderPath;
-            }
-
-            ExtensionMethods.ExportToExcel(dt, file);
-
+            GenerateExcel(list, fileNameWithFolderPath);
         }
-
+             
         public static void GenerateTxtFileForGroupName(List<IisLog> list, string fileNameWithFolderPath)
         {
             throw new NotImplementedException("Program function is not implemented.");
         }
 
+
+        
         #region Report By ReportName
         public static void GenerateCSVFileForReportName(List<IisLog> list, string fileNameWithFolderPath)
         {
-            throw new NotImplementedException("Program function is not implemented.");
+            GenerateCSV(list, fileNameWithFolderPath);
         }
-
+              
         public static void GenerateExcelFileForReportName(List<IisLog> list, string fileNameWithFolderPath)
         {
-            throw new NotImplementedException("Program function is not implemented.");
+            GenerateExcel(list, fileNameWithFolderPath);
         }
 
         public static void GenerateTxtFileForReportName(List<IisLog> list, string fileNameWithFolderPath)
@@ -210,12 +276,12 @@ namespace ReportFileGenerator
         #region Report By UserName
         public static void GenerateCSVFileForUserName(List<IisLog> list, string fileNameWithFolderPath)
         {
-            throw new NotImplementedException("Program function is not implemented.");
+            GenerateCSV(list, fileNameWithFolderPath);
         }
 
         public static void GenerateExcelFileForUserName(List<IisLog> list, string fileNameWithFolderPath)
         {
-            throw new NotImplementedException("Program function is not implemented.");
+            GenerateExcel(list, fileNameWithFolderPath);
         }
 
         public static void GenerateTxtFileForUserName(List<IisLog> list, string fileNameWithFolderPath)

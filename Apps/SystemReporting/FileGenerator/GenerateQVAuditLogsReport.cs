@@ -109,14 +109,7 @@ namespace ReportFileGenerator
                     throw new ApplicationException("Output type not supported");
             }
         }
-
-        #region Report By GroupName
-        /// <summary>
-        /// generate csv file for selected columns only
-        /// </summary>
-        /// <param name="list"></param>
-        /// <param name="fileNameWithFolderPath"></param>
-        public static void GenerateCSVFileForGroupName(List<AuditLog> list, string fileNameWithFolderPath)
+        private static void GenerateCSV(List<AuditLog> list, string fileNameWithFolderPath)
         {
             var resultsList = new List<string>();
 
@@ -134,7 +127,7 @@ namespace ReportFileGenerator
             if (string.IsNullOrEmpty(fileNameWithFolderPath))
             {
                 //Save Back To File
-                file = GetFileDirectroy() + "AuditLog" + "_"+ DateTime.Now.ToString("MMdd_hhmm") + ".csv";
+                file = GetFileDirectroy() + "AuditLog" + "_" + DateTime.Now.ToString("MMdd_hhmm") + ".csv";
             }
             else
             {
@@ -161,6 +154,39 @@ namespace ReportFileGenerator
             }
         }
 
+        private static void GenerateExcel(List<AuditLog> list, string fileNameWithFolderPath)
+        {
+            var dt = ExtensionMethods.ToDataTable(list);
+            if (dt!=null)
+            {
+                dt.Columns.Remove("ListIisLog");
+                dt.Columns.Remove("ListSessionLog");
+                dt.Columns.Remove("ListAuditLog");
+
+                var file = string.Empty;
+                if (string.IsNullOrEmpty(fileNameWithFolderPath))
+                {
+                    //Save Back To File
+                    file = GetFileDirectroy() + "AuditLog" + "_" + DateTime.Now.ToString("MMdd_hhmm") + ".xls";                }
+                else
+                {
+                    file = fileNameWithFolderPath;
+                }
+                ExtensionMethods.ExportToExcel(dt, file);
+            }            
+        }
+
+        #region Report By GroupName
+        /// <summary>
+        /// generate csv file for selected columns only
+        /// </summary>
+        /// <param name="list"></param>
+        /// <param name="fileNameWithFolderPath"></param>
+        public static void GenerateCSVFileForGroupName(List<AuditLog> list, string fileNameWithFolderPath)
+        {
+            GenerateCSV(list, fileNameWithFolderPath);
+        }
+
         /// <summary>
         /// generate excel file for the full entity properties
         /// </summary>
@@ -168,24 +194,10 @@ namespace ReportFileGenerator
         /// <param name="fileNameWithFolderPath"></param>
         public static void GenerateExcelFileForGroupName(List<AuditLog> list, string fileNameWithFolderPath)
         {
-
-            var dt = ExtensionMethods.ConvertToDataTable(list);
-
-            var file = string.Empty;
-            if (string.IsNullOrEmpty(fileNameWithFolderPath))
-            {
-                //Save Back To File
-                file = GetFileDirectroy() + "AuditLog" + "_" + DateTime.Now.ToString("MMdd_hhmm") + ".xls";
-            }
-            else
-            {
-                file = fileNameWithFolderPath;
-            }
-
-            ExtensionMethods.ExportToExcel(dt, file);
-
+            GenerateExcel(list, fileNameWithFolderPath);
         }
-                
+               
+
         public static void GenerateTxtFileForGroupName(List<AuditLog> list, string fileNameWithFolderPath)
         {
             throw new NotImplementedException("Program function is not implemented.");
@@ -196,12 +208,12 @@ namespace ReportFileGenerator
         #region Report By ReportName
         public static void GenerateCSVFileForReportName(List<AuditLog> list, string fileNameWithFolderPath)
         {
-            throw new NotImplementedException("Program function is not implemented.");
+            GenerateCSV(list, fileNameWithFolderPath);
         }
 
         public static void GenerateExcelFileForReportName(List<AuditLog> list, string fileNameWithFolderPath)
         {
-            throw new NotImplementedException("Program function is not implemented.");
+            GenerateExcel(list, fileNameWithFolderPath);
         }
 
         public static void GenerateTxtFileForReportName(List<AuditLog> list, string fileNameWithFolderPath)
@@ -213,12 +225,12 @@ namespace ReportFileGenerator
         #region Report By UserName
         public static void GenerateCSVFileForUserName(List<AuditLog> list, string fileNameWithFolderPath)
         {
-            throw new NotImplementedException("Program function is not implemented.");
+            GenerateCSV(list, fileNameWithFolderPath);
         }
-
+              
         public static void GenerateExcelFileForUserName(List<AuditLog> list, string fileNameWithFolderPath)
         {
-            throw new NotImplementedException("Program function is not implemented.");
+            GenerateExcel(list, fileNameWithFolderPath);
         }
 
         public static void GenerateTxtFileForUserName(List<AuditLog> list, string fileNameWithFolderPath)
@@ -226,6 +238,7 @@ namespace ReportFileGenerator
             throw new NotImplementedException("Program function is not implemented.");
         }
         #endregion
+
         private static string GetFileDirectroy()
         {
             // For Example - D:\Projects\SomeProject\SomeFolder
