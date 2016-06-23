@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.IO.Compression;
 using MongoDbWrap;
+using System.Threading;
 
 namespace BayClinicCernerExtractLib
 {
@@ -16,10 +17,29 @@ namespace BayClinicCernerExtractLib
     public class RawDataParser
     {
         MongoDbConnectionParameters CxParams;
+        Mutex Mutx;
+
+        private bool _EndProcessing;
+        public bool EndProcessing
+        {
+            get {
+                Mutx.WaitOne();
+                bool Ret = _EndProcessing;
+                Mutx.ReleaseMutex();
+                return Ret;
+            }
+            set {
+                Mutx.WaitOne();
+                _EndProcessing = value;
+                Mutx.ReleaseMutex();
+            }
+        }
 
         public RawDataParser(string IniFile, string SectionName)
         {
             CxParams = new MongoDbConnectionParameters(IniFile, SectionName);
+            Mutx = new Mutex();
+            EndProcessing = false;
         }
 
         /// <summary>
@@ -41,6 +61,11 @@ namespace BayClinicCernerExtractLib
             foreach (string Zip in Directory.GetFiles(zipFolder, @"*.zip").OrderBy(name => Directory.GetLastWriteTime(name)))
             {
                 Dictionary<String, String> InsertDict = new Dictionary<string, string>();
+
+                if (EndProcessing)
+                {
+                    return;
+                }
 
                 if (InsertToMongo)
                 {
@@ -84,6 +109,10 @@ namespace BayClinicCernerExtractLib
                 {
                     foreach (ZipArchiveEntry Entry in archive.Entries.OrderBy(entry => entry.LastWriteTime))
                     {
+                        if (EndProcessing)
+                        {
+                            return;
+                        }
                         Trace.WriteLine("Processing zip entry: " + Entry.Name);
                         MigrateZipEntryToMongo(Entry, InsertToMongo, MongoCxn);
                     }
@@ -117,11 +146,14 @@ namespace BayClinicCernerExtractLib
         /// <param name="MongoCxn"></param>
         private void MigrateZipEntryToMongo(ZipArchiveEntry Entry, bool InsertToMongo = false, MongoDbConnection MongoCxn = null)
         {
-            if (Entry.Name.EndsWith(".txt", StringComparison.OrdinalIgnoreCase))
+            if (Entry.Name.EndsWith(".txt", StringComparison.OrdinalIgnoreCase) && !EndProcessing)
             {
-                MigrateIndividualFileContentToMongo(new StreamReader(Entry.Open()), Entry.Name, InsertToMongo, MongoCxn);
+                using (StreamReader Reader = new StreamReader(Entry.Open()))
+                {
+                    MigrateIndividualFileContentToMongo(Reader, Entry.Name, InsertToMongo, MongoCxn);
+                }
 
-                Trace.WriteLine( "Read ZipEntry: " + Entry.FullName );
+            Trace.WriteLine( "Read ZipEntry: " + Entry.FullName );
             }
         }
 
@@ -159,7 +191,7 @@ namespace BayClinicCernerExtractLib
             }
 
             // Process all data lines from the rest of the stream
-            while (Reader.Peek() >= 0)
+            while (Reader.Peek() >= 0 && !EndProcessing)
             {
                 // Lines after the first seem to have one more delimiter (at the end) than the header line, but no value after the last one.  
                 // So Values[] gets one additional element but with no bad consequence since the last one is not a real value.  
