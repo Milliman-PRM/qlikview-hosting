@@ -109,9 +109,12 @@ namespace BayClinicCernerAmbulatory
         /// <returns>true if an existing record was modified, false if a new record was created</returns>
         internal bool MergeWithExistingPatient(ref Patient PatientRecord, CernerReferencedCodeDictionaries ReferencedCodes)
         {
+            DateTime ParsedUpdateTime;
             DateTime ParsedDateTime;
-
-            if (PatientRecord == null)  // nothing to merge with
+            DateTime.TryParse(UpdateDateTime, out ParsedUpdateTime);
+            
+            //This patient is not currently in our system
+            if (PatientRecord == null)  
             {
                 PatientRecord = new Patient();
 
@@ -127,16 +130,20 @@ namespace BayClinicCernerAmbulatory
                 PatientRecord.Race = ReferencedCodes.RaceCodeMeanings[Race];  // coded
                 PatientRecord.Ethnicity = ReferencedCodes.EthnicityCodeMeanings[Ethnicity];  // coded
                 PatientRecord.MaritalStatus = ReferencedCodes.GetCdrMaritalStatusEnum(MaritalStatus);  // coded
+                DateTime.TryParse(UpdateDateTime, out ParsedDateTime);
+                PatientRecord.UpdateTime = ParsedDateTime;
                 PatientRecord.LatestImportFileDate = ImportFileDate;
 
                 return false;
             }
-            else  // do merge
+
+            //The patients information is newer than what we have in the system
+            else if(PatientRecord.UpdateTime < ParsedUpdateTime)  // do merge
             {
                 //ExistingPatient.EmrIdentifier = UniquePersonIdentifier;
-                if (PatientRecord.NameLast.Length < LastName.Length) PatientRecord.NameLast = LastName;
-                if (PatientRecord.NameFirst.Length < FirstName.Length) PatientRecord.NameFirst = FirstName;
-                if (PatientRecord.NameMiddle.Length < MiddleName.Length) PatientRecord.NameMiddle = MiddleName;
+                if (PatientRecord.NameLast != LastName && !String.IsNullOrEmpty(LastName)) PatientRecord.NameLast = LastName;
+                if (PatientRecord.NameFirst != FirstName && !String.IsNullOrEmpty(FirstName)) PatientRecord.NameFirst = FirstName;
+                if (PatientRecord.NameMiddle != MiddleName && !String.IsNullOrEmpty(MiddleName)) PatientRecord.NameMiddle = MiddleName;
                 if (PatientRecord.BirthDate == DateTime.MinValue)
                 {
                     DateTime.TryParse(BirthDateTime, out ParsedDateTime);        // Will be DateTime.MinValue on parse failure
@@ -153,6 +160,11 @@ namespace BayClinicCernerAmbulatory
                 if (PatientRecord.MaritalStatus == CdrContext.MaritalStatus.Unspecified) PatientRecord.MaritalStatus = ReferencedCodes.GetCdrMaritalStatusEnum(MaritalStatus);  // coded
                 PatientRecord.LatestImportFileDate = new String[] { PatientRecord.LatestImportFileDate, ImportFileDate }.Max();
                 return true;
+            }
+            //The patient's information is older than the one we have in the system
+            else
+            {
+                return false;       //Maybe more we could put here? Could check for missing fields in new data and check if the old data has them
             }
         }
 
