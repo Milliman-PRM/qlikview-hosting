@@ -20,9 +20,9 @@ namespace SQLiteConnect
     public class SQLiteDbConnection
     {
         public CustomerEnum Customer;
-        public SQLiteDataReader Reader = null;
-        public SQLiteConnection Connection = null;
-        public SQLiteCommand Command = null;
+        private SQLiteDataReader Reader = null;
+        private SQLiteConnection Connection = null;
+        private SQLiteCommand Command = null;
         private SQLiteConnectionStringBuilder ConnectionStr;
 
         //For use specific to a customer
@@ -121,13 +121,12 @@ namespace SQLiteConnect
 
         public bool CheckOpen()
         {
-            // TODO: This needs to be better, check on connection status
-            return Connection != null;
+            return Connection.State != ConnectionState.Closed;
         }
 
         public void Disconnect()
         {
-            Connection = null;
+            Connection.State = ConnectionState.Closed;
             Reader = null;
             Command = null;
             ConnectionStr = null;
