@@ -14,17 +14,16 @@ using System.IO;
 namespace SQLiteConnect
 {
 
-    public enum CustomerEnum { NoCustomer, WOAH };
+    public enum CustomerEnum { WOAH };
 
 
     public class SQLiteDbConnection
     {
         public CustomerEnum Customer;
-
         public SQLiteDataReader Reader = null;
         public SQLiteConnection Connection = null;
         public SQLiteCommand Command = null;
-        SQLiteConnectionStringBuilder ConnectionStr;
+        private SQLiteConnectionStringBuilder ConnectionStr;
 
         //For use specific to a customer
         public SQLiteDbConnection(CustomerEnum Customer)
@@ -36,7 +35,6 @@ namespace SQLiteConnect
         //For general purpose use
         public SQLiteDbConnection(string FileName)
         {
-            this.Customer = CustomerEnum.NoCustomer;
             ConnectionStr.ConnectionString = "Data Source=" + FileName;
             ConnectSQLite();
         }
@@ -47,17 +45,13 @@ namespace SQLiteConnect
         {
             switch (Customer)
             {
-                case CustomerEnum.NoCustomer:           //Connection string already set
-                    break;
-
                 case CustomerEnum.WOAH:
                     DirectoryInfo RootDirectoryInfo = new DirectoryInfo(@"K:\PHI\0273WOH\3.005-0273WOH06\5-Support_files\");
                     var MostRecentDirectory = RootDirectoryInfo.GetDirectories().OrderByDescending(f => f.Name).First();
                     ConnectionStr.ConnectionString = RootDirectoryInfo + MostRecentDirectory.FullName + @"\035_Staging_Membership\Members_3.005-0273WOH06.sqlite";
                     break;
 
-                default:
-                    Console.WriteLine("Customer Not Found");
+                default:                    //No customer was specified, connection string was already set
                     break;
             }
 
