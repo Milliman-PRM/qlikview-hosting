@@ -76,13 +76,13 @@ namespace SQLiteConnect
             return ColumnNames;
         }
 
-        //Returns a List containing all of the information contained in a specified column
+        //Returns a List containing all of the information contained in specified columns
         public Dictionary<String, List<String>> QuerySQLiteTable(string Columns, string Table, string WhereConditions = null)
         {
             Dictionary<String, List<String>> ComprehensiveColumnInformation = new Dictionary<string, List<string>>();
             List<String> ColumnContent = new List<String>();
-            int ColumnCount = Columns.Count(x => x == ',') + 1;
             String[] ColumnNames = Columns.Split(',');
+            int ColumnCount = ColumnNames.Length;
 
             Command = Connection.CreateCommand();
             Command.CommandText = "SELECT " + Columns + " FROM " + Table;
@@ -106,49 +106,51 @@ namespace SQLiteConnect
 
             return ComprehensiveColumnInformation;
         }
-    
 
-    public bool CheckMembership(string MemberID, string FirstName, string LastName, string DOB)
-    {
-        Command = Connection.CreateCommand();
-        Command.CommandText = "SELECT member_id, mem_name, dob FROM member";
-        Command.CommandType = CommandType.Text;
-        Reader = Command.ExecuteReader();
-
-        string PersonKey = LastName.ToLower() + ", " + FirstName.ToLower();
-        string DOBKey = DOB.Split(' ')[0];
-
-
-        while (Reader.Read())
+        //Specific to WOH. Makes sure the information passed along matches what we have stored in our WOH database
+        public bool CheckMembership(string MemberID, string FirstName, string LastName, string DOB)
         {
-            if (MemberID == Reader[0].ToString())
+            Command = Connection.CreateCommand();
+            Command.CommandText = "SELECT member_id, mem_name, dob FROM member";
+            Command.CommandType = CommandType.Text;
+            Reader = Command.ExecuteReader();
+
+            string PersonKey = LastName.ToLower() + ", " + FirstName.ToLower();
+            string DOBKey = DOB.Split(' ')[0];
+
+
+            while (Reader.Read())
             {
-                return true;
-            }
-            if (PersonKey == Reader[0].ToString().ToLower())
-            {
-                if (DOBKey == Reader[1].ToString())
+                if (MemberID == Reader[0].ToString())
+                {
                     return true;
+                }
+                if (PersonKey == Reader[1].ToString().ToLower())
+                {
+                    if (DOBKey == Reader[2].ToString())
+                        return true;
+                }
             }
+
+            return false;
         }
 
-        return false;
+        //Checks to make sure that the connection state is not in the closed position.
+        //It will return true if the connection state has another status besides open
+        public bool CheckOpen()
+        {
+            return Connection.State != ConnectionState.Closed;
+        }
+
+        //Disconnects and resets all of the SQLiteDbConnection objects 
+        public void Disconnect()
+        {
+            Connection.State = ConnectionState.Closed;
+
+            Reader = null;
+            Command = null;
+            ConnectionStr = null;
+        }
     }
-
-
-
-    public bool CheckOpen()
-    {
-        return Connection.State != ConnectionState.Closed;
-    }
-
-    public void Disconnect()
-    {
-        Connection.State = ConnectionState.Closed;
-        Reader = null;
-        Command = null;
-        ConnectionStr = null;
-    }
-}
 }
 
