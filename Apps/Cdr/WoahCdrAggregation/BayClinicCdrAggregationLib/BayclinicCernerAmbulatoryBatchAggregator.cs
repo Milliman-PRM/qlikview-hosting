@@ -430,19 +430,13 @@ namespace BayClinicCernerAmbulatory
         {
             bool OverallSuccess = true;
 
-            FilterDefinition<MongodbVisitEntity> VisitFilterDef = Builders<MongodbVisitEntity>.Filter
-                .Where(
-                         x => x.UniquePersonIdentifier == PersonDoc.UniquePersonIdentifier
-                      && !(x.LastAggregationRun > 0)     // not previously aggregated
-                      && (x.ImportFile.StartsWith(PersonDoc.ImportFile.Substring(0, 12)))  // match the extract date from PersonDoc.ImportFile 
-                      );
+            //Gets all of the visits that are related to the same patient
+            var query = from Visit in CdrDb.Context.VisitEncounters
+                        where  Visit.Patientdbid == PatientRecord.dbid
+                        select Visit;
 
-            using (var VisitCursor = VisitCollection.Find<MongodbVisitEntity>(VisitFilterDef).ToCursor())
-            {
-                while (VisitCursor.MoveNext())  // transfer the next batch of available documents from the query result cursor
-                {
-                    foreach (MongodbVisitEntity VisitDoc in VisitCursor.Current)
-                    {
+            
+                        /*
                         DateTime BeginDateTime, EndDateTime, ActiveStatusDT;
                         DateTime.TryParse(VisitDoc.EffectiveBeginDateTime, out BeginDateTime);        // Will be DateTime.MinValue on parse failure
                         DateTime.TryParse(VisitDoc.EffectiveEndDateTime, out EndDateTime);        // Will be DateTime.MinValue on parse failure
@@ -476,8 +470,8 @@ namespace BayClinicCernerAmbulatory
                     }
                 }
             }
-
-            return OverallSuccess;
+            */
+                        return OverallSuccess;
         }
 
         /// <summary>

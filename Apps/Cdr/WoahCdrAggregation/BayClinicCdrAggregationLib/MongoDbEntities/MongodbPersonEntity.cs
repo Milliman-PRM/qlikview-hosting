@@ -137,7 +137,7 @@ namespace BayClinicCernerAmbulatory
                 return false;
             }
 
-            //The patients information is newer than what we have in the system
+            //The patient's information is newer than what we have in the system
             else if(PatientRecord.UpdateTime < ParsedUpdateTime)  // do merge
             {
                 //ExistingPatient.EmrIdentifier = UniquePersonIdentifier;
