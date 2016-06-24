@@ -8,75 +8,135 @@ using Devart.Data.SQLite;
 using System.Data;
 using System.IO;
 
+// TODO Move the last 2 constructor args and this call to a Connect(...) or Initialize method
+// Probably including a GetMembership method with encapsulated column names is better
+// Each read from the reader returns a Dictionary<String,String> with column,value pairs
 namespace SQLiteConnect
 {
 
-    public enum CustomerEnum { WOAH };
+    public enum CustomerEnum { NoCustomer, WOAH };
 
 
-    public class SQLiteDatabaseConnection
+    public class SQLiteDbConnection
     {
-        public CustomerEnum _Customer;
-        public SQLiteDataReader Reader;
+        public CustomerEnum Customer;
 
-        public SQLiteDatabaseConnection(CustomerEnum  Customer, string Columns, string Table)
+        public SQLiteDataReader Reader = null;
+        public SQLiteConnection Connection = null;
+        public SQLiteCommand Command = null;
+        SQLiteConnectionStringBuilder ConnectionStr;
+
+        //For use specific to a customer
+        public SQLiteDbConnection(CustomerEnum Customer)
         {
-            this._Customer = Customer;
-            this.ConnectToDatabase(Columns, Table); // TODO Move the last 2 constructor args and this call to a Connect(...) or Initialize method
-            // Probably including a GetMembership method with encapsulated column names is better
-            // Each read from the reader returns a Dictionary<String,String> with column,value pairs
+            this.Customer = Customer;
+            ConnectSQLite();
         }
 
-
-        public SQLiteConnection GetConnection()
+        //For general purpose use
+        public SQLiteDbConnection(string FileName)
         {
-            SQLiteConnection Conn = null;
-            DirectoryInfo RootDirectoryInfo;
-            string Source;
+            this.Customer = CustomerEnum.NoCustomer;
+            ConnectionStr.ConnectionString = "Data Source=" + FileName;
+            ConnectSQLite();
+        }
 
-            switch (_Customer) {
+        //If customer is specified then it will create a connection string according to the customer
+        //Otherwise it will use the one provided in the constructor
+        public void ConnectSQLite()
+        {
+            switch (Customer)
+            {
+                case CustomerEnum.NoCustomer:           //Connection string already set
+                    break;
+
                 case CustomerEnum.WOAH:
-                    RootDirectoryInfo = new DirectoryInfo(@"K:\PHI\0273WOH\3.005-0273WOH06\5-Support_files\");
+                    DirectoryInfo RootDirectoryInfo = new DirectoryInfo(@"K:\PHI\0273WOH\3.005-0273WOH06\5-Support_files\");
                     var MostRecentDirectory = RootDirectoryInfo.GetDirectories().OrderByDescending(f => f.Name).First();
-                    Source = RootDirectoryInfo + MostRecentDirectory.FullName + @"\035_Staging_Membership\Members_3.005-0273WOH06.sqlite";
+                    ConnectionStr.ConnectionString = RootDirectoryInfo + MostRecentDirectory.FullName + @"\035_Staging_Membership\Members_3.005-0273WOH06.sqlite";
                     break;
 
                 default:
-                    return null;
+                    Console.WriteLine("Customer Not Found");
+                    break;
             }
 
-            Conn = new SQLiteConnection("Data Source=" + Source);
-
-            return Conn;
+            Connection = new SQLiteConnection(ConnectionStr.ConnectionString);
         }
 
-        public SQLiteCommand GetCommand(SQLiteConnection Connection, string Columns, string Table, string WhereConditions=null)
+        public List<string> GetColumnNames(string Table)
         {
-            SQLiteCommand Cmd = Connection.CreateCommand();
+            List<string> ColumnNames = new List<string>();
 
-            Cmd.CommandText = "SELECT " + Columns + " FROM " + Table;
+            Command = Connection.CreateCommand();
+            Command.CommandText = "SELECT * FROM " + Table + ".INFORMATION_SCHEMA.COLUMNS ";
+            Command.CommandType = CommandType.Text;
+            Reader = Command.ExecuteReader();
+
+            while (Reader.Read())
+            {
+                ColumnNames.Add(Reader[0].ToString());
+            }
+
+            return ColumnNames;
+        }
+        public SQLiteDataReader GetSQLiteTable(string Columns, string Table, string WhereConditions = null)
+        {
+            Command = Connection.CreateCommand();
+
+            Command.CommandText = "SELECT " + Columns + " FROM " + Table;
             if (!String.IsNullOrEmpty(WhereConditions))
             {
-                Cmd.CommandText += " WHERE " + WhereConditions;
+                Command.CommandText += " WHERE " + WhereConditions;
             }
-            Cmd.CommandType = CommandType.Text;
+            Command.CommandType = CommandType.Text;
 
-            return Cmd;
+            Reader = Command.ExecuteReader();
 
-        }
-        public void ConnectToDatabase(string Columns, string Table) {
-
-            SQLiteConnection MyConn = GetConnection();
-
-            SQLiteCommand Command = GetCommand(MyConn, Columns, Table);
-
-            this.Reader = Command.ExecuteReader();
-            // This class should support multiple commands with dedicated methods that implement them.  Persist the reader in response to a command method being called.  
-
+            return Reader;
         }
 
+        public bool CheckMembership(string MemberID, string FirstName, string LastName, string DOB)
+        {
+            Command = Connection.CreateCommand();
+            Command.CommandText = "SELECT member_id, mem_name, dob FROM member";
+            Command.CommandType = CommandType.Text;
+            Reader = Command.ExecuteReader();
 
+            string PersonKey = LastName.ToLower() + ", " + FirstName.ToLower();
+            string DOBKey = DOB.Split(' ')[0];
 
+  
+            while (Reader.Read())
+            {
+                if (MemberID == Reader[0].ToString())
+                {
+                    return true;
+                }
+                if (PersonKey == Reader[0].ToString().ToLower())
+                {
+                    if (DOBKey == Reader[1].ToString())
+                        return true;
+                }
+            }
+
+            return false;
+        }
+            
+        
+
+        public bool CheckOpen()
+        {
+            // TODO: This needs to be better, check on connection status
+            return Connection != null;
+        }
+
+        public void Disconnect()
+        {
+            Connection = null;
+            Reader = null;
+            Command = null;
+        }
     }
 }
 
