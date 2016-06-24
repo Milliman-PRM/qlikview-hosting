@@ -130,6 +130,7 @@ namespace SQLiteConnect
             Connection = null;
             Reader = null;
             Command = null;
+            ConnectionStr = null;
         }
     }
 }
