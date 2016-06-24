@@ -337,17 +337,17 @@ namespace FileProcessor
                 {
                     if (file.ToLower().IndexOf("u_ex", StringComparison.Ordinal) > -1)
                     {
-                        BaseFileProcessor.LogError(null,DateTime.Now + "||" + "=== File is deleted from processing directory. ===" + file);
+                        BaseFileProcessor.LogError(null,DateTime.Now + "||" + "=== File is deleted from processing directory. ===" + file,false);
                         System.IO.File.Delete(file);
                     }
                     if (file.ToLower().IndexOf("audit_", StringComparison.Ordinal) > -1)
                     {
-                        BaseFileProcessor.LogError(null,DateTime.Now + "||" + "=== File is deleted from processing directory. ===" + file);
+                        BaseFileProcessor.LogError(null,DateTime.Now + "||" + "=== File is deleted from processing directory. ===" + file, false);
                         System.IO.File.Delete(file);
                     }
                     if (file.ToLower().IndexOf("sessions_", StringComparison.Ordinal) > -1)
                     {
-                        BaseFileProcessor.LogError(null,DateTime.Now + "||" + "=== File is deleted from processing directory. ===" + file);
+                        BaseFileProcessor.LogError(null,DateTime.Now + "||" + "=== File is deleted from processing directory. ===" + file, false);
                         System.IO.File.Delete(file);
                     }
                 }                

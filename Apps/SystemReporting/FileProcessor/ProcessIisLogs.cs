@@ -1,5 +1,4 @@
-﻿using MoreLinq;
-using ReportingCommon;
+﻿using ReportingCommon;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -61,7 +60,7 @@ namespace FileProcessor
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, " Class ProcessIisLogs. Method ProcessFileData.");
+                BaseFileProcessor.LogError(ex, " Class ProcessIisLogs. Method ProcessFileData.",true);
             }
         }
 
@@ -92,7 +91,7 @@ namespace FileProcessor
             var fileInfo = new FileInfo(fileNameWithDirectory);
             if (fileInfo == null)
             {
-                BaseFileProcessor.LogError(null, "FileInfo missing. Can not process iisFile " + fileNameWithDirectory);
+                BaseFileProcessor.LogError(null, "FileInfo missing. Can not process iisFile " + fileNameWithDirectory, true);
                 return false;
             }
 
@@ -238,7 +237,7 @@ namespace FileProcessor
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, " Class ProcessIisLogs. Method ProcessLogFile while sending the data to controller. File " + fileNameWithDirectory);
+                BaseFileProcessor.LogError(ex, " Class ProcessIisLogs. Method ProcessLogFile while sending the data to controller. File " + fileNameWithDirectory,true);
             }
 
             return blnSucessful;
@@ -277,7 +276,7 @@ namespace FileProcessor
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, " Class ProcessIisLogs. Method ParseFile. File name. " + filefullName);
+                BaseFileProcessor.LogError(ex, " Class ProcessIisLogs. Method ParseFile. File name. " + filefullName, true);
             }
             return listLogFile;
         }

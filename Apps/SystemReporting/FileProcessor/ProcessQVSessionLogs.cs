@@ -59,7 +59,7 @@ namespace FileProcessor
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, "Class ProcessQVSessionLogs. Method ProcessFileData.");
+                BaseFileProcessor.LogError(ex, "Class ProcessQVSessionLogs. Method ProcessFileData.",true);
             }
         }
 
@@ -183,7 +183,7 @@ namespace FileProcessor
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, " Class ProcessQVSessionLogs. Method ProcessLogFile while sending the data to controller.");
+                BaseFileProcessor.LogError(ex, " Class ProcessQVSessionLogs. Method ProcessLogFile while sending the data to controller.", true);
             }
 
             return blnSucessful;
@@ -213,7 +213,7 @@ namespace FileProcessor
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, " Class ProcessQVSessionLogs. Method ParseFile. File name. " + filefullName);
+                BaseFileProcessor.LogError(ex, " Class ProcessQVSessionLogs. Method ParseFile. File name. " + filefullName, true);
             }
             return listLogFile;
         }

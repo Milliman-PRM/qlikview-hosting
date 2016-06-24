@@ -21,7 +21,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 //
 
 namespace SystemReporting.Data.Database
-{
+{   
     public class ApplicationDbContext : DbContext
     {
         #region Database
@@ -33,8 +33,8 @@ namespace SystemReporting.Data.Database
         public ApplicationDbContext() :
             base(new NpgsqlConnection(ConnectionString), true)
         {
-            Configuration.LazyLoadingEnabled = false;
-            Configuration.ProxyCreationEnabled = false;
+            Configuration.LazyLoadingEnabled = true;
+            Configuration.ProxyCreationEnabled = true;
         }
 
         #endregion

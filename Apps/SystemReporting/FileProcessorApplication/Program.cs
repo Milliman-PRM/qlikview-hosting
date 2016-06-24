@@ -34,7 +34,7 @@ namespace FileProcessorApplication
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, "ProcessFile: Failed processing file. || " + args.ToArray());
+                BaseFileProcessor.LogError(ex, "ProcessFile: Failed processing file. || " + args.ToArray(), true);
             }
         }
 

@@ -1,13 +1,8 @@
 ﻿using SystemReporting.Controller;
 using SystemReporting.Controller.BusinessLogic.Controller;
-using SystemReporting.Utilities;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SystemReporting.Utilities.File;
+using SystemReporting.Utilities.Email;
 
 namespace FileProcessor
 {
@@ -118,7 +113,7 @@ namespace FileProcessor
 
         #region Error Log     
         //Logs error. It will create file at the directory if file does not exist   
-        public static void LogError(Exception ex, string message)
+        public static void LogError(Exception ex, string message, bool sendEmail)
         {
             if (!string.IsNullOrEmpty(message))
             {
@@ -128,7 +123,16 @@ namespace FileProcessor
             {
                 log.Error(DateTime.Now + " Todays Exceptions: ~ " + "||-||", ex);
             }
-        }        
+
+            if (sendEmail)
+                SendEmail(message,"");
+        }
+        public static void SendEmail(string message, string subject)
+        {
+            Notification.SendNotification("Exception file has a new exception recorded. Please cehck the file at the file locaion "
+            + ConfigurationManager.AppSettings["ExceptionFileDirectory"].ToString(),
+                "System Reporting");
+        }
         #endregion        
     }
     #endregion
