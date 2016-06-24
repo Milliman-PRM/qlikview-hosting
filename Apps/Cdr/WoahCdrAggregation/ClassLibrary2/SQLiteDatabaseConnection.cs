@@ -40,7 +40,7 @@ namespace SQLiteConnect
 
         //If customer is specified then it will create a connection string according to the customer
         //Otherwise it will use the one provided in the constructor
-        public void ConnectSQLite(string FileName=null)
+        public void ConnectSQLite(string FileName = null)
         {
             switch (Customer)
             {
@@ -58,7 +58,8 @@ namespace SQLiteConnect
             Connection = new SQLiteConnection(ConnectionStr.ConnectionString);
         }
 
-        public List<string> GetColumnNames(string Table)
+        //Returns a list of all the column names in a specified table
+        public List<String> GetColumnNames(string Table)
         {
             List<string> ColumnNames = new List<string>();
 
@@ -74,10 +75,16 @@ namespace SQLiteConnect
 
             return ColumnNames;
         }
-        public SQLiteDataReader GetSQLiteTable(string Columns, string Table, string WhereConditions = null)
-        {
-            Command = Connection.CreateCommand();
 
+        //Returns a List containing all of the information contained in a specified column
+        public Dictionary<String, List<String>> QuerySQLiteTable(string Columns, string Table, string WhereConditions = null)
+        {
+            Dictionary<String, List<String>> ComprehensiveColumnInformation = new Dictionary<string, List<string>>();
+            List<String> ColumnContent = new List<String>();
+            int ColumnCount = Columns.Count(x => x == ',') + 1;
+            String[] ColumnNames = Columns.Split(',');
+
+            Command = Connection.CreateCommand();
             Command.CommandText = "SELECT " + Columns + " FROM " + Table;
             if (!String.IsNullOrEmpty(WhereConditions))
             {
@@ -87,50 +94,61 @@ namespace SQLiteConnect
 
             Reader = Command.ExecuteReader();
 
-            return Reader;
-        }
-
-        public bool CheckMembership(string MemberID, string FirstName, string LastName, string DOB)
-        {
-            Command = Connection.CreateCommand();
-            Command.CommandText = "SELECT member_id, mem_name, dob FROM member";
-            Command.CommandType = CommandType.Text;
-            Reader = Command.ExecuteReader();
-
-            string PersonKey = LastName.ToLower() + ", " + FirstName.ToLower();
-            string DOBKey = DOB.Split(' ')[0];
-
-  
-            while (Reader.Read())
+            for (int i = 0; i < ColumnCount; i++)
             {
-                if (MemberID == Reader[0].ToString())
+                while (Reader.Read())
                 {
-                    return true;
+                    ColumnContent.Add(Reader[i].ToString());
                 }
-                if (PersonKey == Reader[0].ToString().ToLower())
-                {
-                    if (DOBKey == Reader[1].ToString())
-                        return true;
-                }
+                ComprehensiveColumnInformation.Add(ColumnNames[i], ColumnContent);
+                ColumnContent.Clear();
             }
 
-            return false;
+            return ComprehensiveColumnInformation;
         }
-            
-        
+    
 
-        public bool CheckOpen()
+    public bool CheckMembership(string MemberID, string FirstName, string LastName, string DOB)
+    {
+        Command = Connection.CreateCommand();
+        Command.CommandText = "SELECT member_id, mem_name, dob FROM member";
+        Command.CommandType = CommandType.Text;
+        Reader = Command.ExecuteReader();
+
+        string PersonKey = LastName.ToLower() + ", " + FirstName.ToLower();
+        string DOBKey = DOB.Split(' ')[0];
+
+
+        while (Reader.Read())
         {
-            return Connection.State != ConnectionState.Closed;
+            if (MemberID == Reader[0].ToString())
+            {
+                return true;
+            }
+            if (PersonKey == Reader[0].ToString().ToLower())
+            {
+                if (DOBKey == Reader[1].ToString())
+                    return true;
+            }
         }
 
-        public void Disconnect()
-        {
-            Connection.State = ConnectionState.Closed;
-            Reader = null;
-            Command = null;
-            ConnectionStr = null;
-        }
+        return false;
     }
+
+
+
+    public bool CheckOpen()
+    {
+        return Connection.State != ConnectionState.Closed;
+    }
+
+    public void Disconnect()
+    {
+        Connection.State = ConnectionState.Closed;
+        Reader = null;
+        Command = null;
+        ConnectionStr = null;
+    }
+}
 }
 
