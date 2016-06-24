@@ -35,13 +35,12 @@ namespace SQLiteConnect
         //For general purpose use
         public SQLiteDbConnection(string FileName)
         {
-            ConnectionStr.ConnectionString = "Data Source=" + FileName;
-            ConnectSQLite();
+            ConnectSQLite(FileName);
         }
 
         //If customer is specified then it will create a connection string according to the customer
         //Otherwise it will use the one provided in the constructor
-        public void ConnectSQLite()
+        public void ConnectSQLite(string FileName=null)
         {
             switch (Customer)
             {
@@ -51,7 +50,8 @@ namespace SQLiteConnect
                     ConnectionStr.ConnectionString = RootDirectoryInfo + MostRecentDirectory.FullName + @"\035_Staging_Membership\Members_3.005-0273WOH06.sqlite";
                     break;
 
-                default:                    //No customer was specified, connection string was already set
+                default:                    //No customer was specified, this means the string was given in the constructor and passed to this method
+                    ConnectionStr.ConnectionString = "Data Source=" + FileName;
                     break;
             }
 
