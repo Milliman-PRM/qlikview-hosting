@@ -22,7 +22,9 @@ namespace SQLiteConnect
         public SQLiteDatabaseConnection(CustomerEnum  Customer, string Columns, string Table)
         {
             this._Customer = Customer;
-            this.ConnectToDatabase(Columns, Table);
+            this.ConnectToDatabase(Columns, Table); // TODO Move the last 2 constructor args and this call to a Connect(...) or Initialize method
+            // Probably including a GetMembership method with encapsulated column names is better
+            // Each read from the reader returns a Dictionary<String,String> with column,value pairs
         }
 
 
@@ -69,6 +71,7 @@ namespace SQLiteConnect
             SQLiteCommand Command = GetCommand(MyConn, Columns, Table);
 
             this.Reader = Command.ExecuteReader();
+            // This class should support multiple commands with dedicated methods that implement them.  Persist the reader in response to a command method being called.  
 
         }
 

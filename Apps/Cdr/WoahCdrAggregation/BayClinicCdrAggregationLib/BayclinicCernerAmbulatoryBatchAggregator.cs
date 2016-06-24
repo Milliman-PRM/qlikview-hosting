@@ -15,7 +15,6 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.IO;
 using MongoDB.Driver;
-using BayClinicCernerAmbulatory;
 using BayClinicCdrAggregationLib;
 using System.Data.OleDb;
 using System.Data;
