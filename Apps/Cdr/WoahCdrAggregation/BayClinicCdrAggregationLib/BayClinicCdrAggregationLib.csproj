@@ -89,10 +89,6 @@
       <Project>{5fdfbd80-5d24-40a0-985f-c17f579d8517}</Project>
       <Name>MongoDbWrap</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ClassLibrary1\SasDataSetLib.csproj">
-      <Project>{22b8eaf5-b70c-4064-b4e6-979df14f6709}</Project>
-      <Name>SasDataSetLib</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ClassLibrary2\SQLiteLib.csproj">
       <Project>{d5149a31-d65e-4064-a4f4-cf68069ec55c}</Project>
       <Name>SQLiteLib</Name>

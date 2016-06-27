@@ -108,7 +108,8 @@ namespace SQLiteConnect
                     ComprehensiveColumnInformation[ColumnNames[i]].Add(Reader[i].ToString());
                 }
             }
-
+            
+            //Prevent leaks
             Command.Dispose();
             Reader.Close();
 

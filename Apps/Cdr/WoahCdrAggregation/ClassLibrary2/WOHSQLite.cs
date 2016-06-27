@@ -8,15 +8,16 @@ using Devart.Data.SQLite;
 using System.Data;
 using System.IO;
 
-namespace WOHSQL
+namespace WOHSQLInterface
 {
-    public class WOHSQLite
+    public class WOHSQLiteInterface
     {
         private SQLiteDataReader Reader;
         private SQLiteCommand Command;
         private SQLiteConnection Connection;
         private SQLiteDbConnection WOHSQLConnection;
 
+        
         public void Connect()
         {
             WOHSQLConnection = new SQLiteDbConnection(CustomerEnum.WOAH);
@@ -57,7 +58,6 @@ namespace WOHSQL
             Command.Dispose();
             Connection.Close();
             Reader.Close();
-            ConnectionStr.Clear();
         }
     }
 }

@@ -19,7 +19,7 @@ using BayClinicCdrAggregationLib;
 using System.Data.OleDb;
 using System.Data;
 using System.IO;
-using WOHSQL;
+using WOHSQLInterface;
 
 
 
@@ -38,8 +38,8 @@ namespace BayClinicCernerAmbulatory
         private int WOAHPatientCounter = 0;
 
         //Init the the conncetion to the sql dataset
-        WOHSQLite SQLConnection = new WOHSQLite();
-        SQLConnection.Connect();
+        WOHSQLiteInterface WOHInterface = new WOHSQLiteInterface();
+        
 
         private CdrDbInterface CdrDb;
         private Organization OrganizationObject;
@@ -111,6 +111,8 @@ namespace BayClinicCernerAmbulatory
             ThisAggregationRun = GetNewAggregationRun();
             Initialized &= ThisAggregationRun.dbid > 0;
 
+            WOHInterface.Connect();
+
             MongoRunUpdater = new MongoAggregationRunUpdater(ThisAggregationRun.dbid, MongoCxn.Db);
 
             return Initialized;
@@ -154,6 +156,8 @@ namespace BayClinicCernerAmbulatory
                     }
                 }
             }
+
+            WOHInterface.Disconnect();
 
             ThisAggregationRun.StatusFlags = AggregationRunStatus.Complete;
             CdrDb.Context.SubmitChanges();
@@ -664,7 +668,7 @@ namespace BayClinicCernerAmbulatory
                             return false;
 
                         //Verify patient is in our WOAH Database
-                        if(!SQLConnection.CheckMembershipStatus(InsuranceCoverageDoc.MemberNumber, MongoPerson.LastName, MongoPerson.FirstName, MongoPerson.BirthDateTime))
+                        if(!WOHInterface.CheckMembershipStatus(InsuranceCoverageDoc.MemberNumber, MongoPerson.LastName, MongoPerson.FirstName, MongoPerson.BirthDateTime))
                             return false;
                         
 
