@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Database Name="cdr_woh" EntityNamespace="CdrContext" ContextNamespace="CdrContext" Class="CdrDataContext" xmlns:ed="http://devart.com/schemas/EntityDeveloper/1.0" ed:Guid="8fd042f0-11f8-4573-98a0-8c5153bd64fd" Provider="Devart.Data.PostgreSql.Linq.Provider.PgSqlDataProvider, Devart.Data.PostgreSql.Linq" Extended="true" xmlns="http://schemas.devart.com/linqconnect/mapping">
-  <Connection Mode="ConnectionString" ConnectionString="User Id=tom;Host=localhost;Port=5433;Database=cdr_woh;Initial Schema=public" Provider="Devart.Data.PostgreSql" />
+  <Connection Mode="ConnectionString" ConnectionString="User Id=indy-cdrbot-0273woh;Host=Indy-cdr0273woh;Port=5432;Database=cdr_woh;Initial Schema=public" Provider="Devart.Data.PostgreSql" />
   <Table Name="public.patient" Member="Patients">
     <Type Name="Patient" ed:Guid="c15823c3-4b37-4a7f-9598-2b1d55e839b3">
       <Column Name="dbid" Type="System.Int64" AutoSync="OnInsert" DbType="bigserial NOT NULL" IsReadOnly="true" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" ed:ValidateRequired="true" ed:Guid="f5f1693e-fc45-40ae-9352-db7bc482c248" />

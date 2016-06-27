@@ -620,7 +620,7 @@
                     </Size>
                     <Enabled>false</Enabled>
                     <Oid xsi:type="SchemaModelOID">
-                      <Path>15d4cf25-c31b-4065-8324-c16682ba23e3</Path>
+                      <Path>67c3493f-b71d-480d-b9a7-b2ad90aafe97</Path>
                       <TypeName>EntityDeveloper.Linq.LinqConnectRelationProperty</TypeName>
                     </Oid>
                   </Model>
