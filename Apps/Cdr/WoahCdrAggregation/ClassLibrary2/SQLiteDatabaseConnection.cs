@@ -40,7 +40,7 @@ namespace SQLiteConnect
 
         //If customer is specified then it will create a connection string according to the customer
         //Otherwise it will use the one provided in the constructor
-        public void ConnectSQLite(string FileName = null)
+        public SQLiteConnection ConnectSQLite(string FileName = null)
         {
             switch (Customer)
             {
@@ -56,6 +56,7 @@ namespace SQLiteConnect
             }
 
             Connection = new SQLiteConnection(ConnectionStr.ConnectionString);
+            return Connection;
         }
 
         //Returns a list of all the column names in a specified table
@@ -67,11 +68,14 @@ namespace SQLiteConnect
             Command.CommandText = "SELECT * FROM " + Table + ".INFORMATION_SCHEMA.COLUMNS ";
             Command.CommandType = CommandType.Text;
             Reader = Command.ExecuteReader();
-
+            
             while (Reader.Read())
             {
                 ColumnNames.Add(Reader[0].ToString());
             }
+
+            Reader.Close();
+            Command.Dispose();
 
             return ColumnNames;
         }
@@ -107,33 +111,7 @@ namespace SQLiteConnect
             return ComprehensiveColumnInformation;
         }
 
-        //Specific to WOH. Makes sure the information passed along matches what we have stored in our WOH database
-        public bool CheckMembership(string MemberID, string FirstName, string LastName, string DOB)
-        {
-            Command = Connection.CreateCommand();
-            Command.CommandText = "SELECT member_id, mem_name, dob FROM member";
-            Command.CommandType = CommandType.Text;
-            Reader = Command.ExecuteReader();
-
-            string PersonKey = LastName.ToLower() + ", " + FirstName.ToLower();
-            string DOBKey = DOB.Split(' ')[0];
-
-
-            while (Reader.Read())
-            {
-                if (MemberID == Reader[0].ToString())
-                {
-                    return true;
-                }
-                if (PersonKey == Reader[1].ToString().ToLower())
-                {
-                    if (DOBKey == Reader[2].ToString())
-                        return true;
-                }
-            }
-
-            return false;
-        }
+        
 
         //Checks to make sure that the connection state is not in the closed position.
         //It will return true if the connection state has another status besides open
@@ -145,11 +123,10 @@ namespace SQLiteConnect
         //Disconnects and resets all of the SQLiteDbConnection objects 
         public void Disconnect()
         {
-            Connection.State = ConnectionState.Closed;
-
-            Reader = null;
-            Command = null;
-            ConnectionStr = null;
+            Command.Dispose();
+            Connection.Close();
+            Reader.Close();
+            ConnectionStr.Clear();
         }
     }
 }

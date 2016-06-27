@@ -19,7 +19,7 @@ using BayClinicCdrAggregationLib;
 using System.Data.OleDb;
 using System.Data;
 using System.IO;
-using SQLiteConnect;
+using WOHSQL;
 
 
 
@@ -37,7 +37,8 @@ namespace BayClinicCernerAmbulatory
 
         private int WOAHPatientCounter = 0;
         //Init the the conncetion to the sas dataset
-        SQLiteDbConnection Connect = new SQLiteDbConnection(CustomerEnum.WOAH);
+        WOHSQLite SQLConnection = new WOHSQLite();
+        SQLConnection.Connect();
 
         private CdrDbInterface CdrDb;
         private Organization OrganizationObject;
@@ -662,7 +663,7 @@ namespace BayClinicCernerAmbulatory
                             return false;
 
                         //Verify patient is in our WOAH Database
-                        if(!Connect.CheckMembership(InsuranceCoverageDoc.MemberNumber, MongoPerson.LastName, MongoPerson.FirstName, MongoPerson.BirthDateTime))
+                        if(!SQLConnection.CheckMembership(InsuranceCoverageDoc.MemberNumber, MongoPerson.LastName, MongoPerson.FirstName, MongoPerson.BirthDateTime))
                             return false;
                         
 
