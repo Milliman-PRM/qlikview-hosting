@@ -147,6 +147,13 @@ namespace BayClinicCernerAmbulatory
                 {
                     foreach (MongodbPersonEntity PersonDocument in PersonCursor.Current)
                     {
+                        /*
+                         * Membership test should be here, not in Insurance
+                        if (Patient was never a WOAH member) 
+                        {
+                            continue;
+                        }
+                        */
                         PatientCounter++;
                         bool ThisPatientAggregationResult = AggregateOnePatient(PersonDocument);
                         OverallResult &= ThisPatientAggregationResult;
@@ -659,8 +666,9 @@ namespace BayClinicCernerAmbulatory
                         DateTime.TryParse(InsuranceCoverageDoc.EffectiveEndDateTime, out EndDate);        // Will be DateTime.MinValue on parse failure
 
                         //Verify that the patient is on Medicade
-                        if (InsuranceCoverageDoc.Type != "24198546")
-                            return false;
+                        // Let's discuss what this is accomplishing
+                        if (InsuranceCoverageDoc.Type != "24198546")  // better to look into a code dictionary to interpret this
+                            return false;  // I think continue; would be more correct here.  
 
                         //Verify patient is in our WOAH Database
                         if(!VerifyCoverage.IsCovered(Connect, InsuranceCoverageDoc.MemberNumber, MongoPerson.LastName, MongoPerson.FirstName, MongoPerson.BirthDateTime))
