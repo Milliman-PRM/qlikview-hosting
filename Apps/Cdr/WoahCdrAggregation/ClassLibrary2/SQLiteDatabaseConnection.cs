@@ -8,9 +8,7 @@ using Devart.Data.SQLite;
 using System.Data;
 using System.IO;
 
-// TODO Move the last 2 constructor args and this call to a Connect(...) or Initialize method
-// Probably including a GetMembership method with encapsulated column names is better
-// Each read from the reader returns a Dictionary<String,String> with column,value pairs
+
 namespace SQLiteConnect
 {
 
@@ -98,15 +96,21 @@ namespace SQLiteConnect
 
             Reader = Command.ExecuteReader();
 
-            for (int i = 0; i < ColumnCount; i++)
+            for(int i = 0; i < ColumnCount; i++)
             {
-                while (Reader.Read())
-                {
-                    ColumnContent.Add(Reader[i].ToString());
-                }
                 ComprehensiveColumnInformation.Add(ColumnNames[i], ColumnContent);
-                ColumnContent.Clear();
             }
+
+            while (Reader.Read())
+            {
+                for(int i = 0; i < ColumnCount; i++)
+                {
+                    ComprehensiveColumnInformation[ColumnNames[i]].Add(Reader[i].ToString());
+                }
+            }
+
+            Command.Dispose();
+            Reader.Close();
 
             return ComprehensiveColumnInformation;
         }

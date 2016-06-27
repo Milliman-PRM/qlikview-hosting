@@ -36,7 +36,8 @@ namespace BayClinicCernerAmbulatory
         private String NewBayClinicAmbulatoryMongoCredentialSection = ConfigurationManager.AppSettings["NewBayClinicAmbulatoryMongoCredentialSection"];
 
         private int WOAHPatientCounter = 0;
-        //Init the the conncetion to the sas dataset
+
+        //Init the the conncetion to the sql dataset
         WOHSQLite SQLConnection = new WOHSQLite();
         SQLConnection.Connect();
 
@@ -663,7 +664,7 @@ namespace BayClinicCernerAmbulatory
                             return false;
 
                         //Verify patient is in our WOAH Database
-                        if(!SQLConnection.CheckMembership(InsuranceCoverageDoc.MemberNumber, MongoPerson.LastName, MongoPerson.FirstName, MongoPerson.BirthDateTime))
+                        if(!SQLConnection.CheckMembershipStatus(InsuranceCoverageDoc.MemberNumber, MongoPerson.LastName, MongoPerson.FirstName, MongoPerson.BirthDateTime))
                             return false;
                         
 

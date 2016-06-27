@@ -25,8 +25,8 @@ namespace WOHSQL
             Command = Connection.CreateCommand();
             Command.CommandText = "SELECT member_id, mem_name, dob FROM member";
             Command.CommandType = CommandType.Text;
-
         }
+
         //Specific to WOH. Makes sure the information passed along matches what we have stored in our WOH database
         public bool CheckMembershipStatus(string MemberID, string FirstName, string LastName, string DOB)
         {
@@ -50,6 +50,14 @@ namespace WOHSQL
             }
 
             return false;
+        }
+
+        public void Disconnect()
+        {
+            Command.Dispose();
+            Connection.Close();
+            Reader.Close();
+            ConnectionStr.Clear();
         }
     }
 }
