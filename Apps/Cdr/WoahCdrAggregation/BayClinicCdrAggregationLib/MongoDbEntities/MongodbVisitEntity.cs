@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using CdrContext;
+using CdrDbLib;
 
 namespace BayClinicCernerAmbulatory
 {
@@ -90,6 +92,54 @@ namespace BayClinicCernerAmbulatory
         [BsonElement("lastaggregationrun")]
         public long LastAggregationRun;
 #pragma warning restore 0649
+
+
+        internal bool MergeWithExistingVisit(ref VisitEncounter VisitRecord, ref Patient PatientRecord, CernerReferencedCodeDictionaries ReferencedCodes, ref CdrDbInterface CdrDb)
+        {
+            DateTime BeginDateTime, EndDateTime, UpdateTime, ActiveStatusDT;
+            DateTime.TryParse(EffectiveBeginDateTime, out BeginDateTime);        // Will be DateTime.MinValue on parse failure
+            DateTime.TryParse(EffectiveEndDateTime, out EndDateTime);        // Will be DateTime.MinValue on parse failure
+            DateTime.TryParse(ActiveStatusDateTime, out ActiveStatusDT);        // Will be DateTime.MinValue on parse failure
+            DateTime.TryParse(UpdateDateTime, out UpdateTime);
+            if (VisitRecord == null)
+            {
+                VisitEncounter NewPgRecord = new VisitEncounter
+                {
+                    EmrIdentifier = UniqueVisitIdentifier,
+                    BeginDateTime = BeginDateTime,  // TODO Is this right?
+                    EndDateTime = EndDateTime,  // TODO Is this right?
+                    Status = Active,
+                    StatusDateTime = ActiveStatusDT,  // TODO Is this right?
+                    Organization = ReferencedCodes.GetOrganizationEntityForVisitLocationCode(LocationCode, ref CdrDb),
+                    UpdateTime = UpdateTime,
+                    Patient = PatientRecord
+                };
+                return false;
+            }
+
+            //The patient's information is newer than what we have in the system
+            else if (VisitRecord.UpdateTime < UpdateTime)
+            {
+                if (VisitRecord.BeginDateTime != BeginDateTime && !String.IsNullOrEmpty(EffectiveBeginDateTime)) VisitRecord.BeginDateTime = BeginDateTime;
+                if (VisitRecord.EndDateTime != EndDateTime && !String.IsNullOrEmpty(EffectiveEndDateTime)) VisitRecord.EndDateTime = EndDateTime;
+                if (VisitRecord.StatusDateTime != ActiveStatusDT && !String.IsNullOrEmpty(ActiveStatusDateTime)) VisitRecord.StatusDateTime = ActiveStatusDT;
+
+                if (VisitRecord.Status != Active && !String.IsNullOrEmpty(Active)) VisitRecord.Status = Active;
+
+                if (VisitRecord.Organization != ReferencedCodes.GetOrganizationEntityForVisitLocationCode(LocationCode, ref CdrDb) && !String.IsNullOrEmpty(LocationCode))
+                        VisitRecord.Organization = ReferencedCodes.GetOrganizationEntityForVisitLocationCode(LocationCode, ref CdrDb);
+
+                if (VisitRecord.UpdateTime != UpdateTime && !String.IsNullOrEmpty(UpdateDateTime)) VisitRecord.UpdateTime = UpdateTime;
+
+                return true;
+            }
+
+            //The patient's information is older than the one we have in the system
+            else
+            {
+                return false;       //Maybe more we could put here? Could check for missing fields in new data and check if the old data has them
+            }
+        }
     }
 }
 

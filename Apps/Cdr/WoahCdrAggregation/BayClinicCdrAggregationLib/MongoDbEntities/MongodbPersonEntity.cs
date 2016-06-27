@@ -158,6 +158,7 @@ namespace BayClinicCernerAmbulatory
                 if (PatientRecord.Race.Length < ReferencedCodes.RaceCodeMeanings[Race].Length) PatientRecord.Race = ReferencedCodes.RaceCodeMeanings[Race];  // coded
                 if (PatientRecord.Ethnicity.Length < ReferencedCodes.EthnicityCodeMeanings[Ethnicity].Length) PatientRecord.Ethnicity = ReferencedCodes.EthnicityCodeMeanings[Ethnicity];  // coded
                 if (PatientRecord.MaritalStatus == CdrContext.MaritalStatus.Unspecified) PatientRecord.MaritalStatus = ReferencedCodes.GetCdrMaritalStatusEnum(MaritalStatus);  // coded
+                if (PatientRecord.UpdateTime != ParsedUpdateTime && !String.IsNullOrEmpty(UpdateDateTime)) PatientRecord.UpdateTime = ParsedUpdateTime;
                 PatientRecord.LatestImportFileDate = new String[] { PatientRecord.LatestImportFileDate, ImportFileDate }.Max();
                 return true;
             }
