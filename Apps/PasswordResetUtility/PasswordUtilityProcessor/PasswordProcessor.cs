@@ -7,6 +7,7 @@ using System.Linq;
 using System.Web.Profile;
 using System.Web.Security;
 
+
 /// <summary>
 /// In order to use the Membership API we need to reference System.configuration &  System.Web.ApplicationServices
 /// and we need to add the membership handler to app.config file
@@ -14,20 +15,21 @@ using System.Web.Security;
 namespace PasswordUtilityProcessor
 {
     public class PasswordProcessor : BaseFileProcessor
-    {
+    {        
         public static void ExecutePasswordResetUtility(string args)
         {
             try
             {
                 Process();
-                if (!string.IsNullOrEmpty(GetDirectoryCleanUp()) && ((GetDirectoryCleanUp()) == "True"))
+                if (!string.IsNullOrEmpty(GetDirectoryCleanUp()))
                 {
-                    DirectoryCleanUp();
-                }
+                    if (String.Equals(GetDirectoryCleanUp(), "True", StringComparison.OrdinalIgnoreCase) == true)
+                        DirectoryCleanUp();
+                }          
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, "ExecutePasswordResetUtility || An exception occured during the processing." + args, true);
+                BaseFileProcessor.LogError(ex, "ExecutePasswordResetUtility || An exception occured during the processing." + args);                
             }
         }
 
@@ -38,7 +40,7 @@ namespace PasswordUtilityProcessor
         /// <param name="args"></param>
         private static void Process()
         {
-            if (!string.IsNullOrEmpty(GetAllUserProcessing()) && (GetAllUserProcessing()) == "True")
+            if (String.Equals(GetAllUserProcessing(), "True", StringComparison.OrdinalIgnoreCase) == true)
             {
                 ProcessAllUsers();
             }
@@ -62,8 +64,7 @@ namespace PasswordUtilityProcessor
                 if (usersCollection == null || usersCollection.Count == 0)
                 {
                     //log error and send email
-                    BaseFileProcessor.LogError(null, "ProcessAllUsers || System could not load all users. Check if the database server is down.", false);
-                    SendEmail();
+                    BaseFileProcessor.LogError(null, "ProcessAllUsers || System could not load all users. Check if the database server is down.");
                     return;
                 }
 
@@ -73,7 +74,7 @@ namespace PasswordUtilityProcessor
                     // 1. get FileGenerateCounter value from configs
                     int fileGenerateCounter;
                     //make sure we have numeric value
-                    bool isFileGenerateCounterNumeric = int.TryParse(GetFileGenerateCounter(), out fileGenerateCounter);
+                    var isFileGenerateCounterNumeric = int.TryParse(GetFileGenerateCounter(), out fileGenerateCounter);
 
                     if (isFileGenerateCounterNumeric)
                     {
@@ -146,7 +147,7 @@ namespace PasswordUtilityProcessor
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, "ProcessAllUsers", true);
+                BaseFileProcessor.LogError(ex, "ProcessAllUsers");
             }
         }
 
@@ -154,6 +155,7 @@ namespace PasswordUtilityProcessor
         /// Method to process specific user
         /// </summary>
         /// <param name="args"></param>
+        /// <param name="param">todo: describe param parameter on ProcessUser</param>
         public static void ProcessUser(string param)
         {
             try
@@ -162,8 +164,7 @@ namespace PasswordUtilityProcessor
                 if (user == null)
                 {
                     //log error and send email
-                    BaseFileProcessor.LogError(null, "ProcessUser || Invalid user name. System could not find the user | " + param + " | in database. Please check user name in database and make sure user is valid.", false);
-                    SendEmail();
+                    BaseFileProcessor.LogError(null, "ProcessUser || Invalid user name. System could not find the user | " + param + " | in database. Please check user name in database and make sure user is valid.");
                     return;
                 }
 
@@ -188,11 +189,10 @@ namespace PasswordUtilityProcessor
                             if (providerUserKey == null)
                             {
                                 //log error
-                                BaseFileProcessor.LogError(null, "ProcessUser || Invalid user. System could not find the providerUserKey | " + providerUserKey + " | in database. Check the 'UserId' in [aspnet_Users] for the userName " + user.UserName + ".", false);
-                                SendEmail();
+                                BaseFileProcessor.LogError(null, "ProcessUser || Invalid user. System could not find the providerUserKey | " + providerUserKey + " | in database. Check the 'UserId' in [aspnet_Users] for the userName " + user.UserName + ".");
                                 return;
                             }
-                            WrtiePasswordResetFile(user);
+                            WritePasswordResetFile(user);
                         }
                     }
                 }
@@ -200,27 +200,29 @@ namespace PasswordUtilityProcessor
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, "ProcessUser", true);
+                BaseFileProcessor.LogError(ex, "ProcessUser");
             }
         }
 
-        #region Notification
-        private static void SendEmail()
-        {
-            //send email
-            BaseFileProcessor.SendEmail("Password re-set Utility could not process user(s) information due to missing or lack of information in database. ", "Missing User Information");
-        }
-        #endregion
+        //#region Notification
+        //private static void SendErrorEmail()
+        //{
+        //    if (bErrorLogged)
+        //        //send email
+        //        BaseFileProcessor.SendEmail("Password re-set Utility could not process user(s) information due to missing or lack of information in database. ", "Missing User Information");
+        //    bErrorLogged = false;
+        //}
+        //#endregion
 
         #region File Function
 
-        private static void WrtiePasswordResetFile(MembershipUser user)
+        private static void WritePasswordResetFile(MembershipUser user)
         {
             //get the log directory
             if (!string.IsNullOrEmpty(GetFolderPath()))
             {
                 //write file
-                var userPasswordResetFileAndDirectory = (GetFolderPath() + user.ProviderUserKey.ToString().ToUpper() + ".rst");
+                var userPasswordResetFileAndDirectory = Path.Combine(GetFolderPath() ,user.ProviderUserKey.ToString().ToUpper() + ".rst");
                 ////Check file
                 //if (File.Exists(userPasswordResetFileAndDirectory))
                 //{
@@ -268,9 +270,9 @@ namespace PasswordUtilityProcessor
                         if (fileTobeDeleted.Count > 0)
                         {
                             //loop through each file and delete
-                            foreach (var f in fileTobeDeleted)
+                            foreach (var file in fileTobeDeleted)
                             {
-                                File.Delete(GetFolderPath() + f + ".rst");
+                                File.Delete(Path.Combine(GetFolderPath() , file + ".rst"));
                             }
                         }
                     }
@@ -312,8 +314,8 @@ namespace PasswordUtilityProcessor
         {
             // For Example - D:\Projects\SomeProject\SomeFolder
             return (ConfigurationManager.AppSettings != null &&
-                    ConfigurationManager.AppSettings["DirectroyCleanUp"] != null) ?
-                    ConfigurationManager.AppSettings["DirectroyCleanUp"].ToString() :
+                    ConfigurationManager.AppSettings["DirectoryCleanUp"] != null) ?
+                    ConfigurationManager.AppSettings["DirectoryCleanUp"].ToString() :
                     string.Empty;
         }
 

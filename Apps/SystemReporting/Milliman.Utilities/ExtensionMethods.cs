@@ -7,7 +7,6 @@ using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using NsExcel = Microsoft.Office.Interop.Excel;
 
 namespace SystemReporting.Utilities
 {
@@ -43,61 +42,61 @@ namespace SystemReporting.Utilities
                 throw new ArgumentNullException("Cannot generate an MD5 hash of the given string because the given string was null.");
         }
 
-        public static void ExportToExcel(this DataTable Tbl, string ExcelFilePath = null)
-        {
-            try
-            {
-                if (Tbl == null || Tbl.Columns.Count == 0)
-                    throw new Exception("ExportToExcel: Null or empty input table!\n");
+        //public static void ExportToExcel(this DataTable Tbl, string ExcelFilePath = null)
+        //{
+        //    try
+        //    {
+        //        if (Tbl == null || Tbl.Columns.Count == 0)
+        //            throw new Exception("ExportToExcel: Null or empty input table!\n");
 
-                // load excel, and create a new workbook
-                var excelApp = new NsExcel.Application();
-                excelApp.Workbooks.Add();
+        //        // load excel, and create a new workbook
+        //        var excelApp = new NsExcel.Application();
+        //        excelApp.Workbooks.Add();
 
-                // single worksheet
-                NsExcel._Worksheet workSheet = excelApp.ActiveSheet;
+        //        // single worksheet
+        //        NsExcel._Worksheet workSheet = excelApp.ActiveSheet;
 
-                // column headings
-                for (int i = 0; i < Tbl.Columns.Count; i++)
-                {
-                    workSheet.Cells[1, (i + 1)] = Tbl.Columns[i].ColumnName;
-                }
+        //        // column headings
+        //        for (int i = 0; i < Tbl.Columns.Count; i++)
+        //        {
+        //            workSheet.Cells[1, (i + 1)] = Tbl.Columns[i].ColumnName;
+        //        }
 
-                // rows
-                for (int i = 0; i < Tbl.Rows.Count; i++)
-                {
-                    // to do: format datetime values before printing
-                    for (int j = 0; j < Tbl.Columns.Count; j++)
-                    {
-                        workSheet.Cells[(i + 2), (j + 1)] = Tbl.Rows[i][j];
-                    }
-                }
+        //        // rows
+        //        for (int i = 0; i < Tbl.Rows.Count; i++)
+        //        {
+        //            // to do: format datetime values before printing
+        //            for (int j = 0; j < Tbl.Columns.Count; j++)
+        //            {
+        //                workSheet.Cells[(i + 2), (j + 1)] = Tbl.Rows[i][j];
+        //            }
+        //        }
 
-                // check fielpath
-                if (ExcelFilePath != null && ExcelFilePath != "")
-                {
-                    try
-                    {
-                        workSheet.SaveAs(ExcelFilePath);
-                        excelApp.Quit();
-                        //MessageBox.Show("Excel file saved!");
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception("ExportToExcel: Excel file could not be saved! Check filepath.\n"
-                        + ex.Message);
-                    }
-                }
-                else // no filepath is given
-                {
-                    excelApp.Visible = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("ExportToExcel: \n" + ex.Message);
-            }
-        }
+        //        // check fielpath
+        //        if (ExcelFilePath != null && ExcelFilePath != "")
+        //        {
+        //            try
+        //            {
+        //                workSheet.SaveAs(ExcelFilePath);
+        //                excelApp.Quit();
+        //                //MessageBox.Show("Excel file saved!");
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                throw new Exception("ExportToExcel: Excel file could not be saved! Check filepath.\n"
+        //                + ex.Message);
+        //            }
+        //        }
+        //        else // no filepath is given
+        //        {
+        //            excelApp.Visible = true;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("ExportToExcel: \n" + ex.Message);
+        //    }
+        //}
 
         /// <summary>
         /// Method to convert the list items to datatabale
@@ -127,18 +126,16 @@ namespace SystemReporting.Utilities
             }
             //put a breakpoint here and check datatable
             return dataTable;
-        }
-
-        
+        }               
         
         public static DataTable ToDataTable<T>(this IList<T> list)
         {
             DataTable table = null;
             if (list != null && list.Count > 0)
             {
-                PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(T));
+                var properties = TypeDescriptor.GetProperties(typeof(T));
 
-                List<PropertyDescriptor[]> propList = new List<PropertyDescriptor[]>();
+                var propList = new List<PropertyDescriptor[]>();
 
                 table = new DataTable();
                 foreach (PropertyDescriptor item in properties)

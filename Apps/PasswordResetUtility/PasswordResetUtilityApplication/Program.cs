@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using C = PasswordUtilityProcessor.Constants;
 
 namespace PasswordResetUtilityApplication
 {
@@ -20,15 +21,27 @@ namespace PasswordResetUtilityApplication
                 if (CheckArgs(args))
                 {
                     PasswordProcessor.ExecutePasswordResetUtility(args[0]);
-                }                
+                }
+                SendErrorEmail();
                 Environment.ExitCode = 0;
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, "Main || Failed processing. || " + args, true);
+                BaseFileProcessor.LogError(ex, "Main || Failed processing. || " + args);
             }
         }
-        
+
+        #region Notification
+        private static void SendErrorEmail()
+        {
+            //if error logged filter is true then send email
+            if (C.ERROR_LOGGED)
+                //send email
+                BaseFileProcessor.SendEmail("Password re-set Utility could not process user(s) information due to missing or lack of information in database. ", "Missing User Information");
+            C.ERROR_LOGGED = false;
+        }
+        #endregion
+
         private static bool CheckArgs(string[] args)
         {
             var ReturnValue = false;
