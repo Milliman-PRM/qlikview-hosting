@@ -29,7 +29,6 @@ namespace BayClinicCernerAmbulatory
     {
         public static readonly String WoahBayClinicOrganizationIdentity = "WOAH Bay Clinic";
         private const String FeedIdentity = "BayClinicCernerAmbulatoryExtract";
-        VerifyWOAHCoverage VerifyCoverage = new VerifyWOAHCoverage();
 
         // TODO Some of these should be arguments from the caller, or sourced another way? 
         private String PgConnectionStringName = ConfigurationManager.AppSettings["CdrPostgreSQLConnectionString"];
@@ -38,7 +37,7 @@ namespace BayClinicCernerAmbulatory
 
         private int WOAHPatientCounter = 0;
         //Init the the conncetion to the sas dataset
-        SQLiteDatabaseConnection Connect = new SQLiteDatabaseConnection(CustomerEnum.WOAH, "member_id, mem_name, dob", "member");
+        SQLiteDbConnection Connect = new SQLiteDbConnection(CustomerEnum.WOAH);
 
         private CdrDbInterface CdrDb;
         private Organization OrganizationObject;
@@ -671,7 +670,7 @@ namespace BayClinicCernerAmbulatory
                             return false;  // I think continue; would be more correct here.  
 
                         //Verify patient is in our WOAH Database
-                        if(!VerifyCoverage.IsCovered(Connect, InsuranceCoverageDoc.MemberNumber, MongoPerson.LastName, MongoPerson.FirstName, MongoPerson.BirthDateTime))
+                        if(!Connect.CheckMembership(InsuranceCoverageDoc.MemberNumber, MongoPerson.LastName, MongoPerson.FirstName, MongoPerson.BirthDateTime))
                             return false;
                         
 

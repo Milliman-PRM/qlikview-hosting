@@ -7,8 +7,8 @@
     <ProjectGuid>{D5149A31-D65E-4064-A4F4-CF68069EC55C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ClassLibrary2</RootNamespace>
-    <AssemblyName>ClassLibrary2</AssemblyName>
+    <RootNamespace>SQLiteConnect</RootNamespace>
+    <AssemblyName>SQLiteLib</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -44,7 +44,6 @@
   <ItemGroup>
     <Compile Include="SQLiteDatabaseConnection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="VerifyWOAHCoverage.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
