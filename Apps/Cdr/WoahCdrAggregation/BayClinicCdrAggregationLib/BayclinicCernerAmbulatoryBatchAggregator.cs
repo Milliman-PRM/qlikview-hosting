@@ -474,44 +474,13 @@ namespace BayClinicCernerAmbulatory
                 {
                     foreach (MongodbChargeEntity ChargeDoc in ChargeCursor.Current)
                     {
-                        ChargeCounter++;
-                        DateTime ActiveStatusDT, ServiceDT, PostDT, UpdateDT;
-                        DateTime.TryParse(ChargeDoc.ActiveStatusDateTime, out ActiveStatusDT);
-                        DateTime.TryParse(ChargeDoc.ServiceDateTime, out ServiceDT);
-                        DateTime.TryParse(ChargeDoc.PostedDateTime, out PostDT);
-                        DateTime.TryParse(ChargeDoc.UpdateDateTime, out UpdateDT);
+                        var DuplicateChargeQuery = from Charge in PgVisit.Charges
+                                                   where Charge.EmrIdentifier == ChargeDoc.UniqueChargeIdentifier
+                                                   select Charge;
 
-                        String DescriptionFirstWord = ChargeDoc.Description.Split(' ').FirstOrDefault();
-
-                        // TODO may need to think about value of ChargeDoc.Type, some could be "no charge"
-                        // TODO may need to think about value of ChargeDoc.State, some could be "combined away" or "suspended"
-                        Charge NewPgRecord = new Charge
-                        {
-                            //DentalDetails = new DentalDetail {ToothNumber=0 ,ToothSurfaceCode="" },
-                            EmrIdentifier = ChargeDoc.UniqueChargeIdentifier,
-                            DateOfService = ServiceDT,
-                            Description = ChargeDoc.Description,  // If the ChargeDetail codes are not adequate, a cpt appears to be prepended to this field in raw data
-                            Comment = "",
-                            SubmittedDate = PostDT,
-                            Submitter = "",   // TODO What to do with this?
-                            State = ChargeDoc.State,  // TODO This is a coded reference, get the meaning string
-                            DateInfoLastUpdated = UpdateDT,
-                            VisitEncounter = PgVisit
-                            // Think about whether the ordering_physician_identifier or verifying_physician_identifier would be useful to add to the model
-                            // TODO Should we collect the type field?
-                        };
-                        NewPgRecord.ChargeCodes.Add(new ChargeCode
-                        {
-                            Code = new CodedEntry
-                            {
-                                Code = DescriptionFirstWord,
-                                CodeSystem = "Charge Description Prepend",
-                            }
-                        });
-                        // ChargeDoc.UniqueChargeItemIdentifier is the reference from related ChargeDetail documents
-                        // What is parent_charge_identifier?
-                        // What is offset_charge_identifier?
-
+                        Charge NewPgRecord = DuplicateChargeQuery.FirstOrDefault();
+                        if(ChargeDoc.MergeWithExistingCharges(ref NewPgRecord, ref PgVisit)) { int i = 42;  }
+                       
                         CdrDb.Context.Charges.InsertOnSubmit(NewPgRecord);
                         CdrDb.Context.SubmitChanges();
 
@@ -546,17 +515,11 @@ namespace BayClinicCernerAmbulatory
                 {
                     foreach (MongodbChargeDetailEntity ChargeDetailDoc in ChargeDetailCursor.Current)
                     {
-                        ChargeDetailCounter++;
-
-                        ChargeCode NewPgRecord = new ChargeCode
-                        {
-                            Charge = ChargeRecord,
-                            Code = new CodedEntry
-                            {
-                                Code = ChargeDetailDoc.Code,
-                                CodeSystem = ReferencedCodes.ChargeDetailTypeCodeMeanings[ChargeDetailDoc.Type],
-                            }
-                        };
+                        var DuplicateChargeDetailQuery = from ChargeDetail in ChargeRecord.ChargeCodes
+                                                   where ChargeDetail.EmrIdentifier == ChargeDetailDoc.UniqueChargeItemIdentifier
+                                                   select ChargeDetail;
+                        ChargeCode NewPgRecord = DuplicateChargeDetailQuery.FirstOrDefault();
+                        if(!ChargeDetailDoc.MergeWithExistingChargeCodes(ref NewPgRecord, ref ChargeRecord, ReferencedCodes))
 
                         CdrDb.Context.ChargeCodes.InsertOnSubmit(NewPgRecord);
                         CdrDb.Context.SubmitChanges();

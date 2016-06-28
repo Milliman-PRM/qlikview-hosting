@@ -140,6 +140,7 @@
         </TypeMapping>
       </Column>
       <Column Name="visitencounterdbid" Member="VisitEncounterdbid" Type="System.Int64" AutoSync="Always" DbType="int8" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="b684d484-c458-4c8d-8287-33b9cc56c2b9" />
+      <Column Name="lastimportfiledate" Member="LastImportFileDate" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="e53e0ff6-de55-4644-b012-4b700a2a17b1" />
       <Association Name="VisitEncounter_Charge" ed:AssociationGuid="4ad800a0-9f53-408b-b2d2-30093455ee34" Member="VisitEncounter" ed:Guid="9ec20836-1fc8-485c-92c8-266cefc66921" ThisKey="VisitEncounterdbid" OtherKey="dbid" Type="VisitEncounter" IsForeignKey="true" />
       <Association Name="Charge_ChargeCode" ed:AssociationGuid="7a7f3bbd-d2c3-4b66-8502-bb647ae8b64f" Member="ChargeCodes" ed:Guid="66f993a8-cc71-42e1-9c20-1a4f49b300c8" ThisKey="dbid" OtherKey="Chargedbid" Type="ChargeCode" />
     </Type>
@@ -313,6 +314,9 @@
         </TypeMapping>
       </Column>
       <Column Name="&quot;Chargedbid&quot;" Member="Chargedbid" Type="System.Int64" DbType="int8 NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="9bdfd435-7934-42bc-9e4d-1269f1fe9b14" />
+      <Column Name="emridentifier" Member="EmrIdentifier" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="c2842edc-5a26-4612-bbbe-4a208b1fa2db" />
+      <Column Name="updatetime" Member="UpdateTime" Type="System.DateTime" DbType="timestamp NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="7e97c0d9-fef2-45e7-838b-8979d90e37b8" />
+      <Column Name="lastimportfiledate" Member="LastImportFileDate" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="08fd6f16-1beb-40b8-9397-8d1fea5cc678" />
       <Association Name="Charge_ChargeCode" ed:AssociationGuid="7a7f3bbd-d2c3-4b66-8502-bb647ae8b64f" Member="Charge" ed:Guid="c509d31a-37e8-4670-9ed4-61b3e19294eb" ThisKey="Chargedbid" OtherKey="dbid" Type="Charge" DeleteOnNull="true" IsForeignKey="true" />
     </Type>
   </Table>
