@@ -82,6 +82,8 @@
       <Column Name="datefirstreported" Member="DateFirstReported" Type="System.DateTime" DbType="timestamp" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="5b3479fb-8fa5-4f71-98f8-fa00c196f995" />
       <Column Name="datelastreported" Member="DateLastReported" Type="System.DateTime" DbType="timestamp" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="f247a0b3-2642-430f-83f2-357eda7853f3" />
       <Column Name="patientdbid" Member="Patientdbid" Type="System.Int64" AutoSync="Always" DbType="int8 NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="ad915c6f-b90a-434d-8202-2fa0ae4bdf1b" />
+      <Column Name="updatetime" Member="UpdateTime" Type="System.DateTime" DbType="timestamp NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="cbc6906f-95c5-4307-b039-ae14b7af501e" />
+      <Column Name="lastimportfiledate" Member="LastImportFileDate" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="90bbdda3-a31e-49ee-bb3f-3efb6e002597" />
       <Association Name="Patient_TelephoneNumber" ed:AssociationGuid="88c0c094-bc90-44d2-acf7-6c4ecc064fad" Member="Patient" ed:Guid="39ea6f4d-ce12-4b16-9762-14c99577d293" ThisKey="Patientdbid" OtherKey="dbid" Type="Patient" DeleteOnNull="true" IsForeignKey="true" />
     </Type>
   </Table>

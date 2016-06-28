@@ -290,26 +290,23 @@ namespace BayClinicCernerAmbulatory
                 {
                     foreach (MongodbPhoneEntity PhoneDoc in PhoneCursor.Current)
                     {
-                        PhoneCounter++;
-                        DateTime ActiveStatusDT;
-                        DateTime.TryParse(PhoneDoc.ActiveStatusDateTime, out ActiveStatusDT);
 
-                        TelephoneNumber NewPgRecord = new TelephoneNumber
+                        var DuplicateTelephoneNumberQuery = from Phone in PgPatient.TelephoneNumbers
+                                                            where PhoneDoc.PhoneNumber == Phone.Number.Number
+                                                            select Phone;
+
+                        TelephoneNumber NewPgRecord = DuplicateTelephoneNumberQuery.FirstOrDefault();
+                        
+                        if (PhoneDoc.MergeWithExistingTelephoneNumber(ref NewPgRecord, ref PgPatient, ReferencedCodes))
                         {
-                            Number = new PhoneNumber
-                            {
-                                Number = PhoneDoc.PhoneNumber,
-                                PhoneType = ReferencedCodes.GetCdrPhoneTypeEnum(PhoneDoc.Type)
-                            },
-                            Patient = PgPatient,
-                            DateFirstReported = ActiveStatusDT,
-                            DateLastReported = ActiveStatusDT
-                        };
+                            int i = 42;
+                        }
 
                         CdrDb.Context.TelephoneNumbers.InsertOnSubmit(NewPgRecord);
                         CdrDb.Context.SubmitChanges();
 
                         MongoRunUpdater.PhoneIdList.Add(PhoneDoc.Id);
+                      
                     }
                 }
             }
@@ -430,12 +427,6 @@ namespace BayClinicCernerAmbulatory
         {
             bool OverallSuccess = true;
 
-            //Gets all of the visits that are related to the same patient
-            var PatientVisitQuery = from Visit in CdrDb.Context.VisitEncounters
-                                    where Visit.Patientdbid == PatientRecord.dbid
-                                    select Visit;
-
-
             //Retrieves all of the visits in Mongo that are related to the patient and not already aggregated
             FilterDefinition<MongodbVisitEntity> VisitFilterDef = Builders<MongodbVisitEntity>.Filter
                 .Where(
@@ -451,7 +442,7 @@ namespace BayClinicCernerAmbulatory
                     foreach (MongodbVisitEntity VisitDoc in VisitCursor.Current)
                     {
                         //Should return any new visits that are already in the cdr database
-                        var DuplicateVisitQuery = from Visit in PatientVisitQuery             
+                        var DuplicateVisitQuery = from Visit in PatientRecord.VisitEncounters             
                                                   where VisitDoc.UniqueVisitIdentifier == Visit.EmrIdentifier
                                                   select Visit;
 
