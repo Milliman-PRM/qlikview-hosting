@@ -432,7 +432,7 @@ namespace BayClinicCernerAmbulatory
 
             //Gets all of the visits that are related to the same patient
             var PatientVisitQuery = from Visit in CdrDb.Context.VisitEncounters
-                                    where Visit.PersonIdentifier == PatientRecord.EmrIdentifier
+                                    where Visit.Patientdbid == PatientRecord.dbid
                                     select Visit;
 
 

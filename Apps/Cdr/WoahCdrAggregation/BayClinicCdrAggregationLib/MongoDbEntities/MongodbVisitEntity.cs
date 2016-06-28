@@ -106,7 +106,6 @@ namespace BayClinicCernerAmbulatory
                  VisitRecord = new VisitEncounter
                 {
                     EmrIdentifier = UniqueVisitIdentifier,
-                    PersonIdentifier = UniquePersonIdentifier,
                     BeginDateTime = BeginDateTime,  
                     EndDateTime = EndDateTime,  
                     Status = Active,
