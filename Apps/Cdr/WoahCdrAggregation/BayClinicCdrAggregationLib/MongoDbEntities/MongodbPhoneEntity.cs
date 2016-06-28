@@ -100,7 +100,7 @@ namespace BayClinicCernerAmbulatory
             }
             else if(PhoneRecord.UpdateTime < UpdateTime)
             {
-                if (PhoneRecord.Number.PhoneType != ReferencedCodes.GetCdrPhoneTypeEnum(Type)) PhoneRecord.Number.PhoneType = ReferencedCodes.GetCdrPhoneTypeEnum(Type);
+                if (PhoneRecord.Number.PhoneType != ReferencedCodes.GetCdrPhoneTypeEnum(Type) && !String.IsNullOrEmpty(ReferencedCodes.GetCdrPhoneTypeEnum(Type).ToString())) PhoneRecord.Number.PhoneType = ReferencedCodes.GetCdrPhoneTypeEnum(Type);
 
                 if (PhoneRecord.DateLastReported < ActiveStatusDT) PhoneRecord.DateLastReported = ActiveStatusDT;
                 if (PhoneRecord.DateFirstReported > ActiveStatusDT) PhoneRecord.DateFirstReported = ActiveStatusDT;

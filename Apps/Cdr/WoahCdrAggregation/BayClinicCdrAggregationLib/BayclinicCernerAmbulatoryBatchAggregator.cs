@@ -336,28 +336,17 @@ namespace BayClinicCernerAmbulatory
                 {
                     foreach (MongodbAddressEntity AddressDoc in AddressCursor.Current)
                     {
-                        AddressCounter++;
-                        DateTime ActiveStatusDT;
-                        DateTime.TryParse(AddressDoc.ActiveStatusDateTime, out ActiveStatusDT);
 
-                        PhysicalAddress NewPgRecord = new PhysicalAddress
+                        var DuplicateAddressrQuery = from PatientAddress in PgPatient.PhysicalAddresses
+                                                            where PatientAddress.Address.Line1 == AddressDoc.AddressLine1 && PatientAddress.Address.City == AddressDoc.CityText
+                                                            select PatientAddress;
+
+                        PhysicalAddress NewPgRecord = DuplicateAddressrQuery.FirstOrDefault();
+
+                        if(AddressDoc.MergeWithExistingPhysicalAddress(ref NewPgRecord, ref PgPatient, ReferencedCodes))
                         {
-                            Address = new Address
-                            {
-                                City = AddressDoc.CityText,
-                                State = AddressDoc.StateText,
-                                PostalCode = AddressDoc.ZipCode,
-                                Country = AddressDoc.CountryText,
-                                Line1 = AddressDoc.AddressLine1,
-                                Line2 = AddressDoc.AddressLine2,
-                                Line3 = AddressDoc.AddressLine3,
-                                Line4 = AddressDoc.AddressLine4
-                            },
-                            AddressType = ReferencedCodes.GetCdrAddressTypeEnum(AddressDoc.Type),
-                            patient = PgPatient,
-                            DateFirstReported = ActiveStatusDT,
-                            DateLastReported = ActiveStatusDT
-                        };
+                            int i = 42;
+                        }
 
                         CdrDb.Context.PhysicalAddresses.InsertOnSubmit(NewPgRecord);
                         CdrDb.Context.SubmitChanges();

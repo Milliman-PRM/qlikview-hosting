@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using CdrContext;
+using CdrDbLib;
 
 namespace BayClinicCernerAmbulatory
 {
@@ -96,5 +98,64 @@ namespace BayClinicCernerAmbulatory
         [BsonElement("lastaggregationrun")]
         public long LastAggregationRun;
 #pragma warning restore 0649
+
+        internal bool MergeWithExistingPhysicalAddress(ref PhysicalAddress AddressRecord, ref Patient PatientRecord, CernerReferencedCodeDictionaries ReferencedCodes)
+        {
+            DateTime ActiveStatusDT, UpdateTime;
+            DateTime.TryParse(ActiveStatusDateTime, out ActiveStatusDT);
+            DateTime.TryParse(UpdateDateTime, out UpdateTime);
+            if (AddressRecord == null)
+            {
+                PhysicalAddress NewPgRecord = new PhysicalAddress
+                {
+                    Address = new Address
+                    {
+                        City = CityText,
+                        State = StateText,
+                        PostalCode = ZipCode,
+                        Country = CountryText,
+                        Line1 = AddressLine1,
+                        Line2 = AddressLine2,
+                        Line3 = AddressLine3,
+                        Line4 = AddressLine4
+                    },
+                    AddressType = ReferencedCodes.GetCdrAddressTypeEnum(Type),
+                    patient = PatientRecord,
+                    DateFirstReported = ActiveStatusDT,
+                    DateLastReported = ActiveStatusDT,
+                    UpdateTime = UpdateTime,
+                    LastImportFileDate = ImportFileDate
+                };
+                return true;
+            }
+            else if(AddressRecord.UpdateTime < UpdateTime) 
+            {
+                //Updating the address object
+                if (AddressRecord.Address.City != CityText && !String.IsNullOrEmpty(CityText)) AddressRecord.Address.City = CityText;
+                if (AddressRecord.Address.State != StateText && !String.IsNullOrEmpty(StateText)) AddressRecord.Address.State = StateText;
+                if (AddressRecord.Address.PostalCode != ZipCode && !String.IsNullOrEmpty(ZipCode)) AddressRecord.Address.PostalCode = ZipCode;
+                if (AddressRecord.Address.Country != CountryText && !String.IsNullOrEmpty(CountryText)) AddressRecord.Address.Country = CountryText;
+                if (AddressRecord.Address.Line1 != AddressLine1 && !String.IsNullOrEmpty(AddressLine1)) AddressRecord.Address.Line1 = AddressLine1;
+                if (AddressRecord.Address.Line2 != AddressLine2 && !String.IsNullOrEmpty(AddressLine2)) AddressRecord.Address.Line2 = AddressLine2;
+                if (AddressRecord.Address.Line3 != AddressLine3 && !String.IsNullOrEmpty(AddressLine3)) AddressRecord.Address.Line3 = AddressLine3;
+                if (AddressRecord.Address.Line4 != AddressLine4 && !String.IsNullOrEmpty(AddressLine4)) AddressRecord.Address.Line4 = AddressLine4;
+
+                //Updating the rest
+                if (AddressRecord.AddressType != ReferencedCodes.GetCdrAddressTypeEnum(Type) && !String.IsNullOrEmpty(Type)) AddressRecord.AddressType = ReferencedCodes.GetCdrAddressTypeEnum(Type);
+
+                if (AddressRecord.DateLastReported < ActiveStatusDT) AddressRecord.DateLastReported = ActiveStatusDT;
+                if (AddressRecord.DateFirstReported > ActiveStatusDT) AddressRecord.DateFirstReported = ActiveStatusDT;
+
+                if (AddressRecord.UpdateTime != UpdateTime && !String.IsNullOrEmpty(UpdateDateTime)) AddressRecord.UpdateTime = UpdateTime;
+
+                AddressRecord.LastImportFileDate = new string[] { AddressRecord.LastImportFileDate, ImportFileDate }.Max();
+
+                return false;
+            }
+            else {
+                return false;
+            }
+
+        }
     }
 }
