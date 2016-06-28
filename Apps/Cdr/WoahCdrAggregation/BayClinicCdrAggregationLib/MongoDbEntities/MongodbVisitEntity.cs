@@ -106,12 +106,14 @@ namespace BayClinicCernerAmbulatory
                  VisitRecord = new VisitEncounter
                 {
                     EmrIdentifier = UniqueVisitIdentifier,
+                    PersonIdentifier = UniquePersonIdentifier,
                     BeginDateTime = BeginDateTime,  
                     EndDateTime = EndDateTime,  
                     Status = Active,
                     StatusDateTime = ActiveStatusDT,
                     Organization = ReferencedCodes.GetOrganizationEntityForVisitLocationCode(LocationCode, ref CdrDb),
                     UpdateTime = UpdateTime,
+                    LastImportFileDate = ImportFileDate,
                     Patient = PatientRecord
                 };
                 return false;

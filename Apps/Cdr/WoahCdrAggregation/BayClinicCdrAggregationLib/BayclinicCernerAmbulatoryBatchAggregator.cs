@@ -454,6 +454,7 @@ namespace BayClinicCernerAmbulatory
                         var DuplicateVisitQuery = from Visit in PatientVisitQuery             
                                                   where VisitDoc.UniqueVisitIdentifier == Visit.EmrIdentifier
                                                   select Visit;
+
                         VisitEncounter NewPgRecord = DuplicateVisitQuery.FirstOrDefault();                  
 
                         if (VisitDoc.MergeWithExistingVisit(ref NewPgRecord, ref PatientRecord, ReferencedCodes, ref CdrDb))
@@ -464,59 +465,24 @@ namespace BayClinicCernerAmbulatory
                         else
                         {
                             VisitCounter++;
-
-                            CdrDb.Context.VisitEncounters.InsertOnSubmit(NewPgRecord);
-                            CdrDb.Context.SubmitChanges();
-
-                            MongoRunUpdater.VisitIdList.Add(VisitDoc.Id);
-
-                            // Aggregate entities that are linked to this visit
-                            OverallSuccess &= AggregateCharges(VisitDoc, NewPgRecord);
-                            OverallSuccess &= AggregateResults(PersonDoc, PatientRecord, VisitDoc, NewPgRecord);
-                            OverallSuccess &= AggregateDiagnoses(PersonDoc, PatientRecord, VisitDoc, NewPgRecord);
-                            OverallSuccess &= AggregateImmunizations(PersonDoc, PatientRecord, VisitDoc, NewPgRecord);
-                            OverallSuccess &= AggregateMedications(PersonDoc, PatientRecord, VisitDoc, NewPgRecord);
                         }
+
+                        CdrDb.Context.VisitEncounters.InsertOnSubmit(NewPgRecord);
+                        CdrDb.Context.SubmitChanges();
+
+                        MongoRunUpdater.VisitIdList.Add(VisitDoc.Id);
+
+                        // Aggregate entities that are linked to this visit
+                        OverallSuccess &= AggregateCharges(VisitDoc, NewPgRecord);
+                        OverallSuccess &= AggregateResults(PersonDoc, PatientRecord, VisitDoc, NewPgRecord);
+                        OverallSuccess &= AggregateDiagnoses(PersonDoc, PatientRecord, VisitDoc, NewPgRecord);
+                        OverallSuccess &= AggregateImmunizations(PersonDoc, PatientRecord, VisitDoc, NewPgRecord);
+                        OverallSuccess &= AggregateMedications(PersonDoc, PatientRecord, VisitDoc, NewPgRecord);
+                        
                     }
                 }
             }
 
-
-            /*
-            DateTime BeginDateTime, EndDateTime, ActiveStatusDT;
-            DateTime.TryParse(VisitDoc.EffectiveBeginDateTime, out BeginDateTime);        // Will be DateTime.MinValue on parse failure
-            DateTime.TryParse(VisitDoc.EffectiveEndDateTime, out EndDateTime);        // Will be DateTime.MinValue on parse failure
-            DateTime.TryParse(VisitDoc.ActiveStatusDateTime, out ActiveStatusDT);        // Will be DateTime.MinValue on parse failure
-
-            VisitCounter++;
-
-            VisitEncounter NewPgRecord = new VisitEncounter
-            {
-                EmrIdentifier = VisitDoc.UniqueVisitIdentifier,
-                BeginDateTime = BeginDateTime,  // TODO Is this right?
-                EndDateTime = EndDateTime,  // TODO Is this right?
-                Status = VisitDoc.Active,
-                StatusDateTime = ActiveStatusDT,  // TODO Is this right?
-                Organization = ReferencedCodes.GetOrganizationEntityForVisitLocationCode(VisitDoc.LocationCode, ref CdrDb),
-                Patient = PatientRecord
-            };
-
-            CdrDb.Context.VisitEncounters.InsertOnSubmit(NewPgRecord);
-            CdrDb.Context.SubmitChanges();
-
-            MongoRunUpdater.VisitIdList.Add(VisitDoc.Id);
-
-            // Aggregate entities that are linked to this visit
-            OverallSuccess &= AggregateCharges(VisitDoc, NewPgRecord);
-            OverallSuccess &= AggregateResults(PersonDoc, PatientRecord, VisitDoc, NewPgRecord);
-            OverallSuccess &= AggregateDiagnoses(PersonDoc, PatientRecord, VisitDoc, NewPgRecord);
-            OverallSuccess &= AggregateImmunizations(PersonDoc, PatientRecord, VisitDoc, NewPgRecord);
-            OverallSuccess &= AggregateMedications(PersonDoc, PatientRecord, VisitDoc, NewPgRecord);
-
-        }
-    }
-}
-*/
             return OverallSuccess;
                     }
 
