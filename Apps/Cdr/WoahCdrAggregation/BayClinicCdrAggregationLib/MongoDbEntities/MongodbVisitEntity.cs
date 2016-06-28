@@ -106,10 +106,10 @@ namespace BayClinicCernerAmbulatory
                  VisitRecord = new VisitEncounter
                 {
                     EmrIdentifier = UniqueVisitIdentifier,
-                    BeginDateTime = BeginDateTime,  // TODO Is this right?
-                    EndDateTime = EndDateTime,  // TODO Is this right?
+                    BeginDateTime = BeginDateTime,  
+                    EndDateTime = EndDateTime,  
                     Status = Active,
-                    StatusDateTime = ActiveStatusDT,  // TODO Is this right?
+                    StatusDateTime = ActiveStatusDT,
                     Organization = ReferencedCodes.GetOrganizationEntityForVisitLocationCode(LocationCode, ref CdrDb),
                     UpdateTime = UpdateTime,
                     Patient = PatientRecord
@@ -130,6 +130,8 @@ namespace BayClinicCernerAmbulatory
                         VisitRecord.Organization = ReferencedCodes.GetOrganizationEntityForVisitLocationCode(LocationCode, ref CdrDb);
 
                 if (VisitRecord.UpdateTime != UpdateTime && !String.IsNullOrEmpty(UpdateDateTime)) VisitRecord.UpdateTime = UpdateTime;
+
+                VisitRecord.LastImportFileDate = new string[] { VisitRecord.LastImportFileDate, ImportFileDate }.Max();
 
                 return true;
             }
