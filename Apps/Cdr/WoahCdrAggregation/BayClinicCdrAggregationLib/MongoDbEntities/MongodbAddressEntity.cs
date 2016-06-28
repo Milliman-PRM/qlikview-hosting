@@ -106,7 +106,7 @@ namespace BayClinicCernerAmbulatory
             DateTime.TryParse(UpdateDateTime, out UpdateTime);
             if (AddressRecord == null)
             {
-                PhysicalAddress NewPgRecord = new PhysicalAddress
+                AddressRecord = new PhysicalAddress
                 {
                     Address = new Address
                     {

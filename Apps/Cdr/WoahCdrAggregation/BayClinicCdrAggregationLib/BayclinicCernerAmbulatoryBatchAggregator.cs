@@ -228,11 +228,8 @@ namespace BayClinicCernerAmbulatory
             CdrDb.Context.Transaction = CdrDb.Context.Connection.BeginTransaction();
 
             // Store to database
-            if (PersonDocument.MergeWithExistingPatient(ref PatientRecord, ReferencedCodes))
-            {
-                // Record changes will persist by SubmitChanges()
-                int i = 42;  // debugging breakpoint
-            }
+            if (PersonDocument.MergeWithExistingPatient(ref PatientRecord, ReferencedCodes)) { int i = 42;  }//Debugging breakpoint
+ 
             else
             {
                 CdrDb.Context.Patients.InsertOnSubmit(PatientRecord);
@@ -297,10 +294,8 @@ namespace BayClinicCernerAmbulatory
 
                         TelephoneNumber NewPgRecord = DuplicateTelephoneNumberQuery.FirstOrDefault();
                         
-                        if (PhoneDoc.MergeWithExistingTelephoneNumber(ref NewPgRecord, ref PgPatient, ReferencedCodes))
-                        {
-                            int i = 42;
-                        }
+                        if (PhoneDoc.MergeWithExistingTelephoneNumber(ref NewPgRecord, ref PgPatient, ReferencedCodes)) { int i = 42;  }
+
 
                         CdrDb.Context.TelephoneNumbers.InsertOnSubmit(NewPgRecord);
                         CdrDb.Context.SubmitChanges();
@@ -338,15 +333,13 @@ namespace BayClinicCernerAmbulatory
                     {
 
                         var DuplicateAddressrQuery = from PatientAddress in PgPatient.PhysicalAddresses
-                                                            where PatientAddress.Address.Line1 == AddressDoc.AddressLine1 && PatientAddress.Address.City == AddressDoc.CityText
+                                                            where PatientAddress.Address.Line1 == AddressDoc.AddressLine1 && PatientAddress.Address.City == AddressDoc.CityText //Should I check more fields?
                                                             select PatientAddress;
 
                         PhysicalAddress NewPgRecord = DuplicateAddressrQuery.FirstOrDefault();
 
-                        if(AddressDoc.MergeWithExistingPhysicalAddress(ref NewPgRecord, ref PgPatient, ReferencedCodes))
-                        {
-                            int i = 42;
-                        }
+                        if(AddressDoc.MergeWithExistingPhysicalAddress(ref NewPgRecord, ref PgPatient, ReferencedCodes)) { int i = 42;  }
+
 
                         CdrDb.Context.PhysicalAddresses.InsertOnSubmit(NewPgRecord);
                         CdrDb.Context.SubmitChanges();
@@ -381,19 +374,13 @@ namespace BayClinicCernerAmbulatory
                 {
                     foreach (MongodbIdentifierEntity IdentifierDoc in IdentifierCursor.Current)
                     {
-                        IdentifierCounter++;
-                        DateTime ActiveStatusDT;
-                        DateTime.TryParse(IdentifierDoc.ActiveStatusDateTime, out ActiveStatusDT);
+                        var DuplicatePatientIdentifierQuery = from Identifier in PgPatient.PatientIdentifiers
+                                                            where IdentifierDoc.Identifier == Identifier.Identifier
+                                                            select Identifier;
 
-                        PatientIdentifier NewPgRecord = new PatientIdentifier
-                        {
-                            Identifier = IdentifierDoc.Identifier,
-                            IdentifierType = ReferencedCodes.IdentifierTypeCodeMeanings[IdentifierDoc.IdentifierType],
-                            Organization = OrganizationObject,
-                            Patient = PgPatient,
-                            DateFirstReported = ActiveStatusDT,
-                            DateLastReported = ActiveStatusDT
-                        };
+                        PatientIdentifier NewPgRecord = DuplicatePatientIdentifierQuery.FirstOrDefault();
+
+                        if (IdentifierDoc.MergeWithExistingPatientIdentifiers(ref NewPgRecord, ref PgPatient, ReferencedCodes, OrganizationObject)) { int i = 42;  }
 
                         CdrDb.Context.PatientIdentifiers.InsertOnSubmit(NewPgRecord);
                         CdrDb.Context.SubmitChanges();
