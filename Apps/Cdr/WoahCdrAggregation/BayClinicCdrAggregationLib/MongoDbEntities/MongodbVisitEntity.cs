@@ -103,7 +103,7 @@ namespace BayClinicCernerAmbulatory
             DateTime.TryParse(UpdateDateTime, out UpdateTime);
             if (VisitRecord == null)
             {
-                VisitEncounter NewPgRecord = new VisitEncounter
+                 VisitRecord = new VisitEncounter
                 {
                     EmrIdentifier = UniqueVisitIdentifier,
                     BeginDateTime = BeginDateTime,  // TODO Is this right?

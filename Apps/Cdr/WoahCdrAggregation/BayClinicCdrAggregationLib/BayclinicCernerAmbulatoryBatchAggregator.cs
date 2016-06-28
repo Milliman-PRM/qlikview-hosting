@@ -452,9 +452,9 @@ namespace BayClinicCernerAmbulatory
                     {
                         //Should return any new visits that are already in the cdr database
                         var DuplicateVisitQuery = from Visit in PatientVisitQuery             
-                                                  where VisitDoc.UniquePersonIdentifier == Visit.EmrIdentifier
+                                                  where VisitDoc.UniqueVisitIdentifier == Visit.EmrIdentifier
                                                   select Visit;
-                        VisitEncounter NewPgRecord = DuplicateVisitQuery.FirstOrDefault();                  //Make sure this acutally makes sense and fix it
+                        VisitEncounter NewPgRecord = DuplicateVisitQuery.FirstOrDefault();                  
 
                         if (VisitDoc.MergeWithExistingVisit(ref NewPgRecord, ref PatientRecord, ReferencedCodes, ref CdrDb))
                         {
