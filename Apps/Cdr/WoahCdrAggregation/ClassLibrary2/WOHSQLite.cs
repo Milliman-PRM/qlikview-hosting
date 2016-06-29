@@ -31,7 +31,7 @@ namespace WOHSQLInterface
         //Specific to WOH. Makes sure the information passed along matches what we have stored in our WOH database
         public bool CheckMembershipStatus(string MemberID, string FirstName, string LastName, string DOB)
         {
-            Reader = Command.ExecuteReader();
+            Reader = Command.ExecuteReader();           //Does the reader need to be in here or can it be placed in the connect function? Would improve runtime but reader may be corrupt from last run 
 
             string PersonKey = LastName.ToLower() + ", " + FirstName.ToLower();
             string DOBKey = DOB.Split(' ')[0];
@@ -55,9 +55,7 @@ namespace WOHSQLInterface
 
         public void Disconnect()
         {
-            Command.Dispose();
-            Connection.Close();
-            Reader.Close();
+            WOHSQLConnection.Disconnect();
         }
     }
 }

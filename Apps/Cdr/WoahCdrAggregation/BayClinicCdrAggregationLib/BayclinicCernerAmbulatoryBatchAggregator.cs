@@ -37,7 +37,7 @@ namespace BayClinicCernerAmbulatory
 
         private int WOAHPatientCounter = 0;
 
-        //Init the the conncetion to the sql dataset
+        //Init the the interface to the sql dataset
         WOHSQLiteInterface WOHInterface = new WOHSQLiteInterface();
         
 
@@ -111,6 +111,7 @@ namespace BayClinicCernerAmbulatory
             ThisAggregationRun = GetNewAggregationRun();
             Initialized &= ThisAggregationRun.dbid > 0;
 
+            //Connect to the sql database
             WOHInterface.Connect();
 
             MongoRunUpdater = new MongoAggregationRunUpdater(ThisAggregationRun.dbid, MongoCxn.Db);
@@ -164,6 +165,7 @@ namespace BayClinicCernerAmbulatory
                 }
             }
 
+            //Disconnect after the the database is done being used
             WOHInterface.Disconnect();
 
             ThisAggregationRun.StatusFlags = AggregationRunStatus.Complete;
