@@ -153,16 +153,20 @@ namespace BayClinicCernerAmbulatory
                     {
                         PatientCounter++;
                         var InsuranceCoverageQuery = InsuranceCollection.AsQueryable()
-                                                                    .Where(x => x.UniqueEntityIdentifier == PersonDocument.UniquePersonIdentifier);
-                        MongodbInsuranceEntity PatientCoverageID = InsuranceCoverageQuery.FirstOrDefault();
-                        if(ReferencedCodes.InsuranceCodeMeanings[PatientCoverageID.Type] != "Medicaid")
-                            continue;
-                        if (!WOHInterface.CheckMembershipStatus(PatientCoverageID.MemberNumber, PersonDocument.LastName, PersonDocument.FirstName, PersonDocument.BirthDateTime))
-                            continue;
-                        WOHPatientCounter++;
-                        
-                        bool ThisPatientAggregationResult = AggregateOnePatient(PersonDocument);
-                        OverallResult &= ThisPatientAggregationResult;
+                                                           .Where(x => x.UniqueEntityIdentifier == PersonDocument.UniquePersonIdentifier);
+                       foreach(MongodbInsuranceEntity PatientCoverageID in InsuranceCoverageQuery)
+                        {
+                            if (ReferencedCodes.InsuranceCodeMeanings[PatientCoverageID.Type] == "Medicaid" 
+                                                        && WOHInterface.CheckMembershipStatus(PatientCoverageID.MemberNumber, PersonDocument.LastName, PersonDocument.FirstName, PersonDocument.BirthDateTime))
+                            {
+                                WOHPatientCounter++;
+
+                                bool ThisPatientAggregationResult = AggregateOnePatient(PersonDocument);
+                                OverallResult &= ThisPatientAggregationResult;
+                                break;
+                            }
+                                
+                        }
                     }
                 }
             }
