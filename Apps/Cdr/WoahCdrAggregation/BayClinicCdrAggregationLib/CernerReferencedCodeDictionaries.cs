@@ -38,6 +38,7 @@ namespace BayClinicCernerAmbulatory
         public Dictionary<String, String> ResultUnitsCodeMeanings = new Dictionary<string, string>();
         public Dictionary<String, String> TerminologyCodeMeanings = new Dictionary<string, string>();
         public Dictionary<String, String> ImmunizationCodeMeanings = new Dictionary<string, string>();
+        public Dictionary<String, String> InsuranceCodeMeanings = new Dictionary<String, String>();
         //public Dictionary<String, String> ...CodeMeanings = new Dictionary<string, string>();
 
         #region temporary validation functions
@@ -103,6 +104,8 @@ namespace BayClinicCernerAmbulatory
                 && InitializeReferenceCodeDictionary("REFERENCETERMINOLOGY", new String[] { "TERMINOLOGY" }, ref TerminologyCodeMeanings)
 
                 && InitializeReferenceCodeDictionary("IMMUNIZATION", new String[] { "CODE" }, ref ImmunizationCodeMeanings)
+
+                && InitializeReferenceCodeDictionary("INSURANCE", new String[] { "TYPE" }, ref InsuranceCodeMeanings)
 
                 ;
             

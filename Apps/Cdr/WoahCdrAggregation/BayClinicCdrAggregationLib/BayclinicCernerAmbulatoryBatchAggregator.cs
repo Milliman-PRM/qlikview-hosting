@@ -123,7 +123,7 @@ namespace BayClinicCernerAmbulatory
         {
             bool OverallResult = true;
             int PatientCounter = 0;
-            
+            int WOHPatientCounter = 0;
 
             if (!InitializeRun())
             {
@@ -151,14 +151,16 @@ namespace BayClinicCernerAmbulatory
                 {
                     foreach (MongodbPersonEntity PersonDocument in PersonCursor.Current)
                     {
+                        PatientCounter++;
                         var InsuranceCoverageQuery = InsuranceCollection.AsQueryable()
                                                                     .Where(x => x.UniqueEntityIdentifier == PersonDocument.UniquePersonIdentifier);
                         MongodbInsuranceEntity PatientCoverageID = InsuranceCoverageQuery.FirstOrDefault();
-
+                        if(ReferencedCodes.InsuranceCodeMeanings[PatientCoverageID.Type] != "Medicaid")
+                            continue;
                         if (!WOHInterface.CheckMembershipStatus(PatientCoverageID.MemberNumber, PersonDocument.LastName, PersonDocument.FirstName, PersonDocument.BirthDateTime))
                             continue;
-
-                        PatientCounter++;
+                        WOHPatientCounter++;
+                        
                         bool ThisPatientAggregationResult = AggregateOnePatient(PersonDocument);
                         OverallResult &= ThisPatientAggregationResult;
                     }
