@@ -151,13 +151,13 @@ namespace BayClinicCernerAmbulatory
                 {
                     foreach (MongodbPersonEntity PersonDocument in PersonCursor.Current)
                     {
-                        /*
-                         * Membership test should be here, not in Insurance
-                        if (Patient was never a WOAH member) 
-                        {
+                        var InsuranceCoverageQuery = InsuranceCollection.AsQueryable()
+                                                                    .Where(x => x.UniqueEntityIdentifier == PersonDocument.UniquePersonIdentifier);
+                        MongodbInsuranceEntity PatientCoverageID = InsuranceCoverageQuery.FirstOrDefault();
+
+                        if (!WOHInterface.CheckMembershipStatus(PatientCoverageID.MemberNumber, PersonDocument.LastName, PersonDocument.FirstName, PersonDocument.BirthDateTime))
                             continue;
-                        }
-                        */
+
                         PatientCounter++;
                         bool ThisPatientAggregationResult = AggregateOnePatient(PersonDocument);
                         OverallResult &= ThisPatientAggregationResult;
@@ -178,6 +178,8 @@ namespace BayClinicCernerAmbulatory
 
         private bool AggregateOnePatient(MongodbPersonEntity PersonDocument)
         {
+
+
             DateTime ParsedDateTime;
             bool OverallSuccess = true;
 
@@ -674,12 +676,11 @@ namespace BayClinicCernerAmbulatory
 
                         //Verify that the patient is on Medicade
                         // Let's discuss what this is accomplishing
-                        if (InsuranceCoverageDoc.Type != "24198546")  // better to look into a code dictionary to interpret this
-                            return false;  // I think continue; would be more correct here.  
+                        //if (InsuranceCoverageDoc.Type != "24198546")  // better to look into a code dictionary to interpret this
+                        //   return false;  // I think continue; would be more correct here.  
 
                         //Verify patient is in our WOAH Database
-                        if(!WOHInterface.CheckMembershipStatus(InsuranceCoverageDoc.MemberNumber, MongoPerson.LastName, MongoPerson.FirstName, MongoPerson.BirthDateTime))
-                            return false;
+
                         
 
                         InsuranceCoverage NewPgRecord = new InsuranceCoverage
