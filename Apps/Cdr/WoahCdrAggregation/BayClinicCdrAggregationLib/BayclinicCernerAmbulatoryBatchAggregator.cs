@@ -271,17 +271,18 @@ namespace BayClinicCernerAmbulatory
         /// <summary>
         /// Aggregate the telephone numbers associated with a specified patient
         /// </summary>
-        /// <param name="MongoPerson"></param>
+        /// <param name="PersonDoc"></param>
         /// <param name="PgPatient"></param>
         /// <returns></returns>
-         private bool AggregateTelephoneNumbers(MongodbPersonEntity MongoPerson, Patient PgPatient)
+         private bool AggregateTelephoneNumbers(MongodbPersonEntity PersonDoc, Patient PgPatient)
         {
             FilterDefinition<MongodbPhoneEntity> PhoneFilterDef = Builders<MongodbPhoneEntity>.Filter
                 .Where(
                          x => x.EntityType == "PERSON"
-                      && x.EntityIdentifier == MongoPerson.UniquePersonIdentifier
+                      && x.EntityIdentifier == PersonDoc.UniquePersonIdentifier
                       && !(x.LastAggregationRun > 0)     // not previously aggregated
-                      && (x.ImportFile.StartsWith(MongoPerson.ImportFile.Substring(0, 12)))  // match the extract date from PersonDoc.ImportFile 
+                      && x.ImportFileDate == GetImportDateFromFileName(PersonDoc.ImportFile)
+                      //&& (x.ImportFile.StartsWith(PersonDoc.ImportFile.Substring(0, 12)))  // match the extract date from PersonDoc.ImportFile 
                       );
 
             using (var PhoneCursor = PhoneCollection.Find<MongodbPhoneEntity>(PhoneFilterDef).ToCursor())
@@ -320,17 +321,18 @@ namespace BayClinicCernerAmbulatory
         /// <summary>
         /// Aggregate the address data associated with a specified patient
         /// </summary>
-        /// <param name="MongoPerson"></param>
+        /// <param name="PersonDoc"></param>
         /// <param name="PgPatient"></param>
         /// <returns></returns>
-        private bool AggregateAddresses(MongodbPersonEntity MongoPerson, Patient PgPatient)
+        private bool AggregateAddresses(MongodbPersonEntity PersonDoc, Patient PgPatient)
         {
             FilterDefinition<MongodbAddressEntity> AddressFilterDef = Builders<MongodbAddressEntity>.Filter
                 .Where(
                          x => x.EntityType == "PERSON"
-                      && x.EntityIdentifier == MongoPerson.UniquePersonIdentifier
+                      && x.EntityIdentifier == PersonDoc.UniquePersonIdentifier
                       && !(x.LastAggregationRun > 0)     // not previously aggregated
-                      && (x.ImportFile.StartsWith(MongoPerson.ImportFile.Substring(0, 12)))  // match the extract date from PersonDoc.ImportFile 
+                      && x.ImportFileDate == GetImportDateFromFileName(PersonDoc.ImportFile)
+                      //&& (x.ImportFile.StartsWith(PersonDoc.ImportFile.Substring(0, 12)))  // match the extract date from PersonDoc.ImportFile 
                       );
 
             using (var AddressCursor = AddressCollection.Find<MongodbAddressEntity>(AddressFilterDef).ToCursor())
@@ -376,17 +378,18 @@ namespace BayClinicCernerAmbulatory
         /// <summary>
         /// Aggregate the identifiers associated with a specified patient
         /// </summary>
-        /// <param name="MongoPerson"></param>
+        /// <param name="PersonDoc"></param>
         /// <param name="PgPatient"></param>
         /// <returns></returns>
-        private bool AggregateIdentifiers(MongodbPersonEntity MongoPerson, Patient PgPatient)
+        private bool AggregateIdentifiers(MongodbPersonEntity PersonDoc, Patient PgPatient)
         {
             FilterDefinition<MongodbIdentifierEntity> IdentifierFilterDef = Builders<MongodbIdentifierEntity>.Filter
                 .Where(
                          x => x.EntityType == "PERSON"
-                      && x.EntityIdentifier == MongoPerson.UniquePersonIdentifier
+                      && x.EntityIdentifier == PersonDoc.UniquePersonIdentifier
                       && !(x.LastAggregationRun > 0)     // not previously aggregated
-                      && (x.ImportFile.StartsWith(MongoPerson.ImportFile.Substring(0, 12)))  // match the extract date from PersonDoc.ImportFile 
+                      && x.ImportFileDate == GetImportDateFromFileName(PersonDoc.ImportFile)
+                      //&& (x.ImportFile.StartsWith(MongoPerson.ImportFile.Substring(0, 12)))  // match the extract date from PersonDoc.ImportFile 
                       );
 
             using (var IdentifierCursor = IdentifierCollection.Find<MongodbIdentifierEntity>(IdentifierFilterDef).ToCursor())
@@ -434,7 +437,8 @@ namespace BayClinicCernerAmbulatory
                 .Where(
                          x => x.UniquePersonIdentifier == PersonDoc.UniquePersonIdentifier
                       && !(x.LastAggregationRun > 0)     // not previously aggregated
-                      && (x.ImportFile.StartsWith(PersonDoc.ImportFile.Substring(0, 12)))  // match the extract date from PersonDoc.ImportFile 
+                      && x.ImportFileDate == GetImportDateFromFileName(PersonDoc.ImportFile)
+                      //&& (x.ImportFile.StartsWith(PersonDoc.ImportFile.Substring(0, 12)))  // match the extract date from PersonDoc.ImportFile 
                       );
 
             using (var VisitCursor = VisitCollection.Find<MongodbVisitEntity>(VisitFilterDef).ToCursor())
@@ -483,16 +487,17 @@ namespace BayClinicCernerAmbulatory
         /// <summary>
         /// Aggregate the charge data associated with a specified visit
         /// </summary>
-        /// <param name="MongoVisit"></param>
+        /// <param name="VisitDoc"></param>
         /// <param name="PgVisit"></param>
         /// <returns></returns>
-        private bool AggregateCharges(MongodbVisitEntity MongoVisit, VisitEncounter PgVisit)
+        private bool AggregateCharges(MongodbVisitEntity VisitDoc, VisitEncounter PgVisit)
         {
             FilterDefinition<MongodbChargeEntity> ChargeFilterDef = Builders<MongodbChargeEntity>.Filter
                 .Where(
-                         x => x.UniqueVisitIdentifier == MongoVisit.UniqueVisitIdentifier
+                         x => x.UniqueVisitIdentifier == VisitDoc.UniqueVisitIdentifier
                       && !(x.LastAggregationRun > 0)     // not previously aggregated
-                      && (x.ImportFile.StartsWith(MongoVisit.ImportFile.Substring(0, 12)))  // match the extract date from PersonDoc.ImportFile 
+                      && x.ImportFileDate == GetImportDateFromFileName(VisitDoc.ImportFile)
+                      //&& (x.ImportFile.StartsWith(MongoVisit.ImportFile.Substring(0, 12)))  // match the extract date from PersonDoc.ImportFile 
                       );
 
             using (var ChargeCursor = ChargeCollection.Find<MongodbChargeEntity>(ChargeFilterDef).ToCursor())
@@ -559,7 +564,8 @@ namespace BayClinicCernerAmbulatory
                 .Where(
                          x => x.UniqueChargeItemIdentifier == ChargeDoc.UniqueChargeItemIdentifier
                       && !(x.LastAggregationRun > 0)     // not previously aggregated
-                      && (x.ImportFile.StartsWith(ChargeDoc.ImportFile.Substring(0, 12)))  // match the extract date from PersonDoc.ImportFile 
+                      && x.ImportFileDate == GetImportDateFromFileName(ChargeDoc.ImportFile)
+                      //&& (x.ImportFile.StartsWith(ChargeDoc.ImportFile.Substring(0, 12)))  // match the extract date from PersonDoc.ImportFile 
                       );
 
             using (var ChargeDetailCursor = ChargeDetailCollection.Find<MongodbChargeDetailEntity>(ChargeDetailFilterDef).ToCursor())
@@ -609,7 +615,8 @@ namespace BayClinicCernerAmbulatory
                        x.UniquePersonIdentifier == PersonDoc.UniquePersonIdentifier
                     && x.UniqueVisitIdentifier == VisitDoc.UniqueVisitIdentifier
                     && !(x.LastAggregationRun > 0)     // not previously aggregated
-                   && (x.ImportFile.StartsWith(PersonDoc.ImportFile.Substring(0, 12)))  // match the extract date from PersonDoc.ImportFile 
+                    && x.ImportFileDate == GetImportDateFromFileName(PersonDoc.ImportFile)
+                    //&& (x.ImportFile.StartsWith(PersonDoc.ImportFile.Substring(0, 12)))  // match the extract date from PersonDoc.ImportFile 
                       );
 
             using (var ResultCursor = ResultCollection.Find<MongodbResultEntity>(ResultFilterDef).ToCursor())
@@ -666,7 +673,8 @@ namespace BayClinicCernerAmbulatory
                        x.UniquePersonIdentifier == PersonDoc.UniquePersonIdentifier
                     && x.UniqueVisitIdentifier == VisitDoc.UniqueVisitIdentifier
                     && !(x.LastAggregationRun > 0)     // not previously aggregated
-                    && (x.ImportFile.StartsWith(PersonDoc.ImportFile.Substring(0, 12)))  // match the extract date from PersonDoc.ImportFile 
+                    && x.ImportFileDate == GetImportDateFromFileName(PersonDoc.ImportFile)
+                    //&& (x.ImportFile.StartsWith(PersonDoc.ImportFile.Substring(0, 12)))  // match the extract date from PersonDoc.ImportFile 
                       );
 
             using (var DiagnosisCursor = DiagnosisCollection.Find<MongodbDiagnosisEntity>(DiagnosisFilterDef).ToCursor())
@@ -728,17 +736,18 @@ namespace BayClinicCernerAmbulatory
         /// <summary>
         /// Aggregate the insurance associated with a specified patient
         /// </summary>
-        /// <param name="MongoPerson"></param>
+        /// <param name="PersonDoc"></param>
         /// <param name="PgPatient"></param>
         /// <returns></returns>
-        private bool AggregateInsuranceCoverages(MongodbPersonEntity MongoPerson, Patient PgPatient)
+        private bool AggregateInsuranceCoverages(MongodbPersonEntity PersonDoc, Patient PgPatient)
         {
             FilterDefinition<MongodbInsuranceEntity> InsuranceCoverageFilterDef = Builders<MongodbInsuranceEntity>.Filter
                 .Where(
                          x => x.EntityType == "PERSON"
-                      && x.UniqueEntityIdentifier == MongoPerson.UniquePersonIdentifier
+                      && x.UniqueEntityIdentifier == PersonDoc.UniquePersonIdentifier
                       && !(x.LastAggregationRun > 0)     // not previously aggregated
-                      && (x.ImportFile.StartsWith(MongoPerson.ImportFile.Substring(0, 12)))  // match the extract date from PersonDoc.ImportFile 
+                      && x.ImportFileDate == GetImportDateFromFileName(PersonDoc.ImportFile)
+                      //&& (x.ImportFile.StartsWith(MongoPerson.ImportFile.Substring(0, 12)))  // match the extract date from PersonDoc.ImportFile 
                       );
 
             using (var InsuranceCoverageCursor = InsuranceCollection.Find<MongodbInsuranceEntity>(InsuranceCoverageFilterDef).ToCursor())
@@ -787,7 +796,8 @@ namespace BayClinicCernerAmbulatory
                        x.UniquePersonIdentifier == PersonDoc.UniquePersonIdentifier
                     && x.UniqueVisitIdentifier == VisitDoc.UniqueVisitIdentifier
                     && !(x.LastAggregationRun > 0)     // not previously aggregated
-                    && (x.ImportFile.StartsWith(PersonDoc.ImportFile.Substring(0, 12)))  // match the extract date from PersonDoc.ImportFile 
+                    && x.ImportFileDate == GetImportDateFromFileName(PersonDoc.ImportFile)
+                    //&& (x.ImportFile.StartsWith(PersonDoc.ImportFile.Substring(0, 12)))  // match the extract date from PersonDoc.ImportFile 
                       );
 
             using (var ImmunizationCursor = ImmunizationCollection.Find<MongodbImmunizationEntity>(ImmunizationFilterDef).ToCursor())
@@ -841,7 +851,8 @@ namespace BayClinicCernerAmbulatory
                        x.UniquePersonIdentifier == PersonDoc.UniquePersonIdentifier
                     && x.UniqueVisitIdentifier == VisitDoc.UniqueVisitIdentifier
                     && !(x.LastAggregationRun > 0)     // not previously aggregated
-                    && (x.ImportFile.StartsWith(PersonDoc.ImportFile.Substring(0, 12)))  // match the extract date from PersonDoc.ImportFile 
+                    && x.ImportFileDate == GetImportDateFromFileName(PersonDoc.ImportFile)
+                    //&& (x.ImportFile.StartsWith(PersonDoc.ImportFile.Substring(0, 12)))  // match the extract date from PersonDoc.ImportFile 
                       );
 
             using (var MedicationCursor = MedicationCollection.Find<MongodbMedicationEntity>(MedicationFilterDef).ToCursor())
@@ -941,7 +952,8 @@ namespace BayClinicCernerAmbulatory
             FilterDefinition<MongodbProblemEntity> ProblemFilterDef = ProblemFilterBuilder.Where(x =>
                        x.UniquePersonIdentifier == PersonDoc.UniquePersonIdentifier
                     && !(x.LastAggregationRun > 0)     // not previously aggregated
-                    && (x.ImportFile.StartsWith(PersonDoc.ImportFile.Substring(0,12)))  // match the extract date from PersonDoc.ImportFile
+                    && x.ImportFileDate == GetImportDateFromFileName(PersonDoc.ImportFile)
+                    //&& (x.ImportFile.StartsWith(PersonDoc.ImportFile.Substring(0,12)))  // match the extract date from PersonDoc.ImportFile
                       );
 
             // Following logic will be relevant for Allscripts, not Cerner
@@ -987,6 +999,10 @@ namespace BayClinicCernerAmbulatory
             return true;
         }
 
+        private String GetImportDateFromFileName(String FileName)
+        {
+            return FileName.Substring(8, 4) + FileName.Substring(4, 2) + FileName.Substring(6, 2);
+        }
 
         /// <summary>
         /// Establishes, stores, and returns a new aggregation run record for the current run

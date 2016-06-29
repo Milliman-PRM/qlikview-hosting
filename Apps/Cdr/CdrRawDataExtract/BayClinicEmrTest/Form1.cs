@@ -51,7 +51,7 @@ namespace CdrExtractTest
 
             try
             {
-                Parser.MigrateFolderToMongo(txtFolder.Text, chkMongoInsert.Checked,Path.Combine(txtFolder.Text, "Archive"));
+                Parser.MigrateFolderToMongo(txtFolder.Text, chkMongoInsert.Checked, checkArchive.Checked ? Path.Combine(txtFolder.Text, "Archive") : null);
             }
             catch (Exception ex)
             {
