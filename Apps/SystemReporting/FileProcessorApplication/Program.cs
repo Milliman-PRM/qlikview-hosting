@@ -1,11 +1,10 @@
 ﻿using FileProcessor;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Configuration;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SystemReporting.Utilities;
+using SystemReporting.Utilities.ExceptionHandling;
+using C = SystemReporting.Utilities.Constants;
 
 namespace FileProcessorApplication
 {
@@ -20,21 +19,25 @@ namespace FileProcessorApplication
                 //args = ProcessFileFromUserInput(args);
                 if (CheckArgs(args))
                 {
-                    FileProcessor.ProcessFile.ExecuteProcessFile(args);
+                    ProcessFile.ExecuteProcessFile(args);
                 }
                 else
                 {
                     var argsProcessAll = new string[] { "Iis", "Audit", "Session" };
                     for (int i = 0; i < argsProcessAll.Length; i++)
                     {
-                        FileProcessor.ProcessFile.ExecuteProcessFile(new string[] { argsProcessAll[i] });
+                        ProcessFile.ExecuteProcessFile(new string[] { argsProcessAll[i] });
                     }
                 }
+                if (C.ERROR_LOGGED)
+                {
+                    ExceptionLogger.SendErrorEmail(GetExceptionDirectory(),"System Reporting Exceptions");
+                }               
                 Environment.ExitCode = 0;
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, "ProcessFile: Failed processing file. || " + args.ToArray(), true);
+                ExceptionLogger.LogError(ex, "ProcessFile: Failed processing file. || " + args.ToArray(), "Program File Processor Application");
             }
         }
 
@@ -148,6 +151,15 @@ namespace FileProcessorApplication
                 Console.WriteLine("Ex: FileProcessorApplication.exe   C:\\ProductionLogs\\IISLogs\\u_ex151002.log  ");
                 Console.WriteLine("--------------------------------------------------");
             }
+        }
+
+        private static string GetExceptionDirectory()
+        {
+            // For Example - D:\Projects\SomeProject\SomeFolder
+            return (ConfigurationManager.AppSettings != null &&
+                    ConfigurationManager.AppSettings["ExceptionFileDirectory"] != null) ?
+                    ConfigurationManager.AppSettings["ExceptionFileDirectory"].ToString() :
+                    string.Empty;
         }
     }
 }

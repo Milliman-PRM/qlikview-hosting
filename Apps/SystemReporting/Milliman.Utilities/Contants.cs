@@ -9,6 +9,9 @@ namespace SystemReporting.Utilities
     public static class Constants
     {
         public const string DEFAULT_MICROSOFT_TIME_ZONE_ID = "Eastern Standard Time";
+        
+        //everytime an error is recorded, this will be set
+        public static bool ERROR_LOGGED = false;
 
         #region DB Namespace
 

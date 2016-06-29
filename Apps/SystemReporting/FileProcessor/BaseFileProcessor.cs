@@ -1,8 +1,6 @@
-﻿using SystemReporting.Controller;
+﻿using System;
+using SystemReporting.Controller;
 using SystemReporting.Controller.BusinessLogic.Controller;
-using System;
-using System.Configuration;
-using SystemReporting.Utilities.Email;
 
 namespace FileProcessor
 {
@@ -87,9 +85,6 @@ namespace FileProcessor
     /// </summary>
     public class BaseFileProcessor
     {
-        //switch to using the generic logger
-        public static log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.
-                                                                               MethodBase.GetCurrentMethod().DeclaringType);
         #region FileProcessed
 
         /// <summary>
@@ -110,30 +105,6 @@ namespace FileProcessor
             aFile.Close();
         }
         #endregion
-
-        #region Error Log     
-        //Logs error. It will create file at the directory if file does not exist   
-        public static void LogError(Exception ex, string message, bool sendEmail)
-        {
-            if (!string.IsNullOrEmpty(message))
-            {
-                log.Error(DateTime.Now + " Todays Exceptions: ~ " + "||-||" + message + "||-||", ex);
-            }
-            else
-            {
-                log.Error(DateTime.Now + " Todays Exceptions: ~ " + "||-||", ex);
-            }
-
-            if (sendEmail)
-                SendEmail(message,"");
-        }
-        public static void SendEmail(string message, string subject)
-        {
-            Notification.SendNotification("Exception file has a new exception recorded. Please cehck the file at the file locaion "
-            + ConfigurationManager.AppSettings["ExceptionFileDirectory"].ToString(),
-                "System Reporting");
-        }
-        #endregion        
     }
     #endregion
 }

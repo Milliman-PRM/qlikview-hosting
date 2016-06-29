@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
+using System.IO;
+using System.Text;
 using SystemReporting.Entities.Models;
 using SystemReporting.Utilities;
-using System.IO;
-using System.ComponentModel;
-using System.Reflection;
-using System.Data;
-using System.Text;
+using SystemReporting.Utilities.ExceptionHandling;
 
 namespace ReportFileGenerator
 {
@@ -17,23 +16,31 @@ namespace ReportFileGenerator
                                                     string reportType, string outputType, string logReportName, string fileNameWithFolderPath)
         {
 
-            var reportName = (!string.IsNullOrEmpty(logReportName) ? logReportName : GetLogReportName());
-
-            var reportTypeEum = (Enumerations.eReportType)Enum.Parse(typeof(Enumerations.eReportType), reportType);
-            switch (reportTypeEum)
+            try
             {
-                case Enumerations.eReportType.Group:
-                    ProcessReportGenerateForGroupName(startDateValue, endDateValue, reportName, outputType, fileNameWithFolderPath);
-                    break;
-                case Enumerations.eReportType.Report:
-                    ProcessReportGenerateForReportName(startDateValue, endDateValue, reportName, outputType, fileNameWithFolderPath);
-                    break;
-                case Enumerations.eReportType.User:
-                    ProcessReportGenerateForUserName(startDateValue, endDateValue, reportName, outputType, fileNameWithFolderPath);
-                    break;
-                default:
-                    throw new ApplicationException("Output type not supported");
+                var reportName = (!string.IsNullOrEmpty(logReportName) ? logReportName : GetLogReportName());
+
+                var reportTypeEum = (Enumerations.eReportType)Enum.Parse(typeof(Enumerations.eReportType), reportType);
+                switch (reportTypeEum)
+                {
+                    case Enumerations.eReportType.Group:
+                        ProcessReportGenerateForGroupName(startDateValue, endDateValue, reportName, outputType, fileNameWithFolderPath);
+                        break;
+                    case Enumerations.eReportType.Report:
+                        ProcessReportGenerateForReportName(startDateValue, endDateValue, reportName, outputType, fileNameWithFolderPath);
+                        break;
+                    case Enumerations.eReportType.User:
+                        ProcessReportGenerateForUserName(startDateValue, endDateValue, reportName, outputType, fileNameWithFolderPath);
+                        break;
+                    default:
+                        throw new ApplicationException("Output type not supported");
+                }
             }
+            catch (Exception ex)
+            {
+                ExceptionLogger.LogError(ex, "Exception Raised in Method GenerateReport. ", "GenerateQVAuditLogsReport Exceptions");
+            }
+
         }
 
         public static void ProcessReportGenerateForGroupName(DateTime? startDateValue, DateTime? endDateValue,
@@ -157,23 +164,28 @@ namespace ReportFileGenerator
         private static void GenerateExcel(List<AuditLog> list, string fileNameWithFolderPath)
         {
             var dt = ExtensionMethods.ToDataTable(list);
-            if (dt!=null)
+            if (dt != null)
             {
                 dt.Columns.Remove("ListIisLog");
                 dt.Columns.Remove("ListSessionLog");
                 dt.Columns.Remove("ListAuditLog");
+                dt.Columns.Remove("ReportDesctiption");
+                dt.Columns.Remove("Description");
 
                 var file = string.Empty;
                 if (string.IsNullOrEmpty(fileNameWithFolderPath))
                 {
                     //Save Back To File
-                    file = GetFileDirectroy() + "AuditLog" + "_" + DateTime.Now.ToString("MMdd_hhmm") + ".xls";                }
+                    file = GetFileDirectroy() + "AuditLog" + "_" + DateTime.Now.ToString("MMdd_hhmm") + ".xls";
+                }
                 else
                 {
                     file = fileNameWithFolderPath;
                 }
-                ExtensionMethods.ExportToExcel(dt, file);
-            }            
+
+                var HtmlBody = ExtensionMethods.ExportDatatableToHtml(dt);
+                File.WriteAllText(file, HtmlBody);
+            }
         }
 
         #region Report By GroupName
@@ -196,7 +208,7 @@ namespace ReportFileGenerator
         {
             GenerateExcel(list, fileNameWithFolderPath);
         }
-               
+
 
         public static void GenerateTxtFileForGroupName(List<AuditLog> list, string fileNameWithFolderPath)
         {
@@ -227,7 +239,7 @@ namespace ReportFileGenerator
         {
             GenerateCSV(list, fileNameWithFolderPath);
         }
-              
+
         public static void GenerateExcelFileForUserName(List<AuditLog> list, string fileNameWithFolderPath)
         {
             GenerateExcel(list, fileNameWithFolderPath);

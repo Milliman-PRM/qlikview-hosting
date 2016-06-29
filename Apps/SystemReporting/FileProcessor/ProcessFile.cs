@@ -1,11 +1,7 @@
-﻿using SystemReporting.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 using System.IO;
-using System.Text.RegularExpressions;
+using System.Linq;
+using SystemReporting.Utilities.ExceptionHandling;
 
 namespace FileProcessor
 {
@@ -19,7 +15,7 @@ namespace FileProcessor
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, "ProcessFile: Failed processing file. || " + args.ToArray(), true);
+                ExceptionLogger.LogError(ex, "Exception Raised in Method ExecuteProcessFile. Failed processing file " + args.ToArray(), "ProcessFile Exceptions");
             }
         }
         private static void ProcessLogfiles(string[] args)

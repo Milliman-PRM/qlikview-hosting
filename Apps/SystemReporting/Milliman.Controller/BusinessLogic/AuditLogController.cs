@@ -1,11 +1,10 @@
-﻿using SystemReporting.Data.Repository;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using SystemReporting.Entities.Models;
 using SystemReporting.Entities.Proxy;
 using SystemReporting.Service;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using SystemReporting.Utilities;
+using SystemReporting.Utilities.ExceptionHandling;
 
 namespace SystemReporting.Controller.BusinessLogic.Controller
 {
@@ -101,8 +100,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
             catch (Exception ex)
             {
                 dbService.Dispose();
-                log.Error("Class AuditLogController. Method ProcessLogs.", ex);
-                SendEmail("Exception Raised", "Audit Log Controller Exception");         
+                ExceptionLogger.LogError(ex, "Exception Raised in Method ProcessLogs.", "AuditLog Controller Exception");
             }
             return blnSucessful;
         }

@@ -1,15 +1,7 @@
 ﻿using ReportFileGenerator;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using SystemReporting.Controller.BusinessLogic.Controller;
 using SystemReporting.Entities.Models;
 
 namespace SystemReportingWinUI
@@ -26,11 +18,11 @@ namespace SystemReportingWinUI
             PopulateDDLReportName();
             PopulateDDLUserName();
         }
-        
+
         void Display()
         {
             this.Text = string.Format("Text: {0}; SelectedIndex: {1}; SelectedValue:{2}",
-                                        _text,_selectedIndex, _selectedValue);
+                                        _text, _selectedIndex, _selectedValue);
         }
 
         #region Populate/Load
@@ -51,7 +43,7 @@ namespace SystemReportingWinUI
             ddlReportName.DataSource = listResults;
             ddlReportName.DisplayMember = "ReportName";
             ddlReportName.ValueMember = "Id";
-            ddlReportName.SelectedIndex = -1;            
+            ddlReportName.SelectedIndex = -1;
         }
         public void PopulateDDLUserName()
         {
@@ -60,7 +52,7 @@ namespace SystemReportingWinUI
             ddlUserName.DataSource = listResults;
             ddlUserName.DisplayMember = "UserName";
             ddlUserName.ValueMember = "Id";
-            ddlUserName.SelectedIndex = -1;            
+            ddlUserName.SelectedIndex = -1;
 
         }
 
@@ -112,7 +104,7 @@ namespace SystemReportingWinUI
             _selectedValue = ddlUserName.SelectedValue.ToString();
             Display();
         }
-        
+
         private void txtFolderBrowser_DoubleClick_1(object sender, EventArgs e)
         {
             var R = folderBrowserDialog.ShowDialog();
@@ -127,7 +119,6 @@ namespace SystemReportingWinUI
             {
                 if (MessageBox.Show("You can only select one Category for report", "Close Application", MessageBoxButtons.OK) != DialogResult.OK)
                 {
-
                 }
             }
             else
@@ -169,6 +160,13 @@ namespace SystemReportingWinUI
                 //Get Report output type
                 var reportOutPutType = string.Empty;
                 var fileExtension = string.Empty;
+
+                if (!rdoCsv.Checked && !rdoExcel.Checked && !rdoText.Checked)
+                {
+                    MessageBox.Show("Please select one output file type.", "Process Complete");
+                    return;
+                }
+
                 if (rdoCsv.Checked)
                 {
                     reportOutPutType = rdoCsv.Text;
@@ -191,7 +189,7 @@ namespace SystemReportingWinUI
                 foreach (var log in logCategoryTypeList)
                 {
                     if (!string.IsNullOrEmpty(txtFolderBrowser.Text))
-                        fileNameWithFolderPath = txtFolderBrowser.Text + "\\"+  log +"_"+ DateTime.Now.ToString("MMdd_hhmm") + fileExtension;
+                        fileNameWithFolderPath = txtFolderBrowser.Text + "\\" + log + "_" + DateTime.Now.ToString("MMdd_hhmm") + fileExtension;
 
                     if (log == "Iis")
                     {
@@ -251,7 +249,7 @@ namespace SystemReportingWinUI
                     }
                 }
             }
-            MessageBox.Show("File Process complete.","Process Complete");
+            MessageBox.Show("File Process complete.", "Process Complete");
             return;
         }
 
@@ -261,5 +259,5 @@ namespace SystemReportingWinUI
             howToForm.Show(this);
         }
         #endregion
-     }
+    }
 }
