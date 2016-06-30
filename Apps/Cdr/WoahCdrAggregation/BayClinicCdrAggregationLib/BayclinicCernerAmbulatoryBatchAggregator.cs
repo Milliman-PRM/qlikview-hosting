@@ -118,11 +118,41 @@ namespace BayClinicCernerAmbulatory
             return Initialized;
         }
 
+        public bool IsWOAHMember(MongodbPersonEntity PersonDocument)
+        {
+            var PatientQuery = from Person in CdrDb.Context.Patients
+                               where PersonDocument.UniquePersonIdentifier == Person.EmrIdentifier
+                               select Person;
+            var PatientQueryResults = PatientQuery.FirstOrDefault();
+
+            if (PatientQueryResults != null)
+            {
+                return true;
+            }
+            else
+            {
+                var InsuranceCoverageQuery = InsuranceCollection.AsQueryable()
+                                                   .Where(x => x.UniqueEntityIdentifier == PersonDocument.UniquePersonIdentifier);
+                foreach (MongodbInsuranceEntity PatientCoverageID in InsuranceCoverageQuery)
+                {
+                    var WOAHQuery = ReferenceHealthPlanCollection.AsQueryable()
+                                            .Where(x => x.UniqueHealthPlanIdentifier == PatientCoverageID.UniqueHealthPlanIdentifier
+                                            && x.PlanName == "WESTERN OREGON ADVANCED HEALTH");
+                    var QueryResults = WOAHQuery.FirstOrDefault();
+
+                    if (QueryResults != null)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
         public bool AggregateAllAvailablePatients(bool ClearRunNumbers = false)
         {
             bool OverallResult = true;
             int PatientCounter = 0;
-            int WOHPatientCounter = 0;
+
 
             if (!InitializeRun())
             {
@@ -151,38 +181,13 @@ namespace BayClinicCernerAmbulatory
                     foreach (MongodbPersonEntity PersonDocument in PersonCursor.Current)
                     {
                         PatientCounter++;
-
-                        var PatientQuery = from Person in CdrDb.Context.Patients
-                                           where PersonDocument.UniquePersonIdentifier == Person.EmrIdentifier
-                                           select Person;
-                        var PatientQueryResults = PatientQuery.FirstOrDefault();
-
-                        if (PatientQueryResults != null)
+                        if(IsWOAHMember(PersonDocument))
                         {
-                            WOHPatientCounter++;
+                            WOAHPatientCounter++;
                             bool ThisPatientAggregationResult = AggregateOnePatient(PersonDocument);
                             OverallResult &= ThisPatientAggregationResult;
-                            break;
                         }
-                        else
-                        {
-                            var InsuranceCoverageQuery = InsuranceCollection.AsQueryable()
-                                                               .Where(x => x.UniqueEntityIdentifier == PersonDocument.UniquePersonIdentifier);
-                            foreach (MongodbInsuranceEntity PatientCoverageID in InsuranceCoverageQuery)
-                            {
-                                var WOAHQuery = ReferenceHealthPlanCollection.AsQueryable()
-                                                        .Where(x => x.UniqueHealthPlanIdentifier == PatientCoverageID.UniqueHealthPlanIdentifier
-                                                        && x.PlanName == "WESTERN OREGON ADVANCED HEALTH");
-                                var QueryResults = WOAHQuery.FirstOrDefault();
-
-                                if (QueryResults != null)
-                                {
-                                    WOHPatientCounter++;
-                                    bool ThisPatientAggregationResult = AggregateOnePatient(PersonDocument);
-                                    OverallResult &= ThisPatientAggregationResult;
-                                }
-                            }
-                        }
+                       
                     }
                 }
             }
