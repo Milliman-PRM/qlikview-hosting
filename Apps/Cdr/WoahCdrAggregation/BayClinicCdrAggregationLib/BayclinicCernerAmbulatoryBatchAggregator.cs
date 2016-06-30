@@ -424,14 +424,10 @@ namespace BayClinicCernerAmbulatory
 
                         VisitEncounter NewPgRecord = DuplicateVisitQuery.FirstOrDefault();
 
-                        if (VisitDoc.MergeWithExistingVisit(ref NewPgRecord, ref PatientRecord, ReferencedCodes, ref CdrDb))
+                        if (!VisitDoc.MergeWithExistingVisit(ref NewPgRecord, ref PatientRecord, ReferencedCodes, ref CdrDb))
                         {
                             // Record changes will persist by SubmitChanges()
                             int i = 42;  // debugging breakpoint
-                        }
-                        else
-                        {
-                            VisitCounter++;
                         }
 
                         CdrDb.Context.VisitEncounters.InsertOnSubmit(NewPgRecord);
@@ -786,16 +782,7 @@ namespace BayClinicCernerAmbulatory
                             int i = 42;
                         }
 
-                        /*
-                       
-                        MedicationCounter++;
-                        
 
-
-                        
-
-
-                        */
                         CdrDb.Context.Medications.InsertOnSubmit(NewPgRecord);
                         CdrDb.Context.SubmitChanges();
 
