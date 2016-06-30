@@ -74,6 +74,7 @@
     <Compile Include="MongoDbEntities\MongodbPhoneEntity.cs" />
     <Compile Include="MongoDbEntities\MongodbProblemEntity.cs" />
     <Compile Include="MongoDbEntities\MongodbRefCodeEntity.cs" />
+    <Compile Include="MongoDbEntities\MongodbReferenceHealthPlanEntity.cs" />
     <Compile Include="MongoDbEntities\MongodbReferenceMedicationEntity.cs" />
     <Compile Include="MongoDbEntities\MongodbReferenceTerminologyEntity.cs" />
     <Compile Include="MongoDbEntities\MongodbResultEntity.cs" />

@@ -65,6 +65,7 @@ namespace BayClinicCernerAmbulatory
         IMongoCollection<MongodbMedicationEntity> MedicationCollection;
         IMongoCollection<MongodbMedicationReconciliationDetailEntity> MedicationReconciliationDetailCollection;
         IMongoCollection<MongodbReferenceMedicationEntity> ReferenceMedicationCollection;
+        IMongoCollection<MongodbReferenceHealthPlanEntity> ReferenceHealthPlanCollection;
 
 
         public BayClinicCernerAmbulatoryBatchAggregator(String PgConnectionName = null)
@@ -102,6 +103,7 @@ namespace BayClinicCernerAmbulatory
             MedicationCollection = MongoCxn.Db.GetCollection<MongodbMedicationEntity>("medications");
             MedicationReconciliationDetailCollection = MongoCxn.Db.GetCollection<MongodbMedicationReconciliationDetailEntity>("medicationreconciliationdetail");
             ReferenceMedicationCollection = MongoCxn.Db.GetCollection<MongodbReferenceMedicationEntity>("referencemedication");
+            ReferenceHealthPlanCollection = MongoCxn.Db.GetCollection<MongodbReferenceHealthPlanEntity>("referencehealthplan");
             // TODO initialize collection
 
             Initialized = ReferencedCodes.Initialize(RefCodeCollection);
@@ -149,20 +151,37 @@ namespace BayClinicCernerAmbulatory
                     foreach (MongodbPersonEntity PersonDocument in PersonCursor.Current)
                     {
                         PatientCounter++;
-                        var InsuranceCoverageQuery = InsuranceCollection.AsQueryable()
-                                                           .Where(x => x.UniqueEntityIdentifier == PersonDocument.UniquePersonIdentifier);
-                       foreach(MongodbInsuranceEntity PatientCoverageID in InsuranceCoverageQuery)
-                        {
-                            if (ReferencedCodes.InsuranceCodeMeanings[PatientCoverageID.Type] == "Medicaid" 
-                                                        && WOHMembershipData.CheckMembershipStatus(PatientCoverageID.MemberNumber, PersonDocument.LastName, PersonDocument.FirstName, PersonDocument.BirthDateTime))
-                            {
-                                WOHPatientCounter++;
 
-                                bool ThisPatientAggregationResult = AggregateOnePatient(PersonDocument);
-                                OverallResult &= ThisPatientAggregationResult;
-                                break;
+                        var PatientQuery = from Person in CdrDb.Context.Patients
+                                           where PersonDocument.UniquePersonIdentifier == Person.EmrIdentifier
+                                           select Person;
+                        var PatientQueryResults = PatientQuery.FirstOrDefault();
+
+                        if (PatientQueryResults != null)
+                        {
+                            WOHPatientCounter++;
+                            bool ThisPatientAggregationResult = AggregateOnePatient(PersonDocument);
+                            OverallResult &= ThisPatientAggregationResult;
+                            break;
+                        }
+                        else
+                        {
+                            var InsuranceCoverageQuery = InsuranceCollection.AsQueryable()
+                                                               .Where(x => x.UniqueEntityIdentifier == PersonDocument.UniquePersonIdentifier);
+                            foreach (MongodbInsuranceEntity PatientCoverageID in InsuranceCoverageQuery)
+                            {
+                                var WOAHQuery = ReferenceHealthPlanCollection.AsQueryable()
+                                                        .Where(x => x.UniqueHealthPlanIdentifier == PatientCoverageID.UniqueHealthPlanIdentifier
+                                                        && x.PlanName == "WESTERN OREGON ADVANCED HEALTH");
+                                var QueryResults = WOAHQuery.FirstOrDefault();
+
+                                if (QueryResults != null)
+                                {
+                                    WOHPatientCounter++;
+                                    bool ThisPatientAggregationResult = AggregateOnePatient(PersonDocument);
+                                    OverallResult &= ThisPatientAggregationResult;
+                                }
                             }
-                                
                         }
                     }
                 }
@@ -187,6 +206,7 @@ namespace BayClinicCernerAmbulatory
             bool OverallSuccess = true;
 
             Patient ThisPatient = new Patient();
+            ThisPatient.EmrIdentifier = PersonDocument.UniquePersonIdentifier;
             ThisPatient.NameLast = PersonDocument.LastName;
             ThisPatient.NameFirst = PersonDocument.FirstName;
             ThisPatient.NameMiddle = PersonDocument.MiddleName;
