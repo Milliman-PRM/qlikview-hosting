@@ -228,7 +228,7 @@ namespace BayClinicCernerAmbulatory
             CdrDb.Context.Transaction = CdrDb.Context.Connection.BeginTransaction();
 
             // Store to database
-            if (PersonDocument.MergeWithExistingPatient(ref PatientRecord, ReferencedCodes)) { int i = 42; }//Debugging breakpoint
+            if (PersonDocument.MergeWithExistingPatient(ref PatientRecord, ReferencedCodes)) { PatientCounter++; }//Debugging breakpoint
 
             else
             {
@@ -294,7 +294,7 @@ namespace BayClinicCernerAmbulatory
 
                         TelephoneNumber NewPgRecord = DuplicateTelephoneNumberQuery.FirstOrDefault();
 
-                        if (PhoneDoc.MergeWithExistingTelephoneNumber(ref NewPgRecord, ref PgPatient, ReferencedCodes)) { int i = 42; }
+                        if (PhoneDoc.MergeWithExistingTelephoneNumber(ref NewPgRecord, ref PgPatient, ReferencedCodes)) { PhoneCounter++; }
 
 
                         CdrDb.Context.TelephoneNumbers.InsertOnSubmit(NewPgRecord);
@@ -338,7 +338,7 @@ namespace BayClinicCernerAmbulatory
 
                         PhysicalAddress NewPgRecord = DuplicateAddressrQuery.FirstOrDefault();
 
-                        if (AddressDoc.MergeWithExistingPhysicalAddress(ref NewPgRecord, ref PgPatient, ReferencedCodes)) { int i = 42; }
+                        if (AddressDoc.MergeWithExistingPhysicalAddress(ref NewPgRecord, ref PgPatient, ReferencedCodes)) {AddressCounter++; }
 
 
                         CdrDb.Context.PhysicalAddresses.InsertOnSubmit(NewPgRecord);
@@ -380,7 +380,7 @@ namespace BayClinicCernerAmbulatory
 
                         PatientIdentifier NewPgRecord = DuplicatePatientIdentifierQuery.FirstOrDefault();
 
-                        if (IdentifierDoc.MergeWithExistingPatientIdentifiers(ref NewPgRecord, ref PgPatient, ReferencedCodes, OrganizationObject)) { int i = 42; }
+                        if (IdentifierDoc.MergeWithExistingPatientIdentifiers(ref NewPgRecord, ref PgPatient, ReferencedCodes, OrganizationObject)) { IdentifierCounter++; }
 
                         CdrDb.Context.PatientIdentifiers.InsertOnSubmit(NewPgRecord);
                         CdrDb.Context.SubmitChanges();
@@ -424,11 +424,8 @@ namespace BayClinicCernerAmbulatory
 
                         VisitEncounter NewPgRecord = DuplicateVisitQuery.FirstOrDefault();
 
-                        if (!VisitDoc.MergeWithExistingVisit(ref NewPgRecord, ref PatientRecord, ReferencedCodes, ref CdrDb))
-                        {
-                            // Record changes will persist by SubmitChanges()
-                            int i = 42;  // debugging breakpoint
-                        }
+                        if (VisitDoc.MergeWithExistingVisit(ref NewPgRecord, ref PatientRecord, ReferencedCodes, ref CdrDb)) { VisitCounter++; }
+
 
                         CdrDb.Context.VisitEncounters.InsertOnSubmit(NewPgRecord);
                         CdrDb.Context.SubmitChanges();
@@ -475,7 +472,7 @@ namespace BayClinicCernerAmbulatory
                                                    select Charge;
 
                         Charge NewPgRecord = DuplicateChargeQuery.FirstOrDefault();
-                        if (ChargeDoc.MergeWithExistingCharges(ref NewPgRecord, ref PgVisit)) { int i = 42; }
+                        if (ChargeDoc.MergeWithExistingCharges(ref NewPgRecord, ref PgVisit)) { ChargeCounter++; }
 
                         CdrDb.Context.Charges.InsertOnSubmit(NewPgRecord);
                         CdrDb.Context.SubmitChanges();
@@ -515,7 +512,7 @@ namespace BayClinicCernerAmbulatory
                                                          where ChargeDetail.EmrIdentifier == ChargeDetailDoc.UniqueChargeItemIdentifier
                                                          select ChargeDetail;
                         ChargeCode NewPgRecord = DuplicateChargeDetailQuery.FirstOrDefault();
-                        if (!ChargeDetailDoc.MergeWithExistingChargeCodes(ref NewPgRecord, ref ChargeRecord, ReferencedCodes)) { int i = 42;  }
+                        if (ChargeDetailDoc.MergeWithExistingChargeCodes(ref NewPgRecord, ref ChargeRecord, ReferencedCodes)) { ChargeDetailCounter++;  }
 
                         CdrDb.Context.ChargeCodes.InsertOnSubmit(NewPgRecord);
                         CdrDb.Context.SubmitChanges();
@@ -559,7 +556,7 @@ namespace BayClinicCernerAmbulatory
                                                       where Result.EmrIdentifier == ResultDoc.UniqueResultIdentifier
                                                       select Result;
                         Measurement NewPgRecord = DuplicateResultsQuery.FirstOrDefault();
-                        if (!ResultDoc.MergeWithExistingMeasurements(ref NewPgRecord, ref PatientRecord, VisitRecord, ReferencedCodes)) { int i = 42; }
+                        if (ResultDoc.MergeWithExistingMeasurements(ref NewPgRecord, ref PatientRecord, VisitRecord, ReferencedCodes)) { ResultCounter++; }
 
                         CdrDb.Context.Measurements.InsertOnSubmit(NewPgRecord);
                         CdrDb.Context.SubmitChanges();
@@ -614,7 +611,7 @@ namespace BayClinicCernerAmbulatory
                             TerminologyRecord = new MongodbReferenceTerminologyEntity { Code = "", Text = "", Terminology = "0" };
                         }
 
-                        if (!DiagnosisDoc.MergeWithExistingDiagnoses(ref NewPgRecord, ref PatientRecord, VisitRecord, ReferencedCodes, TerminologyRecord)) { int i = 42; }
+                        if (DiagnosisDoc.MergeWithExistingDiagnoses(ref NewPgRecord, ref PatientRecord, VisitRecord, ReferencedCodes, TerminologyRecord)) { DiagnosisCounter++; }
                    
                         CdrDb.Context.Diagnoses.InsertOnSubmit(NewPgRecord);
                         CdrDb.Context.SubmitChanges();
@@ -655,7 +652,7 @@ namespace BayClinicCernerAmbulatory
                                                               where Insurance.Payer == InsuranceCoverageDoc.UniqueOrganizationIdentifier && Insurance.PlanName == InsuranceCoverageDoc.UniqueHealthPlanIdentifier
                                                               select Insurance;
                         InsuranceCoverage NewPgRecord = DuplicateInsuranceCoverageQuery.FirstOrDefault();
-                        if(!InsuranceCoverageDoc.MergeWithExistingInsuranceCoverage(ref NewPgRecord, ref PgPatient, ReferencedCodes)) { int i = 42; }
+                        if(InsuranceCoverageDoc.MergeWithExistingInsuranceCoverage(ref NewPgRecord, ref PgPatient, ReferencedCodes)) { InsuranceCoverageCounter++; }
 
                         CdrDb.Context.InsuranceCoverages.InsertOnSubmit(NewPgRecord);
                         CdrDb.Context.SubmitChanges();
@@ -696,7 +693,7 @@ namespace BayClinicCernerAmbulatory
                                                               && Immunization.VisitID == ImmunizationDoc.UniqueVisitIdentifier
                                                               select Immunization;
                         Immunization NewPgRecord = DuplicateImmunizationQuery.FirstOrDefault();
-                        if (!ImmunizationDoc.MergeWithExistingImmunizations(ref NewPgRecord, ref PatientRecord, VisitRecord, ReferencedCodes)) { int i = 42; }
+                        if (ImmunizationDoc.MergeWithExistingImmunizations(ref NewPgRecord, ref PatientRecord, VisitRecord, ReferencedCodes)) { ImmunizationCounter++; }
 
                         
                         CdrDb.Context.Immunizations.InsertOnSubmit(NewPgRecord);
@@ -777,10 +774,8 @@ namespace BayClinicCernerAmbulatory
                         {
                             ReferenceMedicationRecord = new MongodbReferenceMedicationEntity { RxNorm = "", CatalogCKI = "", Dnum = "", NDC = "" };
                         }
-                        if (!MedicationDoc.MergeWithExistingMedications(ref NewPgRecord, ref PatientRecord, VisitRecord, ReferenceMedicationRecord, MedicationInstructions))
-                        {
-                            int i = 42;
-                        }
+                        if (MedicationDoc.MergeWithExistingMedications(ref NewPgRecord, ref PatientRecord, VisitRecord, ReferenceMedicationRecord, MedicationInstructions)) { MedicationCounter++; }
+                        
 
 
                         CdrDb.Context.Medications.InsertOnSubmit(NewPgRecord);
@@ -826,7 +821,7 @@ namespace BayClinicCernerAmbulatory
                                                               where Problems.EmrIdentifier == ProblemDoc.UniqueProblemIdentifier
                                                               select Problems;
                         Problem NewPgRecord = DuplicateProblemQuery.FirstOrDefault();
-                        if (!ProblemDoc.MergeWithExistingProblems(ref NewPgRecord, ref PatientRecord)) { int i = 42; }
+                        if (ProblemDoc.MergeWithExistingProblems(ref NewPgRecord, ref PatientRecord)) { ProblemCounter++; }
                        
                         CdrDb.Context.Problems.InsertOnSubmit(NewPgRecord);
                         CdrDb.Context.SubmitChanges();
