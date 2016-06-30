@@ -11,50 +11,20 @@ using System.IO;
 
 namespace SQLiteConnect
 {
-
-    public enum CustomerEnum { WOAH };
-
-
     public class SQLiteDbConnection
     {
-        public CustomerEnum Customer;
-        private SQLiteDataReader Reader = null;
-        private SQLiteConnection Connection = null;
-        private SQLiteCommand Command = null;
-        private SQLiteConnectionStringBuilder ConnectionStr;
+        internal SQLiteDataReader Reader = null;
+        internal SQLiteConnection Connection = null;
+        internal SQLiteCommand Command = null;
 
-        //For use specific to a customer
-        public SQLiteDbConnection(CustomerEnum Customer)
+        public SQLiteDbConnection()
         {
-            this.Customer = Customer;
-            ConnectSQLite();
         }
 
-        //For general purpose use
-        public SQLiteDbConnection(string FileName)
+        public void Connect(string FileName)
         {
-            ConnectSQLite(FileName);
-        }
-
-        //If customer is specified then it will create a connection string according to the customer
-        //Otherwise it will use the one provided in the constructor
-        public SQLiteConnection ConnectSQLite(string FileName = null)
-        {
-            switch (Customer)
-            {
-                case CustomerEnum.WOAH:
-                    DirectoryInfo RootDirectoryInfo = new DirectoryInfo(@"K:\PHI\0273WOH\3.005-0273WOH06\5-Support_files\");
-                    var MostRecentDirectory = RootDirectoryInfo.GetDirectories().OrderByDescending(f => f.Name).First();
-                    ConnectionStr.ConnectionString = RootDirectoryInfo + MostRecentDirectory.FullName + @"\035_Staging_Membership\Members_3.005-0273WOH06.sqlite";
-                    break;
-
-                default:                    //No customer was specified, this means the string was given in the constructor and passed to this method
-                    ConnectionStr.ConnectionString = "Data Source=" + FileName;
-                    break;
-            }
-
-            Connection = new SQLiteConnection(ConnectionStr.ConnectionString);
-            return Connection;
+            String ConnectionStr = "DataSource=" + FileName + ";";
+            Connection = new SQLiteConnection(ConnectionStr);
         }
 
         //Returns a list of all the column names in a specified table
@@ -63,22 +33,29 @@ namespace SQLiteConnect
             List<string> ColumnNames = new List<string>();
 
             Command = Connection.CreateCommand();
-            Command.CommandText = "SELECT * FROM " + Table + ".INFORMATION_SCHEMA.COLUMNS ";
+            Command.CommandText = "SELECT * FROM " + Table + " LIMIT 1";
             Command.CommandType = CommandType.Text;
+
+            Connection.Open();
             Reader = Command.ExecuteReader();
-            
-            while (Reader.Read())
+
+            if (Reader.Read())
             {
-                ColumnNames.Add(Reader[0].ToString());
+                for (int i= 0 ; i < Reader.FieldCount; i++)
+                {
+                    ColumnNames.Add(Reader.GetName(i));
+                }
             }
 
             Reader.Close();
             Command.Dispose();
+            Connection.Close();
 
             return ColumnNames;
         }
 
         //Returns a List containing all of the information contained in specified columns
+        // TODO This should return an iterable of some kind, rather than all the data in a memory resident object (there could be 90 million records)
         public Dictionary<String, List<String>> QuerySQLiteTable(string Columns, string Table, string WhereConditions = null)
         {
             Dictionary<String, List<String>> ComprehensiveColumnInformation = new Dictionary<string, List<string>>();
@@ -110,8 +87,8 @@ namespace SQLiteConnect
             }
             
             //Prevent leaks
-            Command.Dispose();
             Reader.Close();
+            Command.Dispose();
 
             return ComprehensiveColumnInformation;
         }
@@ -122,16 +99,16 @@ namespace SQLiteConnect
         //It will return true if the connection state has another status besides open
         public bool CheckOpen()
         {
+            // TODO needs some refinement (what about values: Broken, Connecting, ...)
             return Connection.State != ConnectionState.Closed;
         }
 
         //Disconnects and resets all of the SQLiteDbConnection objects 
         public void Disconnect()
         {
+            Reader.Close();
             Command.Dispose();
             Connection.Close();
-            Reader.Close();
-            ConnectionStr.Clear();
         }
     }
 }

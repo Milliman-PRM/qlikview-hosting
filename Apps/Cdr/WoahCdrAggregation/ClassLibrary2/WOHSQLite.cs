@@ -10,31 +10,51 @@ using System.IO;
 
 namespace WOHSQLInterface
 {
-    public class WOHSQLiteInterface
+    public class WOHSQLiteInterface : CustomerSpecificBase
     {
-        private SQLiteDataReader Reader;
-        private SQLiteCommand Command;
-        private SQLiteConnection Connection;
         private SQLiteDbConnection WOHSQLConnection;
 
-        
-        public void Connect()
-        {
-            WOHSQLConnection = new SQLiteDbConnection(CustomerEnum.WOAH);
-            Connection = WOHSQLConnection.ConnectSQLite();
+        // Devart types
+        private SQLiteCommand Command;
+        private SQLiteDataReader Reader;
 
-            Command = Connection.CreateCommand();
-            Command.CommandText = "SELECT member_id, mem_name, dob FROM member";
-            Command.CommandType = CommandType.Text;
+        public WOHSQLiteInterface()
+        {
+            WOHSQLConnection = new SQLiteDbConnection();
+
+            SupportFilesRoot = new DirectoryInfo(@"K:\PHI\0273WOH\3.005-0273WOH06\5-Support_files\");
+        }
+
+        ~WOHSQLiteInterface()
+        {
+            Disconnect();
+        }
+
+        public void ConnectToLatestMembership()
+        {
+            DirectoryInfo MostRecentSupportFilesDirectory = SupportFilesRoot.GetDirectories().OrderByDescending(f => f.Name).First();
+            String SQLiteFile = Path.Combine(MostRecentSupportFilesDirectory.FullName, @"035_Staging_Membership\Members_3.005-0273WOH06.sqlite");
+
+            WOHSQLConnection.Connect(SQLiteFile);
+            List<String> x = WOHSQLConnection.GetColumnNames("member");
         }
 
         //Specific to WOH. Makes sure the information passed along matches what we have stored in our WOH database
         public bool CheckMembershipStatus(string MemberID, string FirstName, string LastName, string DOB)
         {
-            Reader = Command.ExecuteReader();           
-
             string PersonKey = LastName.ToLower() + ", " + FirstName.ToLower();
             string DOBKey = DOB.Split(' ')[0];
+
+            Command = WOHSQLConnection.Connection.CreateCommand();
+
+            Command.CommandText = "SELECT member_id, mem_name, dob FROM member WHERE member_id = :id OR (mem_name = :key AND dob = :dob";
+            Command.Parameters.Add("id", MemberID);
+            Command.Parameters.Add("key", PersonKey);
+            Command.Parameters.Add("dob", DOB);
+            Command.CommandType = CommandType.Text;
+
+            WOHSQLConnection.Connection.Open();
+            Reader = Command.ExecuteReader();
 
 
             while (Reader.Read())

@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomerSpecificBase.cs" />
     <Compile Include="WOHSQLite.cs" />
     <Compile Include="SQLiteDatabaseConnection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

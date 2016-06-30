@@ -38,8 +38,7 @@ namespace BayClinicCernerAmbulatory
         private int WOAHPatientCounter = 0;
 
         //Init the the interface to the sql dataset
-        WOHSQLiteInterface WOHInterface = new WOHSQLiteInterface();
-        
+        WOHSQLiteInterface WOHMembershipData = new WOHSQLiteInterface();
 
         private CdrDbInterface CdrDb;
         private Organization OrganizationObject;
@@ -67,8 +66,6 @@ namespace BayClinicCernerAmbulatory
         IMongoCollection<MongodbMedicationReconciliationDetailEntity> MedicationReconciliationDetailCollection;
         IMongoCollection<MongodbReferenceMedicationEntity> ReferenceMedicationCollection;
 
-
-        //TODO Insert Mongo collection for medicationreconciliation
 
         public BayClinicCernerAmbulatoryBatchAggregator(String PgConnectionName = null)
         {
@@ -112,7 +109,7 @@ namespace BayClinicCernerAmbulatory
             Initialized &= ThisAggregationRun.dbid > 0;
 
             //Connect to the sql database
-            WOHInterface.Connect();
+            WOHMembershipData.ConnectToLatestMembership();
 
             MongoRunUpdater = new MongoAggregationRunUpdater(ThisAggregationRun.dbid, MongoCxn.Db);
 
@@ -157,7 +154,7 @@ namespace BayClinicCernerAmbulatory
                        foreach(MongodbInsuranceEntity PatientCoverageID in InsuranceCoverageQuery)
                         {
                             if (ReferencedCodes.InsuranceCodeMeanings[PatientCoverageID.Type] == "Medicaid" 
-                                                        && WOHInterface.CheckMembershipStatus(PatientCoverageID.MemberNumber, PersonDocument.LastName, PersonDocument.FirstName, PersonDocument.BirthDateTime))
+                                                        && WOHMembershipData.CheckMembershipStatus(PatientCoverageID.MemberNumber, PersonDocument.LastName, PersonDocument.FirstName, PersonDocument.BirthDateTime))
                             {
                                 WOHPatientCounter++;
 
@@ -172,7 +169,7 @@ namespace BayClinicCernerAmbulatory
             }
 
             //Disconnect after the the database is done being used
-            WOHInterface.Disconnect();
+            WOHMembershipData.Disconnect();
 
             ThisAggregationRun.StatusFlags = AggregationRunStatus.Complete;
             CdrDb.Context.SubmitChanges();
