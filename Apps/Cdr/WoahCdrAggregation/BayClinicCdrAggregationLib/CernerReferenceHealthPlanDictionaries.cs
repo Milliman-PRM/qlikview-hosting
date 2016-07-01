@@ -19,12 +19,9 @@ namespace BayClinicCernerAmbulatory
     {
         IMongoCollection<MongodbReferenceHealthPlanEntity> ReferenceHealthPlanCollection;
 
-        public Dictionary<String, String> GenderCodeMeanings = new Dictionary<string, string>();
-        //public Dictionary<String, String> ...CodeMeanings = new Dictionary<string, string>();
+        public Dictionary<String, String> PlanNameCodeMeanings = new Dictionary<string, string>();
 
         #region temporary validation functions
-
-
         #endregion
 
         public bool Initialize(IMongoCollection<MongodbReferenceHealthPlanEntity> CollectionArg)
@@ -32,41 +29,35 @@ namespace BayClinicCernerAmbulatory
             ReferenceHealthPlanCollection = CollectionArg;
 
             bool Success =
-                   InitializeReferenceHealthPlanDictionary(ref GenderCodeMeanings)
+                   InitializePlanNameDictionary()
                 ;
 
             return Success;
         }
 
         /// <summary>
-        /// Initializes a dictionary of codes and corresponding display values from the MongoDB referencecode collection, eliminating redundancy
+        /// Initializes a dictionary of codes mapped to PlanName strings from the referencehealthplan collection in MongoDB
         /// </summary>
-        /// <param name="FileName">The value of the 'file_name' field to use for grouping</param>
-        /// <param name="Fields">The values of 0 or more case sensitive 'field' values to search</param>
-        /// <param name="Dict">The dictionary<string,string> to be populated with query results</param>
+        /// <param name="AddZeroUnspecified">Optional, true to include an entry for code "0" mapped to value "Unspecified"</param>
         /// <returns></returns>
-        private bool InitializeReferenceHealthPlanDictionary(ref Dictionary<String, String> Dict, bool AddZeroUnspecified = true)
+        private bool InitializePlanNameDictionary(bool AddZeroUnspecified = true)
         {
-            // TODO get this function right
             try
             {
-                var q = ReferenceHealthPlanCollection.AsQueryable()
-                    .Where(x => x.FileName.ToUpper() == FileName && Fields.Contains(x.Field))
-                    .GroupBy(id => new { ElementCode = id.ElementCode, Display = id.Display })
-                    .Select(x => new { x.Key.ElementCode, x.Key.Display });
+                var q = ReferenceHealthPlanCollection.AsQueryable();
 
                 foreach (var record in q)
                 {
-                    Dict[record.ElementCode] = record.Display;
+                    PlanNameCodeMeanings[record.UniqueHealthPlanIdentifier] = record.PlanName;
                 }
                 if (AddZeroUnspecified)
                 {
-                    Dict["0"] = "Unspecified";
+                    PlanNameCodeMeanings["0"] = "Unspecified";
                 }
             }
             catch (Exception e)
             {
-                Trace.WriteLine("Exception in CernerReferencedCodeDictionaries.InitializeCodeDictionary: " + e.Message);
+                Trace.WriteLine("Exception in CernerReferenceHealthPlanDictionaries.InitializePlanNameDictionary: " + e.Message);
                 return false;
             }
 
