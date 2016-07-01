@@ -46,6 +46,7 @@ namespace BayClinicCernerAmbulatory
         private AggregationRun ThisAggregationRun;
         private MongoDbConnection MongoCxn;
         private CernerReferencedCodeDictionaries ReferencedCodes;
+        private CernerReferenceHealthPlanDictionaries HealthPlanCodes;
         private MongoAggregationRunUpdater MongoRunUpdater;
 
         IMongoCollection<MongodbIdentifierEntity> IdentifierCollection;
@@ -78,7 +79,7 @@ namespace BayClinicCernerAmbulatory
             CdrDb = new CdrDbInterface(PgConnectionName, ConnectionArgumentType.ConnectionStringName);
             MongoCxn = new MongoDbConnection(NewBayClinicAmbulatoryMongoCredentialConfigFile, NewBayClinicAmbulatoryMongoCredentialSection);
             ReferencedCodes = new CernerReferencedCodeDictionaries();
-
+            HealthPlanCodes = new CernerReferenceHealthPlanDictionaries();
         }
 
         private bool InitializeRun()
@@ -120,32 +121,21 @@ namespace BayClinicCernerAmbulatory
 
         public bool IsWOAHMember(MongodbPersonEntity PersonDocument)
         {
-            var PatientQuery = from Person in CdrDb.Context.Patients
-                               where PersonDocument.UniquePersonIdentifier == Person.EmrIdentifier
-                               select Person;
-            var PatientQueryResults = PatientQuery.FirstOrDefault();
 
-            if (PatientQueryResults != null)
-            {
+            if (CdrDb.Context.Patients.Count(p => p.EmrIdentifier == PersonDocument.UniquePersonIdentifier) > 0)
                 return true;
-            }
+
             else
             {
                 var InsuranceCoverageQuery = InsuranceCollection.AsQueryable()
                                                    .Where(x => x.UniqueEntityIdentifier == PersonDocument.UniquePersonIdentifier);
                 foreach (MongodbInsuranceEntity PatientCoverageID in InsuranceCoverageQuery)
                 {
-                    var WOAHQuery = ReferenceHealthPlanCollection.AsQueryable()
-                                            .Where(x => x.UniqueHealthPlanIdentifier == PatientCoverageID.UniqueHealthPlanIdentifier
-                                            && x.PlanName == "WESTERN OREGON ADVANCED HEALTH");
-                    var QueryResults = WOAHQuery.FirstOrDefault();
-
-                    if (QueryResults != null)
-                    {
+                    if (HealthPlanCodes.PlanNameCodeMeanings[PatientCoverageID.Type] == "WESTERN OREGON ADVANCED HEALTH")
                         return true;
-                    }
                 }
             }
+
             return false;
         }
         public bool AggregateAllAvailablePatients(bool ClearRunNumbers = false)
