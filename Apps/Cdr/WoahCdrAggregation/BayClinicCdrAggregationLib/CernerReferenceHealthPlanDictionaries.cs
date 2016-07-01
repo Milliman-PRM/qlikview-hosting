@@ -18,21 +18,52 @@ namespace BayClinicCernerAmbulatory
     class CernerReferenceHealthPlanDictionaries
     {
         IMongoCollection<MongodbReferenceHealthPlanEntity> ReferenceHealthPlanCollection;
+        IMongoCollection<MongodbRefCodeEntity> ReferenceCodeCollection;
 
         public Dictionary<String, String> PlanNameCodeMeanings = new Dictionary<string, string>();
+        public Dictionary<String, String> PlanTypeCodeMeanings = new Dictionary<string, string>();
 
         #region temporary validation functions
         #endregion
 
-        public bool Initialize(IMongoCollection<MongodbReferenceHealthPlanEntity> CollectionArg)
+        public bool Initialize(IMongoCollection<MongodbReferenceHealthPlanEntity> HealthPlanCollectionArg, IMongoCollection<MongodbRefCodeEntity> RefCodeCollectionArg, bool AddZeroUnspecified = true)
         {
-            ReferenceHealthPlanCollection = CollectionArg;
+            ReferenceHealthPlanCollection = HealthPlanCollectionArg;
+            ReferenceCodeCollection = RefCodeCollectionArg;
 
-            bool Success =
-                   InitializePlanNameDictionary()
-                ;
+            try
+            {
+                var q = ReferenceHealthPlanCollection.AsQueryable();
 
-            return Success;
+                foreach (var HealthPlanRecord in q)
+                {
+                    PlanNameCodeMeanings[HealthPlanRecord.UniqueHealthPlanIdentifier] = HealthPlanRecord.PlanName;
+
+                    var TypeCodeQuery = ReferenceCodeCollection.AsQueryable().Where(x =>
+                               x.FileName.ToUpper() == "REFERENCEHEALTHPLAN"
+                            && x.Field.ToUpper() == "TYPE"
+                            && x.ElementCode == HealthPlanRecord.Type
+                        )
+                        .FirstOrDefault()
+                        ;
+
+                    if (TypeCodeQuery != null)
+                    {
+
+                    }
+                }
+                if (AddZeroUnspecified)
+                {
+                    PlanNameCodeMeanings["0"] = "Unspecified";
+                }
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine("Exception in CernerReferenceHealthPlanDictionaries.InitializePlanNameDictionary: " + e.Message);
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -41,6 +72,30 @@ namespace BayClinicCernerAmbulatory
         /// <param name="AddZeroUnspecified">Optional, true to include an entry for code "0" mapped to value "Unspecified"</param>
         /// <returns></returns>
         private bool InitializePlanNameDictionary(bool AddZeroUnspecified = true)
+        {
+            try
+            {
+                var q = ReferenceHealthPlanCollection.AsQueryable();
+
+                foreach (var record in q)
+                {
+                    PlanNameCodeMeanings[record.UniqueHealthPlanIdentifier] = record.PlanName;
+                }
+                if (AddZeroUnspecified)
+                {
+                    PlanNameCodeMeanings["0"] = "Unspecified";
+                }
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine("Exception in CernerReferenceHealthPlanDictionaries.InitializePlanNameDictionary: " + e.Message);
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool InitializePlanTypeDictionary(bool AddZeroUnspecified = true)
         {
             try
             {

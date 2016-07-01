@@ -46,6 +46,7 @@ namespace BayClinicCernerAmbulatory
         private AggregationRun ThisAggregationRun;
         private MongoDbConnection MongoCxn;
         private CernerReferencedCodeDictionaries ReferencedCodes;
+        private CernerReferenceHealthPlanDictionaries ReferencedHealthPlans;
         private MongoAggregationRunUpdater MongoRunUpdater;
 
         IMongoCollection<MongodbIdentifierEntity> IdentifierCollection;
@@ -78,6 +79,7 @@ namespace BayClinicCernerAmbulatory
             CdrDb = new CdrDbInterface(PgConnectionName, ConnectionArgumentType.ConnectionStringName);
             MongoCxn = new MongoDbConnection(NewBayClinicAmbulatoryMongoCredentialConfigFile, NewBayClinicAmbulatoryMongoCredentialSection);
             ReferencedCodes = new CernerReferencedCodeDictionaries();
+            ReferencedHealthPlans = new CernerReferenceHealthPlanDictionaries();
 
         }
 
@@ -106,7 +108,8 @@ namespace BayClinicCernerAmbulatory
             ReferenceHealthPlanCollection = MongoCxn.Db.GetCollection<MongodbReferenceHealthPlanEntity>("referencehealthplan");
             // TODO initialize collection
 
-            Initialized = ReferencedCodes.Initialize(RefCodeCollection);
+            Initialized  = ReferencedCodes.Initialize(RefCodeCollection);
+            Initialized &= ReferencedHealthPlans.Initialize(ReferenceHealthPlanCollection, RefCodeCollection);
             ThisAggregationRun = GetNewAggregationRun();
             Initialized &= ThisAggregationRun.dbid > 0;
 
@@ -768,7 +771,7 @@ namespace BayClinicCernerAmbulatory
                         CdrDb.Context.Immunizations.InsertOnSubmit(NewPgRecord);
                         CdrDb.Context.SubmitChanges();
 
-                        MongoRunUpdater.InsuranceIdList.Add(ImmunizationDoc.Id);
+                        MongoRunUpdater.ImmunizationIdList.Add(ImmunizationDoc.Id);
                     }
                 }
             }
