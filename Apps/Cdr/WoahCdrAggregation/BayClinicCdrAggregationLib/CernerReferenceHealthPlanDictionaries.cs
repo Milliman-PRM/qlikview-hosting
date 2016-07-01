@@ -2,16 +2,11 @@
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Driver.Linq;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.IO;
 using MongoDB.Driver;
-using CdrContext;
-using CdrDbLib;
-using System.Media;
 
 namespace BayClinicCernerAmbulatory
 {
@@ -33,23 +28,24 @@ namespace BayClinicCernerAmbulatory
 
             try
             {
-                var q = ReferenceHealthPlanCollection.AsQueryable();
+                var HealthPlanQuery = ReferenceHealthPlanCollection.AsQueryable();
 
-                foreach (var HealthPlanRecord in q)
+                foreach (MongodbReferenceHealthPlanEntity HealthPlanDoc in HealthPlanQuery)
                 {
-                    PlanNameCodeMeanings[HealthPlanRecord.UniqueHealthPlanIdentifier] = HealthPlanRecord.PlanName;
+                    PlanNameCodeMeanings[HealthPlanDoc.UniqueHealthPlanIdentifier] = HealthPlanDoc.PlanName;
 
-                    var TypeCodeQuery = ReferenceCodeCollection.AsQueryable().Where(x =>
+                    var PlanTypeDoc = ReferenceCodeCollection.AsQueryable()
+                        .Where(x =>
                                x.FileName.ToUpper() == "REFERENCEHEALTHPLAN"
                             && x.Field.ToUpper() == "TYPE"
-                            && x.ElementCode == HealthPlanRecord.Type
+                            && x.ElementCode == HealthPlanDoc.Type
                         )
-                        .FirstOrDefault()
-                        ;
+                        .Take(1)    // All instances of the same code must map to the same meaning
+                        .FirstOrDefault();
 
-                    if (TypeCodeQuery != null)
+                    if (PlanTypeDoc != null)
                     {
-
+                        PlanTypeCodeMeanings[HealthPlanDoc.UniqueHealthPlanIdentifier] = PlanTypeDoc.Display;
                     }
                 }
                 if (AddZeroUnspecified)
@@ -59,60 +55,7 @@ namespace BayClinicCernerAmbulatory
             }
             catch (Exception e)
             {
-                Trace.WriteLine("Exception in CernerReferenceHealthPlanDictionaries.InitializePlanNameDictionary: " + e.Message);
-                return false;
-            }
-
-            return true;
-        }
-
-        /// <summary>
-        /// Initializes a dictionary of codes mapped to PlanName strings from the referencehealthplan collection in MongoDB
-        /// </summary>
-        /// <param name="AddZeroUnspecified">Optional, true to include an entry for code "0" mapped to value "Unspecified"</param>
-        /// <returns></returns>
-        private bool InitializePlanNameDictionary(bool AddZeroUnspecified = true)
-        {
-            try
-            {
-                var q = ReferenceHealthPlanCollection.AsQueryable();
-
-                foreach (var record in q)
-                {
-                    PlanNameCodeMeanings[record.UniqueHealthPlanIdentifier] = record.PlanName;
-                }
-                if (AddZeroUnspecified)
-                {
-                    PlanNameCodeMeanings["0"] = "Unspecified";
-                }
-            }
-            catch (Exception e)
-            {
-                Trace.WriteLine("Exception in CernerReferenceHealthPlanDictionaries.InitializePlanNameDictionary: " + e.Message);
-                return false;
-            }
-
-            return true;
-        }
-
-        private bool InitializePlanTypeDictionary(bool AddZeroUnspecified = true)
-        {
-            try
-            {
-                var q = ReferenceHealthPlanCollection.AsQueryable();
-
-                foreach (var record in q)
-                {
-                    PlanNameCodeMeanings[record.UniqueHealthPlanIdentifier] = record.PlanName;
-                }
-                if (AddZeroUnspecified)
-                {
-                    PlanNameCodeMeanings["0"] = "Unspecified";
-                }
-            }
-            catch (Exception e)
-            {
-                Trace.WriteLine("Exception in CernerReferenceHealthPlanDictionaries.InitializePlanNameDictionary: " + e.Message);
+                Trace.WriteLine("Exception in CernerReferenceHealthPlanDictionaries.Initialize: " + e.Message);
                 return false;
             }
 
