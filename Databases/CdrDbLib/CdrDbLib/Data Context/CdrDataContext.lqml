@@ -13,6 +13,7 @@
       <Column Name="race" Member="Race" Type="System.String" DbType="varchar" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="aef72210-3c4e-4ed5-b471-d9fb269b97dc" />
       <Column Name="ethnicity" Member="Ethnicity" Type="System.String" DbType="varchar" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="4dc14fd9-8ba4-4170-a70c-97e3d6997825" />
       <Column Name="maritalstatus" Member="MaritalStatus" Type="MaritalStatus" DbType="INT2" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="8ed0ac35-9190-4006-b7bf-dec7f01fba76" />
+      <Column Name="emridentifier" Member="EmrIdentifier" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="b16d4627-bd3c-4c1f-a9bb-73fb843f5bf1" />
       <Association Name="Patient_PatientIdentifier" ed:AssociationGuid="5f3fa80d-2b21-438d-9327-7d51d0dc62f9" Member="PatientIdentifiers" ed:Guid="aa3dab3d-585a-46c5-b4bb-388fd93a09e1" ThisKey="dbid" OtherKey="Patientdbid" Type="PatientIdentifier" />
       <Association Name="Patient_PatientAddress" ed:AssociationGuid="107a5c85-691f-4167-913a-e9d51b02cf89" Member="PhysicalAddresses" ed:Guid="d14e039a-9820-4f50-bfe1-2409c2ec6354" ThisKey="dbid" OtherKey="Patientdbid" Type="PhysicalAddress" />
       <Association Name="Patient_TelephoneNumber" ed:AssociationGuid="88c0c094-bc90-44d2-acf7-6c4ecc064fad" Member="TelephoneNumbers" ed:Guid="06bf4270-57c6-441f-8c1c-97eac2ab4cad" ThisKey="dbid" OtherKey="Patientdbid" Type="TelephoneNumber" />
@@ -217,6 +218,8 @@
       <Column Name="enddate" Member="EndDate" Type="System.DateTime" DbType="timestamp" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="3e73b262-9baa-4e41-9085-fdfddb82417d" />
       <Column Name="planname" Member="PlanName" Type="System.String" DbType="varchar" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="9fa72899-291a-452f-b0fb-3f8e57ef602d" />
       <Column Name="patientdbid" Member="Patientdbid" Type="System.Int64" AutoSync="Always" DbType="int8 NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="755a5138-6db7-4cc6-8b16-76f31b9d6298" />
+      <Column Name="coveragetype" Member="CoverageType" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="2baa929a-b060-44d3-a746-74b317a4afa4" />
+      <Column Name="memberid" Member="MemberID" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="8ea16eac-4ec9-4b97-95ed-3e57482af84f" />
       <Association Name="Patient_InsuranceCoverage" ed:AssociationGuid="6e5bb6c6-9667-41a0-b2b9-bf204bf64a09" Member="Patient" ed:Guid="5f572dde-d98c-4d20-bdcc-410c48c92502" ThisKey="Patientdbid" OtherKey="dbid" Type="Patient" DeleteOnNull="true" IsForeignKey="true" />
     </Type>
   </Table>
