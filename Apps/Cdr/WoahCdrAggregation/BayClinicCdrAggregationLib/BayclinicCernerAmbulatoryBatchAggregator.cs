@@ -15,6 +15,13 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.IO;
 using MongoDB.Driver;
+using BayClinicCdrAggregationLib;
+using System.Data.OleDb;
+using System.Data;
+using System.IO;
+using WOHSQLInterface;
+
+
 
 namespace BayClinicCernerAmbulatory
 {
@@ -51,12 +58,18 @@ namespace BayClinicCernerAmbulatory
         private String NewBayClinicAmbulatoryMongoCredentialConfigFile = ConfigurationManager.AppSettings["NewBayClinicAmbulatoryMongoCredentialConfigFile"];
         private String NewBayClinicAmbulatoryMongoCredentialSection = ConfigurationManager.AppSettings["NewBayClinicAmbulatoryMongoCredentialSection"];
 
+        private int WOAHPatientCounter = 0;
+
+        //Init the the interface to the sql dataset
+        WOHSQLiteInterface WOHMembershipData = new WOHSQLiteInterface();
+
         private CdrDbInterface CdrDb;
         private Organization OrganizationObject;
         private DataFeed FeedObject;
         private AggregationRun ThisAggregationRun;
         private MongoDbConnection MongoCxn;
         private CernerReferencedCodeDictionaries ReferencedCodes;
+        private CernerReferenceHealthPlanDictionaries ReferencedHealthPlans;
         private MongoAggregationRunUpdater MongoRunUpdater;
 
         IMongoCollection<MongodbIdentifierEntity> IdentifierCollection;
@@ -76,6 +89,7 @@ namespace BayClinicCernerAmbulatory
         IMongoCollection<MongodbMedicationEntity> MedicationCollection;
         IMongoCollection<MongodbMedicationReconciliationDetailEntity> MedicationReconciliationDetailCollection;
         IMongoCollection<MongodbReferenceMedicationEntity> ReferenceMedicationCollection;
+        IMongoCollection<MongodbReferenceHealthPlanEntity> ReferenceHealthPlanCollection;
 
         public int PatientCounter;
         public int PhoneCounter;
@@ -105,6 +119,8 @@ namespace BayClinicCernerAmbulatory
             CdrDb = new CdrDbInterface(PgConnectionName, ConnectionArgumentType.ConnectionStringName);
             MongoCxn = new MongoDbConnection(NewBayClinicAmbulatoryMongoCredentialConfigFile, NewBayClinicAmbulatoryMongoCredentialSection);
             ReferencedCodes = new CernerReferencedCodeDictionaries();
+            ReferencedHealthPlans = new CernerReferenceHealthPlanDictionaries();
+
             Mutx = new Mutex();
         }
 
@@ -136,6 +152,8 @@ namespace BayClinicCernerAmbulatory
             MedicationCollection = MongoCxn.Db.GetCollection<MongodbMedicationEntity>("medications");
             MedicationReconciliationDetailCollection = MongoCxn.Db.GetCollection<MongodbMedicationReconciliationDetailEntity>("medicationreconciliationdetail");
             ReferenceMedicationCollection = MongoCxn.Db.GetCollection<MongodbReferenceMedicationEntity>("referencemedication");
+            ReferenceHealthPlanCollection = MongoCxn.Db.GetCollection<MongodbReferenceHealthPlanEntity>("referencehealthplan");
+            // TODO initialize collection
 
             // reset all counters to 0
             PatientCounter = PhoneCounter = AddressCounter = IdentifierCounter = VisitCounter = ChargeCounter = ChargeDetailCounter =
@@ -143,14 +161,44 @@ namespace BayClinicCernerAmbulatory
                 0;
 
             Initialized = ReferencedCodes.Initialize(RefCodeCollection);
+            Initialized  = ReferencedCodes.Initialize(RefCodeCollection);
+            Initialized &= ReferencedHealthPlans.Initialize(ReferenceHealthPlanCollection, RefCodeCollection);
             ThisAggregationRun = GetNewAggregationRun();
             Initialized &= ThisAggregationRun.dbid > 0;
+
+            //Connect to the sql database
+            WOHMembershipData.ConnectToLatestMembership();
 
             MongoRunUpdater = new MongoAggregationRunUpdater(ThisAggregationRun.dbid, MongoCxn.Db);
 
             return Initialized;
         }
 
+        public bool IsWOAHMember(MongodbPersonEntity PersonDocument)
+        {
+
+            if (CdrDb.Context.Patients.Count(p => p.EmrIdentifier == PersonDocument.UniquePersonIdentifier) > 0)
+            {
+                return true;
+            }
+
+            else
+            {
+                var InsuranceCoverageQuery = InsuranceCollection.AsQueryable()
+                                                   .Where(x => x.UniqueEntityIdentifier == PersonDocument.UniquePersonIdentifier
+                                                            && x.EntityType == "PERSON");
+
+                foreach (MongodbInsuranceEntity InsuranceDoc in InsuranceCoverageQuery)
+                {
+                    if (ReferencedHealthPlans.PlanNameCodeMeanings[InsuranceDoc.UniqueHealthPlanIdentifier] == "WESTERN OREGON ADVANCED HEALTH")
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
         /// <summary>
         /// Main callable method, iterates over all available patients in MongoDB to aggregate into PostgreSQL
         /// </summary>
@@ -159,6 +207,7 @@ namespace BayClinicCernerAmbulatory
         public bool AggregateAllAvailablePatients(bool ClearRunNumbers = false)
         {
             bool OverallResult = true;
+            int PatientCounter = 0;
 
             if (!InitializeRun())
             {
@@ -187,9 +236,12 @@ namespace BayClinicCernerAmbulatory
                     foreach (MongodbPersonEntity PersonDocument in PersonCursor.Current)
                     {
                         PatientCounter++;
-
-                        bool ThisPatientAggregationResult = AggregateOnePatient(PersonDocument);
-                        OverallResult &= ThisPatientAggregationResult;
+                        if(IsWOAHMember(PersonDocument))
+                        {
+                            WOAHPatientCounter++;
+                            bool ThisPatientAggregationResult = AggregateOnePatient(PersonDocument);
+                            OverallResult &= ThisPatientAggregationResult;
+                        }
 
                         if (EndThreadSignal)
                         {
@@ -200,10 +252,14 @@ namespace BayClinicCernerAmbulatory
             }
 
         EndProcessing:
+            //Disconnect after the the database is done being used
+            WOHMembershipData.Disconnect();
+
             ThisAggregationRun.StatusFlags = AggregationRunStatus.Complete;
             CdrDb.Context.SubmitChanges();
 
             Trace.WriteLine("Processed " + PatientCounter + " patients");
+            Trace.WriteLine("Processed " + WOAHPatientCounter + "WOAH covered patients");
             return OverallResult;
         }
 
@@ -253,6 +309,7 @@ namespace BayClinicCernerAmbulatory
 
             if (OverallSuccess)
             {
+                WOAHPatientCounter++;
                 CdrDb.Context.Transaction.Commit();
                 MongoRunUpdater.UpdateAll();
             }
@@ -760,7 +817,15 @@ namespace BayClinicCernerAmbulatory
                         DateTime StartDate, EndDate;
                         DateTime.TryParse(InsuranceCoverageDoc.EffectiveBeginDateTime, out StartDate);        // Will be DateTime.MinValue on parse failure
                         DateTime.TryParse(InsuranceCoverageDoc.EffectiveEndDateTime, out EndDate);        // Will be DateTime.MinValue on parse failure
-                       
+
+                        //Verify that the patient is on Medicade
+                        // Let's discuss what this is accomplishing
+                        //if (InsuranceCoverageDoc.Type != "24198546")  // better to look into a code dictionary to interpret this
+                        //   return false;  // I think continue; would be more correct here.  
+
+                        //Verify patient is in our WOAH Database
+
+                        
 
                         InsuranceCoverage NewPgRecord = new InsuranceCoverage
                         {
@@ -768,8 +833,11 @@ namespace BayClinicCernerAmbulatory
                             StartDate = StartDate,
                             EndDate = EndDate,
                             PlanName = InsuranceCoverageDoc.UniqueHealthPlanIdentifier,
-                            Patient = PgPatient            //Just adding the patientdbid might may improve runtime
+                            Patient = PgPatient,            //Just adding the patientdbid might may improve runtime
+                            CoverageType = InsuranceCoverageDoc.Type,
+                            MemberID = InsuranceCoverageDoc.MemberNumber
                         };
+
 
                         CdrDb.Context.InsuranceCoverages.InsertOnSubmit(NewPgRecord);
                         CdrDb.Context.SubmitChanges();
@@ -828,7 +896,7 @@ namespace BayClinicCernerAmbulatory
                         CdrDb.Context.Immunizations.InsertOnSubmit(NewPgRecord);
                         CdrDb.Context.SubmitChanges();
 
-                        MongoRunUpdater.InsuranceIdList.Add(ImmunizationDoc.Id);
+                        MongoRunUpdater.ImmunizationIdList.Add(ImmunizationDoc.Id);
                     }
                 }
             }

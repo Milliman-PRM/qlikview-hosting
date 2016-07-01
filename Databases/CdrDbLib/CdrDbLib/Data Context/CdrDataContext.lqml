@@ -219,6 +219,8 @@
       <Column Name="enddate" Member="EndDate" Type="System.DateTime" DbType="timestamp" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="3e73b262-9baa-4e41-9085-fdfddb82417d" />
       <Column Name="planname" Member="PlanName" Type="System.String" DbType="varchar" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="9fa72899-291a-452f-b0fb-3f8e57ef602d" />
       <Column Name="patientdbid" Member="Patientdbid" Type="System.Int64" AutoSync="Always" DbType="int8 NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="755a5138-6db7-4cc6-8b16-76f31b9d6298" />
+      <Column Name="coveragetype" Member="CoverageType" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="2baa929a-b060-44d3-a746-74b317a4afa4" />
+      <Column Name="memberid" Member="MemberID" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="8ea16eac-4ec9-4b97-95ed-3e57482af84f" />
       <Association Name="Patient_InsuranceCoverage" ed:AssociationGuid="6e5bb6c6-9667-41a0-b2b9-bf204bf64a09" Member="Patient" ed:Guid="5f572dde-d98c-4d20-bdcc-410c48c92502" ThisKey="Patientdbid" OtherKey="dbid" Type="Patient" DeleteOnNull="true" IsForeignKey="true" />
     </Type>
   </Table>
