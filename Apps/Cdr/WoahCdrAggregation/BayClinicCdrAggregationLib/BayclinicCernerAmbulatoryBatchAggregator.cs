@@ -133,7 +133,7 @@ namespace BayClinicCernerAmbulatory
                                                    .Where(x => x.UniqueEntityIdentifier == PersonDocument.UniquePersonIdentifier);
                 foreach (MongodbInsuranceEntity PatientCoverageID in InsuranceCoverageQuery)
                 {
-                    if (HealthPlanCodes.PlanNameCodeMeanings[PatientCoverageID.Type] == "WESTERN OREGON ADVANCED HEALTH")
+                    if (ReferencedHealthPlans.PlanNameCodeMeanings[PatientCoverageID.UniqueHealthPlanIdentifier] == "WESTERN OREGON ADVANCED HEALTH")
                         return true;
                 }
             }
