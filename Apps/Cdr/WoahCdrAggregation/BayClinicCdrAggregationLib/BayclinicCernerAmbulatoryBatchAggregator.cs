@@ -125,18 +125,22 @@ namespace BayClinicCernerAmbulatory
         {
 
             if (CdrDb.Context.Patients.Count(p => p.EmrIdentifier == PersonDocument.UniquePersonIdentifier) > 0)
+            {
                 return true;
+            }
 
             else
             {
                 var InsuranceCoverageQuery = InsuranceCollection.AsQueryable()
                                                    .Where(x => x.UniqueEntityIdentifier == PersonDocument.UniquePersonIdentifier
-                                                          && x.EntityType == "PERSON");
+                                                            && x.EntityType == "PERSON");
 
                 foreach (MongodbInsuranceEntity InsuranceDoc in InsuranceCoverageQuery)
                 {
                     if (ReferencedHealthPlans.PlanNameCodeMeanings[InsuranceDoc.UniqueHealthPlanIdentifier] == "WESTERN OREGON ADVANCED HEALTH")
+                    {
                         return true;
+                    }
                 }
             }
 
