@@ -228,7 +228,7 @@ namespace BayClinicCernerExtractLib
             }
 
             // Read and parse field names from the first line of the file
-            string[] FieldNames = SplitLine(Reader.ReadLine());
+            string[] FieldNames = SplitLine(Reader.ReadLine().ToLower());
 
             bool CreateLocalMongoConnection = (MongoCxn == null && InsertToMongo);
             if (CreateLocalMongoConnection)
