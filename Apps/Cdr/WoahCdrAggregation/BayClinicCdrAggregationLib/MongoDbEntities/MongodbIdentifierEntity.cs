@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using CdrContext;
+using CdrDbLib;
 
 namespace BayClinicCernerAmbulatory
 {
@@ -57,5 +59,47 @@ namespace BayClinicCernerAmbulatory
         [BsonElement("lastaggregationrun")]
         public long LastAggregationRun;
 #pragma warning restore 0649
+        internal bool MergeWithExistingPatientIdentifiers(ref PatientIdentifier IdentifierRecord, ref Patient PatientRecord, CernerReferencedCodeDictionaries ReferencedCodes, Organization OrganizationObject)
+        {
+            DateTime ActiveStatusDT, UpdateTime;
+            DateTime.TryParse(ActiveStatusDateTime, out ActiveStatusDT);
+            DateTime.TryParse(UpdateDateTime, out UpdateTime);
+            if (IdentifierRecord == null)
+            {
+
+                IdentifierRecord = new PatientIdentifier
+                {
+                    Identifier = Identifier,
+                    IdentifierType = ReferencedCodes.IdentifierTypeCodeMeanings[IdentifierType],
+                    Organization = OrganizationObject,
+                    Patient = PatientRecord,
+                    DateFirstReported = ActiveStatusDT,
+                    DateLastReported = ActiveStatusDT,
+                    UpdateTime = UpdateTime,
+                    LastImportFileDate = ImportFileDate
+                };
+                return true;
+            }
+
+            else if(IdentifierRecord.UpdateTime < UpdateTime)
+            { 
+                if (IdentifierRecord.IdentifierType != ReferencedCodes.IdentifierTypeCodeMeanings[IdentifierType] && !String.IsNullOrEmpty(IdentifierType)) IdentifierType = ReferencedCodes.IdentifierTypeCodeMeanings[IdentifierType];
+
+                if (IdentifierRecord.DateLastReported < ActiveStatusDT) IdentifierRecord.DateLastReported = ActiveStatusDT;
+                if (IdentifierRecord.DateFirstReported > ActiveStatusDT) IdentifierRecord.DateFirstReported = ActiveStatusDT;
+
+                if (IdentifierRecord.UpdateTime != UpdateTime && !String.IsNullOrEmpty(UpdateDateTime)) IdentifierRecord.UpdateTime = UpdateTime;
+
+                IdentifierRecord.LastImportFileDate = new string[] { IdentifierRecord.LastImportFileDate, ImportFileDate }.Max();
+
+                return false;
+            }
+
+            else
+            {
+                return false;
+            }
+            
+        }
     }
 }

@@ -33,6 +33,7 @@
     <Reference Include="Devart.Data, Version=5.0.1450.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL" />
     <Reference Include="Devart.Data.Linq, Version=4.5.995.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL" />
     <Reference Include="Devart.Data.PostgreSql.Linq, Version=4.5.995.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL" />
+    <Reference Include="Devart.Data.SQLite, Version=5.5.658.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL" />
     <Reference Include="MongoDB.Bson, Version=2.2.4.26, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MongoDB.Bson.2.2.4\lib\net45\MongoDB.Bson.dll</HintPath>
       <Private>True</Private>
@@ -59,6 +60,7 @@
     <Compile Include="BayClinicAggregationWorkerThreadManager.cs" />
     <Compile Include="BayclinicCernerAmbulatoryBatchAggregator.cs" />
     <Compile Include="CernerReferencedCodeDictionaries.cs" />
+    <Compile Include="CernerReferenceHealthPlanDictionaries.cs" />
     <Compile Include="MongoAggregationRunUpdater.cs" />
     <Compile Include="MongoDbEntities\MongodbMedicationEntity.cs" />
     <Compile Include="MongoDbEntities\MongodbImmunizationEntity.cs" />
@@ -73,6 +75,7 @@
     <Compile Include="MongoDbEntities\MongodbPhoneEntity.cs" />
     <Compile Include="MongoDbEntities\MongodbProblemEntity.cs" />
     <Compile Include="MongoDbEntities\MongodbRefCodeEntity.cs" />
+    <Compile Include="MongoDbEntities\MongodbReferenceHealthPlanEntity.cs" />
     <Compile Include="MongoDbEntities\MongodbReferenceMedicationEntity.cs" />
     <Compile Include="MongoDbEntities\MongodbReferenceTerminologyEntity.cs" />
     <Compile Include="MongoDbEntities\MongodbResultEntity.cs" />
@@ -87,6 +90,10 @@
     <ProjectReference Include="..\..\..\AppsCommon\MongoDbWrap\MongoDbWrap.csproj">
       <Project>{5fdfbd80-5d24-40a0-985f-c17f579d8517}</Project>
       <Name>MongoDbWrap</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ClassLibrary2\SQLiteLib.csproj">
+      <Project>{d5149a31-d65e-4064-a4f4-cf68069ec55c}</Project>
+      <Name>SQLiteLib</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

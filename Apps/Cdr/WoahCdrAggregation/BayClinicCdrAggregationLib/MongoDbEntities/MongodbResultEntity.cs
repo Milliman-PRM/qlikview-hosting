@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using CdrContext;
+using CdrDbLib;
 
 namespace BayClinicCernerAmbulatory
 {
@@ -138,5 +140,63 @@ namespace BayClinicCernerAmbulatory
         [BsonElement("lastaggregationrun")]
         public long LastAggregationRun;
 #pragma warning restore 0649
+
+        internal bool MergeWithExistingMeasurements(ref Measurement MeasurementRecord, ref Patient PatientRecord, VisitEncounter VisitRecord, CernerReferencedCodeDictionaries ReferencedCodes)
+        {
+            DateTime PerformedDate, UpdateTime;
+            DateTime.TryParse(PerformedDateTime, out PerformedDate);
+            DateTime.TryParse(UpdateDateTime, out UpdateTime);
+            if (MeasurementRecord == null)
+            {
+                Measurement NewPgRecord = new Measurement
+                {
+                    Patientdbid = PatientRecord.dbid,
+                    VisitEncounterdbid = VisitRecord.dbid,
+                    EmrIdentifier = UniqueResultIdentifier,
+                    Name = ReferencedCodes.ResultCodeCodeMeanings[Code],
+                    Description = Title,  // TODO get this right
+                    Comments = "",    // TODO get this right
+                    MeasurementCode = new CodedEntry { },    // TODO get this right
+                    AssessmentDateTime = PerformedDate,
+                    Value = ResultValue,
+                    Units = ReferencedCodes.ResultUnitsCodeMeanings[Units],
+                    NormalRangeLow = NormalLow,
+                    NormalRangeHigh = NormalHigh,
+                    NormalType = ReferencedCodes.GetResultNormalCodeEnum(NormalCode),
+                    UpdateTime = UpdateTime,
+                    LastImportFileDate = ImportFileDate
+                };
+                return true;
+            }
+            else if(MeasurementRecord.UpdateTime < UpdateTime)
+            {
+                if (MeasurementRecord.Name != ReferencedCodes.ResultCodeCodeMeanings[Code] && !String.IsNullOrEmpty(ReferencedCodes.ResultCodeCodeMeanings[Code]))
+                    MeasurementRecord.Name = ReferencedCodes.ResultCodeCodeMeanings[Code];
+
+                if (MeasurementRecord.Description != Title && !String.IsNullOrEmpty(Title)) MeasurementRecord.Description = Title;
+                if (MeasurementRecord.AssessmentDateTime != PerformedDate && !String.IsNullOrEmpty(PerformedDateTime)) MeasurementRecord.AssessmentDateTime = PerformedDate;
+                if (MeasurementRecord.Value != ResultValue && !String.IsNullOrEmpty(ResultValue)) MeasurementRecord.Value = ResultValue;
+
+                if (MeasurementRecord.Units != ReferencedCodes.ResultUnitsCodeMeanings[Units] && !String.IsNullOrEmpty(ReferencedCodes.ResultUnitsCodeMeanings[Units]))
+                    MeasurementRecord.Units = ReferencedCodes.ResultUnitsCodeMeanings[Units];
+
+                if (MeasurementRecord.NormalRangeLow != NormalLow && !String.IsNullOrEmpty(NormalLow)) MeasurementRecord.NormalRangeLow = NormalLow;
+                if (MeasurementRecord.NormalRangeHigh != NormalHigh && !String.IsNullOrEmpty(NormalHigh)) MeasurementRecord.NormalRangeHigh = NormalHigh;
+
+                if (MeasurementRecord.NormalType != ReferencedCodes.GetResultNormalCodeEnum(NormalCode) && !String.IsNullOrEmpty(NormalCode))
+                    MeasurementRecord.NormalType = ReferencedCodes.GetResultNormalCodeEnum(NormalCode);
+
+                if (MeasurementRecord.UpdateTime != UpdateTime && !String.IsNullOrEmpty(UpdateDateTime)) MeasurementRecord.UpdateTime = UpdateTime;
+
+                MeasurementRecord.LastImportFileDate = new string[] { MeasurementRecord.LastImportFileDate, ImportFileDate }.Max();
+                return false;
+            }
+            else
+            {
+                return false;
+            }
+            
+        }
+
     }
 }

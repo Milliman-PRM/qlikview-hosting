@@ -15,6 +15,7 @@
       <Column Name="ethnicity" Member="Ethnicity" Type="System.String" DbType="varchar" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="4dc14fd9-8ba4-4170-a70c-97e3d6997825" />
       <Column Name="maritalstatus" Member="MaritalStatus" Type="MaritalStatus" DbType="INT2" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="8ed0ac35-9190-4006-b7bf-dec7f01fba76" />
       <Column Name="latestimportfiledate" Member="LatestImportFileDate" Type="System.String" DbType="varchar(8) NOT NULL" CanBeNull="false" UpdateCheck="Never" MaxLength="8" ed:ValidateMaxLength="8" ed:ValidateRequired="true" ed:Guid="07fa9898-9af4-4b73-a2f0-3a40e6cc657d" />
+      <Column Name="updatetime" Member="UpdateTime" Type="System.DateTime" DbType="timestamp NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="d4a4ae1e-782b-4e68-9c4a-ee866fa73036" />
       <Association Name="Patient_PatientIdentifier" ed:AssociationGuid="5f3fa80d-2b21-438d-9327-7d51d0dc62f9" Member="PatientIdentifiers" ed:Guid="aa3dab3d-585a-46c5-b4bb-388fd93a09e1" ThisKey="dbid" OtherKey="Patientdbid" Type="PatientIdentifier" />
       <Association Name="Patient_PatientAddress" ed:AssociationGuid="107a5c85-691f-4167-913a-e9d51b02cf89" Member="PhysicalAddresses" ed:Guid="d14e039a-9820-4f50-bfe1-2409c2ec6354" ThisKey="dbid" OtherKey="Patientdbid" Type="PhysicalAddress" />
       <Association Name="Patient_TelephoneNumber" ed:AssociationGuid="88c0c094-bc90-44d2-acf7-6c4ecc064fad" Member="TelephoneNumbers" ed:Guid="06bf4270-57c6-441f-8c1c-97eac2ab4cad" ThisKey="dbid" OtherKey="Patientdbid" Type="TelephoneNumber" />
@@ -45,6 +46,8 @@
       <Column Name="datelastreported" Member="DateLastReported" Type="System.DateTime" DbType="timestamp" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="145c58e9-6b63-454c-a626-c8a5aac858d9" />
       <Column Name="patientdbid" Member="Patientdbid" Type="System.Int64" AutoSync="Always" DbType="int8 NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="4b7916a2-bce1-4fb9-9c78-914dd7dcedeb" />
       <Column Name="organizationdbid" Member="Organizationdbid" Type="System.Int64" AutoSync="Always" DbType="int8 NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="822ff744-376c-48de-a406-72b5d69f6a33" />
+      <Column Name="updatetime" Member="UpdateTime" Type="System.DateTime" DbType="timestamp NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="0b4a43d8-bef6-4a38-a449-ec99024c4661" />
+      <Column Name="lastimportfiledate" Member="LastImportFileDate" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="f95dec4d-de22-4f7c-af3c-9ad459caffbf" />
       <Association Name="Patient_PatientIdentifier" ed:AssociationGuid="5f3fa80d-2b21-438d-9327-7d51d0dc62f9" Member="Patient" ed:Guid="d809a7ea-f4e1-463f-b9c2-78dc53e0127c" ThisKey="Patientdbid" OtherKey="dbid" Type="Patient" DeleteRule="NO ACTION" DeleteOnNull="true" IsForeignKey="true" />
       <Association Name="Organization_PatientIdentifier" ed:AssociationGuid="117a3f02-9202-4471-ab6f-1775800e756d" Member="Organization" ed:Guid="a82fe512-6f91-4bf3-9bc8-f1d48fd4e30d" ThisKey="Organizationdbid" OtherKey="dbid" Type="Organization" DeleteOnNull="true" IsForeignKey="true" />
     </Type>
@@ -66,6 +69,8 @@
       <Column Name="datelastreported" Member="DateLastReported" Type="System.DateTime" DbType="timestamp" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="a62936b9-14ed-419b-8c4a-ff8754e33d26" />
       <Column Name="patientdbid" Member="Patientdbid" Type="System.Int64" AutoSync="Always" DbType="int8 NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="7a9fde6d-7765-4bed-b3ac-31b631c9fe42" />
       <Column Name="addresstype" Member="AddressType" Type="AddressType" DbType="smallint" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="448a2c2f-905d-4aad-be56-5bb4993fddb5" />
+      <Column Name="updatetime" Member="UpdateTime" Type="System.DateTime" DbType="timestamp NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="e73fe6ce-2435-4225-901e-b19a49061684" />
+      <Column Name="lastimportfiledate" Member="LastImportFileDate" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="e480f10f-0f62-4c9a-b6c2-88150a247fd0" />
       <Association Name="Patient_PatientAddress" ed:AssociationGuid="107a5c85-691f-4167-913a-e9d51b02cf89" Member="patient" ed:Guid="614d252c-e174-416d-84dc-254d3f98a67e" ThisKey="Patientdbid" OtherKey="dbid" Type="Patient" DeleteOnNull="true" IsForeignKey="true" />
     </Type>
   </Table>
@@ -81,6 +86,8 @@
       <Column Name="datefirstreported" Member="DateFirstReported" Type="System.DateTime" DbType="timestamp" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="5b3479fb-8fa5-4f71-98f8-fa00c196f995" />
       <Column Name="datelastreported" Member="DateLastReported" Type="System.DateTime" DbType="timestamp" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="f247a0b3-2642-430f-83f2-357eda7853f3" />
       <Column Name="patientdbid" Member="Patientdbid" Type="System.Int64" AutoSync="Always" DbType="int8 NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="ad915c6f-b90a-434d-8202-2fa0ae4bdf1b" />
+      <Column Name="updatetime" Member="UpdateTime" Type="System.DateTime" DbType="timestamp NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="cbc6906f-95c5-4307-b039-ae14b7af501e" />
+      <Column Name="lastimportfiledate" Member="LastImportFileDate" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="90bbdda3-a31e-49ee-bb3f-3efb6e002597" />
       <Association Name="Patient_TelephoneNumber" ed:AssociationGuid="88c0c094-bc90-44d2-acf7-6c4ecc064fad" Member="Patient" ed:Guid="39ea6f4d-ce12-4b16-9762-14c99577d293" ThisKey="Patientdbid" OtherKey="dbid" Type="Patient" DeleteOnNull="true" IsForeignKey="true" />
     </Type>
   </Table>
@@ -103,6 +110,8 @@
       <Column Name="statusdatetime" Member="StatusDateTime" Type="System.DateTime" DbType="TIMESTAMPTZ" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="54ccfd0a-e90b-4db1-bfc9-4473e25b1dc8" />
       <Column Name="organizationdbid" Member="Organizationdbid" Type="System.Int64" AutoSync="Always" DbType="int8 NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="6c05ffdd-7dbd-4381-94da-eb5a53c87bbe" />
       <Column Name="patientdbid" Member="Patientdbid" Type="System.Int64" AutoSync="Always" DbType="int8 NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="710d4f36-141e-4da8-ac4f-cfe05b945f82" />
+      <Column Name="updatetime" Member="UpdateTime" Type="System.DateTime" DbType="timestamp NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="6b6bc422-b532-4ecb-a5b1-80b45a5942bf" />
+      <Column Name="lastimportfiledate" Member="LastImportFileDate" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="fe379f40-28a5-4f0c-9583-01f09eafdb19" />
       <Association Name="Patient_VisitEncounter" ed:AssociationGuid="28b57ba0-1ca8-4ecc-89f5-8334e9174dec" Member="Patient" ed:Guid="a43ba0dc-954c-4c0d-a612-7f32cd13a106" ThisKey="Patientdbid" OtherKey="dbid" Type="Patient" DeleteOnNull="true" IsForeignKey="true" />
       <Association Name="Organization_VisitEncounter" ed:AssociationGuid="47c312b2-12d4-4f5f-ba62-4af7c1877038" Member="Organization" ed:Guid="b04b2a6a-d51f-4811-bf7b-94328f7e9e60" ThisKey="Organizationdbid" OtherKey="dbid" Type="Organization" DeleteOnNull="true" IsForeignKey="true" />
       <Association Name="VisitEncounter_Charge" ed:AssociationGuid="4ad800a0-9f53-408b-b2d2-30093455ee34" Member="Charges" ed:Guid="27e5bff8-1095-47f3-b5c6-23ba66149280" ThisKey="dbid" OtherKey="VisitEncounterdbid" Type="Charge" />
@@ -131,6 +140,7 @@
         </TypeMapping>
       </Column>
       <Column Name="visitencounterdbid" Member="VisitEncounterdbid" Type="System.Int64" AutoSync="Always" DbType="int8" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="b684d484-c458-4c8d-8287-33b9cc56c2b9" />
+      <Column Name="lastimportfiledate" Member="LastImportFileDate" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="e53e0ff6-de55-4644-b012-4b700a2a17b1" />
       <Association Name="VisitEncounter_Charge" ed:AssociationGuid="4ad800a0-9f53-408b-b2d2-30093455ee34" Member="VisitEncounter" ed:Guid="9ec20836-1fc8-485c-92c8-266cefc66921" ThisKey="VisitEncounterdbid" OtherKey="dbid" Type="VisitEncounter" IsForeignKey="true" />
       <Association Name="Charge_ChargeCode" ed:AssociationGuid="7a7f3bbd-d2c3-4b66-8502-bb647ae8b64f" Member="ChargeCodes" ed:Guid="66f993a8-cc71-42e1-9c20-1a4f49b300c8" ThisKey="dbid" OtherKey="Chargedbid" Type="ChargeCode" />
     </Type>
@@ -163,6 +173,8 @@
       <Column Name="normaltype" Member="NormalType" Type="ResultNormal" DbType="smallint" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="9121cc47-7685-42b9-9c11-a9c858889636" />
       <Column Name="patientdbid" Member="Patientdbid" Type="System.Int64" AutoSync="Always" DbType="int8 NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="713f6aa4-3917-4733-8073-0c142fe3fd3e" />
       <Column Name="visitencounterdbid" Member="VisitEncounterdbid" Type="System.Int64" AutoSync="Always" DbType="int8" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="ff2b6a66-382d-4d70-a996-cdd8736fa67a" />
+      <Column Name="updatetime" Member="UpdateTime" Type="System.DateTime" DbType="timestamp NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="0e9f636b-966a-4491-b77a-6cb141de58b6" />
+      <Column Name="lastimportfiledate" Member="LastImportFileDate" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="73aef72f-4921-4336-a521-a408394d50b3" />
       <Association Name="Patient_Measurement" ed:AssociationGuid="6946cc8f-e055-4653-bbb0-f25fc3fd22e9" Member="Patient" ed:Guid="2148c52b-ad49-494e-ae5d-ca23658bc83f" ThisKey="Patientdbid" OtherKey="dbid" Type="Patient" DeleteOnNull="true" IsForeignKey="true" />
       <Association Name="VisitEncounter_Measurement" ed:AssociationGuid="bc3fb1df-ff46-4835-ad1a-2363523d73a4" Member="VisitEncounter" ed:Guid="9717abde-619d-438b-9cee-561dbf6194c8" ThisKey="VisitEncounterdbid" OtherKey="dbid" Type="VisitEncounter" IsForeignKey="true" />
     </Type>
@@ -185,6 +197,8 @@
       <Column Name="statusdatetime" Member="StatusDateTime" Type="System.DateTime" DbType="TIMESTAMPTZ" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="019cb770-dbb0-46a6-b4b5-1df08b58d694" />
       <Column Name="patientdbid" Member="Patientdbid" Type="System.Int64" AutoSync="Always" DbType="int8 NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="f6555028-2f57-42d9-91b9-4481dc17a37e" />
       <Column Name="visitencounterdbid" Member="VisitEncounterdbid" Type="System.Int64" AutoSync="Always" DbType="int8" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="f80e097b-bc42-4a18-b2c4-2b5a3c5610af" />
+      <Column Name="updatetime" Member="UpdateTime" Type="System.DateTime" DbType="timestamp NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="bd21dfef-29a1-49d1-8428-c5a5d3b3cc79" />
+      <Column Name="lastimportfiledate" Member="LastImportFileDate" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="dd159942-b8f8-4f2c-b277-fbc3af42b1b3" />
       <Association Name="Patient_Medication" ed:AssociationGuid="f8432dc4-5240-4876-8ed7-09299d25a271" Member="Patient" ed:Guid="a566b6d6-aab2-4841-ac2e-39189a15b03d" ThisKey="Patientdbid" OtherKey="dbid" Type="Patient" DeleteOnNull="true" IsForeignKey="true" />
       <Association Name="VisitEncounter_Medication" ed:AssociationGuid="604a15f6-2adb-48a9-9df4-48877c8be6cd" Member="VisitEncounter" ed:Guid="05987dad-42b9-4ece-bafc-5cc80cf0797f" ThisKey="VisitEncounterdbid" OtherKey="dbid" Type="VisitEncounter" IsForeignKey="true" />
     </Type>
@@ -207,6 +221,10 @@
       </Column>
       <Column Name="patientdbid" Member="Patientdbid" Type="System.Int64" AutoSync="Always" DbType="int8 NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="9d63fe75-69cd-4ed2-9388-36094b88f0fe" />
       <Column Name="visitencounterdbid" Member="VisitEncounterdbid" Type="System.Int64" AutoSync="Always" DbType="int8" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="d0e8bc59-6220-43b0-bfaf-ca3894ad54df" />
+      <Column Name="resultid" Member="ResultID" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="60abe2b0-c328-4936-a76c-7c594de43af4" />
+      <Column Name="visitid" Member="VisitID" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="37b29036-eb4d-4878-94bd-b69f57567f4c" />
+      <Column Name="updatetime" Member="UpdateTime" Type="System.DateTime" DbType="timestamp NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="389b1445-524d-41bd-a968-5c2be85c0293" />
+      <Column Name="lastimportfiledate" Member="LastImportFileDate" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="949908e5-adf7-44e1-968a-1ea3d60778bb" />
       <Association Name="Patient_Immunization" ed:AssociationGuid="e5f9e461-d8e6-4eaa-95eb-8a7706940dd3" Member="Patient" ed:Guid="6a3404b2-6dc1-413e-a7b4-96be4e0b3bc2" ThisKey="Patientdbid" OtherKey="dbid" Type="Patient" DeleteOnNull="true" IsForeignKey="true" />
       <Association Name="VisitEncounter_Immunization" ed:AssociationGuid="728ba571-2630-44cb-a3a3-d5ade6d0fc9b" Member="VisitEncounter" ed:Guid="b8330713-b7f5-4f5b-a83c-d9bb72b19082" ThisKey="VisitEncounterdbid" OtherKey="dbid" Type="VisitEncounter" IsForeignKey="true" />
     </Type>
@@ -219,6 +237,10 @@
       <Column Name="enddate" Member="EndDate" Type="System.DateTime" DbType="timestamp" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="3e73b262-9baa-4e41-9085-fdfddb82417d" />
       <Column Name="planname" Member="PlanName" Type="System.String" DbType="varchar" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="9fa72899-291a-452f-b0fb-3f8e57ef602d" />
       <Column Name="patientdbid" Member="Patientdbid" Type="System.Int64" AutoSync="Always" DbType="int8 NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="755a5138-6db7-4cc6-8b16-76f31b9d6298" />
+      <Column Name="coveragetype" Member="CoverageType" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="2baa929a-b060-44d3-a746-74b317a4afa4" />
+      <Column Name="memberid" Member="MemberID" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="8ea16eac-4ec9-4b97-95ed-3e57482af84f" />
+      <Column Name="updatetime" Member="UpdateTime" Type="System.DateTime" DbType="timestamp NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="90ae5854-4bfe-4420-9029-f7ffa78a4387" />
+      <Column Name="lastimportfiledate" Member="LastImportFileDate" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="aae56bd4-35b0-4e85-9b0e-082a9a0cfec4" />
       <Association Name="Patient_InsuranceCoverage" ed:AssociationGuid="6e5bb6c6-9667-41a0-b2b9-bf204bf64a09" Member="Patient" ed:Guid="5f572dde-d98c-4d20-bdcc-410c48c92502" ThisKey="Patientdbid" OtherKey="dbid" Type="Patient" DeleteOnNull="true" IsForeignKey="true" />
     </Type>
   </Table>
@@ -245,6 +267,7 @@
       <Column Name="statusdatetime" Member="StatusDateTime" Type="System.DateTime" DbType="TIMESTAMPTZ" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="dc2300b3-7dbb-49ef-8069-dc4443c73d15" />
       <Column Name="patientdbid" Member="Patientdbid" Type="System.Int64" DbType="int8 NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="7803f99a-d0d1-436b-8eb5-7ce73e86c81f" />
       <Column Name="visitencounterdbid" Member="VisitEncounterdbid" Type="System.Int64" DbType="int8" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="abeb60d6-8cf4-4e7e-abb3-a0a37e904be3" />
+      <Column Name="lastimportfiledate" Member="LastImportFileDate" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="ed93981b-5f86-44d0-a798-90b113aaf01d" />
       <Association Name="Patient_Diagnosis" ed:AssociationGuid="79821cc8-094f-4373-88b5-f7216d670e3c" Member="Patient" ed:Guid="ab7d9b5c-81f2-42b7-a714-3c809c782c91" ThisKey="Patientdbid" OtherKey="dbid" Type="Patient" DeleteOnNull="true" IsForeignKey="true" />
       <Association Name="VisitEncounter_Diagnosis" ed:AssociationGuid="0ba9bfbc-1a10-4d02-9a31-71154c27aabc" Member="VisitEncounter" ed:Guid="769b9de3-4603-4cfd-be4a-1a304c60285d" ThisKey="VisitEncounterdbid" OtherKey="dbid" Type="VisitEncounter" IsForeignKey="true" />
     </Type>
@@ -259,6 +282,8 @@
       <Column Name="enddatetime" Member="EndDateTime" Type="System.DateTime" DbType="TIMESTAMPTZ" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="ee504587-94fb-45a7-9690-1f56b908a88d" />
       <Column Name="patientdbid" Member="Patientdbid" Type="System.Int64" AutoSync="Always" DbType="int8 NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="2ee27345-25c2-4e36-b405-577f2369fa35" />
       <Column Name="visitencounterdbid" Member="VisitEncounterdbid" Type="System.Int64" AutoSync="Always" DbType="int8" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="cd1eb497-2369-4d45-ae0d-649399b36ea2" />
+      <Column Name="updatetime" Member="UpdateTime" Type="System.DateTime" DbType="timestamp NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="0f9be54b-2eb7-4388-a0ff-370997bb0177" />
+      <Column Name="lastimportfiledate" Member="LastImportFileDate" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="cd805c8d-9342-4b93-9842-4cb6c53ca329" />
       <Association Name="Patient_Problem" ed:AssociationGuid="0db6fec7-42d6-4c31-a700-23812c71e8cd" Member="Patient" ed:Guid="5507db8d-42c0-4baa-b871-b65779a8054f" ThisKey="Patientdbid" OtherKey="dbid" Type="Patient" DeleteOnNull="true" IsForeignKey="true" />
       <Association Name="VisitEncounter_Problem" ed:AssociationGuid="05a0b74c-1d71-4eb1-b4fb-91a911e1492d" Member="VisitEncounter" ed:Guid="e79a3951-becf-485b-a55b-fb5dd5969a68" ThisKey="VisitEncounterdbid" OtherKey="dbid" Type="VisitEncounter" IsForeignKey="true" />
     </Type>
@@ -304,6 +329,9 @@
         </TypeMapping>
       </Column>
       <Column Name="&quot;Chargedbid&quot;" Member="Chargedbid" Type="System.Int64" DbType="int8 NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="9bdfd435-7934-42bc-9e4d-1269f1fe9b14" />
+      <Column Name="emridentifier" Member="EmrIdentifier" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="c2842edc-5a26-4612-bbbe-4a208b1fa2db" />
+      <Column Name="updatetime" Member="UpdateTime" Type="System.DateTime" DbType="timestamp NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="7e97c0d9-fef2-45e7-838b-8979d90e37b8" />
+      <Column Name="lastimportfiledate" Member="LastImportFileDate" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="08fd6f16-1beb-40b8-9397-8d1fea5cc678" />
       <Association Name="Charge_ChargeCode" ed:AssociationGuid="7a7f3bbd-d2c3-4b66-8502-bb647ae8b64f" Member="Charge" ed:Guid="c509d31a-37e8-4670-9ed4-61b3e19294eb" ThisKey="Chargedbid" OtherKey="dbid" Type="Charge" DeleteOnNull="true" IsForeignKey="true" />
     </Type>
   </Table>

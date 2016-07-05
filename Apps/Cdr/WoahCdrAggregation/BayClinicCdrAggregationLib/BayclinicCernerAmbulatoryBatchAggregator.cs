@@ -15,6 +15,13 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.IO;
 using MongoDB.Driver;
+using BayClinicCdrAggregationLib;
+using System.Data.OleDb;
+using System.Data;
+using System.IO;
+using WOHSQLInterface;
+
+
 
 namespace BayClinicCernerAmbulatory
 {
@@ -51,12 +58,18 @@ namespace BayClinicCernerAmbulatory
         private String NewBayClinicAmbulatoryMongoCredentialConfigFile = ConfigurationManager.AppSettings["NewBayClinicAmbulatoryMongoCredentialConfigFile"];
         private String NewBayClinicAmbulatoryMongoCredentialSection = ConfigurationManager.AppSettings["NewBayClinicAmbulatoryMongoCredentialSection"];
 
+        private int WOAHPatientCounter = 0;
+
+        //Init the the interface to the sql dataset
+        WOHSQLiteInterface WOHMembershipData = new WOHSQLiteInterface();
+
         private CdrDbInterface CdrDb;
         private Organization OrganizationObject;
         private DataFeed FeedObject;
         private AggregationRun ThisAggregationRun;
         private MongoDbConnection MongoCxn;
         private CernerReferencedCodeDictionaries ReferencedCodes;
+        private CernerReferenceHealthPlanDictionaries ReferencedHealthPlans;
         private MongoAggregationRunUpdater MongoRunUpdater;
 
         IMongoCollection<MongodbIdentifierEntity> IdentifierCollection;
@@ -76,6 +89,7 @@ namespace BayClinicCernerAmbulatory
         IMongoCollection<MongodbMedicationEntity> MedicationCollection;
         IMongoCollection<MongodbMedicationReconciliationDetailEntity> MedicationReconciliationDetailCollection;
         IMongoCollection<MongodbReferenceMedicationEntity> ReferenceMedicationCollection;
+        IMongoCollection<MongodbReferenceHealthPlanEntity> ReferenceHealthPlanCollection;
 
         public int PatientCounter;
         public int PhoneCounter;
@@ -105,6 +119,8 @@ namespace BayClinicCernerAmbulatory
             CdrDb = new CdrDbInterface(PgConnectionName, ConnectionArgumentType.ConnectionStringName);
             MongoCxn = new MongoDbConnection(NewBayClinicAmbulatoryMongoCredentialConfigFile, NewBayClinicAmbulatoryMongoCredentialSection);
             ReferencedCodes = new CernerReferencedCodeDictionaries();
+            ReferencedHealthPlans = new CernerReferenceHealthPlanDictionaries();
+
             Mutx = new Mutex();
         }
 
@@ -136,6 +152,8 @@ namespace BayClinicCernerAmbulatory
             MedicationCollection = MongoCxn.Db.GetCollection<MongodbMedicationEntity>("medications");
             MedicationReconciliationDetailCollection = MongoCxn.Db.GetCollection<MongodbMedicationReconciliationDetailEntity>("medicationreconciliationdetail");
             ReferenceMedicationCollection = MongoCxn.Db.GetCollection<MongodbReferenceMedicationEntity>("referencemedication");
+            ReferenceHealthPlanCollection = MongoCxn.Db.GetCollection<MongodbReferenceHealthPlanEntity>("referencehealthplan");
+            // TODO initialize collection
 
             // reset all counters to 0
             PatientCounter = PhoneCounter = AddressCounter = IdentifierCounter = VisitCounter = ChargeCounter = ChargeDetailCounter =
@@ -143,14 +161,44 @@ namespace BayClinicCernerAmbulatory
                 0;
 
             Initialized = ReferencedCodes.Initialize(RefCodeCollection);
+            Initialized  = ReferencedCodes.Initialize(RefCodeCollection);
+            Initialized &= ReferencedHealthPlans.Initialize(ReferenceHealthPlanCollection, RefCodeCollection);
             ThisAggregationRun = GetNewAggregationRun();
             Initialized &= ThisAggregationRun.dbid > 0;
+
+            //Connect to the sql database
+            WOHMembershipData.ConnectToLatestMembership();
 
             MongoRunUpdater = new MongoAggregationRunUpdater(ThisAggregationRun.dbid, MongoCxn.Db);
 
             return Initialized;
         }
 
+        public bool IsWOAHMember(MongodbPersonEntity PersonDocument)
+        {
+
+            if (CdrDb.Context.Patients.Count(p => p.EmrIdentifier == PersonDocument.UniquePersonIdentifier) > 0)
+            {
+                return true;
+            }
+
+            else
+            {
+                var InsuranceCoverageQuery = InsuranceCollection.AsQueryable()
+                                                   .Where(x => x.UniqueEntityIdentifier == PersonDocument.UniquePersonIdentifier
+                                                            && x.EntityType == "PERSON");
+
+                foreach (MongodbInsuranceEntity InsuranceDoc in InsuranceCoverageQuery)
+                {
+                    if (ReferencedHealthPlans.PlanNameCodeMeanings[InsuranceDoc.UniqueHealthPlanIdentifier] == "WESTERN OREGON ADVANCED HEALTH")
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
         /// <summary>
         /// Main callable method, iterates over all available patients in MongoDB to aggregate into PostgreSQL
         /// </summary>
@@ -159,6 +207,7 @@ namespace BayClinicCernerAmbulatory
         public bool AggregateAllAvailablePatients(bool ClearRunNumbers = false)
         {
             bool OverallResult = true;
+            int PatientCounter = 0;
 
             if (!InitializeRun())
             {
@@ -172,14 +221,14 @@ namespace BayClinicCernerAmbulatory
 
             ThisAggregationRun.StatusFlags = AggregationRunStatus.InProcess;
             CdrDb.Context.SubmitChanges();
-            
+
             FilterDefinition<MongodbPersonEntity> PatientFilterDef = Builders<MongodbPersonEntity>.Filter.Where(x =>
                            x.UniquePersonIdentifier != ""  // has an identifier to be referenced from other txt files
                         && !(x.LastAggregationRun > 0)     // not previously aggregated
                       );
 
             using (var PersonCursor = PersonCollection.Find<MongodbPersonEntity>(PatientFilterDef)
-                                                      .SortBy(x=>x.ImportFileDate)
+                                                      .SortBy(x => x.ImportFileDate)
                                                       .ToCursor())
             {
                 while (PersonCursor.MoveNext())  // transfer the next batch of available documents from the query result cursor
@@ -187,9 +236,12 @@ namespace BayClinicCernerAmbulatory
                     foreach (MongodbPersonEntity PersonDocument in PersonCursor.Current)
                     {
                         PatientCounter++;
-
-                        bool ThisPatientAggregationResult = AggregateOnePatient(PersonDocument);
-                        OverallResult &= ThisPatientAggregationResult;
+                        if(IsWOAHMember(PersonDocument))
+                        {
+                            WOAHPatientCounter++;
+                            bool ThisPatientAggregationResult = AggregateOnePatient(PersonDocument);
+                            OverallResult &= ThisPatientAggregationResult;
+                        }
 
                         if (EndThreadSignal)
                         {
@@ -200,10 +252,14 @@ namespace BayClinicCernerAmbulatory
             }
 
         EndProcessing:
+            //Disconnect after the the database is done being used
+            WOHMembershipData.Disconnect();
+
             ThisAggregationRun.StatusFlags = AggregationRunStatus.Complete;
             CdrDb.Context.SubmitChanges();
 
             Trace.WriteLine("Processed " + PatientCounter + " patients");
+            Trace.WriteLine("Processed " + WOAHPatientCounter + "WOAH covered patients");
             return OverallResult;
         }
 
@@ -228,11 +284,8 @@ namespace BayClinicCernerAmbulatory
             CdrDb.Context.Transaction = CdrDb.Context.Connection.BeginTransaction();
 
             // Store to database
-            if (PersonDocument.MergeWithExistingPatient(ref PatientRecord, ReferencedCodes))
-            {
-                // Record changes will persist by SubmitChanges()
-                int i = 42;  // debugging breakpoint
-            }
+            if (PersonDocument.MergeWithExistingPatient(ref PatientRecord, ReferencedCodes)) { PatientCounter++; }//Debugging breakpoint
+
             else
             {
                 CdrDb.Context.Patients.InsertOnSubmit(PatientRecord);
@@ -253,6 +306,7 @@ namespace BayClinicCernerAmbulatory
 
             if (OverallSuccess)
             {
+                WOAHPatientCounter++;
                 CdrDb.Context.Transaction.Commit();
                 MongoRunUpdater.UpdateAll();
             }
@@ -263,7 +317,7 @@ namespace BayClinicCernerAmbulatory
             }
 
             CdrDb.Context.Connection.Close();
-#endregion  PostgreSQL transaction to process all data for one patient
+            #endregion  PostgreSQL transaction to process all data for one patient
 
             return OverallSuccess;
         }
@@ -291,26 +345,21 @@ namespace BayClinicCernerAmbulatory
                 {
                     foreach (MongodbPhoneEntity PhoneDoc in PhoneCursor.Current)
                     {
-                        PhoneCounter++;
-                        DateTime ActiveStatusDT;
-                        DateTime.TryParse(PhoneDoc.ActiveStatusDateTime, out ActiveStatusDT);
 
-                        TelephoneNumber NewPgRecord = new TelephoneNumber
-                        {
-                            Number = new PhoneNumber
-                            {
-                                Number = PhoneDoc.PhoneNumber,
-                                PhoneType = ReferencedCodes.GetCdrPhoneTypeEnum(PhoneDoc.Type)
-                            },
-                            Patient = PgPatient,
-                            DateFirstReported = ActiveStatusDT,
-                            DateLastReported = ActiveStatusDT
-                        };
+                        var DuplicateTelephoneNumberQuery = from Phone in PgPatient.TelephoneNumbers
+                                                            where PhoneDoc.PhoneNumber == Phone.Number.Number
+                                                            select Phone;
+
+                        TelephoneNumber NewPgRecord = DuplicateTelephoneNumberQuery.FirstOrDefault();
+
+                        if (PhoneDoc.MergeWithExistingTelephoneNumber(ref NewPgRecord, ref PgPatient, ReferencedCodes)) { PhoneCounter++; }
+
 
                         CdrDb.Context.TelephoneNumbers.InsertOnSubmit(NewPgRecord);
                         CdrDb.Context.SubmitChanges();
 
                         MongoRunUpdater.PhoneIdList.Add(PhoneDoc.Id);
+
                     }
                 }
             }
@@ -341,28 +390,15 @@ namespace BayClinicCernerAmbulatory
                 {
                     foreach (MongodbAddressEntity AddressDoc in AddressCursor.Current)
                     {
-                        AddressCounter++;
-                        DateTime ActiveStatusDT;
-                        DateTime.TryParse(AddressDoc.ActiveStatusDateTime, out ActiveStatusDT);
 
-                        PhysicalAddress NewPgRecord = new PhysicalAddress
-                        {
-                            Address = new Address
-                            {
-                                City = AddressDoc.CityText,
-                                State = AddressDoc.StateText,
-                                PostalCode = AddressDoc.ZipCode,
-                                Country = AddressDoc.CountryText,
-                                Line1 = AddressDoc.AddressLine1,
-                                Line2 = AddressDoc.AddressLine2,
-                                Line3 = AddressDoc.AddressLine3,
-                                Line4 = AddressDoc.AddressLine4
-                            },
-                            AddressType = ReferencedCodes.GetCdrAddressTypeEnum(AddressDoc.Type),
-                            patient = PgPatient,
-                            DateFirstReported = ActiveStatusDT,
-                            DateLastReported = ActiveStatusDT
-                        };
+                        var DuplicateAddressrQuery = from PatientAddress in PgPatient.PhysicalAddresses
+                                                     where PatientAddress.Address.Line1 == AddressDoc.AddressLine1 && PatientAddress.Address.City == AddressDoc.CityText //Should I check more fields?
+                                                     select PatientAddress;
+
+                        PhysicalAddress NewPgRecord = DuplicateAddressrQuery.FirstOrDefault();
+
+                        if (AddressDoc.MergeWithExistingPhysicalAddress(ref NewPgRecord, ref PgPatient, ReferencedCodes)) {AddressCounter++; }
+
 
                         CdrDb.Context.PhysicalAddresses.InsertOnSubmit(NewPgRecord);
                         CdrDb.Context.SubmitChanges();
@@ -398,19 +434,13 @@ namespace BayClinicCernerAmbulatory
                 {
                     foreach (MongodbIdentifierEntity IdentifierDoc in IdentifierCursor.Current)
                     {
-                        IdentifierCounter++;
-                        DateTime ActiveStatusDT;
-                        DateTime.TryParse(IdentifierDoc.ActiveStatusDateTime, out ActiveStatusDT);
+                        var DuplicatePatientIdentifierQuery = from Identifier in PgPatient.PatientIdentifiers
+                                                              where IdentifierDoc.Identifier == Identifier.Identifier
+                                                              select Identifier;
 
-                        PatientIdentifier NewPgRecord = new PatientIdentifier
-                        {
-                            Identifier = IdentifierDoc.Identifier,
-                            IdentifierType = ReferencedCodes.IdentifierTypeCodeMeanings[IdentifierDoc.IdentifierType],
-                            Organization = OrganizationObject,
-                            Patient = PgPatient,
-                            DateFirstReported = ActiveStatusDT,
-                            DateLastReported = ActiveStatusDT
-                        };
+                        PatientIdentifier NewPgRecord = DuplicatePatientIdentifierQuery.FirstOrDefault();
+
+                        if (IdentifierDoc.MergeWithExistingPatientIdentifiers(ref NewPgRecord, ref PgPatient, ReferencedCodes, OrganizationObject)) { IdentifierCounter++; }
 
                         CdrDb.Context.PatientIdentifiers.InsertOnSubmit(NewPgRecord);
                         CdrDb.Context.SubmitChanges();
@@ -433,6 +463,7 @@ namespace BayClinicCernerAmbulatory
         {
             bool OverallSuccess = true;
 
+            //Retrieves all of the visits in Mongo that are related to the patient and not already aggregated
             FilterDefinition<MongodbVisitEntity> VisitFilterDef = Builders<MongodbVisitEntity>.Filter
                 .Where(
                          x => x.UniquePersonIdentifier == PersonDoc.UniquePersonIdentifier
@@ -447,23 +478,15 @@ namespace BayClinicCernerAmbulatory
                 {
                     foreach (MongodbVisitEntity VisitDoc in VisitCursor.Current)
                     {
-                        DateTime BeginDateTime, EndDateTime, ActiveStatusDT;
-                        DateTime.TryParse(VisitDoc.EffectiveBeginDateTime, out BeginDateTime);        // Will be DateTime.MinValue on parse failure
-                        DateTime.TryParse(VisitDoc.EffectiveEndDateTime, out EndDateTime);        // Will be DateTime.MinValue on parse failure
-                        DateTime.TryParse(VisitDoc.ActiveStatusDateTime, out ActiveStatusDT);        // Will be DateTime.MinValue on parse failure
+                        //Should return any new visits that are already in the cdr database
+                        var DuplicateVisitQuery = from Visit in PatientRecord.VisitEncounters
+                                                  where VisitDoc.UniqueVisitIdentifier == Visit.EmrIdentifier
+                                                  select Visit;
 
-                        VisitCounter++;
+                        VisitEncounter NewPgRecord = DuplicateVisitQuery.FirstOrDefault();
 
-                        VisitEncounter NewPgRecord = new VisitEncounter
-                        {
-                            EmrIdentifier = VisitDoc.UniqueVisitIdentifier,
-                            BeginDateTime = BeginDateTime,  // TODO Is this right?
-                            EndDateTime = EndDateTime,  // TODO Is this right?
-                            Status = VisitDoc.Active,
-                            StatusDateTime = ActiveStatusDT,  // TODO Is this right?
-                            Organization = ReferencedCodes.GetOrganizationEntityForVisitLocationCode(VisitDoc.LocationCode, ref CdrDb),
-                            Patient = PatientRecord
-                        };
+                        if (VisitDoc.MergeWithExistingVisit(ref NewPgRecord, ref PatientRecord, ReferencedCodes, ref CdrDb)) { VisitCounter++; }
+
 
                         CdrDb.Context.VisitEncounters.InsertOnSubmit(NewPgRecord);
                         CdrDb.Context.SubmitChanges();
@@ -473,7 +496,7 @@ namespace BayClinicCernerAmbulatory
                         // Aggregate entities that are linked to this visit
                         OverallSuccess &= AggregateCharges(VisitDoc, NewPgRecord);
                         OverallSuccess &= AggregateResults(PersonDoc, PatientRecord, VisitDoc, NewPgRecord);
-                        OverallSuccess &= AggregateDiagnoses(PersonDoc, PatientRecord, VisitDoc, NewPgRecord);
+                        OverallSuccess &= AggregateDiagnosis(PersonDoc, PatientRecord, VisitDoc, NewPgRecord);
                         OverallSuccess &= AggregateImmunizations(PersonDoc, PatientRecord, VisitDoc, NewPgRecord);
                         OverallSuccess &= AggregateMedications(PersonDoc, PatientRecord, VisitDoc, NewPgRecord);
 
@@ -506,38 +529,12 @@ namespace BayClinicCernerAmbulatory
                 {
                     foreach (MongodbChargeEntity ChargeDoc in ChargeCursor.Current)
                     {
-                        ChargeCounter++;
-                        DateTime ActiveStatusDT, ServiceDT, PostDT, UpdateDT;
-                        DateTime.TryParse(ChargeDoc.ActiveStatusDateTime, out ActiveStatusDT);
-                        DateTime.TryParse(ChargeDoc.ServiceDateTime, out ServiceDT);
-                        DateTime.TryParse(ChargeDoc.PostedDateTime, out PostDT);
-                        DateTime.TryParse(ChargeDoc.UpdateDateTime, out UpdateDT);
+                        var DuplicateChargeQuery = from Charge in PgVisit.Charges
+                                                   where Charge.EmrIdentifier == ChargeDoc.UniqueChargeIdentifier
+                                                   select Charge;
 
-                        String DescriptionFirstWord = ChargeDoc.Description.Split(' ').FirstOrDefault();
-
-                        // TODO may need to think about value of ChargeDoc.Type, some could be "no charge"
-                        // TODO may need to think about value of ChargeDoc.State, some could be "combined away" or "suspended"
-                        Charge NewPgRecord = new Charge
-                        {
-                            //DentalDetails = new DentalDetail {ToothNumber=0 ,ToothSurfaceCode="" },
-                            EmrIdentifier = ChargeDoc.UniqueChargeIdentifier,
-                            DateOfService = ServiceDT,
-                            Description = ChargeDoc.Description,  // If the ChargeDetail codes are not adequate, a cpt appears to be prepended to this field in raw data
-                            Comment = "",
-                            SubmittedDate = PostDT,
-                            Submitter = "",   // TODO What to do with this?
-                            State = ChargeDoc.State,  // TODO This is a coded reference, get the meaning string
-                            DateInfoLastUpdated = UpdateDT,
-                            VisitEncounter = PgVisit
-                            // Think about whether the ordering_physician_identifier or verifying_physician_identifier would be useful to add to the model
-                            // TODO Should we collect the type field?
-                        };
-                        NewPgRecord.ChargeCodes.Add(new ChargeCode { Code = new CodedEntry { Code = DescriptionFirstWord,
-                                                                                             CodeSystem = "Charge Description Prepend", }
-                                                                   });
-                        // ChargeDoc.UniqueChargeItemIdentifier is the reference from related ChargeDetail documents
-                        // What is parent_charge_identifier?
-                        // What is offset_charge_identifier?
+                        Charge NewPgRecord = DuplicateChargeQuery.FirstOrDefault();
+                        if (ChargeDoc.MergeWithExistingCharges(ref NewPgRecord, ref PgVisit)) { ChargeCounter++; }
 
                         CdrDb.Context.Charges.InsertOnSubmit(NewPgRecord);
                         CdrDb.Context.SubmitChanges();
@@ -574,17 +571,11 @@ namespace BayClinicCernerAmbulatory
                 {
                     foreach (MongodbChargeDetailEntity ChargeDetailDoc in ChargeDetailCursor.Current)
                     {
-                        ChargeDetailCounter++;
-
-                        ChargeCode NewPgRecord = new ChargeCode
-                        {
-                            Charge = ChargeRecord,
-                            Code = new CodedEntry
-                            {
-                                Code = ChargeDetailDoc.Code,
-                                CodeSystem = ReferencedCodes.ChargeDetailTypeCodeMeanings[ChargeDetailDoc.Type],
-                            }
-                        };
+                        var DuplicateChargeDetailQuery = from ChargeDetail in ChargeRecord.ChargeCodes
+                                                         where ChargeDetail.EmrIdentifier == ChargeDetailDoc.UniqueChargeItemIdentifier
+                                                         select ChargeDetail;
+                        ChargeCode NewPgRecord = DuplicateChargeDetailQuery.FirstOrDefault();
+                        if (ChargeDetailDoc.MergeWithExistingChargeCodes(ref NewPgRecord, ref ChargeRecord, ReferencedCodes)) { ChargeDetailCounter++;  }
 
                         CdrDb.Context.ChargeCodes.InsertOnSubmit(NewPgRecord);
                         CdrDb.Context.SubmitChanges();
@@ -608,10 +599,10 @@ namespace BayClinicCernerAmbulatory
         private bool AggregateResults(MongodbPersonEntity PersonDoc, Patient PatientRecord, MongodbVisitEntity VisitDoc, VisitEncounter VisitRecord)
         {
             bool Success = true;
-            DateTime PerformedDateTime;
+
 
             FilterDefinition<MongodbResultEntity> ResultFilterDef = Builders<MongodbResultEntity>.Filter
-                .Where(x => 
+                .Where(x =>
                        x.UniquePersonIdentifier == PersonDoc.UniquePersonIdentifier
                     && x.UniqueVisitIdentifier == VisitDoc.UniqueVisitIdentifier
                     && !(x.LastAggregationRun > 0)     // not previously aggregated
@@ -625,25 +616,11 @@ namespace BayClinicCernerAmbulatory
                 {
                     foreach (MongodbResultEntity ResultDoc in ResultCursor.Current)
                     {
-                        ResultCounter++;
-                        DateTime.TryParse(ResultDoc.PerformedDateTime, out PerformedDateTime);
-
-                        Measurement NewPgRecord = new Measurement
-                        {
-                            Patientdbid = PatientRecord.dbid,
-                            VisitEncounterdbid = VisitRecord.dbid,
-                            EmrIdentifier = ResultDoc.UniqueResultIdentifier,
-                            Name = ReferencedCodes.ResultCodeCodeMeanings[ResultDoc.Code],
-                            Description = ResultDoc.Title,  // TODO get this right
-                            Comments = "",    // TODO get this right
-                            MeasurementCode = new CodedEntry { },    // TODO get this right
-                            AssessmentDateTime = PerformedDateTime,
-                            Value = ResultDoc.ResultValue,
-                            Units = ReferencedCodes.ResultUnitsCodeMeanings[ResultDoc.Units],
-                            NormalRangeLow = ResultDoc.NormalLow,
-                            NormalRangeHigh = ResultDoc.NormalHigh,
-                            NormalType = ReferencedCodes.GetResultNormalCodeEnum(ResultDoc.NormalCode)
-                        };
+                        var DuplicateResultsQuery = from Result in PatientRecord.Measurements
+                                                      where Result.EmrIdentifier == ResultDoc.UniqueResultIdentifier
+                                                      select Result;
+                        Measurement NewPgRecord = DuplicateResultsQuery.FirstOrDefault();
+                        if (ResultDoc.MergeWithExistingMeasurements(ref NewPgRecord, ref PatientRecord, VisitRecord, ReferencedCodes)) { ResultCounter++; }
 
                         CdrDb.Context.Measurements.InsertOnSubmit(NewPgRecord);
                         CdrDb.Context.SubmitChanges();
@@ -664,7 +641,7 @@ namespace BayClinicCernerAmbulatory
         /// <param name="VisitDoc"></param>
         /// <param name="VisitRecord"></param>
         /// <returns></returns>
-        private bool AggregateDiagnoses(MongodbPersonEntity PersonDoc, Patient PatientRecord, MongodbVisitEntity VisitDoc, VisitEncounter VisitRecord)
+        private bool AggregateDiagnosis(MongodbPersonEntity PersonDoc, Patient PatientRecord, MongodbVisitEntity VisitDoc, VisitEncounter VisitRecord)
         {
             bool Success = true;
 
@@ -683,13 +660,11 @@ namespace BayClinicCernerAmbulatory
                 {
                     foreach (MongodbDiagnosisEntity DiagnosisDoc in DiagnosisCursor.Current)
                     {
-                        DiagnosisCounter++;
 
-                        DateTime StartDateTime, EndDateTime, DiagDateTime, StatusDateTime;
-                        DateTime.TryParse(DiagnosisDoc.EffectiveBeginDateTime, out StartDateTime);
-                        DateTime.TryParse(DiagnosisDoc.EffectiveEndDateTime, out EndDateTime);
-                        DateTime.TryParse(DiagnosisDoc.DiagnosisDateTime, out DiagDateTime);
-                        DateTime.TryParse(DiagnosisDoc.ActiveStatusDateTime, out StatusDateTime);
+                        var DuplicateDiagnosisQuery = from Diagnosis in PatientRecord.Diagnoses
+                                                      where Diagnosis.EmrIdentifier == DiagnosisDoc.UniqueDiagnosisIdentifier
+                                                      select Diagnosis;
+                        Diagnosis NewPgRecord = DuplicateDiagnosisQuery.FirstOrDefault();
 
                         var Query = ReferenceTerminologyCollection.AsQueryable()
                             .Where(x => x.UniqueTerminologyIdentifier.ToUpper() == DiagnosisDoc.UniqueTerminologyIdentifier)
@@ -698,29 +673,11 @@ namespace BayClinicCernerAmbulatory
                         MongodbReferenceTerminologyEntity TerminologyRecord = Query.FirstOrDefault();
                         if (TerminologyRecord == null)
                         {
-                            TerminologyRecord = new MongodbReferenceTerminologyEntity {Code = "", Text = "", Terminology = "0" };
+                            TerminologyRecord = new MongodbReferenceTerminologyEntity { Code = "", Text = "", Terminology = "0" };
                         }
 
-                        Diagnosis NewPgRecord = new Diagnosis
-                        {
-                            Patientdbid = PatientRecord.dbid,
-                            VisitEncounterdbid = VisitRecord.dbid,
-                            EmrIdentifier = DiagnosisDoc.UniqueDiagnosisIdentifier,
-                            StartDateTime = StartDateTime,
-                            EndDateTime = EndDateTime,
-                            DeterminationDateTime = DiagDateTime,
-                            ShortDescription = DiagnosisDoc.Display,
-                            LongDescription = "",  // TODO Can I do better?  Maybe this field doesn't need to be here if there is no source of long description.  
-                            DiagCode = new CodedEntry {Code = TerminologyRecord.Code,
-                                                       CodeMeaning = TerminologyRecord.Text,
-                                                       CodeSystem = ReferencedCodes.TerminologyCodeMeanings[TerminologyRecord.Terminology]
-                                                       // TODO Handle variability in codes (e.g. snomed codes are not correct in the "code" field, but are correct in concept. May require custom interpreter/handler
-                                                      },
-                            Status = "",  // TODO If this is just active and inactive maybe I don't need it.  Study.  
-                            StatusDateTime = StatusDateTime
-                            // TODO There is a coded "type" field with values Discharge and Billing.  Figure out whether this should be used/interpreted
-                        };
-
+                        if (DiagnosisDoc.MergeWithExistingDiagnoses(ref NewPgRecord, ref PatientRecord, VisitRecord, ReferencedCodes, TerminologyRecord)) { DiagnosisCounter++; }
+                   
                         CdrDb.Context.Diagnoses.InsertOnSubmit(NewPgRecord);
                         CdrDb.Context.SubmitChanges();
 
@@ -756,20 +713,13 @@ namespace BayClinicCernerAmbulatory
                 {
                     foreach (MongodbInsuranceEntity InsuranceCoverageDoc in InsuranceCoverageCursor.Current)
                     {
-                        InsuranceCoverageCounter++;
-                        DateTime StartDate, EndDate;
-                        DateTime.TryParse(InsuranceCoverageDoc.EffectiveBeginDateTime, out StartDate);        // Will be DateTime.MinValue on parse failure
-                        DateTime.TryParse(InsuranceCoverageDoc.EffectiveEndDateTime, out EndDate);        // Will be DateTime.MinValue on parse failure
-                       
 
-                        InsuranceCoverage NewPgRecord = new InsuranceCoverage
-                        {
-                            Payer = InsuranceCoverageDoc.UniqueOrganizationIdentifier,            
-                            StartDate = StartDate,
-                            EndDate = EndDate,
-                            PlanName = InsuranceCoverageDoc.UniqueHealthPlanIdentifier,
-                            Patient = PgPatient            //Just adding the patientdbid might may improve runtime
-                        };
+                        var DuplicateInsuranceCoverageQuery = from Insurance in PgPatient.InsuranceCoverages
+                                                              where Insurance.Payer == InsuranceCoverageDoc.UniqueOrganizationIdentifier && Insurance.PlanName == InsuranceCoverageDoc.UniqueHealthPlanIdentifier
+                                                              select Insurance;
+                        InsuranceCoverage NewPgRecord = DuplicateInsuranceCoverageQuery.FirstOrDefault();
+                        if(InsuranceCoverageDoc.MergeWithExistingInsuranceCoverage(ref NewPgRecord, ref PgPatient, ReferencedCodes)) { InsuranceCoverageCounter++; }
+
 
                         CdrDb.Context.InsuranceCoverages.InsertOnSubmit(NewPgRecord);
                         CdrDb.Context.SubmitChanges();
@@ -806,29 +756,18 @@ namespace BayClinicCernerAmbulatory
                 {
                     foreach (MongodbImmunizationEntity ImmunizationDoc in ImmunizationCursor.Current)
                     {
-                        ImmunizationCounter++;
-                        DateTime PerformedDateTime;
-                        DateTime.TryParse(ImmunizationDoc.PerformedDateTime, out PerformedDateTime);
+                        var DuplicateImmunizationQuery = from Immunization in PatientRecord.Immunizations
+                                                              where Immunization.ResultID == ImmunizationDoc.UniqueResultIdentifier 
+                                                              && Immunization.VisitID == ImmunizationDoc.UniqueVisitIdentifier
+                                                              select Immunization;
+                        Immunization NewPgRecord = DuplicateImmunizationQuery.FirstOrDefault();
+                        if (ImmunizationDoc.MergeWithExistingImmunizations(ref NewPgRecord, ref PatientRecord, VisitRecord, ReferencedCodes)) { ImmunizationCounter++; }
 
-                        Immunization NewPgRecord = new Immunization
-                        {
-                            Patientdbid = PatientRecord.dbid,
-                            EmrIdentifier = ImmunizationDoc.UniqueOrderIdentifier,  // TODO This is probably not the right value to assign
-                            Description = "",              
-                            PerformedDateTime = PerformedDateTime,              
-                            ImmunizationCode = new CodedEntry
-                            {
-                                Code = ImmunizationDoc.Code,
-                                CodeMeaning = ReferencedCodes.ImmunizationCodeMeanings[ImmunizationDoc.Code],
-                            },
-                            VisitEncounterdbid = VisitRecord.dbid
-                        };
-
-
+                        
                         CdrDb.Context.Immunizations.InsertOnSubmit(NewPgRecord);
                         CdrDb.Context.SubmitChanges();
 
-                        MongoRunUpdater.InsuranceIdList.Add(ImmunizationDoc.Id);
+                        MongoRunUpdater.ImmunizationIdList.Add(ImmunizationDoc.Id);
                     }
                 }
             }
@@ -861,17 +800,15 @@ namespace BayClinicCernerAmbulatory
                 {
                     foreach (MongodbMedicationEntity MedicationDoc in MedicationCursor.Current)
                     {
-                        string MedicationInstructions;
-                        MedicationCounter++;
-                        DateTime PrescriptionDate, StartDate, StopDate, StatusDateTime, FillDate;
-                        DateTime.TryParse("", out FillDate);                                    //Data does not include fill date
-                        DateTime.TryParse(MedicationDoc.OriginalOrderedDateTime, out PrescriptionDate);
-                        DateTime.TryParse(MedicationDoc.StartDateTime, out StartDate);
-                        DateTime.TryParse(MedicationDoc.StopDateTime, out StopDate);
-                        DateTime.TryParse(MedicationDoc.ActiveStatusDateTime, out StatusDateTime);
+                        var DuplicateMedicationsQuery = from Medicine in PatientRecord.Medications
+                                                      where Medicine.EmrIdentifier == MedicationDoc.UniqueMedicationIdentifier
+                                                      select Medicine;
+                        Medication NewPgRecord = DuplicateMedicationsQuery.FirstOrDefault();
+
 
 
                         //Get instructions
+                        string MedicationInstructions;
                         var MedicationReconciliationDetailQuery = MedicationReconciliationDetailCollection.AsQueryable()
                                                                     .Where(x => x.UniqueMedicationIdentifier == MedicationDoc.UniqueMedicationIdentifier);
 
@@ -905,26 +842,9 @@ namespace BayClinicCernerAmbulatory
                         {
                             ReferenceMedicationRecord = new MongodbReferenceMedicationEntity { RxNorm = "", CatalogCKI = "", Dnum = "", NDC = "" };
                         }
+                        if (MedicationDoc.MergeWithExistingMedications(ref NewPgRecord, ref PatientRecord, VisitRecord, ReferenceMedicationRecord, MedicationInstructions)) { MedicationCounter++; }
+                        
 
-
-                        Medication NewPgRecord = new Medication
-                        {
-                            EmrIdentifier = MedicationDoc.UniqueMedicationIdentifier,
-                            PrescriptionDate = PrescriptionDate,
-                            FillDate = FillDate, 
-                            Description = MedicationDoc.OrderedAs,
-                            StartDate = StartDate,
-                            StopDate = StopDate,
-                            Status = MedicationDoc.Status,
-                            StatusDateTime = StatusDateTime,
-                            Patientdbid = PatientRecord.dbid,
-                            VisitEncounterdbid = VisitRecord.dbid,
-                            Instructions = MedicationInstructions,
-                            RxNorm = ReferenceMedicationRecord.RxNorm,
-                            CatalogCKI = ReferenceMedicationRecord.CatalogCKI,
-                            Dnum = ReferenceMedicationRecord.Dnum,
-                            NDC = ReferenceMedicationRecord.NDC
-                        };
 
                         CdrDb.Context.Medications.InsertOnSubmit(NewPgRecord);
                         CdrDb.Context.SubmitChanges();
@@ -966,28 +886,12 @@ namespace BayClinicCernerAmbulatory
                 {
                     foreach (MongodbProblemEntity ProblemDoc in ProblemCursor.Current)
                     {
-                        ProblemCounter++;
-                        DateTime BeginDateTime, EndDateTime, ActiveStatusDateTime;
-                        DateTime.TryParse(ProblemDoc.EffectiveBeginDateTime, out BeginDateTime);
-                        DateTime.TryParse(ProblemDoc.EffectiveEndDateTime, out EndDateTime);
-                        DateTime.TryParse(ProblemDoc.EffectiveEndDateTime, out ActiveStatusDateTime);
-
-                        Problem NewPgRecord = new Problem
-                        {
-                            Patientdbid = PatientRecord.dbid,
-                            EmrIdentifier = ProblemDoc.UniqueProblemIdentifier,
-                            Description = ProblemDoc.Display,  // TODO Think about adding a Problem field for terminology code reference
-                            BeginDateTime = BeginDateTime,
-                            EndDateTime = EndDateTime,
-                            EffectiveDateTime = ActiveStatusDateTime,
-                        };
-
-                        // Following logic will be relevant for Allscripts, not Cerner
-                        //if (VisitRecord != null)  // not relevant for Cerner but probably relevant for Allscripts
-                        //{
-                        //    NewPgRecord.VisitEncounterdbid = VisitRecord.dbid;
-                        //}
-
+                        var DuplicateProblemQuery = from Problems in PatientRecord.Problems
+                                                              where Problems.EmrIdentifier == ProblemDoc.UniqueProblemIdentifier
+                                                              select Problems;
+                        Problem NewPgRecord = DuplicateProblemQuery.FirstOrDefault();
+                        if (ProblemDoc.MergeWithExistingProblems(ref NewPgRecord, ref PatientRecord)) { ProblemCounter++; }
+                       
                         CdrDb.Context.Problems.InsertOnSubmit(NewPgRecord);
                         CdrDb.Context.SubmitChanges();
 
@@ -1095,5 +999,4 @@ namespace BayClinicCernerAmbulatory
 
     }
 }
- 
- 
+

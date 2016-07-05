@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using CdrDbLib;
+using CdrContext;
 
 namespace BayClinicCernerAmbulatory
 {
@@ -73,5 +75,47 @@ namespace BayClinicCernerAmbulatory
         public long LastAggregationRun;
 
 #pragma warning restore 0649
+
+        internal bool MergeWithExistingTelephoneNumber(ref TelephoneNumber PhoneRecord, ref Patient PatientRecord, CernerReferencedCodeDictionaries ReferencedCodes)
+        {
+            DateTime ActiveStatusDT, UpdateTime;
+            DateTime.TryParse(ActiveStatusDateTime, out ActiveStatusDT);        // Will be DateTime.MinValue on parse failure
+            DateTime.TryParse(UpdateDateTime, out UpdateTime);        // Will be DateTime.MinValue on parse failure
+            if (PhoneRecord == null)
+            {
+                PhoneRecord = new TelephoneNumber
+                {
+                    Number = new PhoneNumber
+                    {
+                        Number = PhoneNumber,
+                        PhoneType = ReferencedCodes.GetCdrPhoneTypeEnum(Type)
+                    },
+                    Patient = PatientRecord,
+                    UpdateTime = UpdateTime,
+                    DateFirstReported = ActiveStatusDT,
+                    DateLastReported = ActiveStatusDT,
+                    LastImportFileDate = ImportFileDate
+                };
+                return true;
+            }
+            else if(PhoneRecord.UpdateTime < UpdateTime)
+            {
+                if (PhoneRecord.Number.PhoneType != ReferencedCodes.GetCdrPhoneTypeEnum(Type) && !String.IsNullOrEmpty(ReferencedCodes.GetCdrPhoneTypeEnum(Type).ToString())) PhoneRecord.Number.PhoneType = ReferencedCodes.GetCdrPhoneTypeEnum(Type);
+
+                if (PhoneRecord.DateLastReported < ActiveStatusDT) PhoneRecord.DateLastReported = ActiveStatusDT;
+                if (PhoneRecord.DateFirstReported > ActiveStatusDT) PhoneRecord.DateFirstReported = ActiveStatusDT;
+
+                if (PhoneRecord.UpdateTime != UpdateTime && !String.IsNullOrEmpty(UpdateDateTime)) PhoneRecord.UpdateTime = UpdateTime;
+
+                PhoneRecord.LastImportFileDate = new string[] { PhoneRecord.LastImportFileDate, ImportFileDate }.Max();
+
+                return false;
+            }
+            else
+            {
+                return false;
+            }
+                
+        }
     }
 }
