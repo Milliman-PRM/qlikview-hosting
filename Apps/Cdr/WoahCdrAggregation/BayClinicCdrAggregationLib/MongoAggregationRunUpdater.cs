@@ -164,6 +164,55 @@ namespace BayClinicCernerAmbulatory
                 Db.GetCollection<MongodbChargeEntity>("charge").UpdateOne(FilterDef, UpdateDef);  // record to MongoDB that this document has been aggregated
             }
 
+            foreach (ObjectId DocId in ChargeDetailIdList)
+            {
+                FilterDefinition<MongodbChargeDetailEntity> FilterDef = Builders<MongodbChargeDetailEntity>.Filter.Where(x => x.Id == DocId);
+                UpdateDefinition<MongodbChargeDetailEntity> UpdateDef = Builders<MongodbChargeDetailEntity>.Update.Set(p => p.LastAggregationRun, AggregationRunNumber);
+                Db.GetCollection<MongodbChargeDetailEntity>("chargedetail").UpdateOne(FilterDef, UpdateDef);  // record to MongoDB that this document has been aggregated
+            }
+
+            foreach (ObjectId DocId in ResultIdList)
+            {
+                FilterDefinition<MongodbResultEntity> FilterDef = Builders<MongodbResultEntity>.Filter.Where(x => x.Id == DocId);
+                UpdateDefinition<MongodbResultEntity> UpdateDef = Builders<MongodbResultEntity>.Update.Set(p => p.LastAggregationRun, AggregationRunNumber);
+                Db.GetCollection<MongodbResultEntity>("result").UpdateOne(FilterDef, UpdateDef);  // record to MongoDB that this document has been aggregated
+            }
+
+            foreach (ObjectId DocId in DiagnosisIdList)
+            {
+                FilterDefinition<MongodbDiagnosisEntity> FilterDef = Builders<MongodbDiagnosisEntity>.Filter.Where(x => x.Id == DocId);
+                UpdateDefinition<MongodbDiagnosisEntity> UpdateDef = Builders<MongodbDiagnosisEntity>.Update.Set(p => p.LastAggregationRun, AggregationRunNumber);
+                Db.GetCollection<MongodbDiagnosisEntity>("diagnosis").UpdateOne(FilterDef, UpdateDef);  // record to MongoDB that this document has been aggregated
+            }
+
+            foreach (ObjectId DocId in InsuranceIdList)
+            {
+                FilterDefinition<MongodbInsuranceEntity> FilterDef = Builders<MongodbInsuranceEntity>.Filter.Where(x => x.Id == DocId);
+                UpdateDefinition<MongodbInsuranceEntity> UpdateDef = Builders<MongodbInsuranceEntity>.Update.Set(p => p.LastAggregationRun, AggregationRunNumber);
+                Db.GetCollection<MongodbInsuranceEntity>("insurance").UpdateOne(FilterDef, UpdateDef);  // record to MongoDB that this document has been aggregated
+            }
+
+            foreach (ObjectId DocId in ImmunizationIdList)
+            {
+                FilterDefinition<MongodbImmunizationEntity> FilterDef = Builders<MongodbImmunizationEntity>.Filter.Where(x => x.Id == DocId);
+                UpdateDefinition<MongodbImmunizationEntity> UpdateDef = Builders<MongodbImmunizationEntity>.Update.Set(p => p.LastAggregationRun, AggregationRunNumber);
+                Db.GetCollection<MongodbImmunizationEntity>("immunization").UpdateOne(FilterDef, UpdateDef);  // record to MongoDB that this document has been aggregated
+            }
+
+            foreach (ObjectId DocId in MedicationsIdList)
+            {
+                FilterDefinition<MongodbMedicationEntity> FilterDef = Builders<MongodbMedicationEntity>.Filter.Where(x => x.Id == DocId);
+                UpdateDefinition<MongodbMedicationEntity> UpdateDef = Builders<MongodbMedicationEntity>.Update.Set(p => p.LastAggregationRun, AggregationRunNumber);
+                Db.GetCollection<MongodbMedicationEntity>("medications").UpdateOne(FilterDef, UpdateDef);  // record to MongoDB that this document has been aggregated
+            }
+
+            foreach (ObjectId DocId in ProblemIdList)
+            {
+                FilterDefinition<MongodbProblemEntity> FilterDef = Builders<MongodbProblemEntity>.Filter.Where(x => x.Id == DocId);
+                UpdateDefinition<MongodbProblemEntity> UpdateDef = Builders<MongodbProblemEntity>.Update.Set(p => p.LastAggregationRun, AggregationRunNumber);
+                Db.GetCollection<MongodbProblemEntity>("problem").UpdateOne(FilterDef, UpdateDef);  // record to MongoDB that this document has been aggregated
+            }
+
             Reset();
         }
     }

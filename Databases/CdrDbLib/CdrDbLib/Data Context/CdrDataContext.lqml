@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Database Name="cdr_woh" EntityNamespace="CdrContext" ContextNamespace="CdrContext" Class="CdrDataContext" xmlns:ed="http://devart.com/schemas/EntityDeveloper/1.0" ed:Guid="8fd042f0-11f8-4573-98a0-8c5153bd64fd" Provider="Devart.Data.PostgreSql.Linq.Provider.PgSqlDataProvider, Devart.Data.PostgreSql.Linq" Extended="true" xmlns="http://schemas.devart.com/linqconnect/mapping">
-  <Connection Mode="ConnectionString" ConnectionString="User Id=tom;Host=localhost;Port=5433;Database=cdr_woh;Initial Schema=public" Provider="Devart.Data.PostgreSql" />
+  <Connection Mode="ConnectionString" ConnectionString="User Id=indy-cdrbot-0273woh;Host=Indy-cdr0273woh;Port=5432;Database=cdr_woh;Initial Schema=public" Provider="Devart.Data.PostgreSql" />
   <Table Name="public.patient" Member="Patients">
     <Type Name="Patient" ed:Guid="c15823c3-4b37-4a7f-9598-2b1d55e839b3">
       <Column Name="dbid" Type="System.Int64" AutoSync="OnInsert" DbType="bigserial NOT NULL" IsReadOnly="true" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" ed:ValidateRequired="true" ed:Guid="f5f1693e-fc45-40ae-9352-db7bc482c248" />
@@ -237,6 +237,8 @@
       <Column Name="enddate" Member="EndDate" Type="System.DateTime" DbType="timestamp" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="3e73b262-9baa-4e41-9085-fdfddb82417d" />
       <Column Name="planname" Member="PlanName" Type="System.String" DbType="varchar" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="9fa72899-291a-452f-b0fb-3f8e57ef602d" />
       <Column Name="patientdbid" Member="Patientdbid" Type="System.Int64" AutoSync="Always" DbType="int8 NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="755a5138-6db7-4cc6-8b16-76f31b9d6298" />
+      <Column Name="coveragetype" Member="CoverageType" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="2baa929a-b060-44d3-a746-74b317a4afa4" />
+      <Column Name="memberid" Member="MemberID" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="8ea16eac-4ec9-4b97-95ed-3e57482af84f" />
       <Column Name="updatetime" Member="UpdateTime" Type="System.DateTime" DbType="timestamp NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="90ae5854-4bfe-4420-9029-f7ffa78a4387" />
       <Column Name="lastimportfiledate" Member="LastImportFileDate" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="aae56bd4-35b0-4e85-9b0e-082a9a0cfec4" />
       <Association Name="Patient_InsuranceCoverage" ed:AssociationGuid="6e5bb6c6-9667-41a0-b2b9-bf204bf64a09" Member="Patient" ed:Guid="5f572dde-d98c-4d20-bdcc-410c48c92502" ThisKey="Patientdbid" OtherKey="dbid" Type="Patient" DeleteOnNull="true" IsForeignKey="true" />
