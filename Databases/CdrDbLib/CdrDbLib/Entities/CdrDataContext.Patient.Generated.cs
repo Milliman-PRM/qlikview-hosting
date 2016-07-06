@@ -33,6 +33,8 @@ namespace CdrContext
 
         private long _dbid;
 
+        private string _EmrIdentifier;
+
         private string _NameLast;
 
         private string _NameFirst;
@@ -51,7 +53,7 @@ namespace CdrContext
 
         private System.Nullable<MaritalStatus> _MaritalStatus;
 
-        private string _EmrIdentifier;
+        private string _LatestImportFileDate;
         #pragma warning restore 0649
 
         private EntitySet<PatientIdentifier> _PatientIdentifiers;
@@ -81,6 +83,8 @@ namespace CdrContext
         partial void OnCreated();
         partial void OndbidChanging(long value);
         partial void OndbidChanged();
+        partial void OnEmrIdentifierChanging(string value);
+        partial void OnEmrIdentifierChanged();
         partial void OnNameLastChanging(string value);
         partial void OnNameLastChanged();
         partial void OnNameFirstChanging(string value);
@@ -99,8 +103,8 @@ namespace CdrContext
         partial void OnEthnicityChanged();
         partial void OnMaritalStatusChanging(System.Nullable<MaritalStatus> value);
         partial void OnMaritalStatusChanged();
-        partial void OnEmrIdentifierChanging(string value);
-        partial void OnEmrIdentifierChanged();
+        partial void OnLatestImportFileDateChanging(string value);
+        partial void OnLatestImportFileDateChanged();
         #endregion
 
         public Patient()
@@ -128,6 +132,30 @@ namespace CdrContext
             get
             {
                 return this._dbid;
+            }
+        }
+
+    
+        /// <summary>
+        /// There are no comments for EmrIdentifier in the schema.
+        /// </summary>
+        [Column(Name = @"emridentifier", Storage = "_EmrIdentifier", CanBeNull = false, DbType = "varchar NOT NULL", UpdateCheck = UpdateCheck.Never)]
+        public string EmrIdentifier
+        {
+            get
+            {
+                return this._EmrIdentifier;
+            }
+            set
+            {
+                if (this._EmrIdentifier != value)
+                {
+                    this.OnEmrIdentifierChanging(value);
+                    this.SendPropertyChanging();
+                    this._EmrIdentifier = value;
+                    this.SendPropertyChanged("EmrIdentifier");
+                    this.OnEmrIdentifierChanged();
+                }
             }
         }
 
@@ -349,24 +377,24 @@ namespace CdrContext
 
     
         /// <summary>
-        /// There are no comments for EmrIdentifier in the schema.
+        /// There are no comments for LatestImportFileDate in the schema.
         /// </summary>
-        [Column(Name = @"emridentifier", Storage = "_EmrIdentifier", CanBeNull = false, DbType = "varchar NOT NULL", UpdateCheck = UpdateCheck.Never)]
-        public string EmrIdentifier
+        [Column(Name = @"latestimportfiledate", Storage = "_LatestImportFileDate", CanBeNull = false, DbType = "varchar(8) NOT NULL", UpdateCheck = UpdateCheck.Never)]
+        public string LatestImportFileDate
         {
             get
             {
-                return this._EmrIdentifier;
+                return this._LatestImportFileDate;
             }
             set
             {
-                if (this._EmrIdentifier != value)
+                if (this._LatestImportFileDate != value)
                 {
-                    this.OnEmrIdentifierChanging(value);
+                    this.OnLatestImportFileDateChanging(value);
                     this.SendPropertyChanging();
-                    this._EmrIdentifier = value;
-                    this.SendPropertyChanged("EmrIdentifier");
-                    this.OnEmrIdentifierChanged();
+                    this._LatestImportFileDate = value;
+                    this.SendPropertyChanged("LatestImportFileDate");
+                    this.OnLatestImportFileDateChanged();
                 }
             }
         }

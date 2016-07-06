@@ -5,11 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using CdrContext;
+using CdrDbLib;
 
 namespace BayClinicCernerAmbulatory
 {
     [BsonIgnoreExtraElements]
-    class MongodbChargeDetailEntity
+    internal class MongodbChargeDetailEntity
     {
 #pragma warning disable 0649
         [BsonElement("_id")]
@@ -48,8 +50,51 @@ namespace BayClinicCernerAmbulatory
         [BsonElement("ImportFile")]
         public String ImportFile;
 
+        [BsonElement("ImportFileDate")]
+        public String ImportFileDate;
+
         [BsonElement("lastaggregationrun")]
         public long LastAggregationRun;
 #pragma warning restore 0649
+        internal bool MergeWithExistingChargeCodes(ref ChargeCode ChargeDetailRecord, ref Charge ChargeRecord, CernerReferencedCodeDictionaries ReferencedCodes)
+        {
+            DateTime UpdateTime;
+            DateTime.TryParse(UpdateDateTime, out UpdateTime);
+            if (ChargeDetailRecord != null)
+            {
+                ChargeCode NewPgRecord = new ChargeCode
+                {
+                    EmrIdentifier = UniqueChargeItemIdentifier,
+                    Charge = ChargeRecord,
+                    Code = new CodedEntry
+                    {
+                        Code = Code,
+                        CodeSystem = ReferencedCodes.ChargeDetailTypeCodeMeanings[Type],
+                    },
+                    UpdateTime = UpdateTime,
+                    LastImportFileDate = ImportFileDate
+                };
+                return true;
+            }
+            
+            else if(ChargeDetailRecord.UpdateTime < UpdateTime)
+            {
+                if (ChargeDetailRecord.Code.Code != Code && !String.IsNullOrEmpty(Code)) ChargeDetailRecord.Code.Code = Code;
+                if (ChargeDetailRecord.Code.CodeSystem != ReferencedCodes.ChargeDetailTypeCodeMeanings[Type] && !String.IsNullOrEmpty(Type))
+                    ChargeDetailRecord.Code.CodeSystem = ReferencedCodes.ChargeDetailTypeCodeMeanings[Type];
+
+
+                if (ChargeDetailRecord.UpdateTime != UpdateTime && !String.IsNullOrEmpty(UpdateDateTime)) ChargeDetailRecord.UpdateTime = UpdateTime;
+
+                ChargeDetailRecord.LastImportFileDate = new string[] { ChargeDetailRecord.LastImportFileDate, ImportFileDate }.Max();
+
+                return false;
+            }
+
+            else {
+                return false;
+            }
+            
+        }
     }
 }

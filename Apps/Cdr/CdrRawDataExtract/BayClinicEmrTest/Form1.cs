@@ -14,9 +14,13 @@ namespace CdrExtractTest
 {
     public partial class Form1 : Form
     {
+        BayClinicCernerExtractLib.RawDataParser Parser = null;
+
         public Form1()
         {
             InitializeComponent();
+
+            this.FormClosing += Form1_FormClosing;
 
             txtFolder.Focus();
 
@@ -26,10 +30,18 @@ namespace CdrExtractTest
             var x = settings["RedoxRawFilePath"];
         }
 
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (Parser != null)
+            {
+                Parser.EndProcessing = true;
+            }
+        }
+
         private void btnBayClinic_Click(object sender, EventArgs e)
         {
             System.Diagnostics.Debug.WriteLine("Processing Bay Clinic data in folder: " + txtFolder.Text);
-            BayClinicCernerExtractLib.RawDataParser Parser = new BayClinicCernerExtractLib.RawDataParser(@"H:\.prm_config\.mongodb", @"BayClinicTestMongoCredentials");
+            Parser = new BayClinicCernerExtractLib.RawDataParser(@"H:\.prm_config\.mongodb", @"BayClinicTestMongoCredentials");
             if (!Directory.Exists(txtFolder.Text))
             {
                 Console.Beep();
@@ -39,7 +51,7 @@ namespace CdrExtractTest
 
             try
             {
-                Parser.MigrateFolderToMongo(txtFolder.Text, chkMongoInsert.Checked,Path.Combine(txtFolder.Text, "Archive"));
+                Parser.MigrateFolderToMongo(txtFolder.Text, chkMongoInsert.Checked, checkArchive.Checked ? Path.Combine(txtFolder.Text, "Archive") : null);
             }
             catch (Exception ex)
             {

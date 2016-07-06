@@ -5,11 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using CdrContext;
+using CdrDbLib;
 
 namespace BayClinicCernerAmbulatory
 {
     [BsonIgnoreExtraElements]
-    class MongodbMedicationEntity
+    internal class MongodbMedicationEntity
     {
 #pragma warning disable 0649
         [BsonElement("_id")]
@@ -78,8 +80,78 @@ namespace BayClinicCernerAmbulatory
         [BsonElement("ImportFile")]
         public String ImportFile;
 
+        [BsonElement("ImportFileDate")]
+        public String ImportFileDate;
+
         [BsonElement("lastaggregationrun")]
         public long LastAggregationRun;
 #pragma warning restore 0649
+
+        internal bool MergeWithExistingMedications(ref Medication MedicationRecord, ref Patient PatientRecord, VisitEncounter VisitRecord, MongodbReferenceMedicationEntity ReferenceMedicationRecord, string MedicationInstructions)
+        {
+            DateTime PrescriptionDate, StartDate, StopDate, StatusDateTime, FillDate, UpdateTime;
+            DateTime.TryParse(UpdateDateTime, out UpdateTime);
+            DateTime.TryParse("", out FillDate);                                    //Data does not include fill date
+            DateTime.TryParse(OriginalOrderedDateTime, out PrescriptionDate);
+            DateTime.TryParse(StartDateTime, out StartDate);
+            DateTime.TryParse(StopDateTime, out StopDate);
+            DateTime.TryParse(ActiveStatusDateTime, out StatusDateTime);
+
+            if (ReferenceMedicationRecord == null)
+            {
+                Medication NewPgRecord = new Medication
+                {
+                    EmrIdentifier = UniqueMedicationIdentifier,
+                    PrescriptionDate = PrescriptionDate,
+                    FillDate = FillDate,
+                    Description = OrderedAs,
+                    StartDate = StartDate,
+                    StopDate = StopDate,
+                    Status = Status,
+                    StatusDateTime = StatusDateTime,
+                    Patientdbid = PatientRecord.dbid,
+                    VisitEncounterdbid = VisitRecord.dbid,
+                    Instructions = MedicationInstructions,
+                    RxNorm = ReferenceMedicationRecord.RxNorm,
+                    CatalogCKI = ReferenceMedicationRecord.CatalogCKI,
+                    Dnum = ReferenceMedicationRecord.Dnum,
+                    NDC = ReferenceMedicationRecord.NDC,
+                    UpdateTime = UpdateTime,
+                    LastImportFileDate = ImportFileDate
+                };
+                return true;
+            }
+
+            else if (MedicationRecord.UpdateTime < UpdateTime)
+            {
+                if (MedicationRecord.PrescriptionDate != PrescriptionDate && !String.IsNullOrEmpty(OriginalOrderedDateTime)) MedicationRecord.PrescriptionDate = PrescriptionDate;
+
+                if (MedicationRecord.StartDate != StartDate && !String.IsNullOrEmpty(StartDateTime)) MedicationRecord.StartDate = StartDate;
+                if (MedicationRecord.StopDate != StopDate && !String.IsNullOrEmpty(StopDateTime)) MedicationRecord.StopDate = StopDate;
+
+                if (MedicationRecord.Status != Status && !String.IsNullOrEmpty(Status)) MedicationRecord.Status = Status;
+                if (MedicationRecord.StatusDateTime != StatusDateTime && !String.IsNullOrEmpty(ActiveStatusDateTime)) MedicationRecord.StatusDateTime = StatusDateTime;
+                if (MedicationRecord.Instructions != MedicationInstructions && !String.IsNullOrEmpty(MedicationInstructions)) MedicationRecord.Instructions = MedicationInstructions;
+
+                if (MedicationRecord.RxNorm != ReferenceMedicationRecord.RxNorm && !String.IsNullOrEmpty(ReferenceMedicationRecord.RxNorm)) MedicationRecord.RxNorm = ReferenceMedicationRecord.RxNorm;
+                if (MedicationRecord.CatalogCKI != ReferenceMedicationRecord.CatalogCKI && !String.IsNullOrEmpty(ReferenceMedicationRecord.CatalogCKI)) MedicationRecord.CatalogCKI = ReferenceMedicationRecord.CatalogCKI;
+                if (MedicationRecord.Dnum != ReferenceMedicationRecord.Dnum && !String.IsNullOrEmpty(ReferenceMedicationRecord.Dnum)) MedicationRecord.Dnum = ReferenceMedicationRecord.Dnum;
+                if (MedicationRecord.NDC != ReferenceMedicationRecord.NDC && !String.IsNullOrEmpty(ReferenceMedicationRecord.NDC)) MedicationRecord.NDC = ReferenceMedicationRecord.NDC;
+
+                if (MedicationRecord.UpdateTime != UpdateTime && !String.IsNullOrEmpty(UpdateDateTime)) MedicationRecord.UpdateTime = UpdateTime;
+
+                MedicationRecord.LastImportFileDate = new string[] { MedicationRecord.LastImportFileDate, ImportFileDate }.Max();
+
+
+                return false;
+            }
+
+            else
+            {
+                return false;
+            }
+
+
+        }
     }
 }

@@ -5,11 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using CdrContext;
+using CdrDbLib;
 
 namespace BayClinicCernerAmbulatory
 {
     [BsonIgnoreExtraElements]
-    class MongodbProblemEntity
+    internal class MongodbProblemEntity
     {
 #pragma warning disable 0649
         [BsonElement("_id")]
@@ -117,9 +119,71 @@ namespace BayClinicCernerAmbulatory
         [BsonElement("ImportFile")]
         public String ImportFile;
 
+        [BsonElement("ImportFileDate")]
+        public String ImportFileDate;
+
         [BsonElement("lastaggregationrun")]
         public long LastAggregationRun;
 
 #pragma warning restore 0649
+
+        internal bool MergeWithExistingProblems(ref Problem ProblemRecord, ref Patient PatientRecord)
+        {
+            DateTime BeginDateTime, EndDateTime, ActiveStatusDateTime, UpdateTime;
+            DateTime.TryParse(UpdateDateTime, out UpdateTime);
+            DateTime.TryParse(EffectiveBeginDateTime, out BeginDateTime);
+            DateTime.TryParse(EffectiveEndDateTime, out EndDateTime);
+            DateTime.TryParse(EffectiveEndDateTime, out ActiveStatusDateTime);
+            if (ProblemRecord == null)
+            {
+                Problem NewPgRecord = new Problem
+                {
+                    Patientdbid = PatientRecord.dbid,
+                    EmrIdentifier = UniqueProblemIdentifier,
+                    Description = Display,  // TODO Think about adding a Problem field for terminology code reference
+                    BeginDateTime = BeginDateTime,
+                    EndDateTime = EndDateTime,
+                    UpdateTime = UpdateTime,
+                    LastImportFileDate = ImportFileDate,
+                    EffectiveDateTime = ActiveStatusDateTime,
+                };
+
+                // Following logic will be relevant for Allscripts, not Cerner
+                //if (VisitRecord != null)  // not relevant for Cerner but probably relevant for Allscripts
+                //{
+                //    NewPgRecord.VisitEncounterdbid = VisitRecord.dbid;
+                //}
+                
+
+                return true;
+            }
+            else if (ProblemRecord.UpdateTime < UpdateTime)
+            {
+                if (ProblemRecord.Description != Display && !String.IsNullOrEmpty(Display)) ProblemRecord.Description += "; " + Display;
+                //Extra logic here to have as many real dates as possible instead of max dates
+                if (ProblemRecord.EndDateTime.ToString().Contains("2100"))
+                {
+                    if (!UpdateDateTime.Contains("2100"))
+                        ProblemRecord.EndDateTime = EndDateTime;
+                }
+                if (!ProblemRecord.EndDateTime.ToString().Contains("2100"))
+                {
+                    if (ProblemRecord.EndDateTime < EndDateTime)
+                        ProblemRecord.EndDateTime = EndDateTime;
+                }
+                if (ProblemRecord.BeginDateTime > BeginDateTime) ProblemRecord.BeginDateTime = BeginDateTime;
+
+                if (ProblemRecord.UpdateTime != UpdateTime && !String.IsNullOrEmpty(UpdateDateTime)) ProblemRecord.UpdateTime = UpdateTime;
+
+                ProblemRecord.LastImportFileDate = new string[] { ProblemRecord.LastImportFileDate, ImportFileDate }.Max();
+
+                return false;
+            }
+            else
+            {
+                return false;
+            }
+            
+        }
     }
 }

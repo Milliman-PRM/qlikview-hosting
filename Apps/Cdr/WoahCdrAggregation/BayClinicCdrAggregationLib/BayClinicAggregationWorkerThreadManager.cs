@@ -8,12 +8,16 @@ using BayClinicCernerAmbulatory;
 
 namespace BayClinicCdrAggregationLib
 {
+    /// <summary>
+    /// Manages the control of a worker thread to execute data aggregation 
+    /// </summary>
     public class BayClinicAggregationWorkerThreadManager
     {
         private bool _EndThreadSignal;
+        BayClinicCernerAmbulatoryBatchAggregator Aggregator = null;
 
         /// <summary>
-        /// Property that encapsulates thread safe access
+        /// Property that encapsulates thread safe access to the end thread signal
         /// </summary>
         private bool EndThreadSignal
         {
@@ -42,7 +46,6 @@ namespace BayClinicCdrAggregationLib
         {
             Mutx = new Mutex();
             WorkerThd = new Thread(ThreadMain);
-            EndThreadSignal = false;
         }
 
         /// <summary>
@@ -51,6 +54,7 @@ namespace BayClinicCdrAggregationLib
         /// <param name="PgConnectionName">Name of a PostgreSQL connection string to use. If null, a value is taken from ConfigurationManager.AppSettings["CdrPostgreSQLConnectionString"]</param>
         public void StartThread(String PgConnectionName = null)
         {
+            EndThreadSignal = false;
             WorkerThd.Start(PgConnectionName);
         }
 
@@ -62,26 +66,55 @@ namespace BayClinicCdrAggregationLib
         public bool EndThread(int WaitMs = 0)
         {
             EndThreadSignal = true;
+            if (Aggregator != null)
+            {
+                Aggregator.EndThreadSignal = true;
+            }
 
             return WorkerThd.Join(WaitMs);
         }
 
+        /// <summary>
+        /// returns the count of patient records aggregated so far
+        /// </summary>
+        /// <returns></returns>
+        public long GetNumberOfPatientsDone()
+        {
+            if (Aggregator != null)
+            {
+                return Aggregator.PatientCounter;
+            }
+
+            return 0;
+        }
+
+        /// <summary>
+        /// Worker thread entry point, initiates processing
+        /// </summary>
+        /// <param name="ThreadArg"></param>
         private void ThreadMain(object ThreadArg)
         {
             String PgCxnName = (String)ThreadArg;
+            bool Success;
+
+#if true // do once
+            Aggregator = new BayClinicCernerAmbulatoryBatchAggregator(PgCxnName);
+            Success = Aggregator.AggregateAllAvailablePatients(true);  // TODO for production the argument should be false
+            Aggregator = null;
+
+#else  // repeat
             while (!EndThreadSignal)
             {
-                bool Success;
-                BayClinicCernerAmbulatoryBatchAggregator Aggregator = new BayClinicCernerAmbulatoryBatchAggregator(PgCxnName);
+            Aggregator = new BayClinicCernerAmbulatoryBatchAggregator(PgCxnName);
                 Success = Aggregator.AggregateAllAvailablePatients(true);  // TODO for production the argument should be false
-
-                if (EndThreadSignal)
+                Aggregator = null;
+                if (!EndThreadSignal)
                 {
-                    break;
+                    Thread.Sleep(1 * 60 * 1000);  // milliseconds
                 }
-
-                Thread.Sleep(1 * 60 * 1000);  // milliseconds
             }
+#endif
+
         }
 
     }

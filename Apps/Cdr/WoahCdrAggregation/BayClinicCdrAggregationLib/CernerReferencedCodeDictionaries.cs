@@ -15,7 +15,7 @@ using System.Media;
 
 namespace BayClinicCernerAmbulatory
 {
-    class CernerReferencedCodeDictionaries
+    internal class CernerReferencedCodeDictionaries
     {
         IMongoCollection<MongodbRefCodeEntity> RefCodeCollection;
 
