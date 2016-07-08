@@ -1,10 +1,8 @@
-﻿using FileProcessor;
-using ReportFileGenerator;
+﻿using ReportFileGenerator;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Configuration;
+using SystemReporting.Utilities.ExceptionHandling;
+using C = SystemReporting.Utilities.Constants;
 
 namespace ReportFileGeneratorApplication
 {
@@ -22,11 +20,15 @@ namespace ReportFileGeneratorApplication
                 {
                     GenerateReportFile.ExecuteReportFileGenerate(args[0]);
                 }
+                if (C.ERROR_LOGGED)
+                {
+                    ExceptionLogger.SendErrorEmail(GetExceptionDirectory(), "Report File Generator Application");
+                }
                 Environment.ExitCode = 0;
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, "Main || Failed processing. || " + args, true);
+                ExceptionLogger.LogError(ex, "Exception Raised in Method Main.", "Program Exceptions");
             }
         }
 
@@ -97,6 +99,14 @@ namespace ReportFileGeneratorApplication
                 Console.WriteLine("Ex: FileProcessorApplication.exe   C:\\ProductionLogs\\IISLogs\\u_ex151002.log  ");
                 Console.WriteLine("--------------------------------------------------");
             }
+        }
+        private static string GetExceptionDirectory()
+        {
+            // For Example - D:\Projects\SomeProject\SomeFolder
+            return (ConfigurationManager.AppSettings != null &&
+                    ConfigurationManager.AppSettings["ExceptionFileDirectory"] != null) ?
+                    ConfigurationManager.AppSettings["ExceptionFileDirectory"].ToString() :
+                    string.Empty;
         }
     }
 }

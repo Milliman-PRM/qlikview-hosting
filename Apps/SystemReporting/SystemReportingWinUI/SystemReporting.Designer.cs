@@ -52,6 +52,7 @@ namespace SystemReportingWinUI
             this.dtEndDate = new System.Windows.Forms.DateTimePicker();
             this.lblEndDate = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.btnAbout = new System.Windows.Forms.Button();
             this.lblReportType = new System.Windows.Forms.Label();
             this.ddlUserName = new System.Windows.Forms.ComboBox();
             this.lblUserName = new System.Windows.Forms.Label();
@@ -74,7 +75,6 @@ namespace SystemReportingWinUI
             this.chkListLogType = new System.Windows.Forms.CheckedListBox();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.btnAbout = new System.Windows.Forms.Button();
             this.grpLog.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -107,7 +107,8 @@ namespace SystemReportingWinUI
             this.txtFolderBrowser.Name = "txtFolderBrowser";
             this.txtFolderBrowser.Size = new System.Drawing.Size(311, 39);
             this.txtFolderBrowser.TabIndex = 29;
-            this.txtFolderBrowser.Text = "double click....";
+            this.txtFolderBrowser.Text = "";
+            this.toolTip.SetToolTip(this.txtFolderBrowser, "Double click the text box");
             this.txtFolderBrowser.DoubleClick += new System.EventHandler(this.txtFolderBrowser_DoubleClick_1);
             // 
             // groupBox4
@@ -171,6 +172,16 @@ namespace SystemReportingWinUI
             this.groupBox3.TabIndex = 26;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Report Type:";
+            // 
+            // btnAbout
+            // 
+            this.btnAbout.Image = ((System.Drawing.Image)(resources.GetObject("btnAbout.Image")));
+            this.btnAbout.Location = new System.Drawing.Point(712, 18);
+            this.btnAbout.Name = "btnAbout";
+            this.btnAbout.Size = new System.Drawing.Size(29, 28);
+            this.btnAbout.TabIndex = 30;
+            this.btnAbout.UseVisualStyleBackColor = true;
+            this.btnAbout.Click += new System.EventHandler(this.btnAbout_Click);
             // 
             // lblReportType
             // 
@@ -387,16 +398,6 @@ namespace SystemReportingWinUI
             this.chkListLogType.Size = new System.Drawing.Size(182, 55);
             this.chkListLogType.TabIndex = 14;
             this.toolTip.SetToolTip(this.chkListLogType, "Select one or more log types");
-            // 
-            // btnAbout
-            // 
-            this.btnAbout.Image = ((System.Drawing.Image)(resources.GetObject("btnAbout.Image")));
-            this.btnAbout.Location = new System.Drawing.Point(712, 18);
-            this.btnAbout.Name = "btnAbout";
-            this.btnAbout.Size = new System.Drawing.Size(29, 28);
-            this.btnAbout.TabIndex = 30;
-            this.btnAbout.UseVisualStyleBackColor = true;
-            this.btnAbout.Click += new System.EventHandler(this.btnAbout_Click);
             // 
             // SystemReporting
             // 

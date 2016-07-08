@@ -40,63 +40,7 @@ namespace SystemReporting.Utilities
             }
             else
                 throw new ArgumentNullException("Cannot generate an MD5 hash of the given string because the given string was null.");
-        }
-
-        //public static void ExportToExcel(this DataTable Tbl, string ExcelFilePath = null)
-        //{
-        //    try
-        //    {
-        //        if (Tbl == null || Tbl.Columns.Count == 0)
-        //            throw new Exception("ExportToExcel: Null or empty input table!\n");
-
-        //        // load excel, and create a new workbook
-        //        var excelApp = new NsExcel.Application();
-        //        excelApp.Workbooks.Add();
-
-        //        // single worksheet
-        //        NsExcel._Worksheet workSheet = excelApp.ActiveSheet;
-
-        //        // column headings
-        //        for (int i = 0; i < Tbl.Columns.Count; i++)
-        //        {
-        //            workSheet.Cells[1, (i + 1)] = Tbl.Columns[i].ColumnName;
-        //        }
-
-        //        // rows
-        //        for (int i = 0; i < Tbl.Rows.Count; i++)
-        //        {
-        //            // to do: format datetime values before printing
-        //            for (int j = 0; j < Tbl.Columns.Count; j++)
-        //            {
-        //                workSheet.Cells[(i + 2), (j + 1)] = Tbl.Rows[i][j];
-        //            }
-        //        }
-
-        //        // check fielpath
-        //        if (ExcelFilePath != null && ExcelFilePath != "")
-        //        {
-        //            try
-        //            {
-        //                workSheet.SaveAs(ExcelFilePath);
-        //                excelApp.Quit();
-        //                //MessageBox.Show("Excel file saved!");
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                throw new Exception("ExportToExcel: Excel file could not be saved! Check filepath.\n"
-        //                + ex.Message);
-        //            }
-        //        }
-        //        else // no filepath is given
-        //        {
-        //            excelApp.Visible = true;
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception("ExportToExcel: \n" + ex.Message);
-        //    }
-        //}
+        }       
 
         /// <summary>
         /// Method to convert the list items to datatabale
@@ -194,6 +138,48 @@ namespace SystemReporting.Utilities
                 result = descriptor.GetValue(result);
             }
             return result;
+        }
+
+        public static string ExportDatatableToHtml(DataTable dt)
+        {
+            var strHTMLBuilder = new StringBuilder();
+            strHTMLBuilder.Append("<html >");
+            strHTMLBuilder.Append("<head>");
+            strHTMLBuilder.Append("</head>");
+            strHTMLBuilder.Append("<body>");
+            strHTMLBuilder.Append("<table border='1px' cellpadding='1' cellspacing='1' bgcolor='lightyellow' style='font-family:Garamond; font-size:small'>");
+
+            //Header Row
+            strHTMLBuilder.Append("<tr>");
+            foreach (DataColumn myColumn in dt.Columns)
+            {
+                strHTMLBuilder.Append("<td>");
+                strHTMLBuilder.Append("<b>");
+                strHTMLBuilder.Append(myColumn.ColumnName);
+                strHTMLBuilder.Append("</b>");
+                strHTMLBuilder.Append("</td>");
+            }
+            strHTMLBuilder.Append("</tr>");
+
+            //Details Row
+            foreach (DataRow myRow in dt.Rows)
+            {
+                strHTMLBuilder.Append("<tr >");
+                foreach (DataColumn myColumn in dt.Columns)
+                {
+                    strHTMLBuilder.Append("<td >");
+                    strHTMLBuilder.Append(myRow[myColumn.ColumnName].ToString());
+                    strHTMLBuilder.Append("</td>");
+                }
+                strHTMLBuilder.Append("</tr>");
+            }
+
+            //Close tags.  
+            strHTMLBuilder.Append("</table>");
+            strHTMLBuilder.Append("</body>");
+            strHTMLBuilder.Append("</html>");
+            string htmlTableText = strHTMLBuilder.ToString();
+            return htmlTableText;
         }
     }
 }

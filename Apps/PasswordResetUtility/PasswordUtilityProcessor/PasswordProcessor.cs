@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Web.Profile;
 using System.Web.Security;
-
+using SystemReporting.Utilities.ExceptionHandling;
 
 /// <summary>
 /// In order to use the Membership API we need to reference System.configuration &  System.Web.ApplicationServices
@@ -14,7 +14,7 @@ using System.Web.Security;
 /// </summary>
 namespace PasswordUtilityProcessor
 {
-    public class PasswordProcessor : BaseFileProcessor
+    public class PasswordProcessor 
     {        
         public static void ExecutePasswordResetUtility(string args)
         {
@@ -29,7 +29,7 @@ namespace PasswordUtilityProcessor
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, "ExecutePasswordResetUtility || An exception occured during the processing." + args);                
+                ExceptionLogger.LogError(ex, "Exception Raised in Method ExecutePasswordResetUtility. Failed processing file " + args.ToArray(), "PasswordProcessor Exceptions");
             }
         }
 
@@ -64,7 +64,7 @@ namespace PasswordUtilityProcessor
                 if (usersCollection == null || usersCollection.Count == 0)
                 {
                     //log error and send email
-                    BaseFileProcessor.LogError(null, "ProcessAllUsers || System could not load all users. Check if the database server is down.");
+                    ExceptionLogger.LogError(null, "Exception Raised in Method ProcessAllUsers. ProcessAllUsers || System could not load all users. Check if the database server is down.", "PasswordProcessor Exceptions");
                     return;
                 }
 
@@ -147,7 +147,7 @@ namespace PasswordUtilityProcessor
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, "ProcessAllUsers");
+                ExceptionLogger.LogError(ex, "Exception Raised in Method ProcessAllUsers.", "PasswordProcessor Exceptions");
             }
         }
 
@@ -164,7 +164,7 @@ namespace PasswordUtilityProcessor
                 if (user == null)
                 {
                     //log error and send email
-                    BaseFileProcessor.LogError(null, "ProcessUser || Invalid user name. System could not find the user | " + param + " | in database. Please check user name in database and make sure user is valid.");
+                    ExceptionLogger.LogError(null, "Exception Raised in Method ProcessUser. || Invalid user name. System could not find the user | " + param + " | in database. Please check user name in database and make sure user is valid", "PasswordProcessor Exceptions");
                     return;
                 }
 
@@ -189,7 +189,7 @@ namespace PasswordUtilityProcessor
                             if (providerUserKey == null)
                             {
                                 //log error
-                                BaseFileProcessor.LogError(null, "ProcessUser || Invalid user. System could not find the providerUserKey | " + providerUserKey + " | in database. Check the 'UserId' in [aspnet_Users] for the userName " + user.UserName + ".");
+                                ExceptionLogger.LogError(null, "Exception Raised in Method ProcessUser. || Invalid user. System could not find the providerUserKey | " + providerUserKey + " | in database. Check the 'UserId' in [aspnet_Users] for the userName " + user.UserName + ".", "PasswordProcessor Exceptions");
                                 return;
                             }
                             WritePasswordResetFile(user);
@@ -200,19 +200,9 @@ namespace PasswordUtilityProcessor
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, "ProcessUser");
+                ExceptionLogger.LogError(ex, "Exception Raised in Method ProcessUser. ", "PasswordProcessor Exceptions");
             }
         }
-
-        //#region Notification
-        //private static void SendErrorEmail()
-        //{
-        //    if (bErrorLogged)
-        //        //send email
-        //        BaseFileProcessor.SendEmail("Password re-set Utility could not process user(s) information due to missing or lack of information in database. ", "Missing User Information");
-        //    bErrorLogged = false;
-        //}
-        //#endregion
 
         #region File Function
 
@@ -223,11 +213,7 @@ namespace PasswordUtilityProcessor
             {
                 //write file
                 var userPasswordResetFileAndDirectory = Path.Combine(GetFolderPath() ,user.ProviderUserKey.ToString().ToUpper() + ".rst");
-                ////Check file
-                //if (File.Exists(userPasswordResetFileAndDirectory))
-                //{
-                //    File.Delete(userPasswordResetFileAndDirectory);
-                //}
+               
                 //if file does not exist then create
                 if (!File.Exists(userPasswordResetFileAndDirectory))
                 {

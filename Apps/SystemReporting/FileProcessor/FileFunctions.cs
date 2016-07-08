@@ -2,15 +2,9 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SystemReporting.Utilities;
-using SystemReporting.Utilities.File;
-using SystemReporting.Utilities.ExceptionHandling;
-using System.Security.Cryptography;
-using SystemReporting.Controller;
-using SystemReporting.Controller.BusinessLogic.Controller;
 using SystemReporting.Utilities.Email;
+using SystemReporting.Utilities.ExceptionHandling;
+using SystemReporting.Utilities.File;
 
 namespace FileProcessor
 {
@@ -82,17 +76,6 @@ namespace FileProcessor
         {
             return (ConfigurationManager.AppSettings["ProcessedFileLogFileName"]);
         }
-
-        #region ErrorLogger
-        public static string GetExceptionLoggerFileDirectory()
-        {
-            return ConfigurationManager.AppSettings["ExceptionFileDirectory"];
-        }
-        public static string GetExceptionLoggerFileName()
-        {
-            return ConfigurationManager.AppSettings["ExceptionFileName"];
-        }
-        #endregion
 
         #endregion
 
@@ -333,23 +316,33 @@ namespace FileProcessor
             if (!isEmpty)
             {
                 var fileList = System.IO.Directory.GetFiles(destinationInDirectory.ToString());
+                var msg = string.Empty;
+                var bRecordError = false;
                 foreach (var file in fileList)
                 {
+                    msg = string.Empty;
+                    bRecordError = false;
                     if (file.ToLower().IndexOf("u_ex", StringComparison.Ordinal) > -1)
                     {
-                        BaseFileProcessor.LogError(null,DateTime.Now + "||" + "=== File is deleted from processing directory. ===" + file,false);
+                        bRecordError = true;
                         System.IO.File.Delete(file);
                     }
                     if (file.ToLower().IndexOf("audit_", StringComparison.Ordinal) > -1)
                     {
-                        BaseFileProcessor.LogError(null,DateTime.Now + "||" + "=== File is deleted from processing directory. ===" + file, false);
+                        bRecordError = true;
                         System.IO.File.Delete(file);
                     }
                     if (file.ToLower().IndexOf("sessions_", StringComparison.Ordinal) > -1)
                     {
-                        BaseFileProcessor.LogError(null,DateTime.Now + "||" + "=== File is deleted from processing directory. ===" + file, false);
+                        bRecordError = true;
                         System.IO.File.Delete(file);
                     }
+
+                    if (bRecordError)
+                    {
+                        msg = DateTime.Now + "||" + "=== File is deleted from processing directory. ===" + file;
+                        ExceptionLogger.LogError(null, msg, "File Funciton Exceptions");
+                    }                    
                 }                
 
             }

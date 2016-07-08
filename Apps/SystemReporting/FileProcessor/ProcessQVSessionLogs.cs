@@ -5,7 +5,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using SystemReporting.Entities.Models;
-using SystemReporting.Utilities;
+using SystemReporting.Utilities.ExceptionHandling;
 
 namespace FileProcessor
 {
@@ -59,7 +59,7 @@ namespace FileProcessor
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, "Class ProcessQVSessionLogs. Method ProcessFileData.",true);
+                ExceptionLogger.LogError(ex, "Exception Raised in ProcessFileData.", "ProcessQVSessionLogs Exceptions");
             }
         }
 
@@ -88,8 +88,11 @@ namespace FileProcessor
         public bool ProcessLogFile(string fileNameWithDirectory)
         {
             var fileInfo = new FileInfo(fileNameWithDirectory);
-            var ff = new FileFunctions();
-
+            if (fileInfo == null)
+            {
+                ExceptionLogger.LogError(null, "Exception Raised in Method ProcessLogFile. File Info missing. Can not process " + fileNameWithDirectory, "ProcessQVSessionLogs Exceptions");
+                return false;
+            }
             var blnSucessful = false;
             try
             {
@@ -183,7 +186,7 @@ namespace FileProcessor
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, " Class ProcessQVSessionLogs. Method ProcessLogFile while sending the data to controller.", true);
+                ExceptionLogger.LogError(ex, "Exception Raised in Method ProcessLogFile. Exception happen while sending the data to controller and processing file " + fileNameWithDirectory, "ProcessQVSessionLogs Exceptions");
             }
 
             return blnSucessful;
@@ -213,7 +216,7 @@ namespace FileProcessor
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, " Class ProcessQVSessionLogs. Method ParseFile. File name. " + filefullName, true);
+                ExceptionLogger.LogError(ex, "Exception Raised in Method ParseLogFile. Exception happen while parsing the file " + filefullName, "ProcessQVSessionLogs Exceptions");
             }
             return listLogFile;
         }

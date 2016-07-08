@@ -5,6 +5,7 @@ using System.Configuration;
 using System.IO;
 using SystemReporting.Entities.Models;
 using SystemReporting.Utilities;
+using SystemReporting.Utilities.ExceptionHandling;
 
 namespace ReportFileGenerator
 {
@@ -35,7 +36,7 @@ namespace ReportFileGenerator
             }
             catch(Exception ex)
             {
-                BaseFileProcessor.LogError(ex, "GenerateQVSessionLogsReport:GenerateReport", true);
+                 ExceptionLogger.LogError(ex, "Exception Raised in Method GenerateReport. ", "GenerateQVSessionLogsReport Exceptions");
             }
         }        
 
@@ -118,6 +119,8 @@ namespace ReportFileGenerator
                 dt.Columns.Remove("ListIisLog");
                 dt.Columns.Remove("ListSessionLog");
                 dt.Columns.Remove("ListAuditLog");
+                dt.Columns.Remove("ReportDesctiption");
+                dt.Columns.Remove("Description");
 
                 var file = string.Empty;
                 if (string.IsNullOrEmpty(fileNameWithFolderPath))
@@ -130,7 +133,8 @@ namespace ReportFileGenerator
                     file = fileNameWithFolderPath;
                 }
 
-                ExtensionMethods.ExportToExcel(dt, file);
+                var HtmlBody = ExtensionMethods.ExportDatatableToHtml(dt);
+                File.WriteAllText(file, HtmlBody);
             }
         }
 

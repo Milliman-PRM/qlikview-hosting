@@ -1,10 +1,9 @@
-﻿using SystemReporting.Data.Repository;
-using SystemReporting.Entities.Models;
-using SystemReporting.Service;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using SystemReporting.Utilities;
+using SystemReporting.Entities.Models;
+using SystemReporting.Service;
+using SystemReporting.Utilities.ExceptionHandling;
 
 namespace SystemReporting.Controller.BusinessLogic.Controller
 {
@@ -52,8 +51,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
             catch (Exception ex)
             {
                 dbService.Dispose();
-                log.Fatal("Class CommonController. Method AddOrGetUser.", ex);
-                SendEmail("Exception Raised", "Common Controller Exception");
+                ExceptionLogger.LogError(ex, "Exception Raised in Method AddOrGetUser.", "Common Controller Exception");
             }
 
             return obj;
@@ -81,8 +79,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
             catch (Exception ex)
             {
                 dbService.Dispose();
-                log.Fatal("Class CommonController. Method GetUserById.", ex);
-                SendEmail("Exception Raised", "Common Controller Exception");
+                ExceptionLogger.LogError(ex, "Exception Raised in Method GetUserById.", "Common Controller Exception");
             }
 
             return obj;
@@ -105,10 +102,8 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
             catch (Exception ex)
             {
                 dbService.Dispose();
-                log.Fatal("Class CommonController. Method GroupListGet.", ex);
-                SendEmail("Exception Raised", "Common Controller Exception");
+                ExceptionLogger.LogError(ex, "Exception Raised in Method GetUserList.", "Common Controller Exception");
             }
-
             return obj;
         }
         #endregion
@@ -146,8 +141,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
             catch (Exception ex)
             {
                 dbService.Dispose();
-                log.Fatal("Class CommonController. Method AddOrGetReport.", ex);
-                SendEmail("Exception Raised", "Common Controller Exception");
+                ExceptionLogger.LogError(ex, "Exception Raised in Method AddOrGetReport.", "Common Controller Exception");
             }
 
             return obj;
@@ -170,8 +164,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
             catch (Exception ex)
             {
                 dbService.Dispose();
-                log.Fatal("Class CommonController. Method ReportGet.", ex);
-                SendEmail("Exception Raised", "Common Controller Exception");
+                ExceptionLogger.LogError(ex, "Exception Raised in Method ReportGet.", "Common Controller Exception");
             }
 
             return obj;
@@ -194,8 +187,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
             catch (Exception ex)
             {
                 dbService.Dispose();
-                log.Fatal("Class CommonController. Method ReportGetListBySearch.", ex);
-                SendEmail("Exception Raised", "Common Controller Exception");
+                ExceptionLogger.LogError(ex, "Exception Raised in Method ReportGetListBySearch.", "Common Controller Exception");
             }
 
             return obj;
@@ -218,8 +210,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
             catch (Exception ex)
             {
                 dbService.Dispose();
-                log.Fatal("Class CommonController. Method ReportGet.", ex);
-                SendEmail("Exception Raised", "Common Controller Exception");
+                ExceptionLogger.LogError(ex, "Exception Raised in Method GetReportList.", "Common Controller Exception");
             }
 
             return obj;
@@ -259,8 +250,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
             catch (Exception ex)
             {
                 dbService.Dispose();
-                log.Fatal("Class CommonController. Method AddOrGetGroup.", ex);
-                SendEmail("Exception Raised", "Common Controller Exception");
+                ExceptionLogger.LogError(ex, "Exception Raised Method AddOrGetGroup.", "Common Controller Exception");
             }
 
             return obj;
@@ -282,8 +272,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
             catch (Exception ex)
             {
                 dbService.Dispose();
-                log.Fatal("Class CommonController. Method GroupListGet.", ex);
-                SendEmail("Exception Raised", "Common Controller Exception");
+                ExceptionLogger.LogError(ex, "Exception Raised in Method GroupListGet.", "Common Controller Exception");
             }
 
             return objList;

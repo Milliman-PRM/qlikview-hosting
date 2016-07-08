@@ -1,10 +1,12 @@
 ﻿using PasswordUtilityProcessor;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using C = PasswordUtilityProcessor.Constants;
+using SystemReporting.Utilities.ExceptionHandling;
+using C = SystemReporting.Utilities.Constants;
 
 namespace PasswordResetUtilityApplication
 {
@@ -22,25 +24,17 @@ namespace PasswordResetUtilityApplication
                 {
                     PasswordProcessor.ExecutePasswordResetUtility(args[0]);
                 }
-                SendErrorEmail();
+                if (C.ERROR_LOGGED)
+                {
+                    ExceptionLogger.SendErrorEmail(GetExceptionDirectory(), "Password Reset Utility Application");
+                }
                 Environment.ExitCode = 0;
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, "Main || Failed processing. || " + args);
+                ExceptionLogger.LogError(ex, "Main || Failed processing. || " + args, "Password Reset Utility Application");
             }
         }
-
-        #region Notification
-        private static void SendErrorEmail()
-        {
-            //if error logged filter is true then send email
-            if (C.ERROR_LOGGED)
-                //send email
-                BaseFileProcessor.SendEmail("Password re-set Utility could not process user(s) information due to missing or lack of information in database. ", "Missing User Information");
-            C.ERROR_LOGGED = false;
-        }
-        #endregion
 
         private static bool CheckArgs(string[] args)
         {
@@ -107,6 +101,14 @@ namespace PasswordResetUtilityApplication
                 Console.WriteLine("Ex: PasswordResetUtilityApplication.exe");
                 Console.WriteLine("--------------------------------------------------");
             }
+        }
+        private static string GetExceptionDirectory()
+        {
+            // For Example - D:\Projects\SomeProject\SomeFolder
+            return (ConfigurationManager.AppSettings != null &&
+                    ConfigurationManager.AppSettings["ExceptionFileDirectory"] != null) ?
+                    ConfigurationManager.AppSettings["ExceptionFileDirectory"].ToString() :
+                    string.Empty;
         }
     }
 }

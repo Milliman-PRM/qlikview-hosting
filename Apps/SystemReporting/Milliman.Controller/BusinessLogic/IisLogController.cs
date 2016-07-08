@@ -1,25 +1,16 @@
-﻿using SystemReporting.Data.Database;
-using SystemReporting.Data.Repository;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using SystemReporting.Entities.Models;
 using SystemReporting.Entities.Proxy;
 using SystemReporting.Service;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using SystemReporting.Utilities;
-using log4net.Repository;
-using log4net.Appender;
-using System.IO;
-using log4net;
+using SystemReporting.Utilities.ExceptionHandling;
 
 namespace SystemReporting.Controller.BusinessLogic.Controller
 {
     public class IisLogController : ControllerBase
     {
-        //private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.
-        //                                                                        MethodBase.GetCurrentMethod().DeclaringType);
-        private IMillimanService dbService { get; set; }
+         private IMillimanService dbService { get; set; }
 
         /// <summary>
         /// Constructor
@@ -103,8 +94,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
             catch (Exception ex)
             {
                 dbService.Dispose();
-                log.Fatal("Class IisLogController. Method ProcessLogs.", ex);
-                SendEmail("Exception Raised", "IisLog Controller Exception");
+                ExceptionLogger.LogError(ex, "Exception Raised in Method ProcessLogs.", "IisLog Controller Exception");
             }
             return blnSucessful;
         }
@@ -167,35 +157,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
             }
             return listFinalResult;
         }
-        ///// <summary>
-        ///// get session log report by ReportName
-        ///// </summary>
-        ///// <param name="startDate"></param>
-        ///// <param name="endDate"></param>
-        ///// <param name="reportName"></param>
-        ///// <returns></returns>
-        //public List<IisLog> GetIisLogListForReport(string startDate, string endDate, string reportName)
-        //{
-        //    var dbService = new MillimanService();
-        //    var listResult = new List<IisLog>();
-
-        //    var obj = dbService.GetReports<Report>(a => a.ReportName.Contains(reportName)).FirstOrDefault();
-
-        //    DateTime? dtStartDate = DateTime.Parse(startDate);
-        //    DateTime? dtEndDate = DateTime.Parse(endDate);
-
-        //    if (obj != null)
-        //    {
-        //        listResult = dbService.GetIisLogs<IisLog>(s => s. == obj.Id
-        //                                        &&
-        //                                        s.UserAccessDatetime.Value > dtStartDate
-        //                                        &&
-        //                                        s.UserAccessDatetime.Value <= dtEndDate)
-        //                                        .OrderBy(a => a.UserAccessDatetime).ToList();
-        //    }
-        //    return listResult;
-        //}
-
+       
         /// <summary>
         /// get a session log report by user
         /// </summary>

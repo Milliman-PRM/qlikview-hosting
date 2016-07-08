@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using SystemReporting.Utilities.ExceptionHandling;
 
 namespace ReportFileGenerator
 {
@@ -17,7 +18,7 @@ namespace ReportFileGenerator
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, "ExecutePasswordResetUtility || An exception occured during the processing." + args, true);
+                  ExceptionLogger.LogError(ex, "Exception Raised in Method ExecuteReportFileGenerate. An exception occured during the processing " + args, "GenerateReportFile Exceptions");
             }
         }
         private static void Process()
@@ -53,8 +54,8 @@ namespace ReportFileGenerator
                 }
             }
             catch (Exception ex)
-            {
-                BaseFileProcessor.LogError(ex, "GenerateReportFile:Process", true);
+            {               
+                ExceptionLogger.LogError(ex, "Exception Raised in Method Process.", "GenerateReportFile Exceptions");
             }
         }
                 
