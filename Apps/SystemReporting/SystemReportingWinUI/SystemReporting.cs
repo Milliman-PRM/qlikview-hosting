@@ -188,8 +188,20 @@ namespace SystemReportingWinUI
                 //generate
                 foreach (var log in logCategoryTypeList)
                 {
+                    //Report Name
                     if (!string.IsNullOrEmpty(txtFolderBrowser.Text))
                         fileNameWithFolderPath = txtFolderBrowser.Text + "\\" + log + "_" + DateTime.Now.ToString("MMdd_hhmm") + fileExtension;
+
+                    if (ddlGroupName.SelectedIndex > -1)
+                        fileNameWithFolderPath = txtFolderBrowser.Text + "\\" + ddlGroupName.Text + "_" + log + "_" + DateTime.Now.ToString("MMdd_hhmm") + fileExtension;
+
+                    if (ddlReportName.SelectedIndex > -1)
+                        fileNameWithFolderPath = txtFolderBrowser.Text + "\\" + ddlReportName.Text + "_" + log + "_" + DateTime.Now.ToString("MMdd_hhmm") + fileExtension;
+
+
+                    if (ddlUserName.SelectedIndex > -1)
+                        fileNameWithFolderPath = txtFolderBrowser.Text + "\\" + ddlUserName.Text + "_" + log + "_" + DateTime.Now.ToString("MMdd_hhmm") + fileExtension;
+
 
                     if (log == "Iis")
                     {
