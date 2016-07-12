@@ -17,14 +17,6 @@ namespace SystemReporting.Service
 
         #region Database
 
-        #region Conn
-        //private ApplicationDbContext dbContext { get; set; }
-        //protected void CreateDbContext()
-        //{
-        //    dbContext = new ApplicationDbContext();
-        //}
-        #endregion
-
         #region IDisposable
 
         public void Dispose()
@@ -56,87 +48,6 @@ namespace SystemReporting.Service
         IRepository<User> UserRepository = new Repository<User>(new ApplicationDbContext());
         IRepository<Report> ReportRepository = new Repository<Report>(new ApplicationDbContext());
         IRepository<Group> GroupRepository = new Repository<Group>(new ApplicationDbContext());
-
-        #region Repositories
-        //private IRepository<IisLog> _IisLogRepository;
-        //public IRepository<IisLog> IisLogRepository
-        //{
-        //    get
-        //    {
-        //        if (_IisLogRepository == null)
-        //        {
-        //            _IisLogRepository = new Repository<IisLog>(dbContext);
-        //        }
-        //        return _IisLogRepository;
-        //    }
-        //}
-
-        //private IRepository<AuditLog> _AuditLogRepository;
-        //public IRepository<AuditLog> AuditLogRepository
-        //{
-        //    get
-        //    {
-        //        if (_AuditLogRepository == null)
-        //        {
-        //            _AuditLogRepository = new Repository<AuditLog>(dbContext);
-        //        }
-        //        return _AuditLogRepository;
-        //    }
-        //}
-
-        //private IRepository<SessionLog> _SessionLogRepository;
-        //public IRepository<SessionLog> SessionLogRepository
-        //{
-        //    get
-        //    {
-        //        if (_SessionLogRepository == null)
-        //        {
-        //            _SessionLogRepository = new Repository<SessionLog>(dbContext);
-        //        }
-        //        return _SessionLogRepository;
-        //    }
-        //}
-
-        //private IRepository<User> _UserRepository;
-        //public IRepository<User> UserRepository
-        //{
-        //    get
-        //    {
-        //        if (_UserRepository == null)
-        //        {
-        //            _UserRepository = new Repository<User>(dbContext);
-        //        }
-        //        return _UserRepository;
-        //    }
-        //}
-
-        //private IRepository<Group> _GroupRepository;
-        //public IRepository<Group> GroupRepository
-        //{
-        //    get
-        //    {
-        //        if (_GroupRepository == null)
-        //        {
-        //            _GroupRepository = new Repository<Group>(dbContext);
-        //        }
-        //        return _GroupRepository;
-        //    }
-        //}
-
-        //private IRepository<Report> _ReportRepository;
-        //public IRepository<Report> ReportRepository
-        //{
-        //    get
-        //    {
-        //        if (_ReportRepository == null)
-        //        {
-        //            _ReportRepository = new Repository<Report>(dbContext);
-        //        }
-        //        return _ReportRepository;
-        //    }
-        //}
-        #endregion
-
         #endregion
 
         #endregion

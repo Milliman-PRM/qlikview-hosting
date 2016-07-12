@@ -271,7 +271,10 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
             }
             catch (Exception ex)
             {
-                dbService.Dispose();
+                if(dbService != null)
+                {
+                    dbService.Dispose();
+                }                
                 ExceptionLogger.LogError(ex, "Exception Raised in Method GroupListGet.", "Common Controller Exception");
             }
 
