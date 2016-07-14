@@ -176,6 +176,19 @@ namespace FileProcessor
                         proxyLogEntry.SessionLength = entry.SessionDuration.ToString();
                         proxyLogEntry.SessionEndReason = QlikviewSessionEvent.GetExitReason(entry.ExitReason).ToString();
                         proxyLogEntry.Browser = QlikviewSessionEvent.GetBrowser(entry.ClientType);
+
+                        //if browser has unknown than get the browser name after [browser.] in string
+                        if (proxyLogEntry.Browser.Contains("Unknown"))
+                        {
+                            var browser = "";
+                            var stringTobeSearched = "browser.";
+                            var ix = entry.ClientType.IndexOf(stringTobeSearched);
+                            if (ix != -1)
+                            {
+                                browser = entry.ClientType.Substring(ix + stringTobeSearched.Length);
+                            }
+                            proxyLogEntry.Browser = browser;
+                        }
                         //add entry to list
                         listProxyLogs.Add(proxyLogEntry);
                         proxyLogEntry = new ProxySessionLog();
