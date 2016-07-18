@@ -80,7 +80,10 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                         {
                             ReportType = entry.Report.Substring(0, entry.Report.IndexOf('-'));
                         }
-
+                        else if (entry.Report.Any(c => char.IsDigit(c)) && entry.Report.Length == 32 && !entry.Report.Contains(' '))
+                        {
+                            ReportType = "";
+                        }
                         var report = new Report
                         {
                             ReportName = entry.Report.Trim(),
