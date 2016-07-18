@@ -169,6 +169,7 @@ namespace FileProcessor
 
                         proxyLogEntry.Group = (!string.IsNullOrEmpty(group)) ? group : string.Empty;
                         //**************************************************************************************************//
+                        
                         proxyLogEntry.Report = QlikviewEventBase.GetReportName(entry.Document);
 
                         proxyLogEntry.Document = (!string.IsNullOrEmpty(docNameNoPath)) ? docNameNoPath.ToUpper().Trim() : string.Empty;

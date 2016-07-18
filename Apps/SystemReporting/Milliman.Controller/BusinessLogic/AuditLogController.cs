@@ -74,9 +74,17 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                     //Insert Report
                     if (!string.IsNullOrEmpty(entry.Report))
                     {
+                        //Parses the report and creates the report type
+                        string ReportType = entry.Report.Trim();
+                        if (entry.Report.Contains("-"))
+                        {
+                            ReportType = entry.Report.Substring(0, entry.Report.IndexOf('-'));
+                        }
+
                         var report = new Report
                         {
-                            ReportName = entry.Report.Trim()
+                            ReportName = entry.Report.Trim(),
+                            ReportType = ReportType.Trim()
                         };
                         var addOrGetReport = ControllerCommon.AddOrGetReport(report);
                         if (addOrGetReport != null)

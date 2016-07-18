@@ -123,6 +123,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                 var exists = dbService.GetReports<Report>(u => u.ReportName == model.ReportName).FirstOrDefault();
                 if (exists == null)
                 {
+                    obj.ReportType = model.ReportType.Trim();
                     obj.ReportName = model.ReportName.Trim();
                     obj.AddDate = DateTime.Now;
                     dbService.Save(obj);
