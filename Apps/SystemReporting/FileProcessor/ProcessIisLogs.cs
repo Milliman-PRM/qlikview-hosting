@@ -173,6 +173,18 @@ namespace FileProcessor
                         {
                             var browser = IisAccessEvent.GetBrowserFromAgentString(entry.UserAgent);
                             proxyLogEntry.Browser = (!string.IsNullOrEmpty(browser)) ? browser : string.Empty;
+
+                            if (proxyLogEntry.Browser.Contains("Unknown"))
+                            {
+                                browser = "";
+                                var stringTobeSearched = "browser.";
+                                var ix = entry.UserAgent.IndexOf(stringTobeSearched);
+                                if (ix != -1)
+                                {
+                                    browser = entry.UserAgent.Substring(ix + stringTobeSearched.Length);
+                                }
+                                proxyLogEntry.Browser = browser;
+                            }
                         }
 
                         //TODO - Something special needs to happen for this

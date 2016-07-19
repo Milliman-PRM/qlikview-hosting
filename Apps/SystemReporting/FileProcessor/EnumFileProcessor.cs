@@ -29,5 +29,17 @@
         }
         #endregion
 
+        #region "   BrowserType"
+        public enum eBrowserType
+        {
+            gecko,
+            msie,
+            android,
+            safari,
+            firefox
+        }
+        #endregion
+
+
     }
 }
