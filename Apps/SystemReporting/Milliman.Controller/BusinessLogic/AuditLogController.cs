@@ -75,21 +75,11 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                     if (!string.IsNullOrEmpty(entry.Report))
                     {
                         //Parses the report and creates the report type
-                        string ReportType = entry.Report.Trim();
-                        if (entry.Report.Contains("-"))
-                        {
-                            ReportType = entry.Report.Substring(0, entry.Report.IndexOf('-'));
-                        }
-                        else if (entry.Report.Any(c => char.IsDigit(c)) && entry.Report.Length == 32 && !entry.Report.Contains(' '))
-                        {
-                            ReportType = "";
-                        }
                         var report = new Report
                         {
                             ReportName = entry.Report.Trim(),
-                            ReportType = ReportType.Trim()
                         };
-                        var addOrGetReport = ControllerCommon.AddOrGetReport(report);
+                        var addOrGetReport = ControllerCommon.AddOrGetReport(report, logEntity.Document);
                         if (addOrGetReport != null)
                         {
                             //after insert set the id

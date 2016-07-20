@@ -113,24 +113,24 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
         /// Method checks if object exist then add to db - No Update
         /// </summary>
         /// <param name="model"></param>
-        public Report AddOrGetReport(Report model)
+        public Report AddOrGetReport(Report Report, String Document)
         {
             //initiate service
             dbService = new MillimanService();
             var obj = new Report();
             try
             {
-                var exists = dbService.GetReports<Report>(u => u.ReportName == model.ReportName).FirstOrDefault();
+                var exists = dbService.GetReports<Report>(u => u.ReportName == Report.ReportName).FirstOrDefault();
                 if (exists == null)
                 {
-                    obj.ReportType = model.ReportType.Trim();
-                    obj.ReportName = model.ReportName.Trim();
+                    obj.ReportName = Report.ReportName.Trim();
+                    obj.ReportType = GetReportType(Report, Document);
                     obj.AddDate = DateTime.Now;
                     dbService.Save(obj);
 
                     obj = new Report();
                     //after insert set the id
-                    obj = dbService.GetReports<Report>(a => a.ReportName == model.ReportName).FirstOrDefault();
+                    obj = dbService.GetReports<Report>(a => a.ReportName == Report.ReportName).FirstOrDefault();
                 }
                 else
                 {
@@ -218,6 +218,62 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
         }
         #endregion
 
+        #region"Report Type"
+
+        public string GetReportType(Report Report, String Document)
+        {
+            string ReportType = "";
+            List<string> ReportNameTokens;
+            if (Report.ReportName.Any(c => char.IsDigit(c)) && !Report.ReportName.Contains(' '))
+            {
+                ReportNameTokens = GetParentReportType(Report, Document).Split(' ').ToList();
+            }
+            else
+            {
+                ReportNameTokens = Report.ReportName.Split(' ').ToList();
+            }
+            
+            var dbService = new MillimanService();
+
+            var ReportTypeList = dbService.GetReportTypes<ReportType>().OrderBy(o => o.Type).ToList();
+
+            foreach(ReportType type in ReportTypeList)
+            {
+                List<String> TypeTokens = type.Keywords.Split(';').ToList();
+
+                List<String> CommonTokens = TypeTokens.Intersect(ReportNameTokens).ToList();
+                
+                if (CommonTokens.SequenceEqual(TypeTokens))                 //TODO Will only return true if they are in the same order. They should usually be but should probably fix this
+                {
+                    return type.Type;
+                }
+                
+            }
+
+            return ReportType;
+        }
+
+        public string GetParentReportType(Report Report, String Document)
+        {
+            var dbService = new MillimanService();
+
+            string RootParentDirectory = Document.Substring(0, Document.IndexOf("REDUCEDCACHEDQVWS"));
+
+            var ParentRootQuery = dbService.GetAuditLogs<AuditLog>(a => a.Document.Contains(RootParentDirectory)).Distinct();
+
+            foreach(AuditLog Log in ParentRootQuery)
+            {
+                if(RootParentDirectory.Count(x => x == '\\') == Log.Document.Count(x => x == '\\'))
+                {
+                    string ParentReportName = Log.Document.Substring(Log.Document.LastIndexOf('\\')+1, Log.Document.Length - Log.Document.LastIndexOf('\\') - 5);
+                    return ParentReportName;
+                }
+            }
+
+            return "";
+        }
+
+        #endregion
         #region Group
         /// <summary>
         /// Method checks if object exist then add to db - No Update

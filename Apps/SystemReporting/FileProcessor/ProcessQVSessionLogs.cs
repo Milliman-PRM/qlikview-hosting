@@ -12,6 +12,7 @@ namespace FileProcessor
 {
     public class ProcessQVSessionLogs : ControllerAccess, IFileProcessor
     {
+        List<ProxySessionLog> ChildListProxyLogs = new List<ProxySessionLog>();
         /// <summary>
         /// Constructor
         /// </summary>
@@ -49,10 +50,12 @@ namespace FileProcessor
                             var listFileToProcess = FileFunctions.GetFileToReadFromStatusFile(filter, efilePath);
                             if (listFileToProcess.Count > 0)
                             {
+                                var blnSucessful = false;
                                 foreach (var file in listFileToProcess)
                                 {
                                     ProcessLogFileMove(efilePath, sourceDirectory, destinationInDirectory, file);
                                 }
+                                blnSucessful = ControllerSessionLog.ProcessLogs(ChildListProxyLogs);
                             }
                         }
                     }
@@ -102,6 +105,8 @@ namespace FileProcessor
                 if (listLogFile != null & listLogFile.Count > 0)
                 {
                     var listProxyLogs = new List<ProxySessionLog>();
+                    
+
                     //Entity
                     var proxyLogEntry = new ProxySessionLog();
 
@@ -172,7 +177,7 @@ namespace FileProcessor
                         //**************************************************************************************************//
                         
                         proxyLogEntry.Report = QlikviewEventBase.GetReportName(entry.Document);
-
+                        
                         proxyLogEntry.Document = (!string.IsNullOrEmpty(docNameNoPath)) ? docNameNoPath.ToUpper().Trim() : string.Empty;
 
                         proxyLogEntry.SessionLength = entry.SessionDuration.ToString();
@@ -180,11 +185,20 @@ namespace FileProcessor
                         proxyLogEntry.Browser = FileFunctions.GetBrowserName(proxyLogEntry.ClientType);
                       
                         //add entry to list
-                        listProxyLogs.Add(proxyLogEntry);
+                        if(proxyLogEntry.Report.Any(c => char.IsDigit(c)) && !proxyLogEntry.Report.Contains(' '))
+                        {
+                            ChildListProxyLogs.Add(proxyLogEntry);
+                        }
+                        else
+                        {
+                            listProxyLogs.Add(proxyLogEntry);
+                        }
+
                         proxyLogEntry = new ProxySessionLog();
                     }
                     //process the list
                     blnSucessful = ControllerSessionLog.ProcessLogs(listProxyLogs);
+
                 }
             }
             catch (Exception ex)

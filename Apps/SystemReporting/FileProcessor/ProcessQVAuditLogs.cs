@@ -11,6 +11,7 @@ namespace FileProcessor
 {
     public class ProcessQVAuditLogs : ControllerAccess, IFileProcessor
     {
+        List<ProxyAuditLog> ChildListProxyLogs = new List<ProxyAuditLog>();
         /// <summary>
         /// Constructor
         /// </summary>
@@ -48,10 +49,12 @@ namespace FileProcessor
                             var listFileToProcess = FileFunctions.GetFileToReadFromStatusFile(filter, efilePath);
                             if (listFileToProcess.Count > 0)
                             {
+                                var blnSucessful = false;
                                 foreach (var file in listFileToProcess)
                                 {
                                     ProcessLogFileMove(efilePath, sourceDirectory, destinationInDirectory, file);
                                 }
+                                blnSucessful = ControllerAuditLog.ProcessLogs(ChildListProxyLogs);
                             }
                         }
                     }
@@ -102,6 +105,7 @@ namespace FileProcessor
                 if (listLogFile != null & listLogFile.Count > 0)
                 {
                     var listProxyLogs = new List<ProxyAuditLog>();
+                    
                     //Entity
                     var proxyLogEntry = new ProxyAuditLog();
 
@@ -162,11 +166,21 @@ namespace FileProcessor
 
                         proxyLogEntry.IsReduced = entry.Document.IndexOf(@"\reducedcachedqvws", StringComparison.Ordinal) > -1;
                         //add entry to list
-                        listProxyLogs.Add(proxyLogEntry);
+                        if (proxyLogEntry.Report.Any(c => char.IsDigit(c)) && !proxyLogEntry.Report.Contains(' '))
+                        {
+                            ChildListProxyLogs.Add(proxyLogEntry);
+                        }
+                        else
+                        {
+                            listProxyLogs.Add(proxyLogEntry);
+                        }
                         proxyLogEntry = new ProxyAuditLog();
                     }
+
+                    int i = 42;      //debugging  stuff
                     //process the list
                     blnSucessful = ControllerAuditLog.ProcessLogs(listProxyLogs);
+                    
                 }
             }
             catch (Exception ex)

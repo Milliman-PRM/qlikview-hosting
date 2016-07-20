@@ -48,6 +48,7 @@
     <Compile Include="Models\Group.cs" />
     <Compile Include="Models\IisLog.cs" />
     <Compile Include="Models\Report.cs" />
+    <Compile Include="Models\ReportType.cs" />
     <Compile Include="Models\SessionLog.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
