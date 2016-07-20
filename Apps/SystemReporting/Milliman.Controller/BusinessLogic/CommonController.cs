@@ -243,13 +243,14 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
 
                 List<String> CommonTokens = TypeTokens.Intersect(ReportNameTokens).ToList();
                 
-                if (CommonTokens.SequenceEqual(TypeTokens))                 //TODO Will only return true if they are in the same order. They should usually be but should probably fix this
+                if (CommonTokens.SequenceEqual(TypeTokens))         //TODO Will only return true if they are in the same order. They should usually be but should might need to fix this
                 {
+                    dbService.Dispose();
                     return type.Type;
                 }
                 
             }
-
+            dbService.Dispose();
             return ReportType;
         }
 
@@ -265,11 +266,12 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
             {
                 if(RootParentDirectory.Count(x => x == '\\') == Log.Document.Count(x => x == '\\'))
                 {
+                    dbService.Dispose();
                     string ParentReportName = Log.Document.Substring(Log.Document.LastIndexOf('\\')+1, Log.Document.Length - Log.Document.LastIndexOf('\\') - 5);
                     return ParentReportName;
                 }
             }
-
+            dbService.Dispose();
             return "";
         }
 

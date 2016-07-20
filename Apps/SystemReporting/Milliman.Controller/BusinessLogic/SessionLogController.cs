@@ -70,7 +70,6 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                         var report = new Report
                         {
                             ReportName = entry.Report.Trim(),
-
                         };
                         var addOrGetReport = ControllerCommon.AddOrGetReport(report, logEntity.Document);
                         if (addOrGetReport != null)
