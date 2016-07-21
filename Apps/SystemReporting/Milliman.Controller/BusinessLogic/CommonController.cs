@@ -124,7 +124,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                 if (exists == null)
                 {
                     obj.ReportName = Report.ReportName.Trim();
-                    obj.ReportType = GetReportType(Report, Document);
+                    obj.ReportType = getReportType(Report, Document);
                     obj.AddDate = DateTime.Now;
                     dbService.Save(obj);
 
@@ -226,38 +226,50 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
         /// <param name="Report"></param>
         /// <param name="Document"></param>
         /// <returns></returns>
-        public string GetReportType(Report Report, String Document)
+        public string getReportType(Report Report, String Document)
         {
-            var dbService = new MillimanService();
-
-            string ReportType = "";
-            List<string> ReportNameTokens;
-            if (Report.ReportName.Any(c => char.IsDigit(c)) && !Report.ReportName.Contains(' '))
+            try
             {
-                ReportNameTokens = GetParentReportType(Document).Split(' ').ToList();
-            }
-            else
-            {
-                ReportNameTokens = Report.ReportName.Split(' ').ToList();
-            }
+                var dbService = new MillimanService();
 
-            var ReportTypeList = dbService.GetReportTypes<ReportType>().OrderBy(o => o.Type).ToList();
-
-            foreach(ReportType type in ReportTypeList)
-            {
-                List<String> TypeTokens = type.Keywords.Split(',').ToList();
-
-                List<String> CommonTokens = TypeTokens.Intersect(ReportNameTokens).ToList();
-                
-                if (CommonTokens.SequenceEqual(TypeTokens))         
+                string ReportType = "";
+                List<string> ReportNameTokens;
+                if (Report.ReportName.Any(c => char.IsDigit(c)) && !Report.ReportName.Contains(' '))
                 {
-                    dbService.Dispose();
-                    return type.Type;
+                    ReportNameTokens = getParentReportType(Document).Split(' ').ToList();
                 }
+                else
+                {
+                    ReportNameTokens = Report.ReportName.Split(' ').ToList();
+                }
+
+                var ReportTypeList = dbService.GetReportTypes<ReportType>().OrderBy(o => o.Type).ToList();
+
+                if (ReportTypeList.Count > 0)
+                {
+                    foreach (ReportType type in ReportTypeList)
+                    {
+                        List<String> KeywordTokens = type.Keywords.Split(',').ToList();
+
+                        List<String> CommonTokens = KeywordTokens.Intersect(ReportNameTokens).ToList();
+
+                        if (CommonTokens.SequenceEqual(KeywordTokens))
+                        {
+                            dbService.Dispose();
+                            return type.Type;
+                        }
+                    }
+                }
+
+                dbService.Dispose();
                 
             }
-            dbService.Dispose();
-            return ReportType;
+            catch(Exception ex)
+            {
+                ExceptionLogger.LogError(ex, "Exception Raised in Common Controller.", "ReportType Exceptions");
+            }
+
+            return "";
         }
         /// <summary>
         /// If the report is a child of another report then
@@ -265,7 +277,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
         /// </summary>
         /// <param name="Document"></param>
         /// <returns></returns>
-        public string GetParentReportType(String Document)
+        public string getParentReportType(String Document)
         {
             var dbService = new MillimanService();
 

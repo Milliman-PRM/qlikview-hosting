@@ -12,7 +12,7 @@ namespace FileProcessor
 {
     public class ProcessQVSessionLogs : ControllerAccess, IFileProcessor
     {
-        List<ProxySessionLog> ChildListProxyLogs = new List<ProxySessionLog>();
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -28,6 +28,7 @@ namespace FileProcessor
         {
             try
             {
+                List<ProxySessionLog> ChildListProxyLogs = new List<ProxySessionLog>();
                 if (args.Length > 0)
                 {
                     var filter = "Sessions_INDY-PRM";

@@ -174,7 +174,6 @@ namespace FileProcessor
                             var browser = IisAccessEvent.GetBrowserFromAgentString(entry.UserAgent);
                             proxyLogEntry.Browser = (!string.IsNullOrEmpty(browser)) ? browser : string.Empty;
 
-                            
                         }
 
                         //TODO - Something special needs to happen for this
