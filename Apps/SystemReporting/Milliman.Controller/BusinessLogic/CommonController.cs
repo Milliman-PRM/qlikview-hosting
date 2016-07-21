@@ -219,31 +219,37 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
         #endregion
 
         #region"Report Type"
-
+        /// <summary>
+        /// Takes the report name and matches it up with keywords associated with types 
+        /// in the reporttype table in the database.
+        /// </summary>
+        /// <param name="Report"></param>
+        /// <param name="Document"></param>
+        /// <returns></returns>
         public string GetReportType(Report Report, String Document)
         {
+            var dbService = new MillimanService();
+
             string ReportType = "";
             List<string> ReportNameTokens;
             if (Report.ReportName.Any(c => char.IsDigit(c)) && !Report.ReportName.Contains(' '))
             {
-                ReportNameTokens = GetParentReportType(Report, Document).Split(' ').ToList();
+                ReportNameTokens = GetParentReportType(Document).Split(' ').ToList();
             }
             else
             {
                 ReportNameTokens = Report.ReportName.Split(' ').ToList();
             }
-            
-            var dbService = new MillimanService();
 
             var ReportTypeList = dbService.GetReportTypes<ReportType>().OrderBy(o => o.Type).ToList();
 
             foreach(ReportType type in ReportTypeList)
             {
-                List<String> TypeTokens = type.Keywords.Split(';').ToList();
+                List<String> TypeTokens = type.Keywords.Split(',').ToList();
 
                 List<String> CommonTokens = TypeTokens.Intersect(ReportNameTokens).ToList();
                 
-                if (CommonTokens.SequenceEqual(TypeTokens))         //TODO Will only return true if they are in the same order. They should usually be but should might need to fix this
+                if (CommonTokens.SequenceEqual(TypeTokens))         
                 {
                     dbService.Dispose();
                     return type.Type;
@@ -253,8 +259,13 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
             dbService.Dispose();
             return ReportType;
         }
-
-        public string GetParentReportType(Report Report, String Document)
+        /// <summary>
+        /// If the report is a child of another report then
+        /// this function mathces them up with their parent
+        /// </summary>
+        /// <param name="Document"></param>
+        /// <returns></returns>
+        public string GetParentReportType(String Document)
         {
             var dbService = new MillimanService();
 
