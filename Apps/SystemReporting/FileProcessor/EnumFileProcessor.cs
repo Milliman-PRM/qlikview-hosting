@@ -36,7 +36,8 @@
             msie,
             android,
             safari,
-            firefox
+            firefox,
+            chrome
         }
         #endregion
 

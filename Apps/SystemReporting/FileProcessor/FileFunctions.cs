@@ -400,6 +400,9 @@ namespace FileProcessor
                     case eBrowserType.safari:
                         BrowserName = "safari";
                         break;
+                    case eBrowserType.chrome:
+                        BrowserName = "chrome";
+                        break;
                     default:
                         break;
                 }
