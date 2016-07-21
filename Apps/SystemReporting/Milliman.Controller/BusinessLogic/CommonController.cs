@@ -287,6 +287,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
         }
 
         #endregion
+
         #region Group
         /// <summary>
         /// Method checks if object exist then add to db - No Update

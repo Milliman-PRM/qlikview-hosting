@@ -180,7 +180,7 @@ namespace ReportingCommon
                 }
                 else
                 {
-                    BrowserType = "Unknown Unknown";
+                    BrowserType = "";
                 }
             }
             catch (Exception e)
