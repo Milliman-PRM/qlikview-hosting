@@ -11,7 +11,7 @@ namespace FileProcessor
 {
     public class ProcessQVAuditLogs : ControllerAccess, IFileProcessor
     {
-
+        List<ProxyAuditLog> ChildListProxyLogs = new List<ProxyAuditLog>();
         /// <summary>
         /// Constructor
         /// </summary>
@@ -26,7 +26,7 @@ namespace FileProcessor
         {
             try
             {
-                List<ProxyAuditLog> ChildListProxyLogs = new List<ProxyAuditLog>();
+
                 if (args.Length > 0)
                 {
                     var filter = "Audit_INDY-PRM";
