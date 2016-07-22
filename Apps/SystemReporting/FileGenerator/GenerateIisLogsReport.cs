@@ -128,12 +128,12 @@ namespace ReportFileGenerator
             //Date/Time,QVW,Action,User,Action Activity
             foreach (IisLog curData in list)
                 resultsList.Add(
-                                    (curData.UserAccessDatetime.HasValue ? curData.UserAccessDatetime.Value.ToString() : "NULL").ToString() + "," +
-                                    (!string.IsNullOrEmpty(curData.EventType) ? curData.EventType.ToString() : "NULL").ToString() + "," +
-                                    (!string.IsNullOrEmpty(curData.UserAgent) ? curData.UserAgent.ToString() : "NULL").ToString() + "," +
-                                    (!string.IsNullOrEmpty(curData.User.UserName) ? curData.User.UserName.ToString() : "NULL").ToString() + "," +
-                                    (!string.IsNullOrEmpty(curData.Group.GroupName) ? curData.Group.GroupName.ToString() : "NULL").ToString() + "," +
-                                    (!string.IsNullOrEmpty(curData.QueryURI) ? curData.QueryURI.ToString() : "NULL").ToString()
+                                    (curData.UserAccessDatetime.HasValue ? curData.UserAccessDatetime.Value.ToString() : string.Empty).ToString() + "," +
+                                    (!string.IsNullOrEmpty(curData.EventType) ? curData.EventType.ToString() : string.Empty).ToString() + "," +
+                                    (!string.IsNullOrEmpty(curData.UserAgent) ? curData.UserAgent.ToString() : string.Empty).ToString() + "," +
+                                    (!string.IsNullOrEmpty(curData.User.UserName) ? curData.User.UserName.ToString() : string.Empty).ToString() + "," +
+                                    (!string.IsNullOrEmpty(curData.Group.GroupName) ? curData.Group.GroupName.ToString() : string.Empty).ToString() + "," +
+                                    (!string.IsNullOrEmpty(curData.QueryURI) ? curData.QueryURI.ToString() : string.Empty).ToString()
                                 );
 
             var file = string.Empty;
@@ -179,12 +179,12 @@ namespace ReportFileGenerator
             //Date/Time,QVW,Action,User,Action Activity
             foreach (IisLog curData in list)
                 resultsList.Add(
-                                    (curData.UserAccessDatetime.HasValue ? curData.UserAccessDatetime.Value.ToString() : "NULL").ToString() + "," +
-                                    (!string.IsNullOrEmpty(curData.EventType) ? curData.EventType.ToString() : "NULL").ToString() + "," +
-                                    (!string.IsNullOrEmpty(curData.UserAgent) ? curData.UserAgent.ToString() : "NULL").ToString() + "," +
-                                    (!string.IsNullOrEmpty(curData.User.UserName) ? curData.User.UserName.ToString() : "NULL").ToString() + "," +
-                                    (!string.IsNullOrEmpty(curData.Group.GroupName) ? curData.Group.GroupName.ToString() : "NULL").ToString() + "," +
-                                    (!string.IsNullOrEmpty(curData.QueryURI) ? curData.QueryURI.ToString() : "NULL").ToString()
+                                    (curData.UserAccessDatetime.HasValue ? curData.UserAccessDatetime.Value.ToString() : string.Empty).ToString() + "," +
+                                    (!string.IsNullOrEmpty(curData.EventType) ? curData.EventType.ToString() : string.Empty).ToString() + "," +
+                                    (!string.IsNullOrEmpty(curData.UserAgent) ? curData.UserAgent.ToString() : string.Empty).ToString() + "," +
+                                    (!string.IsNullOrEmpty(curData.User.UserName) ? curData.User.UserName.ToString() : string.Empty).ToString() + "," +
+                                    (!string.IsNullOrEmpty(curData.Group.GroupName) ? curData.Group.GroupName.ToString() : string.Empty).ToString() + "," +
+                                    (!string.IsNullOrEmpty(curData.QueryURI) ? curData.QueryURI.ToString() : string.Empty).ToString()
                                 );
 
             var file = string.Empty;

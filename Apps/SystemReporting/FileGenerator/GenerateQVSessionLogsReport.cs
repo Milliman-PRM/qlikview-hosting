@@ -145,11 +145,11 @@ namespace ReportFileGenerator
             //Date/Time,QVW,QVW Close Reason,User Session Length (HH:MM:SS),User,Browser
             foreach (SessionLog curData in list)
                 resultsList.Add(
-                                (curData.UserAccessDatetime.HasValue ? curData.UserAccessDatetime.Value.ToString() : "NULL").ToString() + "," +
-                                (!string.IsNullOrEmpty(curData.Document) ? curData.Document.ToString() : "NULL").ToString() + "," +
-                                (!string.IsNullOrEmpty(curData.SessionEndReason) ? curData.SessionEndReason.ToString() : "NULL").ToString() + "," +
-                                (!string.IsNullOrEmpty(curData.SessionDuration) ? curData.SessionDuration.ToString() : "NULL").ToString() + "," +
-                                (!string.IsNullOrEmpty(curData.User.UserName) ? curData.User.UserName.ToString() : "NULL").ToString() + "," +
+                                (curData.UserAccessDatetime.HasValue ? curData.UserAccessDatetime.Value.ToString() : string.Empty).ToString() + "," +
+                                (!string.IsNullOrEmpty(curData.Document) ? curData.Document.Replace(@"0000EXT01\", "").ToString() : string.Empty).ToString() + ", " +
+                                (!string.IsNullOrEmpty(curData.SessionEndReason) ? curData.SessionEndReason.ToString() : string.Empty).ToString() + "," +
+                                (!string.IsNullOrEmpty(curData.SessionDuration) ? curData.SessionDuration.ToString() : string.Empty).ToString() + "," +
+                                (!string.IsNullOrEmpty(curData.User.UserName) ? curData.User.UserName.ToString() : string.Empty).ToString() + "," +
                                 curData.Browser.ToString()
                                 );
 
