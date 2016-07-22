@@ -26,7 +26,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
         public bool ProcessLogs(List<ProxySessionLog> listProxyLogs)
         {            
             var blnSucessful = false;
-            List<ProxySessionLog> ChildLogs = new List<ProxySessionLog>();
+
             try
             {
                 var logEntity = new SessionLog();

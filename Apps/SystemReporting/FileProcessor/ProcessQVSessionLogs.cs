@@ -12,7 +12,6 @@ namespace FileProcessor
 {
     public class ProcessQVSessionLogs : ControllerAccess, IFileProcessor
     {
-        List<ProxySessionLog> ChildListProxyLogs = new List<ProxySessionLog>();
         /// <summary>
         /// Constructor
         /// </summary>
@@ -51,12 +50,11 @@ namespace FileProcessor
                             var listFileToProcess = FileFunctions.GetFileToReadFromStatusFile(filter, efilePath);
                             if (listFileToProcess.Count > 0)
                             {
-                                var blnSucessful = false;
                                 foreach (var file in listFileToProcess)
                                 {
                                     ProcessLogFileMove(efilePath, sourceDirectory, destinationInDirectory, file);
                                 }
-                                blnSucessful = ControllerSessionLog.ProcessLogs(ChildListProxyLogs);
+                                //ControllerCommon.UpdateReportTypes();
                             }
                         }
                     }
@@ -186,14 +184,7 @@ namespace FileProcessor
                         proxyLogEntry.Browser = FileFunctions.GetBrowserName(proxyLogEntry.ClientType);
                       
                         //add entry to list
-                        if(proxyLogEntry.Report.Any(c => char.IsDigit(c)) && !proxyLogEntry.Report.Contains(' '))
-                        {
-                            ChildListProxyLogs.Add(proxyLogEntry);
-                        }
-                        else
-                        {
-                            listProxyLogs.Add(proxyLogEntry);
-                        }
+                        listProxyLogs.Add(proxyLogEntry);
 
                         proxyLogEntry = new ProxySessionLog();
                     }

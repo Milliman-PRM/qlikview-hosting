@@ -232,7 +232,6 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
             {
                 var dbService = new MillimanService();
 
-                string ReportType = "";
                 List<string> ReportNameTokens;
                 if (Report.ReportName.Any(c => char.IsDigit(c)) && !Report.ReportName.Contains(' '))
                 {
@@ -283,15 +282,18 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
 
             string RootParentDirectory = Document.Substring(0, Document.IndexOf("REDUCEDCACHEDQVWS"));
 
-            var ParentRootQuery = dbService.GetAuditLogs<AuditLog>(a => a.Document.Contains(RootParentDirectory)).Distinct();
+            var ParentRootQuery = dbService.GetAuditLogs<AuditLog>(a => a.Document.Contains(RootParentDirectory)).OrderBy(a => a.Id);
 
-            foreach(AuditLog Log in ParentRootQuery)
+            if (ParentRootQuery != null)
             {
-                if(RootParentDirectory.Count(x => x == '\\') == Log.Document.Count(x => x == '\\'))
+                foreach (AuditLog Log in ParentRootQuery)
                 {
-                    dbService.Dispose();
-                    string ParentReportName = Log.Document.Substring(Log.Document.LastIndexOf('\\')+1, Log.Document.Length - Log.Document.LastIndexOf('\\') - 5);
-                    return ParentReportName;
+                    if (Log.Document.IndexOf("REDUEDCACHEDQVWS") < 0)
+                    {
+                        dbService.Dispose();
+                        string ParentReportName = Log.Document.Substring(Log.Document.LastIndexOf('\\') + 1, Log.Document.Length - Log.Document.LastIndexOf('\\') - 5);
+                        return ParentReportName;
+                    }
                 }
             }
             dbService.Dispose();

@@ -11,7 +11,7 @@ namespace FileProcessor
 {
     public class ProcessQVAuditLogs : ControllerAccess, IFileProcessor
     {
-        List<ProxyAuditLog> ChildListProxyLogs = new List<ProxyAuditLog>();
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -50,12 +50,11 @@ namespace FileProcessor
                             var listFileToProcess = FileFunctions.GetFileToReadFromStatusFile(filter, efilePath);
                             if (listFileToProcess.Count > 0)
                             {
-                                var blnSucessful = false;
                                 foreach (var file in listFileToProcess)
                                 {
                                     ProcessLogFileMove(efilePath, sourceDirectory, destinationInDirectory, file);
                                 }
-                                blnSucessful = ControllerAuditLog.ProcessLogs(ChildListProxyLogs);
+
                             }
                         }
                     }
@@ -166,19 +165,13 @@ namespace FileProcessor
                         proxyLogEntry.Document = (!string.IsNullOrEmpty(docName)) ? docName.ToUpper().Trim() : string.Empty;
 
                         proxyLogEntry.IsReduced = entry.Document.IndexOf(@"\reducedcachedqvws", StringComparison.Ordinal) > -1;
+                        
                         //add entry to list
-                        if (proxyLogEntry.Report.Any(c => char.IsDigit(c)) && !proxyLogEntry.Report.Contains(' '))
-                        {
-                            ChildListProxyLogs.Add(proxyLogEntry);
-                        }
-                        else
-                        {
-                            listProxyLogs.Add(proxyLogEntry);
-                        }
+                        listProxyLogs.Add(proxyLogEntry);
+                        
                         proxyLogEntry = new ProxyAuditLog();
                     }
 
-                    int i = 42;      //debugging  stuff
                     //process the list
                     blnSucessful = ControllerAuditLog.ProcessLogs(listProxyLogs);
                     
