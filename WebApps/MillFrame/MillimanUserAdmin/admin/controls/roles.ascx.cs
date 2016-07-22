@@ -25,10 +25,11 @@ public partial class admin_controls_roles : System.Web.UI.UserControl
         RoleList.Columns.Add("Role Name");
         RoleList.Columns.Add("User Count");
         RoleList.Columns.Add("External Name");
+        RoleList.Columns.Add("Group Category");
         RoleList.Columns.Add("Friendly Name");
         RoleList.Columns.Add("Maximum Number Users");
         string[] allRoles = Roles.GetAllRoles();
-        MillimanCommon.MillimanGroupMap MGM = MillimanCommon.MillimanGroupMap.GetInstance();
+        var MGM = MillimanCommon.MillimanGroupMap.GetInstance();
 
         // Get the list of roles in the system and how many users belong to each role
         foreach (string roleName in allRoles)
@@ -40,9 +41,10 @@ public partial class admin_controls_roles : System.Web.UI.UserControl
             string FriendlyName = (MG == null) ? string.Empty : MG.FriendlyGroupName;
             string ExternalName = (MG == null) ? string.Empty : MG.ExernalGroupName;
             int MaxUsers = (MG == null) ? 0 : MG.MaximumnUsers;
-           
+            string GroupCategory = (MG == null) ? string.Empty : MG.GroupCategory;
+
             int numberOfUsersInRole = Roles.GetUsersInRole(roleName).Length;
-            string[] roleRow = { roleName, numberOfUsersInRole.ToString(), ExternalName, FriendlyName, MaxUsers.ToString() };
+            string[] roleRow = { roleName, numberOfUsersInRole.ToString(), ExternalName, GroupCategory, FriendlyName, MaxUsers.ToString() };
             RoleList.Rows.Add(roleRow);
         }
 
@@ -124,7 +126,7 @@ public partial class admin_controls_roles : System.Web.UI.UserControl
 
                     this.UserRoles.DataBind();
 
-                    Msg.Text =  "ROLE(S) were sucessfully <b>DELETED</b>!";
+                    Msg.Text = "ROLE(S) were sucessfully <b>DELETED</b>!";
                     Msg.Visible = true;
                 }
             }
@@ -160,26 +162,30 @@ public partial class admin_controls_roles : System.Web.UI.UserControl
     }
 
     #endregion
-   
+
     protected void ApplyChanges_Click(object sender, EventArgs e)
     {
-        MillimanCommon.MillimanGroupMap MGM = MillimanCommon.MillimanGroupMap.GetInstance();
+        var MGM = MillimanCommon.MillimanGroupMap.GetInstance();
         foreach (GridViewRow GVR in UserRoles.Rows)
         {
             Label MillimanGroup = GVR.FindControl("RoleName") as Label;
             TextBox FriendlyName = GVR.FindControl("FriendlyName") as TextBox;
             TextBox Max = GVR.FindControl("UserLimit") as TextBox;
+            TextBox GroupCategory = GVR.FindControl("txtGroupCategory") as TextBox;
+
             if (MGM.MillimanGroupDictionary.ContainsKey(MillimanGroup.Text) == true)
             {
-                MillimanCommon.MillimanGroupMap.MillimanGroups MG = MGM.MillimanGroupDictionary[MillimanGroup.Text];
+                var MG = MGM.MillimanGroupDictionary[MillimanGroup.Text];
                 MG.MaximumnUsers = System.Convert.ToInt32(Max.Text);
                 MG.FriendlyGroupName = FriendlyName.Text;
+                MG.GroupCategory = GroupCategory.Text;
             }
             else  //groups created a number of ways, make sure we have a friendly name for each
             {
-                MillimanCommon.MillimanGroupMap.MillimanGroups MGNew = new MillimanCommon.MillimanGroupMap.MillimanGroups();
+                var MGNew = new MillimanCommon.MillimanGroupMap.MillimanGroups();
                 MGNew.MaximumnUsers = System.Convert.ToInt32(Max.Text);
                 MGNew.FriendlyGroupName = FriendlyName.Text;
+                MGNew.GroupCategory = GroupCategory.Text;
                 MGM.MillimanGroupDictionary.Add(MillimanGroup.Text, MGNew);
             }
             MGM.Save();
