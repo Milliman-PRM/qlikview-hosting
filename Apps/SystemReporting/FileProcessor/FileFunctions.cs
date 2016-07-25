@@ -388,20 +388,20 @@ namespace FileProcessor
                 switch (BrowserEnum)
                 {
                     case eBrowserType.android:
-                        BrowserName = "android";
+                        BrowserName = Enum.GetName(typeof(eBrowserType), eBrowserType.android);
                         break;
                     case eBrowserType.firefox:
                     case eBrowserType.gecko:
-                        BrowserName = "firefox";
+                        BrowserName = Enum.GetName(typeof(eBrowserType), eBrowserType.firefox);
                         break;
                     case eBrowserType.msie:
-                        BrowserName = "msie";
+                        BrowserName = Enum.GetName(typeof(eBrowserType), eBrowserType.msie);
                         break;
                     case eBrowserType.safari:
-                        BrowserName = "safari";
+                        BrowserName = Enum.GetName(typeof(eBrowserType), eBrowserType.safari);
                         break;
                     case eBrowserType.chrome:
-                        BrowserName = "chrome";
+                        BrowserName = Enum.GetName(typeof(eBrowserType), eBrowserType.chrome);
                         break;
                     default:
                         break;
@@ -419,10 +419,10 @@ namespace FileProcessor
                         BrowserName = "safari mobile";
                         break;
                     case "":
-                        BrowserName = "";                                                                   //Checks for "browser." if that ever happens
+                        BrowserName = "";                               //Checks for "browser." if that ever happens
                         break;
                     default:
-                        BrowserName = RawBrowserName;        //Should probably log something here about a new browser being found
+                        BrowserName = RawBrowserName;                   //Should probably log something here about a new browser being found
                         break;
                 }
             }

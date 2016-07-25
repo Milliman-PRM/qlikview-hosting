@@ -218,7 +218,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
         }
         #endregion
 
-        #region"Report Type"
+        #region Report Type
         /// <summary>
         /// Takes the report name and matches it up with keywords associated with types 
         /// in the reporttype table in the database.
@@ -261,7 +261,6 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                 }
 
                 dbService.Dispose();
-                
             }
             catch(Exception ex)
             {
@@ -271,8 +270,8 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
             return "";
         }
         /// <summary>
-        /// If the report is a child of another report then
-        /// this function mathces them up with their parent
+        /// Matches reports with guids to their
+        /// parent report
         /// </summary>
         /// <param name="Document"></param>
         /// <returns></returns>

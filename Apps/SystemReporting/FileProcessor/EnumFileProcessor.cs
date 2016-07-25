@@ -1,4 +1,6 @@
-﻿namespace FileProcessor
+﻿using System.ComponentModel;
+
+namespace FileProcessor
 {
     public class EnumFileProcessor
     {
@@ -29,7 +31,7 @@
         }
         #endregion
 
-        #region "   BrowserType"
+        #region BrowserType
         public enum eBrowserType
         {
             gecko,
