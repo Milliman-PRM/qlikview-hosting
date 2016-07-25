@@ -39,7 +39,9 @@ namespace FileProcessor
             android,
             safari,
             firefox,
-            chrome
+            chrome,
+            android_mobile,
+            safari_mobile
         }
         #endregion
 

@@ -370,7 +370,7 @@ namespace FileProcessor
             var Index = RawClientType.IndexOf(stringToBeSearched);
             if (Index != -1)
             {
-                RawBrowserName = RawClientType.Substring(Index + stringToBeSearched.Length);
+                RawBrowserName = RawClientType.Substring(Index + stringToBeSearched.Length).Replace(".mobile", "_mobile");
                 if (RawBrowserName.IndexOf(' ') > -1)
                 {
                     BrowserVersion = RawBrowserName.Split(' ')[1];
@@ -403,6 +403,12 @@ namespace FileProcessor
                     case eBrowserType.chrome:
                         BrowserName = Enum.GetName(typeof(eBrowserType), eBrowserType.chrome);
                         break;
+                    case eBrowserType.android_mobile:
+                        BrowserName = Enum.GetName(typeof(eBrowserType), eBrowserType.android_mobile).Replace("_", " ");
+                        break;
+                    case eBrowserType.safari_mobile:
+                        BrowserName = Enum.GetName(typeof(eBrowserType), eBrowserType.safari_mobile).Replace("_", " ");
+                        break;
                     default:
                         break;
                 }
@@ -412,12 +418,6 @@ namespace FileProcessor
             {
                 switch (RawBrowserName)
                 {
-                    case "android.mobile":
-                        BrowserName = "android mobile";
-                        break;
-                    case "safari.mobile":
-                        BrowserName = "safari mobile";
-                        break;
                     case "":
                         BrowserName = "";                               //Checks for "browser." if that ever happens
                         break;
