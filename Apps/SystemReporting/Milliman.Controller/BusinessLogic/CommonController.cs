@@ -280,6 +280,70 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
 
             return objList;
         }
+
+
         #endregion
+
+        public Group GetGroupById(string id)
+        {
+            var dbService = new MillimanService();
+            var obj = new Group();
+            try
+            {                
+                int objId = int.Parse(id);
+                obj = dbService.GetGroups<Group>(a => a.Id == objId).FirstOrDefault();
+                dbService.Dispose();
+            }
+            catch (Exception ex)
+            {
+                if (dbService != null)
+                {
+                    dbService.Dispose();
+                }
+                ExceptionLogger.LogError(ex, "Exception Raised in Method GetGroupById.", "Common Controller Exception");
+            }
+
+            return obj;
+        }
+        public Report GetReportById(string id)
+        {
+            var dbService = new MillimanService();
+            var obj = new Report();
+            try
+            {
+                int objId = int.Parse(id);
+                obj = dbService.GetReports<Report>(a => a.Id == objId).FirstOrDefault();
+                dbService.Dispose();
+            }
+            catch (Exception ex)
+            {
+                if (dbService != null)
+                {
+                    dbService.Dispose();
+                }
+                ExceptionLogger.LogError(ex, "Exception Raised in Method GetGroupById.", "Common Controller Exception");
+            }
+            return obj;
+        }
+        public User GetUserById(string id)
+        {
+            var dbService = new MillimanService();
+            var obj = new User();
+            try
+            {
+                int objId = int.Parse(id);
+                obj = dbService.GetUsers<User>(a => a.Id == objId).FirstOrDefault();
+                dbService.Dispose();
+            }
+            catch (Exception ex)
+            {
+                if (dbService != null)
+                {
+                    dbService.Dispose();
+                }
+                ExceptionLogger.LogError(ex, "Exception Raised in Method GetGroupById.", "Common Controller Exception");
+            }
+            return obj;
+        }
     }
 }
