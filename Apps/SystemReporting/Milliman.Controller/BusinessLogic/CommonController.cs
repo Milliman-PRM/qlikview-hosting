@@ -281,11 +281,11 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
 
             string RootParentDirectory = Document.Substring(0, Document.IndexOf("REDUCEDCACHEDQVWS"));
 
-            var ParentRootQuery = dbService.GetAuditLogs<AuditLog>(a => a.Document.Contains(RootParentDirectory)).OrderBy(a => a.Id);
+            var ParentAuditLogRootQuery = dbService.GetAuditLogs<AuditLog>(a => a.Document.Contains(RootParentDirectory)).OrderBy(a => a.Id);
 
-            if (ParentRootQuery != null)
+            if (ParentAuditLogRootQuery != null)
             {
-                foreach (AuditLog Log in ParentRootQuery)
+                foreach (AuditLog Log in ParentAuditLogRootQuery)
                 {
                     if (Log.Document.IndexOf("REDUEDCACHEDQVWS") < 0)
                     {
@@ -295,6 +295,22 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                     }
                 }
             }
+
+            var ParentSessionLogRootQuery = dbService.GetSessionLogs<SessionLog>(a => a.Document.Contains(RootParentDirectory)).OrderBy(a => a.Id);
+
+            if (ParentSessionLogRootQuery != null)
+            {
+                foreach (SessionLog Log in ParentSessionLogRootQuery)
+                {
+                    if (Log.Document.IndexOf("REDUEDCACHEDQVWS") < 0)
+                    {
+                        dbService.Dispose();
+                        string ParentReportName = Log.Document.Substring(Log.Document.LastIndexOf('\\') + 1, Log.Document.Length - Log.Document.LastIndexOf('\\') - 5);
+                        return ParentReportName;
+                    }
+                }
+            }
+
             dbService.Dispose();
             return "";
         }

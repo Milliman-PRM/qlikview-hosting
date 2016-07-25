@@ -104,7 +104,6 @@ namespace FileProcessor
                 if (listLogFile != null & listLogFile.Count > 0)
                 {
                     var listProxyLogs = new List<ProxySessionLog>();
-                    
 
                     //Entity
                     var proxyLogEntry = new ProxySessionLog();
