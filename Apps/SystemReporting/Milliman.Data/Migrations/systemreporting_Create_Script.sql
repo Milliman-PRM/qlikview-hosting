@@ -227,4 +227,21 @@ GRANT ALL ON TABLE qvsessionlog TO postgres WITH GRANT OPTION;
 GRANT ALL ON TABLE qvsessionlog TO public;
 
 
+-- Table: public.reporttype
+
+-- DROP TABLE public.reporttype;
+
+CREATE TABLE public.reporttype
+(
+  type character varying(100) NOT NULL,
+  keywords character varying(100) NOT NULL,
+  id integer NOT NULL,
+  CONSTRAINT pk_reporttype_id PRIMARY KEY (id),
+  CONSTRAINT uq_reporttype_type UNIQUE (type)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE public.reporttype
+  OWNER TO postgres;
 
