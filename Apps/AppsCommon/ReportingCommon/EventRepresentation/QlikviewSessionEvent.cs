@@ -86,6 +86,7 @@ namespace ReportingCommon
                     BrowserVersion = ClientTypeParts[4];
                 }
             }
+
             return BrowserType + " " + BrowserVersion;
         }
 

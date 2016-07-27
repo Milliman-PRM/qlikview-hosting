@@ -47,6 +47,8 @@ namespace SystemReporting.Data.Database
         public DbSet<User> User { get; set; }
         public DbSet<Report> Report { get; set; }
         public DbSet<Group> Group { get; set; }
+        public DbSet<ReportType> ReportType { get; set; }
+
 
         #endregion
 
@@ -69,6 +71,7 @@ namespace SystemReporting.Data.Database
             modelBuilder.Entity<User>().ToTable("user", dbSchema);
             modelBuilder.Entity<Report>().ToTable("report", dbSchema);
             modelBuilder.Entity<Group>().ToTable("group", dbSchema);
+            modelBuilder.Entity<ReportType>().ToTable("reporttype", dbSchema);
 
             modelBuilder.Entity<IisLog>().HasKey(x => x.Id).ToTable("iislog", dbSchema);
             modelBuilder.Entity<IisLog>().HasOptional(c => c.User).WithMany(d => d.ListIisLog).HasForeignKey(c => c.fk_user_id);

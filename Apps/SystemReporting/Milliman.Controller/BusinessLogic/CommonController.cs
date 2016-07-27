@@ -113,23 +113,24 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
         /// Method checks if object exist then add to db - No Update
         /// </summary>
         /// <param name="model"></param>
-        public Report AddOrGetReport(Report model)
+        public Report AddOrGetReport(Report Report, String Document)
         {
             //initiate service
             dbService = new MillimanService();
             var obj = new Report();
             try
             {
-                var exists = dbService.GetReports<Report>(u => u.ReportName == model.ReportName).FirstOrDefault();
+                var exists = dbService.GetReports<Report>(u => u.ReportName == Report.ReportName).FirstOrDefault();
                 if (exists == null)
                 {
-                    obj.ReportName = model.ReportName.Trim();
+                    obj.ReportName = Report.ReportName.Trim();
+                    obj.ReportType = getReportType(Report, Document);
                     obj.AddDate = DateTime.Now;
                     dbService.Save(obj);
 
                     obj = new Report();
                     //after insert set the id
-                    obj = dbService.GetReports<Report>(a => a.ReportName == model.ReportName).FirstOrDefault();
+                    obj = dbService.GetReports<Report>(a => a.ReportName == Report.ReportName).FirstOrDefault();
                 }
                 else
                 {
@@ -215,6 +216,105 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
 
             return obj;
         }
+        #endregion
+
+        #region Report Type
+        /// <summary>
+        /// Takes the report name and matches it up with keywords associated with types 
+        /// in the reporttype table in the database.
+        /// </summary>
+        /// <param name="Report"></param>
+        /// <param name="Document"></param>
+        /// <returns></returns>
+        public string getReportType(Report Report, String Document)
+        {
+            try
+            {
+                var dbService = new MillimanService();
+
+                List<string> ReportNameTokens;
+                if (Report.ReportName.Any(c => char.IsDigit(c)) && !Report.ReportName.Contains(' '))
+                {
+                    ReportNameTokens = getParentReportType(Document).Split(' ').ToList();
+                }
+                else
+                {
+                    ReportNameTokens = Report.ReportName.Split(' ').ToList();
+                }
+
+                var ReportTypeList = dbService.GetReportTypes<ReportType>().OrderBy(o => o.Type).ToList();
+
+                if (ReportTypeList.Count > 0)
+                {
+                    foreach (ReportType type in ReportTypeList)
+                    {
+                        List<String> KeywordTokens = type.Keywords.Split(',').ToList();
+
+                        List<String> CommonTokens = KeywordTokens.Intersect(ReportNameTokens).ToList();
+
+                        if (CommonTokens.SequenceEqual(KeywordTokens))
+                        {
+                            dbService.Dispose();
+                            return type.Type;
+                        }
+                    }
+                }
+
+                dbService.Dispose();
+            }
+            catch(Exception ex)
+            {
+                ExceptionLogger.LogError(ex, "Exception Raised in Common Controller.", "ReportType Exceptions");
+            }
+
+            return "";
+        }
+        /// <summary>
+        /// Matches reports with guids to their
+        /// parent report
+        /// </summary>
+        /// <param name="Document"></param>
+        /// <returns></returns>
+        public string getParentReportType(String Document)
+        {
+            var dbService = new MillimanService();
+
+            string RootParentDirectory = Document.Substring(0, Document.IndexOf("REDUCEDCACHEDQVWS"));
+
+            var ParentAuditLogRootQuery = dbService.GetAuditLogs<AuditLog>(a => a.Document.Contains(RootParentDirectory)).OrderBy(a => a.Id);
+
+            if (ParentAuditLogRootQuery != null)
+            {
+                foreach (AuditLog Log in ParentAuditLogRootQuery)
+                {
+                    if (Log.Document.IndexOf("REDUEDCACHEDQVWS") < 0)
+                    {
+                        dbService.Dispose();
+                        string ParentReportName = Log.Document.Substring(Log.Document.LastIndexOf('\\') + 1, Log.Document.Length - Log.Document.LastIndexOf('\\') - 5);
+                        return ParentReportName;
+                    }
+                }
+            }
+
+            var ParentSessionLogRootQuery = dbService.GetSessionLogs<SessionLog>(a => a.Document.Contains(RootParentDirectory)).OrderBy(a => a.Id);
+
+            if (ParentSessionLogRootQuery != null)
+            {
+                foreach (SessionLog Log in ParentSessionLogRootQuery)
+                {
+                    if (Log.Document.IndexOf("REDUEDCACHEDQVWS") < 0)
+                    {
+                        dbService.Dispose();
+                        string ParentReportName = Log.Document.Substring(Log.Document.LastIndexOf('\\') + 1, Log.Document.Length - Log.Document.LastIndexOf('\\') - 5);
+                        return ParentReportName;
+                    }
+                }
+            }
+
+            dbService.Dispose();
+            return "";
+        }
+
         #endregion
 
         #region Group

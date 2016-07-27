@@ -1,0 +1,20 @@
+﻿INSERT INTO reporttype (type, keywords, id) VALUES ('CARE_COORDINATOR_REPORT', 'CARE,COORDINATOR', 1);
+INSERT INTO reporttype (type, keywords, id) VALUES ('COST_MODEL_DASHBOARD', 'COST,MODEL', 2);
+INSERT INTO reporttype (type, keywords, id) VALUES ('PRCA', 'PRCA', 3);
+INSERT INTO reporttype (type, keywords, id) VALUES ('NY_DEV_BPCI_PREMIER', 'DEV,BPCI,PREMIER', 4);
+INSERT INTO reporttype (type, keywords, id) VALUES ('NY_LIVE_BPCI_PREMIER', 'LIVE,BPCI,PREMIER', 5);
+INSERT INTO reporttype (type, keywords, id) VALUES ('NY_DEMO_BPCI_PREMIER', 'DEMO,BPCI,PREMIER', 6);
+INSERT INTO reporttype (type, keywords, id) VALUES ('NY_DEMO_BPCI_MILLIMAN', 'DEMO,BPCI,MILLIMAN', 7);
+INSERT INTO reporttype (type, keywords, id) VALUES ('NY_DEV_CJR', 'DEV,BPCI,CJR', 8);
+INSERT INTO reporttype (type, keywords, id) VALUES ('NY_LIVE_CJR', 'LIVE,BPCI,CJR', 9);
+INSERT INTO reporttype (type, keywords, id) VALUES ('NY_DEMO_CJR', 'DEMO,CJR,PREMIER', 10);
+INSERT INTO reporttype (type, keywords, id) VALUES ('NY_DEMO_CJR_PREMIER', 'DEMO,CJR,PREMIER', 11);
+INSERT INTO reporttype (type, keywords, id) VALUES ('VT_GAP', 'GAP', 12);
+INSERT INTO reporttype (type, keywords, id) VALUES ('CAPITATION_DASHBOARD', 'CAPITATION', 13);
+INSERT INTO reporttype (type, keywords, id) VALUES ('ENCOUNTER_QUALITY_DASHBOARD', 'ENCOUNTER,QUALITY', 14);
+INSERT INTO reporttype (type, keywords, id) VALUES ('OHIO_FINANCIAL_DASHBOARD', 'OHIO,FINANCIAL', 15);
+INSERT INTO reporttype (type, keywords, id) VALUES ('NY_DEV_BPCI_USPI', 'DEV,BPCI,USPI', 16);
+INSERT INTO reporttype (type, keywords, id) VALUES ('NY_LIVE_BPCI_USPI', 'LIVE,BPCI,USPI', 17);
+INSERT INTO reporttype (type, keywords, id) VALUES ('NY_DEV_BPCI_CAM', 'DEV,BPCI,CAM', 18);
+INSERT INTO reporttype (type, keywords, id) VALUES ('NY_LIVE_BPCI_CAM', 'LIVE,BPCI,CAM', 19);
+

@@ -1,4 +1,6 @@
-﻿namespace FileProcessor
+﻿using System.ComponentModel;
+
+namespace FileProcessor
 {
     public class EnumFileProcessor
     {
@@ -28,6 +30,21 @@
             QVSessionLogs
         }
         #endregion
+
+        #region BrowserType
+        public enum eBrowserType
+        {
+            gecko,
+            msie,
+            android,
+            safari,
+            firefox,
+            chrome,
+            android_mobile,
+            safari_mobile
+        }
+        #endregion
+
 
     }
 }

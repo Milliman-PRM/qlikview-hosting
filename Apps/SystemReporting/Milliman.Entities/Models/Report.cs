@@ -22,6 +22,9 @@ namespace SystemReporting.Entities.Models
         [Column("adddate")]
         public DateTime AddDate { get; set; }
 
+        [Column("reporttype")]
+        public string ReportType { get; set; }
+
         // Navigation property 
         public virtual ICollection<AuditLog> ListAuditLog { get; set; }
         public virtual ICollection<SessionLog> ListSessionLog { get; set; }
@@ -31,6 +34,7 @@ namespace SystemReporting.Entities.Models
         {
             Id = r.Id;
             ReportName = r.ReportName;
+            ReportType = r.ReportType;
             ListAuditLog = new List<AuditLog>();
             ListSessionLog = new List<SessionLog>();
         }
