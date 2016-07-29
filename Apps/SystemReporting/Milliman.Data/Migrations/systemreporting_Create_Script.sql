@@ -81,8 +81,12 @@ CREATE TABLE report
   reportname character varying(100) NOT NULL,
   reportdescription character varying(100),
   adddate timestamp with time zone,
+  fk_report_type_id integer,
   CONSTRAINT pk_report_id PRIMARY KEY (id),
-  CONSTRAINT uq_report_reportname UNIQUE (reportname)
+  CONSTRAINT uq_report_reportname UNIQUE (reportname),
+  CONSTRAINT fk_tbl_group_id FOREIGN KEY (fk_group_id)
+    REFERENCES "group" (id) MATCH SIMPLE
+    ON UPDATE NO ACTION ON DELETE NO ACTION
 )
 WITH (
   OIDS=FALSE
@@ -233,9 +237,9 @@ GRANT ALL ON TABLE qvsessionlog TO public;
 
 CREATE TABLE public.reporttype
 (
+  id serial NOT NULL,
   type character varying(100) NOT NULL,
   keywords character varying(100) NOT NULL,
-  id integer NOT NULL,
   CONSTRAINT pk_reporttype_id PRIMARY KEY (id),
   CONSTRAINT uq_reporttype_type UNIQUE (type)
 )

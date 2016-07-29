@@ -29,7 +29,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
             dbService = new MillimanService();
             var obj = new User();
             try
-            {                
+            {
                 var exists = dbService.GetUsers<User>(u => u.UserName == model.UserName).FirstOrDefault();
                 if (exists == null)
                 {
@@ -92,7 +92,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
             var obj = new List<User>();
             try
             {
-                var exists = dbService.GetUsers<User>().OrderBy(o => o.UserName).ToList(); 
+                var exists = dbService.GetUsers<User>().OrderBy(o => o.UserName).ToList();
                 if (exists.Count > 0)
                 {
                     obj = exists;
@@ -117,6 +117,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
         {
             //initiate service
             dbService = new MillimanService();
+
             var obj = new Report();
             try
             {
@@ -124,7 +125,14 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                 if (exists == null)
                 {
                     obj.ReportName = Report.ReportName.Trim();
-                    obj.ReportType = getReportType(Report, Document);
+
+                    //If the report does not have a report type then it is set to null
+                    obj.fk_report_type_id = null;
+                    if(getReportTypeID(Report, Document) > -1)
+                    {
+                        obj.fk_report_type_id = getReportTypeID(Report, Document);
+                    }
+
                     obj.AddDate = DateTime.Now;
                     dbService.Save(obj);
 
@@ -201,7 +209,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
             var obj = new List<Report>();
             try
             {
-                var exists = dbService.GetReports<Report>().OrderBy(o => o.ReportName).ToList(); 
+                var exists = dbService.GetReports<Report>().OrderBy(o => o.ReportName).ToList();
                 if (exists.Count>0)
                 {
                     obj = exists;
@@ -220,13 +228,13 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
 
         #region Report Type
         /// <summary>
-        /// Takes the report name and matches it up with keywords associated with types 
+        /// Takes the report name and matches it up with keywords associated with types
         /// in the reporttype table in the database.
         /// </summary>
         /// <param name="Report"></param>
         /// <param name="Document"></param>
         /// <returns></returns>
-        public string getReportType(Report Report, String Document)
+        public int getReportTypeID(Report Report, String Document)
         {
             try
             {
@@ -255,7 +263,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                         if (CommonTokens.SequenceEqual(KeywordTokens))
                         {
                             dbService.Dispose();
-                            return type.Type;
+                            return type.Id;
                         }
                     }
                 }
@@ -267,7 +275,8 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                 ExceptionLogger.LogError(ex, "Exception Raised in Common Controller.", "ReportType Exceptions");
             }
 
-            return "";
+            //If report does not match up to any report type
+            return -1;
         }
         /// <summary>
         /// Matches reports with guids to their
@@ -374,7 +383,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                 if(dbService != null)
                 {
                     dbService.Dispose();
-                }                
+                }
                 ExceptionLogger.LogError(ex, "Exception Raised in Method GroupListGet.", "Common Controller Exception");
             }
 

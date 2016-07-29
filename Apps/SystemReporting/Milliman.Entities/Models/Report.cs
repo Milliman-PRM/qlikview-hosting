@@ -25,10 +25,10 @@ namespace SystemReporting.Entities.Models
         [Column("fk_report_type_id")]//referencing the Report for the FK purpose
         public int? fk_report_type_id { get; set; }
 
-        // Foreign key 
+        // Foreign key
         public virtual ReportType ReportType { get; set; }
 
-        // Navigation property 
+        // Navigation property
         public virtual ICollection<AuditLog> ListAuditLog { get; set; }
         public virtual ICollection<SessionLog> ListSessionLog { get; set; }
 

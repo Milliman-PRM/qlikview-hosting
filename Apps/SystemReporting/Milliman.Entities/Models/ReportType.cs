@@ -19,6 +19,10 @@ namespace SystemReporting.Entities.Models
         [Column("keywords")]
         public string Keywords { get; set; }
 
+
+        public virtual ICollection<Report> ListReportLog { get; set; }
+
+
         public ReportType() { }
 
         public ReportType(ReportType rt)
