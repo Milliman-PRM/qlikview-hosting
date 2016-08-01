@@ -127,10 +127,10 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                     obj.ReportName = Report.ReportName.Trim();
 
                     //If the report does not have a report type then it is set to null
-                    obj.fk_report_type_id = null;
-                    if(getReportTypeID(Report, Document) > -1)
+                    obj.fk_report_type_id = getReportTypeID(Report, Document);
+                    if(getReportTypeID(Report, Document) == -1)
                     {
-                        obj.fk_report_type_id = getReportTypeID(Report, Document);
+                        obj.fk_report_type_id = null;
                     }
 
                     obj.AddDate = DateTime.Now;
