@@ -279,7 +279,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
             return -1;
         }
         /// <summary>
-        /// Matches reports with guids to their
+        /// Matches reports with GUID's to their
         /// parent report
         /// </summary>
         /// <param name="Document"></param>
@@ -287,8 +287,12 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
         public string getParentReportType(String Document)
         {
             var dbService = new MillimanService();
+            string RootParentDirectory;
+            if (Document.IndexOf("REDUCEDCACHEDQVWS") < 0) { 
+                return "";
+            }
 
-            string RootParentDirectory = Document.Substring(0, Document.IndexOf("REDUCEDCACHEDQVWS"));
+            RootParentDirectory = Document.Substring(0, Document.IndexOf("REDUCEDCACHEDQVWS"));
 
             var ParentAuditLogRootQuery = dbService.GetAuditLogs<AuditLog>(a => a.Document.Contains(RootParentDirectory)).OrderBy(a => a.Id);
 
