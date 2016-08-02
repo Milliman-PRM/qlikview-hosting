@@ -84,8 +84,9 @@ CREATE TABLE report
   fk_report_type_id integer,
   CONSTRAINT pk_report_id PRIMARY KEY (id),
   CONSTRAINT uq_report_reportname UNIQUE (reportname),
-  CONSTRAINT fk_tbl_group_id FOREIGN KEY (fk_group_id)
-    REFERENCES "group" (id) MATCH SIMPLE
+  CONSTRAINT fk_tbl_reporttype_id FOREIGN KEY (fk_report_type_id)
+      REFERENCES public.reporttype (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
     ON UPDATE NO ACTION ON DELETE NO ACTION
 )
 WITH (
