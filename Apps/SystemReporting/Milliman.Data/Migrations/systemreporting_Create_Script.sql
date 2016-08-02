@@ -69,6 +69,24 @@ GRANT ALL ON TABLE "group" TO postgres WITH GRANT OPTION;
 GRANT ALL ON TABLE "group" TO public;
 
 
+-- Table: public.reporttype
+
+-- DROP TABLE public.reporttype;
+
+CREATE TABLE reporttype
+(
+  id serial NOT NULL,
+  type character varying(100) NOT NULL,
+  keywords character varying(100) NOT NULL,
+  CONSTRAINT pk_reporttype_id PRIMARY KEY (id),
+  CONSTRAINT uq_reporttype_type UNIQUE (type)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE public.reporttype
+  OWNER TO postgres;
+
 
 
 -- Table: report
@@ -85,9 +103,8 @@ CREATE TABLE report
   CONSTRAINT pk_report_id PRIMARY KEY (id),
   CONSTRAINT uq_report_reportname UNIQUE (reportname),
   CONSTRAINT fk_tbl_reporttype_id FOREIGN KEY (fk_report_type_id)
-      REFERENCES public.reporttype (id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION,
-    ON UPDATE NO ACTION ON DELETE NO ACTION
+      REFERENCES "reporttype" (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
 )
 WITH (
   OIDS=FALSE
@@ -232,21 +249,5 @@ GRANT ALL ON TABLE qvsessionlog TO postgres WITH GRANT OPTION;
 GRANT ALL ON TABLE qvsessionlog TO public;
 
 
--- Table: public.reporttype
 
--- DROP TABLE public.reporttype;
-
-CREATE TABLE public.reporttype
-(
-  id serial NOT NULL,
-  type character varying(100) NOT NULL,
-  keywords character varying(100) NOT NULL,
-  CONSTRAINT pk_reporttype_id PRIMARY KEY (id),
-  CONSTRAINT uq_reporttype_type UNIQUE (type)
-)
-WITH (
-  OIDS=FALSE
-);
-ALTER TABLE public.reporttype
-  OWNER TO postgres;
 
