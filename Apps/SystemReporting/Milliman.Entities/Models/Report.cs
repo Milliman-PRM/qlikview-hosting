@@ -22,19 +22,22 @@ namespace SystemReporting.Entities.Models
         [Column("adddate")]
         public DateTime AddDate { get; set; }
 
-        [Column("reporttype")]
-        public string ReportType { get; set; }
+        [Column("fk_report_type_id")]//referencing the Report for the FK purpose
+        public int? fk_report_type_id { get; set; }
 
-        // Navigation property 
+        // Foreign key
+        public virtual ReportType ReportType { get; set; }
+
+        // Navigation property
         public virtual ICollection<AuditLog> ListAuditLog { get; set; }
         public virtual ICollection<SessionLog> ListSessionLog { get; set; }
+
 
         public Report() { }
         public Report(Report r)
         {
             Id = r.Id;
             ReportName = r.ReportName;
-            ReportType = r.ReportType;
             ListAuditLog = new List<AuditLog>();
             ListSessionLog = new List<SessionLog>();
         }
