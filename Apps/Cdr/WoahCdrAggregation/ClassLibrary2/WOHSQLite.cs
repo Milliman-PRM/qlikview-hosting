@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,7 @@ namespace WOHSQLInterface
     public class WOHSQLiteInterface : CustomerSpecificBase
     {
         private SQLiteDbConnection WOHSQLConnection;
+        private String Volume = @"\\indy-netapp\prm_phi";
 
         // Devart types
         private SQLiteCommand Command;
@@ -21,8 +23,6 @@ namespace WOHSQLInterface
         public WOHSQLiteInterface()
         {
             WOHSQLConnection = new SQLiteDbConnection();
-
-            SupportFilesRoot = new DirectoryInfo(@"K:\PHI\0273WOH\3.005-0273WOH06\5-Support_files\");
         }
 
         ~WOHSQLiteInterface()
@@ -30,10 +30,20 @@ namespace WOHSQLInterface
             Disconnect();
         }
 
-        public void ConnectToLatestMembership()
+        public void ConnectToMembershipData(String SqlLiteFileOverride = null)
         {
-            DirectoryInfo MostRecentSupportFilesDirectory = SupportFilesRoot.GetDirectories().OrderByDescending(f => f.Name).First();
-            String SQLiteFile = Path.Combine(MostRecentSupportFilesDirectory.FullName, @"035_Staging_Membership\Members_3.005-0273WOH06.sqlite");
+            String SQLiteFile;
+
+            if (String.IsNullOrEmpty(SqlLiteFileOverride))
+            {
+                SupportFilesRoot = new DirectoryInfo(Path.Combine(Volume, @"PHI\0273WOH\3.005-0273WOH06\5-Support_files\"));
+                DirectoryInfo MostRecentSupportFilesDirectory = SupportFilesRoot.GetDirectories().OrderByDescending(f => f.Name).First();
+                SQLiteFile = Path.Combine(MostRecentSupportFilesDirectory.FullName, @"035_Staging_Membership\Members_3.005-0273WOH06.sqlite");
+            }
+            else
+            {
+                SQLiteFile = SqlLiteFileOverride;
+            }
 
             WOHSQLConnection.Connect(SQLiteFile);
             List<String> x = WOHSQLConnection.GetColumnNames("member");

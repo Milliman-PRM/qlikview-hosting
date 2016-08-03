@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using BayClinicCernerAmbulatory;
+using System.Diagnostics;
+
 
 namespace BayClinicCdrAggregationLib
 {
@@ -13,7 +11,14 @@ namespace BayClinicCdrAggregationLib
     /// </summary>
     public class BayClinicAggregationWorkerThreadManager
     {
+        private struct ThreadArguments
+        {
+            public String ConnectionStringName;
+            public bool ClearMongo;
+        }
+
         private bool _EndThreadSignal;
+        private bool _ClearMongo;
         BayClinicCernerAmbulatoryBatchAggregator Aggregator = null;
 
         /// <summary>
@@ -36,6 +41,26 @@ namespace BayClinicCdrAggregationLib
             }
         }
 
+        /// <summary>
+        /// Property that encapsulates thread safe access to the end thread signal
+        /// </summary>
+        private bool ClearMongo
+        {
+            set
+            {
+                Mutx.WaitOne();
+                _ClearMongo = value;
+                Mutx.ReleaseMutex();
+            }
+            get
+            {
+                Mutx.WaitOne();
+                bool ReturnVal = _ClearMongo;
+                Mutx.ReleaseMutex();
+                return ReturnVal;
+            }
+        }
+
         private Thread WorkerThd;
         private Mutex Mutx;
 
@@ -52,10 +77,17 @@ namespace BayClinicCdrAggregationLib
         /// Starts the encapsulated worker thread
         /// </summary>
         /// <param name="PgConnectionName">Name of a PostgreSQL connection string to use. If null, a value is taken from ConfigurationManager.AppSettings["CdrPostgreSQLConnectionString"]</param>
-        public void StartThread(String PgConnectionName = null)
+        public void StartThread(bool ClearMongoArg, String PgConnectionName = null)
         {
+            String TraceFileName = "TraceLog_" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + ".txt";
+            Trace.Listeners.Add(new TextWriterTraceListener(TraceFileName));
+            Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
+            Trace.AutoFlush = true;
+            Trace.WriteLine("Application launched " + DateTime.Now.ToString());
+
             EndThreadSignal = false;
-            WorkerThd.Start(PgConnectionName);
+            ClearMongo = ClearMongoArg;
+            WorkerThd.Start( new ThreadArguments { ClearMongo = ClearMongo, ConnectionStringName = PgConnectionName } );
         }
 
         /// <summary>
@@ -78,14 +110,16 @@ namespace BayClinicCdrAggregationLib
         /// returns the count of patient records aggregated so far
         /// </summary>
         /// <returns></returns>
-        public long GetNumberOfPatientsDone()
+        public String GetProgressSummary()
         {
             if (Aggregator != null)
             {
-                return Aggregator.PatientCounter;
+                return Aggregator.NewPatientCounter.ToString() + " inserted, " + 
+                       Aggregator.MergedPatientCounter.ToString() + " merged / " +
+                       Aggregator.PersonCounter.ToString() + " processed";
             }
 
-            return 0;
+            return "";
         }
 
         /// <summary>
@@ -94,12 +128,12 @@ namespace BayClinicCdrAggregationLib
         /// <param name="ThreadArg"></param>
         private void ThreadMain(object ThreadArg)
         {
-            String PgCxnName = (String)ThreadArg;
+            ThreadArguments Args = (ThreadArguments) ThreadArg;
             bool Success;
 
 #if true // do once
-            Aggregator = new BayClinicCernerAmbulatoryBatchAggregator(PgCxnName);
-            Success = Aggregator.AggregateAllAvailablePatients(true);  // TODO for production the argument should be false
+            Aggregator = new BayClinicCernerAmbulatoryBatchAggregator(Args.ConnectionStringName);
+            Success = Aggregator.AggregateAllAvailablePatients(Args.ClearMongo);  // TODO for normal production the argument should be false
             Aggregator = null;
 
 #else  // repeat

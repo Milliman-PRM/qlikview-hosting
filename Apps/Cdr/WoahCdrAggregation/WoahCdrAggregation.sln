@@ -3,10 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NorthBendCdrAggregationSvc", "NorthBendCdrAggregationSvc\NorthBendCdrAggregationSvc.csproj", "{AADBCC4C-8B45-42C9-83FE-9770C45CA995}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BayClinicCdrAggregationSvc", "BayClinicCdrAggregationSvc\BayClinicCdrAggregationSvc.csproj", "{B307C1BB-5FE3-4272-AE07-3403E2B5932B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BayClinicCdrAggregationLib", "BayClinicCdrAggregationLib\BayClinicCdrAggregationLib.csproj", "{77D70C26-D7CD-4101-B2F1-69525F37BF31}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NorthBendCdrAggregationLib", "NorthBendCdrAggregationLib\NorthBendCdrAggregationLib.csproj", "{26692E9C-2DD0-4DAB-8785-84736AE1EB82}"
@@ -21,20 +17,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SasDataSetLib", "ClassLibra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLiteLib", "ClassLibrary2\SQLiteLib.csproj", "{D5149A31-D65E-4064-A4F4-CF68069EC55C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WoahCdrAggregationConsoleApp", "WoahCdrAggregationConsoleApp\WoahCdrAggregationConsoleApp.csproj", "{F2FF6A34-75F5-4B74-BC00-400C896C12DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkAccess", "..\..\AppsCommon\NetworkAccess\NetworkAccess.csproj", "{6045ED57-9C70-4A16-B6FD-C46EA652203C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{AADBCC4C-8B45-42C9-83FE-9770C45CA995}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AADBCC4C-8B45-42C9-83FE-9770C45CA995}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AADBCC4C-8B45-42C9-83FE-9770C45CA995}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AADBCC4C-8B45-42C9-83FE-9770C45CA995}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B307C1BB-5FE3-4272-AE07-3403E2B5932B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B307C1BB-5FE3-4272-AE07-3403E2B5932B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B307C1BB-5FE3-4272-AE07-3403E2B5932B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B307C1BB-5FE3-4272-AE07-3403E2B5932B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{77D70C26-D7CD-4101-B2F1-69525F37BF31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{77D70C26-D7CD-4101-B2F1-69525F37BF31}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77D70C26-D7CD-4101-B2F1-69525F37BF31}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -63,6 +55,14 @@ Global
 		{D5149A31-D65E-4064-A4F4-CF68069EC55C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5149A31-D65E-4064-A4F4-CF68069EC55C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5149A31-D65E-4064-A4F4-CF68069EC55C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2FF6A34-75F5-4B74-BC00-400C896C12DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2FF6A34-75F5-4B74-BC00-400C896C12DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2FF6A34-75F5-4B74-BC00-400C896C12DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2FF6A34-75F5-4B74-BC00-400C896C12DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6045ED57-9C70-4A16-B6FD-C46EA652203C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6045ED57-9C70-4A16-B6FD-C46EA652203C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6045ED57-9C70-4A16-B6FD-C46EA652203C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6045ED57-9C70-4A16-B6FD-C46EA652203C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

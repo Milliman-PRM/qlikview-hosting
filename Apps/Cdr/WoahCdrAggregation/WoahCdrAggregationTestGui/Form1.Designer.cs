@@ -30,6 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             this.groupFeedSelection = new System.Windows.Forms.GroupBox();
+            this.labelElapsedTime = new System.Windows.Forms.Label();
             this.labelNbmcPatientsCompleted = new System.Windows.Forms.Label();
             this.labelBcPatientsCompleted = new System.Windows.Forms.Label();
             this.radioNBMCAllscriptsViaIntelliware = new System.Windows.Forms.RadioButton();
@@ -37,27 +38,37 @@
             this.buttonAggregate = new System.Windows.Forms.Button();
             this.buttonEndAllThreads = new System.Windows.Forms.Button();
             this.timerUiUpdate = new System.Windows.Forms.Timer(this.components);
-            this.labelElapsedTime = new System.Windows.Forms.Label();
+            this.checkBoxResetMongoDB = new System.Windows.Forms.CheckBox();
             this.groupFeedSelection.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupFeedSelection
             // 
+            this.groupFeedSelection.Controls.Add(this.labelElapsedTime);
             this.groupFeedSelection.Controls.Add(this.labelNbmcPatientsCompleted);
             this.groupFeedSelection.Controls.Add(this.labelBcPatientsCompleted);
             this.groupFeedSelection.Controls.Add(this.radioNBMCAllscriptsViaIntelliware);
             this.groupFeedSelection.Controls.Add(this.radioBayClinicCernerAmbulatory);
             this.groupFeedSelection.Location = new System.Drawing.Point(12, 12);
             this.groupFeedSelection.Name = "groupFeedSelection";
-            this.groupFeedSelection.Size = new System.Drawing.Size(318, 329);
+            this.groupFeedSelection.Size = new System.Drawing.Size(440, 366);
             this.groupFeedSelection.TabIndex = 0;
             this.groupFeedSelection.TabStop = false;
             this.groupFeedSelection.Text = "Feed Selection";
             // 
+            // labelElapsedTime
+            // 
+            this.labelElapsedTime.AutoSize = true;
+            this.labelElapsedTime.Location = new System.Drawing.Point(6, 343);
+            this.labelElapsedTime.Name = "labelElapsedTime";
+            this.labelElapsedTime.Size = new System.Drawing.Size(13, 13);
+            this.labelElapsedTime.TabIndex = 3;
+            this.labelElapsedTime.Text = "0";
+            // 
             // labelNbmcPatientsCompleted
             // 
             this.labelNbmcPatientsCompleted.AutoSize = true;
-            this.labelNbmcPatientsCompleted.Location = new System.Drawing.Point(246, 44);
+            this.labelNbmcPatientsCompleted.Location = new System.Drawing.Point(196, 46);
             this.labelNbmcPatientsCompleted.Name = "labelNbmcPatientsCompleted";
             this.labelNbmcPatientsCompleted.Size = new System.Drawing.Size(13, 13);
             this.labelNbmcPatientsCompleted.TabIndex = 4;
@@ -66,7 +77,7 @@
             // labelBcPatientsCompleted
             // 
             this.labelBcPatientsCompleted.AutoSize = true;
-            this.labelBcPatientsCompleted.Location = new System.Drawing.Point(246, 22);
+            this.labelBcPatientsCompleted.Location = new System.Drawing.Point(196, 24);
             this.labelBcPatientsCompleted.Name = "labelBcPatientsCompleted";
             this.labelBcPatientsCompleted.Size = new System.Drawing.Size(13, 13);
             this.labelBcPatientsCompleted.TabIndex = 3;
@@ -96,7 +107,7 @@
             // 
             // buttonAggregate
             // 
-            this.buttonAggregate.Location = new System.Drawing.Point(336, 13);
+            this.buttonAggregate.Location = new System.Drawing.Point(458, 13);
             this.buttonAggregate.Name = "buttonAggregate";
             this.buttonAggregate.Size = new System.Drawing.Size(160, 23);
             this.buttonAggregate.TabIndex = 1;
@@ -106,7 +117,7 @@
             // 
             // buttonEndAllThreads
             // 
-            this.buttonEndAllThreads.Location = new System.Drawing.Point(336, 355);
+            this.buttonEndAllThreads.Location = new System.Drawing.Point(458, 355);
             this.buttonEndAllThreads.Name = "buttonEndAllThreads";
             this.buttonEndAllThreads.Size = new System.Drawing.Size(159, 23);
             this.buttonEndAllThreads.TabIndex = 2;
@@ -118,21 +129,22 @@
             // 
             this.timerUiUpdate.Tick += new System.EventHandler(this.timerUiUpdate_Tick);
             // 
-            // labelElapsedTime
+            // checkBoxResetMongoDB
             // 
-            this.labelElapsedTime.AutoSize = true;
-            this.labelElapsedTime.Location = new System.Drawing.Point(336, 175);
-            this.labelElapsedTime.Name = "labelElapsedTime";
-            this.labelElapsedTime.Size = new System.Drawing.Size(13, 13);
-            this.labelElapsedTime.TabIndex = 3;
-            this.labelElapsedTime.Text = "0";
+            this.checkBoxResetMongoDB.AutoSize = true;
+            this.checkBoxResetMongoDB.Location = new System.Drawing.Point(458, 43);
+            this.checkBoxResetMongoDB.Name = "checkBoxResetMongoDB";
+            this.checkBoxResetMongoDB.Size = new System.Drawing.Size(105, 17);
+            this.checkBoxResetMongoDB.TabIndex = 3;
+            this.checkBoxResetMongoDB.Text = "Reset MongoDB";
+            this.checkBoxResetMongoDB.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(508, 390);
-            this.Controls.Add(this.labelElapsedTime);
+            this.ClientSize = new System.Drawing.Size(629, 390);
+            this.Controls.Add(this.checkBoxResetMongoDB);
             this.Controls.Add(this.buttonEndAllThreads);
             this.Controls.Add(this.buttonAggregate);
             this.Controls.Add(this.groupFeedSelection);
@@ -156,6 +168,7 @@
         private System.Windows.Forms.Timer timerUiUpdate;
         private System.Windows.Forms.Label labelNbmcPatientsCompleted;
         private System.Windows.Forms.Label labelElapsedTime;
+        private System.Windows.Forms.CheckBox checkBoxResetMongoDB;
     }
 }
 

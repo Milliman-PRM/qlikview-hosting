@@ -34,7 +34,7 @@ namespace WoahCdrAggregationTestGui
                 case "radioBayClinicCernerAmbulatory":
                     BayClinicAggregationWorkerThreadManager BcLib = new BayClinicAggregationWorkerThreadManager();
 
-                    BcLib.StartThread();
+                    BcLib.StartThread(checkBoxResetMongoDB.Checked);
                     BayClinicProcesses.Add(BcLib);
 
                     Thread.Sleep(200);  // milliseconds
@@ -62,8 +62,12 @@ namespace WoahCdrAggregationTestGui
 
         private void timerUiUpdate_Tick(object sender, EventArgs e)
         {
-            labelBcPatientsCompleted.Text = BayClinicProcesses[0].GetNumberOfPatientsDone().ToString();
-            labelElapsedTime.Text = (DateTime.Now - StartDateTime).ToString();
+            String ProgressSummary = BayClinicProcesses[0].GetProgressSummary();
+            if (!String.IsNullOrWhiteSpace(ProgressSummary))
+            {
+                labelBcPatientsCompleted.Text = ProgressSummary;
+                labelElapsedTime.Text = (DateTime.Now - StartDateTime).ToString();
+            }
             //labelNbmcPatientsCompleted.Text = NbmcProcesses[0].GetNumberOfPatientsDone().ToString();
         }
     }

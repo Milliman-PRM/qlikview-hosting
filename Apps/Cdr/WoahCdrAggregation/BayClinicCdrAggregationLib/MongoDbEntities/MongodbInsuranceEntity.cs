@@ -83,9 +83,18 @@ namespace BayClinicCernerAmbulatory
         [BsonElement("lastaggregationrun")]
         public long LastAggregationRun;
 #pragma warning restore 0649
-        internal bool MergeWithExistingInsuranceCoverage(ref InsuranceCoverage InsuranceCoverageRecord, ref Patient PgPatient, CernerReferencedCodeDictionaries ReferencedCodes)
+
+        /// <summary>
+        /// Selectively combines the attributes of this mongodb document with a supplied Insurance Coverage record
+        /// </summary>
+        /// <param name="InsuranceCoverageRecord">Call with null if there is no existing Insurance Coverage record, the resulting record is returned here</param>
+        /// <param name="PgPatient"></param>
+        /// <param name="ReferencedCodes"></param>
+        /// <param name="ReferencedHealthPlans"></param>
+        /// <returns>true if an existing record was modified, false if a new record was created</returns>
+        internal bool MergeWithExistingInsuranceCoverage(ref InsuranceCoverage InsuranceCoverageRecord, ref Patient PgPatient, CernerReferencedCodeDictionaries ReferencedCodes, CernerReferenceHealthPlanDictionaries ReferencedHealthPlans)
         {
-            bool same = true;
+            string CernerMaxDateTime = "2100-12-31 00:00:00";
             DateTime StartDate, EndDate, UpdateTime;
             DateTime.TryParse(UpdateDateTime, out UpdateTime);
             DateTime.TryParse(EffectiveBeginDateTime, out StartDate);        // Will be DateTime.MinValue on parse failure
@@ -95,27 +104,30 @@ namespace BayClinicCernerAmbulatory
             {
                 InsuranceCoverageRecord = new InsuranceCoverage
                 {
+                    EmrIdentifier = RecordIdentifier,
+                    CoverageType = ReferencedCodes.InsuranceTypeCodeMeanings[Type],
+                    MemberID = MemberNumber,
                     Payer = UniqueOrganizationIdentifier,
                     StartDate = StartDate,
                     EndDate = EndDate,
-                    PlanName = UniqueHealthPlanIdentifier,
+                    PlanName = ReferencedHealthPlans.PlanNameCodeMeanings[UniqueHealthPlanIdentifier],
                     Patient = PgPatient,            //Just adding the patientdbid might may improve runtime
                     UpdateTime = UpdateTime,
                     LastImportFileDate = ImportFileDate
                 };
-                return true;
+                return false;
             }
 
             else if (InsuranceCoverageRecord.UpdateTime < UpdateTime)
             {
                 if (InsuranceCoverageRecord.Payer != UniqueOrganizationIdentifier && !String.IsNullOrEmpty(UniqueOrganizationIdentifier)) InsuranceCoverageRecord.Payer = UniqueOrganizationIdentifier;
                 //Extra logic here to have as many real dates as possible instead of max dates
-                if (InsuranceCoverageRecord.EndDate.ToString().Contains("2100"))
+                if (InsuranceCoverageRecord.EndDate.ToString() == CernerMaxDateTime)
                 {
-                    if (!UpdateDateTime.Contains("2100"))
+                    if (UpdateDateTime != CernerMaxDateTime)
                         InsuranceCoverageRecord.EndDate = EndDate;
                 }
-                if(!InsuranceCoverageRecord.EndDate.ToString().Contains("2100"))
+                if(InsuranceCoverageRecord.EndDate.ToString() != CernerMaxDateTime)
                 {
                     if(InsuranceCoverageRecord.EndDate < EndDate)
                         InsuranceCoverageRecord.EndDate = EndDate;
@@ -127,15 +139,9 @@ namespace BayClinicCernerAmbulatory
                 if (InsuranceCoverageRecord.UpdateTime != UpdateTime && !String.IsNullOrEmpty(UpdateDateTime)) InsuranceCoverageRecord.UpdateTime = UpdateTime;
 
                 InsuranceCoverageRecord.LastImportFileDate = new string[] { InsuranceCoverageRecord.LastImportFileDate, ImportFileDate }.Max();
-
-                return false;
             }
 
-            else
-            {
-                return false;
-            }
-            
+            return true;
         }
     }
 }

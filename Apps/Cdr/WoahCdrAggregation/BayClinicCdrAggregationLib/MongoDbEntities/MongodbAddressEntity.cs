@@ -98,7 +98,14 @@ namespace BayClinicCernerAmbulatory
         [BsonElement("lastaggregationrun")]
         public long LastAggregationRun;
 #pragma warning restore 0649
-
+        
+        /// <summary>
+        /// Selectively combines the attributes of this mongodb document with a supplied Address record
+        /// </summary>
+        /// <param name="AddressRecord">Call with null if there is no existing Address record, the resulting record is returned here</param>
+        /// <param name="PatientRecord"></param>
+        /// <param name="ReferencedCodes"></param>
+        /// <returns>true if an existing record was modified, false if a new record was created</returns>
         internal bool MergeWithExistingPhysicalAddress(ref PhysicalAddress AddressRecord, ref Patient PatientRecord, CernerReferencedCodeDictionaries ReferencedCodes)
         {
             DateTime ActiveStatusDT, UpdateTime;
@@ -108,6 +115,7 @@ namespace BayClinicCernerAmbulatory
             {
                 AddressRecord = new PhysicalAddress
                 {
+                    EmrIdentifier = RecordIdentifier,
                     Address = new Address
                     {
                         City = CityText,
@@ -126,7 +134,7 @@ namespace BayClinicCernerAmbulatory
                     UpdateTime = UpdateTime,
                     LastImportFileDate = ImportFileDate
                 };
-                return true;
+                return false;
             }
             else if(AddressRecord.UpdateTime < UpdateTime) 
             {
@@ -149,13 +157,9 @@ namespace BayClinicCernerAmbulatory
                 if (AddressRecord.UpdateTime != UpdateTime && !String.IsNullOrEmpty(UpdateDateTime)) AddressRecord.UpdateTime = UpdateTime;
 
                 AddressRecord.LastImportFileDate = new string[] { AddressRecord.LastImportFileDate, ImportFileDate }.Max();
-
-                return false;
-            }
-            else {
-                return false;
             }
 
+            return true;
         }
     }
 }

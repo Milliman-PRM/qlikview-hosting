@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -28,6 +29,8 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Devart.Data, Version=5.0.1450.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL" />
@@ -60,6 +63,7 @@
     <Compile Include="BayClinicAggregationWorkerThreadManager.cs" />
     <Compile Include="BayclinicCernerAmbulatoryBatchAggregator.cs" />
     <Compile Include="CernerReferencedCodeDictionaries.cs" />
+    <Compile Include="CernerReferencedTerminologyDictionary.cs" />
     <Compile Include="CernerReferenceHealthPlanDictionaries.cs" />
     <Compile Include="MongoAggregationRunUpdater.cs" />
     <Compile Include="MongoDbEntities\MongodbMedicationEntity.cs" />
@@ -74,6 +78,7 @@
     <Compile Include="MongoDbEntities\MongodbPersonEntity.cs" />
     <Compile Include="MongoDbEntities\MongodbPhoneEntity.cs" />
     <Compile Include="MongoDbEntities\MongodbProblemEntity.cs" />
+    <Compile Include="MongoDbEntities\MongodbProcedureEntity.cs" />
     <Compile Include="MongoDbEntities\MongodbRefCodeEntity.cs" />
     <Compile Include="MongoDbEntities\MongodbReferenceHealthPlanEntity.cs" />
     <Compile Include="MongoDbEntities\MongodbReferenceMedicationEntity.cs" />
@@ -90,6 +95,10 @@
     <ProjectReference Include="..\..\..\AppsCommon\MongoDbWrap\MongoDbWrap.csproj">
       <Project>{5fdfbd80-5d24-40a0-985f-c17f579d8517}</Project>
       <Name>MongoDbWrap</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\AppsCommon\NetworkAccess\NetworkAccess.csproj">
+      <Project>{6045ed57-9c70-4a16-b6fd-c46ea652203c}</Project>
+      <Name>NetworkAccess</Name>
     </ProjectReference>
     <ProjectReference Include="..\ClassLibrary2\SQLiteLib.csproj">
       <Project>{d5149a31-d65e-4064-a4f4-cf68069ec55c}</Project>

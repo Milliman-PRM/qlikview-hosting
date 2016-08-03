@@ -1,8 +1,8 @@
 ﻿using System;
+using System.IO;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Bson.IO;
 using MongoDB.Bson.Serialization.Attributes;
@@ -14,25 +14,43 @@ namespace MongoDbWrap
     {
         private IMongoClient _Client = null;
         private IMongoDatabase _Db = null;
+
+        public bool IsInitialized
+        {
+            get { return TestDatabaseAccess(); }
+        }
+
         public IMongoDatabase Db
         {
             get { return _Db; }
         }
 
-        public MongoDbConnection(String IniFileName, String SectionName)
-        {
-            IniProcessor IniProc = new IniProcessor(IniFileName);
+        public MongoDbConnection()
+        {}
 
-            if (!IniProc.GetSections().Contains(SectionName))
+        public bool InitializeWithIni(String IniFileName, String SectionName)
+        {
+            if (!File.Exists(IniFileName) || String.IsNullOrEmpty(SectionName))
             {
-                throw new Exception("Failed to locate section in IniFile");
+                return false;
             }
 
-            ConnectMongo(new MongoDbConnectionParameters(IniFileName, SectionName));
+            MongoDbConnectionParameters Params = new MongoDbConnectionParameters();
+            if (!Params.ReadFromIni(IniFileName, SectionName))
+            {
+                return false;
+            }
+
+            return ConnectMongo(Params);
         }
 
-        //public MongoDbConnection()
-        //{}
+        public bool InitializeWithEnvironment(String MongoDbNameBase)
+        {
+            MongoDbConnectionParameters Params = new MongoDbConnectionParameters();
+            Params.ReadFromEnvironment(MongoDbNameBase);
+            // Trace.WriteLine("Mongo connection params: " + Params.ToString());  // Don't leave this on, password is logged
+            return ConnectMongo(Params);
+        }
 
         public MongoDbConnection(MongoDbConnectionParameters Params)
         {
@@ -46,8 +64,13 @@ namespace MongoDbWrap
 
         }
 
-        public void ConnectMongo(MongoDbConnectionParameters Params)
+        public bool ConnectMongo(MongoDbConnectionParameters Params)
         {
+            if (!Params.IsValid())
+            {
+                return false;
+            }
+
             var credential = MongoCredential.CreateCredential(Params._UserDomain, Params._User, Params._Password);
             var settings = new MongoClientSettings
             {
@@ -73,6 +96,8 @@ namespace MongoDbWrap
             {
                 AccessMongoDatabase(Params._Db);
             }
+
+            return _Client != null;
         }
 
         public void Disconnect()

@@ -86,7 +86,14 @@ namespace BayClinicCernerAmbulatory
         [BsonElement("lastaggregationrun")]
         public long LastAggregationRun;
 #pragma warning restore 0649
-        internal bool MergeWithExistingCharges(ref Charge ChargeRecord, ref VisitEncounter VisitRecord)
+
+        /// <summary>
+        /// Selectively combines the attributes of this mongodb document with a supplied Charge record
+        /// </summary>
+        /// <param name="ChargeRecord">Call with null if there is no existing Charge record, the resulting record is returned here</param>
+        /// <param name="VisitRecord"></param>
+        /// <returns>true if an existing record was modified, false if a new record was created</returns>
+        internal bool MergeWithExistingCharge(ref Charge ChargeRecord, ref VisitEncounter VisitRecord)
         {
             DateTime ActiveStatusDT, ServiceDT, PostDT, UpdateDT;
             DateTime.TryParse(ActiveStatusDateTime, out ActiveStatusDT);
@@ -99,7 +106,7 @@ namespace BayClinicCernerAmbulatory
 
                 // TODO may need to think about value of Type, some could be "no charge"
                 // TODO may need to think about value of State, some could be "combined away" or "suspended"
-                Charge NewPgRecord = new Charge
+                ChargeRecord = new Charge
                 {
                     //DentalDetails = new DentalDetail {ToothNumber=0 ,ToothSurfaceCode="" },
                     EmrIdentifier = UniqueChargeIdentifier,
@@ -115,18 +122,23 @@ namespace BayClinicCernerAmbulatory
                     // Think about whether the ordering_physician_identifier or verifying_physician_identifier would be useful to add to the model
                     // TODO Should we collect the type field?
                 };
-                NewPgRecord.ChargeCodes.Add(new ChargeCode
+                // Charge codes are extracted from the charge description because they always seem to be prepended to the charge description field.  
+                // This is separate from explicitly extracted charge codes from ChargeDetail documents in MongoDB, which is handled separately.  
+                ChargeRecord.ChargeCodes.Add(new ChargeCode
                 {
                     Code = new CodedEntry
                     {
                         Code = DescriptionFirstWord,
                         CodeSystem = "Charge Description Prepend",
-                    }
+                    },
+                    EmrIdentifier = "",
+                    LastImportFileDate = ImportFileDate,
+                    UpdateTime = UpdateDT
                 });
                 // UniqueChargeItemIdentifier is the reference from related ChargeDetail documents
                 // What is parent_charge_identifier?
                 // What is offset_charge_identifier?
-                return true;
+                return false;
             }
             else if(ChargeRecord.DateInfoLastUpdated < UpdateDT) 
             {
@@ -139,14 +151,9 @@ namespace BayClinicCernerAmbulatory
                 if (ChargeRecord.DateInfoLastUpdated != UpdateDT && !String.IsNullOrEmpty(UpdateDateTime)) ChargeRecord.DateInfoLastUpdated = UpdateDT;
 
                 ChargeRecord.LastImportFileDate = new string[] { ChargeRecord.LastImportFileDate, ImportFileDate }.Max();
-
-                return false;
             }
 
-            else {
-                return false;
-            }
-            
+            return true;
         }
     }
 }

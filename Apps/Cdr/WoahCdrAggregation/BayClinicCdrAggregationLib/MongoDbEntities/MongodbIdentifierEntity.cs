@@ -59,7 +59,16 @@ namespace BayClinicCernerAmbulatory
         [BsonElement("lastaggregationrun")]
         public long LastAggregationRun;
 #pragma warning restore 0649
-        internal bool MergeWithExistingPatientIdentifiers(ref PatientIdentifier IdentifierRecord, ref Patient PatientRecord, CernerReferencedCodeDictionaries ReferencedCodes, Organization OrganizationObject)
+
+        /// <summary>
+        /// Selectively combines the attributes of this mongodb document with a supplied Patient Identifier record
+        /// </summary>
+        /// <param name="IdentifierRecord">Call with null if there is no existing Patient Identifier record, the resulting record is returned here</param>
+        /// <param name="PatientRecord"></param>
+        /// <param name="ReferencedCodes"></param>
+        /// <param name="OrganizationObject"></param>
+        /// <returns>true if an existing record was modified, false if a new record was created</returns>
+        internal bool MergeWithExistingPatientIdentifier(ref PatientIdentifier IdentifierRecord, ref Patient PatientRecord, CernerReferencedCodeDictionaries ReferencedCodes, long OrganizationDbid)
         {
             DateTime ActiveStatusDT, UpdateTime;
             DateTime.TryParse(ActiveStatusDateTime, out ActiveStatusDT);
@@ -69,20 +78,22 @@ namespace BayClinicCernerAmbulatory
 
                 IdentifierRecord = new PatientIdentifier
                 {
+                    EmrIdentifier = RecordIdentifier,
                     Identifier = Identifier,
                     IdentifierType = ReferencedCodes.IdentifierTypeCodeMeanings[IdentifierType],
-                    Organization = OrganizationObject,
+                    Organizationdbid = OrganizationDbid,
                     Patient = PatientRecord,
                     DateFirstReported = ActiveStatusDT,
                     DateLastReported = ActiveStatusDT,
                     UpdateTime = UpdateTime,
                     LastImportFileDate = ImportFileDate
                 };
-                return true;
+                return false;
             }
 
             else if(IdentifierRecord.UpdateTime < UpdateTime)
-            { 
+            {
+                if (IdentifierRecord.Identifier != Identifier && !String.IsNullOrEmpty(Identifier)) IdentifierRecord.Identifier = Identifier;
                 if (IdentifierRecord.IdentifierType != ReferencedCodes.IdentifierTypeCodeMeanings[IdentifierType] && !String.IsNullOrEmpty(IdentifierType)) IdentifierType = ReferencedCodes.IdentifierTypeCodeMeanings[IdentifierType];
 
                 if (IdentifierRecord.DateLastReported < ActiveStatusDT) IdentifierRecord.DateLastReported = ActiveStatusDT;
@@ -91,15 +102,9 @@ namespace BayClinicCernerAmbulatory
                 if (IdentifierRecord.UpdateTime != UpdateTime && !String.IsNullOrEmpty(UpdateDateTime)) IdentifierRecord.UpdateTime = UpdateTime;
 
                 IdentifierRecord.LastImportFileDate = new string[] { IdentifierRecord.LastImportFileDate, ImportFileDate }.Max();
-
-                return false;
             }
 
-            else
-            {
-                return false;
-            }
-            
+            return true;
         }
     }
 }

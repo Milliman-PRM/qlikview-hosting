@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Configuration;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,7 +42,20 @@ namespace CdrDbLib
                     break;
 
             }
-            Context = new CdrDataContext(ConnectionString);
+            try
+            {
+                Context = new CdrDataContext(ConnectionString);
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine("Exception while constructing CdrDataContext, Exception content:\n" + e.Message + "\n" + e.StackTrace);
+            }
+        }
+
+       ~CdrDbInterface()
+        {
+            Context.Dispose();
+            Context = null;
         }
 
         public Organization EnsureOrganizationRecord(String OrganizationName)

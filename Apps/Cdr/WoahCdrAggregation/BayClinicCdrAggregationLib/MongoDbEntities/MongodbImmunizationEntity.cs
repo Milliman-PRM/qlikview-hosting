@@ -123,14 +123,22 @@ namespace BayClinicCernerAmbulatory
         public long LastAggregationRun;
 #pragma warning restore 0649
 
-        internal bool MergeWithExistingImmunizations(ref Immunization ImmunizationRecord, ref Patient PatientRecord, VisitEncounter VisitRecord, CernerReferencedCodeDictionaries ReferencedCodes)
+        /// <summary>
+        /// Selectively combines the attributes of this mongodb document with a supplied Immunization record
+        /// </summary>
+        /// <param name="ImmunizationRecord">Call with null if there is no existing Immunization record, the resulting record is returned here</param>
+        /// <param name="PatientRecord"></param>
+        /// <param name="VisitRecord"></param>
+        /// <param name="ReferencedCodes"></param>
+        /// <returns>true if an existing record was modified, false if a new record was created</returns>
+        internal bool MergeWithExistingImmunization(ref Immunization ImmunizationRecord, ref Patient PatientRecord, VisitEncounter VisitRecord, CernerReferencedCodeDictionaries ReferencedCodes)
         {
             DateTime PerformedDate, UpdateTime;
             DateTime.TryParse(PerformedDateTime, out PerformedDate);
             DateTime.TryParse(UpdateDateTime, out UpdateTime);
             if (ImmunizationRecord == null)
             {
-                Immunization NewPgRecord = new Immunization
+                ImmunizationRecord = new Immunization
                 {
                     Patientdbid = PatientRecord.dbid,
                     EmrIdentifier = UniqueOrderIdentifier,  // TODO This is probably not the right value to assign
@@ -147,7 +155,7 @@ namespace BayClinicCernerAmbulatory
                     UpdateTime = UpdateTime,
                     LastImportFileDate = ImportFileDate
                 };
-                return true;
+                return false;
             }
             else if(ImmunizationRecord.UpdateTime < UpdateTime)
             {
@@ -160,16 +168,9 @@ namespace BayClinicCernerAmbulatory
                 if (ImmunizationRecord.UpdateTime != UpdateTime && !String.IsNullOrEmpty(UpdateDateTime)) ImmunizationRecord.UpdateTime = UpdateTime;
 
                 ImmunizationRecord.LastImportFileDate = new string[] { ImmunizationRecord.LastImportFileDate, ImportFileDate }.Max();
-
-                return false;
-            }
-            else
-            {
-                return false;
             }
 
-
-
+            return true;
         }
     }
 }

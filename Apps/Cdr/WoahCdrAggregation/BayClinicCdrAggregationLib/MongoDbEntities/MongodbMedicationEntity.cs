@@ -87,7 +87,16 @@ namespace BayClinicCernerAmbulatory
         public long LastAggregationRun;
 #pragma warning restore 0649
 
-        internal bool MergeWithExistingMedications(ref Medication MedicationRecord, ref Patient PatientRecord, VisitEncounter VisitRecord, MongodbReferenceMedicationEntity ReferenceMedicationRecord, string MedicationInstructions)
+        /// <summary>
+        /// Selectively combines the attributes of this mongodb document with a supplied Medication record
+        /// </summary>
+        /// <param name="MedicationRecord">Call with null if there is no existing Medication record, the resulting record is returned here</param>
+        /// <param name="PatientRecord"></param>
+        /// <param name="VisitRecord"></param>
+        /// <param name="ReferenceMedicationRecord"></param>
+        /// <param name="MedicationInstructions"></param>
+        /// <returns>true if an existing record was modified, false if a new record was created</returns>
+        internal bool MergeWithExistingMedication(ref Medication MedicationRecord, ref Patient PatientRecord, VisitEncounter VisitRecord, MongodbReferenceMedicationEntity ReferenceMedicationRecord, string MedicationInstructions)
         {
             DateTime PrescriptionDate, StartDate, StopDate, StatusDateTime, FillDate, UpdateTime;
             DateTime.TryParse(UpdateDateTime, out UpdateTime);
@@ -97,9 +106,9 @@ namespace BayClinicCernerAmbulatory
             DateTime.TryParse(StopDateTime, out StopDate);
             DateTime.TryParse(ActiveStatusDateTime, out StatusDateTime);
 
-            if (ReferenceMedicationRecord == null)
+            if (MedicationRecord == null)
             {
-                Medication NewPgRecord = new Medication
+                MedicationRecord = new Medication
                 {
                     EmrIdentifier = UniqueMedicationIdentifier,
                     PrescriptionDate = PrescriptionDate,
@@ -119,7 +128,7 @@ namespace BayClinicCernerAmbulatory
                     UpdateTime = UpdateTime,
                     LastImportFileDate = ImportFileDate
                 };
-                return true;
+                return false;
             }
 
             else if (MedicationRecord.UpdateTime < UpdateTime)
@@ -141,17 +150,9 @@ namespace BayClinicCernerAmbulatory
                 if (MedicationRecord.UpdateTime != UpdateTime && !String.IsNullOrEmpty(UpdateDateTime)) MedicationRecord.UpdateTime = UpdateTime;
 
                 MedicationRecord.LastImportFileDate = new string[] { MedicationRecord.LastImportFileDate, ImportFileDate }.Max();
-
-
-                return false;
             }
 
-            else
-            {
-                return false;
-            }
-
-
+            return true;
         }
     }
 }

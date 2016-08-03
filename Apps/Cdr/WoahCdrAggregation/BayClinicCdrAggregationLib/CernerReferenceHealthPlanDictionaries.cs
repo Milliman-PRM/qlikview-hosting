@@ -18,9 +18,6 @@ namespace BayClinicCernerAmbulatory
         public Dictionary<String, String> PlanNameCodeMeanings = new Dictionary<string, string>();
         public Dictionary<String, String> PlanTypeCodeMeanings = new Dictionary<string, string>();
 
-        #region temporary validation functions
-        #endregion
-
         public bool Initialize(IMongoCollection<MongodbReferenceHealthPlanEntity> HealthPlanCollectionArg, IMongoCollection<MongodbRefCodeEntity> RefCodeCollectionArg, bool AddZeroUnspecified = true)
         {
             ReferenceHealthPlanCollection = HealthPlanCollectionArg;
@@ -40,7 +37,7 @@ namespace BayClinicCernerAmbulatory
                             && x.Field.ToUpper() == "TYPE"
                             && x.ElementCode == HealthPlanDoc.Type
                         )
-                        .Take(1)    // All instances of the same code must map to the same meaning
+                        .Take(1)    // All instances of the same code must map to the same meaning so just ask for one
                         .FirstOrDefault();
 
                     if (PlanTypeDoc != null)
@@ -48,6 +45,7 @@ namespace BayClinicCernerAmbulatory
                         PlanTypeCodeMeanings[HealthPlanDoc.UniqueHealthPlanIdentifier] = PlanTypeDoc.Display;
                     }
                 }
+
                 if (AddZeroUnspecified)
                 {
                     PlanNameCodeMeanings["0"] = "Unspecified";
@@ -55,7 +53,7 @@ namespace BayClinicCernerAmbulatory
             }
             catch (Exception e)
             {
-                Trace.WriteLine("Exception in CernerReferenceHealthPlanDictionaries.Initialize: " + e.Message);
+                Trace.WriteLine("Exception in CernerReferenceHealthPlanDictionaries.Initialize(): " + e.Message);
                 return false;
             }
 

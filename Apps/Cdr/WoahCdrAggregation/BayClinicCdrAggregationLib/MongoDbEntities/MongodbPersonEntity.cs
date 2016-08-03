@@ -102,7 +102,7 @@ namespace BayClinicCernerAmbulatory
 #pragma warning restore 0649
 
         /// <summary>
-        /// SElectively combines the attributes of this mongodb document with a supplied Patient record
+        /// Selectively combines the attributes of this mongodb document with a supplied Patient record
         /// </summary>
         /// <param name="PatientRecord">Call with null if there is no existing Patient record, the resulting record is returned here</param>
         /// <param name="ReferencedCodes"></param>
@@ -160,13 +160,9 @@ namespace BayClinicCernerAmbulatory
                 if (PatientRecord.MaritalStatus == CdrContext.MaritalStatus.Unspecified) PatientRecord.MaritalStatus = ReferencedCodes.GetCdrMaritalStatusEnum(MaritalStatus);  // coded
                 if (PatientRecord.UpdateTime != ParsedUpdateTime && !String.IsNullOrEmpty(UpdateDateTime)) PatientRecord.UpdateTime = ParsedUpdateTime;
                 PatientRecord.LatestImportFileDate = new String[] { PatientRecord.LatestImportFileDate, ImportFileDate }.Max();
-                return true;
             }
-            //The patient's information is older than the one we have in the system
-            else
-            {
-                return false;       //Maybe more we could put here? Could check for missing fields in new data and check if the old data has them
-            }
+
+            return true;
         }
 
     }

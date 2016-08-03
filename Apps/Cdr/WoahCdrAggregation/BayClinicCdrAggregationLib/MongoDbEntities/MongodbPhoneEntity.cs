@@ -76,6 +76,13 @@ namespace BayClinicCernerAmbulatory
 
 #pragma warning restore 0649
 
+        /// <summary>
+        /// Selectively combines the attributes of this mongodb document with a supplied Phone Record record
+        /// </summary>
+        /// <param name="PhoneRecord">Call with null if there is no existing Phone Record record, the resulting record is returned here</param>
+        /// <param name="PatientRecord"></param>
+        /// <param name="ReferencedCodes"></param>
+        /// <returns>true if an existing record was modified, false if a new record was created</returns>
         internal bool MergeWithExistingTelephoneNumber(ref TelephoneNumber PhoneRecord, ref Patient PatientRecord, CernerReferencedCodeDictionaries ReferencedCodes)
         {
             DateTime ActiveStatusDT, UpdateTime;
@@ -85,6 +92,7 @@ namespace BayClinicCernerAmbulatory
             {
                 PhoneRecord = new TelephoneNumber
                 {
+                    EmrIdentifier = RecordIdentifier,
                     Number = new PhoneNumber
                     {
                         Number = PhoneNumber,
@@ -96,11 +104,15 @@ namespace BayClinicCernerAmbulatory
                     DateLastReported = ActiveStatusDT,
                     LastImportFileDate = ImportFileDate
                 };
-                return true;
+                return false;
             }
             else if(PhoneRecord.UpdateTime < UpdateTime)
             {
-                if (PhoneRecord.Number.PhoneType != ReferencedCodes.GetCdrPhoneTypeEnum(Type) && !String.IsNullOrEmpty(ReferencedCodes.GetCdrPhoneTypeEnum(Type).ToString())) PhoneRecord.Number.PhoneType = ReferencedCodes.GetCdrPhoneTypeEnum(Type);
+                if (PhoneRecord.Number.Number != PhoneNumber && !String.IsNullOrEmpty(PhoneNumber)) PhoneRecord.Number.Number = PhoneNumber;
+                if (PhoneRecord.Number.PhoneType != ReferencedCodes.GetCdrPhoneTypeEnum(Type) && !String.IsNullOrEmpty(ReferencedCodes.GetCdrPhoneTypeEnum(Type).ToString()))
+                {
+                    PhoneRecord.Number.PhoneType = ReferencedCodes.GetCdrPhoneTypeEnum(Type);
+                }
 
                 if (PhoneRecord.DateLastReported < ActiveStatusDT) PhoneRecord.DateLastReported = ActiveStatusDT;
                 if (PhoneRecord.DateFirstReported > ActiveStatusDT) PhoneRecord.DateFirstReported = ActiveStatusDT;
@@ -108,14 +120,9 @@ namespace BayClinicCernerAmbulatory
                 if (PhoneRecord.UpdateTime != UpdateTime && !String.IsNullOrEmpty(UpdateDateTime)) PhoneRecord.UpdateTime = UpdateTime;
 
                 PhoneRecord.LastImportFileDate = new string[] { PhoneRecord.LastImportFileDate, ImportFileDate }.Max();
+            }
 
-                return false;
-            }
-            else
-            {
-                return false;
-            }
-                
+            return true;
         }
     }
 }

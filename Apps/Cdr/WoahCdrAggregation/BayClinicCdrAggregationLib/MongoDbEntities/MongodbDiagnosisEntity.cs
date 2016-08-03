@@ -107,17 +107,47 @@ namespace BayClinicCernerAmbulatory
         [BsonElement("lastaggregationrun")]
         public long LastAggregationRun;
 #pragma warning restore 0649
-        internal bool MergeWithExistingDiagnoses(ref Diagnosis DiagnosisRecord, ref Patient PatientRecord, VisitEncounter VisitRecord, CernerReferencedCodeDictionaries ReferencedCodes, MongodbReferenceTerminologyEntity TerminologyRecord)
+
+        /// <summary>
+        /// Selectively combines the attributes of this mongodb document with a supplied Diangosis record
+        /// </summary>
+        /// <param name="DiagnosisRecord">Call with null if there is no existing Diagnosis record, the resulting record is returned here</param>
+        /// <param name="PatientRecord"></param>
+        /// <param name="VisitRecord"></param>
+        /// <param name="ReferencedCodes"></param>
+        /// <param name="TerminologyRecord"></param>
+        /// <returns>true if an existing record was modified, false if a new record was created</returns>
+        internal bool MergeWithExistingDiagnosis(ref Diagnosis DiagnosisRecord, ref Patient PatientRecord, VisitEncounter VisitRecord, CernerReferencedCodeDictionaries ReferencedCodes,CernerReferencedTerminologyDictionaries TerminologyCodes)
         {
+            String FullCode, CodeSystem;
             DateTime StartDateTime, EndDateTime, DiagDateTime, StatusDateTime;
             DateTime.TryParse(EffectiveBeginDateTime, out StartDateTime);
             DateTime.TryParse(EffectiveEndDateTime, out EndDateTime);
             DateTime.TryParse(DiagnosisDateTime, out DiagDateTime);
             DateTime.TryParse(ActiveStatusDateTime, out StatusDateTime);
 
+            //Code parsing
+            
+
+            FullCode = TerminologyCodes.TerminologyConceptMeaning[UniqueTerminologyIdentifier];
+            if (FullCode.Contains("{") && FullCode.Contains("}"))
+            {
+                CodeSystem = TerminologyCodes.TerminologyConceptMeaning[UniqueTerminologyIdentifier].Split('}')[0].Replace("{", "");
+            }
+            else
+            {
+                CodeSystem = "";
+            }
+            CodedEntry DiagnosisCode = new CodedEntry
+            {
+                Code = FullCode,
+                CodeMeaning = TerminologyCodes.TerminologyCodeMeaning[UniqueTerminologyIdentifier],
+                CodeSystem = CodeSystem
+            };
+
             if (DiagnosisRecord == null)
             {
-                Diagnosis NewPgRecord = new Diagnosis
+                DiagnosisRecord = new Diagnosis
                 {
                     Patientdbid = PatientRecord.dbid,
                     VisitEncounterdbid = VisitRecord.dbid,
@@ -127,19 +157,13 @@ namespace BayClinicCernerAmbulatory
                     DeterminationDateTime = DiagDateTime,
                     ShortDescription = Display,
                     LongDescription = "",  // TODO Can I do better?  Maybe this field doesn't need to be here if there is no source of long description.  
-                    DiagCode = new CodedEntry
-                    {
-                        Code = TerminologyRecord.Code,
-                        CodeMeaning = TerminologyRecord.Text,
-                        CodeSystem = ReferencedCodes.TerminologyCodeMeanings[TerminologyRecord.Terminology]
-                        // TODO Handle variability in codes (e.g. snomed codes are not correct in the "code" field, but are correct in concept. May require custom interpreter/handler
-                    },
+                    DiagCode = DiagnosisCode,
                     Status = "",  // TODO If this is just active and inactive maybe I don't need it.  Study.  
                     StatusDateTime = StatusDateTime,         //Same as the update time
                     LastImportFileDate = ImportFileDate
                     // TODO There is a coded "type" field with values Discharge and Billing.  Figure out whether this should be used/interpreted
                 };
-                return true;
+                return false;
             }
             
             else if(DiagnosisRecord.StatusDateTime < StatusDateTime)
@@ -156,26 +180,18 @@ namespace BayClinicCernerAmbulatory
                         DiagnosisRecord.EndDateTime = EndDateTime;
                 }
 
+                if (DiagnosisRecord.DiagCode != DiagnosisCode) { DiagnosisRecord.DiagCode = DiagnosisCode; }
+
                 if (DiagnosisRecord.DeterminationDateTime != DiagDateTime && !DiagnosisDateTime.Contains("2100") && !String.IsNullOrEmpty(DiagnosisDateTime))
                     DiagnosisRecord.DeterminationDateTime = DiagDateTime;
                 if (DiagnosisRecord.ShortDescription != Display && !String.IsNullOrEmpty(Display)) DiagnosisRecord.ShortDescription += "; " + Display;
-                if (DiagnosisRecord.DiagCode.Code != TerminologyRecord.Code && !String.IsNullOrEmpty(TerminologyRecord.Code)) DiagnosisRecord.DiagCode.Code = TerminologyRecord.Code;
-                if (DiagnosisRecord.DiagCode.CodeMeaning != TerminologyRecord.Text && !String.IsNullOrEmpty(TerminologyRecord.Text)) DiagnosisRecord.DiagCode.CodeMeaning = TerminologyRecord.Text;
-                if (DiagnosisRecord.DiagCode.CodeSystem != ReferencedCodes.TerminologyCodeMeanings[TerminologyRecord.Terminology] && !String.IsNullOrEmpty(ReferencedCodes.TerminologyCodeMeanings[TerminologyRecord.Terminology]))
-                    DiagnosisRecord.DiagCode.CodeSystem = ReferencedCodes.TerminologyCodeMeanings[TerminologyRecord.Terminology];
 
                 if (DiagnosisRecord.StatusDateTime != StatusDateTime && !String.IsNullOrEmpty(UpdateDateTime)) DiagnosisRecord.StatusDateTime = StatusDateTime;
 
                 DiagnosisRecord.LastImportFileDate = new string[] { DiagnosisRecord.LastImportFileDate, ImportFileDate }.Max();
-
-                return false;
             }
 
-            else
-            {
-                return false;
-            }
-            
+            return true;
         }
     }
 }

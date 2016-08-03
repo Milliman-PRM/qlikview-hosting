@@ -141,14 +141,22 @@ namespace BayClinicCernerAmbulatory
         public long LastAggregationRun;
 #pragma warning restore 0649
 
-        internal bool MergeWithExistingMeasurements(ref Measurement MeasurementRecord, ref Patient PatientRecord, VisitEncounter VisitRecord, CernerReferencedCodeDictionaries ReferencedCodes)
+        /// <summary>
+        /// Selectively combines the attributes of this mongodb document with a supplied Measurment record
+        /// </summary>
+        /// <param name="MeasurementRecord">Call with null if there is no existing Measurment record, the resulting record is returned here</param>
+        /// <param name="PatientRecord"></param>
+        /// <param name="VisitRecord"></param>
+        /// <param name="ReferencedCodes"></param>
+        /// <returns>true if an existing record was modified, false if a new record was created</returns>
+        internal bool MergeWithExistingMeasurement(ref Measurement MeasurementRecord, ref Patient PatientRecord, VisitEncounter VisitRecord, CernerReferencedCodeDictionaries ReferencedCodes)
         {
             DateTime PerformedDate, UpdateTime;
             DateTime.TryParse(PerformedDateTime, out PerformedDate);
             DateTime.TryParse(UpdateDateTime, out UpdateTime);
             if (MeasurementRecord == null)
             {
-                Measurement NewPgRecord = new Measurement
+                MeasurementRecord = new Measurement
                 {
                     Patientdbid = PatientRecord.dbid,
                     VisitEncounterdbid = VisitRecord.dbid,
@@ -166,7 +174,7 @@ namespace BayClinicCernerAmbulatory
                     UpdateTime = UpdateTime,
                     LastImportFileDate = ImportFileDate
                 };
-                return true;
+                return false;
             }
             else if(MeasurementRecord.UpdateTime < UpdateTime)
             {
@@ -189,13 +197,10 @@ namespace BayClinicCernerAmbulatory
                 if (MeasurementRecord.UpdateTime != UpdateTime && !String.IsNullOrEmpty(UpdateDateTime)) MeasurementRecord.UpdateTime = UpdateTime;
 
                 MeasurementRecord.LastImportFileDate = new string[] { MeasurementRecord.LastImportFileDate, ImportFileDate }.Max();
-                return false;
+
             }
-            else
-            {
-                return false;
-            }
-            
+
+            return true;
         }
 
     }

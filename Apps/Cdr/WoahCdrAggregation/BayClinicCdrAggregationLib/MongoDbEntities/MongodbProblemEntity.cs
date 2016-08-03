@@ -127,7 +127,13 @@ namespace BayClinicCernerAmbulatory
 
 #pragma warning restore 0649
 
-        internal bool MergeWithExistingProblems(ref Problem ProblemRecord, ref Patient PatientRecord)
+        /// <summary>
+        /// Selectively combines the attributes of this mongodb document with a supplied Problem record
+        /// </summary>
+        /// <param name="ProblemRecord">Call with null if there is no existing Problem record, the resulting record is returned here</param>
+        /// <param name="PatientRecord"></param>
+        /// <returns>true if an existing record was modified, false if a new record was created</returns>
+        internal bool MergeWithExistingProblem(ref Problem ProblemRecord, ref Patient PatientRecord)
         {
             DateTime BeginDateTime, EndDateTime, ActiveStatusDateTime, UpdateTime;
             DateTime.TryParse(UpdateDateTime, out UpdateTime);
@@ -136,7 +142,7 @@ namespace BayClinicCernerAmbulatory
             DateTime.TryParse(EffectiveEndDateTime, out ActiveStatusDateTime);
             if (ProblemRecord == null)
             {
-                Problem NewPgRecord = new Problem
+                ProblemRecord = new Problem
                 {
                     Patientdbid = PatientRecord.dbid,
                     EmrIdentifier = UniqueProblemIdentifier,
@@ -155,7 +161,7 @@ namespace BayClinicCernerAmbulatory
                 //}
                 
 
-                return true;
+                return false;
             }
             else if (ProblemRecord.UpdateTime < UpdateTime)
             {
@@ -176,14 +182,9 @@ namespace BayClinicCernerAmbulatory
                 if (ProblemRecord.UpdateTime != UpdateTime && !String.IsNullOrEmpty(UpdateDateTime)) ProblemRecord.UpdateTime = UpdateTime;
 
                 ProblemRecord.LastImportFileDate = new string[] { ProblemRecord.LastImportFileDate, ImportFileDate }.Max();
+            }
 
-                return false;
-            }
-            else
-            {
-                return false;
-            }
-            
+            return true;
         }
     }
 }

@@ -93,7 +93,14 @@ namespace BayClinicCernerAmbulatory
         public long LastAggregationRun;
 #pragma warning restore 0649
 
-
+        /// <summary>
+        /// Selectively combines the attributes of this mongodb document with a supplied Visit record
+        /// </summary>
+        /// <param name="VisitRecord">Call with null if there is no existing Visit record, the resulting record is returned here</param>
+        /// <param name="PatientRecord"></param>
+        /// <param name="ReferencedCodes"></param>
+        /// <param name="CdrDb"></param>
+        /// <returns>true if an existing record was modified, false if a new record was created</returns>
         internal bool MergeWithExistingVisit(ref VisitEncounter VisitRecord, ref Patient PatientRecord, CernerReferencedCodeDictionaries ReferencedCodes, ref CdrDbInterface CdrDb)
         {
             DateTime BeginDateTime, EndDateTime, UpdateTime, ActiveStatusDT;
@@ -110,7 +117,7 @@ namespace BayClinicCernerAmbulatory
                     EndDateTime = EndDateTime,  
                     Status = Active,
                     StatusDateTime = ActiveStatusDT,
-                    Organization = ReferencedCodes.GetOrganizationEntityForVisitLocationCode(LocationCode, ref CdrDb),
+                    Organizationdbid = ReferencedCodes.GetOrganizationDbidForVisitLocationCode(LocationCode, ref CdrDb),
                     UpdateTime = UpdateTime,
                     LastImportFileDate = ImportFileDate,
                     Patient = PatientRecord
@@ -127,21 +134,16 @@ namespace BayClinicCernerAmbulatory
 
                 if (VisitRecord.Status != Active && !String.IsNullOrEmpty(Active)) VisitRecord.Status = Active;
 
-                if (VisitRecord.Organization != ReferencedCodes.GetOrganizationEntityForVisitLocationCode(LocationCode, ref CdrDb) && !String.IsNullOrEmpty(LocationCode))
-                        VisitRecord.Organization = ReferencedCodes.GetOrganizationEntityForVisitLocationCode(LocationCode, ref CdrDb);
+                if (VisitRecord.Organizationdbid != ReferencedCodes.GetOrganizationDbidForVisitLocationCode(LocationCode, ref CdrDb) && !String.IsNullOrEmpty(LocationCode))
+                        VisitRecord.Organizationdbid = ReferencedCodes.GetOrganizationDbidForVisitLocationCode(LocationCode, ref CdrDb);
 
                 if (VisitRecord.UpdateTime != UpdateTime && !String.IsNullOrEmpty(UpdateDateTime)) VisitRecord.UpdateTime = UpdateTime;
 
                 VisitRecord.LastImportFileDate = new string[] { VisitRecord.LastImportFileDate, ImportFileDate }.Max();
 
-                return true;
             }
 
-            //The patient's information is older than the one we have in the system
-            else
-            {
-                return false;       //Maybe more we could put here? Could check for missing fields in new data and check if the old data has them
-            }
+            return true;
         }
     }
 }

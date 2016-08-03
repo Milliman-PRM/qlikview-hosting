@@ -38,7 +38,7 @@ namespace BayClinicCernerAmbulatory
         public Dictionary<String, String> ResultUnitsCodeMeanings = new Dictionary<string, string>();
         public Dictionary<String, String> TerminologyCodeMeanings = new Dictionary<string, string>();
         public Dictionary<String, String> ImmunizationCodeMeanings = new Dictionary<string, string>();
-        public Dictionary<String, String> InsuranceCodeMeanings = new Dictionary<string, string>();
+        public Dictionary<String, String> InsuranceTypeCodeMeanings = new Dictionary<string, string>();
         //public Dictionary<String, String> ...CodeMeanings = new Dictionary<string, string>();
 
         #region temporary validation functions
@@ -70,7 +70,7 @@ namespace BayClinicCernerAmbulatory
         {
             RefCodeCollection = CollectionArg;
 
-            ValidateRefCodeFieldList("PERSON", 12);
+            //ValidateRefCodeFieldList("PERSON", 12);
 
             bool Success =
                    InitializeReferenceCodeDictionary("PERSON", new String[] {"GENDER"},                  ref GenderCodeMeanings)
@@ -105,13 +105,13 @@ namespace BayClinicCernerAmbulatory
 
                 && InitializeReferenceCodeDictionary("IMMUNIZATION", new String[] { "CODE" }, ref ImmunizationCodeMeanings)
 
-                && InitializeReferenceCodeDictionary("INSURANCE", new String[] { "TYPE" }, ref InsuranceCodeMeanings)
+                && InitializeReferenceCodeDictionary("INSURANCE", new String[] { "TYPE" }, ref InsuranceTypeCodeMeanings)
 
                 ;
             
-            Trace.WriteLine("Identifier Typecodes dictionary has values: " + String.Join(", ", IdentifierTypeCodeMeanings));
-            Trace.WriteLine("Identifier Groupcodes dictionary has values: " + String.Join(", ", IdentifierGroupCodeMeanings));
-            Trace.WriteLine("ChargeDetail Type dictionary has values: " + String.Join(", ", ChargeDetailTypeCodeMeanings));
+            //Trace.WriteLine("Identifier Typecodes dictionary has values: " + String.Join(", ", IdentifierTypeCodeMeanings));
+            //Trace.WriteLine("Identifier Groupcodes dictionary has values: " + String.Join(", ", IdentifierGroupCodeMeanings));
+            //Trace.WriteLine("ChargeDetail Type dictionary has values: " + String.Join(", ", ChargeDetailTypeCodeMeanings));
 
             return Success;
         }
@@ -150,14 +150,14 @@ namespace BayClinicCernerAmbulatory
             return true;
         }
 
-        public Organization GetOrganizationEntityForVisitLocationCode(String CernerCode, ref CdrDbInterface CdrDb)
+        public long GetOrganizationDbidForVisitLocationCode(String CernerCode, ref CdrDbInterface CdrDb)
         {
             switch (VisitLocationCodeMeanings[CernerCode])
             {
                 case "Bay Clinic":
-                    return CdrDb.EnsureOrganizationRecord(BayClinicCernerAmbulatoryBatchAggregator.WoahBayClinicOrganizationIdentity);
+                    return CdrDb.EnsureOrganizationRecord(BayClinicCernerAmbulatoryBatchAggregator.WoahBayClinicOrganizationIdentity).dbid;
                 default:
-                    throw new Exception("Unsupported Visit location");
+                    throw new Exception("Unsupported Visit location encountered in GetOrganizationDbidForVisitLocationCode()" + VisitLocationCodeMeanings[CernerCode] + " with code " + CernerCode);
             }
         }
 
@@ -173,9 +173,10 @@ namespace BayClinicCernerAmbulatory
                         return Gender.Male;
                     case "unspecified":
                         return Gender.Unspecified;
+                    case "unknown":
+                        return Gender.Unknown;
                     default:
-                        Trace.WriteLine("Unsupported Patient-Gender encountered: " + GenderCodeMeanings[CernerCode] + " with code " + CernerCode);
-                        return Gender.Unspecified;
+                        throw new Exception("Unsupported Patient-Gender encountered in GetOrganizationDbidForVisitLocationCode(): " + GenderCodeMeanings[CernerCode] + " with code " + CernerCode);
                 }
             }
 
@@ -200,8 +201,7 @@ namespace BayClinicCernerAmbulatory
                         return AddressType.ePrescribing;
                     default:
                         SystemSounds.Beep.Play();
-                        Trace.WriteLine("Unsupported Address-Type encountered: " + AddressTypeCodeMeanings[CernerCode] + " with code " + CernerCode);
-                        return AddressType.Unspecified;
+                        throw new Exception("Unsupported Address-Type encountered: " + AddressTypeCodeMeanings[CernerCode] + " with code " + CernerCode);
                 }
             }
 
@@ -227,8 +227,7 @@ namespace BayClinicCernerAmbulatory
                     case "internal secure":
                         return PhoneType.Other;
                     default:
-                        Trace.WriteLine("Unsupported Phone-Type encountered: " + PhoneTypeCodeMeanings[CernerCode] + " with code " + CernerCode);
-                        return PhoneType.Other;
+                        throw new Exception("Unsupported Phone-Type encountered: " + PhoneTypeCodeMeanings[CernerCode] + " with code " + CernerCode);
                 }
             }
 
@@ -265,8 +264,7 @@ namespace BayClinicCernerAmbulatory
                         return MaritalStatus.Unspecified;
 
                     default:
-                        Trace.WriteLine("Unsupported Patient-MaritalStatus encountered: " + MaritalStatusCodeMeanings[CernerCode] + " with code " + CernerCode);
-                        return MaritalStatus.Unspecified;
+                        throw new Exception("Unsupported Patient-MaritalStatus encountered: " + MaritalStatusCodeMeanings[CernerCode] + " with code " + CernerCode);
                 }
             }
 
@@ -295,8 +293,7 @@ namespace BayClinicCernerAmbulatory
                         return ResultNormal.Unspecified;
 
                     default:
-                        Trace.WriteLine("Unsupported Result-Normal code encountered: " + ResultNormalCodeMeanings[CernerCode] + " with code " + CernerCode);
-                        return ResultNormal.Unspecified;
+                        throw new Exception("Unsupported Result-Normal code encountered: " + ResultNormalCodeMeanings[CernerCode] + " with code " + CernerCode);
                 }
             }
 

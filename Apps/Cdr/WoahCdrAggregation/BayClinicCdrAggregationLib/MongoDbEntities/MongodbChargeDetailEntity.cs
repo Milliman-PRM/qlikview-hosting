@@ -56,13 +56,21 @@ namespace BayClinicCernerAmbulatory
         [BsonElement("lastaggregationrun")]
         public long LastAggregationRun;
 #pragma warning restore 0649
-        internal bool MergeWithExistingChargeCodes(ref ChargeCode ChargeDetailRecord, ref Charge ChargeRecord, CernerReferencedCodeDictionaries ReferencedCodes)
+
+        /// <summary>
+        /// Selectively combines the attributes of this mongodb document with a supplied Charge Detail record
+        /// </summary>
+        /// <param name="ChargeDetailRecord">Call with null if there is no existing Charge Detail record, the resulting record is returned here</param>
+        /// <param name="ChargeRecord"></param>
+        /// <param name="ReferencedCodes"></param>
+        /// <returns>true if an existing record was modified, false if a new record was created</returns>
+        internal bool MergeWithExistingChargeCode(ref ChargeCode ChargeDetailRecord, ref Charge ChargeRecord, CernerReferencedCodeDictionaries ReferencedCodes)
         {
             DateTime UpdateTime;
             DateTime.TryParse(UpdateDateTime, out UpdateTime);
-            if (ChargeDetailRecord != null)
+            if (ChargeDetailRecord == null)
             {
-                ChargeCode NewPgRecord = new ChargeCode
+                ChargeDetailRecord = new ChargeCode
                 {
                     EmrIdentifier = UniqueChargeItemIdentifier,
                     Charge = ChargeRecord,
@@ -74,7 +82,7 @@ namespace BayClinicCernerAmbulatory
                     UpdateTime = UpdateTime,
                     LastImportFileDate = ImportFileDate
                 };
-                return true;
+                return false;
             }
             
             else if(ChargeDetailRecord.UpdateTime < UpdateTime)
@@ -87,14 +95,9 @@ namespace BayClinicCernerAmbulatory
                 if (ChargeDetailRecord.UpdateTime != UpdateTime && !String.IsNullOrEmpty(UpdateDateTime)) ChargeDetailRecord.UpdateTime = UpdateTime;
 
                 ChargeDetailRecord.LastImportFileDate = new string[] { ChargeDetailRecord.LastImportFileDate, ImportFileDate }.Max();
-
-                return false;
             }
 
-            else {
-                return false;
-            }
-            
+            return true;
         }
     }
 }
