@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.Profile;
 using System.Web.Security;
 using System.Web.UI;
@@ -16,29 +17,29 @@ public partial class admin_controls_edit_user_modal : System.Web.UI.UserControl
 
     #region On Page_Prerender
 
-    private void Page_PreRender(object sender, EventArgs e)
-    {
-        // Load the User Roles into checkboxes.
-        UserRoles.DataSource = Roles.GetAllRoles();
-        UserRoles.DataBind();
+    //private void Page_PreRender(object sender, EventArgs e)
+    //{
+    //    // Load the User Roles into checkboxes.
+    //    UserRoles.DataSource = Roles.GetAllRoles();
+    //    UserRoles.DataBind();
 
-        // if detailsview is not in edit mode, disable checkboxes
-        if (UserInfo.CurrentMode != DetailsViewMode.Edit)
-        {
-            foreach (ListItem checkbox in UserRoles.Items)
-            {
-                checkbox.Enabled = false;
-            }
-        }
+    //    // if detailsview is not in edit mode, disable checkboxes
+    //    if (UserInfo.CurrentMode != DetailsViewMode.Edit)
+    //    {
+    //        foreach (ListItem checkbox in UserRoles.Items)
+    //        {
+    //            checkbox.Enabled = false;
+    //        }
+    //    }
 
-        // Bind checkboxes to the User's own set of roles.
-        string[] userRoles = Roles.GetRolesForUser(username);
-        foreach (string role in userRoles)
-        {
-            ListItem checkbox = UserRoles.Items.FindByValue(role);
-            checkbox.Selected = true;
-        }
-    }
+    //    // Bind checkboxes to the User's own set of roles.
+    //    string[] userRoles = Roles.GetRolesForUser(username);
+    //    foreach (string role in userRoles)
+    //    {
+    //        ListItem checkbox = UserRoles.Items.FindByValue(role);
+    //        checkbox.Selected = true;
+    //    }
+    //}
 
     #endregion
 
@@ -77,7 +78,7 @@ public partial class admin_controls_edit_user_modal : System.Web.UI.UserControl
 
         //always go into edit mode
         UserInfo.DefaultMode = DetailsViewMode.Edit;
-    
+
         // Get User's Profile
         if (!Page.IsPostBack)
         {
@@ -85,7 +86,7 @@ public partial class admin_controls_edit_user_modal : System.Web.UI.UserControl
             // bind country names to the dropdown list
             ddlCountries.DataSource = CountryNames.CountryNames.GetCountries();
             ddlCountries.DataBind();
-            
+
             // get state names from app_code folder
             // bind state names to the dropdown lists in address info and company info section
             ddlStates1.DataSource = UnitedStates.StateNames.GetStates();
@@ -139,7 +140,7 @@ public partial class admin_controls_edit_user_modal : System.Web.UI.UserControl
                 CB.Checked = profile.AccessOptions.IsClientAdministrator;
             }
             CB = GetIsPublishingAdminCheckBox();
-            if ( CB != null )
+            if (CB != null)
             {
                 CB.Checked = profile.AccessOptions.IsPublishingAdministrator;
             }
@@ -198,20 +199,21 @@ public partial class admin_controls_edit_user_modal : System.Web.UI.UserControl
         profile.Company.Phone = txbCompanyPhone.Text;
         profile.Company.Fax = txbCompanyFax.Text;
         profile.Company.Website = txbCompanyWebsite.Text;
-       
+
         // Subscriptions
         profile.Preferences.Newsletter = ddlNewsletter.SelectedValue;
 
-          CheckBox CB = GetIsUserAdminCheckBox();
-          if (CB != null)
-          {
-              profile.AccessOptions.IsClientAdministrator = CB.Checked;
-          }
-          CB = GetIsPublishingAdminCheckBox();
-        if ( CB != null )
+        CheckBox CB = GetIsUserAdminCheckBox();
+        if (CB != null)
+        {
+            profile.AccessOptions.IsClientAdministrator = CB.Checked;
+        }
+        CB = GetIsPublishingAdminCheckBox();
+        if (CB != null)
         {
             profile.AccessOptions.IsPublishingAdministrator = CB.Checked;
         }
+
         // this is what we will call from the button click to save the user's profile
         profile.Save();
     }
@@ -286,21 +288,29 @@ public partial class admin_controls_edit_user_modal : System.Web.UI.UserControl
 
     private void UpdateUserRoles()
     {
+        var checkedRoles = ctrlUserRoles.CheckedRoles;
+        var uncheckedRoles = ctrlUserRoles.UnChekcedRoles;
+
         // add or remove user from role based on selection
-        foreach (ListItem rolebox in UserRoles.Items)
+        foreach (var role in checkedRoles)
         {
-            if (rolebox.Selected)
+            if (role != null)
             {
-                if (!Roles.IsUserInRole(username, rolebox.Text))
+                if (!Roles.IsUserInRole(username, role))
                 {
-                    Roles.AddUserToRole(username, rolebox.Text);
+                    Roles.AddUserToRole(username, role);
                 }
             }
-            else
+        }
+
+        // add or remove user from role based on selection
+        foreach (var role in uncheckedRoles)
+        {
+            if (role != null)
             {
-                if (Roles.IsUserInRole(username, rolebox.Text))
+                if (Roles.IsUserInRole(username, role))
                 {
-                    Roles.RemoveUserFromRole(username, rolebox.Text);
+                    Roles.RemoveUserFromRole(username, role);
                 }
             }
         }
@@ -369,7 +379,7 @@ public partial class admin_controls_edit_user_modal : System.Web.UI.UserControl
         // try to update user password
         try
         {
-            if (u.ChangePassword(u.GetPassword(), "@" + Guid.NewGuid().ToString().Substring(0,8) + "@" ))
+            if (u.ChangePassword(u.GetPassword(), "@" + Guid.NewGuid().ToString().Substring(0, 8) + "@"))
             {
                 CreatePasswordReset(u);
                 ////Send password reset email
@@ -479,7 +489,7 @@ public partial class admin_controls_edit_user_modal : System.Web.UI.UserControl
     }
 
     #endregion
- 
+
     protected void UserInfo_ItemCreated(object sender, EventArgs e)
     {
         CheckBox CB = GetIsUserAdminCheckBox();

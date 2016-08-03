@@ -19,6 +19,7 @@ namespace MillimanCommon
             public string ExernalGroupName { get; set; }
             public string FriendlyGroupName { get; set; }
             public int MaximumnUsers { get; set; }
+            public string GroupCategory { get; set; }
             public MillimanGroups()
             {
 
@@ -71,8 +72,8 @@ namespace MillimanCommon
         {
             StopFileWatcher();  //we are a producer,  stop watching since we always write things
             var serializer = new SharpSerializer(false);
-            if ( string.IsNullOrEmpty(RepoFilePath) )
-                RepoFilePath = ConfigurationManager.AppSettings["MillimanGroupMap"]; 
+            if (string.IsNullOrEmpty(RepoFilePath))
+                RepoFilePath = ConfigurationManager.AppSettings["MillimanGroupMap"];
             serializer.Serialize(this, RepoFilePath);
             return true;
         }
@@ -136,19 +137,20 @@ namespace MillimanCommon
 
         public static void StopFileWatcher()
         {
-            if ( FileWatcher != null )
+            if (FileWatcher != null)
                 FileWatcher.EnableRaisingEvents = false;
         }
 
         public void TestData()
         {
             string[] R = Roles.GetAllRoles();
-            foreach( string S in R  )
+            foreach (string S in R)
             {
                 MillimanGroups MG = new MillimanGroups();
                 MG.MillimanGroupName = S;
                 MG.MaximumnUsers = 0;
-                MillimanGroupDictionary.Add( S, MG );
+                MG.GroupCategory = "";
+                MillimanGroupDictionary.Add(S, MG);
             }
 
         }

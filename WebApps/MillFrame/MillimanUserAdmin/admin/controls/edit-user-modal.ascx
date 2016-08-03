@@ -2,13 +2,15 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
 <%@ Register Src="js-include3.ascx" TagName="js" TagPrefix="uc3" %>
 <%@ Register Src="~/js/js/jquery.ascx" TagName="jquery" TagPrefix="uc4" %>
+<%@ Register Src="~/admin/controls/UserRolesSelector.ascx" TagName="userRoleSelector" TagPrefix="urs" %>
+
 <div>
     <%-- ajax update panel start --%>
     <asp:UpdatePanel ID="UpdatePanel1" runat="server">
         <ContentTemplate>
             <%-- ajax tab container start --%>
             <cc1:TabContainer ID="tcntUserInfo" runat="server" ActiveTabIndex="3" Width="100%" Font-Size="10px" CssClass="aTab1">
-                <cc1:TabPanel ID="TabPanel1" runat="server" HeaderText="Create New Group" >
+                <cc1:TabPanel ID="TabPanel1" runat="server" HeaderText="Create New Group">
                     <ContentTemplate>
                         <div class="contentTemplate">
                             <div class="formSectionTitle2">
@@ -25,9 +27,10 @@
                 </cc1:TabPanel>
                 <cc1:TabPanel ID="TabPanel2" runat="server" HeaderText="General User Info">
                     <ContentTemplate>
-                        <div class="contentTemplate" style="padding-top:5px">
-                            <div style="height:100px;width:98%;overflow:auto;border:1px solid black;background-color:lightgray">
-                                <asp:CheckBoxList ID="UserRoles" runat="server" CellSpacing="5" RepeatColumns="1"  />
+                        <div class="contentTemplate" style="padding-top: 5px">
+                            <div style="height: 100px; width: 98%; overflow: auto; border: 1px solid black; background-color: lightgray">
+                                <urs:userRoleSelector ID="ctrlUserRoles" runat="server" />
+                                <%--<asp:CheckBoxList ID="UserRoles" runat="server" CellSpacing="5" RepeatColumns="1" />--%>
                             </div>
                             <br />
                             <div class="formSectionTitle2">
@@ -37,7 +40,7 @@
                                 <Fields>
                                     <asp:BoundField DataField="UserName" HeaderText="User Name" ReadOnly="True"></asp:BoundField>
                                     <asp:BoundField DataField="Email" HeaderText="Email">
-                                    <ControlStyle Width="245px" />
+                                        <ControlStyle Width="245px" />
                                     </asp:BoundField>
                                     <asp:TemplateField HeaderText="Security Q&A">
                                         <EditItemTemplate>
@@ -55,7 +58,7 @@
                                             <asp:CheckBox runat="server" ID="IsClientAdministrator" />
                                         </ItemTemplate>
                                     </asp:TemplateField>
-                                  <asp:TemplateField HeaderText="Client Publishing Administrator">
+                                    <asp:TemplateField HeaderText="Client Publishing Administrator">
                                         <ItemTemplate>
                                             <asp:CheckBox runat="server" ID="IsPublishingAdministrator" />
                                         </ItemTemplate>
@@ -72,7 +75,7 @@
                                         <EditItemTemplate>
                                             <div class="clearBoth2">
                                             </div>
-                                            <asp:Button ID="Button1" CssClass="inputButton" runat="server" CausesValidation="True" CommandName="Update" Text="Update User" OnClientClick="return confirm('This will UPDATE the User Info. Click OK to continue.')"/>
+                                            <asp:Button ID="Button1" CssClass="inputButton" runat="server" CausesValidation="True" CommandName="Update" Text="Update User" OnClientClick="return confirm('This will UPDATE the User Info. Click OK to continue.')" />
                                             <asp:Button ID="Button2" CssClass="inputButton" runat="server" CausesValidation="False" CommandName="Cancel" Text="Cancel" />
                                             <asp:Button ID="Button4" CssClass="inputButton" runat="server" Text="Unlock User" OnClick="UnlockUser" OnClientClick="return confirm('Click OK to unlock this user.')" />
                                             <asp:Button ID="Button5" CssClass="inputButton" runat="server" Text="Delete User" OnClick="DeleteUser" OnClientClick="return confirm('Are you sure? This will delete all information related to this user including the user profile.')" />
@@ -340,25 +343,26 @@
                                 <asp:TextBox ID="OldPasswordTextbox" runat="server" TextMode="Password" Width="140px" Visible="False"></asp:TextBox>
                                 <asp:RequiredFieldValidator ID="OldPasswordRequiredValidator" runat="server" ControlToValidate="OldPasswordTextbox" Display="Dynamic" ErrorMessage="Required" ValidationGroup="changepassword"></asp:RequiredFieldValidator>
                                 <span class="currentPW">
-                                    <asp:TextBox  style="background-color:transparent;width:300px" ID="lblCurrentPassword" runat="server" EnableViewState="False" ReadOnly="True"></asp:TextBox>
+                                    <asp:TextBox Style="background-color: transparent; width: 300px" ID="lblCurrentPassword" runat="server" EnableViewState="False" ReadOnly="True"></asp:TextBox>
                                 </span>
 
-                                <br /><br />
-                            <div>
-                                <asp:Button ID="ChangePasswordButtonSecureLink" CssClass="inputButton" runat="server" OnClick="ChangePasswordSecureLink_OnClick" Text="Reset Password( Secure Link Email )"  ToolTip="Send the user a secure link password for password reset.  Do no use the Secure Link functionality with 'Manual' password reset." Width="300px" />
+                                <br />
+                                <br />
+                                <div>
+                                    <asp:Button ID="ChangePasswordButtonSecureLink" CssClass="inputButton" runat="server" OnClick="ChangePasswordSecureLink_OnClick" Text="Reset Password( Secure Link Email )" ToolTip="Send the user a secure link password for password reset.  Do no use the Secure Link functionality with 'Manual' password reset." Width="300px" />
+                                </div>
+                                <br />
                             </div>
-                            <br />
-                            </div>
-                            <div class="formLabelsText" style="visibility:visible">
+                            <div class="formLabelsText" style="visibility: visible">
                                 New Password:<br />
                                 <asp:TextBox ID="PasswordTextbox" runat="server" TextMode="Password" Width="140px"></asp:TextBox>
                                 <asp:RequiredFieldValidator ID="PasswordRequiredValidator" runat="server" ControlToValidate="PasswordTextbox" Display="Dynamic" ErrorMessage="Required" ValidationGroup="changepassword"></asp:RequiredFieldValidator>
-                                <span class="currentPW" style="background-color:transparent;" >
-                                    <asp:Label ID="Suggested" style="background-color:transparent;" runat="server" EnableViewState="False" Enabled="False" BackColor="transparent" ></asp:Label>
+                                <span class="currentPW" style="background-color: transparent;">
+                                    <asp:Label ID="Suggested" Style="background-color: transparent;" runat="server" EnableViewState="False" Enabled="False" BackColor="transparent"></asp:Label>
                                 </span>
 
                             </div>
-                            <div class="formLabelsText" style="visibility:visible">
+                            <div class="formLabelsText" style="visibility: visible">
                                 Confirm New Password:<br />
                                 <asp:TextBox ID="PasswordConfirmTextbox" runat="server" TextMode="Password" Width="140px"></asp:TextBox>
                                 <asp:RequiredFieldValidator ID="PasswordConfirmRequiredValidator" runat="server" ControlToValidate="PasswordConfirmTextbox" Display="Dynamic" ErrorMessage="Required" ValidationGroup="changepassword"></asp:RequiredFieldValidator>
@@ -369,25 +373,25 @@
                             </div>
                             <div class="formSectionEnd">
                             </div>
-                            <div class="formSectionTitle2" style="visibility:hidden">
+                            <div class="formSectionTitle2" style="visibility: hidden">
                                 CHANGE PASSWORD Q AND A
                             </div>
-                            <div class="formLabelsText" style="visibility:hidden">
+                            <div class="formLabelsText" style="visibility: hidden">
                                 Password:<br />
                                 <asp:TextBox ID="qaCurrentPassword" runat="server" TextMode="Password" Width="140px"></asp:TextBox>
                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="qaCurrentPassword" ErrorMessage="Required" ValidationGroup="changePasswordQA"></asp:RequiredFieldValidator>
                             </div>
-                            <div class="formLabelsText" style="visibility:hidden">
+                            <div class="formLabelsText" style="visibility: hidden">
                                 New Password Security Question:<br />
                                 <asp:TextBox ID="qaNewQuestion" runat="server" MaxLength="256" Width="140px"></asp:TextBox>
                                 <asp:RequiredFieldValidator ID="QuestionRequiredValidator" runat="server" ControlToValidate="qaNewQuestion" ErrorMessage="Required" ValidationGroup="changePasswordQA"></asp:RequiredFieldValidator>
                             </div>
-                            <div class="formLabelsText" style="visibility:hidden">
+                            <div class="formLabelsText" style="visibility: hidden">
                                 New Passsword Security Answer:<br />
                                 <asp:TextBox ID="qaNewAnswer" runat="server" MaxLength="128" Width="140px"></asp:TextBox>
                                 <asp:RequiredFieldValidator ID="AnswerRequiredValidator" runat="server" ControlToValidate="qaNewAnswer" ErrorMessage="Required" ValidationGroup="changePasswordQA"></asp:RequiredFieldValidator>
                             </div>
-                            <div style="visibility:hidden">
+                            <div style="visibility: hidden">
                                 <asp:Button ID="ChangePasswordQuestionButton" CssClass="inputButton" runat="server" OnClick="ChangePasswordQuestion_OnClick" Text="Change Q. and A." ValidationGroup="changePasswordQA" />
                             </div>
                             <div>

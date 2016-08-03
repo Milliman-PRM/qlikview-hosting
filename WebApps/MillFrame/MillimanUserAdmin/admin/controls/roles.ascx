@@ -4,6 +4,7 @@
 <%@ Register Src="~/js/js/jquery.ascx" TagName="jquery" TagPrefix="uc4" %>
 <%@ Register src="search-box.ascx" tagname="search" tagprefix="uc2" %>
 <%@ Register src="a-z-menu.ascx" tagname="a" tagprefix="uc5" %>
+
 <%-- gridview banner --%>
 <div class="gvBanner">
     <span class="gvBannerUsers">
@@ -61,6 +62,14 @@
             </HeaderTemplate>
             <ItemTemplate>
                 <asp:Label ID="ExternalName" runat="server" Text='<%# Eval("External Name") %>'></asp:Label>
+            </ItemTemplate>
+        </asp:TemplateField>
+        <asp:TemplateField>
+            <HeaderTemplate>
+                GROUP CATEGORY
+            </HeaderTemplate>
+            <ItemTemplate>
+                <center> <asp:TextBox ID="txtGroupCategory" runat="server" Text='<%# Eval("Group Category") %>' Width="95%"></asp:TextBox></center>
             </ItemTemplate>
         </asp:TemplateField>
        <asp:TemplateField>
