@@ -47,6 +47,7 @@ namespace SystemReporting.Service
         IRepository<SessionLog> SessionLogRepository = new Repository<SessionLog>(new ApplicationDbContext());
         IRepository<User> UserRepository = new Repository<User>(new ApplicationDbContext());
         IRepository<Report> ReportRepository = new Repository<Report>(new ApplicationDbContext());
+        IRepository<ReportType> ReportTypeRepository = new Repository<ReportType>(new ApplicationDbContext());
         IRepository<Group> GroupRepository = new Repository<Group>(new ApplicationDbContext());
         #endregion
 
@@ -448,6 +449,57 @@ namespace SystemReporting.Service
             IEnumerable<Report> returnValues = Enumerable.Empty<Report>();
             returnValues = GetReports<Report>(Id, name).ToList();
             return returnValues;
+        }
+
+        #endregion
+
+        #region"Report Type"
+        public void Remove(ReportType obj)
+        {
+            if (obj.Id > 0)
+                ReportTypeRepository.Delete(obj);
+
+            ReportTypeRepository.Commit();
+        }
+
+        public void Save(ReportType obj)
+        {
+            if (obj.Id <= 0)
+            {
+                ReportTypeRepository.Add(obj);
+            }
+            else
+                ReportTypeRepository.Attach(obj);
+
+            ReportTypeRepository.Commit();
+        }
+
+        public IQueryable<T> GetReportTypes<T>(Expression<Func<T, bool>> predicate = null) where T : ReportType
+        {
+            var query = ReportTypeRepository.FindAll().OfType<T>();
+            if (predicate != null)
+                query = query.Where(predicate);
+
+            return query;
+        }
+
+        public IQueryable<T> GetReportTypes<T>(int Id, string name, Expression<Func<T, bool>> predicate = null) where T : ReportType
+        {
+            // Look at the Repository for all types of the generic type
+            var query = ReportTypeRepository.FindAll().OfType<T>();
+            // If we have a defined predicate - than limit the query by that expression
+            if (predicate != null)
+                query = query.Where(predicate);
+
+            return query;
+        }
+
+        public List<String> GetKeywords(String name)
+        {
+            List<String> POC = new List<String>();
+
+
+            return POC;
         }
 
         #endregion

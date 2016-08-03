@@ -88,6 +88,8 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Migrations\add_Report_Type_To_Database.sql" />
+    <Content Include="Migrations\reporttype_Populate_Table.sql" />
     <Content Include="Migrations\systemreporting_Reset_Script.sql" />
     <Content Include="Migrations\systemreporting_Create_Script.sql" />
   </ItemGroup>

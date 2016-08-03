@@ -155,7 +155,7 @@ namespace ReportingCommon
                     }
                     BrowserType = "Chrome " + BrowserVersion;
                 }
-                else if (UserAgent.ToUpper().Contains("SAFARI") && !UserAgent.ToUpper().Contains("CHROME"))
+                else if (UserAgent.ToUpper().Contains("SAFARI") && !UserAgent.ToUpper().Contains("CHROME") && !UserAgent.ToUpper().Contains("ANDROID"))
                 {
                     int SafariIndex = Array.IndexOf(tokens, tokens.First(a => a.StartsWith("Safari")));
                     string[] SafariTokens = tokens[SafariIndex].Split('/');
@@ -166,6 +166,20 @@ namespace ReportingCommon
                         BrowserVersion = SafariTokens[1];
                     }
                     BrowserType = "Safari " + BrowserVersion;
+                }
+                else if (UserAgent.ToUpper().Contains("ANDROID") && !UserAgent.ToUpper().Contains("CHROME"))
+                {
+                    int BrowserIndex = Array.IndexOf(tokens, tokens.First(a => a.StartsWith("Version")));
+
+                    string[] AndroidTokens = tokens[BrowserIndex].Split('/');
+                    if(AndroidTokens.Length == 2 &&
+                        !string.IsNullOrWhiteSpace(AndroidTokens[1]) &&
+                        Char.IsDigit(AndroidTokens[1][0]))
+                    {
+                        BrowserVersion = AndroidTokens[1];
+                    }
+
+                    BrowserType = "Android " + BrowserVersion;
                 }
                 else if (UserAgent.ToUpper().Contains("RV:"))
                 {
@@ -180,7 +194,7 @@ namespace ReportingCommon
                 }
                 else
                 {
-                    BrowserType = "Unknown Unknown";
+                    BrowserType = "";
                 }
             }
             catch (Exception e)

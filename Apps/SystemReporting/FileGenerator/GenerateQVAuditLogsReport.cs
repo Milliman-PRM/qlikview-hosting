@@ -122,13 +122,15 @@ namespace ReportFileGenerator
 
             //Date/Time,QVW,Action,User,Action Activity
             foreach (AuditLog curData in list)
+            {
                 resultsList.Add(
-                                (curData.UserAccessDatetime.HasValue ? curData.UserAccessDatetime.Value.ToString() : "NULL").ToString() + "," +
-                                (!string.IsNullOrEmpty(curData.Document) ? curData.Document.ToString() : "NULL").ToString() + "," +
-                                (!string.IsNullOrEmpty(curData.EventType) ? curData.EventType.ToString() : "NULL").ToString() + "," +
-                                (!string.IsNullOrEmpty(curData.User.UserName) ? curData.User.UserName.ToString() : "NULL").ToString() + "," +
-                                (!string.IsNullOrEmpty(curData.Message) ? curData.Message.ToString() : "NULL").ToString()
-                                );
+                                (curData.UserAccessDatetime.HasValue ? curData.UserAccessDatetime.Value.ToString() : string.Empty).ToString() + "," +
+                                (!string.IsNullOrEmpty(curData.Document) ? curData.Document.Replace(@"0000EXT01\", "").ToString() : string.Empty).ToString() + ", " +
+                                (!string.IsNullOrEmpty(curData.EventType) ? curData.EventType.ToString() : string.Empty).ToString() + "," +
+                                (!string.IsNullOrEmpty(curData.User.UserName) ? curData.User.UserName.ToString() : string.Empty).ToString() + "," +
+                                (!string.IsNullOrEmpty(curData.Message) ? curData.Message.ToString() : string.Empty).ToString()
+                            );
+            }
 
             var file = string.Empty;
             if (string.IsNullOrEmpty(fileNameWithFolderPath))

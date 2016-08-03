@@ -11,6 +11,7 @@ namespace FileProcessor
 {
     public class ProcessQVAuditLogs : ControllerAccess, IFileProcessor
     {
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -25,6 +26,7 @@ namespace FileProcessor
         {
             try
             {
+
                 if (args.Length > 0)
                 {
                     var filter = "Audit_INDY-PRM";
@@ -52,6 +54,7 @@ namespace FileProcessor
                                 {
                                     ProcessLogFileMove(efilePath, sourceDirectory, destinationInDirectory, file);
                                 }
+
                             }
                         }
                     }
@@ -102,6 +105,7 @@ namespace FileProcessor
                 if (listLogFile != null & listLogFile.Count > 0)
                 {
                     var listProxyLogs = new List<ProxyAuditLog>();
+                    
                     //Entity
                     var proxyLogEntry = new ProxyAuditLog();
 
@@ -161,12 +165,16 @@ namespace FileProcessor
                         proxyLogEntry.Document = (!string.IsNullOrEmpty(docName)) ? docName.ToUpper().Trim() : string.Empty;
 
                         proxyLogEntry.IsReduced = entry.Document.IndexOf(@"\reducedcachedqvws", StringComparison.Ordinal) > -1;
+                        
                         //add entry to list
                         listProxyLogs.Add(proxyLogEntry);
+                        
                         proxyLogEntry = new ProxyAuditLog();
                     }
+
                     //process the list
                     blnSucessful = ControllerAuditLog.ProcessLogs(listProxyLogs);
+                    
                 }
             }
             catch (Exception ex)

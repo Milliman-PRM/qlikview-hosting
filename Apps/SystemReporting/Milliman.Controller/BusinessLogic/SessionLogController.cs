@@ -26,6 +26,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
         public bool ProcessLogs(List<ProxySessionLog> listProxyLogs)
         {            
             var blnSucessful = false;
+
             try
             {
                 var logEntity = new SessionLog();
@@ -68,9 +69,9 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                     {
                         var report = new Report
                         {
-                            ReportName = entry.Report.Trim()
+                            ReportName = entry.Report.Trim(),
                         };
-                        var addOrGetReport = ControllerCommon.AddOrGetReport(report);
+                        var addOrGetReport = ControllerCommon.AddOrGetReport(report, logEntity.Document);
                         if (addOrGetReport != null)
                         {
                             //after insert set the id

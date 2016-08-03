@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using SystemReporting.Entities.Models;
 using SystemReporting.Utilities.ExceptionHandling;
+using static FileProcessor.EnumFileProcessor;
 
 namespace FileProcessor
 {
@@ -26,6 +27,7 @@ namespace FileProcessor
         {
             try
             {
+
                 if (args.Length > 0)
                 {
                     var filter = "Sessions_INDY-PRM";
@@ -52,6 +54,7 @@ namespace FileProcessor
                                 {
                                     ProcessLogFileMove(efilePath, sourceDirectory, destinationInDirectory, file);
                                 }
+                                //ControllerCommon.UpdateReportTypes();
                             }
                         }
                     }
@@ -101,6 +104,7 @@ namespace FileProcessor
                 if (listLogFile != null & listLogFile.Count > 0)
                 {
                     var listProxyLogs = new List<ProxySessionLog>();
+
                     //Entity
                     var proxyLogEntry = new ProxySessionLog();
 
@@ -169,32 +173,23 @@ namespace FileProcessor
 
                         proxyLogEntry.Group = (!string.IsNullOrEmpty(group)) ? group : string.Empty;
                         //**************************************************************************************************//
+                        
                         proxyLogEntry.Report = QlikviewEventBase.GetReportName(entry.Document);
-
+                        
                         proxyLogEntry.Document = (!string.IsNullOrEmpty(docNameNoPath)) ? docNameNoPath.ToUpper().Trim() : string.Empty;
 
                         proxyLogEntry.SessionLength = entry.SessionDuration.ToString();
                         proxyLogEntry.SessionEndReason = QlikviewSessionEvent.GetExitReason(entry.ExitReason).ToString();
-                        proxyLogEntry.Browser = QlikviewSessionEvent.GetBrowser(entry.ClientType);
-
-                        //if browser has unknown than get the browser name after [browser.] in string
-                        if (proxyLogEntry.Browser.Contains("Unknown"))
-                        {
-                            var browser = "";
-                            var stringTobeSearched = "browser.";
-                            var ix = entry.ClientType.IndexOf(stringTobeSearched);
-                            if (ix != -1)
-                            {
-                                browser = entry.ClientType.Substring(ix + stringTobeSearched.Length);
-                            }
-                            proxyLogEntry.Browser = browser;
-                        }
+                        proxyLogEntry.Browser = FileFunctions.GetBrowserName(proxyLogEntry.ClientType);
+                      
                         //add entry to list
                         listProxyLogs.Add(proxyLogEntry);
+
                         proxyLogEntry = new ProxySessionLog();
                     }
                     //process the list
                     blnSucessful = ControllerSessionLog.ProcessLogs(listProxyLogs);
+
                 }
             }
             catch (Exception ex)
@@ -204,7 +199,9 @@ namespace FileProcessor
 
             return blnSucessful;
         }
-
+        
+       
+        
         /// <summary>
         /// Parse log file and returns the list
         /// </summary>

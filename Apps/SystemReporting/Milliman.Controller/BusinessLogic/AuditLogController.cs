@@ -74,11 +74,12 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                     //Insert Report
                     if (!string.IsNullOrEmpty(entry.Report))
                     {
+                        //Parses the report and creates the report type
                         var report = new Report
                         {
-                            ReportName = entry.Report.Trim()
+                            ReportName = entry.Report.Trim(),
                         };
-                        var addOrGetReport = ControllerCommon.AddOrGetReport(report);
+                        var addOrGetReport = ControllerCommon.AddOrGetReport(report, logEntity.Document);
                         if (addOrGetReport != null)
                         {
                             //after insert set the id
