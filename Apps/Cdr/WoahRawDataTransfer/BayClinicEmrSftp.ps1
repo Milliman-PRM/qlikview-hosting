@@ -28,9 +28,9 @@ try
         {
             $remotePath = "$($remotePath)/"
         }
-        if (-Not $localPath.EndsWith('/')) 
+        if (-Not $localPath.EndsWith('\')) 
         {
-            $localPath = "$($localPath)/"
+            $localPath = "$($localPath)\"
         }
 
         # Connect to remote server, will puke if it fails
