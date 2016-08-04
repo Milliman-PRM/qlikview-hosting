@@ -13,24 +13,25 @@ namespace ReportFileGenerator
     public class GenerateQVAuditLogsReport : ControllerAccess
     {
         public static void GenerateReport(DateTime? startDateValue, DateTime? endDateValue,
-                                                    string reportType, string outputType, string logReportName, string fileNameWithFolderPath)
+                                                    string reportType, string outputType, string selectionId, string fileNameWithFolderPath)
         {
 
             try
             {
-                var reportName = (!string.IsNullOrEmpty(logReportName) ? logReportName : GetLogReportName());
+                //if the user did not select any report then get the report from config
+                var selectedItemId = (!string.IsNullOrEmpty(selectionId) ? selectionId : GetLogReportName());
 
                 var reportTypeEum = (Enumerations.eReportType)Enum.Parse(typeof(Enumerations.eReportType), reportType);
                 switch (reportTypeEum)
                 {
                     case Enumerations.eReportType.Group:
-                        ProcessReportGenerateForGroupName(startDateValue, endDateValue, reportName, outputType, fileNameWithFolderPath);
+                        ProcessReportGenerateForGroupName(startDateValue, endDateValue, selectedItemId, outputType, fileNameWithFolderPath);
                         break;
                     case Enumerations.eReportType.Report:
-                        ProcessReportGenerateForReportName(startDateValue, endDateValue, reportName, outputType, fileNameWithFolderPath);
+                        ProcessReportGenerateForReportName(startDateValue, endDateValue, selectedItemId, outputType, fileNameWithFolderPath);
                         break;
                     case Enumerations.eReportType.User:
-                        ProcessReportGenerateForUserName(startDateValue, endDateValue, reportName, outputType, fileNameWithFolderPath);
+                        ProcessReportGenerateForUserName(startDateValue, endDateValue, selectedItemId, outputType, fileNameWithFolderPath);
                         break;
                     default:
                         throw new ApplicationException("Output type not supported");
@@ -44,12 +45,12 @@ namespace ReportFileGenerator
         }
 
         public static void ProcessReportGenerateForGroupName(DateTime? startDateValue, DateTime? endDateValue,
-                                                                string reportName, string outputType, string fileNameWithFolderPath)
+                                                                string selectedItemId, string outputType, string fileNameWithFolderPath)
         {
             var ca = new ControllerAccess();
             var list = ca.ControllerAuditLog.GetAuditLogListForGroup(startDateValue.Value.ToString(),
                                                                         endDateValue.Value.ToString(),
-                                                                        reportName);
+                                                                        selectedItemId);
 
             var outputTypeEum = (Enumerations.eOutputType)Enum.Parse(typeof(Enumerations.eOutputType), outputType);
             switch (outputTypeEum)
@@ -69,12 +70,12 @@ namespace ReportFileGenerator
 
         }
         public static void ProcessReportGenerateForReportName(DateTime? startDateValue, DateTime? endDateValue,
-                                                                string reportName, string outputType, string fileNameWithFolderPath)
+                                                                string selectedItemId, string outputType, string fileNameWithFolderPath)
         {
             var ca = new ControllerAccess();
             var list = ca.ControllerAuditLog.GetAuditLogListForReport(startDateValue.Value.ToString(),
                                                                         endDateValue.Value.ToString(),
-                                                                        reportName);
+                                                                        selectedItemId);
 
             var outputTypeEum = (Enumerations.eOutputType)Enum.Parse(typeof(Enumerations.eOutputType), outputType);
             switch (outputTypeEum)
@@ -93,12 +94,12 @@ namespace ReportFileGenerator
             }
         }
         public static void ProcessReportGenerateForUserName(DateTime? startDateValue, DateTime? endDateValue,
-                                                                string reportName, string outputType, string fileNameWithFolderPath)
+                                                                string selectedItemId, string outputType, string fileNameWithFolderPath)
         {
             var ca = new ControllerAccess();
             var list = ca.ControllerAuditLog.GetAuditLogListForUser(startDateValue.Value.ToString(),
                                                                     endDateValue.Value.ToString(),
-                                                                    reportName);
+                                                                    selectedItemId);
 
             var outputTypeEum = (Enumerations.eOutputType)Enum.Parse(typeof(Enumerations.eOutputType), outputType);
             switch (outputTypeEum)
@@ -123,11 +124,17 @@ namespace ReportFileGenerator
             //Date/Time,QVW,Action,User,Action Activity
             foreach (AuditLog curData in list)
             {
+                var userName = "";
+                if (curData.User != null)
+                {
+                    userName = !string.IsNullOrEmpty(curData.User.UserName) ? curData.User.UserName : string.Empty;
+                }
+
                 resultsList.Add(
                                 (curData.UserAccessDatetime.HasValue ? curData.UserAccessDatetime.Value.ToString() : string.Empty).ToString() + "," +
                                 (!string.IsNullOrEmpty(curData.Document) ? curData.Document.Replace(@"0000EXT01\", "").ToString() : string.Empty).ToString() + ", " +
                                 (!string.IsNullOrEmpty(curData.EventType) ? curData.EventType.ToString() : string.Empty).ToString() + "," +
-                                (!string.IsNullOrEmpty(curData.User.UserName) ? curData.User.UserName.ToString() : string.Empty).ToString() + "," +
+                                (userName).ToString() + "," +
                                 (!string.IsNullOrEmpty(curData.Message) ? curData.Message.ToString() : string.Empty).ToString()
                             );
             }
@@ -146,7 +153,7 @@ namespace ReportFileGenerator
             //write file
             if (!File.Exists(file))
                 File.WriteAllLines(file, resultsList.ToArray());
-
+            
             //now add the header
             var path = file;
             string str;

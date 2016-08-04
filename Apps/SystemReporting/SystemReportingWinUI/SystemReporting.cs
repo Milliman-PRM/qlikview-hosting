@@ -184,7 +184,8 @@ namespace SystemReportingWinUI
                 }
 
                 var fileNameWithFolderPath = string.Empty;
-                var reportName = string.Empty;
+                var selectionName = string.Empty;
+                var selectionId = string.Empty;
                 //generate
                 foreach (var log in logCategoryTypeList)
                 {
@@ -207,36 +208,42 @@ namespace SystemReportingWinUI
                     {
                         if (ddlGroupName.SelectedIndex > -1)
                         {
-                            reportName = ddlGroupName.Text;
-                            GenerateIisLogsReport.ProcessReportGenerateForGroupName(startDate, endDate, reportName, reportOutPutType, fileNameWithFolderPath);
+                            selectionName = ddlGroupName.Text;
+                            selectionId = ddlGroupName.SelectedValue.ToString();
+                            GenerateIisLogsReport.ProcessReportGenerateForGroupName(startDate, endDate, selectionId, reportOutPutType, fileNameWithFolderPath);
                         }
                         if (ddlReportName.SelectedIndex > -1)
                         {
-                            reportName = ddlReportName.Text;
+                            selectionName = ddlReportName.Text;
+                            selectionId = ddlReportName.SelectedValue.ToString();
                             //GenerateIisLogsReport.ProcessReportGenerateForReportName(startDate, endDate, reportName, reportOutPutType, fileNameWithFolderPath);
                         }
                         if (ddlUserName.SelectedIndex > -1)
                         {
-                            reportName = ddlUserName.Text;
-                            GenerateIisLogsReport.ProcessReportGenerateForUserName(startDate, endDate, reportName, reportOutPutType, fileNameWithFolderPath);
+                            selectionName = ddlUserName.Text;
+                            selectionId = ddlUserName.SelectedValue.ToString();
+                            GenerateIisLogsReport.ProcessReportGenerateForUserName(startDate, endDate, selectionId, reportOutPutType, fileNameWithFolderPath);
                         }
                     }
                     if (log == "Audit")
                     {
                         if (ddlGroupName.SelectedIndex > -1)
                         {
-                            reportName = ddlGroupName.Text;
-                            GenerateQVAuditLogsReport.ProcessReportGenerateForGroupName(startDate, endDate, reportName, reportOutPutType, fileNameWithFolderPath);
+                            selectionName = ddlGroupName.Text;
+                            selectionId = ddlGroupName.SelectedValue.ToString();
+                            GenerateQVAuditLogsReport.ProcessReportGenerateForGroupName(startDate, endDate, selectionId, reportOutPutType, fileNameWithFolderPath);
                         }
                         if (ddlReportName.SelectedIndex > -1)
                         {
-                            reportName = ddlReportName.Text;
-                            GenerateQVAuditLogsReport.ProcessReportGenerateForReportName(startDate, endDate, reportName, reportOutPutType, fileNameWithFolderPath);
+                            selectionName = ddlReportName.Text;
+                            selectionId = ddlReportName.SelectedValue.ToString();
+                            GenerateQVAuditLogsReport.ProcessReportGenerateForReportName(startDate, endDate, selectionId, reportOutPutType, fileNameWithFolderPath);
                         }
                         if (ddlUserName.SelectedIndex > -1)
                         {
-                            reportName = ddlUserName.Text;
-                            GenerateQVAuditLogsReport.ProcessReportGenerateForUserName(startDate, endDate, reportName, reportOutPutType, fileNameWithFolderPath);
+                            selectionName = ddlUserName.Text;
+                            selectionId = ddlUserName.SelectedValue.ToString();
+                            GenerateQVAuditLogsReport.ProcessReportGenerateForUserName(startDate, endDate, selectionId, reportOutPutType, fileNameWithFolderPath);
                         }
 
                     }
@@ -244,18 +251,21 @@ namespace SystemReportingWinUI
                     {
                         if (ddlGroupName.SelectedIndex > -1)
                         {
-                            reportName = ddlGroupName.Text;
-                            GenerateQVSessionLogsReport.ProcessReportGenerateForGroupName(startDate, endDate, reportName, reportOutPutType, fileNameWithFolderPath);
+                            selectionName = ddlGroupName.Text;
+                            selectionId = ddlGroupName.SelectedValue.ToString();
+                            GenerateQVSessionLogsReport.ProcessReportGenerateForGroupName(startDate, endDate, selectionId, reportOutPutType, fileNameWithFolderPath);
                         }
                         if (ddlReportName.SelectedIndex > -1)
                         {
-                            reportName = ddlReportName.Text;
-                            GenerateQVSessionLogsReport.ProcessReportGenerateForReportName(startDate, endDate, reportName, reportOutPutType, fileNameWithFolderPath);
+                            selectionName = ddlReportName.Text;
+                            selectionId = ddlReportName.SelectedValue.ToString();
+                            GenerateQVSessionLogsReport.ProcessReportGenerateForReportName(startDate, endDate, selectionId, reportOutPutType, fileNameWithFolderPath);
                         }
                         if (ddlUserName.SelectedIndex > -1)
                         {
-                            reportName = ddlUserName.Text;
-                            GenerateQVSessionLogsReport.ProcessReportGenerateForUserName(startDate, endDate, reportName, reportOutPutType, fileNameWithFolderPath);
+                            selectionName = ddlUserName.Text;
+                            selectionId = ddlUserName.SelectedValue.ToString();
+                            GenerateQVSessionLogsReport.ProcessReportGenerateForUserName(startDate, endDate, selectionId, reportOutPutType, fileNameWithFolderPath);
                         }
 
                     }

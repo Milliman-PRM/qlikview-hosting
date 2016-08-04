@@ -150,7 +150,7 @@ public partial class admin_controls_edit_user_modal : System.Web.UI.UserControl
             string NewPassword = PasswordGenerator.Generate();
 
             OldPasswordTextbox.Attributes.Add("value", NewPassword);
-            Suggested.Text = "Suggested New Password @" + NewPassword;
+            Suggested.Text = "Suggested New Password @" + NewPassword;            
         }
     }
 
@@ -344,23 +344,23 @@ public partial class admin_controls_edit_user_modal : System.Web.UI.UserControl
 
     #endregion
 
-    #region Add New Role
+    //#region Add New Role
 
-    public void AddRole(object sender, EventArgs e)
-    {
-        // create new roles
-        try
-        {
-            Roles.CreateRole(NewRole.Text);
-            ConfirmationMessage.InnerText = "The new role was added.";
-        }
-        catch (Exception ex)
-        {
-            ConfirmationMessage.InnerText = ex.Message;
-        }
-    }
+    //public void AddRole(object sender, EventArgs e)
+    //{
+    //    // create new roles
+    //    try
+    //    {
+    //        Roles.CreateRole(NewRole.Text);
+    //        ConfirmationMessage.InnerText = "The new role was added.";
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        ConfirmationMessage.InnerText = ex.Message;
+    //    }
+    //}
 
-    #endregion
+    //#endregion
 
     #region Change Password Button Click
 

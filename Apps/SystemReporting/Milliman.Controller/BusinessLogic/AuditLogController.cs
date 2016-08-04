@@ -109,17 +109,16 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
         /// <summary>
         /// get session log report by Group name
         /// </summary>
-        /// <param name="date"></param>
-        /// <param name="reportName"></param>
         /// <param name="startDate">todo: describe startDate parameter on GetSessionLogListForGroup</param>
         /// <param name="endDate">todo: describe endDate parameter on GetSessionLogListForGroup</param>
+        /// <param name="paramId">todo: describe selectedItemId parameter on GetAuditLogListForGroup</param>
         /// <returns></returns>
-        public List<AuditLog> GetAuditLogListForGroup(string startDate, string endDate, string reportName)
+        public List<AuditLog> GetAuditLogListForGroup(string startDate, string endDate, string paramId)
         {
             var dbService = new MillimanService();
             var listResult = new List<AuditLog>();
 
-            var obj = dbService.GetGroups<Group>(a => a.GroupName.Contains(reportName)).FirstOrDefault();
+            Group obj = ControllerCommon.GetGroupById(paramId);
 
             DateTime? dtStartDate = DateTime.Parse(startDate);
             DateTime? dtEndDate = DateTime.Parse(endDate);
@@ -127,11 +126,11 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
             if (obj != null)
             {
                 listResult = dbService.GetAuditLogs<AuditLog>(s => s.fk_group_id == obj.Id
-                                                &&
-                                                s.UserAccessDatetime.Value > dtStartDate
-                                                &&
-                                                s.UserAccessDatetime.Value <= dtEndDate)
-                                                .OrderBy(a => a.UserAccessDatetime).ToList();
+                                                                &&
+                                                                s.UserAccessDatetime.Value > dtStartDate
+                                                                &&
+                                                                s.UserAccessDatetime.Value <= dtEndDate)
+                                                                .OrderBy(a => a.UserAccessDatetime).ToList();
             }
             return listResult;
         }
@@ -140,14 +139,14 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
         /// </summary>
         /// <param name="startDate"></param>
         /// <param name="endDate"></param>
-        /// <param name="reportName"></param>
+        /// <param name="paramId">todo: describe selectedItemId parameter on GetAuditLogListForReport</param>
         /// <returns></returns>
-        public List<AuditLog> GetAuditLogListForReport(string startDate, string endDate, string reportName)
+        public List<AuditLog> GetAuditLogListForReport(string startDate, string endDate, string paramId)
         {
             var dbService = new MillimanService();
             var listResult = new List<AuditLog>();
 
-            var obj = dbService.GetReports<Report>(a => a.ReportName.Contains(reportName)).FirstOrDefault();
+            Report obj = ControllerCommon.GetReportById(paramId);
 
             DateTime? dtStartDate = DateTime.Parse(startDate);
             DateTime? dtEndDate = DateTime.Parse(endDate);
@@ -169,14 +168,14 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
         /// </summary>
         /// <param name="startDate"></param>
         /// <param name="endDate"></param>
-        /// <param name="reportName"></param>
+        /// <param name="paramId">todo: describe selectedItemId parameter on GetAuditLogListForUser</param>
         /// <returns></returns>
-        public List<AuditLog> GetAuditLogListForUser(string startDate, string endDate, string reportName)
+        public List<AuditLog> GetAuditLogListForUser(string startDate, string endDate, string paramId)
         {
             var dbService = new MillimanService();
             var listResult = new List<AuditLog>();
 
-            var obj = dbService.GetUsers<User>(a => a.UserName.Contains(reportName)).FirstOrDefault();
+            User obj = ControllerCommon.GetUserById(paramId);
 
             DateTime? dtStartDate = DateTime.Parse(startDate);
             DateTime? dtEndDate = DateTime.Parse(endDate);
