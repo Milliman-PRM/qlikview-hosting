@@ -37,11 +37,19 @@ public partial class admin_controls_roles : System.Web.UI.UserControl
             MillimanCommon.MillimanGroupMap.MillimanGroups MG = null;
             if (MGM.MillimanGroupDictionary.ContainsKey(roleName))
                 MG = MGM.MillimanGroupDictionary[roleName];
-
+            
             string FriendlyName = (MG == null) ? string.Empty : MG.FriendlyGroupName;
             string ExternalName = (MG == null) ? string.Empty : MG.ExernalGroupName;
             int MaxUsers = (MG == null) ? 0 : MG.MaximumnUsers;
-            string GroupCategory = (MG == null) ? string.Empty : MG.GroupCategory.ToUpper().Trim();
+
+            string GroupCategory = string.Empty;
+            if (MG!=null)
+            {
+                if (!string.IsNullOrEmpty(MG.GroupCategory))
+                {
+                    GroupCategory= MG.GroupCategory.ToUpper().Trim();
+                }
+            }
 
             int numberOfUsersInRole = Roles.GetUsersInRole(roleName).Length;
             string[] roleRow = { roleName, numberOfUsersInRole.ToString(), ExternalName, GroupCategory.ToUpper().Trim(), FriendlyName, MaxUsers.ToString() };
