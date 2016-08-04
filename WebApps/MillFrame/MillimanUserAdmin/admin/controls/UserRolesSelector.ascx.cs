@@ -196,6 +196,7 @@ public partial class admin_controls_UserRolesSelector : System.Web.UI.UserContro
                     tvUserRoles.CollapseAll();
                     masterNode.ShowCheckBox = false;
 
+                    var userRoles = Roles.GetRolesForUser(UserName);
                     foreach (DataRow childRow in masterRow.GetChildRows("children"))
                     {
                         //var masterNode = new TreeNode(text, value);
@@ -207,8 +208,7 @@ public partial class admin_controls_UserRolesSelector : System.Web.UI.UserContro
 
                         //Get all roles associated with user & check that role
                         if (!string.IsNullOrEmpty(UserName))
-                        {
-                            var userRoles = Roles.GetRolesForUser(UserName);
+                        {                            
                             foreach (string role in userRoles)
                             {
                                 if (childNode.Text == role)
