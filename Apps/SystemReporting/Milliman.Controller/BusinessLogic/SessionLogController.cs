@@ -115,17 +115,16 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
         /// <summary>
         /// get session log report by Group name
         /// </summary>
-        /// <param name="date"></param>
-        /// <param name="reportName"></param>
         /// <param name="startDate">todo: describe startDate parameter on GetSessionLogListForGroup</param>
         /// <param name="endDate">todo: describe endDate parameter on GetSessionLogListForGroup</param>
+        /// <param name="paramId">todo: describe paramId parameter on GetSessionLogListForGroup</param>
         /// <returns></returns>
-        public List<SessionLog> GetSessionLogListForGroup(string startDate,string endDate, string reportName)
+        public List<SessionLog> GetSessionLogListForGroup(string startDate,string endDate, string paramId)
         {
             var dbService = new MillimanService();
             var listResult = new List<SessionLog>();
 
-            var obj = dbService.GetGroups<Group>(a => a.GroupName.Contains(reportName)).FirstOrDefault();
+            Group obj = ControllerCommon.GetGroupById(paramId);
 
             DateTime? dtStartDate = DateTime.Parse(startDate);
             DateTime? dtEndDate = DateTime.Parse(endDate);
@@ -147,14 +146,14 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
         /// </summary>
         /// <param name="startDate"></param>
         /// <param name="endDate"></param>
-        /// <param name="reportName"></param>
+        /// <param name="paramId">todo: describe paramId parameter on GetSessionLogListForReport</param>
         /// <returns></returns>
-        public List<SessionLog> GetSessionLogListForReport(string startDate, string endDate, string reportName)
+        public List<SessionLog> GetSessionLogListForReport(string startDate, string endDate, string paramId)
         {
             var dbService = new MillimanService();
             var listResult = new List<SessionLog>();
 
-            var obj = dbService.GetReports<Report>(a => a.ReportName.Contains(reportName)).FirstOrDefault();   
+            Report  obj = ControllerCommon.GetReportById(paramId);
 
             DateTime? dtStartDate = DateTime.Parse(startDate);
             DateTime? dtEndDate = DateTime.Parse(endDate);
@@ -176,14 +175,14 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
         /// </summary>
         /// <param name="startDate"></param>
         /// <param name="endDate"></param>
-        /// <param name="reportName"></param>
+        /// <param name="paramId">todo: describe paramId parameter on GetSessionLogListForUser</param>
         /// <returns></returns>
-        public List<SessionLog> GetSessionLogListForUser(string startDate, string endDate, string reportName)
+        public List<SessionLog> GetSessionLogListForUser(string startDate, string endDate, string paramId)
         {
             var dbService = new MillimanService();
             var listResult = new List<SessionLog>();
 
-            var obj = dbService.GetUsers<User>(a => a.UserName.Contains(reportName)).FirstOrDefault();
+            User obj = ControllerCommon.GetUserById(paramId);
 
             DateTime? dtStartDate = DateTime.Parse(startDate);
             DateTime? dtEndDate = DateTime.Parse(endDate);
