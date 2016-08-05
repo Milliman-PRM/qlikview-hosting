@@ -16,7 +16,7 @@ namespace BayClinicCernerExtractLib
     /// </summary>
     public class RawDataParser
     {
-        private const String FeedIdentity = "bayclinicemr";  // TODO move this to config shared between aggregation and extraction applications
+        private const String FeedIdentity = "bayclinictest";  // TODO move this to config shared between aggregation and extraction applications
 
         private String IniFileName, IniSectionName;
 

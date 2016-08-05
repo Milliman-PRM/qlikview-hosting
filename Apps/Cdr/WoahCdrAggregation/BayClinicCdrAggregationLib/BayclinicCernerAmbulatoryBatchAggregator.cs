@@ -19,7 +19,7 @@ namespace BayClinicCernerAmbulatory
     class BayClinicCernerAmbulatoryBatchAggregator
     {
         public static readonly String WoahBayClinicOrganizationIdentity = "WOAH Bay Clinic";
-        private const String FeedIdentity = "bayclinicemr";  // TODO move this to config shared between aggregation and extraction applications
+        private const String FeedIdentity = "bayclinictest";  // TODO move this to config shared between aggregation and extraction applications
 
         private Mutex Mutx;
         private bool _EndThreadSignal;
@@ -289,7 +289,7 @@ namespace BayClinicCernerAmbulatory
             // First just evaluate whether this patient was already aggregated before, if so then return true. 
             if (CdrDb.Context.Patients.Count(p => p.EmrIdentifier == PersonDocument.UniquePersonIdentifier) > 0)
             {
-                Trace.WriteLine("Found member in PG" + PersonDocument.UniquePersonIdentifier);
+                //Trace.WriteLine("Found member " + PersonDocument.UniquePersonIdentifier + " in PostgreSQL");
                 return true;
             }
             else
@@ -302,7 +302,7 @@ namespace BayClinicCernerAmbulatory
                 {
                     if (ReferencedCodes.InsuranceTypeCodeMeanings[InsuranceDoc.Type].ToUpper() == "MEDICAID")
                     {
-                        Trace.WriteLine("Found member in Mongo" + PersonDocument.UniquePersonIdentifier);
+                        //Trace.WriteLine("Found member " + PersonDocument.UniquePersonIdentifier + " in MongoDB");
                         return true;
                     }
                 }
@@ -367,7 +367,16 @@ namespace BayClinicCernerAmbulatory
                         {
                             NonMemberCounter++;
                         }
+
                         PersonCounter++;
+                        if (PersonCounter % 1000 == 0)
+                        {
+                            Trace.Write(".");
+                            if (PersonCounter % 25000 == 0)
+                            {
+                                Trace.WriteLine("Evaluated " + PersonCounter.ToString() + " person documents for eligibility");
+                            }
+                        }
 
                         if (EndThreadSignal)
                         {
@@ -397,6 +406,7 @@ EndProcessing:
             Trace.WriteLine("Merged      " + MergedPatientCounter + " existing patient records");
             Trace.WriteLine("Non-members " + NonMemberCounter + " non-member documents evaluated");
             Trace.WriteLine("Rolled back " + RollbackCounter + " patient transactions");
+            Trace.WriteLine("Aggregation process completed at " + DateTime.Now);
             return OverallResult;
         }
 

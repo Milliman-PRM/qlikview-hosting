@@ -3,8 +3,8 @@
 ECHO This process running as Windows user: %USERNAME%
 ECHO(
 
-cd C:\PRM\Cdr\WoahRawDataTransfer
-PowerShell.exe -File C:\PRM\Cdr\CdrWoahRawDataTransfer\BayClinicEmrSftp.ps1
+cd C:\PRM\Cdr\CdrWohRawDataTransfer
+PowerShell.exe -File C:\PRM\Cdr\CdrWohRawDataTransfer\BayClinicEmrSftp.ps1
 
 IF ERRORLEVEL 1 (
   ECHO Retrieval error, aborting batch processing
@@ -12,13 +12,10 @@ IF ERRORLEVEL 1 (
   EXIT /b
 )
 
-EXIT /b
-rem remove the above
-
 ECHO Retrieval completed successfully
 ECHO(
 
-cd C:\PRM\Cdr\CdrRawDataExtract
+cd C:\PRM\Cdr\CdrWohRawDataExtract
 C:\PRM\Cdr\CdrWohRawDataExtract\CdrExtractConsoleApp.exe
 
 IF ERRORLEVEL 1 (
@@ -30,7 +27,7 @@ IF ERRORLEVEL 1 (
 ECHO Extraction completed successfully
 ECHO(
 
-cd C:\PRM\Cdr\WoahCdrAggregation
+cd C:\PRM\Cdr\CdrWohAggregation
 C:\PRM\Cdr\CdrWohAggregation\WoahCdrAggregationConsoleApp.exe
 
 IF ERRORLEVEL 1 (
