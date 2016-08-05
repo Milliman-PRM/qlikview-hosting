@@ -2,7 +2,9 @@
 # Set-ExecutionPolicy RemoteSigned
 try
 {
-    $ftpUserName = (Get-Item env:bayclinicemr_ftpusername).Value
+    Write-Host ("Bay Clinic Emr feed retrieval script launched at {0}" -f (Get-Date))
+
+	$ftpUserName = (Get-Item env:bayclinicemr_ftpusername).Value
     $ftpPassword = (Get-Item env:bayclinicemr_ftppassword).Value
     $remotePath = (Get-Item env:bayclinicemr_ftpremotepath).Value
     $localPath = (Get-Item env:bayclinicemr_ftplocalpath).Value
