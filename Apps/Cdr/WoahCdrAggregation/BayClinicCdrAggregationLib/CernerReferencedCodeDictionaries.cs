@@ -157,7 +157,9 @@ namespace BayClinicCernerAmbulatory
                 case "Bay Clinic":
                     return CdrDb.EnsureOrganizationRecord(BayClinicCernerAmbulatoryBatchAggregator.WoahBayClinicOrganizationIdentity).dbid;
                 default:
-                    throw new Exception("Unsupported Visit location encountered in GetOrganizationDbidForVisitLocationCode()" + VisitLocationCodeMeanings[CernerCode] + " with code " + CernerCode);
+                    Trace.WriteLine("WARNING: From CernerReferencedCodeDictionaries.GetOrganizationDbidForVisitLocationCode(), adding to database previously unsupported coded location >" + VisitLocationCodeMeanings[CernerCode] + "<");
+                    return CdrDb.EnsureOrganizationRecord(VisitLocationCodeMeanings[CernerCode]).dbid;
+                    //throw new Exception("Unsupported Visit location encountered in GetOrganizationDbidForVisitLocationCode()" + VisitLocationCodeMeanings[CernerCode] + " with code " + CernerCode);
             }
         }
 

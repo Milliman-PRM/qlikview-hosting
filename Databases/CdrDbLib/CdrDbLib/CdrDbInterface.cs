@@ -58,7 +58,7 @@ namespace CdrDbLib
             Context = null;
         }
 
-        public Organization EnsureOrganizationRecord(String OrganizationName)
+        public Organization EnsureOrganizationRecord(String OrganizationName, String EmrIdentifier="")
         {
             List<Organization> MatchingOrganizations = Context.Organizations.Where(x => x.OrgName == OrganizationName).ToList();
 
@@ -71,7 +71,7 @@ namespace CdrDbLib
                 Organization NewOrganization = new Organization
                 {
                     OrgName = OrganizationName,
-                    EmrIdentifier = ""  // TODO get this value from somewhere
+                    EmrIdentifier = EmrIdentifier
                 };
 
                 Context.Organizations.InsertOnSubmit(NewOrganization);
