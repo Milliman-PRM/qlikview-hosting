@@ -372,9 +372,9 @@ namespace BayClinicCernerAmbulatory
                         if (PersonCounter % 1000 == 0)
                         {
                             Trace.Write(".");
-                            if (PersonCounter % 25000 == 0)
+                            if (PersonCounter % 50000 == 0)
                             {
-                                Trace.WriteLine("Evaluated " + PersonCounter.ToString() + " person documents for eligibility");
+                                Trace.WriteLine("Evaluated " + String.Format("{0,8:#}", PersonCounter) + " person documents for eligibility");
                             }
                         }
 
