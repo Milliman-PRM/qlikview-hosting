@@ -263,6 +263,7 @@ namespace BayClinicCernerAmbulatory
                 0;
 
             ThisAggregationRunDbid = GetNewAggregationRunDbid();
+            Trace.WriteLine("Aggregating Bay Clinic Cerner data.  ThisAggregationRunDbid is " + ThisAggregationRunDbid);
 
             Initialized = ReferencedCodes.Initialize(RefCodeCollection);
             Initialized &= ReferencedHealthPlans.Initialize(ReferenceHealthPlanCollection, RefCodeCollection);
