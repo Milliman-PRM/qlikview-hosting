@@ -23,8 +23,8 @@ INSERT INTO reporttype (id, type, keywords) VALUES (6, 'NY_DEMO_BPCI_PREMIER', '
 INSERT INTO reporttype (id, type, keywords) VALUES (7, 'NY_DEMO_BPCI_MILLIMAN', 'BPCI,DEMO,MILLIMAN');
 INSERT INTO reporttype (id, type, keywords) VALUES (8, 'NY_DEV_CJR', 'DEV,BPCI,CJR');
 INSERT INTO reporttype (id, type, keywords) VALUES (9, 'NY_LIVE_CJR', 'LIVE,BPCI,CJR');
-INSERT INTO reporttype (id, type, keywords) VALUES (10, 'NY_DEMO_CJR', 'DEMO,CJR,PREMIER');
-INSERT INTO reporttype (id, type, keywords) VALUES (11, 'NY_DEMO_CJR_PREMIER', 'DEMO,CJR,PREMIER');
+INSERT INTO reporttype (id, type, keywords) VALUES (10, 'NY_DEMO_CJR_PREMIER', 'CJR,DEMO,PREMIER');
+INSERT INTO reporttype (id, type, keywords) VALUES (11, 'NY_DEMO_CJR', 'CJR,DEMO');
 INSERT INTO reporttype (id, type, keywords) VALUES (12, 'VT_GAP', 'GAP');
 INSERT INTO reporttype (id, type, keywords) VALUES (13, 'CAPITATION_DASHBOARD', 'CAPITATION');
 INSERT INTO reporttype (id, type, keywords) VALUES (14, 'ENCOUNTER_QUALITY_DASHBOARD', 'ENCOUNTER,QUALITY');
@@ -37,7 +37,7 @@ INSERT INTO reporttype (id, type, keywords) VALUES (19, 'NY_LIVE_BPCI_CAM', 'LIV
 
 
 
---Alter the report table to accomodate the report type field
+--Alter the report table to accomodate the report type field and create foreign key reference
   ALTER TABLE public.report
     DROP COLUMN reporttype,
     ADD fk_report_type_id INTEGER,
@@ -90,6 +90,7 @@ BEGIN
 
 		parsed_report_name := '';
 		parsed_report_name := replace(report_name, '- ', '');
+		parsed_report_name := replace(parsed_report_name, 'REPORTING ', '');
 
 		FOR rt IN SELECT * FROM public.reporttype
 		LOOP
@@ -99,13 +100,14 @@ BEGIN
 			parsed_keywords := trim(both ' ' from parsed_keywords);
 
 			IF parsed_report_name LIKE '%' || parsed_keywords || ' %' OR parsed_report_name = parsed_keywords THEN
+				it := it + 1;
 				update public.report set fk_report_type_id = rt.id where id = r.id;
 			END IF;
 
 		END LOOP;
-		it := it + 1;
+
 	END LOOP;
-RETURN it;
+RETURN it;			--Returns the amount of fields with new report types
 END;
 
 
