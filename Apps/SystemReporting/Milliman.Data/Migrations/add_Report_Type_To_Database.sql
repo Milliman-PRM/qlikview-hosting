@@ -1,4 +1,5 @@
-﻿--Create the report type table
+﻿
+--Creates the reporttype table 
 CREATE TABLE reporttype
 (
   id serial NOT NULL,
@@ -23,8 +24,8 @@ INSERT INTO reporttype (id, type, keywords) VALUES (6, 'NY_DEMO_BPCI_PREMIER', '
 INSERT INTO reporttype (id, type, keywords) VALUES (7, 'NY_DEMO_BPCI_MILLIMAN', 'BPCI,DEMO,MILLIMAN');
 INSERT INTO reporttype (id, type, keywords) VALUES (8, 'NY_DEV_CJR', 'DEV,BPCI,CJR');
 INSERT INTO reporttype (id, type, keywords) VALUES (9, 'NY_LIVE_CJR', 'LIVE,BPCI,CJR');
-INSERT INTO reporttype (id, type, keywords) VALUES (10, 'NY_DEMO_CJR_PREMIER', 'CJR,DEMO,PREMIER');
-INSERT INTO reporttype (id, type, keywords) VALUES (11, 'NY_DEMO_CJR', 'CJR,DEMO');
+INSERT INTO reporttype (id, type, keywords) VALUES (10, 'NY_DEMO_CJR', 'CJR,DEMO');
+INSERT INTO reporttype (id, type, keywords) VALUES (11, 'NY_DEMO_CJR_PREMIER', 'CJR,DEMO,PREMIER');
 INSERT INTO reporttype (id, type, keywords) VALUES (12, 'VT_GAP', 'GAP');
 INSERT INTO reporttype (id, type, keywords) VALUES (13, 'CAPITATION_DASHBOARD', 'CAPITATION');
 INSERT INTO reporttype (id, type, keywords) VALUES (14, 'ENCOUNTER_QUALITY_DASHBOARD', 'ENCOUNTER,QUALITY');
@@ -65,43 +66,51 @@ DECLARE
 	GUID_report_name TEXT;
 	report_name TEXT;
 BEGIN
-	it := 0;
+	it := 0;			--This will keep track of how many records are updated
+	
+	--Goes through every report and attempts to match the reportname to the report type
 	FOR r IN SELECT * from public.report ORDER BY r.id
 	LOOP
-		report_name := r.reportname;
+		report_name := r.reportname;	
 		IF report_name NOT LIKE '% %' AND LENGTH(report_name) = 32 THEN
+			
+			--If a GUID then go through the qvauditlog to match the GUID to a report
 			FOR a IN SELECT * FROM public.qvauditlog WHERE document LIKE '%' || report_name || '%' LIMIT 1
 			LOOP
 				group_name := substring(a.document from 0 for position('REDUCEDCACHEDQVWS' in a.document));
 				group_name := replace (group_name, '\', '\\');		--Deal with those pesky escape charachters
 			END LOOP;
+			
+			--After we get the group directory we find the root report name of that directory. This is the name we will match to a type
 			FOR l IN SELECT * FROM public.qvauditlog WHERE document LIKE '%' || group_name || '%' AND document NOT LIKE '%REDUCEDCACHEDQVWS%' LIMIT 1
 			LOOP
 				group_name := replace(group_name, '\\', '\');
 
 				GUID_report_name := reverse(l.document);
-				GUID_report_name := substring(GUID_report_name, position('.' in GUID_report_name) + 1, position('\' in GUID_report_name) - 5);
+				GUID_report_name := substring(GUID_report_name, position('.' in GUID_report_name) + 1, position('\' in GUID_report_name) - 5); --parse the directory to only get the report name
 				GUID_report_name := reverse(GUID_report_name);
 
 				report_name := GUID_report_name;
 			END LOOP;
 
 		END IF;
-
+		
+		--Replace some undesirable charachters or strings that could be in the report name
 		parsed_report_name := '';
 		parsed_report_name := replace(report_name, '- ', '');
 		parsed_report_name := replace(parsed_report_name, 'REPORTING ', '');
 
+		--Attempt to match the report name to any of the keywords in the report type table
 		FOR rt IN SELECT * FROM public.reporttype
 		LOOP
 			parsed_keywords := '';
 
 			parsed_keywords := replace(rt.keywords, ',', ' ');
-			parsed_keywords := trim(both ' ' from parsed_keywords);
+			parsed_keywords := trim(both ' ' from parsed_keywords);		--Turn the keywords into a string that can match up with the report name
 
 			IF parsed_report_name LIKE '%' || parsed_keywords || ' %' OR parsed_report_name = parsed_keywords THEN
 				it := it + 1;
-				update public.report set fk_report_type_id = rt.id where id = r.id;
+				update public.report set fk_report_type_id = rt.id where id = r.id;		--When a match is found we update the table
 			END IF;
 
 		END LOOP;
