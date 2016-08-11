@@ -7,8 +7,8 @@ INSERT INTO reporttype (id, type, keywords) VALUES (6, 'NY_DEMO_BPCI_PREMIER', '
 INSERT INTO reporttype (id, type, keywords) VALUES (7, 'NY_DEMO_BPCI_MILLIMAN', 'BPCI,DEMO,MILLIMAN');
 INSERT INTO reporttype (id, type, keywords) VALUES (8, 'NY_DEV_CJR', 'DEV,BPCI,CJR');
 INSERT INTO reporttype (id, type, keywords) VALUES (9, 'NY_LIVE_CJR', 'LIVE,BPCI,CJR');
-INSERT INTO reporttype (id, type, keywords) VALUES (10, 'NY_DEMO_CJR', 'DEMO,CJR,PREMIER');
-INSERT INTO reporttype (id, type, keywords) VALUES (11, 'NY_DEMO_CJR_PREMIER', 'DEMO,CJR,PREMIER');
+INSERT INTO reporttype (id, type, keywords) VALUES (10, 'NY_DEMO_CJR_PREMIER', 'CJR,DEMO,PREMIER');
+INSERT INTO reporttype (id, type, keywords) VALUES (11, 'NY_DEMO_CJR', 'CJR,DEMO');
 INSERT INTO reporttype (id, type, keywords) VALUES (12, 'VT_GAP', 'GAP');
 INSERT INTO reporttype (id, type, keywords) VALUES (13, 'CAPITATION_DASHBOARD', 'CAPITATION');
 INSERT INTO reporttype (id, type, keywords) VALUES (14, 'ENCOUNTER_QUALITY_DASHBOARD', 'ENCOUNTER,QUALITY');
@@ -17,4 +17,3 @@ INSERT INTO reporttype (id, type, keywords) VALUES (16, 'NY_DEV_BPCI_USPI', 'DEV
 INSERT INTO reporttype (id, type, keywords) VALUES (17, 'NY_LIVE_BPCI_USPI', 'LIVE,BPCI,USPI');
 INSERT INTO reporttype (id, type, keywords) VALUES (18, 'NY_DEV_BPCI_CAM', 'DEV,BPCI,CAM');
 INSERT INTO reporttype (id, type, keywords) VALUES (19, 'NY_LIVE_BPCI_CAM', 'LIVE,BPCI,CAM');
-
