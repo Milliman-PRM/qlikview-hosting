@@ -5,291 +5,186 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>User Profile/Password Settings</title>
+
+    <link id="lnkBootstrapcss" runat="server" rel="stylesheet" type="text/css" href="~/Css/bootstrap.css" />
     <style type="text/css">
-    html
-   {
-    overflow    : hidden;
-   }
-    body
-     {
-		margin: 20px 20px 20px 20px;
-	}
-
-        .auto-style1 {
-            width: 410px;
-        }
-
-        button:hover {
-            background-color:#BDCAB4;
-        }
+        html{overflow-y:scroll!important;overflow-x:scroll!important}
+        body{margin:20px}
+        .windowContainer{width:400px;padding:0;background:#fefefe;margin:0 auto;border:1px solid #c4cddb;border-top-color:#d3dbde;border-bottom-color:#bfc9dc;box-shadow:0 1px 1px #ccc;border-radius:5px;position:relative}
+        .windowContainer h3{margin:0;padding:10px 0;font-size:16px;text-align:center;background:#ebebec;border-bottom:1px solid #dde0e7;box-shadow:0 -1px 0 #fff inset;border-radius:5px 5px 0 0;text-shadow:1px 1px 0 #fff;font-weight:700}
+        .windowContainer ul,li{margin:0;padding:0;list-style-type:square}
+        .windowContainer input{border:1px solid #d5d9da;border-radius:5px;box-shadow:0 0 5px #e8e9eb inset;outline:0}
+        .fieldSetWithBorder{border:2px dashed #eee;margin:2px 2px 3px 3px;overflow:hidden;padding:2px;width:217px}
+        .fieldSetWithBorder legend{font-size:14px;line-height:inherit}
+        #passwordCriteriaContainer{background:#fefefe;border:1px solid #ddd;border-radius:5px;box-shadow:0 1px 3px #ccc;display:none;font-size:.8em;padding:6px;position:absolute;right:41px;width:236px;z-index:2000;left:30%;top:68%}
+        #passwordCriteriaContainer:before{content:"\25B2";position:absolute;top:-10px;left:45%;font-size:14px;line-height:12px;color:#ddd;text-shadow:none;display:block}
+        #passwordCriteriaContainer h1,h2,h3,h4{margin:0 0 10px;padding:0;font-weight:400}
+        #passwordCriteriaContainer ul,li{list-style-type:circle;margin:4px 3px 4px 4px;padding:2px 1px 3px 9px;width:203px}
+        .invalidPassword,.validPassword{padding-left:6px;line-height:12px}
+        .invalidPassword{background:url(images/invalid.png) 0 50% no-repeat;color:#ec3f41}
+        .validPassword{background:url(images/valid.png) 0 50% no-repeat;color:#3a7d34}
+        .badMatch{color:#f66}
+        .textbox-focus{border:solid 2px #00C;background:#def}
+        input.textbox-focus{border:2px solid #00C;background:#def}
+        .ddl{border:2px solid #d5d9da;border-radius:3px;padding:3px;text-indent:.01px;font-size:13px;font-family:Georgia;margin:6px 6px 0 2px}
+        /*bootstra specifc*/
+        .container{width:832px}
+        td{padding:4px!important}
+        .form-control{height:30px}
+        .table{margin-bottom:5px}        
     </style>
+    <script type="text/javascript">
+        var GlobalError = '';
+        var PasswordFormatError = "Passwords must have a length of 7 characters, with at least 1 non-alphanumeric character.";
 
-     <script type="text/javascript">
+        function getRadWindow() {
+            var oWindow = null;
+            if (window.radWindow)
+                oWindow = window.radWindow;
+            else if (window.frameElement.radWindow)
+                oWindow = window.frameElement.radWindow;
+            return oWindow;
+        }
 
-         var GlobalError = '';
-         var PasswordFormatError = "Passwords must have a length of 7 characters, with at least 1 non-alphanumeric character.";
+        // Reload parent page
+        function CloseDialog() {
+            var ThisDialog = getRadWindow();
+            var Parent = getRadWindow().BrowserWindow;
+            Parent.radalert('Profile/Password information has been saved.', 350, 150, "Information Saved");
+            ThisDialog.close();
+        }
 
-         function getRadWindow() {
-             var oWindow = null;
-             if (window.radWindow)
-                 oWindow = window.radWindow;
-             else if (window.frameElement.radWindow)
-                 oWindow = window.frameElement.radWindow;
-             return oWindow;
-         }
+        //Clear the Text Boxes
+        function ClearTextboxes() {
+            try {
+                document.getElementById('UserFirstName').value = '';
+                document.getElementById('UserLastName').value = '';
+                //document.getElementById('Email').value = '';
+                document.getElementById('Phone').value = '';
+                document.getElementById('CurrentPassword').value = '';
+                document.getElementById('NewPassword').value = '';
+                document.getElementById('ConfirmNewPassword').value = '';
+                document.getElementById('Answer').value = '';
 
-         // Reload parent page
-         function CloseDialog() {
-             var ThisDialog = getRadWindow();
-             var Parent = getRadWindow().BrowserWindow;
-             // Parent.alert("Profile/Password information has been saved.");
-             Parent.radalert('Profile/Password information has been saved.', 350, 150, "Information Saved" );
-             ThisDialog.close();
-         }
+                //select first element in drop down list
+                var ddl = $('select[name="SecretPhraseDropdown"]');
+                ddl.val(ddl.find('option').first().val());
+            }
+            catch (err)
+            { var txt = 'Errot=>' + err.description; alert(txt); }
+        }
 
-   </script>
+    </script>
 </head>
-<body style="background-color:white;background-image:url(images/watermark.png);background-repeat:repeat" onload="OnLoad();">
+<body style="background-color: white; background-image: url(images/watermark.png); background-repeat: repeat" onload="OnLoad();">
     <form id="form1" runat="server">
-    <table style="border:0px solid gray;width:850px;margin:0px auto;" cellspacing="5" id="PrimaryContainer">
-        <tr>
-            <td colspan="2" style=" padding-right:5px;">
-                <div id="NewUserMessage" style="background-color:white;width:100%;display:block;border:1px solid #316563">
-                    <table border="0" style="padding:5px; overflow: hidden; font-weight:300 ;width:100%" cellpadding="5" >
-                        <tr>
-                            <td>
-                                <img src="css/milliman_small.png" style="border:0px" />
-                            </td>
-                            <td valign="middle">
-                                You are required to change your password and complete your profile information before continuing.&nbsp; Passwords must have a minimum length of 7 characters with at least 1 non-alphanumeric character.
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </td> 
-       </tr>
-
-        <tr>
-            <td class="auto-style1">
-                 <div style="width:400px;height:400px;">
-                    <table  cellpadding="5" style="border:1px solid black;width:400px;flex-align:center">
-                        <tr>
-                            <td  colspan="2" style=" text-align:center; background-image:url(images/header.gif);border-bottom:1px solid black;">User Profile Information</td>
-                        </tr>
-                        <tr>
-                            <td align="right">
-                                <label>First Name</label>
-                            </td>
-                            <td>
-                                <asp:TextBox ID="UserFirstName" runat="server"></asp:TextBox>
-                                </td>
-                        </tr>
-
-                        <tr>
-                            <td align="right">
-                                <label>Last Name</label>
-                            </td>
-                            <td>
-                                <asp:TextBox ID="UserLastName" runat="server"></asp:TextBox>
-                            </td>
-                        </tr>
-
-                       <tr>
-                            <td align="right">
-                                <label>Email</label>
-                            </td>
-                            <td>
-                                <asp:TextBox ID="Email" runat="server"></asp:TextBox><img src="Images/star-blue-icon.png" title="This field is required."/>
-                            </td>
-                        </tr>
-
-                     <tr>
-                            <td align="right">
-                                <label>Company</label>
-                            </td>
-                            <td>
-                                <asp:TextBox ID="Company" runat="server"></asp:TextBox>
-                            </td>
-                        </tr>
-                     <tr>
-                            <td align="right">
-                                <label>Address 1</label>
-                            </td>
-                            <td>
-                                <asp:TextBox ID="Address1" runat="server"></asp:TextBox>
-                            </td>
-                        </tr>
-
-                     <tr>
-                            <td align="right">
-                                <label>Address 2</label>
-                            </td>
-                            <td>
-                                <asp:TextBox ID="Address2" runat="server"></asp:TextBox>
-                            </td>
-                        </tr>
-
-                     <tr>
-                            <td align="right">
-                                <label>City</label>
-                            </td>
-                            <td>
-                                <asp:TextBox ID="City" runat="server"></asp:TextBox>
-                            </td>
-                        </tr>
-                     <tr>
-                            <td align="right">
-                                <label>State</label>
-                            </td>
-                            <td>
-                                <asp:DropDownList id="State" runat="server">
-	                                <asp:ListItem value="AL">Alabama</asp:ListItem>
-	                                <asp:ListItem value="AK">Alaska</asp:ListItem>
-	                                <asp:ListItem value="AZ">Arizona</asp:ListItem>
-	                                <asp:ListItem value="AR">Arkansas</asp:ListItem>
-	                                <asp:ListItem value="CA">California</asp:ListItem>
-	                                <asp:ListItem value="CO">Colorado</asp:ListItem>
-	                                <asp:ListItem value="CT">Connecticut</asp:ListItem>
-	                                <asp:ListItem value="DE">Delaware</asp:ListItem>
-	                                <asp:ListItem value="DC">District of Columbia</asp:ListItem>
-	                                <asp:ListItem value="FL">Florida</asp:ListItem>
-	                                <asp:ListItem value="GA">Georgia</asp:ListItem>
-	                                <asp:ListItem value="HI">Hawaii</asp:ListItem>
-	                                <asp:ListItem value="ID">Idaho</asp:ListItem>
-	                                <asp:ListItem value="IL">Illinois</asp:ListItem>
-	                                <asp:ListItem value="IN">Indiana</asp:ListItem>
-	                                <asp:ListItem value="IA">Iowa</asp:ListItem>
-	                                <asp:ListItem value="KS">Kansas</asp:ListItem>
-	                                <asp:ListItem value="KY">Kentucky</asp:ListItem>
-	                                <asp:ListItem value="LA">Louisiana</asp:ListItem>
-	                                <asp:ListItem value="ME">Maine</asp:ListItem>
-	                                <asp:ListItem value="MD">Maryland</asp:ListItem>
-	                                <asp:ListItem value="MA">Massachusetts</asp:ListItem>
-	                                <asp:ListItem value="MI">Michigan</asp:ListItem>
-	                                <asp:ListItem value="MN">Minnesota</asp:ListItem>
-	                                <asp:ListItem value="MS">Mississippi</asp:ListItem>
-	                                <asp:ListItem value="MO">Missouri</asp:ListItem>
-	                                <asp:ListItem value="MT">Montana</asp:ListItem>
-	                                <asp:ListItem value="NE">Nebraska</asp:ListItem>
-	                                <asp:ListItem value="NV">Nevada</asp:ListItem>
-	                                <asp:ListItem value="NH">New Hampshire</asp:ListItem>
-	                                <asp:ListItem value="NJ">New Jersey</asp:ListItem>
-	                                <asp:ListItem value="NM">New Mexico</asp:ListItem>
-	                                <asp:ListItem value="NY">New York</asp:ListItem>
-	                                <asp:ListItem value="NC">North Carolina</asp:ListItem>
-	                                <asp:ListItem value="ND">North Dakota</asp:ListItem>
-	                                <asp:ListItem value="OH">Ohio</asp:ListItem>
-	                                <asp:ListItem value="OK">Oklahoma</asp:ListItem>
-	                                <asp:ListItem value="OR">Oregon</asp:ListItem>
-	                                <asp:ListItem value="PA">Pennsylvania</asp:ListItem>
-	                                <asp:ListItem value="RI">Rhode Island</asp:ListItem>
-	                                <asp:ListItem value="SC">South Carolina</asp:ListItem>
-	                                <asp:ListItem value="SD">South Dakota</asp:ListItem>
-	                                <asp:ListItem value="TN">Tennessee</asp:ListItem>
-	                                <asp:ListItem value="TX">Texas</asp:ListItem>
-	                                <asp:ListItem value="UT">Utah</asp:ListItem>
-	                                <asp:ListItem value="VT">Vermont</asp:ListItem>
-	                                <asp:ListItem value="VA">Virginia</asp:ListItem>
-	                                <asp:ListItem value="WA">Washington</asp:ListItem>
-	                                <asp:ListItem value="WV">West Virginia</asp:ListItem>
-	                                <asp:ListItem value="WI">Wisconsin</asp:ListItem>
-	                                <asp:ListItem value="WY">Wyoming</asp:ListItem>
-                                </asp:DropDownList>
-
-                            </td>
-                        </tr>
-
-                     <tr>
-                            <td align="right">
-                                <label>Zip Code</label>
-                            </td>
-                            <td>
-                                <asp:TextBox ID="ZipCode" runat="server"></asp:TextBox>
-                            </td>
-                        </tr>
-
-                       <tr>
-                            <td align="right">
-                                <label>Phone</label>
-                            </td>
-                            <td>
-                                <asp:TextBox ID="Phone" runat="server"></asp:TextBox><img src="Images/star-blue-icon.png" title="A phone number is required - valid formats:<br>(999)999-9999 , 999-999-9999 or 9999999999"/>
-                            </td>
-                        </tr>
-<%--                       <tr>
-                            <td align="right">
-                                <label>Mobile</label>
-                            </td>
-                            <td>
-                                <asp:TextBox ID="Mobile" runat="server"></asp:TextBox><img src="Images/star-blue-icon.png" title="A 'phone' or 'mobile' number is required."/>
-                            </td>
-                        </tr>--%>
-
-                       <%-- <tr >
-                            <td colspan="2" align="center"> 
-                                
-                                &nbsp;</td> 
-                        </tr>--%>
-                        </table>
-                 </div>
-            </td>
-
-            <td style="vertical-align:top">
-                <table>
-                      <tr>
-                        <td >
-                             <div style="width:400px; ">
-
-                                <table  cellpadding="5" style="border:1px solid black;width:400px;flex-align:center">
-                                        <tr>
-                                            <td  colspan="3" style=" text-align:center; background-image:url(images/header.gif);border-bottom:1px solid black;">Password Settings</td>
-                                        </tr>                                            
-                                         <tr>
-                                                <td align="right" style="width:170px">
-                                                    <asp:Label ID="CurrentPasswordLabel" runat="server" AssociatedControlID="CurrentPassword">Current Password</asp:Label>
-                                                </td>
-                                                <td>
-                                                    <asp:TextBox ID="CurrentPassword" runat="server" TextMode="Password" Width="170px" onblur="LostFocus()"></asp:TextBox>
-                                                </td>
-                                                <td><img src="Images/star-blue-icon.png" title="This field is required." id="CurrentPasswordIcon" /></td>
-                                            </tr>
-                                            <tr>
-                                                <td align="right" style="width:170px">
-                                                    <asp:Label ID="NewPasswordLabel" runat="server" AssociatedControlID="NewPassword">New Password</asp:Label>
-                                                </td>
-                                                <td>
-                                                    <asp:TextBox ID="NewPassword" runat="server" onblur="LostFocus()" TextMode="Password" Width="170px" ToolTip="Passwords must have a length of 7 characters, with at least 1 non-alphanumeric character."></asp:TextBox>
-                                                </td>
-                                                <td><img src="Images/star-blue-icon.png" title="This field is required." id="NewPasswordIcon"/></td>
-                                            </tr>
-                                            <tr>
-                                                <td align="right" style="width:170px">
-                                                    <asp:Label ID="ConfirmNewPasswordLabel" runat="server" AssociatedControlID="ConfirmNewPassword">Confirm New Password</asp:Label>
-                                                </td>
-                                                <td>
-                                                    <asp:TextBox ID="ConfirmNewPassword" runat="server" onblur="LostFocus()" TextMode="Password" Width="170px" ToolTip="Passwords must have a length of 7 characters, with at least 1 non-alphanumeric character."></asp:TextBox>
-                                                </td>
-                                                <td><img src="Images/star-blue-icon.png" title="This field is required." id="ConfirmPasswordIcon"/></td>
-                                            </tr>
-
-                                        </table>
-                            </div>
-                        </td>
-                      </tr>
-                    <tr><td colspan="2">&nbsp;</td></tr>
-                       <tr>
-                           <td >
-                                 <div style="width:400px; ">
-                                <table  cellpadding="5" style="border:1px solid black;width:400px;flex-align:center">
-                                        <tr>
-                                            <td  colspan="2" style=" text-align:center; background-image:url(images/header.gif);border-bottom:1px solid black;">Password Recovery Settings</td>
-                                        </tr>
-                                        <tr>
-                                        <td align="right">
-                                            <label>Security Question</label>
+        <%--for responsive design--%>
+        <div class="container-fluid">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <%--window for the user profile info--%>
+                        <div id="divUserProfileSettingsContainer" class="windowContainer">
+                            <h3>User Profile Information</h3>
+                            <table class="table table-hover">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <label for="UserFirstName" class="labelweak">First Name:</label></td>
+                                        <td>
+                                            <asp:TextBox ID="UserFirstName" runat="server" CssClass="form-control" Width="185px" MaxLength="50"></asp:TextBox></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label for="UserLastName" class="labelweak">Last Name:</label></td>
+                                        <td>
+                                            <asp:TextBox ID="UserLastName" runat="server" CssClass="form-control" Width="185px" MaxLength="50"></asp:TextBox></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label for="Email" class="labelweak required">Email Address:&nbsp;</label></td>
+                                        <td>
+                                            <asp:TextBox ID="Email" runat="server" CssClass="form-control" Width="250px" MaxLength="256"></asp:TextBox></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label for="Phone" class="labelweak required">Phone:&nbsp;</label>
                                         </td>
                                         <td>
-                                            <asp:DropDownList ID="SecretPhraseDropdown" runat="server">
+                                            <asp:TextBox ID="Phone" runat="server" CssClass="form-control phone" Width="170px" MaxLength="10"></asp:TextBox>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-sm-5">
+                        <%--window for the user Password Verification info--%>
+                        <div class="windowContainer">
+                            <h3>Password Verification</h3>
+                            <table class="table table-hover">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <label for="CurrentPassword" class="labelweak required">Current Password:&nbsp;</label></td>
+                                        <td>
+                                            <asp:TextBox ID="CurrentPassword" runat="server" class="form-control" TextMode="Password" Width="170px"></asp:TextBox>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label for="NewPassword" class="labelweak required">New Password:&nbsp;</label></td>
+                                        <td>
+                                            <%--ensure only 8 chars are entered--%>
+                                            <asp:TextBox ID="NewPassword" runat="server" class="NewPassword form-control" TextMode="Password" Width="170px"
+                                                MaxLength="8"></asp:TextBox>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label for="ConfirmNewPassword" class="labelweak required">Confirm Password:&nbsp;</label></td>
+                                        <td>
+                                            <%--ensure only 8 chars are entered--%>
+<%--                                            <asp:TextBox ID="ConfirmNewPassword" runat="server" class="form-control" TextMode="Password" Width="170px"
+                                               MaxLengt="8" onblur="validatePasswordMatch(); return false;" 
+                                                onkeypress="return this.value.length<=7" ></asp:TextBox>--%>
+
+                                            <asp:TextBox ID="ConfirmNewPassword" runat="server" class="form-control" TextMode="Password" Width="170px"
+                                               MaxLengt="8"  
+                                                onkeypress="return this.value.length<=7" ></asp:TextBox>
+                                            <span id="passwordMatchMessage" class="passwordMatchMessage"></span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div id="passwordCriteriaContainer">
+                                <fieldset class="fieldSetWithBorder">
+                                    <legend>Password Criteria</legend>
+                                    <div id="divcriteria" style="margin: -15px 0 0 1px;">
+                                        <ul>
+                                            <li id="letter" class="invalidPassword">At least <strong>one letter</strong></li>
+                                            <li id="capital" class="invalidPassword">At least <strong>one capital letter</strong></li>
+                                            <li id="lowercase" class="invalidPassword">At least <strong>one lowercase letter</strong></li>
+                                            <li id="number" class="invalidPassword">At least <strong>one number</strong></li>
+                                            <li id="special" class="invalidPassword">Must contain a <strong>special character</strong></li>
+                                            <li id="length" class="invalidPassword">Be at least <strong>8 characters</strong></li>
+                                        </ul>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+                        <div class="space"></div>
+                        <%--window for the user Password Recovery Settings--%>
+                        <div class="windowContainer">
+                            <h3>Password Recovery Settings</h3>
+                            <table class="table table-hover">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <label for="SecretPhraseDropdown" class="labelweak">Security Question:</label></td>
+                                        <td>
+                                            <asp:DropDownList ID="SecretPhraseDropdown" runat="server" Width="293px"
+                                                BackColor="Window" Font-Names="Georgia" CssClass="ddl">
                                                 <asp:ListItem Text="">What was the name of the city you grew up in?</asp:ListItem>
                                                 <asp:ListItem Text="">What was your first pet's name?</asp:ListItem>
                                                 <asp:ListItem Text="">What model was your first car?</asp:ListItem>
@@ -299,190 +194,171 @@
                                                 <asp:ListItem Text="">What is your lucky number?</asp:ListItem>
                                                 <asp:ListItem Text="">What was your childhood nickname?</asp:ListItem>
                                                 <asp:ListItem Text="">What is your favorite vacation place?</asp:ListItem>
-
-                                            </asp:DropDownList>
-                                            
-                                        </td>
+                                            </asp:DropDownList></td>
                                     </tr>
                                     <tr>
-                                        <td align="right">
-                                            <label>Answer</label>
-                                        </td>
                                         <td>
-                                            <asp:TextBox ID="Answer" runat="server"></asp:TextBox><img src="Images/star-blue-icon.png" title="This field is required." />
-                                        </td>
+                                            <label for="Answer" class="labelweak required">Answer:&nbsp;</label></td>
+                                        <td>
+                                            <asp:TextBox ID="Answer" runat="server" CssClass="form-control" Width="170px" MaxLength="128"></asp:TextBox></td>
                                     </tr>
-                                </table>
-  
-                            </div>
-                                <br />
-                                <div id="UserMessages" style="border:0px solid #DF3A01;margin:5px;vertical-align:middle;display:none">
-                                   <div style="float:left;padding:5px"> <img src="Images/warning-orange.png"  /></div>
-                                    <div id="Message" style="float:left;margin:5px;vertical-align:middle;width:300px"> </div>
-                                </div>
-                           </td>
-                        </tr>
-                </table>
-            </td>
-        </tr>
-        <tr>
-            <td style="height:15px;">&nbsp;</td>
-        </tr>
-        <tr>
-            <td colspan="2" style="flex-align:center;text-align:center"> 
-                <asp:Button ID="ChangePasswordPushButton" runat="server" CommandName="ChangePassword" Text="Apply Changes"  OnClick="ChangePasswordPushButton_Click" OnClientClick="return Validate()" BackColor="White" BorderColor="#CCCCCC" BorderStyle="Solid" BorderWidth="1" Height="25px" Width="195px" style=" background-image:url(images/header.gif)" />
-<%--                <asp:ImageButton  ImageUrl="~/Images/applychanges.png" ID="Button1" runat="server" CommandName="ChangePassword"  OnClick="ChangePasswordPushButton_Click" OnClientClick="return Validate()"  />--%>
-           </td>
-        </tr>
-    </table>
-
-      <div id="footer"  style="height:25px;bottom:0;position:absolute;left:10px;right:10px;overflow:hidden;vertical-align:bottom;display:none">
-            <table style="width:100%;height:100%;overflow:hidden">
-                <tr>
-                    <td valign="middle"><center>Copyright &copy Milliman 2015</center></td>
-                </tr>
-            </table> 
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="space"></div>
+            <div id="alert_placeholder" class="errorAlert"></div>
+            <div class="space"></div>
+            <div class="container">
+                <div class="row">
+                    <div class="center-block" style="float: none; padding: 4px; width: 415px;">
+                        <div class="alert alert-warning">
+                            <strong>Important!</strong> All required fields are marked with an asterisk (*).
+                        </div>
+                        <div class="center-block col-md-8" style="float: none;">
+                            <asp:Button ID="Button1" runat="server" CommandName="ChangePassword" Text="Apply Changes"
+                                OnClick="ChangePasswordPushButton_Click" CssClass="btn btn-primary"
+                                OnClientClick="return Validate();" />
+                            <asp:Button ID="Button2" runat="server" CommandName="ResetForm" Text="Reset Form" CssClass="btn btn-primary"
+                                OnClientClick="ClearTextboxes();" />
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
+        <div id="footer" style="height: 25px; bottom: 0; position: absolute; left: 10px; right: 10px; overflow: hidden; vertical-align: bottom; display: none">
+            <table style="width: 100%; height: 100%; overflow: hidden">
+                <tr>
+                    <td valign="middle">
+                        <center>Copyright &copy Milliman 2015</center>
+                    </td>
+                </tr>
+            </table>
+        </div>
+       
     </form>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <script type="text/javascript">
-
         var GlobalError = '';
         var PasswordFormatError = "Passwords must have a length of 7 characters, with at least 1 non-alphanumeric character.";
 
-      
-        function ErrorDialog() {
-            alert('There was an issue saving your information.  An email has been automatically sent to the system administrator on this issue.');
-
-        }
-
+        //form load
         function OnLoad() {
-            var newPasswordIcon = document.getElementById("NewPasswordIcon");
-            var confirmPasswordIcon = document.getElementById("ConfirmPasswordIcon");
-            var currentPasswordIcon = document.getElementById("CurrentPasswordIcon");
-            currentPasswordIcon.style.display = 'none';
-
             if (window.location.href.indexOf('newuser') == -1) {
-                var Header = document.getElementById('NewUserMessage');
-                Header.style.display = 'none';
-                newPasswordIcon.style.display = 'none';
-                confirmPasswordIcon.style.display = 'none';
+                //do nothing
             }
             else {
-                newPasswordIcon.style.display = 'block';
-                confirmPasswordIcon.style.display = 'block';
-                var Primary = document.getElementById('PrimaryContainer');
-                Primary.style.borderWidth = '1px;';
-                var Footer = document.getElementById('footer');
-                Footer.style.display = 'block';
+                bootstrap_alert.warning("You are required to change your password and complete your profile information before continuing.&nbsp <br>Passwords must have a minimum length of 7 characters with at least 1 non-alphanumeric character.")
             }
         }
 
+        //init Bootstrap alert//
+        bootstrap_alert = function () { }
+        bootstrap_alert.warning = function (message) {
+            $('#alert_placeholder').html('<div class="alert alert-danger fade in"><strong> &nbsp Error&nbsp! </strong>&nbsp&nbsp' + message
+                                        + '<a class="close" data-dismiss="alert"><b>x</b></a></div>')
+        }
+
+        //alert close
+        $(".errorAlert").click(function () {
+            $(".alert-danger").alert("close");
+        });
+
+        //Prevent cut, copy, paste
+        $('#ConfirmNewPassword').bind("cut copy paste", function (e) {
+            e.preventDefault();
+        });
+
+        $("#ConfirmNewPassword").keyup(validatePasswordMatch);
+
+        //format phone number to (000)000-0000
+        // check for char and symbos. allow only numbers
+        function phoneFormatter() {
+            $('.phone').on('input', function () {
+                var number = $(this).val().replace(/[^\d]/g, '')
+                if (number.length == 7)
+                {
+                    number = number.replace(/(\d{3})(\d{4})/, "$1-$2");
+                } else if (number.length == 10) {
+                    number = number.replace(/(\d{3})(\d{3})(\d{4})/, "($1)$2-$3");
+                }
+                $(this).val(number)
+            });
+        };
+
+        $(phoneFormatter);
+
+        //function to validate data
         function Validate() {
-            var MsgBox = document.getElementById("UserMessages");
-            MsgBox.style.display = 'none';
-            var Msg = document.getElementById("Message");
-            var MyEmail = document.getElementById("Email");
-  
-            if (MyEmail.value == '') {
-                MsgBox.style.display = 'block';
-                Msg.innerHTML = "The 'Email' field is required.";
-                MyEmail.focus();
-                return false;
-            }
-            var Phone = document.getElementById("Phone");
-            //var Mobile = document.getElementById("Mobile");
-            if ( Phone.value == '' ) 
-            {
-                MsgBox.style.display = 'block';
-                Msg.innerHTML = "The 'Phone' field is required.";
-                Mobile.focus();
-                return false;
-            }
-
-            if ( (Phone.value != '') && (IsValidPhoneNumber(Phone.value) == false) ) {
-                MsgBox.style.display = 'block';
-                Msg.innerHTML = GlobalError;
-                Phone.focus();
-                return false;
-            }
-            //if ( (Mobile.value != '') && (IsValidPhoneNumber(Mobile.value) == false) ) {
-            //    MsgBox.style.display = 'block';
-            //    Msg.innerHTML = GlobalError;
-            //    Mobile.focus();
-            //    return false;
-            //}
-            var passwordAnswer = document.getElementById("Answer");
-            if (passwordAnswer.value == '') {
-                MsgBox.style.display = 'block';
-                Msg.innerHTML = "The password retrieval setting - 'Answer' is required.";
-                passwordAnswer.focus();
-                return false;
-            }
-            var CurPassword = document.getElementById("CurrentPassword");
-            var newPassword = document.getElementById("NewPassword");
-            var confirmPassword = document.getElementById("ConfirmNewPassword");
-
-            if (CurPassword.value != '') {
-                if (newPassword.value == '') {
-                    MsgBox.style.display = 'block';
-                    Msg.innerHTML = "The password setting - 'New Password' cannot be empty";
-                    newPassword.focus();
+            try {
+                var MyEmail = document.getElementById("Email");
+                if (MyEmail.value == '') {
+                    bootstrap_alert.warning('The Email field is required.');
+                    $("#Email").focus();
                     return false;
                 }
-                if (newPassword.value != confirmPassword.value) {
-                    MsgBox.style.display = 'block';
-                    Msg.innerHTML = "The password setting - 'New Password' and 'Confirm New Password' do not match!";
-                    newPassword.focus();
+                var Phone = document.getElementById("Phone");
+                if (Phone.value == '') {
+                    bootstrap_alert.warning('The Phone field is required.');
+                    Phone.focus();
                     return false;
                 }
-            }
+                if ((Phone.value != '') && (IsValidPhoneNumber(Phone.value) == false)) {
+                    bootstrap_alert.warning(GlobalError);
+                    Phone.focus()
+                    Phone.select()
+                    return false;
+                }
 
-            if ( (newPassword.value != '') || (confirmPassword.value != '') )
-            {
+                var CurPassword = document.getElementById("CurrentPassword");
+                var newPassword = document.getElementById("NewPassword");
+                var confirmPassword = document.getElementById("ConfirmNewPassword");
+
                 if (CurPassword.value == '') {
-                    MsgBox.style.display = 'block';
-                    Msg.innerHTML = "To change your password, your 'Current Password' must be provided along with the requested 'New Password' and 'Confirm New Password'.";
-                    CurPassword.focus();
+                    bootstrap_alert.warning('The password setting Current Password filed cannot be empty');
+                    $("#CurrentPassword").focus()
                     return false;
                 }
-                else {
-                    if (IsValidPassword(newPassword.value) == false) {
-                        MsgBox.style.display = 'block';
-                        Msg.innerHTML = PasswordFormatError;
-                        newPassword.focus();
+
+                if (newPassword.value == '') {
+                    bootstrap_alert.warning('The password setting New Password filed cannot be empty');
+                    $("#NewPassword").focus()
+                    return false;
+                }
+
+                if (confirmPassword.value == '') {
+                    bootstrap_alert.warning('The password setting Confirm New Password filed cannot be empty');
+                    $("#ConfirmNewPassword").focus()
+                    return false;
+                }
+
+                if (CurPassword.value != '') {
+                    if (newPassword.value != confirmPassword.value) {
+                        bootstrap_alert.warning('The password setting New Password filed and Confirm New Password field do not match!');
+                        $("#NewPassword").focus()
+                        $("#NewPassword").select()
                         return false;
                     }
                 }
+
+                var passwordAnswer = document.getElementById("Answer");
+                if (passwordAnswer.value == '') {
+                    bootstrap_alert.warning('The password retrieval setting Answer field is required.');
+                    $("#Answer").focus()
+                    return false;
+                }               
             }
-
-
+            catch (err) {
+                return false;
+                var txt = 'Errot=>' + err.description;
+                alert(txt);
+            }
             return true;
-        }
-
-        function LostFocus() {
-            var CPI = document.getElementById("CurrentPasswordIcon");
-            var NPI = document.getElementById("NewPasswordIcon");
-            var CNPI = document.getElementById("ConfirmPasswordIcon");
-
-            var CP = document.getElementById("CurrentPassword");
-            var NP = document.getElementById("NewPassword");
-            var CNP = document.getElementById("ConfirmNewPassword");
-
-            if ( (CP.value != '') || (NP.value != '') || ( CNP.value != ''))
-            {
-                NPI.style.display = 'block';
-                CNPI.style.display = 'block';
-   
-                if ( CP.value.toLowerCase().indexOf("[system provided]") == -1 )
-                    CPI.style.display = 'block';
-            }
-            else {
-                CPI.style.display = 'none';
-                NPI.style.display = 'none';
-                CNPI.style.display = 'none';
-            }
         }
 
         function IsValidPhoneNumber(PhoneNumber) {
@@ -499,12 +375,101 @@
             return true;
         }
 
-        function IsValidPassword(CandidatePassword) {
-            if (/[^a-zA-Z0-9]/.test(CandidatePassword)) {
-                //alert('Input is not alphanumeric');
-                return CandidatePassword.length >= 7;
+        //Password Check
+        $('input.NewPassword').keyup(function () {
+            // set password variable
+            var newpasswordValue = $(this).val();
+
+            //validate the length
+            if (newpasswordValue.length < 8) {
+                $('#length').removeClass('validPassword').addClass('invalidPassword');
+            } else {
+                $('#length').removeClass('invalidPassword').addClass('validPassword');
             }
-            return false;
+
+            //validate any letter
+            if (newpasswordValue.match(/[A-z]/)) {
+                $('#letter').removeClass('invalidPassword').addClass('validPassword');
+            } else {
+                $('#letter').removeClass('validPassword').addClass('invalidPassword');
+            }
+
+            //validate any uppercase letter
+            if (newpasswordValue.match(/[A-Z]/)) {
+                $('#capital').removeClass('invalidPassword').addClass('validPassword');
+            } else {
+                $('#capital').removeClass('validPassword').addClass('invalidPassword');
+            }
+
+            //validate any lower case letter
+            if (newpasswordValue.match(/[a-z]/)) {
+                $('#lowercase').removeClass('invalidPassword').addClass('validPassword');
+            } else {
+                $('#lowercase').removeClass('validPassword').addClass('invalidPassword');
+            }
+
+            //validate a number
+            if (newpasswordValue.match(/[0-9]/)) {
+                $('#number').removeClass('invalidPassword').addClass('validPassword');
+            } else {
+                $('#number').removeClass('validPassword').addClass('invalidPassword');
+            }
+
+            //validate special
+            if (newpasswordValue.match(/[~!@#$%^&*;?+_.]/)) {
+                $('#special').removeClass('invalidPassword').addClass('validPassword');
+            } else {
+                $('#special').removeClass('validPassword').addClass('invalidPassword');
+            }
+
+            //validate repeatedChars allows only 4 letters or numbers
+            //if (newpasswordValue.match(/([a-zA-Z0-9]{4})/)) {
+            //if (newpasswordValue.match(/([A-Za-z])\1\1\1/)) {
+            //if (newpasswordValue.match(/([A-Za-z]{4})/)) {
+            //if (newpasswordValue.match(/([a-z])\1\1\1/)) {
+            //    alert('You can not have more than 3 continus repeated chars.');
+            //    return false;
+            //}
+            //if (newpasswordValue.match(/([A-Z])\1\1\1/)) {
+            //    alert('You can not have more than 3 continus repeated chars.');
+            //    return false;
+            //}
+
+            var regex = new RegExp(/([A-Za-z])\1\1\1/);
+            if (newpasswordValue.match(regex)) {
+                alert('You can not have more than 3 continus repeated chars.');
+                return false;
+            }
+            
+
+            //validate non-printable chars 
+            if (newpasswordValue.match(/[^\u0000-\u007F]/)) {
+                bootstrap_alert.warning('You can not have non-printable chars.');
+                return false;
+            }
+        }).focus(function () {
+            $('#passwordCriteriaContainer').show();
+        }).blur(function () {
+            $('#passwordCriteriaContainer').hide();
+        });
+
+        //function to check if the two password matches
+        var message = document.getElementById('passwordMatchMessage');
+        function validatePasswordMatch() {
+            var newPassword = $("#NewPassword").val();
+            var confirmPassword = $("#ConfirmNewPassword").val();
+            if (newPassword != confirmPassword) {
+                message.innerHTML = "Passwords Do Not Match!"
+                $('#passwordMatchMessage').addClass('badMatch');
+            }
+            else {
+                resetPasswordMatch();
+            }
+        }
+
+        function resetPasswordMatch() {
+            message.innerHTML = "";
+            $('#passwordMatchMessage').removeClass('badMatch');
         }
     </script>
 </body>

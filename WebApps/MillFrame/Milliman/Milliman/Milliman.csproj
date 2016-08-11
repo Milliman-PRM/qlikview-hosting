@@ -83,6 +83,7 @@
     <Content Include="Announcements\Announcements.xml" />
     <Content Include="Announcements\AnnouncementsTemplate.xml" />
     <Content Include="AssertionService.aspx" />
+    <Content Include="Css\bootstrap.css" />
     <Content Include="Css\Milliman_small.png" />
     <Content Include="email_templates\resetpassword.htm" />
     <Content Include="email_templates\welcome.htm" />
@@ -99,6 +100,9 @@
     <Content Include="Images\Word-icon.png" />
     <Content Include="Images\Xml-icon.png" />
     <Content Include="Images\zip-icon.png" />
+    <Content Include="Javascript\bootstrap.js" />
+    <Content Include="Javascript\bootstrap.min.js" />
+    <Content Include="Javascript\npm.js" />
     <Content Include="Logs\placeholder.txt" />
     <Content Include="SecureLinkUsed.html" />
     <Content Include="SecureLinkIssue.html" />
@@ -266,6 +270,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="MimeTypeMap\Mime.dat" />
+    <Content Include="Css\glyphicons-halflings-regular.eot" />
+    <Content Include="Css\glyphicons-halflings-regular.ttf" />
+    <Content Include="Css\glyphicons-halflings-regular.woff" />
     <None Include="Properties\PublishProfiles\MillimanDebug.pubxml" />
     <Content Include="SSOConfigure\tibcert.crt" />
     <Content Include="SSOConfigure\HCIntel.cer" />
@@ -297,7 +304,9 @@
       <Name>MillimanReportReduction</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\licenses.licx" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

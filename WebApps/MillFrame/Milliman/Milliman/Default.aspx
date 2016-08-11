@@ -110,7 +110,10 @@
 
         <telerik:RadWindowManager EnableShadow="true" Behaviors="Resize, Close, Reload, Move" ID="RadWindowManager" DestroyOnClose="true" Opacity="100" runat="server" Width="450" Height="400" VisibleStatusbar="False" Style="z-index: 20000;">
           <Windows>
-               <telerik:RadWindow ID="RadWindow1" runat="server" Animation="Fade" AutoSize="True" Behaviors="Close, Move, Reload" Modal="True"  Height="800px" Width="600px" InitialBehaviors="Close" Title="User Profile/Password Settings" VisibleStatusbar="False"  VisibleTitlebar="False" />
+               <telerik:RadWindow ID="RadWindow1" runat="server" Animation="Fade" AutoSize="True" Behaviors="Close, Move, Reload" Modal="True" 
+                    Height="800px" Width="570px" InitialBehaviors="Close" 
+                   Title="User Profile/Password Settings" VisibleStatusbar="False"  VisibleTitlebar="False"
+                   OnClientResize="clientShow" OnClientDragStart="clientShow" OnClientDragEnd="clientShow"  OnClientShow="clientShow" />
           </Windows>
      </telerik:RadWindowManager>
     </form>
@@ -119,9 +122,20 @@
         function OpenProfile()
         {
             var wnd = window.radopen("profile.aspx", "User Profile/Password Settings");
-            wnd.setSize(900, 550);
+            //setting window size
+            wnd.setSize(950, 570);
             wnd.set_modal(true);
             wnd.Center();
+        }
+
+        function clientShow(sender, args) {
+            debugger;
+            if ($telerik.isChrome) {
+                sender.get_contentFrame().style.width = "";
+                setTimeout(function () {
+                    sender.get_contentFrame().style.width = "100%";
+                }, 0);
+            }
         }
 
         function SayHi() {

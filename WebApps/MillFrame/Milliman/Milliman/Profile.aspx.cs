@@ -16,7 +16,6 @@ namespace MillimanDev2
         {
             if (!IsPostBack)
             {
-
                 LoadData();
                 if (Request["newuser"] != null)
                 {
@@ -53,26 +52,7 @@ namespace MillimanDev2
             UserFirstName.Text = GetValueAsString( PB, "Personal.FirstName");
             UserLastName.Text = GetValueAsString( PB, "Personal.LastName");
             Email.Text = Membership.GetUser().Email;
-            Company.Text = GetValueAsString( PB, "Company.Company");
-            string Address = GetValueAsString( PB, "Company.Address");
-            string address1 = "";
-            string address2 = "";
-            if (string.IsNullOrEmpty(Address) == false)
-            {
-                string[] Addresses = Address.Split(new char[] { '|' });
-                address1 = Addresses[0];
-                if (Addresses.Count() > 1)
-                    address2 = Addresses[1];
-            }
-
-            Address1.Text = address1;
-            Address2.Text = address2;
-            City.Text = GetValueAsString( PB, "Company.City");
-            string StateText = GetValueAsString(PB, "Company.State");
-            State.SelectedValue = StateText.Trim();
-            ZipCode.Text = GetValueAsString( PB, "Company.PostalCode");
             Phone.Text = GetValueAsString( PB, "Company.Phone");
-            //Mobile.Text = GetValueAsString( PB, "Company.Mobile");  
 
             if (string.IsNullOrEmpty( Membership.GetUser().PasswordQuestion ) == false )
                 SecretPhraseDropdown.Text = Membership.GetUser().PasswordQuestion;
@@ -85,14 +65,7 @@ namespace MillimanDev2
  
             SetValueFromString(PB, "Personal.FirstName",UserFirstName.Text);
             SetValueFromString(PB, "Personal.LastName", UserLastName.Text);
-            SetValueFromString(PB, "Company.Company",Company.Text);
-            SetValueFromString(PB, "Company.Address", Address1.Text + "|" + Address2.Text);
- 
-            SetValueFromString(PB, "Company.City",City.Text);
-            SetValueFromString(PB, "Company.State", State.SelectedValue.Trim());
-            SetValueFromString(PB, "Company.PostalCode", ZipCode.Text);
             SetValueFromString(PB, "Company.Phone", Phone.Text);
-            //SetValueFromString(PB, "Company.Mobile", Mobile.Text);  
             PB.Save();
 
             MembershipUser MU = Membership.GetUser();
@@ -106,9 +79,7 @@ namespace MillimanDev2
             }
            // string password = Membership.Providers["dbSqlMemberShipProviderAdmin"].GetPassword(MU.UserName, null);
             string password = MU.GetPassword();
-            MU.ChangePasswordQuestionAndAnswer(password, SecretPhraseDropdown.Text, Answer.Text);
-
-            
+            MU.ChangePasswordQuestionAndAnswer(password, SecretPhraseDropdown.Text, Answer.Text);           
 
         }
 

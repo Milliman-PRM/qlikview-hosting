@@ -312,19 +312,39 @@ ul.AspNet-Menu li:hover ul, ul.AspNet-Menu li li:hover ul, ul.AspNet-Menu li li 
 .GB_Window .on{border-bottom: 1px solid #333;}
 .GB_Window .click{border-bottom: 1px solid white;}
 
-
-.centerElement{margin:auto;padding:5px;}
-.spacer{height:10px;}
-.backgroundColor{background-color:#e8e8e8;}
-.headers{-moz-transition:color .1s ease-in-out 0s;border-bottom:4px solid transparent;color:#555;font-size:1.3em;text-decoration:none!important;text-shadow:1px 1px 0 #FFF;}
-.mainTable{background-color:#e8e8e8;border-collapse:collapse;margin-bottom:5px;width:750px;}
-.customRoundedPanel{overflow:hidden;background:#d3d3d3;border-radius:10px;-moz-border-radius:10px;-webkit-border-radius:10px;-opera-border-radius:10px;}
+.centerElement{margin:auto;padding:5px}
+.spacer{height:10px}
+.backgroundColor{background-color:#e8e8e8}
+.headers{-moz-transition:color .1s ease-in-out 0;border-bottom:4px solid transparent;color:#555;font-size:1.3em;text-decoration:none!important;text-shadow:1px 1px 0 #FFF}
+.mainTable{background-color:#e8e8e8;border-collapse:collapse;margin-bottom:5px;width:750px}
+.customRoundedPanel{overflow:hidden;background:#d3d3d3;border-radius:10px;-moz-border-radius:10px;-webkit-border-radius:10px;-opera-border-radius:10px}
 .customRoundPanelShadow{box-shadow:0 1px 2px 1px #666}
 .softRoundContainer{width:754px;margin-top:10px}
 .softRoundContainerStyle{border:2px solid #fff;border-radius:4px;box-shadow:0 0 5px #888}
-/*.softRoundContainer-editor{-moz-transition:all .5s ease-in-out 0s;-moz-box-shadow:0 0 52px #B0AEAE;-moz-border-radius-bottomleft:15px;-moz-border-radius-bottomright:15px;-moz-border-radius-topleft:15px;-moz-border-radius-topright:15px;-webkit-border-radius:15px}*/
-.softRoundContainer-editor{border:1px solid #B0AEAE;margin:3px;overflow:hidden;padding:10px;-moz-transition:all .5s ease-in-out 0s;-moz-box-shadow:0 0 52px #B0AEAE;-moz-border-radius-bottomleft:15px;-moz-border-radius-bottomright:15px;-moz-border-radius-topleft:15px;-moz-border-radius-topright:15px;-webkit-border-radius:15px;}
-
-.navyHeaderFont{
-    font-weight: bold; color: Navy; font-size: 12px;
-}
+.softRoundContainer-editor{border:1px solid #B0AEAE;margin:3px;overflow:hidden;padding:10px;-moz-transition:all .5s ease-in-out 0;-moz-box-shadow:0 0 52px #B0AEAE;-moz-border-radius-bottomleft:15px;-moz-border-radius-bottomright:15px;-moz-border-radius-topleft:15px;-moz-border-radius-topright:15px;-webkit-border-radius:15px}
+.space{margin-bottom:5px}
+.alert{border:1px solid transparent;border-radius:4px!important;margin-bottom:6px!important;padding:4px!important}
+.weak{color:#999;font-size:14px}
+.labelweak{color:#5f6162;font-size:12px;margin:5px -6px 3px 8px}
+.required:after{content:" *";font-weight:700;color:#c1c1c1;font-size:20px;margin:0;float:right}
+.navyHeaderFont{font-weight:700;color:Navy;font-size:12px}
+.weak{color:#999;font-size:14px}
+.labelweak{color:#5f6162;font-size:12px;margin:5px -6px 3px 8px}
+.required:after{content:" *";font-weight:700;color:#c1c1c1;font-size:20px;margin:0;float:right}
+.windowContainer{width:400px;padding:0;background:#fefefe;margin:0 auto;border:1px solid #c4cddb;border-top-color:#d3dbde;border-bottom-color:#bfc9dc;box-shadow:0 1px 1px #ccc;border-radius:5px;position:relative}
+.windowContainer h3{margin:0;padding:10px 0;font-size:16px;text-align:center;background:#ebebec;border-bottom:1px solid #dde0e7;box-shadow:0 -1px 0 #fff inset;border-radius:5px 5px 0 0;text-shadow:1px 1px 0 #fff;font-weight:700}
+.windowContainer ul,li{margin:0;padding:0;list-style-type:square}
+.windowContainer input{border:1px solid #d5d9da;border-radius:5px;box-shadow:0 0 5px #e8e9eb inset;outline:0}
+.fieldSetWithBorder{border:2px dashed #eee;margin:2px 2px 3px 3px;overflow:hidden;padding:2px;width:217px}
+.fieldSetWithBorder legend{font-size:14px;line-height:inherit}
+#passwordCriteriaContainer{background:#fefefe;border:1px solid #ddd;border-radius:5px;box-shadow:0 1px 3px #ccc;display:none;font-size:.8em;padding:6px;position:absolute;right:41px;width:236px;z-index:2000;left:30%;top:68%}
+#passwordCriteriaContainer:before{content:"\25B2";position:absolute;top:-10px;left:45%;font-size:14px;line-height:12px;color:#ddd;text-shadow:none;display:block}
+#passwordCriteriaContainer h1,h2,h3,h4{margin:0 0 10px;padding:0;font-weight:400}
+#passwordCriteriaContainer ul,li{list-style-type:circle;margin:4px 3px 4px 4px;padding:2px 1px 3px 9px;width:203px}
+.invalidPassword,.validPassword{padding-left:6px;line-height:12px}
+.invalidPassword{background:url(images/invalid.png) 0 50% no-repeat;color:#ec3f41}
+.validPassword{background:url(images/valid.png) 0 50% no-repeat;color:#3a7d34}
+.badMatch{color:#f66}
+.textbox-focus{border:solid 2px #00C;background:#def}
+input.textbox-focus{border:2px solid #00C;background:#def}
+.ddl{border:2px solid #d5d9da;border-radius:3px;padding:3px;text-indent:.01px;font-size:13px;font-family:Georgia;margin:6px 6px 0 2px}
