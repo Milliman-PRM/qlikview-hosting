@@ -24,7 +24,7 @@ INSERT INTO reporttype (id, type, keywords) VALUES (6, 'NY_DEMO_BPCI_PREMIER', '
 INSERT INTO reporttype (id, type, keywords) VALUES (7, 'NY_DEMO_BPCI_MILLIMAN', 'BPCI,DEMO,MILLIMAN');
 INSERT INTO reporttype (id, type, keywords) VALUES (8, 'NY_DEV_CJR', 'DEV,BPCI,CJR');
 INSERT INTO reporttype (id, type, keywords) VALUES (9, 'NY_LIVE_CJR', 'LIVE,BPCI,CJR');
-INSERT INTO reporttype (id, type, keywords) VALUES (10, 'NY_DEMO_CJR', 'CJR,DEMO');
+INSERT INTO reporttype (id, type, keywords) VALUES (10, 'NY_DEMO_CJR', 'CJR,REPORTING,DEMO');
 INSERT INTO reporttype (id, type, keywords) VALUES (11, 'NY_DEMO_CJR_PREMIER', 'CJR,DEMO,PREMIER');
 INSERT INTO reporttype (id, type, keywords) VALUES (12, 'VT_GAP', 'GAP');
 INSERT INTO reporttype (id, type, keywords) VALUES (13, 'CAPITATION_DASHBOARD', 'CAPITATION');
@@ -98,7 +98,6 @@ BEGIN
 		--Replace some undesirable charachters or strings that could be in the report name
 		parsed_report_name := '';
 		parsed_report_name := replace(report_name, '- ', '');
-		parsed_report_name := replace(parsed_report_name, 'REPORTING ', '');
 
 		--Attempt to match the report name to any of the keywords in the report type table
 		FOR rt IN SELECT * FROM public.reporttype
