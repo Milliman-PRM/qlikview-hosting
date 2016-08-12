@@ -9,7 +9,13 @@
     <link id="lnkBootstrapcss" runat="server" rel="stylesheet" type="text/css" href="~/Css/bootstrap.css" />
     <style type="text/css">
         html{overflow-y:scroll!important;overflow-x:scroll!important}
+        html, button, input, select, textarea,label { font-family: arial,"Times New Roman" ,Times,serif,sans-serif; font-size: 12px; color: #222; }
         body{margin:20px}
+        .space{margin-bottom:5px}
+        .alert{border:1px solid transparent;border-radius:4px!important;margin-bottom:6px!important;padding:4px!important}
+        .weak{color:#999;font-size:14px}
+        .labelweak{color:#5f6162;font-size:12px;margin:5px -6px 3px 8px}
+        .required:after{content:" *";font-weight:700;color:#c1c1c1;font-size:20px;margin:0;float:right}
         .windowContainer{width:400px;padding:0;background:#fefefe;margin:0 auto;border:1px solid #c4cddb;border-top-color:#d3dbde;border-bottom-color:#bfc9dc;box-shadow:0 1px 1px #ccc;border-radius:5px;position:relative}
         .windowContainer h3{margin:0;padding:10px 0;font-size:16px;text-align:center;background:#ebebec;border-bottom:1px solid #dde0e7;box-shadow:0 -1px 0 #fff inset;border-radius:5px 5px 0 0;text-shadow:1px 1px 0 #fff;font-weight:700}
         .windowContainer ul,li{margin:0;padding:0;list-style-type:square}
@@ -27,11 +33,12 @@
         .textbox-focus{border:solid 2px #00C;background:#def}
         input.textbox-focus{border:2px solid #00C;background:#def}
         .ddl{border:2px solid #d5d9da;border-radius:3px;padding:3px;text-indent:.01px;font-size:13px;font-family:Georgia;margin:6px 6px 0 2px}
+        .dashedSeparator{margin:25px 0px;border-bottom:dashed 1px #666;}
         /*bootstra specifc*/
         .container{width:832px}
         td{padding:4px!important}
         .form-control{height:30px}
-        .table{margin-bottom:5px}        
+        .table{margin-bottom:5px}  
     </style>
     <script type="text/javascript">
         var GlobalError = '';
@@ -111,7 +118,7 @@
                                             <label for="Phone" class="labelweak required">Phone:&nbsp;</label>
                                         </td>
                                         <td>
-                                            <asp:TextBox ID="Phone" runat="server" CssClass="form-control phone" Width="170px" MaxLength="10"></asp:TextBox>
+                                            <asp:TextBox ID="Phone" runat="server" CssClass="form-control phone" Width="185px" MaxLength="10"></asp:TextBox>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -128,7 +135,7 @@
                                         <td>
                                             <label for="CurrentPassword" class="labelweak required">Current Password:&nbsp;</label></td>
                                         <td>
-                                            <asp:TextBox ID="CurrentPassword" runat="server" class="form-control" TextMode="Password" Width="170px"></asp:TextBox>
+                                            <asp:TextBox ID="CurrentPassword" runat="server" class="form-control" TextMode="Password" Width="185px"></asp:TextBox>
                                         </td>
                                     </tr>
                                     <tr>
@@ -136,7 +143,7 @@
                                             <label for="NewPassword" class="labelweak required">New Password:&nbsp;</label></td>
                                         <td>
                                             <%--ensure only 8 chars are entered--%>
-                                            <asp:TextBox ID="NewPassword" runat="server" class="NewPassword form-control" TextMode="Password" Width="170px"
+                                            <asp:TextBox ID="NewPassword" runat="server" class="NewPassword form-control" TextMode="Password" Width="185px"
                                                 MaxLength="8"></asp:TextBox>
                                         </td>
                                     </tr>
@@ -144,12 +151,7 @@
                                         <td>
                                             <label for="ConfirmNewPassword" class="labelweak required">Confirm Password:&nbsp;</label></td>
                                         <td>
-                                            <%--ensure only 8 chars are entered--%>
-<%--                                            <asp:TextBox ID="ConfirmNewPassword" runat="server" class="form-control" TextMode="Password" Width="170px"
-                                               MaxLengt="8" onblur="validatePasswordMatch(); return false;" 
-                                                onkeypress="return this.value.length<=7" ></asp:TextBox>--%>
-
-                                            <asp:TextBox ID="ConfirmNewPassword" runat="server" class="form-control" TextMode="Password" Width="170px"
+                                            <asp:TextBox ID="ConfirmNewPassword" runat="server" class="form-control" TextMode="Password" Width="185px"
                                                MaxLengt="8"  
                                                 onkeypress="return this.value.length<=7" ></asp:TextBox>
                                             <span id="passwordMatchMessage" class="passwordMatchMessage"></span>
@@ -200,7 +202,7 @@
                                         <td>
                                             <label for="Answer" class="labelweak required">Answer:&nbsp;</label></td>
                                         <td>
-                                            <asp:TextBox ID="Answer" runat="server" CssClass="form-control" Width="170px" MaxLength="128"></asp:TextBox></td>
+                                            <asp:TextBox ID="Answer" runat="server" CssClass="form-control" Width="295px" MaxLength="128"></asp:TextBox></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -291,54 +293,86 @@
             });
         };
 
-        $(phoneFormatter);
+       $(phoneFormatter);
 
         //function to validate data
         function Validate() {
             try {
-                var MyEmail = document.getElementById("Email");
-                if (MyEmail.value == '') {
+
+                //allow only alphabets
+                var regixCharsOnly = new RegExp(/^[a-zA-Z]*$/);
+                if ($('#UserFirstName').val() != '') {
+                    if (!$('#UserFirstName').val().match(regixCharsOnly)) {
+                        bootstrap_alert.warning('The First name can be characters only.');
+                        $("#UserFirstName").focus();
+                        return false;
+                    }
+                }
+                if ($('#UserLastName').val() != '') {
+                    if (!$('#UserLastName').val().match(regixCharsOnly)) {
+                        bootstrap_alert.warning('The last name can be characters only.');
+                        $("#UserLastName").focus();
+                        return false;
+                    }
+                }                
+
+                var MyEmail = $('#Email').val();
+                if (MyEmail == '') {
                     bootstrap_alert.warning('The Email field is required.');
                     $("#Email").focus();
                     return false;
                 }
-                var Phone = document.getElementById("Phone");
-                if (Phone.value == '') {
+
+                var Phone = $('#Phone').val();
+                if (Phone == '') {
                     bootstrap_alert.warning('The Phone field is required.');
-                    Phone.focus();
+                    $('#Phone').focus();
                     return false;
                 }
-                if ((Phone.value != '') && (IsValidPhoneNumber(Phone.value) == false)) {
+                if ((Phone != '') && (IsValidPhoneNumber(Phone) == false)) {
                     bootstrap_alert.warning(GlobalError);
-                    Phone.focus()
-                    Phone.select()
+                    $('#Phone').focus()
+                    $('#Phone').select()
                     return false;
                 }
 
-                var CurPassword = document.getElementById("CurrentPassword");
-                var newPassword = document.getElementById("NewPassword");
-                var confirmPassword = document.getElementById("ConfirmNewPassword");
+                var CurPassword = $('#CurrentPassword').val(); //document.getElementById("CurrentPassword").value;
+                var newPassword = $('#NewPassword').val(); //document.getElementById("NewPassword").value;
+                var confirmPassword = $('#ConfirmNewPassword').val(); //document.getElementById("ConfirmNewPassword").value;
 
-                if (CurPassword.value == '') {
-                    bootstrap_alert.warning('The password setting Current Password filed cannot be empty');
+               if (CurPassword == '') {
+                    bootstrap_alert.warning('The password setting Current Password filed cannot be empty.');
                     $("#CurrentPassword").focus()
                     return false;
                 }
-
-                if (newPassword.value == '') {
-                    bootstrap_alert.warning('The password setting New Password filed cannot be empty');
+             
+                if (newPassword == '') {
+                    bootstrap_alert.warning('The password setting New Password filed cannot be empty.');
                     $("#NewPassword").focus()
                     return false;
                 }
 
-                if (confirmPassword.value == '') {
-                    bootstrap_alert.warning('The password setting Confirm New Password filed cannot be empty');
-                    $("#ConfirmNewPassword").focus()
+                if (newPassword.length < 8)
+                {
+                    bootstrap_alert.warning('The New Password field length must be 8 chars.');
+                    $("#NewPassword").focus()
+                    return false;
+                }
+                
+                if (confirmPassword == '') {
+                    bootstrap_alert.warning('The password setting Confirm New Password filed cannot be empty.');
+                    $('#ConfirmNewPassword').focus()
                     return false;
                 }
 
-                if (CurPassword.value != '') {
-                    if (newPassword.value != confirmPassword.value) {
+                if (confirmPassword.length < 8) {
+                    bootstrap_alert.warning('The Confirm Password length must be 8 chars.');
+                    $('#ConfirmNewPassword').focus()
+                    return false;
+                }
+
+                if (CurPassword != '') {
+                    if (newPassword != confirmPassword) {
                         bootstrap_alert.warning('The password setting New Password filed and Confirm New Password field do not match!');
                         $("#NewPassword").focus()
                         $("#NewPassword").select()
@@ -346,10 +380,10 @@
                     }
                 }
 
-                var passwordAnswer = document.getElementById("Answer");
-                if (passwordAnswer.value == '') {
+                var passwordAnswer = $('#Answer').val(); //document.getElementById("Answer").v;
+                if (passwordAnswer == '') {
                     bootstrap_alert.warning('The password retrieval setting Answer field is required.');
-                    $("#Answer").focus()
+                    $('#Answer').focus()
                     return false;
                 }               
             }
@@ -415,13 +449,19 @@
                 $('#number').removeClass('validPassword').addClass('invalidPassword');
             }
 
-            //validate special
+            //validate allowed special
             if (newpasswordValue.match(/[~!@#$%^&*;?+_.]/)) {
                 $('#special').removeClass('invalidPassword').addClass('validPassword');
             } else {
                 $('#special').removeClass('validPassword').addClass('invalidPassword');
             }
 
+            //not allowed chars
+            var regexChar = new RegExp(/[`,<>;':"/[\]|{}()=-]/);
+            if (newpasswordValue.match(regexChar)) {
+                alert('The character you entered is not valid.');
+                return false;
+            }
             //validate repeatedChars allows only 4 letters or numbers
             //if (newpasswordValue.match(/([a-zA-Z0-9]{4})/)) {
             //if (newpasswordValue.match(/([A-Za-z])\1\1\1/)) {

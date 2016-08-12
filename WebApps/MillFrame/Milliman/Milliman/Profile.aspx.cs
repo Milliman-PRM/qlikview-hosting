@@ -63,8 +63,8 @@ namespace MillimanDev2
         {
             ProfileBase PB = ProfileBase.Create(Membership.GetUser().UserName);
  
-            SetValueFromString(PB, "Personal.FirstName",UserFirstName.Text);
-            SetValueFromString(PB, "Personal.LastName", UserLastName.Text);
+            SetValueFromString(PB, "Personal.FirstName", SentenceCase(UserFirstName.Text));
+            SetValueFromString(PB, "Personal.LastName", SentenceCase(UserLastName.Text));
             SetValueFromString(PB, "Company.Phone", Phone.Text);
             PB.Save();
 
@@ -81,6 +81,21 @@ namespace MillimanDev2
             string password = MU.GetPassword();
             MU.ChangePasswordQuestionAndAnswer(password, SecretPhraseDropdown.Text, Answer.Text);           
 
+        }
+
+        /// <summary>
+        /// Converts a string to sentence case.
+        /// </summary>
+        /// <param name="input">The string to convert.</param>
+        /// <returns>A string</returns>
+        public static string SentenceCase(string input)
+        {
+            if (input.Length < 1)
+                return input;
+
+            string sentence = input.ToLower();
+            return sentence[0].ToString().ToUpper() +
+               sentence.Substring(1);
         }
 
         private enum DataValidationTypes { DATA_VALID, BAD_CURRENT_PASSWORD, NO_PASSWORD_CHANGE, EMBEDDED_PASSWORD, UNSPECIFIED_ERROR };
