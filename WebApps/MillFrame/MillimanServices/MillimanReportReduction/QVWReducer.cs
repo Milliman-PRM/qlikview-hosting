@@ -218,20 +218,34 @@ namespace MillimanReportReduction
                     //do something else
                     Client.SaveDocumentTask(documentTask);
 
-                    System.Threading.Thread.Sleep(4000);//give it a second
+                TaskInfo TI = Client.FindTask(qdsGuid, TaskType.DocumentTask, documentTask.General.TaskName);
+                while (TI == null)
+                {
+                    System.Threading.Thread.Sleep(100);
+                    TI = Client.FindTask(qdsGuid, TaskType.DocumentTask, documentTask.General.TaskName);
+                }
+
+                //keep looping and telling to run, until it RUNS
+                TaskStatus taskStatus = Client.GetTaskStatus(documentTask.ID, TaskStatusScope.All);
+                while (string.Compare(taskStatus.General.Status.ToString(), "running", true) != 0)
+                {
                     Client.RunTask(documentTask.ID);
+                    System.Threading.Thread.Sleep(1000);
+                    taskStatus = Client.GetTaskStatus(documentTask.ID, TaskStatusScope.All);
+                }
 
-                    TaskStatus taskStatus = Client.GetTaskStatus(documentTask.ID, TaskStatusScope.All);
-                    while (string.IsNullOrEmpty(taskStatus.Extended.LastLogMessages))
-                    {
-                        System.Threading.Thread.Sleep(1000);
-                        taskStatus = Client.GetTaskStatus(documentTask.ID, TaskStatusScope.All);
-                    }
+                //loop till we get a log status message
+                taskStatus = Client.GetTaskStatus(documentTask.ID, TaskStatusScope.All);
+                while (string.IsNullOrEmpty(taskStatus.Extended.LastLogMessages))
+                {
+                    System.Threading.Thread.Sleep(1000);
+                    taskStatus = Client.GetTaskStatus(documentTask.ID, TaskStatusScope.All);
+                }
 
-                    TaskCompletedAt = System.Convert.ToDateTime(taskStatus.Extended.FinishedTime);
-                    TaskStatusMsg = taskStatus.Extended.LastLogMessages;
+                TaskCompletedAt = System.Convert.ToDateTime(taskStatus.Extended.FinishedTime);
+                TaskStatusMsg = taskStatus.Extended.LastLogMessages;
 
-                    if (DeleteTaskOnCompletion == true)
+                if (DeleteTaskOnCompletion == true)
                     {
                         bool Status = Client.DeleteTask(documentTask.ID, TaskType.DocumentTask);
                         System.IO.Directory.Delete(System.IO.Path.GetDirectoryName(SourceFolderFile), true);
