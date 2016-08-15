@@ -225,21 +225,45 @@ namespace MillimanReportReduction
                     TI = Client.FindTask(qdsGuid, TaskType.DocumentTask, documentTask.General.TaskName);
                 }
 
-                //keep looping and telling to run, until it RUNS
-                TaskStatus taskStatus = Client.GetTaskStatus(documentTask.ID, TaskStatusScope.All);
-                while (string.Compare(taskStatus.General.Status.ToString(), "running", true) != 0)
+                DateTime StartPollingTime = DateTime.Now;
+                //keep looping and telling to run, until it RUNS,  entire process for 2 while loops should be less than 30 mins
+                TaskStatus taskStatus = null;
+                while (true)
                 {
                     Client.RunTask(documentTask.ID);
                     System.Threading.Thread.Sleep(1000);
                     taskStatus = Client.GetTaskStatus(documentTask.ID, TaskStatusScope.All);
+                    if (taskStatus == null)
+                    {
+                        throw new System.Exception("Task " + TaskID + " for document '" + QualifiedQVWNameToReduce + "' was not found by QV publisher - Run");
+                    }
+                    else if (string.Compare(taskStatus.General.Status.ToString(), "running", true) == 0)
+                    {
+                        break;
+                    }
+                    else if ((DateTime.Now - StartPollingTime).TotalMinutes > 30.0)
+                    {
+                        throw new System.Exception("Task " + TaskID + " for document '" + QualifiedQVWNameToReduce + "' aborted after 30 minutes - Run");
+                    }
                 }
 
                 //loop till we get a log status message
-                taskStatus = Client.GetTaskStatus(documentTask.ID, TaskStatusScope.All);
-                while (string.IsNullOrEmpty(taskStatus.Extended.LastLogMessages))
+                while (true)
                 {
-                    System.Threading.Thread.Sleep(1000);
                     taskStatus = Client.GetTaskStatus(documentTask.ID, TaskStatusScope.All);
+                    if (taskStatus == null)
+                    {
+                        throw new System.Exception("Task " + TaskID + " for document '" + QualifiedQVWNameToReduce + "' was not found by QV publisher - Finished");
+                    }
+                    else if ((taskStatus.Extended != null) && (string.IsNullOrEmpty(taskStatus.Extended.LastLogMessages)))
+                    {
+                        break;
+                    }
+                    else if ((DateTime.Now - StartPollingTime).TotalMinutes > 30.0)
+                    {
+                        throw new System.Exception("Task " + TaskID + " for document '" + QualifiedQVWNameToReduce + "' aborted after 30 minutes - Finished");
+                    }
+                    System.Threading.Thread.Sleep(1000);
                 }
 
                 TaskCompletedAt = System.Convert.ToDateTime(taskStatus.Extended.FinishedTime);
