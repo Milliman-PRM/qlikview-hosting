@@ -91,6 +91,7 @@ try
         $ErrorMessage = $_.Exception.Message
         $FailedItem = $_.Exception.ItemName
         Write-Host ("Exception with message: {0} from item {1}" -f $ErrorMessage, $FailedItem)
+		throw $_.Exception
     }
     finally
     {

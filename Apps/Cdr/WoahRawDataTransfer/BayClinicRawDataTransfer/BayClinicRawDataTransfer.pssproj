@@ -7,13 +7,14 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>MyApplication</RootNamespace>
     <AssemblyName>MyApplication</AssemblyName>
-    <Name>WoahRawDataTransfer</Name>
+    <Name>BayClinicRawDataTransfer</Name>
     <ClrVersion />
     <PowerShellHostVersion />
     <PowerShellVersion />
     <ProcessorArchitecture />
     <RequiredModules />
     <WorkingDirectory>$(ProjectDir)</WorkingDirectory>
+    <ProjectHome />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
