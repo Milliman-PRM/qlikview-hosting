@@ -5,11 +5,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>User Profile/Password Settings</title>
-
     <link id="lnkBootstrapcss" runat="server" rel="stylesheet" type="text/css" href="~/Css/bootstrap.css" />
     <style type="text/css">
         html{overflow-y:scroll!important;overflow-x:scroll!important}
-        html, button, input, select, textarea,label { font-family: arial,"Times New Roman" ,Times,serif,sans-serif; font-size: 12px; color: #222; }
+        html,button,input,select,textarea,label{font-family:arial,"Times New Roman",Times,serif,sans-serif;font-size:12px;color:#222}
         body{margin:20px}
         .space{margin-bottom:5px}
         .alert{border:1px solid transparent;border-radius:4px!important;margin-bottom:6px!important;padding:4px!important}
@@ -33,12 +32,22 @@
         .textbox-focus{border:solid 2px #00C;background:#def}
         input.textbox-focus{border:2px solid #00C;background:#def}
         .ddl{border:2px solid #d5d9da;border-radius:3px;padding:3px;text-indent:.01px;font-size:13px;font-family:Georgia;margin:6px 6px 0 2px}
-        .dashedSeparator{margin:25px 0px;border-bottom:dashed 1px #666;}
+        .dashedSeparator{margin:25px 0;border-bottom:dashed 1px #666}
         /*bootstra specifc*/
         .container{width:832px}
         td{padding:4px!important}
         .form-control{height:30px}
-        .table{margin-bottom:5px}  
+        .table{margin-bottom:5px}
+        /*password hint*/
+        .smallContainer{background:#F4F9FB none repeat scroll 0 0;border:2px dashed #ddd;margin:1px 4px -7px -1px;width:400px}
+        .first-of-type{margin:4px 3px 4px -2px}
+        .addBar{font-size:14px;font-weight:700;margin:-1px 36px -3px;overflow:hidden;width:300px}
+        .listUL{font-size:12px;list-style-type:square;margin:3px 0 -2px 32px;padding:2px 1px 1px 6px;width:312px}
+        .listLi{font-size:12px;list-style-type:square;margin:3px 0 -2px 32px;padding:2px 1px 1px 6px;width:267px}
+        .showHideDivHeader{width:400px;padding:0;margin:4px 8px 9px 1px;cursor:pointer}
+        .showHideDivContext{padding:5px -1px;background-color:#fafafa}
+        .showPassword{float:right;margin:-25px 13px 0 0}
+        .hidePassword{float:right;margin:-30px 2px 0 0;background:#ff0 url(./Images/eye-icon.png) 20px 75px no-repeat}
     </style>
     <script type="text/javascript">
         var GlobalError = '';
@@ -83,154 +92,179 @@
 
     </script>
 </head>
-<body style="background-color: white; background-image: url(images/watermark.png); background-repeat: repeat" onload="OnLoad();">
+<body style="background-color: white; background-image: url(images/watermark.png); background-repeat: repeat;" onload="OnLoad();">
     <form id="form1" runat="server">
         <%--for responsive design--%>
         <div class="container-fluid">
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <%--window for the user profile info--%>
-                        <div id="divUserProfileSettingsContainer" class="windowContainer">
-                            <h3>User Profile Information</h3>
-                            <table class="table table-hover">
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <label for="UserFirstName" class="labelweak">First Name:</label></td>
-                                        <td>
-                                            <asp:TextBox ID="UserFirstName" runat="server" CssClass="form-control" Width="185px" MaxLength="50"></asp:TextBox></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <label for="UserLastName" class="labelweak">Last Name:</label></td>
-                                        <td>
-                                            <asp:TextBox ID="UserLastName" runat="server" CssClass="form-control" Width="185px" MaxLength="50"></asp:TextBox></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <label for="Email" class="labelweak required">Email Address:&nbsp;</label></td>
-                                        <td>
-                                            <asp:TextBox ID="Email" runat="server" CssClass="form-control" Width="250px" MaxLength="256"></asp:TextBox></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <label for="Phone" class="labelweak required">Phone:&nbsp;</label>
-                                        </td>
-                                        <td>
-                                            <asp:TextBox ID="Phone" runat="server" CssClass="form-control phone" Width="185px" MaxLength="10"></asp:TextBox>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <%--window for the user profile info--%>
+                    <div id="divUserProfileSettingsContainer" class="windowContainer">
+                        <h3>User Profile Information</h3>
+                        <table class="table table-hover">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <label for="UserFirstName" class="labelweak">First Name:</label></td>
+                                    <td>
+                                        <asp:TextBox ID="UserFirstName" runat="server" CssClass="form-control" Width="185px" MaxLength="50"></asp:TextBox></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label for="UserLastName" class="labelweak">Last Name:</label></td>
+                                    <td>
+                                        <asp:TextBox ID="UserLastName" runat="server" CssClass="form-control" Width="185px" MaxLength="50"></asp:TextBox></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label for="Email" class="labelweak required">Email Address:&nbsp;</label></td>
+                                    <td>
+                                        <asp:TextBox ID="Email" runat="server" CssClass="form-control" Width="250px" MaxLength="256"></asp:TextBox></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label for="Phone" class="labelweak required">Phone:&nbsp;</label>
+                                    </td>
+                                    <td>
+                                        <asp:TextBox ID="Phone" runat="server" CssClass="form-control phone" Width="185px" MaxLength="10"></asp:TextBox>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="col-sm-5">
-                        <%--window for the user Password Verification info--%>
-                        <div class="windowContainer">
-                            <h3>Password Verification</h3>
-                            <table class="table table-hover">
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <label for="CurrentPassword" class="labelweak required">Current Password:&nbsp;</label></td>
-                                        <td>
-                                            <asp:TextBox ID="CurrentPassword" runat="server" class="form-control" TextMode="Password" Width="185px"></asp:TextBox>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <label for="NewPassword" class="labelweak required">New Password:&nbsp;</label></td>
-                                        <td>
-                                            <%--ensure only 8 chars are entered--%>
-                                            <asp:TextBox ID="NewPassword" runat="server" class="NewPassword form-control" TextMode="Password" Width="185px"
-                                                MaxLength="8"></asp:TextBox>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <label for="ConfirmNewPassword" class="labelweak required">Confirm Password:&nbsp;</label></td>
-                                        <td>
-                                            <asp:TextBox ID="ConfirmNewPassword" runat="server" class="form-control" TextMode="Password" Width="185px"
-                                               MaxLengt="8"  
-                                                onkeypress="return this.value.length<=7" ></asp:TextBox>
-                                            <span id="passwordMatchMessage" class="passwordMatchMessage"></span>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <div id="passwordCriteriaContainer">
-                                <fieldset class="fieldSetWithBorder">
-                                    <legend>Password Criteria</legend>
-                                    <div id="divcriteria" style="margin: -15px 0 0 1px;">
-                                        <ul>
-                                            <li id="letter" class="invalidPassword">At least <strong>one letter</strong></li>
-                                            <li id="capital" class="invalidPassword">At least <strong>one capital letter</strong></li>
-                                            <li id="lowercase" class="invalidPassword">At least <strong>one lowercase letter</strong></li>
-                                            <li id="number" class="invalidPassword">At least <strong>one number</strong></li>
-                                            <li id="special" class="invalidPassword">Must contain a <strong>special character</strong></li>
-                                            <li id="length" class="invalidPassword">Be at least <strong>8 characters</strong></li>
-                                        </ul>
-                                    </div>
+                    <%--window for the user profile info--%>
+                    <div class="space"></div>
+                    <%--password hint--%>
+                    <div id="divPasswordHint" class="showHideDivHeader" runat="server">
+                        <span class="heading weak">Password Hint&nbsp;<img id="imgShow" src="~/Images/InformationBulb.png" runat="server"
+                            width="18" height="18" />
+                        </span>
+                        <div class="showHideDivContext">
+                            <div class="smallContainer">
+                                <fieldset class="first-of-type">
+                                    <legend id="litLegend" class="addBar">Your password must:</legend>
+                                    <ul class="listUL">
+                                        <li class="listLi">Be at least 8 characters long</li>
+                                        <li class="listLi">Conatin at least one letter [a-z or A-Z]</li>
+                                        <li class="listLi">Conatin a capital letter [A-Z]</li>
+                                        <li class="listLi">Conatin a lowercase letter [a-z]</li>
+                                        <li class="listLi">Conatin a number [0-9]</li>
+                                        <li class="listLi">Conatin a special character [~!@#$%^&*;?+_.]</li>
+                                    </ul>
                                 </fieldset>
                             </div>
                         </div>
-                        <div class="space"></div>
-                        <%--window for the user Password Recovery Settings--%>
-                        <div class="windowContainer">
-                            <h3>Password Recovery Settings</h3>
-                            <table class="table table-hover">
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <label for="SecretPhraseDropdown" class="labelweak">Security Question:</label></td>
-                                        <td>
-                                            <asp:DropDownList ID="SecretPhraseDropdown" runat="server" Width="293px"
-                                                BackColor="Window" Font-Names="Georgia" CssClass="ddl">
-                                                <asp:ListItem Text="">What was the name of the city you grew up in?</asp:ListItem>
-                                                <asp:ListItem Text="">What was your first pet's name?</asp:ListItem>
-                                                <asp:ListItem Text="">What model was your first car?</asp:ListItem>
-                                                <asp:ListItem Text="">What is your favorite city?</asp:ListItem>
-                                                <asp:ListItem Text="">Who manufactured your television?</asp:ListItem>
-                                                <asp:ListItem Text="">What is your favorite animal?</asp:ListItem>
-                                                <asp:ListItem Text="">What is your lucky number?</asp:ListItem>
-                                                <asp:ListItem Text="">What was your childhood nickname?</asp:ListItem>
-                                                <asp:ListItem Text="">What is your favorite vacation place?</asp:ListItem>
-                                            </asp:DropDownList></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <label for="Answer" class="labelweak required">Answer:&nbsp;</label></td>
-                                        <td>
-                                            <asp:TextBox ID="Answer" runat="server" CssClass="form-control" Width="295px" MaxLength="128"></asp:TextBox></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                    </div>
+                    <%--password hint--%>
+                </div>
+                <div class="space"></div>
+                <div class="col-sm-5">
+                    <%--window for the user Password Verification info--%>
+                    <div class="windowContainer">
+                        <h3>Password Verification</h3>
+                        <table class="table table-hover">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <label for="CurrentPassword" class="labelweak required">Current Password:&nbsp;</label></td>
+                                    <td>
+                                        <asp:TextBox ID="CurrentPassword" runat="server" class="form-control" TextMode="Password" Width="185px"></asp:TextBox>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label for="NewPassword" class="labelweak required">New Password:&nbsp;</label></td>
+                                    <td>
+                                        <%--ensure only 8 chars are entered--%>
+                                        <asp:TextBox ID="NewPassword" runat="server" class="NewPassword form-control" TextMode="Password" Width="185px"
+                                            MaxLength="8"></asp:TextBox>
+                                                <img src="Images/eye-icon.png" class="showPassword" 
+                                                    id="imageShowPassword" onclick="changeImage(this)" width="18" height="18"/>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label for="ConfirmNewPassword" class="labelweak required">Confirm Password:&nbsp;</label></td>
+                                    <td>
+                                        <asp:TextBox ID="ConfirmNewPassword" runat="server" class="form-control" TextMode="Password" Width="185px"
+                                            MaxLengt="8"
+                                            onkeypress="return this.value.length<=7"></asp:TextBox>
+                                        <span id="passwordMatchMessage" class="passwordMatchMessage"></span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div id="passwordCriteriaContainer">
+                            <fieldset class="fieldSetWithBorder">
+                                <legend>Password Criteria</legend>
+                                <div id="divcriteria" style="margin: -15px 0 0 1px;">
+                                    <ul>
+                                        <li id="letter" class="invalidPassword">At least <strong>one letter</strong></li>
+                                        <li id="capital" class="invalidPassword">At least <strong>one capital letter</strong></li>
+                                        <li id="lowercase" class="invalidPassword">At least <strong>one lowercase letter</strong></li>
+                                        <li id="number" class="invalidPassword">At least <strong>one number</strong></li>
+                                        <li id="special" class="invalidPassword">Must contain a <strong>special character</strong></li>
+                                        <li id="length" class="invalidPassword">Be at least <strong>8 characters</strong></li>
+                                    </ul>
+                                </div>
+                            </fieldset>
                         </div>
                     </div>
+                    <%--window for the user Password Verification info--%>
+                    <div class="space"></div>
+                    <%--window for the user Password Recovery Settings--%>
+                    <div class="windowContainer">
+                        <h3>Password Recovery Settings</h3>
+                        <table class="table table-hover">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <label for="SecretPhraseDropdown" class="labelweak">Security Question:</label></td>
+                                    <td>
+                                        <asp:DropDownList ID="SecretPhraseDropdown" runat="server" Width="293px"
+                                            BackColor="Window" Font-Names="Georgia" CssClass="ddl">
+                                            <asp:ListItem Text="">What was the name of the city you grew up in?</asp:ListItem>
+                                            <asp:ListItem Text="">What was your first pet's name?</asp:ListItem>
+                                            <asp:ListItem Text="">What model was your first car?</asp:ListItem>
+                                            <asp:ListItem Text="">What is your favorite city?</asp:ListItem>
+                                            <asp:ListItem Text="">Who manufactured your television?</asp:ListItem>
+                                            <asp:ListItem Text="">What is your favorite animal?</asp:ListItem>
+                                            <asp:ListItem Text="">What is your lucky number?</asp:ListItem>
+                                            <asp:ListItem Text="">What was your childhood nickname?</asp:ListItem>
+                                            <asp:ListItem Text="">What is your favorite vacation place?</asp:ListItem>
+                                        </asp:DropDownList></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label for="Answer" class="labelweak required">Answer:&nbsp;</label></td>
+                                    <td>
+                                        <asp:TextBox ID="Answer" runat="server" CssClass="form-control" Width="295px" MaxLength="128"></asp:TextBox></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <%--window for the user Password Recovery Settings--%>
                 </div>
             </div>
             <div class="space"></div>
             <div id="alert_placeholder" class="errorAlert"></div>
             <div class="space"></div>
-            <div class="container">
-                <div class="row">
-                    <div class="center-block" style="float: none; padding: 4px; width: 415px;">
-                        <div class="alert alert-warning">
-                            <strong>Important!</strong> All required fields are marked with an asterisk (*).
-                        </div>
-                        <div class="center-block col-md-8" style="float: none;">
-                            <asp:Button ID="Button1" runat="server" CommandName="ChangePassword" Text="Apply Changes"
-                                OnClick="ChangePasswordPushButton_Click" CssClass="btn btn-primary"
-                                OnClientClick="return Validate();" />
-                            <asp:Button ID="Button2" runat="server" CommandName="ResetForm" Text="Reset Form" CssClass="btn btn-primary"
-                                OnClientClick="ClearTextboxes();" />
-                        </div>
+            <div class="row">
+                <div class="center-block" style="float: none; padding: 4px; width: 415px;">
+                    <div class="alert alert-warning">
+                        <strong>Important!</strong> All required fields are marked with an asterisk (*).
+                    </div>
+                    <div class="center-block col-md-8" style="float: none;">
+                        <asp:Button ID="Button1" runat="server" CommandName="ChangePassword" Text="Apply Changes"
+                            OnClick="ChangePasswordPushButton_Click" CssClass="btn btn-primary"
+                            OnClientClick="return Validate();" />
+                        <asp:Button ID="Button2" runat="server" CommandName="ResetForm" Text="Reset Form" CssClass="btn btn-primary"
+                            OnClientClick="ClearTextboxes();" />
                     </div>
                 </div>
             </div>
         </div>
-
         <div id="footer" style="height: 25px; bottom: 0; position: absolute; left: 10px; right: 10px; overflow: hidden; vertical-align: bottom; display: none">
             <table style="width: 100%; height: 100%; overflow: hidden">
                 <tr>
@@ -240,7 +274,7 @@
                 </tr>
             </table>
         </div>
-       
+
     </form>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -248,7 +282,7 @@
     <script type="text/javascript">
         var GlobalError = '';
         var PasswordFormatError = "Passwords must have a length of 7 characters, with at least 1 non-alphanumeric character.";
-
+       
         //form load
         function OnLoad() {
             if (window.location.href.indexOf('newuser') == -1) {
@@ -257,6 +291,33 @@
             else {
                 bootstrap_alert.warning("You are required to change your password and complete your profile information before continuing.&nbsp <br>Passwords must have a minimum length of 7 characters with at least 1 non-alphanumeric character.")
             }
+        }
+
+        $(".showHideDivContext").hide();
+        //toggle the div
+        $(".heading").click(function () {
+            $(this).next(".showHideDivContext").slideToggle(500);
+        });
+
+        //function to switch between show hide image
+        $("#imageShowPassword").on('click', function () {
+            //show password for the class of NewPassword
+            var $pwd = $(".NewPassword");
+            var imageElement = $("#imageShowPassword");
+            if ($pwd.attr('type') === 'password') {
+                $pwd.attr('type', 'text');
+                changeImage('imageElement');
+            } else {
+                $pwd.attr('type', 'password');
+                changeImage('imageElement');
+            }
+        });
+
+        function changeImage(element) {
+            var right = "./Images/eye-icon.png";
+            var left = "./Images/eye-hide.png";
+            element.src = element.bln ? right : left;
+            element.bln = !element.bln;
         }
 
         //init Bootstrap alert//
@@ -283,8 +344,7 @@
         function phoneFormatter() {
             $('.phone').on('input', function () {
                 var number = $(this).val().replace(/[^\d]/g, '')
-                if (number.length == 7)
-                {
+                if (number.length == 7) {
                     number = number.replace(/(\d{3})(\d{4})/, "$1-$2");
                 } else if (number.length == 10) {
                     number = number.replace(/(\d{3})(\d{3})(\d{4})/, "($1)$2-$3");
@@ -293,7 +353,7 @@
             });
         };
 
-       $(phoneFormatter);
+        $(phoneFormatter);
 
         //function to validate data
         function Validate() {
@@ -314,7 +374,7 @@
                         $("#UserLastName").focus();
                         return false;
                     }
-                }                
+                }
 
                 var MyEmail = $('#Email').val();
                 if (MyEmail == '') {
@@ -340,25 +400,24 @@
                 var newPassword = $('#NewPassword').val(); //document.getElementById("NewPassword").value;
                 var confirmPassword = $('#ConfirmNewPassword').val(); //document.getElementById("ConfirmNewPassword").value;
 
-               if (CurPassword == '') {
+                if (CurPassword == '') {
                     bootstrap_alert.warning('The password setting Current Password filed cannot be empty.');
                     $("#CurrentPassword").focus()
                     return false;
                 }
-             
+
                 if (newPassword == '') {
                     bootstrap_alert.warning('The password setting New Password filed cannot be empty.');
                     $("#NewPassword").focus()
                     return false;
                 }
 
-                if (newPassword.length < 8)
-                {
+                if (newPassword.length < 8) {
                     bootstrap_alert.warning('The New Password field length must be 8 chars.');
                     $("#NewPassword").focus()
                     return false;
                 }
-                
+
                 if (confirmPassword == '') {
                     bootstrap_alert.warning('The password setting Confirm New Password filed cannot be empty.');
                     $('#ConfirmNewPassword').focus()
@@ -385,7 +444,7 @@
                     bootstrap_alert.warning('The password retrieval setting Answer field is required.');
                     $('#Answer').focus()
                     return false;
-                }               
+                }
             }
             catch (err) {
                 return false;
@@ -462,25 +521,13 @@
                 alert('The character you entered is not valid.');
                 return false;
             }
-            //validate repeatedChars allows only 4 letters or numbers
-            //if (newpasswordValue.match(/([a-zA-Z0-9]{4})/)) {
-            //if (newpasswordValue.match(/([A-Za-z])\1\1\1/)) {
-            //if (newpasswordValue.match(/([A-Za-z]{4})/)) {
-            //if (newpasswordValue.match(/([a-z])\1\1\1/)) {
-            //    alert('You can not have more than 3 continus repeated chars.');
-            //    return false;
-            //}
-            //if (newpasswordValue.match(/([A-Z])\1\1\1/)) {
-            //    alert('You can not have more than 3 continus repeated chars.');
-            //    return false;
-            //}
-
+            //not allowed continus repeated chars
             var regex = new RegExp(/([A-Za-z])\1\1\1/);
             if (newpasswordValue.match(regex)) {
                 alert('You can not have more than 3 continus repeated chars.');
                 return false;
             }
-            
+
 
             //validate non-printable chars 
             if (newpasswordValue.match(/[^\u0000-\u007F]/)) {

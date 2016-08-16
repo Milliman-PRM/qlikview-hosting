@@ -67,6 +67,24 @@ namespace MillimanDev2 {
         protected global::System.Web.UI.WebControls.TextBox Phone;
         
         /// <summary>
+        /// divPasswordHint control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divPasswordHint;
+        
+        /// <summary>
+        /// imgShow control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlImage imgShow;
+        
+        /// <summary>
         /// CurrentPassword control.
         /// </summary>
         /// <remarks>
