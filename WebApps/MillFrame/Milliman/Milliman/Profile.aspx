@@ -39,15 +39,39 @@
         .form-control{height:30px}
         .table{margin-bottom:5px}
         /*password hint*/
-        .smallContainer{background:#F4F9FB none repeat scroll 0 0;border:2px dashed #ddd;margin:1px 4px -7px -1px;width:400px}
+        .smallContainer{  background: #f4f9fb none repeat scroll 0 0;border: 2px dashed #ddd;width: 349px;}
         .first-of-type{margin:4px 3px 4px -2px}
         .addBar{font-size:14px;font-weight:700;margin:-1px 36px -3px;overflow:hidden;width:300px}
-        .listUL{font-size:12px;list-style-type:square;margin:3px 0 -2px 32px;padding:2px 1px 1px 6px;width:312px}
+        .listUL{font-size:12px;list-style-type:square;margin:2px 0 1px 12px;padding:2px 1px 1px 6px;width:312px}
         .listLi{font-size:12px;list-style-type:square;margin:3px 0 -2px 32px;padding:2px 1px 1px 6px;width:267px}
-        .showHideDivHeader{width:400px;padding:0;margin:4px 8px 9px 1px;cursor:pointer}
+        
+        .showHideDivHeader{width:400px;padding:0;margin:4px 8px 9px 1px;cursor:pointer;width: 349px}
         .showHideDivContext{padding:5px -1px;background-color:#fafafa}
-        .showPassword{float:right;margin:-25px 13px 0 0}
-        .hidePassword{float:right;margin:-30px 2px 0 0;background:#ff0 url(./Images/eye-icon.png) 20px 75px no-repeat}
+        .showPassword{float:right;margin:-25px 13px 0 0}  
+         #divPasswordHintCriteria{ background: #fefefe none repeat scroll 0 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px #ccc;
+    display: none;
+    font-size: 0.8em;
+    height: 176px;
+    left: 3%;
+    padding: 6px;
+    position: absolute;
+    right: 43px;
+    top: 97%;
+    width: 365px;
+    z-index: 2000;}
+         #divPasswordHintCriteria:before{color: #ddd;
+    display: block;
+    font-size: 14px;
+    left: 43%;
+    line-height: 12px;
+    position: absolute;
+    text-shadow: none;
+    top: -12px;}
+      
+
     </style>
     <script type="text/javascript">
         var GlobalError = '';
@@ -135,11 +159,11 @@
                     <%--window for the user profile info--%>
                     <div class="space"></div>
                     <%--password hint--%>
-                    <div id="divPasswordHint" class="showHideDivHeader" runat="server">
-                        <span class="heading weak">Password Hint&nbsp;<img id="imgShow" src="~/Images/InformationBulb.png" runat="server"
-                            width="18" height="18" />
+                    <div id="divPasswordHint" class="showHideDivHeader" >
+                        <span class="weak">Password Hint&nbsp;<img id="imgShow" src="~/Images/InformationBulb.png" runat="server"
+                            width="18" height="18" style="margin:2px 6px 6px 2px;" />
                         </span>
-                        <div class="showHideDivContext">
+                        <div id="divPasswordHintCriteria" >
                             <div class="smallContainer">
                                 <fieldset class="first-of-type">
                                     <legend id="litLegend" class="addBar">Your password must:</legend>
@@ -293,11 +317,14 @@
             }
         }
 
-        $(".showHideDivContext").hide();
-        //toggle the div
-        $(".heading").click(function () {
-            $(this).next(".showHideDivContext").slideToggle(500);
-        });
+         $('#divPasswordHintCriteria').hide();
+         $('#divPasswordHint').mouseover(function () {
+            $('#divPasswordHintCriteria').show();      
+         });
+         $('#divPasswordHint').mouseout(function () {
+            $('#divPasswordHintCriteria').hide();      
+         });
+
 
         //function to switch between show hide image
         $("#imageShowPassword").on('click', function () {
