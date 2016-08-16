@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NbmcUnityQueryLib", "NbmcUnityQueryLib\NbmcUnityQueryLib.csproj", "{0FD4D43A-A055-47B1-9B3D-DFD21E552B2C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NbmcUnityTestGui", "NbmcUnityTestGui\NbmcUnityTestGui.csproj", "{34455278-2FB7-4297-909C-DAC6927C743F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0FD4D43A-A055-47B1-9B3D-DFD21E552B2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FD4D43A-A055-47B1-9B3D-DFD21E552B2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FD4D43A-A055-47B1-9B3D-DFD21E552B2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FD4D43A-A055-47B1-9B3D-DFD21E552B2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34455278-2FB7-4297-909C-DAC6927C743F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34455278-2FB7-4297-909C-DAC6927C743F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34455278-2FB7-4297-909C-DAC6927C743F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34455278-2FB7-4297-909C-DAC6927C743F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
