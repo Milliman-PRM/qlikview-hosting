@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NbmcUnityQueryLib", "NbmcUn
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NbmcUnityTestGui", "NbmcUnityTestGui\NbmcUnityTestGui.csproj", "{34455278-2FB7-4297-909C-DAC6927C743F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MongoDbWrap", "..\..\..\AppsCommon\MongoDbWrap\MongoDbWrap.csproj", "{5FDFBD80-5D24-40A0-985F-C17F579D8517}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLiteLib", "..\..\..\..\Databases\SQLiteLib\SQLiteLib.csproj", "{D5149A31-D65E-4064-A4F4-CF68069EC55C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{34455278-2FB7-4297-909C-DAC6927C743F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{34455278-2FB7-4297-909C-DAC6927C743F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{34455278-2FB7-4297-909C-DAC6927C743F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FDFBD80-5D24-40A0-985F-C17F579D8517}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FDFBD80-5D24-40A0-985F-C17F579D8517}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FDFBD80-5D24-40A0-985F-C17F579D8517}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FDFBD80-5D24-40A0-985F-C17F579D8517}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5149A31-D65E-4064-A4F4-CF68069EC55C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5149A31-D65E-4064-A4F4-CF68069EC55C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5149A31-D65E-4064-A4F4-CF68069EC55C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5149A31-D65E-4064-A4F4-CF68069EC55C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

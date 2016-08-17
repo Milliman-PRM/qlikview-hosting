@@ -83,6 +83,22 @@ namespace WOHSQLInterface
             return false;
         }
 
+        public IEnumerable<String> GetWoahIds()
+        {
+            Command = WOHSQLConnection.Connection.CreateCommand();
+
+            Command.CommandText = "SELECT member_id, mem_name, dob FROM member";
+            Command.CommandType = CommandType.Text;
+
+            WOHSQLConnection.Connection.Open();
+            Reader = Command.ExecuteReader();
+
+            while (Reader.Read())
+            {
+                yield return Reader[0].ToString();
+            }
+        }
+
         public void Disconnect()
         {
             WOHSQLConnection.Disconnect();

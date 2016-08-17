@@ -28,24 +28,25 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.ButtonGo = new System.Windows.Forms.Button();
+            this.ButtonBuildMrnList = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // ButtonGo
+            // ButtonBuildMrnList
             // 
-            this.ButtonGo.Location = new System.Drawing.Point(13, 13);
-            this.ButtonGo.Name = "ButtonGo";
-            this.ButtonGo.Size = new System.Drawing.Size(75, 23);
-            this.ButtonGo.TabIndex = 0;
-            this.ButtonGo.Text = "Go";
-            this.ButtonGo.UseVisualStyleBackColor = true;
+            this.ButtonBuildMrnList.Location = new System.Drawing.Point(13, 13);
+            this.ButtonBuildMrnList.Name = "ButtonBuildMrnList";
+            this.ButtonBuildMrnList.Size = new System.Drawing.Size(101, 23);
+            this.ButtonBuildMrnList.TabIndex = 0;
+            this.ButtonBuildMrnList.Text = "Build Mrn List";
+            this.ButtonBuildMrnList.UseVisualStyleBackColor = true;
+            this.ButtonBuildMrnList.Click += new System.EventHandler(this.ButtonBuildMrnList_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 262);
-            this.Controls.Add(this.ButtonGo);
+            this.Controls.Add(this.ButtonBuildMrnList);
             this.Name = "Form1";
             this.Text = "Form1";
             this.ResumeLayout(false);
@@ -54,7 +55,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Button ButtonGo;
+        private System.Windows.Forms.Button ButtonBuildMrnList;
     }
 }
 
