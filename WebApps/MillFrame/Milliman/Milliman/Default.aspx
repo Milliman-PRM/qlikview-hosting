@@ -44,16 +44,6 @@
         .RadWindow .rwPopupButton {
             margin-left: 100px !important;
         }   
-        .windowcss
-        {
-          overflow-X: scroll!important;
-            overflow-y: scroll!important;
-        }  
-        /*this addes scroll but looks ugly*/   
-        /*.RadWindow_Default {
-            overflow-X: scroll!important;
-            overflow-y: scroll!important;
-        }*/
     </style>
 </head>
 <body>
@@ -129,7 +119,7 @@
             VisibleStatusbar="False" Style="z-index: 20000;">
             <Windows>
                 <telerik:RadWindow ID="RadWindow1" runat="server" Animation="Fade" AutoSize="True" Behaviors="Close, Move, Reload" Modal="True"
-                    Height="800px" Width="590px" InitialBehaviors="Close"  CssClass="windowcss"
+                    Height="800px" Width="612px" InitialBehaviors="Close" 
                    Title="User Profile/Password Settings" VisibleStatusbar="False" VisibleTitlebar="False" />
             </Windows>
         </telerik:RadWindowManager>
@@ -141,15 +131,10 @@
             //$('#RadWindow1').html('<iframe border=0 width="100%" height ="100%" src="' + "profile.aspx.aspx" + '"> </iframe>');
             var wnd = window.radopen("profile.aspx", "User Profile/Password Settings", scrollbars = 1);
             ////setting window size
-            wnd.setSize(950, 590);
+            wnd.setSize(950, 612);
             wnd.set_modal(true);
             //windoScroll();
             wnd.Center();
-        }
-
-        function windoScroll()
-        {
-            $('#RadWindow1').addClass('windowcss');
         }
 
         function SayHi() { }

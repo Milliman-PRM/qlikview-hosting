@@ -26,8 +26,8 @@
         #passwordCriteriaContainer h1,h2,h3,h4{margin:0 0 10px;padding:0;font-weight:400}
         #passwordCriteriaContainer ul,li{list-style-type:circle;margin:4px 3px 4px 4px;padding:2px 1px 3px 9px;width:203px}
         .invalidPassword,.validPassword{padding-left:6px;line-height:12px}
-        .invalidPassword{background:url(images/invalid.png) 0 50% no-repeat;color:#ec3f41}
-        .validPassword{background:url(images/valid.png) 0 50% no-repeat;color:#3a7d34}
+        .invalidPassword{color:#ec3f41}
+        .validPassword{color:#3a7d34}
         .badMatch{color:#f66}
         .textbox-focus{border:solid 2px #00C;background:#def}
         input.textbox-focus{border:2px solid #00C;background:#def}
@@ -48,28 +48,8 @@
         .showHideDivHeader{width:400px;padding:0;margin:4px 8px 9px 1px;cursor:pointer;width: 349px}
         .showHideDivContext{padding:5px -1px;background-color:#fafafa}
         .showPassword{float:right;margin:-25px 13px 0 0}  
-         #divPasswordHintCriteria{ background: #fefefe none repeat scroll 0 0;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    box-shadow: 0 1px 3px #ccc;
-    display: none;
-    font-size: 0.8em;
-    height: 176px;
-    left: 3%;
-    padding: 6px;
-    position: absolute;
-    right: 43px;
-    top: 97%;
-    width: 365px;
-    z-index: 2000;}
-         #divPasswordHintCriteria:before{color: #ddd;
-    display: block;
-    font-size: 14px;
-    left: 43%;
-    line-height: 12px;
-    position: absolute;
-    text-shadow: none;
-    top: -12px;}
+        #divPasswordHintCriteria{background:#fefefe none repeat scroll 0 0;border:1px solid #ddd;border-radius:5px;box-shadow:0 1px 3px #ccc;display:none;font-size:.8em;height:176px;left:3%;padding:6px;position:absolute;right:43px;top:97%;width:365px;z-index:2000}
+        #divPasswordHintCriteria:before{color:#ddd;display:block;font-size:14px;left:43%;line-height:12px;position:absolute;text-shadow:none;top:-12px}
       
 
     </style>
@@ -272,14 +252,12 @@
                 </div>
             </div>
             <div class="space"></div>
-            <div id="alert_placeholder" class="errorAlert"></div>
-            <div class="space"></div>
             <div class="row">
-                <div class="center-block" style="float: none; padding: 4px; width: 415px;">
+                <div class="center-block" style="float: none; padding: 4px; width: 415px; margin-top:20px;">
                     <div class="alert alert-warning">
                         <strong>Important!</strong> All required fields are marked with an asterisk (*).
                     </div>
-                    <div class="center-block col-md-8" style="float: none;">
+                    <div class="col-md-8" style="float: none;">
                         <asp:Button ID="Button1" runat="server" CommandName="ChangePassword" Text="Apply Changes"
                             OnClick="ChangePasswordPushButton_Click" CssClass="btn btn-primary"
                             OnClientClick="return Validate();" />
@@ -287,6 +265,9 @@
                             OnClientClick="ClearTextboxes();" />
                     </div>
                 </div>
+                <div class="space"></div>
+                            <div id="alert_placeholder" class="errorAlert"></div>
+            <div class="space"></div>
             </div>
         </div>
         <div id="footer" style="height: 25px; bottom: 0; position: absolute; left: 10px; right: 10px; overflow: hidden; vertical-align: bottom; display: none">
@@ -311,6 +292,7 @@
         function OnLoad() {
             if (window.location.href.indexOf('newuser') == -1) {
                 //do nothing
+
             }
             else {
                 bootstrap_alert.warning("You are required to change your password and complete your profile information before continuing.&nbsp <br>Passwords must have a minimum length of 7 characters with at least 1 non-alphanumeric character.")
