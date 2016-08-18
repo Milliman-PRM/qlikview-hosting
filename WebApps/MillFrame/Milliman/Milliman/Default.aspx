@@ -20,30 +20,13 @@
     <script src="https://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
     <%--   <script src="script.js"></script>--%>
     <link rel="Stylesheet" href="Css/Styles.css" />
-    <style type="text/css">
-        h4 {
-            text-align: right;
-            vertical-align: bottom;
-            background-color: red;
-        }
-
-        .tableRow {
-            border-bottom: 1px solid gray;
-        }
-
+    <style type="text/css">  
+        h4{text-align:right;vertical-align:bottom;background-color:red}
+        .tableRow{border-bottom:1px solid gray}
         /*restyle the radwindow alert box to make it not look bad*/
-        .RadWindow .rwWindowContent .radalert {
-            background-image: none !important; /* removes the excalamtion mark icon */
-            padding-left: 0px !important;
-        }
-
-        .RadWindow .rwDialogText {
-            margin-left: 10px !important;
-        }
-
-        .RadWindow .rwPopupButton {
-            margin-left: 100px !important;
-        }   
+        .RadWindow .rwWindowContent .radalert{background-image:none!important;padding-left:0!important}/* removes the excalamtion mark icon */
+        .RadWindow .rwDialogText{margin-left:10px!important}
+                                                                                                                                                                                                             .RadWindow .rwPopupButton{margin-left:100px!important}
     </style>
 </head>
 <body>
@@ -65,7 +48,6 @@
                     </tr>
                 </table>
             </div>
-
             <div style="min-width: 800px; border-bottom: 1px solid #F4CB79; border-top: 1px solid #FAE5BC; background-color: #F4F4F4; background-image: url('Images/header.gif'); background-repeat: repeat;">
                 <table style="width: 100%">
                     <tr>
@@ -99,12 +81,9 @@
                                     </asp:Table>
                                 </div>
                             </asp:TableCell>
-
                             <%-- announcements--%>
-                            <asp:TableCell Style="vertical-align: top;">
-   
+                            <asp:TableCell Style="vertical-align: top;">   
                             </asp:TableCell>
-
                         </asp:TableRow>
                     </asp:Table>
                 </center>
@@ -115,11 +94,13 @@
             <center>Copyright &copy Milliman 2016</center>
         </div>
 
-        <telerik:RadWindowManager EnableShadow="true" Behaviors="Resize, Close, Reload, Move" ID="RadWindowManager" DestroyOnClose="true" Opacity="100" runat="server" Width="450" Height="400" 
-            VisibleStatusbar="False" Style="z-index: 20000;">
+        <telerik:RadWindowManager EnableShadow="true" Behaviors="Resize, Close, Reload, Move" ID="RadWindowManager" 
+                                DestroyOnClose="true" Opacity="100" runat="server" Width="450" Height="400" 
+                                VisibleStatusbar="False" Style="z-index: 20000;">
             <Windows>
-                <telerik:RadWindow ID="RadWindow1" runat="server" Animation="Fade" AutoSize="True" Behaviors="Close, Move, Reload" Modal="True"
-                    Height="800px" Width="612px" InitialBehaviors="Close" 
+                <telerik:RadWindow ID="RadWindow1" runat="server" Animation="Fade" AutoSize="True" 
+                    Behaviors="Close, Move, Reload" Modal="True"
+                    Height="600px" Width="1008px" InitialBehaviors="Close" 
                    Title="User Profile/Password Settings" VisibleStatusbar="False" VisibleTitlebar="False" />
             </Windows>
         </telerik:RadWindowManager>
@@ -131,7 +112,7 @@
             //$('#RadWindow1').html('<iframe border=0 width="100%" height ="100%" src="' + "profile.aspx.aspx" + '"> </iframe>');
             var wnd = window.radopen("profile.aspx", "User Profile/Password Settings", scrollbars = 1);
             ////setting window size
-            wnd.setSize(950, 612);
+            wnd.setSize(1008, 600);
             wnd.set_modal(true);
             //windoScroll();
             wnd.Center();

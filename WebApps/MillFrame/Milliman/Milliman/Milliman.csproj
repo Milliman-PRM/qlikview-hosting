@@ -106,6 +106,7 @@
     <Content Include="Images\zip-icon.png" />
     <Content Include="Javascript\bootstrap.js" />
     <Content Include="Javascript\bootstrap.min.js" />
+    <Content Include="Javascript\maskedinput.js" />
     <Content Include="Javascript\npm.js" />
     <Content Include="Logs\placeholder.txt" />
     <Content Include="SecureLinkUsed.html" />
