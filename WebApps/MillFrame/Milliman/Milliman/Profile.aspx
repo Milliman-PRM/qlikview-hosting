@@ -53,7 +53,9 @@
         .showPassword{float:right;margin:-25px 13px 0 0}          
         .listUL{font-size:12px;list-style-type:square;margin:2px 0 1px 12px;padding:2px 1px 1px 6px;width:312px}
         .listLi{font-size:12px;list-style-type:square;margin:3px 0 -2px 32px;padding:2px 1px 1px 6px;width:267px}   
-        #divPasswordHintCriteria{background:#fefefe none repeat scroll 0 0;border:1px solid #ddd;border-radius:5px;box-shadow:0 1px 3px #ccc;display:none;font-size:.8em;height:176px;padding:6px;position:absolute;width:365px;z-index:2000}
+        #divPasswordHintCriteria{background:#fefefe none repeat scroll 0 0;border:1px solid #ddd;
+                                 border-radius:5px;box-shadow:0 1px 3px #ccc;display:none;font-size:.8em;
+                                 height:165px;padding:6px;position:absolute;width:365px;z-index:2000}
   
 .containerWrap
 {
@@ -128,7 +130,7 @@
     <form id="form1" runat="server">
         <div class="containerWrap">
             <div class="page-header roundShadowContainer" style="width:880px;">
-              <h2>User Profile <small>Password Recovery Settings</small></h2>
+              <h2>User Profile  <small>Password Settings</small></h2>
             </div>
             <div class="left-div">
                 <%--window for the user profile info--%>
@@ -140,8 +142,7 @@
                                 <td>
                                     <label for="UserFirstName" class="labelweak">First Name:</label></td>
                                 <td>
-                                    <input id="UserFirstName" name="UserFirstName" type="text" runat="server" class="form-control" placeholder="first name..."
-                                        maxlength="50" style="width: 185px;" tabindex="1" onclick="this.select();" />
+                                    <input id="UserFirstName" name="UserFirstName" type="text" runat="server" class="form-control" placeholder="first name..."    maxlength="50" style="width: 185px;" tabindex="1" onclick="this.select();" />
                                 </td>
                             </tr>
                             <tr>
@@ -183,7 +184,6 @@
                                 <legend id="litLegend" class="addBar">Your password must:</legend>
                                 <ul class="listUL">
                                     <li class="listLi">Be at least 8 characters long</li>
-                                    <li class="listLi">Conatin at least one letter [a-z or A-Z]</li>
                                     <li class="listLi">Conatin a capital letter [A-Z]</li>
                                     <li class="listLi">Conatin a lowercase letter [a-z]</li>
                                     <li class="listLi">Conatin a number [0-9]</li>
@@ -222,8 +222,7 @@
                                         <fieldset class="fieldSetWithBorder">
                                             <legend>Password Criteria</legend>
                                             <div id="divcriteria" style="margin: -15px 0 0 1px;">
-                                                <ul>
-                                                    <li id="letter" class="invalidPassword">At least <strong>one letter</strong></li>
+                                                <ul>                                                   
                                                     <li id="capital" class="invalidPassword">At least <strong>one capital letter</strong></li>
                                                     <li id="lowercase" class="invalidPassword">At least <strong>one lowercase letter</strong></li>
                                                     <li id="number" class="invalidPassword">At least <strong>one number</strong></li>
@@ -330,7 +329,7 @@
             }
             else {
                 //$('#CurrentPassword').at
-                showAlert(msg);
+                showInformationAlert(msg);
             }
         }
 
@@ -398,19 +397,18 @@
         //function to validate data
         function Validate() {
             try {
-                debugger;
                 //allow only alphabets
                 var regixCharsOnly = new RegExp(/^[a-zA-Z]*$/);
                 if ($('#UserFirstName').val() != '') {
                     if (!$('#UserFirstName').val().match(regixCharsOnly)) {
-                        showAlert('The First name can be characters only.');
+                        showErrorAlert('The First name can be characters only.');
                         //$("#UserFirstName").focus();
                         return false;
                     }
                 }
                 if ($('#UserLastName').val() != '') {
                     if (!$('#UserLastName').val().match(regixCharsOnly)) {
-                        showAlert('The last name can be characters only.');
+                        showErrorAlert('The last name can be characters only.');
                         //$("#UserLastName").focus();
                         return false;
                     }
@@ -418,14 +416,14 @@
 
                 var MyEmail = $('#Email').val();
                 if (MyEmail == '') {
-                    showAlert('The Email field is required.');
+                    showErrorAlert('The Email field is required.');
                     //$("#Email").focus();
                     return false;
                 }
 
                 var Phone = $('#Phone').val();
                 if (Phone == '') {
-                    showAlert('The Phone field is required.');
+                    showErrorAlert('The Phone field is required.');
                     //$('#Phone').select();
                     return false;
                 }
@@ -438,43 +436,44 @@
                 if (CurPassword != '') {
                     if (newPassword == '') {
                         var msg = ('The password setting New Password filed cannot be empty.');
-                        showAlert(msg);
+                        showErrorAlert(msg);
                         //$("#NewPassword").focus()
                         return false;
                     }
 
                     if (newPassword.length < 8) {
-                        var msg = ('The New Password field length must be 8 chars.');
-                        showAlert(msg);
+                        var msg = ('The New Password field length must be at least 8 chars.');
+                        showErrorAlert(msg);
                        // $("#NewPassword").focus()
                         return false;
                     }
 
                     if (confirmPassword == '') {
                         var msg = ('The password setting Confirm New Password filed cannot be empty.');
-                        showAlert(msg);
+                        showErrorAlert(msg);
                         //$('#ConfirmNewPassword').focus()
                         return false;
                     }
 
                     if (confirmPassword.length < 8) {
-                        var msg = ('The Confirm Password length must be 8 chars.');
-                        showAlert(msg);
+                        var msg = ('The Confirm Password length must be at least 8 chars.');
+                        showErrorAlert(msg);
                        // $('#ConfirmNewPassword').focus()
                         return false;
                     }
                     if (newPassword != confirmPassword) {
                         var msg = ('The password setting New Password filed and Confirm New Password field do not match!');
-                        showAlert(msg);
+                        showErrorAlert(msg);
                         $("#NewPassword").focus()
                         $("#NewPassword").select()
                         return false;
                     }
                 }
-                if ((newPassword.value != '') || (confirmPassword.value != '')) {
-                    if (CurPassword.value == '') {
+                if ((newPassword != '') || (confirmPassword != '')) {
+                    debugger;
+                    if (CurPassword == '') {
                         var msg = ('To change your password, your Current Password must be provided along with the requested New Password and Confirm New Password.');
-                        showAlert(msg);
+                        showErrorAlert(msg);
                         //CurrentPassword.focus()
                         return false;
                     }
@@ -483,7 +482,7 @@
                 var passwordAnswer = $('#Answer').val(); //document.getElementById("Answer").v;
                 if (passwordAnswer == '') {
                     var msg = ('The password retrieval setting Answer field is required.');
-                    showAlert(msg);
+                    showErrorAlert(msg);
                     //$('#Answer').focus()
                     return false;
                 }
@@ -506,13 +505,6 @@
                 $('#length').removeClass('validPassword').addClass('invalidPassword');
             } else {
                 $('#length').removeClass('invalidPassword').addClass('validPassword');
-            }
-
-            //validate any letter
-            if (newpasswordValue.match(/[A-z]/)) {
-                $('#letter').removeClass('invalidPassword').addClass('validPassword');
-            } else {
-                $('#letter').removeClass('validPassword').addClass('invalidPassword');
             }
 
             //validate any uppercase letter
@@ -546,22 +538,23 @@
             //not allowed chars
             var regexChar = new RegExp(/[`,<>;':"/[\]|{}()=-]/);
             if (newpasswordValue.match(regexChar)) {
-                showAlert('The character you entered is not valid.');
+                showErrorAlert('The character you entered is not valid.');
                 return false;
             }
             //not allowed continus repeated chars
             var regex = new RegExp(/([A-Za-z])\1\1\1/);
             if (newpasswordValue.match(regex)) {
-                showAlert('You can not have more than 3 continus repeated chars.');
+                showErrorAlert('You can not have more than 3 continus repeated chars.');
                 return false;
             }
 
 
             //validate non-printable chars 
             if (newpasswordValue.match(/[^\u0000-\u007F]/)) {
-                showAlert('You can not have non-printable chars.');
+                showErrorAlert('You can not have non-printable chars.');
                 return false;
             }
+
         }).focus(function () {
             $('#divPasswordCriteriaContainer').show();
         }).blur(function () {
@@ -587,7 +580,8 @@
             $('#passwordMatchMessage').removeClass('badMatch');
         }
 
-        function showAlert(alertMessage) {
+        //show error
+        function showErrorAlert(alertMessage) {
             BootstrapDialog.show({
                 title: 'Error',
                 message: alertMessage,
@@ -603,7 +597,25 @@
                     }
                 }],
             });
+        }
 
+        //show info
+        function showInformationAlert(alertMessage) {
+            BootstrapDialog.show({
+                title: 'Information',
+                message: alertMessage,
+                type: BootstrapDialog.TYPE_INFO, // <-- Default value is BootstrapDialog.TYPE_PRIMARY
+                closable: true, // <-- Default value is false
+                draggable: true, // <-- Default value is false
+                buttons: [{
+                    label: 'OK',
+                    hotkey: 13, // Keycode of keyup event of key 'A' is 65.
+                    cssClass: 'btn-info',
+                    action: function (dialog) {
+                        dialog.close();
+                    }
+                }],
+            });
         }
 
     </script>
