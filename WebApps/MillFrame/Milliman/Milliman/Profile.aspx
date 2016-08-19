@@ -306,7 +306,6 @@
 
         //form load
         function OnLoad() {
-            debugger;
             var msg = 'You are required to change your password and complete your profile information before continuing.&nbsp <br>Passwords must have a minimum length of 8 characters with at least 1 non-alphanumeric character.';
             var CurPassword = $('#CurrentPassword');
             if (window.location.href.indexOf('newuser') == -1) {
@@ -428,6 +427,25 @@
                         return false;
                     }
 
+                     //the passwrod should not contain 3 or more char from user name
+                    //find user name 
+                    var username = '<%=Context.User.Identity.Name%>';
+                    //get new password value
+                    var password = $('#NewPassword').val();
+                    //divide the user name into 3 letters so abcdefghi@somthing.com will look like [abd def ghi @som thi ng. com]
+                    var partsof3Letters = username.match(/.{3}/g).concat(username.substr(1).match(/.{3}/g),
+                                                    username.substr(2).match(/.{3}/g));
+                    //now join the letters like 
+                    // afs|hee|n.k|han|@mi|lli|man|.co|fsh|een|.kh|an@|mil|lim|an.|com|she|en.|kha|n@m|ill|ima|n.c and see if that has 
+                    //chars matching with password
+                    var passwordHas3UserNameLetters = new RegExp(partsof3Letters.join("|"), "i").test(password); // true
+                    if (passwordHas3UserNameLetters)
+                    {
+                        $('#NewPassword').addClass('textbox-focus');
+                        showErrorAlert('The password you entered <b>' + password + ' </b> contain part of your user name. The passwrod should not contain 3 or more contiguous chars from account name.');
+                        return false;
+                    }
+
                     if (confirmPassword == '') {
                         var msg = ('The password setting Confirm New Password filed cannot be empty.');
                         $('#ConfirmNewPassword').addClass('textbox-focus');
@@ -531,26 +549,7 @@
             if (newpasswordValue.match(/[^\u0000-\u007F]/)) {
                 showErrorAlert('You can not have non-printable chars.');
                 return false;
-            }
-            
-            //the passwrod should not contain 3 or more char from user name
-            //find user name 
-            var username = '<%=Context.User.Identity.Name%>';
-            //get new password value
-            var password = $('#NewPassword').val();
-            //divide the user name into 3 letters so abcdefghi@somthing.com will look like [abd def ghi @som thi ng. com]
-            var partsof3Letters = username.match(/.{3}/g).concat(username.substr(1).match(/.{3}/g),
-                                            username.substr(2).match(/.{3}/g));
-            //now join the letters like 
-            // afs|hee|n.k|han|@mi|lli|man|.co|fsh|een|.kh|an@|mil|lim|an.|com|she|en.|kha|n@m|ill|ima|n.c and see if that has 
-            //chars matching with password
-            var passwordHas3UserNameLetters = new RegExp(partsof3Letters.join("|"), "i").test(password); // true
-            if (passwordHas3UserNameLetters)
-            {
-                $('#NewPassword').addClass('textbox-focus');
-                showErrorAlert('The password you entered <b>' + password + ' </b> contain part of your user name. The passwrod should not contain 3 or more contiguous chars from account name.');
-                return false;
-            }
+            }        
 
 
         }).focus(function () {
