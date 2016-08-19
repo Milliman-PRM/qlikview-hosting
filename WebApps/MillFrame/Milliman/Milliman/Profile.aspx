@@ -18,8 +18,7 @@
         .weak{color:#999;font-size:14px}
         .labelweak{color:#5f6162;font-size:12px;margin:5px -6px 3px 8px}
         .required:after{content:" *";font-weight:700;color:#c1c1c1;font-size:20px;margin:0;float:right}
-        .textbox-focus{border:solid 2px #00C;background:#def}
-         input.textbox-focus{border:2px solid #00C;background:#def}
+        .textbox-focus{border:2px solid #00C;background:#def}
         .roundShadowContainer{background:#fefefe;border:1px solid #c4cddb;padding:0;margin:0 auto;border-top-color:#d3dbde;border-bottom-color:#bfc9dc;box-shadow:0 1px 1px #ccc;border-radius:5px;}
         .roundShadowContainer h2{margin:0;padding:10px 0;font-size:18px;text-align:center;background:#ebebec;border-bottom:1px solid #dde0e7;box-shadow:0 -1px 0 #fff inset;border-radius:5px 5px 0 0;text-shadow:1px 1px 0 #fff;font-weight:700}
         .roundShadowContainer h3{margin:0;padding:10px 0;font-size:16px;text-align:center;background:#ebebec;border-bottom:1px solid #dde0e7;box-shadow:0 -1px 0 #fff inset;border-radius:5px 5px 0 0;text-shadow:1px 1px 0 #fff;font-weight:700}
@@ -55,31 +54,11 @@
         .listLi{font-size:12px;list-style-type:square;margin:3px 0 -2px 32px;padding:2px 1px 1px 6px;width:267px}   
         #divPasswordHintCriteria{background:#fefefe none repeat scroll 0 0;border:1px solid #ddd;
                                  border-radius:5px;box-shadow:0 1px 3px #ccc;display:none;font-size:.8em;
-                                 height:165px;padding:6px;position:absolute;width:365px;z-index:2000}
-  
-.containerWrap
-{
-  text-align: center;
-  padding: 15px;  
-  width: 100%;
-}
-.left-div
-{
-  display: inline-block;
-  max-width: 435px;
-  text-align: left;
-  padding: 3px;
-  margin: 3px;
-  vertical-align: top;
-}
-.right-div
-{
-  display: inline-block;
-  max-width: 435px;
-  text-align: left;
-  padding: 3px;
-  margin: 3px;
-}
+                                 height:161px;padding:6px;position:absolute;width:365px;z-index:2000}
+         /*Layout*/
+      .containerWrap{text-align:center;padding:15px;width:100%}
+      .left-div{display:inline-block;max-width:435px;text-align:left;padding:3px;margin:3px;vertical-align:top}
+      .right-div{display:inline-block;max-width:435px;text-align:left;padding:3px;margin:3px}
 
     </style>
 
@@ -142,7 +121,9 @@
                                 <td>
                                     <label for="UserFirstName" class="labelweak">First Name:</label></td>
                                 <td>
-                                    <input id="UserFirstName" name="UserFirstName" type="text" runat="server" class="form-control" placeholder="first name..."    maxlength="50" style="width: 185px;" tabindex="1" onclick="this.select();" />
+                                    <input id="UserFirstName" name="UserFirstName" type="text" runat="server" class="form-control" 
+                                        placeholder="first name..."    maxlength="50" style="width: 185px;" tabindex="1" 
+                                        onclick="this.select(); removeClass(this, 'textbox-focus');" />
                                 </td>
                             </tr>
                             <tr>
@@ -150,7 +131,7 @@
                                     <label for="UserLastName" class="labelweak">Last Name:</label></td>
                                 <td>
                                     <input id="UserLastName" name="UserLastName" type="text" runat="server" class="form-control" placeholder="last name..."
-                                        maxlength="50" style="width: 185px;" tabindex="2" onclick="this.select();" />
+                                        maxlength="50" style="width: 185px;" tabindex="2" onclick="this.select(); removeClass(this, 'textbox-focus');" />
                                 </td>
                             </tr>
                             <tr>
@@ -165,8 +146,8 @@
                                     <label for="Phone" class="labelweak required">Phone:&nbsp;</label>
                                 </td>
                                 <td>
-                                    <input id="Phone" name="Phone" type="text" runat="server" class="form-control" placeholder="(000)000-0000"
-                                         style="width: 185px;" tabindex="3" />
+                                    <input id="Phone" name="Phone" type="text" runat="server" class="form-control phone" placeholder="(000)000-0000"
+                                         style="width: 185px;" tabindex="3" onclick="removeClass(this, 'textbox-focus');" />
                                 </td>
                             </tr>
                         </tbody>
@@ -205,7 +186,9 @@
                                 <td>
                                     <label for="CurrentPassword" class="labelweak required">Current Password:&nbsp;</label></td>
                                 <td>
-                                    <asp:TextBox ID="CurrentPassword" runat="server" class="form-control" TextMode="Password" Width="185px">
+<%--                                    <input id="CurrentPassword" name="CurrentPassword" type="password" runat="server" class="form-control"
+                                        style="width: 185px;" tabindex="4" onclick="this.select(); removeClass(this, 'textbox-focus');" />--%>
+                                    <asp:TextBox ID="CurrentPassword" runat="server" class="form-control" TextMode="Password" Width="185px" onclick="this.select(); removeClass(this, 'textbox-focus');" >
                                     </asp:TextBox>
                                 </td>
                             </tr>
@@ -214,7 +197,7 @@
                                     <label for="NewPassword" class="labelweak required">New Password:&nbsp;</label></td>
                                 <td>
                                     <input id="NewPassword" name="NewPassword" type="password" runat="server" class="NewPassword form-control"
-                                        style="width: 185px;" tabindex="5" onclick="this.select();" />
+                                        style="width: 185px;" tabindex="5" onclick="this.select(); removeClass(this, 'textbox-focus');" />
 
                                     <img src="Images/eye-icon.png" class="showPassword"
                                         id="imageShowPassword" onclick="changeImage(this)" width="18" height="18" />
@@ -239,7 +222,7 @@
                                     <label for="ConfirmNewPassword" class="labelweak required">Confirm Password:&nbsp;</label></td>
                                 <td>
                                     <input id="ConfirmNewPassword" name="ConfirmNewPassword" type="password" runat="server" class="form-control"
-                                        style="width: 185px;" tabindex="6" onclick="this.select();" />
+                                        style="width: 185px;" tabindex="6" onclick="this.select(); removeClass(this, 'textbox-focus');" />
 
                                     <span id="passwordMatchMessage" class="passwordMatchMessage"></span>
                                 </td>
@@ -277,7 +260,7 @@
                                     <label for="Answer" class="labelweak required">Answer:&nbsp;</label></td>
                                 <td>
                                     <input id="Answer" name="Answer" type="text" runat="server" class="form-control"
-                                        style="width: 295px;" tabindex="7" maxlength="128"  onclick="this.select();" />
+                                        style="width: 295px;" tabindex="7" maxlength="128"  onclick="this.select(); removeClass(this, 'textbox-focus');" />
                                 </td>
                             </tr>
                         </tbody>
@@ -323,12 +306,19 @@
 
         //form load
         function OnLoad() {
+            debugger;
             var msg = 'You are required to change your password and complete your profile information before continuing.&nbsp <br>Passwords must have a minimum length of 8 characters with at least 1 non-alphanumeric character.';
+            var CurPassword = $('#CurrentPassword');
             if (window.location.href.indexOf('newuser') == -1) {
-                //do nothing             
+                //do nothing   -- this is not a new user                
+                //CurPassword.attr("type", "password"); //switch to passwrod mode
+                //CurPassword.value = "";//clear it
+                //CurPassword.removeAttr('disabled');//enable
             }
             else {
-                //$('#CurrentPassword').at
+                //CurPassword.attr("type", "text");
+                //CurPassword.val('[System Provided]');
+                //CurPassword.attr('disabled', 'disabled');
                 showInformationAlert(msg);
             }
         }
@@ -387,103 +377,92 @@
             element.bln = !element.bln;
         }
 
-        //Prevent cut, copy, paste
-        //$('#ConfirmNewPassword').bind("cut copy paste", function (e) {
-        //    e.preventDefault();
-        //});
-
+        //raise the key up even for ConfirmNewPassword 
         $("#ConfirmNewPassword").keyup(validatePasswordMatch);
 
         //function to validate data
         function Validate() {
             try {
+
                 //allow only alphabets
                 var regixCharsOnly = new RegExp(/^[a-zA-Z]*$/);
                 if ($('#UserFirstName').val() != '') {
                     if (!$('#UserFirstName').val().match(regixCharsOnly)) {
-                        showErrorAlert('The First name can be characters only.');
-                        //$("#UserFirstName").focus();
+                        $('#UserFirstName').addClass('textbox-focus');
+                        showErrorAlert('The First name can be characters only.');                        
                         return false;
                     }
                 }
                 if ($('#UserLastName').val() != '') {
                     if (!$('#UserLastName').val().match(regixCharsOnly)) {
-                        showErrorAlert('The last name can be characters only.');
-                        //$("#UserLastName").focus();
+                        $('#UserLastName').addClass('textbox-focus');
+                        showErrorAlert('The last name can be characters only.');                        
                         return false;
                     }
                 }
 
-                var MyEmail = $('#Email').val();
-                if (MyEmail == '') {
-                    showErrorAlert('The Email field is required.');
-                    //$("#Email").focus();
-                    return false;
-                }
-
                 var Phone = $('#Phone').val();
                 if (Phone == '') {
-                    showErrorAlert('The Phone field is required.');
-                    //$('#Phone').select();
+                    $('#Phone').addClass('textbox-focus');
+                    showErrorAlert('The Phone field is required.');                    
                     return false;
                 }
 
-                var CurPassword = $('#CurrentPassword').val(); //document.getElementById("CurrentPassword").value;
-                var newPassword = $('#NewPassword').val(); //document.getElementById("NewPassword").value;
-                var confirmPassword = $('#ConfirmNewPassword').val(); //document.getElementById("ConfirmNewPassword").value;
+                var CurPassword = $('#CurrentPassword').val();
+                var newPassword = $('#NewPassword').val(); 
+                var confirmPassword = $('#ConfirmNewPassword').val();
 
                 //check the password only if CurPassword is entered
                 if (CurPassword != '') {
                     if (newPassword == '') {
                         var msg = ('The password setting New Password filed cannot be empty.');
-                        showErrorAlert(msg);
-                        //$("#NewPassword").focus()
+                        $('#NewPassword').addClass('textbox-focus');
+                        showErrorAlert(msg);                        
                         return false;
                     }
 
                     if (newPassword.length < 8) {
                         var msg = ('The New Password field length must be at least 8 chars.');
-                        showErrorAlert(msg);
-                       // $("#NewPassword").focus()
+                        $('#NewPassword').addClass('textbox-focus');
+                        showErrorAlert(msg);                        
                         return false;
                     }
 
                     if (confirmPassword == '') {
                         var msg = ('The password setting Confirm New Password filed cannot be empty.');
-                        showErrorAlert(msg);
-                        //$('#ConfirmNewPassword').focus()
+                        $('#ConfirmNewPassword').addClass('textbox-focus');
+                        showErrorAlert(msg);                        
                         return false;
                     }
 
                     if (confirmPassword.length < 8) {
                         var msg = ('The Confirm Password length must be at least 8 chars.');
-                        showErrorAlert(msg);
-                       // $('#ConfirmNewPassword').focus()
+                        $('#ConfirmNewPassword').addClass('textbox-focus');
+                        showErrorAlert(msg);                       
                         return false;
                     }
                     if (newPassword != confirmPassword) {
                         var msg = ('The password setting New Password filed and Confirm New Password field do not match!');
                         showErrorAlert(msg);
-                        $("#NewPassword").focus()
+                        $('#NewPassword').addClass('textbox-focus');
                         $("#NewPassword").select()
                         return false;
                     }
                 }
                 if ((newPassword != '') || (confirmPassword != '')) {
-                    debugger;
                     if (CurPassword == '') {
                         var msg = ('To change your password, your Current Password must be provided along with the requested New Password and Confirm New Password.');
-                        showErrorAlert(msg);
-                        //CurrentPassword.focus()
+                        $('#CurrentPassword').addClass('textbox-focus');
+                        showErrorAlert(msg);                        
                         return false;
                     }
                 }
 
-                var passwordAnswer = $('#Answer').val(); //document.getElementById("Answer").v;
+                var passwordAnswer = $('#Answer').val();
                 if (passwordAnswer == '') {
-                    var msg = ('The password retrieval setting Answer field is required.');
+                    var msg = ('The password retrieval setting Answer field is required.');                    
+                    $('#Answer').addClass('textbox-focus');
                     showErrorAlert(msg);
-                    //$('#Answer').focus()
                     return false;
                 }
             }
@@ -541,19 +520,38 @@
                 showErrorAlert('The character you entered is not valid.');
                 return false;
             }
-            //not allowed continus repeated chars
-            var regex = new RegExp(/([A-Za-z])\1\1\1/);
-            if (newpasswordValue.match(regex)) {
-                showErrorAlert('You can not have more than 3 continus repeated chars.');
-                return false;
-            }
-
+            ////not allowed continus repeated chars
+            //var regex = new RegExp(/([A-Za-z])\1\1\1/);
+            //if (newpasswordValue.match(regex)) {
+            //    showErrorAlert('You can not have more than 3 continus repeated chars.');
+            //    return false;
+            //}
 
             //validate non-printable chars 
             if (newpasswordValue.match(/[^\u0000-\u007F]/)) {
                 showErrorAlert('You can not have non-printable chars.');
                 return false;
             }
+            
+            //the passwrod should not contain 3 or more char from user name
+            //find user name 
+            var username = '<%=Context.User.Identity.Name%>';
+            //get new password value
+            var password = $('#NewPassword').val();
+            //divide the user name into 3 letters so abcdefghi@somthing.com will look like [abd def ghi @som thi ng. com]
+            var partsof3Letters = username.match(/.{3}/g).concat(username.substr(1).match(/.{3}/g),
+                                            username.substr(2).match(/.{3}/g));
+            //now join the letters like 
+            // afs|hee|n.k|han|@mi|lli|man|.co|fsh|een|.kh|an@|mil|lim|an.|com|she|en.|kha|n@m|ill|ima|n.c and see if that has 
+            //chars matching with password
+            var passwordHas3UserNameLetters = new RegExp(partsof3Letters.join("|"), "i").test(password); // true
+            if (passwordHas3UserNameLetters)
+            {
+                $('#NewPassword').addClass('textbox-focus');
+                showErrorAlert('The password you entered <b>' + password + ' </b> contain part of your user name. The passwrod should not contain 3 or more contiguous chars from account name.');
+                return false;
+            }
+
 
         }).focus(function () {
             $('#divPasswordCriteriaContainer').show();
@@ -583,15 +581,15 @@
         //show error
         function showErrorAlert(alertMessage) {
             BootstrapDialog.show({
-                title: 'Error',
+                title: 'Data Entry Issue',
                 message: alertMessage,
-                type: BootstrapDialog.TYPE_DANGER, // <-- Default value is BootstrapDialog.TYPE_PRIMARY
+                type: BootstrapDialog.TYPE_WARNING, // <-- Default value is BootstrapDialog.TYPE_PRIMARY
                 closable: true, // <-- Default value is false
                 draggable: true, // <-- Default value is false
                 buttons: [{
                     label: 'OK',
                     hotkey: 13, // Keycode of keyup event of key 'A' is 65.
-                    cssClass: 'btn-danger',
+                    cssClass: 'btn-warning',
                     action: function (dialog) {
                         dialog.close();
                     }
@@ -616,6 +614,28 @@
                     }
                 }],
             });
+        }
+
+        //funchion to chane class on element
+        function changeClass(btn, cls) {
+            if (!hasClass(btn, cls)) {
+                addClass(btn, cls);
+            }
+        }
+        //cehck for a class
+        function hasClass(ele, cls) {
+            return ele.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
+        }
+        //add a class
+        function addClass(ele, cls) {
+            if (!hasClass(ele, cls)) ele.className += " " + cls;
+        }
+        //remove class
+        function removeClass(ele, cls) {
+            if (hasClass(ele, cls)) {
+                var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
+                ele.className = ele.className.replace(reg, ' ');
+            }
         }
 
     </script>
