@@ -100,7 +100,10 @@
                 ddl.val(ddl.find('option').first().val());
             }
             catch (err)
-            { var txt = 'Errot=>' + err.description; alert(txt); }
+            {
+                var txt = 'Errot=>' + err.description;
+                showDangerAlert(txt); 
+            }
         }
 
     </script>
@@ -427,22 +430,32 @@
                         return false;
                     }
 
-                     //the passwrod should not contain 3 or more char from user name
+                    //the passwrod should not contain 3 or more char from user name
                     //find user name 
                     var username = '<%=Context.User.Identity.Name%>';
                     //get new password value
-                    var password = $('#NewPassword').val();
+                    var password = $('#NewPassword').val();                                      
+
                     //divide the user name into 3 letters so abcdefghi@somthing.com will look like [abd def ghi @som thi ng. com]
-                    var partsof3Letters = username.match(/.{3}/g).concat(username.substr(1).match(/.{3}/g),
-                                                    username.substr(2).match(/.{3}/g));
-                    //now join the letters like 
-                    // afs|hee|n.k|han|@mi|lli|man|.co|fsh|een|.kh|an@|mil|lim|an.|com|she|en.|kha|n@m|ill|ima|n.c and see if that has 
-                    //chars matching with password
-                    var passwordHas3UserNameLetters = new RegExp(partsof3Letters.join("|"), "i").test(password); // true
-                    if (passwordHas3UserNameLetters)
+                    // example: ["afs", "hee", "n.k", "han", "@mi", "lli", "man", ".co", "fsh", "een", ".kh", "an@", "mil", "lim", "an.", "com", "she", "en.", "kha", "n@m", "ill", "ima", "n.c"]
+                    var partsOfThreeLettersUsername = username.match(/.{3}/g)
+                                        .concat(
+                                                username.substr(1).match(/.{3}/g),
+                                                username.substr(2).match(/.{3}/g)
+                                               );
+                    
+                    //example: ["afs", "Ujn", "8*c", "fsU", "jn8", "*co", "sUj", "n8*", "com"]
+                    var partsOfThreeLettersPassword = password.match(/.{3}/g)
+                                            .concat(
+                                                    password.substr(1).match(/.{3}/g),
+                                                    password.substr(2).match(/.{3}/g)
+                                                   );
+                   
+                    var result = matchWordsinStringArray(partsOfThreeLettersUsername, partsOfThreeLettersPassword);
+                    if (result != null)
                     {
                         $('#NewPassword').addClass('textbox-focus');
-                        showErrorAlert('The password you entered <b>' + password + ' </b> contain part of your user name. The passwrod should not contain 3 or more contiguous chars from account name.');
+                        showErrorAlert('The password you entered <b>' + password + ' </b> contain part of your user name <b>' + result.usernameElement + '</b> as embed in password <b>' + result.passwordElement + '</b> . The passwrod should not contain 3 or more contiguous chars from account name.');
                         return false;
                     }
 
@@ -487,9 +500,39 @@
             catch (err) {
                 return false;
                 var txt = 'Errot=>' + err.description;
-                alert(txt);
+                showDangerAlert(txt);
             }
             return true;
+        }
+        
+        function matchWordsinStringArray(username, password) {
+            var arrayMatchfound = null;
+            try
+            {
+                for (var i = 0; i < password.length && !arrayfound; i++) {
+                    var $lowerKeyPassword = password[i].toLowerCase();
+                    
+                    for (var j = 0, wLen = username.length; j < wLen && !arrayfound; j++) {
+                        var $lowerKeyUserName = username[j].toLowerCase();
+
+                        if ($lowerKeyPassword  == $lowerKeyUserName) {
+                            arrayMatchfound = {
+                                usernameElement: $lowerKeyUserName,
+                                passwordElement: $lowerKeyPassword
+                            };
+                            return arrayMatchfound;
+                        }
+                    }
+                }
+
+            }
+            catch (err) {
+                return false;
+                var txt = 'Errot=>' + err.description;
+                showDangerAlert(txt);
+            }
+          
+            return arrayMatchfound;
         }
 
         //Password Check
@@ -589,6 +632,25 @@
                     label: 'OK',
                     hotkey: 13, // Keycode of keyup event of key 'A' is 65.
                     cssClass: 'btn-warning',
+                    action: function (dialog) {
+                        dialog.close();
+                    }
+                }],
+            });
+        }
+
+        //show error
+        function showDangerAlert(alertMessage) {
+            BootstrapDialog.show({
+                title: 'Error!',
+                message: alertMessage,
+                type: BootstrapDialog.TYPE_DANGER, // <-- Default value is BootstrapDialog.TYPE_PRIMARY
+                closable: true, // <-- Default value is false
+                draggable: true, // <-- Default value is false
+                buttons: [{
+                    label: 'OK',
+                    hotkey: 13, // Keycode of keyup event of key 'A' is 65.
+                    cssClass: 'btn-danger',
                     action: function (dialog) {
                         dialog.close();
                     }
