@@ -446,8 +446,9 @@
                     var result = matchWordsinStringArray(partsOfThreeLettersUsernameArray, partsOfThreeLettersPasswordArray);
                     if (result != null)
                     {
+                        var elementValue = password.match(new RegExp(result.passwordElement, "i"));
                         $('#NewPassword').addClass('textbox-focus');
-                        showErrorAlert('The password you entered <b>' + password + ' </b> contain part of your user name <b>' + result.usernameElement + '</b> as embed in password <b>' + result.passwordElement + '</b> . The passwrod should not contain 3 or more contiguous chars from account name.');
+                        showErrorAlert('The password you entered cannot contain substring <b>' + elementValue[0] + '</b>, since <b>' + elementValue[0] + '</b> is a substring in your account name.  The password cannot contain 3 or more contiguous characters from the account name.');
                         return false;
                     }
 
