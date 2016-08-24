@@ -63,8 +63,6 @@
     </style>
 
     <script type="text/javascript">
-        var GlobalError = '';
-        var PasswordFormatError = "Passwords must have a length of 8 characters, with at least 1 non-alphanumeric character.";
 
         function getRadWindow() {
             var oWindow = null;
@@ -312,15 +310,9 @@
             var msg = 'You are required to change your password and complete your profile information before continuing.&nbsp <br>Passwords must have a minimum length of 8 characters with at least 1 non-alphanumeric character.';
             var CurPassword = $('#CurrentPassword');
             if (window.location.href.indexOf('newuser') == -1) {
-                //do nothing   -- this is not a new user                
-                //CurPassword.attr("type", "password"); //switch to passwrod mode
-                //CurPassword.value = "";//clear it
-                //CurPassword.removeAttr('disabled');//enable
+                //do nothing   -- this is not a new user       
             }
             else {
-                //CurPassword.attr("type", "text");
-                //CurPassword.val('[System Provided]');
-                //CurPassword.attr('disabled', 'disabled');
                 showInformationAlert(msg);
             }
         }
@@ -438,20 +430,20 @@
 
                     //divide the user name into 3 letters so abcdefghi@somthing.com will look like [abd def ghi @som thi ng. com]
                     // example: ["abc", "def", "g.h", "ijk", "@em", "ail", ".co", "m"]
-                    var partsOfThreeLettersUsername = username.match(/.{3}/g)
+                    var partsOfThreeLettersUsernameArray = username.match(/.{3}/g)
                                         .concat(
                                                 username.substr(1).match(/.{3}/g),
                                                 username.substr(2).match(/.{3}/g)
                                                );
                     
                     //example: ["afs", "Ujn", "8*c", "fsU", "jn8", "*co", "sUj", "n8*", "com"]
-                    var partsOfThreeLettersPassword = password.match(/.{3}/g)
+                    var partsOfThreeLettersPasswordArray = password.match(/.{3}/g)
                                             .concat(
                                                     password.substr(1).match(/.{3}/g),
                                                     password.substr(2).match(/.{3}/g)
                                                    );
                    
-                    var result = matchWordsinStringArray(partsOfThreeLettersUsername, partsOfThreeLettersPassword);
+                    var result = matchWordsinStringArray(partsOfThreeLettersUsernameArray, partsOfThreeLettersPasswordArray);
                     if (result != null)
                     {
                         $('#NewPassword').addClass('textbox-focus');
@@ -505,15 +497,15 @@
             return true;
         }
         
-        function matchWordsinStringArray(username, password) {
+        function matchWordsinStringArray(usernameArray, passwordArray) {
             var arrayMatchfound = null;
             try
             {
-                for (var i = 0; i < password.length && !arrayfound; i++) {
-                    var $lowerKeyPassword = password[i].toLowerCase();
+                for (var i = 0; i < passwordArray.length && !arrayMatchfound; i++) {
+                    var $lowerKeyPassword = passwordArray[i].toLowerCase();
                     
-                    for (var j = 0, wLen = username.length; j < wLen && !arrayfound; j++) {
-                        var $lowerKeyUserName = username[j].toLowerCase();
+                    for (var j = 0, wLen = usernameArray.length; j < wLen && !arrayMatchfound; j++) {
+                        var $lowerKeyUserName = usernameArray[j].toLowerCase();
 
                         if ($lowerKeyPassword  == $lowerKeyUserName) {
                             arrayMatchfound = {
