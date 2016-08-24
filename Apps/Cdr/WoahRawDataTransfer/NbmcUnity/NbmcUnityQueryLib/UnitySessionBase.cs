@@ -35,9 +35,12 @@ namespace NbmcUnityQueryLib
         public bool Connect(String UnityUserName, String UnityPassword, String UnityEndpoint)
         {
             // Unity client from service reference 
-            UnityClient = new UnityServiceClient("basichttp", UnityEndpoint);
+            if (UnityClient == null || UnityClient.State != System.ServiceModel.CommunicationState.Opened)
+            {
+                UnityClient = new UnityServiceClient("basichttp", UnityEndpoint);
 
-            UnitySecurityToken = UnityClient.GetSecurityToken(UnityUserName, UnityPassword);
+                UnitySecurityToken = UnityClient.GetSecurityToken(UnityUserName, UnityPassword);
+            }
 
             return true;
         }

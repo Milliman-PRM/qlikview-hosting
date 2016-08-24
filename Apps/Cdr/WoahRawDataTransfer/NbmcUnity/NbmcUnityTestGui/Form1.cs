@@ -15,6 +15,7 @@ using System.IO;
 using MongoDB.Driver;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
+using NbmcUnityQueryLib;
 
 namespace NbmcUnityTestGui
 {
@@ -27,111 +28,181 @@ namespace NbmcUnityTestGui
 
         private void ButtonBuildMrnList_Click(object sender, EventArgs e)
         {
+            // local declarations
+
+            // database connections
             MongoDbConnection MongoDb = new MongoDbConnection();
             MongoDb.InitializeWithIni(@"H:\.prm_config\.mongodb", "MongoCredentials");
             IMongoCollection<BsonDocument> PatientCollection = MongoDb.Db.GetCollection<BsonDocument>("patient");
-            Dictionary<String, HashSet<String>> NbmcMrns = new Dictionary<string, HashSet<string>>();
+
+            /*
+            MongoDbConnection RawDataDb = new MongoDbConnection();
+            RawDataDb.InitializeWithIni(@"H:\.prm_config\.mongodb", "MongoNbmcRawDataCredentials");
+            IMongoCollection<BsonDocument> RawDataDbPatientIndexCollection = RawDataDb.Db.GetCollection<BsonDocument>(TextPatIndexCollectionName.Text);
+
+            // Delete all existing documents
+            RawDataDbPatientIndexCollection.DeleteMany("{}");
+            */
 
             // Instantiate the the interface to the SQLite membership dataset
             WOHSQLiteInterface WOHMembershipData = new WOHSQLiteInterface();
 
-            /*  This block works well for authenticated access to network resources when running as SYSTEM user
-             *  uses reference to project "NetworkAccess" in Apps/AppsCommon
-             *  
-            MembershipDataFileUsed = null;
-            if (!Environment.ExpandEnvironmentVariables("<%ephi_username%><%ephi_password%>").Contains("<%"))
-            {
-                NetworkCredential KDriveCredentials = new NetworkCredential
-                {
-                    UserName = EphiUserName,
-                    Password = EphiPassword,
-                    Domain = "ROOT_MILLIMAN"
-                };
-
-                using (new NetworkConnection(@"\\indy-netapp\prm_phi", KDriveCredentials))
-                {
-                    DirectoryInfo SupportFilesFolder = new DirectoryInfo(@"\\indy-netapp\prm_phi\phi\0273WOH\3.005-0273WOH06\5-Support_files");
-                    DirectoryInfo LatestSubfolder = SupportFilesFolder.GetDirectories().OrderByDescending(f => f.Name).First();
-                    String WoahMembershipDataFile = Path.Combine(LatestSubfolder.FullName, @"035_Staging_Membership\Members_3.005-0273WOH06.sqlite");
-                    File.Copy(WoahMembershipDataFile, @".\Members_3.005-0273WOH06.sqlite", true);
-                    Trace.WriteLine("File.Copy returned at " + DateTime.Now);
-
-                    MembershipDataFileUsed = Path.GetFullPath(@".\Members_3.005-0273WOH06.sqlite");
-                }
-            }
-            */
-
             DirectoryInfo SupportFilesFolder = new DirectoryInfo(@"\\indy-netapp\prm_phi\phi\0273WOH\3.005-0273WOH06\5-Support_files");
             DirectoryInfo LatestSubfolder = SupportFilesFolder.GetDirectories().OrderByDescending(f => f.Name).First();
             String WoahMembershipDataFile = Path.Combine(LatestSubfolder.FullName, @"035_Staging_Membership\Members_3.005-0273WOH06.sqlite");
-
             Trace.WriteLine("Using membership data file: " + WoahMembershipDataFile);
 
             //Connect to the SQLite membership database
             WOHMembershipData.ConnectToMembershipData(WoahMembershipDataFile);
 
-            int WoahIdCounter = 0, MaxPerIdMatchCounter = 0, MaxMrnCounter = 0;
-            StreamWriter CsvWriter = new StreamWriter("NBMCWoahMembers_" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + ".csv");
-            CsvWriter.WriteLine("Woah ID|NBMC MRN");
+            int WoahIdCounter = 0, EmrIdCounter = 0, MrnCounter = 0, MaxPerWoahIdMrnCounter = 0, MaxPerWoahIdEmrIdCounter = 0;
+
+            String CsvFileName = "NBMCWoahMembers_" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + ".csv";
+            Trace.WriteLine("Output of identifier mapping will be written to file: " + CsvFileName);
+            StreamWriter CsvWriter = new StreamWriter(CsvFileName);
+            CsvWriter.AutoFlush = true;
+            CsvWriter.WriteLine("Woah ID|NBMC MRN|Allscripts ID");
 
             foreach (String WoahId in WOHMembershipData.GetWoahIds())
             {
                 WoahIdCounter++;
-                HashSet<String> MrnSet = NbmcMrns.ContainsKey(WoahId) ? NbmcMrns[WoahId] : new HashSet<string>();
+                HashSet<String> MrnSet = new HashSet<string>();
+                HashSet<String> PIdSet = new HashSet<string>();
+                int PerWoahIdMrnCounter = 0, PerWoahIdEmrIdCounter = 0;
+
                 PipelineDefinition<BsonDocument, BsonDocument> pipeline = new BsonDocument[]
                 {
-                    //new BsonDocument { { "$match", new BsonDocument("identifiers.root", "2.16.124.113635.1.4.1.104") } },  // WOAH ID
+                    //new BsonDocument { { "$match", new BsonDocument("identifiers.root", "2.16.124.113635.1.4.1.104") } },  // Has a WOAH ID
                     new BsonDocument { { "$match", new BsonDocument("identifiers.extension", WoahId) } },
                     new BsonDocument { { "$project", new BsonDocument { {"identifiers", 1}, {"names", 1}, { "birthDate", 1 } } } },
                     new BsonDocument { { "$unwind", new BsonDocument("path", "$identifiers") } },
-                    new BsonDocument { { "$match", new BsonDocument("identifiers.root", "1.3.6.1.4.1.22812.3.7498501.3") } },  // NBMC MRN
+                    new BsonDocument { { "$match", new BsonDocument("$or", new BsonArray {
+                                                                                          { new BsonDocument("identifiers.root", "1.3.6.1.4.1.22812.3.7498501.3") }, // NBMC MRN
+                                                                                          { new BsonDocument("identifiers.root", "2.16.124.113635.1.4.1.105") }  // Allscripts record ID
+                                                                                         } ) } },
                 };
-
-                int PerWoahIdMatchCounter = 0; 
 
                 var results = PatientCollection.Aggregate(pipeline);
 
-                // The pipeline will yield one match per NBMC MRN
+                // The pipeline will yield one match per NBMC MRN or Allscripts record ID
                 foreach (BsonDocument OneResult in results.ToEnumerable())
                 {
-                    PerWoahIdMatchCounter++;
-                    MaxPerIdMatchCounter = Math.Max(MaxPerIdMatchCounter, PerWoahIdMatchCounter);
                     BsonDocument IdentifiersDoc = OneResult["identifiers"].AsBsonDocument;
-                    Trace.WriteLine("\n_id is " + OneResult["_id"].AsString);
+                    //Trace.WriteLine("\n_id is " + OneResult["_id"].AsString);
                     string root = IdentifiersDoc["root"].AsString;
                     string ext = IdentifiersDoc["extension"].AsString;
-                    Trace.WriteLine(root + " -> " + ext);
+                    //Trace.WriteLine(root + " -> " + ext);
 
-                    MaxMrnCounter = Math.Max(MaxMrnCounter, PerWoahIdMatchCounter);
-                    MrnSet.Add(ext);
-                    NbmcMrns[WoahId] = MrnSet;
+                    switch (root)
+                    {
+                        case "1.3.6.1.4.1.22812.3.7498501.3":  // NBMC MRN
+                            MrnCounter++;
+                            PerWoahIdMrnCounter++;
+                            MaxPerWoahIdMrnCounter = Math.Max(MaxPerWoahIdMrnCounter, PerWoahIdMrnCounter);
+                            MrnSet.Add(ext);
+                            break;
+                        case "2.16.124.113635.1.4.1.105":  // Allscripts record ID
+                            EmrIdCounter++;
+                            PerWoahIdEmrIdCounter++;
+                            MaxPerWoahIdEmrIdCounter = Math.Max(MaxPerWoahIdEmrIdCounter, PerWoahIdEmrIdCounter);
+                            PIdSet.Add(ext);
+                            break;
+                        default:
+                            // oopsie (probably impossible)
+                            break;
+                    }
                 }
 
-                if (NbmcMrns.ContainsKey(WoahId))
+                /*
+                BsonDocument NewDoc = new BsonDocument
                 {
-                    CsvWriter.WriteLine(WoahId + "|" + String.Join(",", NbmcMrns[WoahId].ToArray()));
-                    CsvWriter.FlushAsync();
-                }
-                Trace.Write("WOAH ID " + WoahId + " was matched " + PerWoahIdMatchCounter + " times in MongoDB");
-                Trace.WriteLine(NbmcMrns.ContainsKey(WoahId) ? ", Mrns are: " + String.Join(", ", NbmcMrns[WoahId].ToArray()) : "");
+                    { "Woah ID", WoahId },
+                    { "NBMC MRN", new BsonArray(NbmcMrns[WoahId].ToArray()) },
+                    { "Allscripts ID", new BsonArray(NbmcPIds[WoahId].ToArray()) }
+                };
+                RawDataDbPatientIndexCollection.InsertOne(NewDoc);
+                */
+
+                CsvWriter.WriteLine(WoahId + "|" + String.Join(",", MrnSet.ToArray()) + "|" + String.Join(",", PIdSet.ToArray()));
+                Trace.WriteLine("WOAH ID " + WoahId + " corresponds to MRNs: " + String.Join(",", MrnSet.ToArray()) + " and EMR IDs: " + String.Join(",", PIdSet.ToArray()));
             }
 
-            for (int i = 0; i<2; i++)
-            {
-                try  // the close can throw, I think because the asynchronous flush is not completed
-                {
-                    CsvWriter.Close();
-                }
-                catch (Exception)
-                {
-                    Thread.Sleep(200);
-                    continue;
-                }
-                break;
-            }
-            Trace.WriteLine("WOAH ID count: " + WoahIdCounter);
-            Trace.WriteLine("MaxPerIdMatchCounter: " + MaxPerIdMatchCounter);
-            Trace.WriteLine("MaxMrnCounter: " + MaxMrnCounter);
+            CsvWriter.Close();
+
+            Trace.WriteLine("WOAH ID  count: " + WoahIdCounter);
+            Trace.WriteLine("NBMC MRN count: " + WoahIdCounter);
+            Trace.WriteLine("EMR  ID  count: " + WoahIdCounter);
+            Trace.WriteLine("MaxPerWoahIdEmrIdCounter: " + MaxPerWoahIdEmrIdCounter);
+            Trace.WriteLine("MaxPerWoahIdMrnCounter: " + MaxPerWoahIdMrnCounter);
         }
+
+        private void ButtonExtractDiagnoses_Click(object sender, EventArgs e)
+        {
+            String TraceFileName = "TraceLog_" + ".txt";
+
+            TraceListener ThisTraceListener = new TextWriterTraceListener(TraceFileName);
+            Trace.Listeners.Add(ThisTraceListener);
+            Trace.WriteLine("Launched " + DateTime.Now.ToString());
+
+            PatientExplorer PatExplorer = new PatientExplorer();
+
+            int OperationCounter = 0;
+
+            openFileDialog1.InitialDirectory = ".";
+            openFileDialog1.Filter = "csv files (*.csv)|*.csv";
+            openFileDialog1.FilterIndex = 2;
+            openFileDialog1.RestoreDirectory = true;
+
+            if (openFileDialog1.ShowDialog() != DialogResult.OK)
+            {
+                Trace.WriteLine("Csv file not found, not processing");
+                MessageBox.Show("Csv file not found, not processing");
+                return;
+            }
+
+            using (StreamReader IdMapStream = new StreamReader(openFileDialog1.OpenFile()))
+            {
+                String[] FieldNames = IdMapStream.ReadLine().Split(new char[]{ '|'}, StringSplitOptions.RemoveEmptyEntries);
+
+                while (!IdMapStream.EndOfStream)
+                {
+                    String[] Fields = IdMapStream.ReadLine().Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+                    if (Fields.Count() != 3)
+                    {
+                        continue;
+                    }
+                    String WoahId = Fields[0];
+                    String[] Mrns = Fields[1].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                    String[] EmrIds = Fields[2].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                    if (Mrns.Count() == 0 || EmrIds.Count() == 0)
+                    {
+                        continue;
+                    }
+
+                    if (Mrns.Count() != EmrIds.Count())
+                    {
+                        Trace.WriteLine("For WOAH ID " + WoahId + " Mrn count " + Mrns.Count() + " and EMRId count " + EmrIds.Count() + " are not the same");
+                        continue;
+                    }
+
+                    for (int EmrIdCounter = 0; EmrIdCounter < EmrIds.Count(); EmrIdCounter++)
+                    {
+                        String EmrCsvFileName = "Diagnoses_" + WoahId + "_" + Mrns[EmrIdCounter] + "_" + EmrIds[EmrIdCounter] + ".csv";
+                        OperationCounter++;
+                        Trace.WriteLine("Starting Unity operations on WOAH ID " + WoahId + ", Mrn " + Mrns[EmrIdCounter] + ", EmrId " + EmrIds[EmrIdCounter]);
+                        PatExplorer.ExplorePatientEmrId(EmrIds[EmrIdCounter], false, true, false, EmrCsvFileName);
+                    }
+
+                    if (OperationCounter > 100)
+                    {
+                        Trace.WriteLine("Completed " + OperationCounter + " Emr Id operations, breaking");
+                        break;
+                    }
+                }
+            }
+
+            Trace.WriteLine("Total operation counter is " + OperationCounter);
+        }
+
     }
 }

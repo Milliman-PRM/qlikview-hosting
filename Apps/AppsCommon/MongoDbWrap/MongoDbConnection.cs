@@ -70,7 +70,7 @@ namespace MongoDbWrap
             {
                 return false;
             }
-
+            /*
             var credential = MongoCredential.CreateCredential(Params._UserDomain, Params._User, Params._Password);
             var settings = new MongoClientSettings
             {
@@ -79,22 +79,29 @@ namespace MongoDbWrap
             };
             settings.Server = (Params._Port == 0) ? new MongoServerAddress(Params._Host) :
                                                     new MongoServerAddress(Params._Host, Params._Port);
-
+*/
             string ConnectionString = @"mongodb://" + Params._User + ":" + Params._Password + "@" + Params._Host;
             if (Params._Port > 0)
             {
                 ConnectionString += ":" + Params._Port.ToString();
             }
+            ConnectionString += @"/" + Params._Db;
+            if (!String.IsNullOrEmpty(Params._UserDomain) && Params._UserDomain != Params._Db)
+            {
+                ConnectionString += "?authSource=" + Params._UserDomain + "&connectTimeoutMS=5000";
+            }
 
-            var Settings = MongoClientSettings.FromUrl(new MongoUrl(ConnectionString));
-            Settings.MaxConnectionLifeTime = new TimeSpan(2, 0, 0);
+            //MongoClientSettings Settings = MongoClientSettings.FromUrl(new MongoUrl(ConnectionString));
+            //Settings.MaxConnectionLifeTime = new TimeSpan(2, 0, 0);
+            //_Client = new MongoClient(Settings);
 
-            _Client = new MongoClient(settings);
-            //MongoClientSettings ClientSettings = Client.Settings;
+            _Client = new MongoClient(ConnectionString);
+            //_Client.Settings.MaxConnectionLifeTime = new TimeSpan(2, 0, 0);
 
             if (!string.IsNullOrEmpty(Params._Db))
             {
                 AccessMongoDatabase(Params._Db);
+                var x = _Db.ListCollections();
             }
 
             return _Client != null;

@@ -18,6 +18,7 @@ namespace NbmcUnityQueryLib
         string UnityPassword;
         string UnityAppName;
         string EhrUsername;
+        string OutputPath = @".\Output";
 
         public PatientExplorer()
         {
@@ -33,6 +34,93 @@ namespace NbmcUnityQueryLib
             EhrUsername = appSettings["ehr.username"]; // valid EHR login name 
         }
 
+        public void ExplorePatientEmrId(string EmrId, bool DoCharges, bool DoDiagnoses, bool DoProblems, String CsvFileName = null)
+        {
+            Connect(UnityUsername, UnityPassword, UnityEndpoint);
+            StreamWriter CsvWriter = null;
+
+            if (DoProblems)
+            {
+                DataSet ProblemDs = UnityClient.Magic("GetPatientProblems", EhrUsername, UnityAppName, EmrId, UnitySecurityToken, "N", "ALL", "", "", "Y", "", null);
+                Trace.WriteLine("Problem output is:\n" + ProblemDs.GetXml());
+                Trace.Write("Allscripts problems IDs are: ");
+                foreach (DataTable ProblemTable in ProblemDs.Tables)
+                {
+                    // There is a table returned with name "getpatientproblemsinfo1", which contains only errors
+                    if (ProblemTable.TableName == "getpatientproblemsinfo")
+                    {
+                        foreach (DataRow ProblemRow in ProblemTable.Rows)  // for each multi-field record
+                        {
+                            String ProblemId = ProblemRow["ProblemID"].ToString();
+                            //Trace.Write(ProblemRow["ProblemID"].ToString() + " , ");
+                            Trace.Write("ProblemID to evaluate is : " + ProblemId);
+                            DataSet ProblemDetailsDs = UnityClient.Magic("GetProblemDetails", EhrUsername, UnityAppName, EmrId, UnitySecurityToken, ProblemId, "", "", "", "", "", null);
+                            Trace.Write("GetProblemDetails returned xml:" + ProblemDetailsDs.GetXml());
+                        }
+                    }
+                }
+            }
+
+            if (DoDiagnoses)
+            {
+                if (String.IsNullOrEmpty(CsvFileName))
+                {
+                    CsvFileName = "Diagnoses_EmrId_" + EmrId + ".csv";
+                }
+                CsvFileName = Path.Combine(OutputPath, CsvFileName);
+                Directory.CreateDirectory(OutputPath);
+                CsvWriter = new StreamWriter(CsvFileName);
+
+                CsvWriter.WriteLine("Patient_EmrId|" +
+                                    "Encounter_EmrId|" +
+                                    "Encounter_DateTime|" +
+                                    "Encounter_PerformingProviderName|" +
+                                    "Encounter_BillingProviderName|" +
+                                    "Encounter_appointmenttype|" +
+                                    "Encounter_ApptComment|" +
+                                    "Diagnosis_code|" +
+                                    "Diagnosis_Diagnosis|" +
+                                    "Diagnosis_ICD10code|" +
+                                    "Diagnosis_ICD10diagnosis");
+            }
+
+            Trace.WriteLine("\nCalling GetEncounterList with patient EHR ID: " + EmrId);
+            DataSet EncounterDs = UnityClient.Magic("GetEncounterList", EhrUsername, UnityAppName, EmrId, UnitySecurityToken, "", "", "", "Y", "", "", null);
+            Trace.WriteLine("Output from GetEncounterList:\n" + EncounterDs.GetXml());
+
+            foreach (DataTable EncounterTable in EncounterDs.Tables)  // one table in a response
+            {
+                Trace.WriteLine("Encounter table named " + EncounterTable.TableName + " has " + EncounterTable.Rows.Count + " rows");
+                foreach (DataRow EncounterRow in EncounterTable.Rows)  // for each multi-field record
+                {
+                    string EncounterId = EncounterRow["ID"].ToString();
+                    Trace.WriteLine("\nFound encounter with EncounterID = " + EncounterId);
+                    int TempInt;
+                    if (!int.TryParse(EncounterId, out TempInt) || TempInt <= 0)
+                    {
+                        Trace.WriteLine("EncounterId not parsable into valid integer, skipping this encounter: " + EncounterId);
+                        continue;
+                    }
+
+                    if (DoCharges)
+                    {
+                        HandleCharges(EmrId, EncounterId, EncounterRow);
+                    }
+
+                    if (DoDiagnoses)
+                    {
+                        HandleDiagnoses(EmrId, EncounterId, EncounterRow, CsvWriter);
+                    }
+                }
+            }
+
+            if (CsvWriter != null)
+            {
+                CsvWriter.Close();
+                CsvWriter = null;
+            }
+        }
+
         public void ExplorePatient(string PatientMrn, bool DoCharges, bool DoDiagnoses, bool DoProblems)
         {
             String TraceFileName = "TraceLog_" + PatientMrn + ".txt";
@@ -40,7 +128,6 @@ namespace NbmcUnityQueryLib
             TraceListener ThisTraceListener = new TextWriterTraceListener(TraceFileName);
             Trace.Listeners.Add(ThisTraceListener);
             Trace.WriteLine("Launched " + DateTime.Now.ToString());
-            StreamWriter CsvWriter = null;
 
             Trace.WriteLine("Attempting to connect to unity service with endpoint " + UnityEndpoint);
             Connect(UnityUsername, UnityPassword, UnityEndpoint);
@@ -58,8 +145,7 @@ namespace NbmcUnityQueryLib
 
             if (PatientMrn.Trim().Length > 0)
             {
-                DataSet PatientDs, EncounterDs;
-                string EncounterId = "";
+                DataSet PatientDs;
 
                 Trace.WriteLine("\nCalling GetPatientByMRN with MRN: " + PatientMrn);
                 PatientDs = UnityClient.Magic("GetPatientByMRN", EhrUsername, UnityAppName, "", UnitySecurityToken, PatientMrn, "", "", "", "", "", null);
@@ -88,79 +174,7 @@ namespace NbmcUnityQueryLib
                 // main loop for each patient id
                 foreach (String PatientID in AllPatientIds)
                 {
-                    if (DoProblems)
-                    {
-                        DataSet ProblemDs = UnityClient.Magic("GetPatientProblems", EhrUsername, UnityAppName, PatientID, UnitySecurityToken, "N", "ALL", "", "", "Y", "", null);
-                        Trace.WriteLine("Problem output is:\n" + ProblemDs.GetXml());
-                        Trace.Write("Allscripts problems IDs are: ");
-                        foreach (DataTable ProblemTable in ProblemDs.Tables)
-                        {
-                            // There is a table returned with name "getpatientproblemsinfo1", which contains only errors
-                            if (ProblemTable.TableName == "getpatientproblemsinfo")
-                            {
-                                foreach (DataRow ProblemRow in ProblemTable.Rows)  // for each multi-field record
-                                {
-                                    String ProblemId = ProblemRow["ProblemID"].ToString();
-                                    //Trace.Write(ProblemRow["ProblemID"].ToString() + " , ");
-                                    Trace.Write("ProblemID to evaluate is : " + ProblemId);
-                                    DataSet ProblemDetailsDs = UnityClient.Magic("GetProblemDetails", EhrUsername, UnityAppName, PatientID, UnitySecurityToken, ProblemId, "", "", "", "", "", null);
-                                    Trace.Write("GetProblemDetails returned xml:" + ProblemDetailsDs.GetXml());
-                                }
-                            }
-                        }
-                    }
-
-                    if (DoDiagnoses)
-                    {
-                        CsvWriter = new StreamWriter("Diagnoses_" + PatientMrn + ".csv");
-
-                        CsvWriter.WriteLine("Patient_ID|" +
-                                            "Encounter_DateTime|" +
-                                            "Encounter_PerformingProviderName|" +
-                                            "Encounter_BillingProviderName|" +
-                                            "Encounter_appointmenttype|" +
-                                            "Encounter_ApptComment|" +
-                                            "Diagnosis_code|" +
-                                            "Diagnosis_Diagnosis|" +
-                                            "Diagnosis_ICD10code|" +
-                                            "Diagnosis_ICD10diagnosis");
-                    }
-
-                    Trace.WriteLine("\nCalling GetEncounterList with patient EHR ID: " + PatientID);
-                    EncounterDs = UnityClient.Magic("GetEncounterList", EhrUsername, UnityAppName, PatientID, UnitySecurityToken, "", "", "", "Y", "", "", null);
-                    Trace.WriteLine("Output from GetEncounterList:\n" + EncounterDs.GetXml());
-
-                    foreach (DataTable EncounterTable in EncounterDs.Tables)  // one table in a response
-                    {
-                        Trace.WriteLine("Encounter table named " + EncounterTable.TableName + " has " + EncounterTable.Rows.Count + " rows");
-                        foreach (DataRow EncounterRow in EncounterTable.Rows)  // for each multi-field record
-                        {
-                            EncounterId = EncounterRow["ID"].ToString();
-                            Trace.WriteLine("\nFound encounter with EncounterID = " + EncounterId);
-                            int TempInt;
-                            if (!int.TryParse(EncounterId, out TempInt) || TempInt <= 0)
-                            {
-                                Trace.WriteLine("EncounterId not parsable into valid integer, skipping this encounter: " + EncounterId);
-                                continue;
-                            }
-
-                            if (DoCharges)
-                            {
-                                HandleCharges(PatientID, EncounterId, EncounterRow);
-                            }
-
-                            if (DoDiagnoses)
-                            {
-                                HandleDiagnoses(PatientID, EncounterId, EncounterRow, CsvWriter);
-                            }
-                        }
-                    }
-                }
-
-                if (CsvWriter != null)
-                {
-                    CsvWriter.Close();
-                    CsvWriter = null;
+                    ExplorePatientEmrId(PatientID, DoCharges, DoDiagnoses, DoProblems);
                 }
             }
 
@@ -195,14 +209,14 @@ CleanUp:
             }
         }
 
-        void HandleDiagnoses(String PatientID, String EncounterId, DataRow EncounterRow, StreamWriter CsvWriter)
+        void HandleDiagnoses(String PatientEmrId, String EncounterEmrId, DataRow EncounterRow, StreamWriter CsvWriter)
         {
             DataSet DiagnosisDs;
 
-            Trace.WriteLine("\nCalling GetPatientDiagnosis with patient EHR ID: " + PatientID + " and encounter EHR ID " + EncounterId);
+            Trace.WriteLine("\nCalling GetPatientDiagnosis with patient EMR ID: " + PatientEmrId + " and encounter EMR ID " + EncounterEmrId);
             try
             {
-                DiagnosisDs = UnityClient.Magic("GetPatientDiagnosis", EhrUsername, UnityAppName, PatientID, UnitySecurityToken, "", "", "", EncounterId, "", "", null);
+                DiagnosisDs = UnityClient.Magic("GetPatientDiagnosis", EhrUsername, UnityAppName, PatientEmrId, UnitySecurityToken, "", "", "", EncounterEmrId, "", "", null);
             }
             catch (Exception e)
             {
@@ -216,7 +230,8 @@ CleanUp:
                 Trace.WriteLine("This DiagnosisTable has " + DiagnosisTable.Rows.Count + " diagnoses");
                 foreach (DataRow DiagnosisRow in DiagnosisTable.Rows)
                 {
-                    CsvWriter.WriteLine(PatientID + "|" +
+                    CsvWriter.WriteLine(PatientEmrId + "|" +
+                                        EncounterEmrId + "|" +
                                         EncounterRow["DTTM"] + "|" +
                                         EncounterRow["PerformingProviderName"] + "|" +
                                         EncounterRow["BillingProviderName"] + "|" +
