@@ -437,7 +437,7 @@
                     var password = $('#NewPassword').val();                                      
 
                     //divide the user name into 3 letters so abcdefghi@somthing.com will look like [abd def ghi @som thi ng. com]
-                    // example: ["afs", "hee", "n.k", "han", "@mi", "lli", "man", ".co", "fsh", "een", ".kh", "an@", "mil", "lim", "an.", "com", "she", "en.", "kha", "n@m", "ill", "ima", "n.c"]
+                    // example: ["abc", "def", "g.h", "ijk", "@em", "ail", ".co", "m"]
                     var partsOfThreeLettersUsername = username.match(/.{3}/g)
                                         .concat(
                                                 username.substr(1).match(/.{3}/g),
