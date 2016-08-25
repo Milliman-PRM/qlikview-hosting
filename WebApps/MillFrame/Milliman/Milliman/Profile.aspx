@@ -7,9 +7,7 @@
     <title>User Profile/Password Settings</title>
     <link id="lnkBootstrapcss" runat="server" rel="stylesheet" type="text/css" href="~/Css/bootstrap.css" />
     <style type="text/css">
-        html {
-            overflow:scroll;
-        }
+        html {overflow:scroll;}
         html,button,input,select,textarea,label{font-family:arial,"Times New Roman",Times,serif,sans-serif;font-size:12px;color:#222}
         body{margin:20px}
         /*Standard Generic*/
@@ -79,30 +77,7 @@
             var Parent = getRadWindow().BrowserWindow;
             Parent.radalert('Profile/Password information has been saved.', 350, 150, "Information Saved");
             ThisDialog.close();
-        }
-
-        //Clear the Text Boxes
-        function ClearTextboxes() {
-            try {
-                document.getElementById('UserFirstName').value = '';
-                document.getElementById('UserLastName').value = '';
-                //document.getElementById('Email').value = '';
-                document.getElementById('Phone').value = '';
-                document.getElementById('CurrentPassword').value = '';
-                document.getElementById('NewPassword').value = '';
-                document.getElementById('ConfirmNewPassword').value = '';
-                document.getElementById('Answer').value = '';
-
-                //select first element in drop down list
-                var ddl = $('select[name="SecretPhraseDropdown"]');
-                ddl.val(ddl.find('option').first().val());
-            }
-            catch (err)
-            {
-                var txt = 'Errot=>' + err.description;
-                showDangerAlert(txt); 
-            }
-        }
+        }              
 
     </script>
 </head>
@@ -297,13 +272,13 @@
 
     </form>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.34.5/js/bootstrap-dialog.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.34.5/css/bootstrap-dialog.min.css" />
+    <script src="Javascript/jquery.min.v2.1.1.js"></script>
+    <script src="Javascript/bootstrap.min.v3.3.7.js"></script>
+    <script src="Javascript/bootstrap-dialog.min.js"></script>
     <script src="Javascript/maskedinput.js" type="text/javascript"></script>
+    <link href="Css/bootstrap-dialog.min.css" rel="stylesheet" />
+
     <script type="text/javascript">
-        var PasswordFormatError = "Passwords must have a length of 8 characters, with at least 1 non-alphanumeric character.";
 
         //form load
         function OnLoad() {
@@ -316,6 +291,28 @@
                 showInformationAlert(msg);
             }
         }
+
+        //Clear the Text Boxes
+        function ClearTextboxes() {
+            try {
+                document.getElementById('UserFirstName').value = '';
+                document.getElementById('UserLastName').value = '';
+                //document.getElementById('Email').value = '';
+                document.getElementById('Phone').value = '';
+                document.getElementById('CurrentPassword').value = '';
+                document.getElementById('NewPassword').value = '';
+                document.getElementById('ConfirmNewPassword').value = '';
+                document.getElementById('Answer').value = '';
+
+                //select first element in drop down list
+                var ddl = $('select[name="SecretPhraseDropdown"]');
+                ddl.val(ddl.find('option').first().val());
+            }
+            catch (err) {
+                var txt = 'Error=>' + err.description;
+                showDangerAlert(txt);
+            }
+        }       
 
         //set phone mask
         $("#Phone").mask("(999) 999-9999");
@@ -492,7 +489,7 @@
             }
             catch (err) {
                 return false;
-                var txt = 'Errot=>' + err.description;
+                var txt = 'Error=>' + err.description;
                 showDangerAlert(txt);
             }
             return true;
@@ -521,7 +518,7 @@
             }
             catch (err) {
                 return false;
-                var txt = 'Errot=>' + err.description;
+                var txt = 'Error=>' + err.description;
                 showDangerAlert(txt);
             }
           

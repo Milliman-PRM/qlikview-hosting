@@ -83,6 +83,7 @@
     <Content Include="Announcements\Announcements.xml" />
     <Content Include="Announcements\AnnouncementsTemplate.xml" />
     <Content Include="AssertionService.aspx" />
+    <Content Include="Css\bootstrap-dialog.min.css" />
     <Content Include="Css\bootstrap.css" />
     <Content Include="Css\bootstrap.min.css" />
     <Content Include="Css\Milliman_small.png" />
@@ -104,8 +105,9 @@
     <Content Include="Images\Word-icon.png" />
     <Content Include="Images\Xml-icon.png" />
     <Content Include="Images\zip-icon.png" />
+    <Content Include="Javascript\bootstrap-dialog.min.js" />
     <Content Include="Javascript\bootstrap.js" />
-    <Content Include="Javascript\bootstrap.min.js" />
+    <Content Include="Javascript\bootstrap.min.v3.3.7.js" />
     <Content Include="Javascript\maskedinput.js" />
     <Content Include="Javascript\npm.js" />
     <Content Include="Logs\placeholder.txt" />
@@ -278,6 +280,7 @@
     <Content Include="Css\glyphicons-halflings-regular.eot" />
     <Content Include="Css\glyphicons-halflings-regular.ttf" />
     <Content Include="Css\glyphicons-halflings-regular.woff" />
+    <Content Include="Javascript\jquery.min.v2.1.1.js" />
     <None Include="Properties\PublishProfiles\MillimanDebug.pubxml" />
     <Content Include="SSOConfigure\tibcert.crt" />
     <Content Include="SSOConfigure\HCIntel.cer" />
