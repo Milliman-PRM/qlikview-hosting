@@ -68,6 +68,7 @@
     </ModelFirst>
     <Diagrams>
       <Diagram Name="CdrDataContextDiagram" DefaultDiagram="True" />
+      <Diagram Name="CdrWithTypes" />
     </Diagrams>
     <Templates>
       <Template Name="LinqConnect" Description="Use this template to generate a strongly-typed DataContext class and persistence-aware classes." Enabled="True" PredefinedTemplateName="LinqConnect C#">
