@@ -33,6 +33,8 @@
             this.TextPatIndexCollectionName = new System.Windows.Forms.TextBox();
             this.LabelCollectionName = new System.Windows.Forms.Label();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // ButtonBuildMrnList
@@ -47,7 +49,7 @@
             // 
             // ButtonExtractDiagnoses
             // 
-            this.ButtonExtractDiagnoses.Location = new System.Drawing.Point(12, 98);
+            this.ButtonExtractDiagnoses.Location = new System.Drawing.Point(12, 134);
             this.ButtonExtractDiagnoses.Name = "ButtonExtractDiagnoses";
             this.ButtonExtractDiagnoses.Size = new System.Drawing.Size(260, 23);
             this.ButtonExtractDiagnoses.TabIndex = 1;
@@ -77,11 +79,31 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 85);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(189, 13);
+            this.label1.TabIndex = 4;
+            this.label1.Text = "Should be run from a domain computer";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(12, 164);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(211, 13);
+            this.label2.TabIndex = 5;
+            this.label2.Text = "Should be run from prm-data-1.milliman.com";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 377);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.LabelCollectionName);
             this.Controls.Add(this.TextPatIndexCollectionName);
             this.Controls.Add(this.ButtonExtractDiagnoses);
@@ -102,6 +124,8 @@
         private System.Windows.Forms.TextBox TextPatIndexCollectionName;
         private System.Windows.Forms.Label LabelCollectionName;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
     }
 }
 

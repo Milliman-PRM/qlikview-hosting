@@ -18,12 +18,9 @@ namespace NbmcUnityTestGui
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            String TraceFileName = "TraceLog_" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + ".txt";
             Trace.Listeners.Clear();
-            Trace.Listeners.Add(new TextWriterTraceListener(TraceFileName));
             Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
             Trace.AutoFlush = true;
-            Trace.WriteLine("Application launched " + DateTime.Now.ToString());
 
             Application.Run(new Form1());
         }

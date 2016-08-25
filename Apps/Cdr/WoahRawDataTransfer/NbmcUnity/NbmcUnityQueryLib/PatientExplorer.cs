@@ -18,7 +18,6 @@ namespace NbmcUnityQueryLib
         string UnityPassword;
         string UnityAppName;
         string EhrUsername;
-        string OutputPath = @".\Output";
 
         public PatientExplorer()
         {
@@ -34,14 +33,13 @@ namespace NbmcUnityQueryLib
             EhrUsername = appSettings["ehr.username"]; // valid EHR login name 
         }
 
-        public void ExplorePatientEmrId(string EmrId, bool DoCharges, bool DoDiagnoses, bool DoProblems, String CsvFileName = null)
+        public void ExplorePatientEmrId(string PatientEmrId, bool DoCharges, bool DoDiagnoses, bool DoProblems, StreamWriter CsvWriter = null, String PatientMrn = "", String WoahId = "")
         {
             Connect(UnityUsername, UnityPassword, UnityEndpoint);
-            StreamWriter CsvWriter = null;
 
             if (DoProblems)
             {
-                DataSet ProblemDs = UnityClient.Magic("GetPatientProblems", EhrUsername, UnityAppName, EmrId, UnitySecurityToken, "N", "ALL", "", "", "Y", "", null);
+                DataSet ProblemDs = UnityClient.Magic("GetPatientProblems", EhrUsername, UnityAppName, PatientEmrId, UnitySecurityToken, "N", "ALL", "", "", "Y", "", null);
                 Trace.WriteLine("Problem output is:\n" + ProblemDs.GetXml());
                 Trace.Write("Allscripts problems IDs are: ");
                 foreach (DataTable ProblemTable in ProblemDs.Tables)
@@ -54,7 +52,7 @@ namespace NbmcUnityQueryLib
                             String ProblemId = ProblemRow["ProblemID"].ToString();
                             //Trace.Write(ProblemRow["ProblemID"].ToString() + " , ");
                             Trace.Write("ProblemID to evaluate is : " + ProblemId);
-                            DataSet ProblemDetailsDs = UnityClient.Magic("GetProblemDetails", EhrUsername, UnityAppName, EmrId, UnitySecurityToken, ProblemId, "", "", "", "", "", null);
+                            DataSet ProblemDetailsDs = UnityClient.Magic("GetProblemDetails", EhrUsername, UnityAppName, PatientEmrId, UnitySecurityToken, ProblemId, "", "", "", "", "", null);
                             Trace.Write("GetProblemDetails returned xml:" + ProblemDetailsDs.GetXml());
                         }
                     }
@@ -63,29 +61,34 @@ namespace NbmcUnityQueryLib
 
             if (DoDiagnoses)
             {
-                if (String.IsNullOrEmpty(CsvFileName))
+                if (CsvWriter == null)
                 {
-                    CsvFileName = "Diagnoses_EmrId_" + EmrId + ".csv";
-                }
-                CsvFileName = Path.Combine(OutputPath, CsvFileName);
-                Directory.CreateDirectory(OutputPath);
-                CsvWriter = new StreamWriter(CsvFileName);
+                    string OutputPath = @".\Output";
+                    String CsvFileName = "Diagnoses_EmrId_" + PatientEmrId + ".csv";
+                    CsvFileName = Path.Combine(OutputPath, CsvFileName);
+                    Directory.CreateDirectory(OutputPath);
+                    CsvWriter = new StreamWriter(CsvFileName);
+                    CsvWriter.AutoFlush = true;
 
-                CsvWriter.WriteLine("Patient_EmrId|" +
-                                    "Encounter_EmrId|" +
-                                    "Encounter_DateTime|" +
-                                    "Encounter_PerformingProviderName|" +
-                                    "Encounter_BillingProviderName|" +
-                                    "Encounter_appointmenttype|" +
-                                    "Encounter_ApptComment|" +
-                                    "Diagnosis_code|" +
-                                    "Diagnosis_Diagnosis|" +
-                                    "Diagnosis_ICD10code|" +
-                                    "Diagnosis_ICD10diagnosis");
+                    CsvWriter.WriteLine("Patient_EmrId|" +
+                                        "Patient_Mrn|" +
+                                        "Patient_WoahId|" +
+                                        "Encounter_EmrId|" +
+                                        "Encounter_DateTime|" +
+                                        "Encounter_PerformingProviderName|" +
+                                        "Encounter_BillingProviderName|" +
+                                        "Encounter_appointmenttype|" +
+                                        "Encounter_ApptComment|" +
+                                        "Diagnosis_ProblemDE|" +
+                                        "Diagnosis_code|" +
+                                        "Diagnosis_Diagnosis|" +
+                                        "Diagnosis_ICD10code|" +
+                                        "Diagnosis_ICD10diagnosis");
+                }
             }
 
-            Trace.WriteLine("\nCalling GetEncounterList with patient EHR ID: " + EmrId);
-            DataSet EncounterDs = UnityClient.Magic("GetEncounterList", EhrUsername, UnityAppName, EmrId, UnitySecurityToken, "", "", "", "Y", "", "", null);
+            Trace.WriteLine("\nCalling GetEncounterList with patient EHR ID: " + PatientEmrId);
+            DataSet EncounterDs = UnityClient.Magic("GetEncounterList", EhrUsername, UnityAppName, PatientEmrId, UnitySecurityToken, "", "", "", "Y", "", "", null);
             Trace.WriteLine("Output from GetEncounterList:\n" + EncounterDs.GetXml());
 
             foreach (DataTable EncounterTable in EncounterDs.Tables)  // one table in a response
@@ -104,26 +107,21 @@ namespace NbmcUnityQueryLib
 
                     if (DoCharges)
                     {
-                        HandleCharges(EmrId, EncounterId, EncounterRow);
+                        HandleCharges(PatientEmrId, EncounterId, EncounterRow);
                     }
 
                     if (DoDiagnoses)
                     {
-                        HandleDiagnoses(EmrId, EncounterId, EncounterRow, CsvWriter);
+                        HandleDiagnoses(PatientEmrId, EncounterId, EncounterRow, CsvWriter, PatientMrn, WoahId);
                     }
                 }
             }
 
-            if (CsvWriter != null)
-            {
-                CsvWriter.Close();
-                CsvWriter = null;
-            }
         }
 
-        public void ExplorePatient(string PatientMrn, bool DoCharges, bool DoDiagnoses, bool DoProblems)
+        public void ExplorePatient(string PatientMrn, bool DoCharges, bool DoDiagnoses, bool DoProblems, string WoahId)
         {
-            String TraceFileName = "TraceLog_" + PatientMrn + ".txt";
+            String TraceFileName = "TraceLog_MRN_" + PatientMrn + ".txt";
 
             TraceListener ThisTraceListener = new TextWriterTraceListener(TraceFileName);
             Trace.Listeners.Add(ThisTraceListener);
@@ -174,7 +172,7 @@ namespace NbmcUnityQueryLib
                 // main loop for each patient id
                 foreach (String PatientID in AllPatientIds)
                 {
-                    ExplorePatientEmrId(PatientID, DoCharges, DoDiagnoses, DoProblems);
+                    ExplorePatientEmrId(PatientID, DoCharges, DoDiagnoses, DoProblems, null, PatientMrn, WoahId);
                 }
             }
 
@@ -209,7 +207,7 @@ CleanUp:
             }
         }
 
-        void HandleDiagnoses(String PatientEmrId, String EncounterEmrId, DataRow EncounterRow, StreamWriter CsvWriter)
+        void HandleDiagnoses(String PatientEmrId, String EncounterEmrId, DataRow EncounterRow, StreamWriter CsvWriter, String PatientMrn = "", String WoahId = "")
         {
             DataSet DiagnosisDs;
 
@@ -230,25 +228,34 @@ CleanUp:
                 Trace.WriteLine("This DiagnosisTable has " + DiagnosisTable.Rows.Count + " diagnoses");
                 foreach (DataRow DiagnosisRow in DiagnosisTable.Rows)
                 {
-                    CsvWriter.WriteLine(PatientEmrId + "|" +
-                                        EncounterEmrId + "|" +
-                                        EncounterRow["DTTM"] + "|" +
-                                        EncounterRow["PerformingProviderName"] + "|" +
-                                        EncounterRow["BillingProviderName"] + "|" +
-                                        EncounterRow["appointmenttype"] + "|" +
-                                        EncounterRow["ApptComment"] + "|" +
-                                        DiagnosisRow["Code"] + "|" +
-                                        DiagnosisRow["Diagnosis"] + "|" +
-                                        DiagnosisRow["ICD10Code"] + "|" +
-                                        DiagnosisRow["ICD10Diagnosis"]);
-
-                    for (int i = 0; i < DiagnosisTable.Columns.Count; i++)
+                    if (CsvWriter != null)
                     {
-                        //Trace.WriteLine("Diagnosis field name: " + DiagnosisTable.Columns[i].ColumnName + ", value: " + DiagnosisRow[i]);
+                        CsvWriter.WriteLine(PatientEmrId + "|" +
+                                            PatientMrn + "|" +
+                                            WoahId + "|" +
+                                            EncounterEmrId + "|" +
+                                            EncounterRow["DTTM"] + "|" +
+                                            EncounterRow["PerformingProviderName"] + "|" +
+                                            EncounterRow["BillingProviderName"] + "|" +
+                                            EncounterRow["appointmenttype"] + "|" +
+                                            EncounterRow["ApptComment"] + "|" +
+                                            DiagnosisRow["ProblemDE"] + "|" +
+                                            DiagnosisRow["Code"] + "|" +
+                                            DiagnosisRow["Diagnosis"] + "|" +
+                                            DiagnosisRow["ICD10Code"] + "|" +
+                                            DiagnosisRow["ICD10Diagnosis"]);
+
+                        /*
+                        for (int i = 0; i < DiagnosisTable.Columns.Count; i++)
+                        {
+                            Trace.WriteLine("Diagnosis field name: " + DiagnosisTable.Columns[i].ColumnName + ", value: " + DiagnosisRow[i]);
+                        }
+                        Trace.WriteLine("");
+                        */
                     }
-                    //Trace.WriteLine("");
-                }
-            }
-        }
-    }
-}
+                }  // foreach DiagnosisRow 
+            }  // foreach DiagnosisTable
+        }  // HandleDiagnoses
+
+    }  // class
+}  // namespace

@@ -21,6 +21,8 @@ namespace NbmcUnityTestGui
 {
     public partial class Form1 : Form
     {
+        String LaunchTimestampString;
+
         public Form1()
         {
             InitializeComponent();
@@ -28,7 +30,7 @@ namespace NbmcUnityTestGui
 
         private void ButtonBuildMrnList_Click(object sender, EventArgs e)
         {
-            // local declarations
+            LaunchTimestampString = DateTime.Now.ToString("yyyyMMdd-HHmmss");
 
             // database connections
             MongoDbConnection MongoDb = new MongoDbConnection();
@@ -57,7 +59,7 @@ namespace NbmcUnityTestGui
 
             int WoahIdCounter = 0, EmrIdCounter = 0, MrnCounter = 0, MaxPerWoahIdMrnCounter = 0, MaxPerWoahIdEmrIdCounter = 0;
 
-            String CsvFileName = "NBMCWoahMembers_" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + ".csv";
+            String CsvFileName = "NBMCWoahMembers_" + LaunchTimestampString + ".csv";
             Trace.WriteLine("Output of identifier mapping will be written to file: " + CsvFileName);
             StreamWriter CsvWriter = new StreamWriter(CsvFileName);
             CsvWriter.AutoFlush = true;
@@ -138,11 +140,12 @@ namespace NbmcUnityTestGui
 
         private void ButtonExtractDiagnoses_Click(object sender, EventArgs e)
         {
-            String TraceFileName = "TraceLog_" + ".txt";
+            LaunchTimestampString = DateTime.Now.ToString("yyyyMMdd-HHmmss");
+            String TraceFileName = "TraceLog_" + LaunchTimestampString + ".txt";
 
             TraceListener ThisTraceListener = new TextWriterTraceListener(TraceFileName);
             Trace.Listeners.Add(ThisTraceListener);
-            Trace.WriteLine("Launched " + DateTime.Now.ToString());
+            Trace.WriteLine("Launched " + LaunchTimestampString);
 
             PatientExplorer PatExplorer = new PatientExplorer();
 
@@ -155,10 +158,31 @@ namespace NbmcUnityTestGui
 
             if (openFileDialog1.ShowDialog() != DialogResult.OK)
             {
-                Trace.WriteLine("Csv file not found, not processing");
-                MessageBox.Show("Csv file not found, not processing");
+                Trace.WriteLine("ID map .csv file not found, not processing");
+                MessageBox.Show("ID map .csv file not found, not processing");
                 return;
             }
+
+            String OutputPath = @".\Output";
+            String CsvFileName = "Diagnoses_" + LaunchTimestampString + ".csv";
+            CsvFileName = Path.Combine(OutputPath, CsvFileName);
+            Directory.CreateDirectory(OutputPath);
+            StreamWriter CsvWriter = new StreamWriter(CsvFileName);
+            CsvWriter.AutoFlush = true;
+            CsvWriter.WriteLine("Patient_EmrId|" +
+                                "Patient_Mrn|" +
+                                "Patient_WoahId|" +
+                                "Encounter_EmrId|" +
+                                "Encounter_DateTime|" +
+                                "Encounter_PerformingProviderName|" +
+                                "Encounter_BillingProviderName|" +
+                                "Encounter_appointmenttype|" +
+                                "Encounter_ApptComment|" +
+                                "Diagnosis_ProblemDE|" +
+                                "Diagnosis_code|" +
+                                "Diagnosis_Diagnosis|" +
+                                "Diagnosis_ICD10code|" +
+                                "Diagnosis_ICD10diagnosis");
 
             using (StreamReader IdMapStream = new StreamReader(openFileDialog1.OpenFile()))
             {
@@ -187,10 +211,9 @@ namespace NbmcUnityTestGui
 
                     for (int EmrIdCounter = 0; EmrIdCounter < EmrIds.Count(); EmrIdCounter++)
                     {
-                        String EmrCsvFileName = "Diagnoses_" + WoahId + "_" + Mrns[EmrIdCounter] + "_" + EmrIds[EmrIdCounter] + ".csv";
                         OperationCounter++;
                         Trace.WriteLine("Starting Unity operations on WOAH ID " + WoahId + ", Mrn " + Mrns[EmrIdCounter] + ", EmrId " + EmrIds[EmrIdCounter]);
-                        PatExplorer.ExplorePatientEmrId(EmrIds[EmrIdCounter], false, true, false, EmrCsvFileName);
+                        PatExplorer.ExplorePatientEmrId(EmrIds[EmrIdCounter], false, true, false, CsvWriter, Mrns[EmrIdCounter], WoahId);
                     }
 
                     if (OperationCounter > 100)
@@ -201,6 +224,7 @@ namespace NbmcUnityTestGui
                 }
             }
 
+            CsvWriter.Close();
             Trace.WriteLine("Total operation counter is " + OperationCounter);
         }
 
