@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Threading;
 using System.Diagnostics;
 using System.Collections.Generic;
@@ -21,8 +22,6 @@ namespace NbmcUnityTestGui
 {
     public partial class Form1 : Form
     {
-        String LaunchTimestampString;
-
         public Form1()
         {
             InitializeComponent();
@@ -30,7 +29,7 @@ namespace NbmcUnityTestGui
 
         private void ButtonBuildMrnList_Click(object sender, EventArgs e)
         {
-            LaunchTimestampString = DateTime.Now.ToString("yyyyMMdd-HHmmss");
+            DateTime LaunchTimestamp = DateTime.Now;
 
             // database connections
             MongoDbConnection MongoDb = new MongoDbConnection();
@@ -59,7 +58,7 @@ namespace NbmcUnityTestGui
 
             int WoahIdCounter = 0, EmrIdCounter = 0, MrnCounter = 0, MaxPerWoahIdMrnCounter = 0, MaxPerWoahIdEmrIdCounter = 0;
 
-            String CsvFileName = "NBMCWoahMembers_" + LaunchTimestampString + ".csv";
+            String CsvFileName = "NBMCWoahMembers_" + LaunchTimestamp.ToString("yyyyMMdd-HHmmss") + ".csv";
             Trace.WriteLine("Output of identifier mapping will be written to file: " + CsvFileName);
             StreamWriter CsvWriter = new StreamWriter(CsvFileName);
             CsvWriter.AutoFlush = true;
@@ -140,16 +139,31 @@ namespace NbmcUnityTestGui
 
         private void ButtonExtractDiagnoses_Click(object sender, EventArgs e)
         {
-            LaunchTimestampString = DateTime.Now.ToString("yyyyMMdd-HHmmss");
-            String TraceFileName = "TraceLog_" + LaunchTimestampString + ".txt";
+            DateTime LaunchTimestamp = DateTime.Now;
+            String TraceFileName = "TraceLog_" + LaunchTimestamp.ToString("yyyyMMdd-HHmmss") + ".txt";
 
             TraceListener ThisTraceListener = new TextWriterTraceListener(TraceFileName);
             Trace.Listeners.Add(ThisTraceListener);
-            Trace.WriteLine("Launched " + LaunchTimestampString);
+            Trace.WriteLine("Operation launched " + LaunchTimestamp.ToString("yyyyMMdd-HHmmss"));
 
             PatientExplorer PatExplorer = new PatientExplorer();
 
-            int OperationCounter = 0;
+            #region Declare and initialize variables to limit the run duration
+            int MrnCounter = 0;
+            int MrnCountLimit;
+            int.TryParse(ConfigurationManager.AppSettings["MrnCountLimit"], out MrnCountLimit);
+
+            int[] OutInt = new int[4] { 0, 0, 0, 0 };
+            String[] RunDurationLimitSettingStrings = ConfigurationManager.AppSettings["RunDurationLimit"].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            if (RunDurationLimitSettingStrings.Count() == 4)
+            {
+                OutInt[0] = int.Parse(RunDurationLimitSettingStrings[0]);
+                OutInt[1] = int.Parse(RunDurationLimitSettingStrings[1]);
+                OutInt[2] = int.Parse(RunDurationLimitSettingStrings[2]);
+                OutInt[3] = int.Parse(RunDurationLimitSettingStrings[3]);
+            }
+            TimeSpan RunDurationLimit = new TimeSpan(OutInt[0], OutInt[1], OutInt[2], OutInt[3]);
+            #endregion
 
             openFileDialog1.InitialDirectory = ".";
             openFileDialog1.Filter = "csv files (*.csv)|*.csv";
@@ -164,7 +178,7 @@ namespace NbmcUnityTestGui
             }
 
             String OutputPath = @".\Output";
-            String CsvFileName = "Diagnoses_" + LaunchTimestampString + ".csv";
+            String CsvFileName = "Diagnoses_" + LaunchTimestamp.ToString("yyyyMMdd-HHmmss") + ".csv";
             CsvFileName = Path.Combine(OutputPath, CsvFileName);
             Directory.CreateDirectory(OutputPath);
             StreamWriter CsvWriter = new StreamWriter(CsvFileName);
@@ -211,21 +225,27 @@ namespace NbmcUnityTestGui
 
                     for (int EmrIdCounter = 0; EmrIdCounter < EmrIds.Count(); EmrIdCounter++)
                     {
-                        OperationCounter++;
+                        MrnCounter++;
                         Trace.WriteLine("Starting Unity operations on WOAH ID " + WoahId + ", Mrn " + Mrns[EmrIdCounter] + ", EmrId " + EmrIds[EmrIdCounter]);
                         PatExplorer.ExplorePatientEmrId(EmrIds[EmrIdCounter], false, true, false, CsvWriter, Mrns[EmrIdCounter], WoahId);
                     }
 
-                    if (OperationCounter > 100)
+                    if (MrnCountLimit > 0 && MrnCounter >= MrnCountLimit)
                     {
-                        Trace.WriteLine("Completed " + OperationCounter + " Emr Id operations, breaking");
+                        Trace.WriteLine("Completed the configured limit of " + MrnCounter + " MRN operations, breaking");
+                        break;
+                    }
+                    if (RunDurationLimit.TotalSeconds > 0.0 && (DateTime.Now-LaunchTimestamp) > RunDurationLimit)
+                    {
+                        Trace.WriteLine("Run duration reached the configured limit of " + RunDurationLimit.ToString() + ", breaking");
                         break;
                     }
                 }
             }
+            Trace.WriteLine("Total extracted PatientMrn counter is " + MrnCounter);
 
             CsvWriter.Close();
-            Trace.WriteLine("Total operation counter is " + OperationCounter);
+            Trace.WriteLine("Extract operation completed at " + DateTime.Now.ToString("yyyyMMdd-HHmmss"));
         }
 
     }

@@ -18,6 +18,7 @@ namespace NbmcUnityQueryLib
         string UnityPassword;
         string UnityAppName;
         string EhrUsername;
+        DateTime EncountersOnOrAfter;
 
         public PatientExplorer()
         {
@@ -31,11 +32,13 @@ namespace NbmcUnityQueryLib
             UnityPassword = appSettings["svc.password"];
             UnityAppName = appSettings["appname"]; // application name from Allscripts
             EhrUsername = appSettings["ehr.username"]; // valid EHR login name 
+
+            DateTime.TryParse(ConfigurationManager.AppSettings["EncountersOnOrAfter"], out EncountersOnOrAfter);
         }
 
         public void ExplorePatientEmrId(string PatientEmrId, bool DoCharges, bool DoDiagnoses, bool DoProblems, StreamWriter CsvWriter = null, String PatientMrn = "", String WoahId = "")
         {
-            Connect(UnityUsername, UnityPassword, UnityEndpoint);
+            Connect(UnityUsername, UnityPassword, UnityEndpoint);  // Does nothing if already connected
 
             if (DoProblems)
             {
@@ -102,6 +105,17 @@ namespace NbmcUnityQueryLib
                     if (!int.TryParse(EncounterId, out TempInt) || TempInt <= 0)
                     {
                         Trace.WriteLine("EncounterId not parsable into valid integer, skipping this encounter: " + EncounterId);
+                        continue;
+                    }
+
+                    // 
+                    string EncounterDateTimeStr = EncounterRow["DTTM"].ToString();
+                    DateTime EncounterDateTime;
+                    DateTime.TryParse(EncounterDateTimeStr, out EncounterDateTime);
+
+                    if (EncounterDateTime < EncountersOnOrAfter)
+                    {
+                        Trace.WriteLine("Encounter " + EncounterId + " occurred on " + EncounterDateTime.ToShortDateString() + " before the configured query date range");
                         continue;
                     }
 
