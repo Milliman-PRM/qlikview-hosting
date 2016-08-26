@@ -70,12 +70,9 @@ namespace SystemReporting.Data.Database
 
             ////Foreign Keys
             modelBuilder.Entity<User>().ToTable("user", dbSchema);
-            modelBuilder.Entity<Report>().ToTable("report", dbSchema);
-            modelBuilder.Entity<Report>().HasOptional(c => c.ReportType).WithMany(d => d.ListReportLog).HasForeignKey(c => c.fk_report_type_id);
+            modelBuilder.Entity<Report>().ToTable("report", dbSchema);           
             modelBuilder.Entity<Group>().ToTable("group", dbSchema);
             modelBuilder.Entity<ReportType>().ToTable("reporttype", dbSchema);
-
-
 
             modelBuilder.Entity<IisLog>().HasKey(x => x.Id).ToTable("iislog", dbSchema);
             modelBuilder.Entity<IisLog>().HasOptional(c => c.User).WithMany(d => d.ListIisLog).HasForeignKey(c => c.fk_user_id);
@@ -90,6 +87,8 @@ namespace SystemReporting.Data.Database
             modelBuilder.Entity<SessionLog>().HasOptional(c => c.User).WithMany(d => d.ListSessionLog).HasForeignKey(c => c.fk_user_id);
             modelBuilder.Entity<SessionLog>().HasOptional(c => c.Group).WithMany(d => d.ListSessionLog).HasForeignKey(c => c.fk_group_id);
             modelBuilder.Entity<SessionLog>().HasOptional(c => c.Report).WithMany(d => d.ListSessionLog).HasForeignKey(c => c.fk_report_id);
+
+            modelBuilder.Entity<Report>().HasOptional(r => r.ReportType).WithMany(t=>t.ListReports).HasForeignKey(x => x.fk_report_type_id);
 
             base.OnModelCreating(modelBuilder);
         }

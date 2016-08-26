@@ -117,7 +117,6 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
         {
             //initiate service
             dbService = new MillimanService();
-
             var obj = new Report();
             try
             {
@@ -126,13 +125,10 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                 {
                     obj.ReportName = Report.ReportName.Trim();
 
+                    int? reportTypeId;
                     //If the report does not have a report type then it is set to null
-                    obj.fk_report_type_id = getReportTypeID(Report, Document);
-                    if(getReportTypeID(Report, Document) == -1)
-                    {
-                        obj.fk_report_type_id = null;
-                    }
-
+                    reportTypeId = getReportTypeID(Report, Document);
+                    obj.fk_report_type_id = reportTypeId.HasValue ? reportTypeId.Value : (int?)null;
                     obj.AddDate = DateTime.Now;
                     dbService.Save(obj);
 
@@ -234,36 +230,36 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
         /// <param name="Report"></param>
         /// <param name="Document"></param>
         /// <returns></returns>
-        public int getReportTypeID(Report Report, String Document)
+        public int? getReportTypeID(Report Report, string Document)
         {
+            int? reportTypeId = null; 
             try
             {
                 var dbService = new MillimanService();
 
-                List<string> ReportNameTokens;
+                List<string> reportNameTokens;
                 if (Report.ReportName.Any(c => char.IsDigit(c)) && !Report.ReportName.Contains(' '))
                 {
-                    ReportNameTokens = getParentReportType(Document).Split(' ').ToList();
+                    reportNameTokens = getParentReportType(Document).Split(' ').ToList();
                 }
                 else
                 {
-                    ReportNameTokens = Report.ReportName.Split(' ').ToList();
+                    reportNameTokens = Report.ReportName.Split(' ').ToList();
                 }
 
-                var ReportTypeList = dbService.GetReportTypes<ReportType>().OrderBy(o => o.Type).ToList();
+                var reportTypeList = dbService.GetReportTypes<ReportType>().OrderBy(o => o.Type).ToList();
 
-                if (ReportTypeList.Count > 0)
+                if (reportTypeList.Count > 0)
                 {
-                    foreach (ReportType type in ReportTypeList)
+                    foreach (ReportType reportType in reportTypeList)
                     {
-                        List<String> KeywordTokens = type.Keywords.Split(',').ToList();
-
-                        List<String> CommonTokens = KeywordTokens.Intersect(ReportNameTokens).ToList();
+                        List<String> KeywordTokens = reportType.Keywords.Split(',').ToList();
+                        List<String> CommonTokens = KeywordTokens.Intersect(reportNameTokens).ToList();
 
                         if (CommonTokens.SequenceEqual(KeywordTokens))
                         {
                             dbService.Dispose();
-                            return type.Id;
+                            reportTypeId = reportType.Id;
                         }
                     }
                 }
@@ -276,56 +272,52 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
             }
 
             //If report does not match up to any report type
-            return -1;
+            return reportTypeId;
         }
         /// <summary>
         /// Matches reports with GUID's to their
         /// parent report
         /// </summary>
-        /// <param name="Document"></param>
+        /// <param name="document"></param>
         /// <returns></returns>
-        public string getParentReportType(String Document)
+        public string getParentReportType(string document)
         {
             var dbService = new MillimanService();
-            string RootParentDirectory;
-            if (Document.IndexOf("REDUCEDCACHEDQVWS") < 0) { 
+            string rootParentDirectory;
+            string parentReportName=string.Empty;
+
+            if (document.IndexOf("REDUCEDCACHEDQVWS") < 0) { 
                 return "";
             }
 
-            RootParentDirectory = Document.Substring(0, Document.IndexOf("REDUCEDCACHEDQVWS"));
+            rootParentDirectory = document.Substring(0, document.IndexOf("REDUCEDCACHEDQVWS"));
 
-            var ParentAuditLogRootQuery = dbService.GetAuditLogs<AuditLog>(a => a.Document.Contains(RootParentDirectory)).OrderBy(a => a.Id);
-
-            if (ParentAuditLogRootQuery != null)
+            var parentAuditLogRootQuery = dbService.GetAuditLogs<AuditLog>(a => a.Document.Contains(rootParentDirectory)).OrderBy(a => a.Id);
+            if (parentAuditLogRootQuery != null)
             {
-                foreach (AuditLog Log in ParentAuditLogRootQuery)
+                foreach (AuditLog aulog in parentAuditLogRootQuery)
                 {
-                    if (Log.Document.IndexOf("REDUEDCACHEDQVWS") < 0)
+                    if (aulog.Document.IndexOf("REDUEDCACHEDQVWS") < 0)
                     {
-                        dbService.Dispose();
-                        string ParentReportName = Log.Document.Substring(Log.Document.LastIndexOf('\\') + 1, Log.Document.Length - Log.Document.LastIndexOf('\\') - 5);
-                        return ParentReportName;
+                        parentReportName = aulog.Document.Substring(aulog.Document.LastIndexOf('\\') + 1, aulog.Document.Length - aulog.Document.LastIndexOf('\\') - 5);
                     }
                 }
             }
 
-            var ParentSessionLogRootQuery = dbService.GetSessionLogs<SessionLog>(a => a.Document.Contains(RootParentDirectory)).OrderBy(a => a.Id);
-
-            if (ParentSessionLogRootQuery != null)
+            var parentSessionLogRootQuery = dbService.GetSessionLogs<SessionLog>(a => a.Document.Contains(rootParentDirectory)).OrderBy(a => a.Id);
+            if (parentSessionLogRootQuery != null)
             {
-                foreach (SessionLog Log in ParentSessionLogRootQuery)
+                foreach (SessionLog slog in parentSessionLogRootQuery)
                 {
-                    if (Log.Document.IndexOf("REDUEDCACHEDQVWS") < 0)
+                    if (slog.Document.IndexOf("REDUEDCACHEDQVWS") < 0)
                     {
-                        dbService.Dispose();
-                        string ParentReportName = Log.Document.Substring(Log.Document.LastIndexOf('\\') + 1, Log.Document.Length - Log.Document.LastIndexOf('\\') - 5);
-                        return ParentReportName;
+                        parentReportName = slog.Document.Substring(slog.Document.LastIndexOf('\\') + 1, slog.Document.Length - slog.Document.LastIndexOf('\\') - 5);
                     }
                 }
             }
 
             dbService.Dispose();
-            return "";
+            return parentReportName;
         }
 
         #endregion

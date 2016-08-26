@@ -7,8 +7,8 @@
 CREATE TABLE reporttype
 (
   id serial NOT NULL,
-  type character varying(100) NOT NULL,
-  keywords character varying(100) NOT NULL,
+  type character varying(100) NULL,
+  keywords character varying(100) NULL,
   CONSTRAINT pk_reporttype_id PRIMARY KEY (id),
   CONSTRAINT uq_reporttype_type UNIQUE (type)
 )
@@ -69,13 +69,6 @@ INSERT INTO public.qvauditlog_temp SELECT * FROM public.qvauditlog order by id;
 SELECT setval('qvauditlog_temp_id_seq', (SELECT max(id) FROM public.qvauditlog), true);
 ALTER TABLE public.qvauditlog ALTER id SET DEFAULT nextval('qvauditlog_id_seq');
 
---6. Create Temp Table to qvsessionlog Data
-CREATE TABLE public.qvsessionlog_temp (LIKE public.qvsessionlog INCLUDING ALL);
-ALTER TABLE public.qvsessionlog_temp ALTER id DROP DEFAULT;
-CREATE SEQUENCE qvsessionlog_temp_id_seq;
-INSERT INTO public.qvsessionlog_temp SELECT * FROM public.qvsessionlog order by id;
-SELECT setval('qvsessionlog_temp_id_seq', (SELECT max(id) FROM public.qvsessionlog), true);
-ALTER TABLE public.qvsessionlog ALTER id SET DEFAULT nextval('qvsessionlog_id_seq');
  --/*********************************************************************************************************************/--
 
 --6. Create the function to update all of the pre exsisting reports
@@ -183,10 +176,24 @@ INSERT INTO public.report(id, reportname, reportdescription, adddate, fk_report_
 ALTER TABLE public.qvauditlog ADD CONSTRAINT fk_tbl_report_id FOREIGN KEY(fk_report_id) REFERENCES public.report (id);
 ALTER TABLE public.qvsessionlog ADD CONSTRAINT fk_tbl_report_id FOREIGN KEY(fk_report_id) REFERENCES public.report (id);
 --/*********************************************************************************************************************/--
---Insert data from the Temp Report to the Origianl Report table
+--RESEQUENCE THE REPORT
 
-Select * from report 
+-- Login to psql and run the following
+-- What is the result?
+SELECT MAX(id) FROM public.report;
 
+-- Then run...
+-- This should be higher than the last result.
+SELECT nextval('report_id_seq');
+
+-- If it's not higher... run this set the sequence last to your highest pid it. 
+-- (wise to run a quick pg_dump first...)
+SELECT setval('report_id_seq', (SELECT MAX(id) FROM public.report));
+-- if your tables might have no rows
+-- false means the set value will be returned by the next nextval() call    
+SELECT setval('report_id_seq', COALESCE((SELECT MAX(id)+1 FROM public.report), 1), false);
+
+--/*********************************************************************************************************************/--
 --13. Drop temp table
 Drop Table report_temp
 Drop Table qvauditlog_temp
