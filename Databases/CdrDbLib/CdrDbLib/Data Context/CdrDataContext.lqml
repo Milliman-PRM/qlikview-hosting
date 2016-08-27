@@ -83,7 +83,7 @@
       <Column Name="emridentifier" Member="EmrIdentifier" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="91cc3999-c289-43c6-b23b-470027ae1c93" />
       <Column Member="Number" Type="PhoneNumber" IsValueType="True" ed:ValidateRequired="false" ed:Guid="9569e654-b939-4307-8d3c-20694e9da3a3">
         <TypeMapping>
-          <Column Name="&quot;number&quot;" Member="Number" DbType="varchar NOT NULL" />
+          <Column Name="number" Member="Number" DbType="varchar NOT NULL" />
           <Column Name="phonetype" Member="PhoneType" DbType="smallint NOT NULL" />
         </TypeMapping>
       </Column>
@@ -210,7 +210,7 @@
   </Table>
   <Table Name="public.immunization" Member="Immunizations">
     <Type Name="Immunization" ed:Guid="708cde36-302b-4339-b827-159c9b8fd50a">
-      <Column Name="bdid" Type="System.Int64" AutoSync="OnInsert" DbType="bigserial NOT NULL" IsReadOnly="true" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" ed:ValidateRequired="true" ed:Guid="481b93c1-9dc0-4730-913d-103952ca1728" />
+      <Column Name="dbid" Type="System.Int64" AutoSync="OnInsert" DbType="bigserial NOT NULL" IsReadOnly="true" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" ed:ValidateRequired="true" ed:Guid="481b93c1-9dc0-4730-913d-103952ca1728" />
       <Column Name="emridentifier" Member="EmrIdentifier" Type="System.String" DbType="varchar" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="2b56ed50-f2f3-4039-a577-3de235e59580" />
       <Column Name="description" Member="Description" Type="System.String" DbType="varchar" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="5237c49b-8d04-4be0-9502-3792f68d9096" />
       <Column Name="performeddatetime" Member="PerformedDateTime" Type="System.DateTime" DbType="TIMESTAMPTZ" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="e784380b-c7ce-4bbd-927f-f0b5fbba68c9" />
@@ -300,21 +300,22 @@
       <Column Name="statusflags" Member="StatusFlags" Type="AggregationRunStatus" DbType="int4 NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="6051d6fb-c111-4958-bace-202261af84ff">
         <Documentation>
           <Summary>Bit mask</Summary>
-          <LongDescription>Binary            Int     Meaning
-00000001       1         Value Reserved By Program
-00000010       2         Aggregation In Progress
-00000100       4         Complete
-00001000       8         future
-00010000      16        future 
-00100000      32         future
-01000000      64         future
-10000000     128         future
+          <LongDescription>
+            Binary            Int     Meaning
+            00000001       1         Value Reserved By Program
+            00000010       2         Aggregation In Progress
+            00000100       4         Complete
+            00001000       8         future
+            00010000      16         future
+            00100000      32         future
+            01000000      64         future
+            10000000     128         future
 
 
 
 
 
-</LongDescription>
+          </LongDescription>
         </Documentation>
       </Column>
       <Column Name="startdatetime" Member="StartDateTime" Type="System.DateTimeOffset" DbType="timestamp with time zone" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="0932eaa6-c850-4c68-b5da-21c1e8878eb1" />
@@ -336,7 +337,7 @@
           <Column Name="codemodifierdescription" Member="CodeModifierDescription" DbType="varchar" />
         </TypeMapping>
       </Column>
-      <Column Name="&quot;Chargedbid&quot;" Member="Chargedbid" Type="System.Int64" DbType="int8 NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="9bdfd435-7934-42bc-9e4d-1269f1fe9b14" />
+      <Column Name="chargedbid" Member="Chargedbid" Type="System.Int64" DbType="int8 NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="9bdfd435-7934-42bc-9e4d-1269f1fe9b14" />
       <Column Name="updatetime" Member="UpdateTime" Type="System.DateTime" DbType="timestamp NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="7e97c0d9-fef2-45e7-838b-8979d90e37b8" />
       <Column Name="lastimportfiledate" Member="LastImportFileDate" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="08fd6f16-1beb-40b8-9397-8d1fea5cc678" />
       <Association Name="Charge_ChargeCode" ed:AssociationGuid="7a7f3bbd-d2c3-4b66-8502-bb647ae8b64f" Member="Charge" ed:Guid="c509d31a-37e8-4670-9ed4-61b3e19294eb" ThisKey="Chargedbid" OtherKey="dbid" Type="Charge" DeleteOnNull="true" IsForeignKey="true" />
@@ -345,8 +346,8 @@
   <Table Name="public.&quot;procedure&quot;" Member="Procedures">
     <Type Name="Procedure" ed:Guid="513fe723-c929-4c9d-a127-02f27eff1508">
       <Column Name="dbid" Type="System.Int64" AutoSync="OnInsert" DbType="bigserial NOT NULL" IsReadOnly="true" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" ed:ValidateRequired="true" ed:Guid="cc0076fa-62c3-47f3-ae4e-3dfa94f62e51" />
-      <Column Name="&quot;Patientdbid&quot;" Member="Patientdbid" Type="System.Int64" DbType="int8 NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="f53cab89-c087-4c7f-90c1-dab7f496852c" />
-      <Column Name="&quot;VisitEncounterdbid&quot;" Member="VisitEncounterdbid" Type="System.Int64" DbType="int8 NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="dc105511-da55-4b3c-a184-b6349a008ad6" />
+      <Column Name="patientdbid" Member="Patientdbid" Type="System.Int64" DbType="int8 NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="f53cab89-c087-4c7f-90c1-dab7f496852c" />
+      <Column Name="visitencounterdbid" Member="VisitEncounterdbid" Type="System.Int64" DbType="int8 NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="dc105511-da55-4b3c-a184-b6349a008ad6" />
       <Column Name="emridentifier" Member="EmrIdentifier" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="dfc10af2-79de-4b47-a445-7dd8ec24bfed" />
       <Column Member="TerminologyCode" Type="CodedEntry" IsValueType="True" ed:ValidateRequired="false" ed:Guid="ec727bbb-e575-43e3-b820-fa26fdf2fd86">
         <TypeMapping>
