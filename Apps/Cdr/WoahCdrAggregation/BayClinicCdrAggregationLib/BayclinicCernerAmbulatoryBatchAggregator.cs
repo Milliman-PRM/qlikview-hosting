@@ -11,8 +11,6 @@ using MongoDbWrap;
 using MongoDB.Driver;
 using System.Data;
 using System.IO;
-using WOHSQLInterface;
-using NetworkAccess;
 
 namespace BayClinicCernerAmbulatory
 {
@@ -389,17 +387,22 @@ namespace BayClinicCernerAmbulatory
             }
 
 EndProcessing:
-            /* not using SQLite for now
-            WOHMembershipData.Disconnect();
+/* not using SQLite for now
+WOHMembershipData.Disconnect();
 
-            if (!String.IsNullOrEmpty(MembershipDataFileUsed) && File.Exists(MembershipDataFileUsed))
-            {
-                File.Delete(MembershipDataFileUsed);
-            }
-            */
+if (!String.IsNullOrEmpty(MembershipDataFileUsed) && File.Exists(MembershipDataFileUsed))
+{
+    File.Delete(MembershipDataFileUsed);
+}
+*/
 
+            query = from Run in CdrDb.Context.AggregationRuns
+                        where Run.dbid == ThisAggregationRunDbid
+                        select Run;
+            AggRun = query.FirstOrDefault();  // Returns existing record or null
             AggRun.StatusFlags = AggregationRunStatus.Complete;
             CdrDb.Context.SubmitChanges();
+
             CdrDb = null;
 
             Trace.WriteLine("Processed   " + PersonCounter + " person documents from MongoDB");

@@ -158,7 +158,7 @@ namespace BayClinicCernerAmbulatory
                     ShortDescription = Display,
                     LongDescription = "",  // TODO Can I do better?  Maybe this field doesn't need to be here if there is no source of long description.  
                     DiagCode = DiagnosisCode,
-                    Status = "",  // TODO If this is just active and inactive maybe I don't need it.  Study.  
+                    Status = (Active == "1") ? "Active" : "Inactive",
                     StatusDateTime = StatusDateTime,         //Same as the update time
                     LastImportFileDate = ImportFileDate
                     // TODO There is a coded "type" field with values Discharge and Billing.  Figure out whether this should be used/interpreted
@@ -181,6 +181,7 @@ namespace BayClinicCernerAmbulatory
                 }
 
                 if (DiagnosisRecord.DiagCode != DiagnosisCode) { DiagnosisRecord.DiagCode = DiagnosisCode; }
+                DiagnosisRecord.Status = (Active == "1") ? "Active" : "Inactive";
 
                 if (DiagnosisRecord.DeterminationDateTime != DiagDateTime && !DiagnosisDateTime.Contains("2100") && !String.IsNullOrEmpty(DiagnosisDateTime))
                     DiagnosisRecord.DeterminationDateTime = DiagDateTime;
