@@ -7,6 +7,7 @@ using ComponentPro.Saml;
 using ComponentPro.Saml.Binding;
 using ComponentPro.Saml2;
 using ComponentPro.Saml2.Binding;
+using System.Configuration;
 
 namespace MillimanDev
 {
@@ -198,14 +199,80 @@ namespace MillimanDev
                 MembershipUserCollection MUC = Membership.FindUsersByName(txtUserName.Text);
                 MembershipUser MU = MUC[txtUserName.Text];
                 FormsAuthentication.SetAuthCookie(MU.UserName, false);
-               
+
                 Response.Redirect("default.aspx");
             }
             else
             {
-                lblErrorMessage.Text = "A valid user name and password is required for access!";
+                //check if the user name exist
+                var user = Membership.GetUser(txtUserName.Text);
+                if (user != null)
+                {
+                    //get the unlock timespan duration from the configs
+                    int autoUnlockDuration = int.Parse(GetPasswordUnlockAttemps());
+
+                    //if user is lockout
+                    if (user.IsLockedOut)
+                    {
+                        //if the time span that user have been locked out is 5 or greater unlock
+                        if ((user.LastLockoutDate.ToUniversalTime().AddMinutes(autoUnlockDuration) < DateTime.UtcNow))
+                        {
+                            //unlock user
+                            user.UnlockUser();
+                        }
+                        else
+                        {
+                            lblErrorMessage.Text = string.Format("Your account has been locked out for {0} minutes due to multiple failed login attempts. Please try agiaing later.",
+                                                                            autoUnlockDuration);
+                            return;
+                        }
+                    }
+
+                    //user is unlock
+                    UserValidate();
+                }
+                else
+                {
+                    lblErrorMessage.Text = "A valid user name and password is required for access!";
+                }
+            }
+        }
+
+        public void UserValidate()
+        {
+            var user = Membership.GetUser(txtUserName.Text);
+            //wrong username
+            if (user.UserName != txtUserName.Text)
+            {
+                lblErrorMessage.Text = string.Format("The username you provided is incorrect.");
+                return;
             }
 
+            //wrong password
+            if (user.GetPassword() != txtPassword.Text)
+            {
+                lblErrorMessage.Text = string.Format("The password you provided is incorrect.");
+                return;
+            }
+
+            //validate user
+            if (Membership.ValidateUser(txtUserName.Text, txtPassword.Text))
+            {
+                this.Session["milliman"] = "Yes, I am!";
+                Session["patientid"] = "";
+                var MUC = Membership.FindUsersByName(txtUserName.Text);
+                var MU = MUC[txtUserName.Text];
+                FormsAuthentication.SetAuthCookie(MU.UserName, false);
+
+                Response.Redirect("default.aspx");
+            }
+        }
+        private static string GetPasswordUnlockAttemps()
+        {
+            return (ConfigurationManager.AppSettings != null &&
+                    ConfigurationManager.AppSettings["DefaultAccountLockoutTimeSpan"] != null) ?
+                    ConfigurationManager.AppSettings["DefaultAccountLockoutTimeSpan"].ToString() :
+                    string.Empty;
         }
     }
 }

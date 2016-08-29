@@ -4,6 +4,7 @@
 <%@ Register Src="~/js/js/jquery.ascx" TagName="jquery" TagPrefix="uc4" %>
 <%@ Register src="a-z-menu.ascx" tagname="a" tagprefix="uc2" %>
 <%@ Register src="search-box.ascx" tagname="search" tagprefix="uc5" %>
+
 <%-- gridview banner --%>
 <div class="gvBanner">
     <span class="gvBannerUsers">
@@ -33,7 +34,7 @@
         </asp:TemplateField>
         <asp:TemplateField HeaderText="USER NAME" SortExpression="UserName">
             <ItemTemplate>
-                <span class="gvShortcut"><a href='edit_user_modal.aspx?username=<%# Eval("UserName") %>' rel="gb_page_center[525, 600]" title="Edit User Details">
+                <span class="gvShortcut"><a href='edit_user_modal.aspx?username=<%# Eval("UserName") %>' rel="gb_page_center[750, 840]" title="Edit User Details">
                     <%# Eval("UserName") %></a></span>
             </ItemTemplate>
         </asp:TemplateField>

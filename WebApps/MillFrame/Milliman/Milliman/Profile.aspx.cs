@@ -16,7 +16,6 @@ namespace MillimanDev2
         {
             if (!IsPostBack)
             {
-
                 LoadData();
                 if (Request["newuser"] != null)
                 {
@@ -24,6 +23,7 @@ namespace MillimanDev2
                     CurrentPassword.BackColor = System.Drawing.Color.LightGray;
                     CurrentPassword.TextMode = TextBoxMode.SingleLine;
                     CurrentPassword.Text = @"[System Provided]";
+
                 }
             }
         }
@@ -50,66 +50,53 @@ namespace MillimanDev2
         private void LoadData()
         {
             ProfileBase PB = ProfileBase.Create(Membership.GetUser().UserName);
-            UserFirstName.Text = GetValueAsString( PB, "Personal.FirstName");
-            UserLastName.Text = GetValueAsString( PB, "Personal.LastName");
-            Email.Text = Membership.GetUser().Email;
-            Company.Text = GetValueAsString( PB, "Company.Company");
-            string Address = GetValueAsString( PB, "Company.Address");
-            string address1 = "";
-            string address2 = "";
-            if (string.IsNullOrEmpty(Address) == false)
-            {
-                string[] Addresses = Address.Split(new char[] { '|' });
-                address1 = Addresses[0];
-                if (Addresses.Count() > 1)
-                    address2 = Addresses[1];
-            }
-
-            Address1.Text = address1;
-            Address2.Text = address2;
-            City.Text = GetValueAsString( PB, "Company.City");
-            string StateText = GetValueAsString(PB, "Company.State");
-            State.SelectedValue = StateText.Trim();
-            ZipCode.Text = GetValueAsString( PB, "Company.PostalCode");
-            Phone.Text = GetValueAsString( PB, "Company.Phone");
-            //Mobile.Text = GetValueAsString( PB, "Company.Mobile");  
+            UserFirstName.Value = GetValueAsString( PB, "Personal.FirstName");
+            UserLastName.Value = GetValueAsString( PB, "Personal.LastName");
+            Email.Value = Membership.GetUser().Email;
+            Phone.Value = GetValueAsString( PB, "Company.Phone");
 
             if (string.IsNullOrEmpty( Membership.GetUser().PasswordQuestion ) == false )
                 SecretPhraseDropdown.Text = Membership.GetUser().PasswordQuestion;
-            Answer.Text = string.IsNullOrEmpty(Membership.GetUser().Comment) ? "" : Membership.GetUser().Comment;  //we put the answer in the comment
+            Answer.Value = string.IsNullOrEmpty(Membership.GetUser().Comment) ? "" : Membership.GetUser().Comment;  //we put the answer in the comment
         }
 
         private void SaveData()
         {
             ProfileBase PB = ProfileBase.Create(Membership.GetUser().UserName);
  
-            SetValueFromString(PB, "Personal.FirstName",UserFirstName.Text);
-            SetValueFromString(PB, "Personal.LastName", UserLastName.Text);
-            SetValueFromString(PB, "Company.Company",Company.Text);
-            SetValueFromString(PB, "Company.Address", Address1.Text + "|" + Address2.Text);
- 
-            SetValueFromString(PB, "Company.City",City.Text);
-            SetValueFromString(PB, "Company.State", State.SelectedValue.Trim());
-            SetValueFromString(PB, "Company.PostalCode", ZipCode.Text);
-            SetValueFromString(PB, "Company.Phone", Phone.Text);
-            //SetValueFromString(PB, "Company.Mobile", Mobile.Text);  
+            SetValueFromString(PB, "Personal.FirstName", SentenceCase(UserFirstName.Value));
+            SetValueFromString(PB, "Personal.LastName", SentenceCase(UserLastName.Value));
+            SetValueFromString(PB, "Company.Phone", Phone.Value);
             PB.Save();
 
             MembershipUser MU = Membership.GetUser();
-            MU.Email = Email.Text;
-            MU.Comment = Answer.Text;
+            MU.Email = Email.Value;
+            MU.Comment = Answer.Value;
             Membership.UpdateUser(MU);
 
             if (Request["newuser"] != null)
             {
-                MU.ChangePassword(MU.GetPassword(), NewPassword.Text);
+                MU.ChangePassword(MU.GetPassword(), NewPassword.Value);
             }
            // string password = Membership.Providers["dbSqlMemberShipProviderAdmin"].GetPassword(MU.UserName, null);
             string password = MU.GetPassword();
-            MU.ChangePasswordQuestionAndAnswer(password, SecretPhraseDropdown.Text, Answer.Text);
+            MU.ChangePasswordQuestionAndAnswer(password, SecretPhraseDropdown.Text, Answer.Value);           
 
-            
+        }
 
+        /// <summary>
+        /// Converts a string to sentence case.
+        /// </summary>
+        /// <param name="input">The string to convert.</param>
+        /// <returns>A string</returns>
+        public static string SentenceCase(string input)
+        {
+            if (input.Length < 1)
+                return input;
+
+            string sentence = input.ToLower();
+            return sentence[0].ToString().ToUpper() +
+               sentence.Substring(1);
         }
 
         private enum DataValidationTypes { DATA_VALID, BAD_CURRENT_PASSWORD, NO_PASSWORD_CHANGE, EMBEDDED_PASSWORD, UNSPECIFIED_ERROR };
@@ -118,15 +105,21 @@ namespace MillimanDev2
             try
             {
                 //user isn't changing password settings
-                if (string.IsNullOrEmpty(CurrentPassword.Text) && string.IsNullOrEmpty(NewPassword.Text) && string.IsNullOrEmpty(ConfirmNewPassword.Text))
+                if (string.IsNullOrEmpty(CurrentPassword.Text) && string.IsNullOrEmpty(NewPassword.Value) 
+                                && string.IsNullOrEmpty(ConfirmNewPassword.Value))
                     return DataValidationTypes.NO_PASSWORD_CHANGE;
 
                 MembershipUser MU = Membership.GetUser();
                 //       not empty                                must be the same  New & Conf                           Old and New not same                                          New does nothave old embedded      
-                if ((ConfirmNewPassword.Text != "") && (ConfirmNewPassword.Text == NewPassword.Text) && (string.Compare(MU.GetPassword(),NewPassword.Text,true)!=0) && ( NewPassword.Text.ToLower().IndexOf( MU.GetPassword().ToLower() ) == -1 ) )
+                if ((ConfirmNewPassword.Value != "") && 
+                        (ConfirmNewPassword.Value == NewPassword.Value) && 
+                            (string.Compare(MU.GetPassword(), NewPassword.Value, true)!=0) && 
+                                ( NewPassword.Value.ToLower().IndexOf( MU.GetPassword().ToLower() ) == -1 ) )
                 {
-                    string CurrentSystemPassword = string.Compare(CurrentPassword.Text, "[system provided]", true) == 0 ? Membership.GetUser().GetPassword() : CurrentPassword.Text;
-                    if (Membership.GetUser().ChangePassword(CurrentSystemPassword, ConfirmNewPassword.Text) == true) 
+                    string CurrentSystemPassword = string.Compare(CurrentPassword.Text, "[system provided]", true) == 0 ? 
+                                                        Membership.GetUser().GetPassword() : CurrentPassword.Text;
+
+                    if (Membership.GetUser().ChangePassword(CurrentSystemPassword, ConfirmNewPassword.Value) == true) 
                         return DataValidationTypes.DATA_VALID;
                     return DataValidationTypes.BAD_CURRENT_PASSWORD;
                 }

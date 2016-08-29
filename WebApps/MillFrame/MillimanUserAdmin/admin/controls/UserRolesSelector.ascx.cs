@@ -1,9 +1,11 @@
 ﻿using MillimanCommon;
 using Polenter.Serialization;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Linq;
 using System.Web.Security;
 using System.Web.UI.WebControls;
 
@@ -18,7 +20,7 @@ public partial class admin_controls_UserRolesSelector : System.Web.UI.UserContro
         get { return _userName; }
         set { _userName = value; }
     }
-    
+
     public List<string> CheckedRoles
     {
         get
@@ -33,7 +35,7 @@ public partial class admin_controls_UserRolesSelector : System.Web.UI.UserContro
             }
         }
     }
-    
+
     public List<string> UnChekcedRoles
     {
         get
@@ -128,14 +130,14 @@ public partial class admin_controls_UserRolesSelector : System.Web.UI.UserContro
                     if (childNode.Checked)
                     {
                         childNode.Checked = false;
-                    }                    
+                    }
                 }
                 if (parentNode.Expanded == true)
                 {
                     parentNode.CollapseAll();
                 }
             }
-        }       
+        }
     }
 
     private void PopulateUserRolesTreeview()
@@ -150,7 +152,7 @@ public partial class admin_controls_UserRolesSelector : System.Web.UI.UserContro
             dtparent.TableName = "dtparent";
 
             var dtchild = new DataTable();
-            dtchild = FillChildTable();
+            dtchild = FillParentTable();
             dtchild.DefaultView.Sort = "[colRoleName] ASC";
             dtchild.TableName = "dtchild";
 
@@ -158,7 +160,7 @@ public partial class admin_controls_UserRolesSelector : System.Web.UI.UserContro
             ds.Tables.Add(dtchild);
 
             //create parent child relationship
-            ds.Relations.Add("children", dtparent.Columns["colGroupCategory"], dtchild.Columns["colGroupCategory"]);
+            ds.Relations.Add("children", dtparent.Columns["colGroupCategory"], dtchild.Columns["colGroupCategory"], false);
 
             if (ds.Tables[0].Rows.Count > 0)
             {
@@ -166,13 +168,40 @@ public partial class admin_controls_UserRolesSelector : System.Web.UI.UserContro
                 foreach (DataRow masterRow in ds.Tables[0].Rows)
                 {
                     //var masterNode = new TreeNode(text, value);
-                    var categoryValue = !string.IsNullOrEmpty(masterRow["colGroupCategory"].ToString()) ? (masterRow["colGroupCategory"].ToString()) : "NO CATEGORY";
-                    var categoryText = !string.IsNullOrEmpty(masterRow["colGroupCategory"].ToString()) ? (masterRow["colGroupCategory"].ToString()) : "NO CATEGORY";
+                    var categoryValue = !string.IsNullOrEmpty(masterRow["colGroupCategory"].ToString()) ? (masterRow["colGroupCategory"].ToString().ToUpper()) : "NO CATEGORY";
+                    var categoryText = !string.IsNullOrEmpty(masterRow["colGroupCategory"].ToString()) ? (masterRow["colGroupCategory"].ToString().ToUpper()) : "NO CATEGORY";
                     var masterNode = new TreeNode(categoryText, categoryValue);
-                    tvUserRoles.Nodes.Add(masterNode);
+
+                    if (tvUserRoles.Nodes.Count > 0)
+                    {
+                        var bExist = false;
+                        for (int i = 0; i < tvUserRoles.Nodes.Count; i++)
+                        {
+                            if (tvUserRoles.Nodes[i].Text == masterNode.Text)
+                            {
+                                bExist = true;
+                                break;
+                            }
+                        }
+                        if (!bExist)
+                        {
+                            tvUserRoles.Nodes.Add(masterNode);
+                        }
+                    }
+                    else
+                    {
+                        tvUserRoles.Nodes.Add(masterNode);
+                    }
+
                     tvUserRoles.CollapseAll();
                     masterNode.ShowCheckBox = false;
-
+                    
+                    string[] userRoles=null;
+                    if (!string.IsNullOrEmpty(UserName))
+                    {
+                        userRoles = Roles.GetRolesForUser(UserName);                     
+                    }
+                    
                     foreach (DataRow childRow in masterRow.GetChildRows("children"))
                     {
                         //var masterNode = new TreeNode(text, value);
@@ -183,9 +212,8 @@ public partial class admin_controls_UserRolesSelector : System.Web.UI.UserContro
                         childNode.ShowCheckBox = true;
 
                         //Get all roles associated with user & check that role
-                        if (!string.IsNullOrEmpty(UserName))
-                        {
-                            var userRoles = Roles.GetRolesForUser(UserName);
+                        if (userRoles!=null)
+                        {    
                             foreach (string role in userRoles)
                             {
                                 if (childNode.Text == role)
@@ -199,7 +227,8 @@ public partial class admin_controls_UserRolesSelector : System.Web.UI.UserContro
                     }
                 }
             }
-        }
+              
+       }
         catch (Exception ex)
         {
             throw new Exception("Unable to populate treeview" + ex.Message);
@@ -222,59 +251,63 @@ public partial class admin_controls_UserRolesSelector : System.Web.UI.UserContro
         dt.Columns.Add("colGroupCategory");
 
         var allRoles = Roles.GetAllRoles();
+
         // Get the list of roles in the system and how many users belong to each role
         foreach (string roleName in allRoles)
         {
             MillimanGroupMap.MillimanGroups groups = null;
             if (groupMapInstance.MillimanGroupDictionary.ContainsKey(roleName))
                 groups = groupMapInstance.MillimanGroupDictionary[roleName];
-            var GroupCategory = (groups == null) ? string.Empty : groups.GroupCategory;
+
+            var groupCategoryFromXml = "";
+            if (groups != null)
+            {
+                groupCategoryFromXml = !string.IsNullOrEmpty(groups.GroupCategory) ? groups.GroupCategory.ToUpper() : "NO CATEGORY";
+            }
+            var groupCategory = groupCategoryFromXml;
+
             string[] roleRow = {
                                     roleName,
-                                    GroupCategory
+                                    groupCategory
                                 };
             dt.Rows.Add(roleRow);
         }
 
+        var newTable = from row in dt.AsEnumerable()
+                       group row by new
+                       {
+                           colGroupCategory = row.Field<string>("colGroupCategory"),
+                           colRoleName = row.Field<string>("colRoleName")
+                       }
+                      into grp
+                       select new
+                       {
+                           colGroupCategory = grp.Key.colGroupCategory,
+                           colRoleName = grp.Key.colRoleName
+                       };
+
+        var finalTable = newTable.OrderBy(a => a.colGroupCategory).ThenBy(b=>b.colRoleName);
         var dtUniqRecords = new DataTable();
-        dtUniqRecords = dt.DefaultView.ToTable(true, "colGroupCategory");
+        dtUniqRecords = ConvertToDataTable(finalTable);
         return dtUniqRecords;
     }
 
-    private DataTable FillChildTable()
+    DataTable ConvertToDataTable<TSource>(IEnumerable<TSource> source)
     {
+        var props = typeof(TSource).GetProperties();
+
         var dt = new DataTable();
-        //this gets called first
-        var GroupMapFile = ConfigurationManager.AppSettings["MillimanGroupMap"];
-        var serializer = new SharpSerializer(false);
-        MillimanGroupMap groupMapInstance = null;
-        if (System.IO.File.Exists(GroupMapFile))
-        {
-            groupMapInstance = serializer.Deserialize(GroupMapFile) as MillimanGroupMap;
-        }
+        dt.Columns.AddRange(
+          props.Select(p => new DataColumn(p.Name, p.PropertyType)).ToArray()
+        );
 
-        // Create a DataTable and define its columns
-        dt.Columns.Add("colRoleName");
-        dt.Columns.Add("colGroupCategory");
-
-        var allRoles = Roles.GetAllRoles();
-        // Get the list of roles in the system and how many users belong to each role
-        foreach (string roleName in allRoles)
-        {
-            MillimanGroupMap.MillimanGroups groups = null;
-            if (groupMapInstance.MillimanGroupDictionary.ContainsKey(roleName))
-                groups = groupMapInstance.MillimanGroupDictionary[roleName];
-            var GroupCategory = (groups == null) ? string.Empty : groups.GroupCategory;
-            string[] roleRow = {
-                                    roleName,
-                                    GroupCategory
-                                };
-            dt.Rows.Add(roleRow);
-        }
+        source.ToList().ForEach(
+          i => dt.Rows.Add(props.Select(p => p.GetValue(i, null)).ToArray())
+        );
 
         return dt;
     }
-
+       
     /// <summary>
     /// Recursively checks or unchecks all child nodes for a given TreeNode.
     /// </summary>
@@ -282,7 +315,6 @@ public partial class admin_controls_UserRolesSelector : System.Web.UI.UserContro
     /// <param name="check">Desired value of TreeNode.Checked.</param>
     private void ChangeChecked(TreeNode node, bool check)
     {
-
         // "Queue" up child nodes to be checked or unchecked.
         //if (node.Parent.ChildNodes.Count > 0)
         //{

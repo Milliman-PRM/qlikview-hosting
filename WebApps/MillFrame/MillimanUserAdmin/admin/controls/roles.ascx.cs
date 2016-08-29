@@ -37,14 +37,22 @@ public partial class admin_controls_roles : System.Web.UI.UserControl
             MillimanCommon.MillimanGroupMap.MillimanGroups MG = null;
             if (MGM.MillimanGroupDictionary.ContainsKey(roleName))
                 MG = MGM.MillimanGroupDictionary[roleName];
-
+            
             string FriendlyName = (MG == null) ? string.Empty : MG.FriendlyGroupName;
             string ExternalName = (MG == null) ? string.Empty : MG.ExernalGroupName;
             int MaxUsers = (MG == null) ? 0 : MG.MaximumnUsers;
-            string GroupCategory = (MG == null) ? string.Empty : MG.GroupCategory;
+
+            string GroupCategory = string.Empty;
+            if (MG!=null)
+            {
+                if (!string.IsNullOrEmpty(MG.GroupCategory))
+                {
+                    GroupCategory= MG.GroupCategory.ToUpper().Trim();
+                }
+            }
 
             int numberOfUsersInRole = Roles.GetUsersInRole(roleName).Length;
-            string[] roleRow = { roleName, numberOfUsersInRole.ToString(), ExternalName, GroupCategory, FriendlyName, MaxUsers.ToString() };
+            string[] roleRow = { roleName, numberOfUsersInRole.ToString(), ExternalName, GroupCategory.ToUpper().Trim(), FriendlyName, MaxUsers.ToString() };
             RoleList.Rows.Add(roleRow);
         }
 
@@ -178,14 +186,14 @@ public partial class admin_controls_roles : System.Web.UI.UserControl
                 var MG = MGM.MillimanGroupDictionary[MillimanGroup.Text];
                 MG.MaximumnUsers = System.Convert.ToInt32(Max.Text);
                 MG.FriendlyGroupName = FriendlyName.Text;
-                MG.GroupCategory = GroupCategory.Text;
+                MG.GroupCategory = GroupCategory.Text.ToUpper().Trim();
             }
             else  //groups created a number of ways, make sure we have a friendly name for each
             {
                 var MGNew = new MillimanCommon.MillimanGroupMap.MillimanGroups();
                 MGNew.MaximumnUsers = System.Convert.ToInt32(Max.Text);
                 MGNew.FriendlyGroupName = FriendlyName.Text;
-                MGNew.GroupCategory = GroupCategory.Text;
+                MGNew.GroupCategory = GroupCategory.Text.ToUpper().Trim();
                 MGM.MillimanGroupDictionary.Add(MillimanGroup.Text, MGNew);
             }
             MGM.Save();
