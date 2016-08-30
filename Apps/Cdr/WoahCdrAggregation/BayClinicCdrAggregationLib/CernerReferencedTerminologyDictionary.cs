@@ -21,6 +21,7 @@ namespace BayClinicCernerAmbulatory
 
         public Dictionary<String, String> TerminologyConceptMeaning = new Dictionary<string, string>();
         public Dictionary<String, String> TerminologyCodeMeaning = new Dictionary<string, string>();
+        public Dictionary<String, String> TerminologyTerminologyCode = new Dictionary<string, string>();
 
         public bool Initialize(IMongoCollection<MongodbReferenceTerminologyEntity> CollectionArg, bool AddZeroUnspecified = true)
         {
@@ -28,15 +29,17 @@ namespace BayClinicCernerAmbulatory
             try
             {
                 var TerminologyQuery = RefTerminologyCollection.AsQueryable();
-                foreach(MongodbReferenceTerminologyEntity TerminologyDoc in TerminologyQuery)
+                foreach(MongodbReferenceTerminologyEntity ReferenceTerminologyDoc in TerminologyQuery)
                 {
-                    TerminologyConceptMeaning[TerminologyDoc.UniqueTerminologyIdentifier] = TerminologyDoc.Concept;
-                    TerminologyCodeMeaning[TerminologyDoc.UniqueTerminologyIdentifier] = TerminologyDoc.Code;
+                    TerminologyConceptMeaning[ReferenceTerminologyDoc.UniqueTerminologyIdentifier] = ReferenceTerminologyDoc.Concept;
+                    TerminologyCodeMeaning[ReferenceTerminologyDoc.UniqueTerminologyIdentifier] = ReferenceTerminologyDoc.Code;
+                    TerminologyTerminologyCode[ReferenceTerminologyDoc.UniqueTerminologyIdentifier] = ReferenceTerminologyDoc.Terminology;
                 }
                 if (AddZeroUnspecified)
                 {
                     TerminologyConceptMeaning["0"] = "Unspecified";
                     TerminologyCodeMeaning["0"] = "Unspecified";
+                    TerminologyTerminologyCode["0"] = "Unspecified";
                 }
 
             }

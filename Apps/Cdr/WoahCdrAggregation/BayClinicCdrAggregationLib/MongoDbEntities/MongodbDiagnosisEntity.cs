@@ -117,9 +117,8 @@ namespace BayClinicCernerAmbulatory
         /// <param name="ReferencedCodes"></param>
         /// <param name="TerminologyRecord"></param>
         /// <returns>true if an existing record was modified, false if a new record was created</returns>
-        internal bool MergeWithExistingDiagnosis(ref Diagnosis DiagnosisRecord, ref Patient PatientRecord, VisitEncounter VisitRecord, CernerReferencedCodeDictionaries ReferencedCodes,CernerReferencedTerminologyDictionaries TerminologyCodes)
+        internal bool MergeWithExistingDiagnosis(ref Diagnosis DiagnosisRecord, ref Patient PatientRecord, VisitEncounter VisitRecord, CernerReferencedCodeDictionaries ReferencedCodes, CernerReferencedTerminologyDictionaries TerminologyDictionaries)
         {
-            String FullCode, CodeSystem;
             DateTime StartDateTime, EndDateTime, DiagDateTime, StatusDateTime;
             DateTime.TryParse(EffectiveBeginDateTime, out StartDateTime);
             DateTime.TryParse(EffectiveEndDateTime, out EndDateTime);
@@ -127,22 +126,13 @@ namespace BayClinicCernerAmbulatory
             DateTime.TryParse(ActiveStatusDateTime, out StatusDateTime);
 
             //Code parsing
-            
+            String TerminologyCode = TerminologyDictionaries.TerminologyTerminologyCode[UniqueTerminologyIdentifier];
 
-            FullCode = TerminologyCodes.TerminologyConceptMeaning[UniqueTerminologyIdentifier];
-            if (FullCode.Contains("{") && FullCode.Contains("}"))
-            {
-                CodeSystem = TerminologyCodes.TerminologyConceptMeaning[UniqueTerminologyIdentifier].Split('}')[0].Replace("{", "");
-            }
-            else
-            {
-                CodeSystem = "";
-            }
             CodedEntry DiagnosisCode = new CodedEntry
             {
-                Code = FullCode,
-                CodeMeaning = TerminologyCodes.TerminologyCodeMeaning[UniqueTerminologyIdentifier],
-                CodeSystem = CodeSystem
+                Code = TerminologyDictionaries.TerminologyCodeMeaning[UniqueTerminologyIdentifier],
+                CodeMeaning = TerminologyDictionaries.TerminologyConceptMeaning[UniqueTerminologyIdentifier],
+                CodeSystem = ReferencedCodes.TerminologyCodeMeanings[TerminologyCode]
             };
 
             if (DiagnosisRecord == null)
