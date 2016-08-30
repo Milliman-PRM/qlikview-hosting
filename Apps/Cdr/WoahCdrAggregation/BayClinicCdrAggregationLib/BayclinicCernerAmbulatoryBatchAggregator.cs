@@ -24,7 +24,7 @@ namespace BayClinicCernerAmbulatory
         private String _PgConnectionName;
         //private String MembershipDataFileUsed;
 
-        private StreamWriter CsvWriter;
+        //private StreamWriter CsvWriter;
         private DateTime PatientLoopStart;
         long WriteCounter;
 
@@ -228,7 +228,8 @@ namespace BayClinicCernerAmbulatory
 
             bool Initialized;
 
-            CsvWriter = new StreamWriter("Performance_" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + ".csv");
+            //CsvWriter = new StreamWriter("Performance_" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + ".csv");
+            //CsvWriter.AutoFlush = true;
             WriteCounter = 0;
 
             EndThreadSignal = false;
@@ -459,7 +460,7 @@ if (!String.IsNullOrEmpty(MembershipDataFileUsed) && File.Exists(MembershipDataF
             DateTime StoreStart = DateTime.Now;
             CdrDb.Context.SubmitChanges();
             DateTime StoreEnd = DateTime.Now;
-            CsvWriter.WriteLine((WriteCounter++).ToString() + " , " + (StoreEnd - PatientLoopStart).TotalSeconds + " , " + (StoreEnd - StoreStart).TotalSeconds);
+            //CsvWriter.WriteLine((WriteCounter++).ToString() + " , " + (StoreEnd - PatientLoopStart).TotalSeconds + " , " + (StoreEnd - StoreStart).TotalSeconds);
 
             MongoRunUpdater.PersonIdList.Add(PersonDocument.Id);
 
