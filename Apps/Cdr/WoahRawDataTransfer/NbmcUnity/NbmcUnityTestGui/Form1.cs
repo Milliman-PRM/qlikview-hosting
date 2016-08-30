@@ -245,8 +245,25 @@ namespace NbmcUnityTestGui
             Trace.WriteLine("Total extracted PatientMrn counter is " + MrnCounter);
 
             CsvWriter.Close();
+
             Trace.WriteLine("Extract operation completed at " + DateTime.Now.ToString("yyyyMMdd-HHmmss"));
+            Trace.Listeners.Remove(ThisTraceListener);
         }
 
+        private void ButtonExploreSystem_Click(object sender, EventArgs e)
+        {
+            DateTime LaunchTimestamp = DateTime.Now;
+            String TraceFileName = "TraceLog_" + LaunchTimestamp.ToString("yyyyMMdd-HHmmss") + ".txt";
+            TraceListener ThisTraceListener = new TextWriterTraceListener(TraceFileName);
+            Trace.Listeners.Add(ThisTraceListener);
+            Trace.WriteLine("Operation launched " + LaunchTimestamp.ToString("yyyyMMdd-HHmmss"));
+
+            PatientExplorer PatExplorer = new PatientExplorer();
+
+            PatExplorer.ExploreServer();
+
+            Trace.WriteLine("ExploreSystem operation completed at " + DateTime.Now.ToString("yyyyMMdd-HHmmss"));
+            Trace.Listeners.Remove(ThisTraceListener);
+        }
     }
 }

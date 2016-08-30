@@ -271,5 +271,22 @@ CleanUp:
             }  // foreach DiagnosisTable
         }  // HandleDiagnoses
 
+        public void ExploreServer()
+        {
+            Trace.WriteLine("Attempting to connect to unity service with endpoint " + UnityEndpoint);
+            Connect(UnityUsername, UnityPassword, UnityEndpoint);
+
+            // GetServerInfo: Display general Unity server information
+            DataSet ServerInfoDs = UnityClient.Magic("GetServerInfo", EhrUsername, UnityAppName, "", UnitySecurityToken, "", "", "", "", "", "", null);
+            Trace.WriteLine("\nOutput from GetServerInfo:\n" + ServerInfoDs.GetXml());
+
+            DataSet DictionaryListDs = UnityClient.Magic("GetListOfDictionaries", EhrUsername, UnityAppName, "", UnitySecurityToken, "", "", "", "", "", "", null);
+            Trace.WriteLine("\nOutput from GetListOfDictionaries:\n" + DictionaryListDs.GetXml());
+
+            DataSet Icd10DiagnosisDictionaryDs = UnityClient.Magic("GetDictionary", EhrUsername, UnityAppName, "", UnitySecurityToken, "ICD10_Diagnosis_DE", "", "", "", "", "", null);
+            Trace.WriteLine("\nOutput from GetDictionary:\n" + Icd10DiagnosisDictionaryDs.GetXml());
+
+        }
+
     }  // class
 }  // namespace
