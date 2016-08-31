@@ -28,6 +28,7 @@ namespace BayClinicCernerAmbulatory
             RefTerminologyCollection = CollectionArg;
             try
             {
+                // TODO convert this query to aggregation pipeline and group by identifier to speed up the processing of returned docs
                 var TerminologyQuery = RefTerminologyCollection.AsQueryable();
                 foreach(MongodbReferenceTerminologyEntity ReferenceTerminologyDoc in TerminologyQuery)
                 {

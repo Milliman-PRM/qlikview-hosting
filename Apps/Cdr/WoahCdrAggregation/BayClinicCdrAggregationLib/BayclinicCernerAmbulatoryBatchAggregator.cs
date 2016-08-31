@@ -273,6 +273,9 @@ namespace BayClinicCernerAmbulatory
 
             if (ClearRunNumbers)
             {
+                // TODO This would truncate patients and all tables directly or indirectly referencing patients through foreign keys.  
+                // CdrDb.Context.ExecuteCommand("TRUNCATE TABLE public.patient RESTART IDENTITY CASCADE");
+
                 MongoRunUpdater.ClearAllMongoAggregationRunNumbers();
             }
 

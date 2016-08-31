@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -126,14 +127,16 @@ namespace BayClinicCernerAmbulatory
             DateTime.TryParse(ActiveStatusDateTime, out StatusDateTime);
 
             //Code parsing
-            String TerminologyCode = TerminologyDictionaries.TerminologyTerminologyCode[UniqueTerminologyIdentifier];
-
-            CodedEntry DiagnosisCode = new CodedEntry
+            CodedEntry DiagnosisCode = new CodedEntry();
+            if (!String.IsNullOrEmpty(UniqueTerminologyIdentifier))
             {
-                Code = TerminologyDictionaries.TerminologyCodeMeaning[UniqueTerminologyIdentifier],
-                CodeMeaning = TerminologyDictionaries.TerminologyConceptMeaning[UniqueTerminologyIdentifier],
-                CodeSystem = ReferencedCodes.TerminologyCodeMeanings[TerminologyCode]
-            };
+                DiagnosisCode.Code = TerminologyDictionaries.TerminologyCodeMeaning[UniqueTerminologyIdentifier];
+                DiagnosisCode.CodeMeaning = TerminologyDictionaries.TerminologyConceptMeaning[UniqueTerminologyIdentifier];
+                if (UniqueTerminologyIdentifier != "0") {
+                    String TerminologyCode = TerminologyDictionaries.TerminologyTerminologyCode[UniqueTerminologyIdentifier];
+                    DiagnosisCode.CodeSystem = ReferencedCodes.TerminologyCodeMeanings[TerminologyCode];
+                }
+            }
 
             if (DiagnosisRecord == null)
             {
