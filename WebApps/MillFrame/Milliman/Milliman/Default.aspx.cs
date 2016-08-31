@@ -498,7 +498,7 @@ namespace MillimanDev
             LoadProductsForSelectedGroup();
         }
                
-        protected void RadMenu1_ItemClick(object sender, Telerik.Web.UI.RadMenuEventArgs e)
+        protected void mnuOptions_ItemClick(object sender, Telerik.Web.UI.RadMenuEventArgs e)
         {
             //Telerik.Web.UI.RadMenuItem ItemClicked = e.Item;
             if (string.Compare(e.Item.Value.ToString(), "logout", true) == 0)

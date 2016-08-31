@@ -71,7 +71,7 @@
             </div>
             <div class="menu">
                 <telerik:RadMenu ID="mnuOptions" runat="server" EnableRoundedCorners="true"
-                    EnableShadows="true" OnItemClick="RadMenu1_ItemClick" >
+                    EnableShadows="true" OnItemClick="mnuOptions_ItemClick" >
                     <CollapseAnimation Duration="200" Type="OutQuint" />
                 </telerik:RadMenu>
                 <div class="menuDropdownFilter">
