@@ -133,6 +133,93 @@ namespace NbmcUnityQueryLib
 
         }
 
+        public void ExplorePatientLabs(string PatientEmrId, StreamWriter CsvWriter = null, String PatientMrn = "", String WoahId = "")
+        {
+            HashSet<string> Areas = new HashSet<string>();
+            Connect(UnityUsername, UnityPassword, UnityEndpoint);  // Does nothing if already connected
+
+            if (CsvWriter == null)
+            {
+                string OutputPath = @".\Output";
+                String CsvFileName = "Diagnoses_EmrId_" + PatientEmrId + ".csv";
+                CsvFileName = Path.Combine(OutputPath, CsvFileName);
+                Directory.CreateDirectory(OutputPath);
+                CsvWriter = new StreamWriter(CsvFileName);
+                CsvWriter.AutoFlush = true;
+
+                CsvWriter.WriteLine("Patient_EmrId|" +
+                                    "Patient_Mrn|" +
+                                    "Patient_WoahId|" +
+                                    "Encounter_EmrId|" +
+                                    "Encounter_DateTime|" +
+                                    "Encounter_PerformingProviderName|" +
+                                    "Encounter_BillingProviderName|" +
+                                    "Encounter_appointmenttype|" +
+                                    "Encounter_ApptComment|" +
+                                    "Diagnosis_ProblemDE|" +
+                                    "Diagnosis_code|" +
+                                    "Diagnosis_Diagnosis|" +
+                                    "Diagnosis_ICD10code|" +
+                                    "Diagnosis_ICD10diagnosis");
+            }
+
+            Trace.WriteLine("\nCalling GetEncounterList with patient EHR ID: " + PatientEmrId);
+            DataSet EncounterDs = UnityClient.Magic("GetEncounterList", EhrUsername, UnityAppName, PatientEmrId, UnitySecurityToken, "", "", "", "Y", "", "", null);
+            //Trace.WriteLine("Output from GetEncounterList:\n" + EncounterDs.GetXml());
+
+            foreach (DataTable EncounterTable in EncounterDs.Tables)  // one table in a response
+            {
+                Trace.WriteLine("Encounter table named " + EncounterTable.TableName + " has " + EncounterTable.Rows.Count + " rows");
+                foreach (DataRow EncounterRow in EncounterTable.Rows)  // for each multi-field record
+                {
+                    string EncounterId = EncounterRow["ID"].ToString();
+                    Trace.WriteLine("\nFound encounter with EncounterID = " + EncounterId);
+                    int TempInt;
+                    if (!int.TryParse(EncounterId, out TempInt) || TempInt <= 0)
+                    {
+                        Trace.WriteLine("EncounterId not parsable into valid integer, skipping this encounter: " + EncounterId);
+                        continue;
+                    }
+
+                    // 
+                    string EncounterDateTimeStr = EncounterRow["DTTM"].ToString();
+                    DateTime EncounterDateTime;
+                    DateTime.TryParse(EncounterDateTimeStr, out EncounterDateTime);
+
+                    if (EncounterDateTime < EncountersOnOrAfter)
+                    {
+                        Trace.WriteLine("Encounter " + EncounterId + " occurred on " + EncounterDateTime.ToShortDateString() + " before the configured query date range");
+                        continue;
+                    }
+
+                    Trace.WriteLine("\nCalling GetEncounterSummary with patient EHR ID " + PatientEmrId + ", Encounter EHR ID: " + EncounterId);
+                    DataSet EncounterSummaryDs = UnityClient.Magic("GetEncounterSummary", EhrUsername, UnityAppName, PatientEmrId, UnitySecurityToken, EncounterId, "", "", "Y", "", "", null);
+                    Trace.WriteLine("Output from GetEncounterSummary:\n" + EncounterSummaryDs.GetXml());
+
+                    foreach (DataTable EncounterSummaryTable in EncounterSummaryDs.Tables)  // one table in a response
+                    {
+                        Trace.WriteLine("EncounterSummary table named " + EncounterSummaryTable.TableName + " has " + EncounterSummaryTable.Rows.Count + " rows");
+                        foreach (DataRow EncounterSummaryRow in EncounterSummaryTable.Rows)  // for each multi-field record
+                        {
+                            String Area = EncounterSummaryRow["Area"].ToString();
+                            switch (Area)
+                            {
+                                case "Results":
+                                    Trace.WriteLine("Result found with code " + EncounterSummaryRow["code"].ToString());
+                                    break;
+                                default:
+                                    Trace.WriteLine("unexpected Area encountered: " + Area);
+                                    break;
+                            }
+                            Areas.Add(Area);
+                        }
+                    }
+
+                }
+            }
+            Trace.WriteLine("Areas found are: " + String.Join(", ", Areas.ToArray()));
+        }
+
         public void ExplorePatient(string PatientMrn, bool DoCharges, bool DoDiagnoses, bool DoProblems, string WoahId)
         {
             String TraceFileName = "TraceLog_MRN_" + PatientMrn + ".txt";
@@ -281,10 +368,17 @@ CleanUp:
             Trace.WriteLine("\nOutput from GetServerInfo:\n" + ServerInfoDs.GetXml());
 
             DataSet DictionaryListDs = UnityClient.Magic("GetListOfDictionaries", EhrUsername, UnityAppName, "", UnitySecurityToken, "", "", "", "", "", "", null);
-            Trace.WriteLine("\nOutput from GetListOfDictionaries:\n" + DictionaryListDs.GetXml());
+            //Trace.WriteLine("\nOutput from GetListOfDictionaries:\n" + DictionaryListDs.GetXml());
+            foreach (DataRow De in DictionaryListDs.Tables[0].Rows)
+            {
+                Trace.WriteLine("Dictionary table name: " + De["TableName"].ToString());
+            }
 
-            DataSet Icd10DiagnosisDictionaryDs = UnityClient.Magic("GetDictionary", EhrUsername, UnityAppName, "", UnitySecurityToken, "ICD10_Diagnosis_DE", "", "", "", "", "", null);
-            Trace.WriteLine("\nOutput from GetDictionary:\n" + Icd10DiagnosisDictionaryDs.GetXml());
+            DataSet QODs = UnityClient.Magic("GetDictionary", EhrUsername, UnityAppName, "", UnitySecurityToken, "QO_DE", "", "", "", "", "", null);
+            Trace.WriteLine("\nOutput from GetDictionary:\n" + QODs.GetXml());
+
+            DataSet CodeTypeDictionaryDs = UnityClient.Magic("GetDictionary", EhrUsername, UnityAppName, "", UnitySecurityToken, "Code_Type_DE", "", "", "", "", "", null);
+            Trace.WriteLine("\nOutput from GetDictionary:\n" + CodeTypeDictionaryDs.GetXml());
 
         }
 

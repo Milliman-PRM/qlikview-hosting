@@ -265,5 +265,118 @@ namespace NbmcUnityTestGui
             Trace.WriteLine("ExploreSystem operation completed at " + DateTime.Now.ToString("yyyyMMdd-HHmmss"));
             Trace.Listeners.Remove(ThisTraceListener);
         }
+
+        private void ButtonExtractLabs_Click(object sender, EventArgs e)
+        {
+            DateTime LaunchTimestamp = DateTime.Now;
+            String TraceFileName = "TraceLog_" + LaunchTimestamp.ToString("yyyyMMdd-HHmmss") + ".txt";
+
+            TraceListener ThisTraceListener = new TextWriterTraceListener(TraceFileName);
+            Trace.Listeners.Add(ThisTraceListener);
+            Trace.WriteLine("Operation launched " + LaunchTimestamp.ToString("yyyyMMdd-HHmmss"));
+
+            PatientExplorer PatExplorer = new PatientExplorer();
+
+            #region Declare and initialize variables to limit the run duration
+            int MrnCounter = 0;
+            int MrnCountLimit;
+            int.TryParse(ConfigurationManager.AppSettings["MrnCountLimit"], out MrnCountLimit);
+
+            int[] OutInt = new int[4] { 0, 0, 0, 0 };
+            String[] RunDurationLimitSettingStrings = ConfigurationManager.AppSettings["RunDurationLimit"].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            if (RunDurationLimitSettingStrings.Count() == 4)
+            {
+                OutInt[0] = int.Parse(RunDurationLimitSettingStrings[0]);
+                OutInt[1] = int.Parse(RunDurationLimitSettingStrings[1]);
+                OutInt[2] = int.Parse(RunDurationLimitSettingStrings[2]);
+                OutInt[3] = int.Parse(RunDurationLimitSettingStrings[3]);
+            }
+            TimeSpan RunDurationLimit = new TimeSpan(OutInt[0], OutInt[1], OutInt[2], OutInt[3]);
+            #endregion
+
+            openFileDialog1.InitialDirectory = ".";
+            openFileDialog1.Filter = "csv files (*.csv)|*.csv";
+            openFileDialog1.FilterIndex = 2;
+            openFileDialog1.RestoreDirectory = true;
+
+            if (openFileDialog1.ShowDialog() != DialogResult.OK)
+            {
+                Trace.WriteLine("ID map .csv file not found, not processing");
+                MessageBox.Show("ID map .csv file not found, not processing");
+                return;
+            }
+
+            String OutputPath = @".\Output";
+            String CsvFileName = "Labs_" + LaunchTimestamp.ToString("yyyyMMdd-HHmmss") + ".csv";
+            CsvFileName = Path.Combine(OutputPath, CsvFileName);
+            Directory.CreateDirectory(OutputPath);
+            StreamWriter CsvWriter = new StreamWriter(CsvFileName);
+            CsvWriter.AutoFlush = true;
+            CsvWriter.WriteLine("Patient_EmrId|" +
+                                "Patient_Mrn|" +
+                                "Patient_WoahId|" +
+                                "Encounter_EmrId|" +
+                                "Encounter_DateTime|" +
+                                "Encounter_PerformingProviderName|" +
+                                "Encounter_BillingProviderName|" +
+                                "Encounter_appointmenttype|" +
+                                "Encounter_ApptComment|" +
+                                "Diagnosis_ProblemDE|" +
+                                "Diagnosis_code|" +
+                                "Diagnosis_Diagnosis|" +
+                                "Diagnosis_ICD10code|" +
+                                "Diagnosis_ICD10diagnosis");
+
+            using (StreamReader IdMapStream = new StreamReader(openFileDialog1.OpenFile()))
+            {
+                String[] FieldNames = IdMapStream.ReadLine().Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+
+                while (!IdMapStream.EndOfStream)
+                {
+                    String[] Fields = IdMapStream.ReadLine().Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+                    if (Fields.Count() != 3)
+                    {
+                        continue;
+                    }
+                    String WoahId = Fields[0];
+                    String[] Mrns = Fields[1].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                    String[] EmrIds = Fields[2].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                    if (Mrns.Count() == 0 || EmrIds.Count() == 0)
+                    {
+                        continue;
+                    }
+
+                    if (Mrns.Count() != EmrIds.Count())
+                    {
+                        Trace.WriteLine("For WOAH ID " + WoahId + " Mrn count " + Mrns.Count() + " and EMRId count " + EmrIds.Count() + " are not the same");
+                        continue;
+                    }
+
+                    for (int EmrIdCounter = 0; EmrIdCounter < EmrIds.Count(); EmrIdCounter++)
+                    {
+                        MrnCounter++;
+                        Trace.WriteLine("Starting Unity operations on WOAH ID " + WoahId + ", Mrn " + Mrns[EmrIdCounter] + ", EmrId " + EmrIds[EmrIdCounter]);
+                        PatExplorer.ExplorePatientLabs(EmrIds[EmrIdCounter], CsvWriter, Mrns[EmrIdCounter], WoahId);
+                    }
+
+                    if (MrnCountLimit > 0 && MrnCounter >= MrnCountLimit)
+                    {
+                        Trace.WriteLine("Completed the configured limit of " + MrnCounter + " MRN operations, breaking");
+                        break;
+                    }
+                    if (RunDurationLimit.TotalSeconds > 0.0 && (DateTime.Now - LaunchTimestamp) > RunDurationLimit)
+                    {
+                        Trace.WriteLine("Run duration reached the configured limit of " + RunDurationLimit.ToString() + ", breaking");
+                        break;
+                    }
+                }
+            }
+            Trace.WriteLine("Total extracted PatientMrn counter is " + MrnCounter);
+
+            CsvWriter.Close();
+
+            Trace.WriteLine("Extract operation completed at " + DateTime.Now.ToString("yyyyMMdd-HHmmss"));
+            Trace.Listeners.Remove(ThisTraceListener);
+        }
     }
 }
