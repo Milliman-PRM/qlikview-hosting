@@ -4,124 +4,161 @@
 <%@ Register Src="~/js/js/jquery.ascx" TagName="jquery" TagPrefix="uc4" %>
 <%@ Register Src="~/admin/controls/UserRolesSelector.ascx" TagName="userRoleSelector" TagPrefix="urs" %>
 
+<style>
+    .roundShadowContainer {
+        width: 754px;
+        margin-top: 10px;
+    }
+
+    .containerWrap {
+        margin: 0 auto;
+        padding: 2px;
+        width: 20%;
+    }
+
+    .left {
+        float: left;
+        margin: 3px;
+        text-align: left;
+        padding: 2px;
+    }
+
+    .right {
+        float: right;
+        margin: -3px;
+        text-align: left;
+    }
+</style>
+
 <div class="adminHelp">
     1.) Minimum Required Password Length = 7 char.<br />
     2.) Minimum Required Non-Alphanumeric char = 1.<br />
     3.) Passwords are case sensitive.
 </div>
+
 <%-- gridview banner --%>
 <div class="gvBanner">
     <span class="gvBannerUsers">
         <asp:Image ID="Image1" runat="server" ImageAlign="AbsMiddle" ImageUrl="~/images/decoy-icon-36px.png" /></span> Create Users With Group
 </div>
-<%-- create user wizard with roles --%>
-<div class="centerElement softRoundContainer softRoundContainerStyle">
 
-    <telerik:RadAjaxManager ID="RadAjaxManager1" runat="server">
-        <AjaxSettings>
-            <telerik:AjaxSetting AjaxControlID="RadGrid1">
-                <UpdatedControls>
-                    <telerik:AjaxUpdatedControl ControlID="RadGrid1"></telerik:AjaxUpdatedControl>
-                </UpdatedControls>
-            </telerik:AjaxSetting>
-        </AjaxSettings>
-    </telerik:RadAjaxManager>
+<telerik:RadAjaxManager ID="RadAjaxManager2" runat="server">
+    <AjaxSettings>
+        <telerik:AjaxSetting AjaxControlID="RadGrid1">
+            <UpdatedControls>
+                <telerik:AjaxUpdatedControl ControlID="RadGrid1"></telerik:AjaxUpdatedControl>
+            </UpdatedControls>
+        </telerik:AjaxSetting>
+    </AjaxSettings>
+</telerik:RadAjaxManager>
 
-    <telerik:RadWindowManager EnableShadow="true" ID="RadWindowManager" runat="server">
-    </telerik:RadWindowManager>
+<telerik:RadWindowManager EnableShadow="true" ID="RadWindowManager" runat="server">
+</telerik:RadWindowManager>
 
-    <div class="softRoundContainer-editor softRoundContainerStyle">      
-        <div class="softRoundContainerStyle" style="width: 50%; display:table; box-shadow:#eee;">
-            <div style="display: table-row">
-                <div style="width: 89px; display: table-cell;"><span class="navyHeaderFont">&nbsp; Login Type &nbsp;</span> </div>
-                <div style="display: table-cell;">
-                    <asp:RadioButtonList ID="UserType" runat="server" AutoPostBack="True"
-                        OnSelectedIndexChanged="UserType_SelectedIndexChanged" RepeatDirection="Horizontal">
-                        <asp:ListItem Selected="true">Milliman Login</asp:ListItem>
-                        <asp:ListItem>External SSO Login</asp:ListItem>
-                    </asp:RadioButtonList>
-                </div>
-            </div>
-        </div>
-        <div class="spacer"></div>
-        <div class="">
-            <span class="navyHeaderFont">&nbsp; Group Selection
-                                                        &nbsp;</span>
-            <div id="divUserRole" class="softRoundContainer-editor softRoundContainerStyle" style="height: 200px; overflow-y: scroll;">
-                <asp:UpdatePanel ID="UpdatePanel1" runat="server" ChildrenAsTriggers="true">
-                    <ContentTemplate>
-                        <urs:userRoleSelector ID="ctrlUserRoles" runat="server" />
-                    </ContentTemplate>
-                </asp:UpdatePanel>
-            </div>
+<div class="centerElement roundShadowContainer">
+    <div class="softRoundContainerStyle" style="height: 23px; width: 333px;">
+        <div class="left"><span class="navyHeaderFont">Login Type:</span></div>
+        <div class="right">
+            <%--panel for UserType--%>
+            <asp:RadioButtonList ID="UserType" runat="server" AutoPostBack="True"
+                OnSelectedIndexChanged="UserType_SelectedIndexChanged" RepeatDirection="Horizontal">
+                <asp:ListItem Selected="true">Milliman Login</asp:ListItem>
+                <asp:ListItem>External SSO Login</asp:ListItem>
+            </asp:RadioButtonList>
         </div>
     </div>
-    <div class="spacer"></div>
-    <telerik:RadGrid runat="server" ID="RadGrid1" AllowSorting="True" AutoGenerateColumns="False" CellSpacing="5" GridLines="None" OnItemCommand="RadGrid1_ItemCommand" AllowAutomaticDeletes="True" ViewStateMode="Enabled" MasterTableView-AllowAutomaticDeletes="True" ClientIDMode="AutoID">
-        <MasterTableView EditMode="Batch" CommandItemDisplay="Top" TableLayout="Fixed">
-            <CommandItemTemplate>
-                <asp:LinkButton ID="Add" runat="server" CommandName="Add" Visible="true"><asp:Image runat="server" style="border:0px;vertical-align:middle;" alt="" ImageUrl="~/Images/Office-Girl-icon.png"/>Add List Entry</asp:LinkButton>&nbsp;&nbsp;
-                <asp:LinkButton Width="100px" ID="Validate" runat="server" CommandName="Validate" Visible='<%# RadGrid1.EditIndexes.Count == 0 %>'><asp:Image runat="server"  style="border:0px;vertical-align:middle;" alt="" ImageUrl="~/Images/process-icon.png"/>Validate</asp:LinkButton>&nbsp;&nbsp;
-                <asp:LinkButton ID="Clear" runat="server" CommandName="Clear" Visible='<%# RadGrid1.EditIndexes.Count == 0 %>'><asp:Image runat="server" style="border:0px;vertical-align:middle;" alt="" ImageUrl="~/Images/Actions-edit-delete-icon16x16.png"/>Clear List</asp:LinkButton>&nbsp;&nbsp;
-            </CommandItemTemplate>
-            <Columns>
-                <telerik:GridTemplateColumn DataField="ValidationImage" UniqueName="ValidationImageStatus" HeaderStyle-Width="20px">
-                    <ItemTemplate>
-                        <asp:Image ID="ValidationStatusImage" runat="server" ImageUrl='<%#Eval("ValidationImage") %>' ToolTip='<%#Eval("ErrorMsg") %>' />
-                    </ItemTemplate>
-                </telerik:GridTemplateColumn>
-                <telerik:GridTemplateColumn DataField="Account_Name" HeaderText="Account" UniqueName="AccountNameText" HeaderStyle-Width="100%">
-                    <ItemTemplate>
-                        <asp:TextBox ID="AccountNameTextBox" runat="server" AutoPostBack="false" Text='<%#Eval("Account_Name") %>' Width="100%"></asp:TextBox>
-                    </ItemTemplate>
-                    <HeaderStyle Width="100%"></HeaderStyle>
-                </telerik:GridTemplateColumn>
-                <telerik:GridTemplateColumn DataField="SendWelcomeEmail" HeaderText="Send Welcome" UniqueName="SendWelcome" HeaderStyle-Width="100px" ItemStyle-HorizontalAlign="Center">
-                    <ItemTemplate>
-                        <asp:CheckBox ID="SendWelcomeCheckbox" runat="server" AutoPostBack="false" />
-                    </ItemTemplate>
-                </telerik:GridTemplateColumn>
-                <telerik:GridTemplateColumn DataField="DataAccess_Required" HeaderText="<center>Database Access</center>" UniqueName="DataAccessRequiredText">
-                    <ItemTemplate>
-                        <center><asp:CheckBox ID="DataAccessRequiredTextBox" AutoPostBack="false" runat="server" Checked='<%#Eval("DataAccess_Required") %>'/></center>
-                    </ItemTemplate>
-                </telerik:GridTemplateColumn>
-                <telerik:GridButtonColumn Text="Delete" CommandName="Delete" ButtonType="ImageButton" ConfirmText="Delete this user from the list?" ConfirmDialogType="Classic">
-                    <HeaderStyle Width="32px" />
-                </telerik:GridButtonColumn>
-            </Columns>
-        </MasterTableView>
-    </telerik:RadGrid>
-    <telerik:RadPanelBar ID="RadPanelBar1" runat="server" Width="100%" CollapseDelay="100" ExpandDelay="100">
-        <Items>
-            <telerik:RadPanelItem ID="UserPanel" Text="CSV List Entries" Expanded="False" runat="server" ImagePosition="Left" ToolTip="Click to expand and paste new user information here" ExpandedImageUrl="~/Images/User-Group-icon.png" DisabledImageUrl="~/Images/User-Group-icon.png" ImageUrl="~/Images/User-Group-icon.png">
+    <div class="space"></div>
+    <div class="softRoundContainerStyle">
+        <span class="navyHeaderFont" style="background: #e4dfdf;">Group Selection</span>
+        <div id="divUserRole" class="softRoundContainerStyle" style="height: 200px; overflow-y: scroll;">
+            <%--panel for updPanelUserRoles--%>
+            <asp:UpdatePanel ID="updPanelUserRoles" runat="server" ChildrenAsTriggers="true" UpdateMode="Conditional">
                 <ContentTemplate>
-                    <asp:Table ID="Table1" runat="server" Height="350px" Width="100%">
-                        <asp:TableRow ToolTip="Paste new user information using comma delimited format:<br> Email Address, [True/False] with *1 entry per line">
-                            <asp:TableCell>
-                                <asp:Label ID="Label1" runat="server" Text="Paste new user information using comma delimited format:<br> Email Address,[True/False] <br> *1 entry per line"></asp:Label>
-                            </asp:TableCell>
-                        </asp:TableRow>
-
-                        <asp:TableRow Width="100%">
-                            <asp:TableCell Width="100%">
-                                <asp:TextBox runat="server" ID="UserList" TextMode="MultiLine" Rows="20" Width="100%"></asp:TextBox>
-                            </asp:TableCell>
-                        </asp:TableRow>
-
-                        <asp:TableRow>
-                            <asp:TableCell HorizontalAlign="Center">
-                                <asp:Button ID="Button1" runat="server" Text="Submit" OnClick="Submit_Click" />
-                            </asp:TableCell>
-
-                        </asp:TableRow>
-                    </asp:Table>
+                    <urs:userRoleSelector ID="ctrlUserRoles" runat="server" />
                 </ContentTemplate>
-            </telerik:RadPanelItem>
-        </Items>
-    </telerik:RadPanelBar>
-    <br />
-    <center><asp:ImageButton ID="CreateNewUsers" runat="server"  ImageUrl="~/images/CreateUsersButton.png" ToolTip="Add the listed users to the HCIntel system." OnClick="CreateNewUsers_Click" /></center>
+            </asp:UpdatePanel>
+        </div>
+    </div>
+    <div class="space"></div>
+    <div class="softRoundContainerStyle">
+        <telerik:RadGrid runat="server" ID="RadGrid1" AllowSorting="True" AutoGenerateColumns="False" CellSpacing="5" GridLines="None"
+            OnItemCommand="RadGrid1_ItemCommand"
+            AllowAutomaticDeletes="True" ViewStateMode="Enabled" MasterTableView-AllowAutomaticDeletes="True" ClientIDMode="AutoID">
+            <MasterTableView EditMode="Batch" CommandItemDisplay="Top" TableLayout="Fixed">
+                <CommandItemTemplate>
+                    <asp:LinkButton ID="Add" runat="server" CommandName="Add" Visible="true"><asp:Image runat="server" style="border:0px;vertical-align:middle;" alt="" ImageUrl="~/Images/Office-Girl-icon.png"/>Add List Entry</asp:LinkButton>&nbsp;&nbsp;
+                    <asp:LinkButton Width="100px" ID="Validate" runat="server" CommandName="Validate" Visible='<%# RadGrid1.EditIndexes.Count == 0 %>'><asp:Image runat="server"  style="border:0px;vertical-align:middle;" alt="" ImageUrl="~/Images/process-icon.png"/>Validate</asp:LinkButton>&nbsp;&nbsp;
+                    <asp:LinkButton ID="Clear" runat="server" CommandName="Clear" Visible='<%# RadGrid1.EditIndexes.Count == 0 %>'><asp:Image runat="server" style="border:0px;vertical-align:middle;" alt="" ImageUrl="~/Images/Actions-edit-delete-icon16x16.png"/>Clear List</asp:LinkButton>&nbsp;&nbsp;
+                </CommandItemTemplate>
+                <Columns>
+                    <telerik:GridTemplateColumn DataField="ValidationImage" UniqueName="ValidationImageStatus" HeaderStyle-Width="20px">
+                        <ItemTemplate>
+                            <asp:Image ID="ValidationStatusImage" runat="server" ImageUrl='<%#Eval("ValidationImage") %>' ToolTip='<%#Eval("ErrorMsg") %>' />
+                        </ItemTemplate>
+                    </telerik:GridTemplateColumn>
+                    <telerik:GridTemplateColumn DataField="Account_Name" HeaderText="Account" UniqueName="AccountNameText" HeaderStyle-Width="100%">
+                        <ItemTemplate>
+                            <asp:TextBox ID="AccountNameTextBox" runat="server" AutoPostBack="false" Text='<%#Eval("Account_Name") %>' Width="90%" Height="20px" CssClass="standardTextBox"></asp:TextBox>
+                        </ItemTemplate>
+                        <HeaderStyle Width="100%"></HeaderStyle>
+                    </telerik:GridTemplateColumn>
+                    <telerik:GridTemplateColumn DataField="SendWelcomeEmail" HeaderText="Send Welcome" UniqueName="SendWelcome" HeaderStyle-Width="100px" ItemStyle-HorizontalAlign="Center">
+                        <ItemTemplate>
+                            <asp:CheckBox ID="SendWelcomeCheckbox" runat="server" AutoPostBack="false" Checked='<%#Eval("SendWelcomeEmail") %>'/>
+                        </ItemTemplate>
+                    </telerik:GridTemplateColumn>
+                    <telerik:GridTemplateColumn DataField="DataAccess_Required" HeaderText="<center>Database Access</center>" UniqueName="DataAccessRequiredText">
+                        <ItemTemplate>
+                            <center><asp:CheckBox ID="DataAccessRequiredTextBox" AutoPostBack="false" runat="server" Checked='<%#Eval("DataAccess_Required") %>'/></center>
+                        </ItemTemplate>
+                    </telerik:GridTemplateColumn>
+                    <telerik:GridButtonColumn Text="Delete" CommandName="Delete" ButtonType="ImageButton" ConfirmText="Delete this user from the list?" ConfirmDialogType="Classic">
+                        <HeaderStyle Width="32px" />
+                    </telerik:GridButtonColumn>
+                </Columns>
+            </MasterTableView>
+        </telerik:RadGrid>
+    </div>
+    <div class="space"></div>
+
+    <div class="softRoundContainerStyle">
+
+        <telerik:RadPanelBar ID="RadPanelBar1" runat="server" Width="100%" CollapseDelay="100" ExpandDelay="100" ExpandMode="MultipleExpandedItems">
+            <Items>
+                <telerik:RadPanelItem ID="UserPanel" Value="UserPanel" Text="CSV List Entries" Expanded="False" runat="server" ImagePosition="Left" ToolTip="Click to expand and paste new user information here" ExpandedImageUrl="~/Images/User-Group-icon.png" DisabledImageUrl="~/Images/User-Group-icon.png" ImageUrl="~/Images/User-Group-icon.png">
+                    <ContentTemplate>
+                        <asp:Table ID="Table1" runat="server" Height="241px" Width="100%">
+                            <asp:TableRow ToolTip="Paste new user information using comma delimited format:<br> Email Address, [True/False] with *1 entry per line">
+                                <asp:TableCell>
+                                <div class="softRoundContainerStyle infoBox" style="width:700px;"><span>&nbsp;&nbsp;Paste new user information using comma delimited format such as;</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>Email Address,[True/False]</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="right" style="margin-top: 1px;margin-right:5px!important;"><i>Note</i>: *1 entry per line</span></div>
+                                </asp:TableCell>
+                            </asp:TableRow>
+                            <asp:TableRow Width="100%">
+                                <asp:TableCell Width="100%">
+                                    <asp:UpdatePanel ID="updPanelUserList" runat="server" ChildrenAsTriggers="true" UpdateMode="Conditional">
+                                        <ContentTemplate>
+                                            <asp:TextBox runat="server" ID="UserList" TextMode="MultiLine" Rows="20" Width="98%" Height="150px"></asp:TextBox>
+                                        </ContentTemplate>
+                                    </asp:UpdatePanel>
+                                </asp:TableCell>
+                            </asp:TableRow>
+                            <asp:TableRow>
+                                <asp:TableCell HorizontalAlign="Center">
+                                    <asp:Button ID="Button1" runat="server" Text="Submit" OnClick="Submit_Click" CssClass="buttonGray" />
+                                </asp:TableCell>
+                            </asp:TableRow>
+                        </asp:Table>
+                    </ContentTemplate>
+                </telerik:RadPanelItem>
+            </Items>
+        </telerik:RadPanelBar>
+
+        <div class="space"></div>
+        <div class="containerWrap">
+            <asp:ImageButton ID="CreateNewUsers" runat="server" ImageUrl="~/images/CreateUsersButton.png" ToolTip="Add the listed users to the HCIntel system." OnClick="CreateNewUsers_Click" />
+        </div>
+        <div class="space"></div>
+    </div>
 </div>
 
 <%-- help sidebar --%>
@@ -163,45 +200,8 @@
     }
 
     function ConfirmAction() {
-        //var grid = document.getElementById("RadGrid1");
-        //var MasterTable = grid.get_masterTableView();
-        //var Rows = MasterTable.get_dataItems();
-
-        //if (Rows.length == 1)
-        //    return Confirm("Are you certain you want to create this user?");
-        //return Confirm("Are you certain you want to create these " + Rows.length + " users?");
-
         return window.confirm("Are you certain you want to create these users?");
     }
 
 
 </script>
-
-<%--<script type="text/javascript">
-    window.BlockingRadConfirm = function (text, mozEvent, oWidth, oHeight, callerObj, oTitle) {
-        var ev = mozEvent ? mozEvent : window.event;
-        ev.cancelBubble = true;
-        ev.returnValue = false;
-        if (ev.stopPropagation) ev.stopPropagation();
-        if (ev.preventDefault) ev.preventDefault();
-        var callerObj = ev.srcElement ? ev.srcElement : ev.target;
-        if (callerObj) {
-            var callBackFn = function (arg) {
-                if (arg) {
-                    callerObj["onclick"] = "";
-                    if (callerObj.tagName == "A") {
-                        try {
-                            eval(callerObj.href)
-                        }
-                        catch (e) { }
-                    }
-                    else if (callerObj.click) {
-                        callerObj.click();
-                    }
-                }
-            }
-            radconfirm(text, callBackFn, oWidth, oHeight, callerObj, oTitle);
-        }
-        return false;
-    }
-</script> --%>  
