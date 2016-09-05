@@ -235,42 +235,42 @@ namespace ClientPublisher
                 }
 
             }
-
+          
 
             int ProjectIndex = 0;
             IList<ProjectSettingsExtension> Projects = new List<ProjectSettingsExtension>();
             foreach (string Group in FoundSuperGroup.GroupNames)
             {
-                List<string> GroupProjects = MillimanCommon.UserRepo.GetInstance().FindAllProjectsForRole(Group);
+               List<string> GroupProjects = MillimanCommon.UserRepo.GetInstance().FindAllProjectsForRole(Group);
                 if (GroupProjects != null)
-                {
-                    if (GroupProjects.Count > 1)
-                    {
-                        System.Web.Security.FormsAuthentication.SignOut();
-                        Session.Abandon();
-                        Response.Redirect("HTML/GroupContainsMultipleProjects.html");
-                        return;
-                    }
-                    if (GroupProjects.Count == 1)
-                    {
-                        ProjectSettingsExtension ThisProject = ProjectSettingsExtension.LoadProjectExtension(GroupProjects[0]);
-                        try
-                        {
-                            if (ThisProject != null)
-                            {
-                                ThisProject.ProjectIndex = ProjectIndex;
-                                ProjectIndex++;
-                                Projects.Add(ThisProject);
-                            }
+               {
+                   if (GroupProjects.Count > 1)
+                   {
+                       System.Web.Security.FormsAuthentication.SignOut();
+                       Session.Abandon();
+                       Response.Redirect("HTML/GroupContainsMultipleProjects.html");
+                       return;
+                   }
+                   if (GroupProjects.Count == 1)
+                   {
+                       ProjectSettingsExtension ThisProject = ProjectSettingsExtension.LoadProjectExtension(GroupProjects[0]);
+                       try
+                       {
+                           if (ThisProject != null)
+                           {
+                               ThisProject.ProjectIndex = ProjectIndex;
+                               ProjectIndex++;
+                               Projects.Add(ThisProject);
+                           }
 
-                        }
-                        catch (Exception)
-                        {
+                       }
+                       catch (Exception)
+                       {
 
-                            throw;
-                        }
-                    }
-                }
+                           throw;
+                       }
+                   }
+               }
             }
 
             if (Projects.Count == 0)

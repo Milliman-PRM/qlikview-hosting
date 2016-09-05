@@ -38,7 +38,7 @@ namespace MillimanDev
                 }
 
                 string MenuXML = System.IO.File.ReadAllText(Server.MapPath("~/MainMenuConfiguration/MainMenu.xml"));
-                RadMenu1.LoadXml(ProcessForPublisherAdmin( ProcessForClientAdmin(MenuXML) ));
+                RadMenu1.LoadXml(ProcessForPublisherAdmin(ProcessForClientAdmin(MenuXML)));
 
                 LoadAnnouncements();
                 LoadProducts();
@@ -64,7 +64,7 @@ namespace MillimanDev
             else
             {
                 //this will correct the issue of postback for end-users for not for admins with "filter-by" permissions
-                if (Groups.SelectedItem == null) 
+                if (Groups.SelectedItem == null)
                 {
                     LoadProducts();
                 }
@@ -81,7 +81,7 @@ namespace MillimanDev
             }
 
             MillimanCommon.SuperGroup SG = MillimanCommon.SuperGroup.GetInstance();
-            List<MillimanCommon.SuperGroup.SuperGroupContainer> MyItems = SG.GetSupersForPublishingAdmin( Membership.GetUser().UserName);
+            List<MillimanCommon.SuperGroup.SuperGroupContainer> MyItems = SG.GetSupersForPublishingAdmin(Membership.GetUser().UserName);
             if (MyItems.Count == 0)
             {
                 return XML.Replace(ReplacementTag, "");  //they do not have anything setup via global admin 
@@ -245,7 +245,7 @@ namespace MillimanDev
         private string CreateMenuItem(string DisplayText, string ToolTip, string ParameterItem, bool LaunchPublisher = false)
         {
             string SubEntry = @"<Item Text='_GROUPFRIENDLYNAME_' NavigateUrl='_URL_' Target='_blank' ToolTip='_TOOLTIP_' ImageUrl='images/User-Group-icon.png'/>";
-            if ( LaunchPublisher )
+            if (LaunchPublisher)
                 SubEntry = @"<Item Text='_GROUPFRIENDLYNAME_' NavigateUrl='_URL_' Target='_blank' ToolTip='_TOOLTIP_' ImageUrl='images/upload.png'/>";
             string CacheDir = WebConfigurationManager.AppSettings["HCIntelCache"];  //should be full path in web.config
             string CacheFileName = Guid.NewGuid().ToString().Replace('-', '_');
@@ -255,7 +255,7 @@ namespace MillimanDev
             MillimanCommon.CacheEntry CE = new MillimanCommon.CacheEntry(Membership.GetUser().ProviderUserKey.ToString(), Membership.GetUser().UserName, ParameterItem, DateTime.Now.AddHours(2.0));
             CE.Save(CachePathFileName);
             string ClientAdminApplication = WebConfigurationManager.AppSettings["ClientAdminApp"];
-            if ( LaunchPublisher )
+            if (LaunchPublisher)
                 ClientAdminApplication = WebConfigurationManager.AppSettings["ClientPublishingApp"];
             string Launch = ClientAdminApplication + "?key=" + System.IO.Path.GetFileNameWithoutExtension(CachePathFileName);
             SubEntry = SubEntry.Replace("_URL_", Launch);
@@ -265,7 +265,7 @@ namespace MillimanDev
         /// <summary>
         /// Remove all cached credentials older than the specified date
         /// </summary>
-        private void CacheCleaner(int ClearOlderThanXDays )
+        private void CacheCleaner(int ClearOlderThanXDays)
         {
             string CacheDir = WebConfigurationManager.AppSettings["HCIntelCache"];
             string[] AllFiles = System.IO.Directory.GetFiles(CacheDir, "*");
@@ -276,8 +276,8 @@ namespace MillimanDev
             }
         }
 
-        private enum AdminType {  User, Publisher }
-        private bool GetAdminByType( AdminType Admin)
+        private enum AdminType { User, Publisher }
+        private bool GetAdminByType(AdminType Admin)
         {
             MembershipUser MU = Membership.GetUser();
             if (MU != null)
@@ -289,7 +289,7 @@ namespace MillimanDev
                     System.Data.SqlClient.SqlCommand comm = new System.Data.SqlClient.SqlCommand();
                     comm.Connection = new System.Data.SqlClient.SqlConnection(ConnectionString);
                     String sql = @"SELECT IsClientAdministrator from aspnet_customprofile where UserId='" + UserId.ToUpper() + "'";
-                    if ( Admin == AdminType.Publisher)
+                    if (Admin == AdminType.Publisher)
                         sql = @"SELECT IsPublishingAdministrator from aspnet_customprofile where UserId='" + UserId.ToUpper() + "'";
                     comm.CommandText = sql;
                     comm.Connection.Open();
@@ -297,7 +297,7 @@ namespace MillimanDev
                     while (cursor.Read())
                     {
                         string Value = string.Empty;
-                        if ( Admin == AdminType.User )
+                        if (Admin == AdminType.User)
                             Value = cursor["IsClientAdministrator"].ToString();
                         else
                             Value = cursor["IsPublishingAdministrator"].ToString();
@@ -324,18 +324,18 @@ namespace MillimanDev
         {
             try
             {
-                string ResetFile = System.IO.Path.Combine( WebConfigurationManager.AppSettings["ResetUserInfoRoot"], UserID + ".rst" );
+                string ResetFile = System.IO.Path.Combine(WebConfigurationManager.AppSettings["ResetUserInfoRoot"], UserID + ".rst");
                 return System.IO.File.Exists(ResetFile);
             }
             catch (Exception)
             {
 
             }
-  
+
             return false;
         }
 
-        private string CreateCacheEntry(string ConnectionStringFriendlyName, string ConnectionString )
+        private string CreateCacheEntry(string ConnectionStringFriendlyName, string ConnectionString)
         {
             string CacheDir = WebConfigurationManager.AppSettings["HCIntelCache"];  //should be full path in web.config
             string CacheFileName = Guid.NewGuid().ToString().Replace('-', '_');
@@ -353,7 +353,7 @@ namespace MillimanDev
         /// <param name="ACL_Entity"></param>
         private void LoadProduct(MillimanCommon.UserAccessList.UserAccess ACL_Entity)
         {
- 
+
             string DBBrowser = WebConfigurationManager.AppSettings["DatabaseBrowserURL"]; //full url to browser page
             string QVDocumentRoot = WebConfigurationManager.AppSettings["QVDocumentRoot"];
 
@@ -365,15 +365,15 @@ namespace MillimanDev
             //ProductCell.Text = " <table cellspacing='0'><tr><td align='right' style='background-image:url(images/header.gif);border:1px solid gray'><a href='dashboard.aspx?dashboardid=POPULATION'> <img src='images/nodatabase.png' title='Direct database access is not available.' style='width:15px;height:15px;border-style:none;vertical-align:middle' /> </a></td></tr><tr><td style='border:1px solid gray' ><a href='dashboard.aspx?dashboardid=POPULATION' target='_blank'>  <img src='Css/populationreport.gif' style='border-style:none'></img></a></td></tr></table>";
             ProductCell.Text = " <table cellspacing='0'><tr><td align='right' style='background-image:url(images/header.gif);border:1px solid gray'> _DOWNLOAD1_ _DOWNLOAD2_ _DOWNLOAD3_ _DOWNLOAD4_ _DOWNLOAD5_ _DOWNLOAD6_ _DBACCESS_</td></tr><tr><td style='border:1px solid gray' align='middle'  ><a href='_DASHBOARD_' target='_blank' onclick='return _ENABLED_;' ><img src='imagereflector.aspx?key=_THUMBNAIL_' title='Click to launch - _REPORTNAME_ ' style='border-style:none'></img></a></td></tr></table>";
             //ProductCell.Text = " <table cellspacing='0'><tr><td align='right' style='background-image:url(images/header.gif);border:1px solid gray'> _DBACCESS_ </td></tr><tr><td style='border:1px solid gray' align='middle'  ><a href='_DASHBOARD_' target='_blank'><img src='imagereflector.aspx?key=_THUMBNAIL_' title='Click to launch - _REPORTNAME_ ' style='border-style:none'></img></a></td></tr></table>";
-            
+
             // #37 if I am admin let me always see a QVW reduced if available, master otherwise - but I will show special icon
             bool AmAdministrator = IAmAdministrator();
             if (AmAdministrator)
-                if (string.IsNullOrEmpty(ACL_Entity.QVReducedRelativeProjectPath) == true ) //show ADMIN the master QVW to admin
+                if (string.IsNullOrEmpty(ACL_Entity.QVReducedRelativeProjectPath) == true) //show ADMIN the master QVW to admin
                     ProductCell.Text = ProductCell.Text.Replace("_DASHBOARD_", @"dashboard.aspx?key=" + MillimanCommon.Utilities.ConvertStringToHex(ACL_Entity.QVRootRelativeProjectPath));
                 else  //show ADMIN redcued version
                     ProductCell.Text = ProductCell.Text.Replace("_DASHBOARD_", @"dashboard.aspx?key=" + MillimanCommon.Utilities.ConvertStringToHex(ACL_Entity.QVReducedRelativeProjectPath));
-            else  
+            else
                 ProductCell.Text = ProductCell.Text.Replace("_DASHBOARD_", @"dashboard.aspx?key=" + MillimanCommon.Utilities.ConvertStringToHex(ACL_Entity.QVReducedRelativeProjectPath));
 
             if (ACL_Entity.ReducedVersionNotAvailable)
@@ -392,7 +392,7 @@ namespace MillimanDev
             if (AmAdministrator)
                 MakeClickable = "true";
 
-            ProductCell.Text = ProductCell.Text.Replace("_ENABLED_", MakeClickable );
+            ProductCell.Text = ProductCell.Text.Replace("_ENABLED_", MakeClickable);
 
             //look to see if there is a tooltip, if so use it
             string Tooltip = System.IO.Path.GetFileNameWithoutExtension(ACL_Entity.ProjectSettings.ProjectName);
@@ -414,34 +414,34 @@ namespace MillimanDev
             }
 
             //check for custom downloads
-            if ( Membership.GetUser() != null )
+            if (Membership.GetUser() != null)
             {
-               string DownloadItemTemplate = "<a href='reflector.ashx?key=_KEY_' target='_blank'><img src='_ICON_' title='_TOOLTIP_' style='width:15px;height:15px;border-style:none;vertical-align:middle' /></a>";
+                string DownloadItemTemplate = "<a href='reflector.ashx?key=_KEY_' target='_blank'><img src='_ICON_' title='_TOOLTIP_' style='width:15px;height:15px;border-style:none;vertical-align:middle' /></a>";
 
-               string AccountName = Membership.GetUser().UserName;
-               MillimanCommon.CustomUserDownloads CUD = MillimanCommon.CustomUserDownloads.GetInstance();
-               int DownloadIndex = 1; //yes start at 1
-               string QVWRelativePath = string.IsNullOrEmpty(ACL_Entity.QVReducedRelativeProjectPath) ? ACL_Entity.QVRootRelativeProjectPath : ACL_Entity.QVReducedRelativeProjectPath;
-               foreach (MillimanCommon.CustomUserDownloads.CustomDownloads CD in CUD.GetUserSpecficDownloads(AccountName, ACL_Entity.QVRootRelativeProjectPath))
-               {
-                   string ReplacementLabel = "_DOWNLOAD" + DownloadIndex.ToString() + "_";
-                   DownloadIndex++;
-                   string NewDownloadItem = DownloadItemTemplate.Replace("_KEY_", MillimanCommon.Utilities.ConvertStringToHex( System.IO.Path.Combine(QVDocumentRoot, CD.VirtualItemPath)));
-                   //string IconReflector = "reflector.ashx?key=" + MillimanCommon.Utilities.ConvertStringToHex( System.IO.Path.Combine(QVDocumentRoot,CD.VirtualItemIcon));
-                   string IconReflector = "reflector.ashx?key=" + MillimanCommon.Utilities.ConvertStringToHex(System.IO.Path.Combine(QVDocumentRoot, CD.VirtualItemIcon));
-                   //NewDownloadItem = NewDownloadItem.Replace("_ICON_", CD.VirtualItemIcon);
-                   
-                   //this allows backward compatabiltiy as we transform to new framework
-                   if (( CD.VirtualItemIcon.ToLower().Contains(@"images/")) || ( CD.VirtualItemIcon.ToLower().Contains(@"images\")))
-                       NewDownloadItem = NewDownloadItem.Replace("_ICON_", CD.VirtualItemIcon);  //new method contains all icons in IMAGES dir
-                   else
-                       NewDownloadItem = NewDownloadItem.Replace("_ICON_",IconReflector);  //old way, icons were located with documents
+                string AccountName = Membership.GetUser().UserName;
+                MillimanCommon.CustomUserDownloads CUD = MillimanCommon.CustomUserDownloads.GetInstance();
+                int DownloadIndex = 1; //yes start at 1
+                string QVWRelativePath = string.IsNullOrEmpty(ACL_Entity.QVReducedRelativeProjectPath) ? ACL_Entity.QVRootRelativeProjectPath : ACL_Entity.QVReducedRelativeProjectPath;
+                foreach (MillimanCommon.CustomUserDownloads.CustomDownloads CD in CUD.GetUserSpecficDownloads(AccountName, ACL_Entity.QVRootRelativeProjectPath))
+                {
+                    string ReplacementLabel = "_DOWNLOAD" + DownloadIndex.ToString() + "_";
+                    DownloadIndex++;
+                    string NewDownloadItem = DownloadItemTemplate.Replace("_KEY_", MillimanCommon.Utilities.ConvertStringToHex(System.IO.Path.Combine(QVDocumentRoot, CD.VirtualItemPath)));
+                    //string IconReflector = "reflector.ashx?key=" + MillimanCommon.Utilities.ConvertStringToHex( System.IO.Path.Combine(QVDocumentRoot,CD.VirtualItemIcon));
+                    string IconReflector = "reflector.ashx?key=" + MillimanCommon.Utilities.ConvertStringToHex(System.IO.Path.Combine(QVDocumentRoot, CD.VirtualItemIcon));
+                    //NewDownloadItem = NewDownloadItem.Replace("_ICON_", CD.VirtualItemIcon);
+
+                    //this allows backward compatabiltiy as we transform to new framework
+                    if ((CD.VirtualItemIcon.ToLower().Contains(@"images/")) || (CD.VirtualItemIcon.ToLower().Contains(@"images\")))
+                        NewDownloadItem = NewDownloadItem.Replace("_ICON_", CD.VirtualItemIcon);  //new method contains all icons in IMAGES dir
+                    else
+                        NewDownloadItem = NewDownloadItem.Replace("_ICON_", IconReflector);  //old way, icons were located with documents
 
 
-                   NewDownloadItem = NewDownloadItem.Replace("_TOOLTIP_", CD.Tooltip);
-                   ProductCell.Text = ProductCell.Text.Replace(ReplacementLabel, NewDownloadItem);
-                   //_DOWNLOAD1_ _DOWNLOAD2_ _DOWNLOAD3_ _DOWNLOAD4_ _DOWNLOAD5_ _DOWNLOAD6_
-               }
+                    NewDownloadItem = NewDownloadItem.Replace("_TOOLTIP_", CD.Tooltip);
+                    ProductCell.Text = ProductCell.Text.Replace(ReplacementLabel, NewDownloadItem);
+                    //_DOWNLOAD1_ _DOWNLOAD2_ _DOWNLOAD3_ _DOWNLOAD4_ _DOWNLOAD5_ _DOWNLOAD6_
+                }
             }
             //replace any custom downloads with transparnt icon
             for (int DownloadIndex = 1; DownloadIndex <= 6; DownloadIndex++)
@@ -462,7 +462,7 @@ namespace MillimanDev
             {
                 Desc.Text += @"<br><br>";
                 Desc.Text += "<center> <a href='Reflector.ashx?key=_KEY_&nofile=true' target='_blank' title='Click to view' > <img src='images/document-icon.png' align='middle' border='0' hspace='5'  /> View User Guide </a> </center>";
-                Desc.Text = Desc.Text.Replace("_KEY_", MillimanCommon.Utilities.ConvertStringToHex( System.IO.Path.Combine( ACL_Entity.ProjectSettings.AbsoluteProjectPath,  ACL_Entity.ProjectSettings.UserManual )));
+                Desc.Text = Desc.Text.Replace("_KEY_", MillimanCommon.Utilities.ConvertStringToHex(System.IO.Path.Combine(ACL_Entity.ProjectSettings.AbsoluteProjectPath, ACL_Entity.ProjectSettings.UserManual)));
             }
             ProductRow.Cells.Add(Desc);
 
@@ -541,8 +541,8 @@ namespace MillimanDev
                     SB.Append(Anncouncement.ToMessage());
                 }
                 SB.Append(AnnouncementCellEnd);
-                
-               FirstAndOnlyRow.Cells[1].Text = SB.ToString();
+
+                FirstAndOnlyRow.Cells[1].Text = SB.ToString();
             }
             else
             {
@@ -553,7 +553,7 @@ namespace MillimanDev
 
         protected void btnLogout_Click(object sender, EventArgs e)
         {
-        
+
         }
 
         protected void Groups_SelectedIndexChanged(object sender, EventArgs e)
@@ -607,6 +607,6 @@ namespace MillimanDev
             }
         }
 
-      
+
     }
 }

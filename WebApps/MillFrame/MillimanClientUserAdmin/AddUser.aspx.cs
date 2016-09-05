@@ -25,7 +25,7 @@ namespace MillimanClientUserAdmin
                 }
                 string LabelTemplate = "Currently using " + StandardUsers.ToString() + " of " + MG.MaximumnUsers.ToString() + " licenses for " + MG.FriendlyGroupName;
                 License.Text = LabelTemplate;
-                
+
                 //create some test data
                 //MillimanCommon.DownloadDescriptions DD = new MillimanCommon.DownloadDescriptions();
                 //DD.DownloadItem = "186156_treeinpanelbar.zip";
@@ -35,7 +35,7 @@ namespace MillimanClientUserAdmin
                 //
 
                 List<UserInfo> UL = new List<UserInfo>();
-                UL.Add(new UserInfo());
+                    UL.Add(new UserInfo());
                 RadGrid1.DataSource = UL;
                 RadGrid1.DataBind();
 
@@ -187,7 +187,7 @@ namespace MillimanClientUserAdmin
         }
 
         private string AlphaNums = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        private string AccountValidChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-@.";
+       private string AccountValidChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-@.";
         private string EmailLocalSectionValidChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%&'*+-/=?^_`{|}~.";
         private string EmailServerValidChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-.";
         private List<UserInfo> ValidateUserRequests()
@@ -318,54 +318,54 @@ namespace MillimanClientUserAdmin
                     if (System.Web.Security.Roles.RoleExists(GroupID) == true)
                     {
                         List<string> UserDirectories = new List<string>(); //save list for possible rollack
-                        try
-                        {
+                try
+                {
                             string ProjectDir = System.Configuration.ConfigurationManager.AppSettings["QVDocumentRoot"];
                             ProjectDir = System.IO.Path.Combine(ProjectDir, GroupID.Replace("_","\\"));  //groups use underscore,  to convert to directory use slash
-                            foreach (UserInfo User in UI)
-                            {
-                                bool AccountCreated = false;
-                                System.Web.Security.MembershipUser MU = System.Web.Security.Membership.GetUser(User.Account_Name_No_Password);
-                                if (MU == null)
-                                {
-                                    string Password = User.Password;
-                                    if (string.IsNullOrEmpty(Password))
-                                        Password = "@" + Guid.NewGuid().ToString();
-                                    MU = System.Web.Security.Membership.CreateUser(User.Account_Name_No_Password, Password, User.Account_Name_No_Password);
-                                    AccountCreated = true;
-                                    NewUsers.Add(User.Account_Name_No_Password);
-                                }
-                                if (MU == null)
-                                    throw new Exception("User account not created for: " + User.Account_Name_No_Password);
-                                CreatedUsers.Add(User.Account_Name_No_Password);
+                    foreach (UserInfo User in UI)
+                    {
+                        bool AccountCreated = false;
+                        System.Web.Security.MembershipUser MU = System.Web.Security.Membership.GetUser(User.Account_Name_No_Password);
+                        if (MU == null)
+                        {
+                            string Password = User.Password;
+                            if (string.IsNullOrEmpty(Password))
+                                Password = "@" + Guid.NewGuid().ToString();
+                            MU = System.Web.Security.Membership.CreateUser(User.Account_Name_No_Password, Password, User.Account_Name_No_Password);
+                            AccountCreated = true;
+                            NewUsers.Add(User.Account_Name_No_Password);
+                                    }
+                        if (MU == null)
+                            throw new Exception("User account not created for: " + User.Account_Name_No_Password);
+                        CreatedUsers.Add(User.Account_Name_No_Password);
                                 if (System.Web.Security.Roles.IsUserInRole(User.Account_Name_No_Password, GroupID) == false)
                                     System.Web.Security.Roles.AddUserToRole(User.Account_Name_No_Password, GroupID);
-                                UserCount++;
-                                //create user password reset file
-                                string ResetFile = System.IO.Path.Combine(System.Configuration.ConfigurationManager.AppSettings["ResetUserInfoRoot"], MU.ProviderUserKey + ".rst");
-                                string WasWelcomed = User.SendWelcomeEmail == true ? "welcome" : "nowelcome";
+                        UserCount++;
+                        //create user password reset file
+                        string ResetFile = System.IO.Path.Combine(System.Configuration.ConfigurationManager.AppSettings["ResetUserInfoRoot"], MU.ProviderUserKey + ".rst");
+                        string WasWelcomed = User.SendWelcomeEmail == true ? "welcome" : "nowelcome";
 
-                                //if a new account, then make them reset thier password, otherwise don't force a password reset
-                                if (AccountCreated == true)
-                                {
-                                    System.IO.File.WriteAllText(ResetFile, MU.UserName + " added " + DateTime.Now.ToShortDateString() + " " + WasWelcomed);
-                                    ResetFiles.Add(ResetFile);
-                                }
+                        //if a new account, then make them reset thier password, otherwise don't force a password reset
+                        if (AccountCreated == true)
+                        {
+                            System.IO.File.WriteAllText(ResetFile, MU.UserName + " added " + DateTime.Now.ToShortDateString() + " " + WasWelcomed);
+                            ResetFiles.Add(ResetFile);
+                        }
 
                                 string UserDir = MillimanCommon.ReducedQVWUtilities.GetUserDir(ProjectDir, User.Account_Name_No_Password);
                                 if (System.IO.Directory.Exists(UserDir) == false)
                                 {
                                     System.IO.Directory.CreateDirectory(UserDir);
-                                }
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            UserCount = 0;
-                            RollBack(CreatedUsers, GroupID, NewUsers, ResetFiles);
-                            MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "Unspecified", ex);
-                        }
                     }
+                }
+                        }
+                catch (Exception ex)
+                {
+                    UserCount = 0;
+                            RollBack(CreatedUsers, GroupID, NewUsers, ResetFiles);
+                    MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "Unspecified", ex);
+                }
+            }
                     else
                     {
                         MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, GroupID + " was passed in for adding user but stated role does not exist in system");
@@ -456,20 +456,20 @@ namespace MillimanClientUserAdmin
 
                     AddUser.Promote(GroupID, CreatedUsers);
 
-                    string Msg = "User accounts(s):\\n\\n";
+                        string Msg = "User accounts(s):\\n\\n";
                     foreach( string User in CreatedUsers )
-                        Msg += User + "\\n";
-                    Msg += "\\n have been added to the system.";
+                            Msg += User + "\\n";
+                        Msg += "\\n have been added to the system.";
 
-                    string script = "<script type=\"text/javascript\">CloseDialog('" + Msg + "');</script>";
-                    //string script = "<script type=\"text/javascript\">CloseDialog('" + Msg + "');</script>";
-                    // Gets the executing web page
-                    Page page = HttpContext.Current.CurrentHandler as Page;
-                    // Checks if the handler is a Page and that the script isn't allready on the Page
-                    if (page != null && !page.ClientScript.IsStartupScriptRegistered("CloseMe"))
-                    {
-                        page.ClientScript.RegisterStartupScript(typeof(AddUser), "CloseMe", script);
-                    }
+                        string script = "<script type=\"text/javascript\">CloseDialog('" + Msg + "');</script>";
+                        //string script = "<script type=\"text/javascript\">CloseDialog('" + Msg + "');</script>";
+                        // Gets the executing web page
+                        Page page = HttpContext.Current.CurrentHandler as Page;
+                        // Checks if the handler is a Page and that the script isn't allready on the Page
+                        if (page != null && !page.ClientScript.IsStartupScriptRegistered("CloseMe"))
+                        {
+                            page.ClientScript.RegisterStartupScript(typeof(AddUser), "CloseMe", script);
+                        }
 
                 }
                 else
@@ -500,7 +500,7 @@ namespace MillimanClientUserAdmin
                 OriginalFile = S.Replace("_tmp", "");
                 System.IO.File.Delete(OriginalFile);
                 System.IO.File.Move(S, OriginalFile);
-            }
+        }
 
             MillimanReportReduction.QVWReductionProcessor.AuthorizeAllQVWs();
         }

@@ -26,28 +26,7 @@
         /*restyle the radwindow alert box to make it not look bad*/
         .RadWindow .rwWindowContent .radalert{background-image:none!important;padding-left:0!important}/* removes the excalamtion mark icon */
         .RadWindow .rwDialogText{margin-left:10px!important}
-         div.menu {
-                min-width: 846px;
-                border-bottom: 1px solid #F4CB79;
-                border-top: 1px solid #FAE5BC;
-                height: 28px;
-                background-color: #F4F4F4;
-                background-image: url('Images/header.gif');
-                background-repeat: repeat;
-                padding: 2px;
-        }
-        .clear {
-            clear: both;
-            float: none;
-        }
-        div.RadMenu {
-            float: left;
-        }
-        .menuDropdownFilter {
-            float: right !important;
-            margin-right: 26px;
-        }        
-                                                                                                                                                                                             .RadWindow .rwPopupButton{margin-left:100px!important}
+                                                                                                                                                                                                             .RadWindow .rwPopupButton{margin-left:100px!important}
     </style>
 </head>
 <body>
@@ -69,17 +48,18 @@
                     </tr>
                 </table>
             </div>
-            <div class="menu">
-                <telerik:RadMenu ID="mnuOptions" runat="server" EnableRoundedCorners="true"
-                    EnableShadows="true" OnItemClick="mnuOptions_ItemClick" >
-                    <CollapseAnimation Duration="200" Type="OutQuint" />
-                </telerik:RadMenu>
-                <div class="menuDropdownFilter">
-                    <asp:Label runat="server" ID="FilterLabel" Visible="False">Filter By &nbsp;</asp:Label>
-                    <asp:DropDownList ID="ddlGroups" runat="server" Visible="False" AutoPostBack="True"
-                        OnSelectedIndexChanged="Groups_SelectedIndexChanged" ViewStateMode="Enabled" Width="400">
-                    </asp:DropDownList>
-                </div>
+            <div style="min-width: 800px; border-bottom: 1px solid #F4CB79; border-top: 1px solid #FAE5BC; background-color: #F4F4F4; background-image: url('Images/header.gif'); background-repeat: repeat;">
+                <table style="width: 100%">
+                    <tr>
+                        <td>
+                            <telerik:RadMenu ID="RadMenu1" runat="server" EnableRoundedCorners="true" EnableShadows="true" OnItemClick="RadMenu1_ItemClick"></telerik:RadMenu>
+                        </td>
+                        <td valign="middle">
+                            <span style="float: right; vertical-align: middle">
+                                <asp:Label runat="server" ID="FilterLabel" Visible="False">Filter By &nbsp;</asp:Label><asp:DropDownList ID="Groups" runat="server" Visible="False" AutoPostBack="True" OnSelectedIndexChanged="Groups_SelectedIndexChanged" ViewStateMode="Enabled"></asp:DropDownList>&nbsp;&nbsp;</span>
+                        </td>
+                    </tr>
+                </table>
             </div>
             <div>
                 <br />
