@@ -106,72 +106,15 @@ namespace MillimanDev
             }
         }
 
-        /// <summary>
-        /// Check to see if user is supposed to be able to admin thier own users,  if not
-        /// remove the option on the menu to launch client admin interface, otherwise look into adding options for
-        /// admin.  It is possible they are setup to admin clients, but not in a group, in this case remove the
-        /// menu option
-        /// </summary>
-        /// <param name="XML"></param>
-        /// <returns></returns>
-        private string ProcessForClientAdmin(string XML)
-        {
-            //<Item Text='User Administration' Width='200px' LeftLogo="images/user-group-icon.png">
-            //  <Group Flow='Vertical'>
-            //    <Item Text='Administer users for Francisan CIR' Value='CIR' PostBack='true'/>
-            //    <Item Text='Administer users for Francisan NIR' Value='NIR' />
-            //    <Item Text='Administer users for Francisan WIR' Value='WIR'/>
-            //  </Group>
-            //</Item> 
-            string ReplacementTag = "_INSERT_CLIENT_ADMIN_ITEM_";
-            bool IsUserAdmin = GetAdminByType( AdminType.User);
-            if (IsUserAdmin == false)
-            {
-                return XML.Replace(ReplacementTag, "");
-            }
-            else
-            {
-                MillimanCommon.SuperGroup SG = MillimanCommon.SuperGroup.GetInstance();
-
-                 System.Collections.Generic.List<MillimanCommon.SuperGroup.SuperGroupContainer> SuperGroups = SG.GetSupersForClientAdmin(Membership.GetUser().UserName);
-
-                string MainEntry = @"<Item Text='User Administration' Width='200px' LeftLogo='images/user-group-icon.png' ToolTip='_TOOLTIP_'><Group Flow='Vertical'>_ITEMS_</Group></Item>";
-
-                string[] MyCurrentRoles = MillimanCommon.UserAccessList.GetRolesForUser();
-                System.Collections.Generic.List<string> MyRoles = new System.Collections.Generic.List<string>(MyCurrentRoles);
-                //don't use "Administrator" role - is build in default role
-                for (int Index = 0; Index < MyRoles.Count; Index++)
-                {
-                    if (string.Compare(MyRoles[Index], "administrator", true) == 0)
-                    {
-                        MyRoles.RemoveAt(Index);
-                        break;
-                    }
-                }
-                if (SuperGroups.Count == 1)
-                {
-                    string SubMenu = CreateMenuItem("User Administration", "Administer users for " + SuperGroups[0].ContainerName, SuperGroups[0].ContainerName);
-                    return XML.Replace(ReplacementTag, SubMenu);
-                }
-                else if (SuperGroups.Count > 1)
-                {
-                    string SubMenus = string.Empty;
-                    foreach (MillimanCommon.SuperGroup.SuperGroupContainer SGC in SuperGroups)
-                    {
-                        string SubMenu = CreateMenuItem("Administer users for " + SGC.ContainerName, SGC.ContainerDescription, SGC.ContainerName);
-                        SubMenus += SubMenu;
-                    }
-                    MainEntry = MainEntry.Replace("_ITEMS_", SubMenus);
-                    MainEntry = MainEntry.Replace("_TOOLTIP_", "Administer users and control access rights.");
-                    return XML.Replace(ReplacementTag, MainEntry);
-                }
-                else //am client admin but not in a group - get rid of menu option
-                {
-                    return XML.Replace(ReplacementTag, "");
-                }
-            }
-        }
-
+        //this version is for the next revision of Millframe that allows report selection
+        ///// <summary>
+        ///// Check to see if user is supposed to be able to admin thier own users,  if not
+        ///// remove the option on the menu to launch client admin interface, otherwise look into adding options for
+        ///// admin.  It is possible they are setup to admin clients, but not in a group, in this case remove the
+        ///// menu option
+        ///// </summary>
+        ///// <param name="XML"></param>
+        ///// <returns></returns>
         //private string ProcessForClientAdmin(string XML)
         //{
         //    //<Item Text='User Administration' Width='200px' LeftLogo="images/user-group-icon.png">
@@ -182,14 +125,16 @@ namespace MillimanDev
         //    //  </Group>
         //    //</Item> 
         //    string ReplacementTag = "_INSERT_CLIENT_ADMIN_ITEM_";
-        //    bool IsUserAdmin = GetAdminByType(AdminType.User);
+        //    bool IsUserAdmin = GetAdminByType( AdminType.User);
         //    if (IsUserAdmin == false)
         //    {
         //        return XML.Replace(ReplacementTag, "");
         //    }
         //    else
         //    {
-        //        MillimanCommon.MillimanGroupMap MGM = MillimanCommon.MillimanGroupMap.GetInstance();
+        //        MillimanCommon.SuperGroup SG = MillimanCommon.SuperGroup.GetInstance();
+
+        //         System.Collections.Generic.List<MillimanCommon.SuperGroup.SuperGroupContainer> SuperGroups = SG.GetSupersForClientAdmin(Membership.GetUser().UserName);
 
         //        string MainEntry = @"<Item Text='User Administration' Width='200px' LeftLogo='images/user-group-icon.png' ToolTip='_TOOLTIP_'><Group Flow='Vertical'>_ITEMS_</Group></Item>";
 
@@ -204,31 +149,18 @@ namespace MillimanDev
         //                break;
         //            }
         //        }
-        //        string FriendlyGroupName = "????";
-        //        if (MyRoles.Count == 1)
+        //        if (SuperGroups.Count == 1)
         //        {
-        //            FriendlyGroupName = MGM.MillimanGroupDictionary[MyRoles[0]].FriendlyGroupName;
-        //            string SubMenu = CreateMenuItem("User Administration", "Administer users for " + FriendlyGroupName, MyRoles[0]);
-        //            //don't show if no users are allowed
-        //            if (MGM.MillimanGroupDictionary[MyRoles[0]].MaximumnUsers > 0)
-        //                return XML.Replace(ReplacementTag, SubMenu);
-        //            return "";
+        //            string SubMenu = CreateMenuItem("User Administration", "Administer users for " + SuperGroups[0].ContainerName, SuperGroups[0].ContainerName);
+        //            return XML.Replace(ReplacementTag, SubMenu);
         //        }
-        //        else if (MyRoles.Count > 1)
+        //        else if (SuperGroups.Count > 1)
         //        {
         //            string SubMenus = string.Empty;
-        //            foreach (string Role in MyRoles)
+        //            foreach (MillimanCommon.SuperGroup.SuperGroupContainer SGC in SuperGroups)
         //            {
-        //                if (MGM.MillimanGroupDictionary.ContainsKey(Role) == true)
-        //                {  //if we do not have a friendly name dont show a menu item
-        //                    FriendlyGroupName = MGM.MillimanGroupDictionary[Role].FriendlyGroupName;
-        //                    if (string.IsNullOrEmpty(FriendlyGroupName) == false)
-        //                    {
-        //                        string SubMenu = CreateMenuItem("Administer users for " + FriendlyGroupName, "", Role);
-        //                        if (MGM.MillimanGroupDictionary[Role].MaximumnUsers > 0)
-        //                            SubMenus += SubMenu;
-        //                    }
-        //                }
+        //                string SubMenu = CreateMenuItem("Administer users for " + SGC.ContainerName, SGC.ContainerDescription, SGC.ContainerName);
+        //                SubMenus += SubMenu;
         //            }
         //            MainEntry = MainEntry.Replace("_ITEMS_", SubMenus);
         //            MainEntry = MainEntry.Replace("_TOOLTIP_", "Administer users and control access rights.");
@@ -240,6 +172,76 @@ namespace MillimanDev
         //        }
         //    }
         //}
+
+        private string ProcessForClientAdmin(string XML)
+        {
+            //<Item Text='User Administration' Width='200px' LeftLogo="images/user-group-icon.png">
+            //  <Group Flow='Vertical'>
+            //    <Item Text='Administer users for Francisan CIR' Value='CIR' PostBack='true'/>
+            //    <Item Text='Administer users for Francisan NIR' Value='NIR' />
+            //    <Item Text='Administer users for Francisan WIR' Value='WIR'/>
+            //  </Group>
+            //</Item> 
+            string ReplacementTag = "_INSERT_CLIENT_ADMIN_ITEM_";
+            bool IsUserAdmin = GetAdminByType(AdminType.User);
+            if (IsUserAdmin == false)
+            {
+                return XML.Replace(ReplacementTag, "");
+            }
+            else
+            {
+                MillimanCommon.MillimanGroupMap MGM = MillimanCommon.MillimanGroupMap.GetInstance();
+
+                string MainEntry = @"<Item Text='User Administration' Width='200px' LeftLogo='images/user-group-icon.png' ToolTip='_TOOLTIP_'><Group Flow='Vertical'>_ITEMS_</Group></Item>";
+
+                string[] MyCurrentRoles = MillimanCommon.UserAccessList.GetRolesForUser();
+                System.Collections.Generic.List<string> MyRoles = new System.Collections.Generic.List<string>(MyCurrentRoles);
+                //don't use "Administrator" role - is build in default role
+                for (int Index = 0; Index < MyRoles.Count; Index++)
+                {
+                    if (string.Compare(MyRoles[Index], "administrator", true) == 0)
+                    {
+                        MyRoles.RemoveAt(Index);
+                        break;
+                    }
+                }
+                string FriendlyGroupName = "????";
+                if (MyRoles.Count == 1)
+                {
+                    FriendlyGroupName = MGM.MillimanGroupDictionary[MyRoles[0]].FriendlyGroupName;
+                    string SubMenu = CreateMenuItem("User Administration", "Administer users for " + FriendlyGroupName, MyRoles[0]);
+                    //don't show if no users are allowed
+                    if (MGM.MillimanGroupDictionary[MyRoles[0]].MaximumnUsers > 0)
+                        return XML.Replace(ReplacementTag, SubMenu);
+                    return "";
+                }
+                else if (MyRoles.Count > 1)
+                {
+                    string SubMenus = string.Empty;
+                    foreach (string Role in MyRoles)
+                    {
+                        if (MGM.MillimanGroupDictionary.ContainsKey(Role) == true)
+                        {  //if we do not have a friendly name dont show a menu item
+                            FriendlyGroupName = MGM.MillimanGroupDictionary[Role].FriendlyGroupName;
+                            if (string.IsNullOrEmpty(FriendlyGroupName) == false)
+                            {
+                                string SubMenu = CreateMenuItem("Administer users for " + FriendlyGroupName, "", Role);
+                                if (MGM.MillimanGroupDictionary[Role].MaximumnUsers > 0)
+                                    SubMenus += SubMenu;
+                            }
+                        }
+                    }
+                    MainEntry = MainEntry.Replace("_ITEMS_", SubMenus);
+                    MainEntry = MainEntry.Replace("_TOOLTIP_", "Administer users and control access rights.");
+                    return XML.Replace(ReplacementTag, MainEntry);
+                }
+                else //am client admin but not in a group - get rid of menu option
+                {
+                    return XML.Replace(ReplacementTag, "");
+                }
+            }
+        }
+
         private string CreateMenuItem(string DisplayText, string ToolTip, string ParameterItem, bool LaunchPublisher = false)
         {
             string SubEntry = @"<Item Text='_GROUPFRIENDLYNAME_' NavigateUrl='_URL_' Target='_blank' ToolTip='_TOOLTIP_' ImageUrl='images/User-Group-icon.png'/>";

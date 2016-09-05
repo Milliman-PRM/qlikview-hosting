@@ -31,6 +31,42 @@ namespace ClientPublisher
             }
         }
 
+        //If the QVW is present in the directory, and should not be shown, there is a QVW.OFFLINE file that will
+        //be in the directory along with the QVW - this indicates not to show it
+        static public string NotAvailable = "Offline";
+        static public string IsAvailable = "Take Offline";  //set text on button to take it offline, since it is available
+        static public string IsOffline = "Take Online";     //QVW is there, but in an offline state
+        static public string OfflineExtension = ".OFFLINE";  //QVW has an extension of OFFLINE instead of QVW
+
+        public string Availability
+        {
+            get
+            {
+                string QVW = System.IO.Path.Combine(AbsoluteProjectPath, QVName + ".qvw");
+                string QVWOfflineFile = System.IO.Path.Combine(AbsoluteProjectPath, QVName + OfflineExtension);
+                if (System.IO.File.Exists(QVW) == false) //no QVW available
+                    return NotAvailable;
+                else if (System.IO.File.Exists(QVWOfflineFile)) //offline file is available, so dont show QVW to end users
+                    return IsOffline;
+                else
+                    return IsAvailable; //no QVWOfflineFile exists
+            }
+        }
+        public string AvailabilityTooltip
+        {
+            get
+            {
+
+                string QVWOnline = System.IO.Path.Combine(AbsoluteProjectPath, QVName + ".qvw");
+                string QVWOffline = System.IO.Path.Combine(AbsoluteProjectPath, QVName + OfflineExtension);
+                if (System.IO.File.Exists(QVWOffline))
+                    return "Report is present, but in an offline state - click to make available to users.";
+                else if (System.IO.File.Exists(QVWOnline))
+                    return "Report is available to users - click to take report offline.";
+                else
+                    return "Report is not present on server - a new report must be uploaded before state can be changed.";
+            }
+        }
         private int _ProjectIndex;
 
         public int ProjectIndex

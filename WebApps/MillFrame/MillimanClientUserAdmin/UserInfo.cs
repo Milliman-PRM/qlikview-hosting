@@ -79,7 +79,6 @@ public class UserInfo
 	public UserInfo()
 	{
         _HasPassword = false;
-        _Password = CreateTempPassword();
         SetStatus(StatusType.NONE);
 	}
 
@@ -90,7 +89,6 @@ public class UserInfo
         ProcessAccountName(_UserName, out  _Account_Name_No_Password, out _Password);
         _SendWelcomeEmail = SendWelcomeEmail;
         _DataAccess_Required = _DataAccess;
-        _Password = CreateTempPassword();
         SetStatus(StatusType.NONE);
     }
 
@@ -157,23 +155,5 @@ public class UserInfo
             }
         }
         return true;
-    }
-
-    private string CreateTempPassword()
-    {
-        string CandidateTmpPswd = Guid.NewGuid().ToString("N").ToUpper() + Guid.NewGuid().ToString("N");
-        string AmbigiousChars = "10oOQIilL";
-        string TmpPassword = string.Empty;
-        foreach( char C in CandidateTmpPswd )
-        {
-            if (AmbigiousChars.Contains(C) == false)
-                TmpPassword += C;
-            if (TmpPassword.Length == 10)
-                break;
-        }
-
-        return "@" + TmpPassword + "@";
-
-        
     }
 }

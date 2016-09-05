@@ -142,6 +142,11 @@ namespace MillimanCommon
             string StrictGroups = System.Configuration.ConfigurationManager.AppSettings["StrictReductionRuleGroups"].ToLower();
             foreach (dynamic EO in QVFiles)
             {
+                //check to see if report is supposed to be offline, but the presense of an OFFLINE file
+                string OfflineFile = EO.QVFilename.ToLower().Replace(".qvw", ".offline");
+                if (System.IO.File.Exists(OfflineFile))
+                    continue;  //skip over this is offline
+
                 string QVWRole = EO.Role;
                 if (StrictGroups.IndexOf(QVWRole.ToLower()) == -1)  //NOT strict rules
                 {
