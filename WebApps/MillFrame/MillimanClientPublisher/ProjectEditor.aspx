@@ -124,8 +124,9 @@
                 window.setTimeout(
                     function () {
                         var oWnd = GetRadWindow();
-                        oWnd.SetWidth(document.body.scrollWidth + 70);
-                        oWnd.SetHeight(document.body.scrollHeight + 70);
+                        //this results in the window being way to large
+                        //oWnd.SetWidth(document.body.scrollWidth + 70);
+                        //oWnd.SetHeight(document.body.scrollHeight + 70);
 
                         var lock = document.getElementById('LockPane');
                         if (lock)
