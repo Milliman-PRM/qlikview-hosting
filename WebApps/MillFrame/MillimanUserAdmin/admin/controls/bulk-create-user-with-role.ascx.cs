@@ -316,7 +316,7 @@ public partial class bulk_admin_controls_create_user_with_role : System.Web.UI.U
 
                     //create a profile for the user
                     ProfileCommon p = (ProfileCommon)ProfileCommon.Create(UI.Account_Name, true);
-                    p.AccessOptions.AccessType = IsMillimanLogin ? MillimanCommon.Predefined.MillimanLoginType : MillimanCommon.Predefined.CovisintLoginType;
+                    p.AccessOptions.AccessType = IsMillimanLogin ? MillimanCommon.Predefined.MillimanLoginType : MillimanCommon.Predefined.ExternalLoginType;
                     p.AccessOptions.DBRequired = UI.DataAccess_Required;
                     p.AccessOptions.MustChangePassword = true;
                     p.Save();

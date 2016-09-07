@@ -45,3 +45,4 @@
    at MillimanCommon.UserRepo.Load() in C:\Users\afsheen.khan\PRMDevelopment\Dev_08032016\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 337
    at MillimanCommon.UserRepo.GetInstance() in C:\Users\afsheen.khan\PRMDevelopment\Dev_08032016\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 30
    at MillimanDev.Global.Application_Start(Object sender, EventArgs e) in C:\Users\afsheen.khan\PRMDevelopment\Dev_08032016\WebApps\MillFrame\Milliman\Milliman\Global.asax.cs:line 77----------------------------------------9/5/2016 12:32:50 PMInfo           Application Start
+9/7/2016 2:05:40 PM Info           Application Start
