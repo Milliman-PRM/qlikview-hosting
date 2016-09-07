@@ -3,7 +3,7 @@ using SystemReporting.Service;
 using SystemReporting.Utilities;
 using System;
 using System.Configuration;
-
+using SystemReporting.Utilities.Email;
 
 namespace SystemReporting.Controller
 {
@@ -13,9 +13,6 @@ namespace SystemReporting.Controller
     [Serializable]
     public abstract class ControllerBase : IController, IControllerAccessible
     {
-        public static log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.
-                                                                               MethodBase.GetCurrentMethod().DeclaringType);
-
         public ControllerBase() { }
 
         #region Registering Controllers
@@ -75,8 +72,15 @@ namespace SystemReporting.Controller
             }
         }
 
+        public static void SendEmail(string message, string subject)
+        {
+            var msg = message + "Exception file has a new exception recorded. Please cehck the file at the file locaion "
+                            + ConfigurationManager.AppSettings["ExceptionFileDirectory"];
+            //send email
+            Notification.SendNotification(msg, subject);
+        }
         #endregion
-        
+
     }
 
 }

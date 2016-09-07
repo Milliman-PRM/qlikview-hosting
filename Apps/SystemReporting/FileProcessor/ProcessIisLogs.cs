@@ -1,16 +1,11 @@
-﻿using MoreLinq;
-using ReportingCommon;
+﻿using ReportingCommon;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SystemReporting.Controller;
-using SystemReporting.Controller.BusinessLogic.Controller;
 using SystemReporting.Entities.Proxy;
-using SystemReporting.Utilities;
+using SystemReporting.Utilities.ExceptionHandling;
 
 namespace FileProcessor
 {
@@ -61,7 +56,7 @@ namespace FileProcessor
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, " Class ProcessIisLogs. Method ProcessFileData.");
+                ExceptionLogger.LogError(ex, "Exception Raised in ProcessLogFileData.", "ProcessIisLogs Exceptions");
             }
         }
 
@@ -92,7 +87,7 @@ namespace FileProcessor
             var fileInfo = new FileInfo(fileNameWithDirectory);
             if (fileInfo == null)
             {
-                BaseFileProcessor.LogError(null, "FileInfo missing. Can not process iisFile " + fileNameWithDirectory);
+                ExceptionLogger.LogError(null, "Exception Raised in Method ProcessLogFile. File Info missing. Can not process " + fileNameWithDirectory, "ProcessIisLogs Exceptions");
                 return false;
             }
 
@@ -238,7 +233,7 @@ namespace FileProcessor
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, " Class ProcessIisLogs. Method ProcessLogFile while sending the data to controller. File " + fileNameWithDirectory);
+                ExceptionLogger.LogError(ex, "Exception Raised in Method ProcessLogFile. Exception happen while sending the data to controller and processing file " + fileNameWithDirectory, "ProcessIisLogs Exceptions");
             }
 
             return blnSucessful;
@@ -277,7 +272,7 @@ namespace FileProcessor
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, " Class ProcessIisLogs. Method ParseFile. File name. " + filefullName);
+                ExceptionLogger.LogError(ex, "Exception Raised in Method ParseFile. Exception happen while parsing the file " + filefullName, "ProcessIisLogs Exceptions");
             }
             return listLogFile;
         }

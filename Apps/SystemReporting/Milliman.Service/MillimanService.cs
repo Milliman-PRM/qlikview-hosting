@@ -17,14 +17,6 @@ namespace SystemReporting.Service
 
         #region Database
 
-        #region Conn
-        //private ApplicationDbContext dbContext { get; set; }
-        //protected void CreateDbContext()
-        //{
-        //    dbContext = new ApplicationDbContext();
-        //}
-        #endregion
-
         #region IDisposable
 
         public void Dispose()
@@ -55,88 +47,8 @@ namespace SystemReporting.Service
         IRepository<SessionLog> SessionLogRepository = new Repository<SessionLog>(new ApplicationDbContext());
         IRepository<User> UserRepository = new Repository<User>(new ApplicationDbContext());
         IRepository<Report> ReportRepository = new Repository<Report>(new ApplicationDbContext());
+        IRepository<ReportType> ReportTypeRepository = new Repository<ReportType>(new ApplicationDbContext());
         IRepository<Group> GroupRepository = new Repository<Group>(new ApplicationDbContext());
-
-        #region Repositories
-        //private IRepository<IisLog> _IisLogRepository;
-        //public IRepository<IisLog> IisLogRepository
-        //{
-        //    get
-        //    {
-        //        if (_IisLogRepository == null)
-        //        {
-        //            _IisLogRepository = new Repository<IisLog>(dbContext);
-        //        }
-        //        return _IisLogRepository;
-        //    }
-        //}
-
-        //private IRepository<AuditLog> _AuditLogRepository;
-        //public IRepository<AuditLog> AuditLogRepository
-        //{
-        //    get
-        //    {
-        //        if (_AuditLogRepository == null)
-        //        {
-        //            _AuditLogRepository = new Repository<AuditLog>(dbContext);
-        //        }
-        //        return _AuditLogRepository;
-        //    }
-        //}
-
-        //private IRepository<SessionLog> _SessionLogRepository;
-        //public IRepository<SessionLog> SessionLogRepository
-        //{
-        //    get
-        //    {
-        //        if (_SessionLogRepository == null)
-        //        {
-        //            _SessionLogRepository = new Repository<SessionLog>(dbContext);
-        //        }
-        //        return _SessionLogRepository;
-        //    }
-        //}
-
-        //private IRepository<User> _UserRepository;
-        //public IRepository<User> UserRepository
-        //{
-        //    get
-        //    {
-        //        if (_UserRepository == null)
-        //        {
-        //            _UserRepository = new Repository<User>(dbContext);
-        //        }
-        //        return _UserRepository;
-        //    }
-        //}
-
-        //private IRepository<Group> _GroupRepository;
-        //public IRepository<Group> GroupRepository
-        //{
-        //    get
-        //    {
-        //        if (_GroupRepository == null)
-        //        {
-        //            _GroupRepository = new Repository<Group>(dbContext);
-        //        }
-        //        return _GroupRepository;
-        //    }
-        //}
-
-        //private IRepository<Report> _ReportRepository;
-        //public IRepository<Report> ReportRepository
-        //{
-        //    get
-        //    {
-        //        if (_ReportRepository == null)
-        //        {
-        //            _ReportRepository = new Repository<Report>(dbContext);
-        //        }
-        //        return _ReportRepository;
-        //    }
-        //}
-        #endregion
-
         #endregion
 
         #endregion
@@ -537,6 +449,57 @@ namespace SystemReporting.Service
             IEnumerable<Report> returnValues = Enumerable.Empty<Report>();
             returnValues = GetReports<Report>(Id, name).ToList();
             return returnValues;
+        }
+
+        #endregion
+
+        #region"Report Type"
+        public void Remove(ReportType obj)
+        {
+            if (obj.Id > 0)
+                ReportTypeRepository.Delete(obj);
+
+            ReportTypeRepository.Commit();
+        }
+
+        public void Save(ReportType obj)
+        {
+            if (obj.Id <= 0)
+            {
+                ReportTypeRepository.Add(obj);
+            }
+            else
+                ReportTypeRepository.Attach(obj);
+
+            ReportTypeRepository.Commit();
+        }
+
+        public IQueryable<T> GetReportTypes<T>(Expression<Func<T, bool>> predicate = null) where T : ReportType
+        {
+            var query = ReportTypeRepository.FindAll().OfType<T>();
+            if (predicate != null)
+                query = query.Where(predicate);
+
+            return query;
+        }
+
+        public IQueryable<T> GetReportTypes<T>(int Id, string name, Expression<Func<T, bool>> predicate = null) where T : ReportType
+        {
+            // Look at the Repository for all types of the generic type
+            var query = ReportTypeRepository.FindAll().OfType<T>();
+            // If we have a defined predicate - than limit the query by that expression
+            if (predicate != null)
+                query = query.Where(predicate);
+
+            return query;
+        }
+
+        public List<String> GetKeywords(String name)
+        {
+            List<String> POC = new List<String>();
+
+
+            return POC;
         }
 
         #endregion

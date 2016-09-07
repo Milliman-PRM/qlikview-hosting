@@ -37,6 +37,11 @@ namespace SystemReporting.Service
         void Save(Report obj);
         IQueryable<T> GetReports<T>(Expression<Func<T, bool>> predicate = null) where T : Report;
         #endregion
+        #region"Report Type"
+        void Remove(ReportType obj);
+        void Save(ReportType obj);
+        IQueryable<T> GetReportTypes<T>(Expression<Func<T, bool>> predicate = null) where T : ReportType;
+        #endregion
         #region Group
         void Remove(Group obj);
         void Save(Group obj);

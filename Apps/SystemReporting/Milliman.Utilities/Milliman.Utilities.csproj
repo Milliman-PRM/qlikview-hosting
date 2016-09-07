@@ -34,14 +34,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Es.Logging, Version=0.0.4.0, Culture=neutral, PublicKeyToken=776b289507df5578, processorArchitecture=MSIL">
-      <HintPath>..\packages\Es.Logging.0.0.4\lib\net45\Es.Logging.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Es.Logging.Log4, Version=0.0.4.0, Culture=neutral, PublicKeyToken=776b289507df5578, processorArchitecture=MSIL">
-      <HintPath>..\packages\Es.Logging.Log4.0.0.4\lib\net45\Es.Logging.Log4.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>

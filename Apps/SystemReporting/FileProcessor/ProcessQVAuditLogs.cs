@@ -1,18 +1,17 @@
-﻿using SystemReporting.Entities.Proxy;
-using ReportingCommon;
+﻿using ReportingCommon;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SystemReporting.Utilities;
+using SystemReporting.Entities.Proxy;
+using SystemReporting.Utilities.ExceptionHandling;
 
 namespace FileProcessor
 {
     public class ProcessQVAuditLogs : ControllerAccess, IFileProcessor
     {
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -27,6 +26,7 @@ namespace FileProcessor
         {
             try
             {
+
                 if (args.Length > 0)
                 {
                     var filter = "Audit_INDY-PRM";
@@ -54,6 +54,7 @@ namespace FileProcessor
                                 {
                                     ProcessLogFileMove(efilePath, sourceDirectory, destinationInDirectory, file);
                                 }
+
                             }
                         }
                     }
@@ -61,7 +62,7 @@ namespace FileProcessor
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, "Class ProcessQVAuditLogs. Method ProcessFileData.");
+                 ExceptionLogger.LogError(ex, "Exception Raised in ProcessLogFileData.", "ProcessQVAuditLogs Exceptions");
             }
         }
 
@@ -90,8 +91,12 @@ namespace FileProcessor
         public bool ProcessLogFile(string fileNameWithDirectory)
         {
             var fileInfo = new FileInfo(fileNameWithDirectory);
-            var ff = new FileFunctions();
-
+            if (fileInfo == null)
+            {
+                ExceptionLogger.LogError(null, "Exception Raised in Method ProcessLogFile. File Info missing. Can not process " + fileNameWithDirectory, "ProcessQVAuditLogs Exceptions");
+                return false;
+            }
+                        
             var blnSucessful = false;
             try
             {
@@ -100,6 +105,7 @@ namespace FileProcessor
                 if (listLogFile != null & listLogFile.Count > 0)
                 {
                     var listProxyLogs = new List<ProxyAuditLog>();
+                    
                     //Entity
                     var proxyLogEntry = new ProxyAuditLog();
 
@@ -159,17 +165,21 @@ namespace FileProcessor
                         proxyLogEntry.Document = (!string.IsNullOrEmpty(docName)) ? docName.ToUpper().Trim() : string.Empty;
 
                         proxyLogEntry.IsReduced = entry.Document.IndexOf(@"\reducedcachedqvws", StringComparison.Ordinal) > -1;
+                        
                         //add entry to list
                         listProxyLogs.Add(proxyLogEntry);
+                        
                         proxyLogEntry = new ProxyAuditLog();
                     }
+
                     //process the list
                     blnSucessful = ControllerAuditLog.ProcessLogs(listProxyLogs);
+                    
                 }
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, " Class ProcessQVAuditLogs. Method ProcessLogFile while sending the data to controller. File " + fileNameWithDirectory);
+                ExceptionLogger.LogError(ex, "Exception Raised in Method ProcessLogFile. Exception happen while sending the data to controller and processing file " + fileNameWithDirectory, "ProcessQVAuditLogs Exceptions");
             }
 
             return blnSucessful;
@@ -199,7 +209,7 @@ namespace FileProcessor
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, " Class ProcessQVAuditLogs. Method ParseFile. File name. " + filefullName);
+                ExceptionLogger.LogError(ex, "Exception Raised in Method ParseLogFile. Exception happen while parsing the file " + filefullName, "ProcessQVAuditLogs Exceptions");
             }
             return listLogFile;
         }

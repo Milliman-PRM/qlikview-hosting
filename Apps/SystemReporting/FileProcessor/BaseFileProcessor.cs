@@ -1,13 +1,6 @@
-﻿using SystemReporting.Controller;
+﻿using System;
+using SystemReporting.Controller;
 using SystemReporting.Controller.BusinessLogic.Controller;
-using SystemReporting.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SystemReporting.Utilities.File;
 
 namespace FileProcessor
 {
@@ -92,9 +85,6 @@ namespace FileProcessor
     /// </summary>
     public class BaseFileProcessor
     {
-        //switch to using the generic logger
-        public static log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.
-                                                                               MethodBase.GetCurrentMethod().DeclaringType);
         #region FileProcessed
 
         /// <summary>
@@ -115,21 +105,6 @@ namespace FileProcessor
             aFile.Close();
         }
         #endregion
-
-        #region Error Log     
-        //Logs error. It will create file at the directory if file does not exist   
-        public static void LogError(Exception ex, string message)
-        {
-            if (!string.IsNullOrEmpty(message))
-            {
-                log.Error(DateTime.Now + " Todays Exceptions: ~ " + "||-||" + message + "||-||", ex);
-            }
-            else
-            {
-                log.Error(DateTime.Now + " Todays Exceptions: ~ " + "||-||", ex);
-            }
-        }        
-        #endregion        
     }
     #endregion
 }

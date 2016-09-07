@@ -1,17 +1,15 @@
-﻿using SystemReporting.Data.Repository;
-using SystemReporting.Entities.Models;
-using SystemReporting.Service;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using SystemReporting.Utilities;
+using SystemReporting.Entities.Models;
+using SystemReporting.Service;
+using SystemReporting.Utilities.ExceptionHandling;
 
 namespace SystemReporting.Controller.BusinessLogic.Controller
 {
     [Serializable]
     public class SessionLogController : ControllerBase
-    {
-        
+    {        
         private IMillimanService dbService { get; set; }
        
         /// <summary>
@@ -28,6 +26,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
         public bool ProcessLogs(List<ProxySessionLog> listProxyLogs)
         {            
             var blnSucessful = false;
+
             try
             {
                 var logEntity = new SessionLog();
@@ -70,9 +69,9 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                     {
                         var report = new Report
                         {
-                            ReportName = entry.Report.Trim()
+                            ReportName = entry.Report.Trim(),
                         };
-                        var addOrGetReport = ControllerCommon.AddOrGetReport(report);
+                        var addOrGetReport = ControllerCommon.AddOrGetReport(report, logEntity.Document);
                         if (addOrGetReport != null)
                         {
                             //after insert set the id
@@ -108,9 +107,96 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
             catch (Exception ex)
             {
                 dbService.Dispose();
-                log.Fatal("Class SessionLogController. Method ProcessLogs.",ex);
+                ExceptionLogger.LogError(ex, "Exception Raised in Method ProcessLogs.", "Session log Controller Exception");
             }
             return blnSucessful;
+        }
+
+        /// <summary>
+        /// get session log report by Group name
+        /// </summary>
+        /// <param name="startDate">todo: describe startDate parameter on GetSessionLogListForGroup</param>
+        /// <param name="endDate">todo: describe endDate parameter on GetSessionLogListForGroup</param>
+        /// <param name="paramId">todo: describe paramId parameter on GetSessionLogListForGroup</param>
+        /// <returns></returns>
+        public List<SessionLog> GetSessionLogListForGroup(string startDate,string endDate, string paramId)
+        {
+            var dbService = new MillimanService();
+            var listResult = new List<SessionLog>();
+
+            Group obj = ControllerCommon.GetGroupById(paramId);
+
+            DateTime? dtStartDate = DateTime.Parse(startDate);
+            DateTime? dtEndDate = DateTime.Parse(endDate);
+
+            if (obj!= null)
+            {
+                listResult = dbService.GetSessionLogs<SessionLog>(s => s.fk_group_id == obj.Id
+                                               &&
+                                               s.UserAccessDatetime.Value > dtStartDate
+                                               &&
+                                               s.UserAccessDatetime.Value <= dtEndDate)
+                                               .OrderBy(a => a.UserAccessDatetime).ToList();
+            }
+           
+            return listResult;
+        }
+        /// <summary>
+        /// get session log report by ReportName
+        /// </summary>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        /// <param name="paramId">todo: describe paramId parameter on GetSessionLogListForReport</param>
+        /// <returns></returns>
+        public List<SessionLog> GetSessionLogListForReport(string startDate, string endDate, string paramId)
+        {
+            var dbService = new MillimanService();
+            var listResult = new List<SessionLog>();
+
+            Report  obj = ControllerCommon.GetReportById(paramId);
+
+            DateTime? dtStartDate = DateTime.Parse(startDate);
+            DateTime? dtEndDate = DateTime.Parse(endDate);
+
+            if (obj != null)
+            {
+                listResult = dbService.GetSessionLogs<SessionLog>(s => s.fk_group_id == obj.Id
+                                                &&
+                                                s.UserAccessDatetime.Value > dtStartDate
+                                                &&
+                                                s.UserAccessDatetime.Value <= dtEndDate)
+                                                .OrderBy(a => a.UserAccessDatetime).ToList();
+            }
+            return listResult;
+        }
+
+        /// <summary>
+        /// get a session log report by user
+        /// </summary>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        /// <param name="paramId">todo: describe paramId parameter on GetSessionLogListForUser</param>
+        /// <returns></returns>
+        public List<SessionLog> GetSessionLogListForUser(string startDate, string endDate, string paramId)
+        {
+            var dbService = new MillimanService();
+            var listResult = new List<SessionLog>();
+
+            User obj = ControllerCommon.GetUserById(paramId);
+
+            DateTime? dtStartDate = DateTime.Parse(startDate);
+            DateTime? dtEndDate = DateTime.Parse(endDate);
+
+            if (obj != null)
+            {
+                listResult = dbService.GetSessionLogs<SessionLog>(s => s.fk_user_id == obj.Id
+                                                &&
+                                                s.UserAccessDatetime.Value > dtStartDate
+                                                &&
+                                                s.UserAccessDatetime.Value <= dtEndDate)
+                                                .OrderBy(a => a.UserAccessDatetime).ToList();
+            }
+            return listResult;
         }
     }
 }

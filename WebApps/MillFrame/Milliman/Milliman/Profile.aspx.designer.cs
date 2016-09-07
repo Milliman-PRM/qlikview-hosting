@@ -13,6 +13,15 @@ namespace MillimanDev2 {
     public partial class Profile {
         
         /// <summary>
+        /// lnkBootstrapcss control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlLink lnkBootstrapcss;
+        
+        /// <summary>
         /// form1 control.
         /// </summary>
         /// <remarks>
@@ -28,7 +37,7 @@ namespace MillimanDev2 {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox UserFirstName;
+        protected global::System.Web.UI.HtmlControls.HtmlInputText UserFirstName;
         
         /// <summary>
         /// UserLastName control.
@@ -37,7 +46,7 @@ namespace MillimanDev2 {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox UserLastName;
+        protected global::System.Web.UI.HtmlControls.HtmlInputText UserLastName;
         
         /// <summary>
         /// Email control.
@@ -46,61 +55,7 @@ namespace MillimanDev2 {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox Email;
-        
-        /// <summary>
-        /// Company control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox Company;
-        
-        /// <summary>
-        /// Address1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox Address1;
-        
-        /// <summary>
-        /// Address2 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox Address2;
-        
-        /// <summary>
-        /// City control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox City;
-        
-        /// <summary>
-        /// State control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList State;
-        
-        /// <summary>
-        /// ZipCode control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox ZipCode;
+        protected global::System.Web.UI.HtmlControls.HtmlInputText Email;
         
         /// <summary>
         /// Phone control.
@@ -109,16 +64,16 @@ namespace MillimanDev2 {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox Phone;
+        protected global::System.Web.UI.HtmlControls.HtmlInputText Phone;
         
         /// <summary>
-        /// CurrentPasswordLabel control.
+        /// imgShow control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label CurrentPasswordLabel;
+        protected global::System.Web.UI.HtmlControls.HtmlImage imgShow;
         
         /// <summary>
         /// CurrentPassword control.
@@ -130,31 +85,13 @@ namespace MillimanDev2 {
         protected global::System.Web.UI.WebControls.TextBox CurrentPassword;
         
         /// <summary>
-        /// NewPasswordLabel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label NewPasswordLabel;
-        
-        /// <summary>
         /// NewPassword control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox NewPassword;
-        
-        /// <summary>
-        /// ConfirmNewPasswordLabel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label ConfirmNewPasswordLabel;
+        protected global::System.Web.UI.HtmlControls.HtmlInputPassword NewPassword;
         
         /// <summary>
         /// ConfirmNewPassword control.
@@ -163,7 +100,7 @@ namespace MillimanDev2 {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox ConfirmNewPassword;
+        protected global::System.Web.UI.HtmlControls.HtmlInputPassword ConfirmNewPassword;
         
         /// <summary>
         /// SecretPhraseDropdown control.
@@ -181,15 +118,24 @@ namespace MillimanDev2 {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox Answer;
+        protected global::System.Web.UI.HtmlControls.HtmlInputText Answer;
         
         /// <summary>
-        /// ChangePasswordPushButton control.
+        /// Button1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button ChangePasswordPushButton;
+        protected global::System.Web.UI.WebControls.Button Button1;
+        
+        /// <summary>
+        /// Button2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button Button2;
     }
 }

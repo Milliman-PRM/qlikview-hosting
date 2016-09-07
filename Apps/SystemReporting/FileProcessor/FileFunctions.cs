@@ -2,20 +2,17 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SystemReporting.Utilities;
-using SystemReporting.Utilities.File;
-using SystemReporting.Utilities.ExceptionHandling;
-using System.Security.Cryptography;
-using SystemReporting.Controller;
-using SystemReporting.Controller.BusinessLogic.Controller;
 using SystemReporting.Utilities.Email;
+using SystemReporting.Utilities.ExceptionHandling;
+using SystemReporting.Utilities.File;
+using static FileProcessor.EnumFileProcessor;
+using System.Globalization;
 
 namespace FileProcessor
 {
     public class FileFunctions
     {
+
         #region File Direcotries and Locations
         /// <summary>
         /// This method retrieves the location where the files will be copied from to be processed
@@ -82,17 +79,6 @@ namespace FileProcessor
         {
             return (ConfigurationManager.AppSettings["ProcessedFileLogFileName"]);
         }
-
-        #region ErrorLogger
-        public static string GetExceptionLoggerFileDirectory()
-        {
-            return ConfigurationManager.AppSettings["ExceptionFileDirectory"];
-        }
-        public static string GetExceptionLoggerFileName()
-        {
-            return ConfigurationManager.AppSettings["ExceptionFileName"];
-        }
-        #endregion
 
         #endregion
 
@@ -333,23 +319,33 @@ namespace FileProcessor
             if (!isEmpty)
             {
                 var fileList = System.IO.Directory.GetFiles(destinationInDirectory.ToString());
+                var msg = string.Empty;
+                var bRecordError = false;
                 foreach (var file in fileList)
                 {
+                    msg = string.Empty;
+                    bRecordError = false;
                     if (file.ToLower().IndexOf("u_ex", StringComparison.Ordinal) > -1)
                     {
-                        BaseFileProcessor.LogError(null,DateTime.Now + "||" + "=== File is deleted from processing directory. ===" + file);
+                        bRecordError = true;
                         System.IO.File.Delete(file);
                     }
                     if (file.ToLower().IndexOf("audit_", StringComparison.Ordinal) > -1)
                     {
-                        BaseFileProcessor.LogError(null,DateTime.Now + "||" + "=== File is deleted from processing directory. ===" + file);
+                        bRecordError = true;
                         System.IO.File.Delete(file);
                     }
                     if (file.ToLower().IndexOf("sessions_", StringComparison.Ordinal) > -1)
                     {
-                        BaseFileProcessor.LogError(null,DateTime.Now + "||" + "=== File is deleted from processing directory. ===" + file);
+                        bRecordError = true;
                         System.IO.File.Delete(file);
                     }
+
+                    if (bRecordError)
+                    {
+                        msg = DateTime.Now + "||" + "=== File is deleted from processing directory. ===" + file;
+                        ExceptionLogger.LogError(null, msg, "File Funciton Exceptions");
+                    }                    
                 }                
 
             }
@@ -357,6 +353,91 @@ namespace FileProcessor
             return files;
         }
         #endregion
+
+        /// <summary>
+        /// Extracts the browser type and version from the raw ClientType string
+        /// </summary>
+        /// <param name="RawClientType">Full client type string from the log files</param>
+        /// <returns>String of the browser name and version</returns>
+        #region Browser
+        public static String GetBrowserName(String RawClientType)
+        {
+            TextInfo TI = new CultureInfo("en-US", false).TextInfo;
+            string BrowserName = "";
+            string BrowserVersion = "";
+            string RawBrowserName;
+            var stringToBeSearched = "browser.";
+            var Index = RawClientType.IndexOf(stringToBeSearched);
+            if (Index != -1)
+            {
+                RawBrowserName = RawClientType.Substring(Index + stringToBeSearched.Length).Replace(".mobile", "_mobile");
+                if (RawBrowserName.IndexOf(' ') > -1)
+                {
+                    BrowserVersion = RawBrowserName.Split(' ')[1];
+                    RawBrowserName = RawBrowserName.Split(' ')[0];
+                }
+            }
+            else
+            {
+                return "";
+            }
+            eBrowserType BrowserEnum;
+            //String matches a known enum
+            if (Enum.TryParse(RawBrowserName, true, out BrowserEnum))
+            {
+                switch (BrowserEnum)
+                {
+                    case eBrowserType.android:
+                        BrowserName = Enum.GetName(typeof(eBrowserType), eBrowserType.android);
+                        break;
+                    case eBrowserType.firefox:
+                    case eBrowserType.gecko:
+                        BrowserName = Enum.GetName(typeof(eBrowserType), eBrowserType.firefox);
+                        break;
+                    case eBrowserType.msie:
+                        BrowserName = Enum.GetName(typeof(eBrowserType), eBrowserType.msie);
+                        break;
+                    case eBrowserType.safari:
+                        BrowserName = Enum.GetName(typeof(eBrowserType), eBrowserType.safari);
+                        break;
+                    case eBrowserType.chrome:
+                        BrowserName = Enum.GetName(typeof(eBrowserType), eBrowserType.chrome);
+                        break;
+                    case eBrowserType.android_mobile:
+                        BrowserName = Enum.GetName(typeof(eBrowserType), eBrowserType.android_mobile).Replace("_", " ");
+                        break;
+                    case eBrowserType.safari_mobile:
+                        BrowserName = Enum.GetName(typeof(eBrowserType), eBrowserType.safari_mobile).Replace("_", " ");
+                        break;
+                    default:
+                        break;
+                }
+            }
+            //String does not match a known enum
+            else
+            {
+                switch (RawBrowserName)
+                {
+                    case "":
+                        BrowserName = "";                               //Checks for "browser." if that ever happens
+                        break;
+                    default:
+                        BrowserName = RawBrowserName;                   //Should probably log something here about a new browser being found
+                        break;
+                }
+            }
+
+            if(BrowserEnum.Equals(eBrowserType.msie))
+            {
+                return BrowserName.ToUpper() + " " + BrowserVersion;
+            }
+
+            return TI.ToTitleCase(BrowserName) + " " + BrowserVersion;
+        }
+
+        #endregion
     }
+
+
 
 }

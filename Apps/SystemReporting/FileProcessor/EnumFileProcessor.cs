@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 
 namespace FileProcessor
 {
@@ -35,6 +30,21 @@ namespace FileProcessor
             QVSessionLogs
         }
         #endregion
+
+        #region BrowserType
+        public enum eBrowserType
+        {
+            gecko,
+            msie,
+            android,
+            safari,
+            firefox,
+            chrome,
+            android_mobile,
+            safari_mobile
+        }
+        #endregion
+
 
     }
 }

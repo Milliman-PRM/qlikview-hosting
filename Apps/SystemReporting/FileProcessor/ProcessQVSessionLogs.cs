@@ -5,7 +5,8 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using SystemReporting.Entities.Models;
-using SystemReporting.Utilities;
+using SystemReporting.Utilities.ExceptionHandling;
+using static FileProcessor.EnumFileProcessor;
 
 namespace FileProcessor
 {
@@ -26,6 +27,7 @@ namespace FileProcessor
         {
             try
             {
+
                 if (args.Length > 0)
                 {
                     var filter = "Sessions_INDY-PRM";
@@ -52,6 +54,7 @@ namespace FileProcessor
                                 {
                                     ProcessLogFileMove(efilePath, sourceDirectory, destinationInDirectory, file);
                                 }
+                                //ControllerCommon.UpdateReportTypes();
                             }
                         }
                     }
@@ -59,7 +62,7 @@ namespace FileProcessor
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, "Class ProcessQVSessionLogs. Method ProcessFileData.");
+                ExceptionLogger.LogError(ex, "Exception Raised in ProcessFileData.", "ProcessQVSessionLogs Exceptions");
             }
         }
 
@@ -88,8 +91,11 @@ namespace FileProcessor
         public bool ProcessLogFile(string fileNameWithDirectory)
         {
             var fileInfo = new FileInfo(fileNameWithDirectory);
-            var ff = new FileFunctions();
-
+            if (fileInfo == null)
+            {
+                ExceptionLogger.LogError(null, "Exception Raised in Method ProcessLogFile. File Info missing. Can not process " + fileNameWithDirectory, "ProcessQVSessionLogs Exceptions");
+                return false;
+            }
             var blnSucessful = false;
             try
             {
@@ -98,6 +104,7 @@ namespace FileProcessor
                 if (listLogFile != null & listLogFile.Count > 0)
                 {
                     var listProxyLogs = new List<ProxySessionLog>();
+
                     //Entity
                     var proxyLogEntry = new ProxySessionLog();
 
@@ -166,29 +173,35 @@ namespace FileProcessor
 
                         proxyLogEntry.Group = (!string.IsNullOrEmpty(group)) ? group : string.Empty;
                         //**************************************************************************************************//
+                        
                         proxyLogEntry.Report = QlikviewEventBase.GetReportName(entry.Document);
-
+                        
                         proxyLogEntry.Document = (!string.IsNullOrEmpty(docNameNoPath)) ? docNameNoPath.ToUpper().Trim() : string.Empty;
 
                         proxyLogEntry.SessionLength = entry.SessionDuration.ToString();
                         proxyLogEntry.SessionEndReason = QlikviewSessionEvent.GetExitReason(entry.ExitReason).ToString();
-                        proxyLogEntry.Browser = QlikviewSessionEvent.GetBrowser(entry.ClientType);
+                        proxyLogEntry.Browser = FileFunctions.GetBrowserName(proxyLogEntry.ClientType);
+                      
                         //add entry to list
                         listProxyLogs.Add(proxyLogEntry);
+
                         proxyLogEntry = new ProxySessionLog();
                     }
                     //process the list
                     blnSucessful = ControllerSessionLog.ProcessLogs(listProxyLogs);
+
                 }
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, " Class ProcessQVSessionLogs. Method ProcessLogFile while sending the data to controller.");
+                ExceptionLogger.LogError(ex, "Exception Raised in Method ProcessLogFile. Exception happen while sending the data to controller and processing file " + fileNameWithDirectory, "ProcessQVSessionLogs Exceptions");
             }
 
             return blnSucessful;
         }
-
+        
+       
+        
         /// <summary>
         /// Parse log file and returns the list
         /// </summary>
@@ -213,7 +226,7 @@ namespace FileProcessor
             }
             catch (Exception ex)
             {
-                BaseFileProcessor.LogError(ex, " Class ProcessQVSessionLogs. Method ParseFile. File name. " + filefullName);
+                ExceptionLogger.LogError(ex, "Exception Raised in Method ParseLogFile. Exception happen while parsing the file " + filefullName, "ProcessQVSessionLogs Exceptions");
             }
             return listLogFile;
         }

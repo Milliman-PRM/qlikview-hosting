@@ -1,17 +1,21 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeFile="bulk-create-user-with-role.ascx.cs" Inherits="bulk_admin_controls_create_user_with_role" %>
 <%@ Register Src="js-include3.ascx" TagName="js" TagPrefix="uc3" %>
 <%@ Register TagPrefix="telerik" Namespace="Telerik.Web.UI" Assembly="Telerik.Web.UI" %>
-<%@ Register src="~/js/js/jquery.ascx" tagname="jquery" tagprefix="uc4" %>
+<%@ Register Src="~/js/js/jquery.ascx" TagName="jquery" TagPrefix="uc4" %>
+<%@ Register Src="~/admin/controls/UserRolesSelector.ascx" TagName="userRoleSelector" TagPrefix="urs" %>
+
 <div class="adminHelp">
-    1.) Minimum Required Password Length = 7 char.<br />2.) Minimum Required Non-Alphanumeric char = 1.<br /> 3.) Passwords are case sensitive.
+    1.) Minimum Required Password Length = 7 char.<br />
+    2.) Minimum Required Non-Alphanumeric char = 1.<br />
+    3.) Passwords are case sensitive.
 </div>
 <%-- gridview banner --%>
 <div class="gvBanner">
-  <span class="gvBannerUsers">
-    <asp:Image ID="Image1" runat="server" ImageAlign="AbsMiddle" ImageUrl="~/images/decoy-icon-36px.png" /></span> Create Users With Group
+    <span class="gvBannerUsers">
+        <asp:Image ID="Image1" runat="server" ImageAlign="AbsMiddle" ImageUrl="~/images/decoy-icon-36px.png" /></span> Create Users With Group
 </div>
 <%-- create user wizard with roles --%>
-<div class="cuwWrap" style="width:600px;">
+<div class="centerElement softRoundContainer softRoundContainerStyle">
 
     <telerik:RadAjaxManager ID="RadAjaxManager1" runat="server">
         <AjaxSettings>
@@ -23,131 +27,80 @@
         </AjaxSettings>
     </telerik:RadAjaxManager>
 
-     <telerik:RadWindowManager EnableShadow="true" ID="RadWindowManager"  runat="server" >
-  
-     </telerik:RadWindowManager>
+    <telerik:RadWindowManager EnableShadow="true" ID="RadWindowManager" runat="server">
+    </telerik:RadWindowManager>
 
-
- <table style="border:1px solid black;border-collapse:collapse;margin-bottom:5px;background-color:#E8E8E8; width: 600px;">
-     
-     <tr style="background-position:top; background-image:url(images/graygradient.png);background-repeat:repeat-x" >
-         <th >Login Type</th>
-         <th >Group Selection</th>
-         <th >Account Lifespan</th>
-     </tr>
-     <tr>
-         <td  >
-             <div style="width:151px; height:200px;overflow:hidden;border:1px solid gray;padding:10px;background-color:white;">
-                 <asp:RadioButtonList  ID="UserType" runat="server" AutoPostBack="True" OnSelectedIndexChanged="UserType_SelectedIndexChanged">
-                     <asp:ListItem selected="true">Milliman Login</asp:ListItem>
-                     <asp:ListItem  >External SSO Login</asp:ListItem>
-                 </asp:RadioButtonList>
-             </div>
-         </td>
-         <td >
-             <div style="width:214px; height:200px;overflow:auto;border:1px solid gray;padding:10px;background-color:white;">
-                <asp:CheckBoxList ID="Groups" runat="server"> </asp:CheckBoxList>
-             </div>
-         </td>
-         <td >
-            <div style="width:157px; height:200px;overflow:hidden;border:1px solid gray;padding:10px;background-color:white;">
-                 <asp:CheckBox ID="AccountExpires" runat="server" Text="Accounts Expire" AutoPostBack="True" OnCheckedChanged="AccountExpires_CheckedChanged" />
-                 <br />
-                 <br />
-                 Account lifespan is <br /> <asp:DropDownList ID="DateValue" runat="server" AutoPostBack="True" Enabled="False" OnSelectedIndexChanged="DateValue_SelectedIndexChanged"></asp:DropDownList>
-                                     <asp:DropDownList ID="DateType" runat="server" AutoPostBack="True" Enabled="False" OnSelectedIndexChanged="DateType_SelectedIndexChanged">
-                                         <asp:ListItem Text="Year(s)" Value="year" Selected="True"></asp:ListItem>
-                                         <asp:ListItem Text="Month(s)" Value="month" Selected="False"></asp:ListItem>
-                                         <asp:ListItem Text="Week(s)" Value="week" Selected="False"></asp:ListItem>
-                                         <asp:ListItem Text="Day(s)" Value="day" Selected="False"></asp:ListItem>
-                                     </asp:DropDownList>
-                 <br />
-                <br />
-                 Expires on <telerik:RadDatePicker ID="DatePicker" runat="server" Enabled="False"></telerik:RadDatePicker>
+    <div class="softRoundContainer-editor softRoundContainerStyle">      
+        <div class="softRoundContainerStyle" style="width: 50%; display:table; box-shadow:#eee;">
+            <div style="display: table-row">
+                <div style="width: 89px; display: table-cell;"><span class="navyHeaderFont">&nbsp; Login Type &nbsp;</span> </div>
+                <div style="display: table-cell;">
+                    <asp:RadioButtonList ID="UserType" runat="server" AutoPostBack="True"
+                        OnSelectedIndexChanged="UserType_SelectedIndexChanged" RepeatDirection="Horizontal">
+                        <asp:ListItem Selected="true">Milliman Login</asp:ListItem>
+                        <asp:ListItem>External SSO Login</asp:ListItem>
+                    </asp:RadioButtonList>
+                </div>
             </div>
-         </td>
-     </tr>
- </table>
-
-   
- 
-<%--    <telerik:RadGrid runat="server" ID="Issues" AllowPaging="true" AllowSorting="true" OnSortCommand="Issues_SortCommand" OnPageIndexChanged="Issues_PageIndexChanged" OnPageSizeChanged="Issues_PageSizeChanged" OnPreRender="Issues_PreRender"></telerik:RadGrid>          --%>
-    <telerik:RadGrid runat="server" ID="RadGrid1" AllowSorting="True"  AutoGenerateColumns="False" CellSpacing="5"  GridLines="None" OnItemCommand="RadGrid1_ItemCommand" AllowAutomaticDeletes="True" ViewStateMode="Enabled" MasterTableView-AllowAutomaticDeletes="True" ClientIDMode="AutoID">
+        </div>
+        <div class="spacer"></div>
+        <div class="">
+            <span class="navyHeaderFont">&nbsp; Group Selection
+                                                        &nbsp;</span>
+            <div id="divUserRole" class="softRoundContainer-editor softRoundContainerStyle" style="height: 200px; overflow-y: scroll;">
+                <asp:UpdatePanel ID="UpdatePanel1" runat="server" ChildrenAsTriggers="true">
+                    <ContentTemplate>
+                        <urs:userRoleSelector ID="ctrlUserRoles" runat="server" />
+                    </ContentTemplate>
+                </asp:UpdatePanel>
+            </div>
+        </div>
+    </div>
+    <div class="spacer"></div>
+    <telerik:RadGrid runat="server" ID="RadGrid1" AllowSorting="True" AutoGenerateColumns="False" CellSpacing="5" GridLines="None" OnItemCommand="RadGrid1_ItemCommand" AllowAutomaticDeletes="True" ViewStateMode="Enabled" MasterTableView-AllowAutomaticDeletes="True" ClientIDMode="AutoID">
         <MasterTableView EditMode="Batch" CommandItemDisplay="Top" TableLayout="Fixed">
             <CommandItemTemplate>
-               <asp:LinkButton ID="Add" runat="server" CommandName="Add" Visible="true"><asp:Image runat="server" style="border:0px;vertical-align:middle;" alt="" ImageUrl="~/Images/Office-Girl-icon.png"/>Add List Entry</asp:LinkButton>&nbsp;&nbsp;
-<%--               <asp:LinkButton ID="AutoCompleted" runat="server" CommandName="Autocomplete" Visible='<%# RadGrid1.EditIndexes.Count == 0 %>'><asp:Image ID="Image2" runat="server"  style="border:0px;vertical-align:middle;" alt="" ImageUrl="~/Images/process-icon.png"/>Auto-Complete</asp:LinkButton>&nbsp;&nbsp;--%>
-               <asp:LinkButton Width="100px" ID="Validate" runat="server" CommandName="Validate" Visible='<%# RadGrid1.EditIndexes.Count == 0 %>'><asp:Image runat="server"  style="border:0px;vertical-align:middle;" alt="" ImageUrl="~/Images/process-icon.png"/>Validate</asp:LinkButton>&nbsp;&nbsp;
-<%--               <asp:LinkButton ID="Create" runat="server" CommandName="Create" Visible='<%# RadGrid1.EditIndexes.Count == 0 %>' OnClientClick="return ConfirmAction();"><asp:Image runat="server"  style="border:0px;vertical-align:middle;" alt=""  ImageUrl="~/Images/process-accept-icon.png"/>Create Users</asp:LinkButton>&nbsp;&nbsp;--%>
-               
-               <asp:LinkButton ID="Clear"  runat="server" CommandName="Clear" Visible='<%# RadGrid1.EditIndexes.Count == 0 %>'><asp:Image runat="server" style="border:0px;vertical-align:middle;" alt="" ImageUrl="~/Images/Actions-edit-delete-icon16x16.png"/>Clear List</asp:LinkButton>&nbsp;&nbsp;
-           </CommandItemTemplate>
+                <asp:LinkButton ID="Add" runat="server" CommandName="Add" Visible="true"><asp:Image runat="server" style="border:0px;vertical-align:middle;" alt="" ImageUrl="~/Images/Office-Girl-icon.png"/>Add List Entry</asp:LinkButton>&nbsp;&nbsp;
+                <asp:LinkButton Width="100px" ID="Validate" runat="server" CommandName="Validate" Visible='<%# RadGrid1.EditIndexes.Count == 0 %>'><asp:Image runat="server"  style="border:0px;vertical-align:middle;" alt="" ImageUrl="~/Images/process-icon.png"/>Validate</asp:LinkButton>&nbsp;&nbsp;
+                <asp:LinkButton ID="Clear" runat="server" CommandName="Clear" Visible='<%# RadGrid1.EditIndexes.Count == 0 %>'><asp:Image runat="server" style="border:0px;vertical-align:middle;" alt="" ImageUrl="~/Images/Actions-edit-delete-icon16x16.png"/>Clear List</asp:LinkButton>&nbsp;&nbsp;
+            </CommandItemTemplate>
             <Columns>
-   <%--             <telerik:GridImageColumn HeaderStyle-Width="20px" DataType="System.String" DataImageUrlFields="ValidationImage"
-                            ImageAlign="Middle" ImageHeight="16px" ImageWidth="16px" HeaderText="" UniqueName="ValidationImageStatus">
-                    <HeaderStyle Width="20px"></HeaderStyle>
-                </telerik:GridImageColumn>--%>
-
-                  <telerik:GridTemplateColumn DataField="ValidationImage"  UniqueName="ValidationImageStatus" HeaderStyle-Width="20px"  >
+                <telerik:GridTemplateColumn DataField="ValidationImage" UniqueName="ValidationImageStatus" HeaderStyle-Width="20px">
                     <ItemTemplate>
-                        <asp:Image ID="ValidationStatusImage" runat="server" ImageUrl='<%#Eval("ValidationImage") %>' ToolTip='<%#Eval("ErrorMsg") %>'/>
+                        <asp:Image ID="ValidationStatusImage" runat="server" ImageUrl='<%#Eval("ValidationImage") %>' ToolTip='<%#Eval("ErrorMsg") %>' />
                     </ItemTemplate>
                 </telerik:GridTemplateColumn>
-
-                <telerik:GridTemplateColumn DataField="Account_Name" HeaderText="Account" UniqueName="AccountNameText" HeaderStyle-Width="100%"  >
+                <telerik:GridTemplateColumn DataField="Account_Name" HeaderText="Account" UniqueName="AccountNameText" HeaderStyle-Width="100%">
                     <ItemTemplate>
                         <asp:TextBox ID="AccountNameTextBox" runat="server" AutoPostBack="false" Text='<%#Eval("Account_Name") %>' Width="100%"></asp:TextBox>
                     </ItemTemplate>
-
                     <HeaderStyle Width="100%"></HeaderStyle>
                 </telerik:GridTemplateColumn>
-
-  <%--              <telerik:GridTemplateColumn DataField="Email" HeaderText="Email" UniqueName="EmailText" HeaderStyle-Width="130px">
-                    <ItemTemplate>
-                        <asp:TextBox ID="EmailTextBox" runat="server" AutoPostBack="false" Text='<%#Eval("Email") %>' Width="100%"></asp:TextBox>
-                    </ItemTemplate>
-                    <HeaderStyle Width="130px"></HeaderStyle>
-                </telerik:GridTemplateColumn>
-
-                <telerik:GridTemplateColumn DataField="Password" HeaderText="Password" UniqueName="PasswordText"   >
-                   <ItemTemplate>
-                        <asp:TextBox ID="PasswordTextBox" runat="server" AutoPostBack="false" Text='<%#Eval("Password") %>' Width="100%" ></asp:TextBox>
-                    </ItemTemplate>
-                </telerik:GridTemplateColumn>
-
-                <telerik:GridTemplateColumn DataField="Confirm_Password" HeaderText="Confirm Password" UniqueName="ConfirmPasswordText" >
-                    <ItemTemplate>
-                        <asp:TextBox ID="ConfirmPasswordTextBox" runat="server" AutoPostBack="false" Text='<%#Eval("Confirm_Password") %>' Width="100%"></asp:TextBox>
-                    </ItemTemplate>
-                </telerik:GridTemplateColumn>--%>
-
                 <telerik:GridTemplateColumn DataField="SendWelcomeEmail" HeaderText="Send Welcome" UniqueName="SendWelcome" HeaderStyle-Width="100px" ItemStyle-HorizontalAlign="Center">
                     <ItemTemplate>
                         <asp:CheckBox ID="SendWelcomeCheckbox" runat="server" AutoPostBack="false" />
                     </ItemTemplate>
                 </telerik:GridTemplateColumn>
-
                 <telerik:GridTemplateColumn DataField="DataAccess_Required" HeaderText="<center>Database Access</center>" UniqueName="DataAccessRequiredText">
                     <ItemTemplate>
-                       <center><asp:CheckBox ID="DataAccessRequiredTextBox" AutoPostBack="false" runat="server" Checked='<%#Eval("DataAccess_Required") %>'/></center>
+                        <center><asp:CheckBox ID="DataAccessRequiredTextBox" AutoPostBack="false" runat="server" Checked='<%#Eval("DataAccess_Required") %>'/></center>
                     </ItemTemplate>
                 </telerik:GridTemplateColumn>
-
                 <telerik:GridButtonColumn Text="Delete" CommandName="Delete" ButtonType="ImageButton" ConfirmText="Delete this user from the list?" ConfirmDialogType="Classic">
                     <HeaderStyle Width="32px" />
                 </telerik:GridButtonColumn>
             </Columns>
-
         </MasterTableView>
-    </telerik:RadGrid>          
-       <telerik:RadPanelBar ID="RadPanelBar1" runat="server"  Width="100%"   CollapseDelay="100" ExpandDelay="100">
+    </telerik:RadGrid>
+    <telerik:RadPanelBar ID="RadPanelBar1" runat="server" Width="100%" CollapseDelay="100" ExpandDelay="100">
         <Items>
-            <telerik:RadPanelItem ID="UserPanel" Text="CSV List Entries"  Expanded="False" runat="server" ImagePosition="Left" ToolTip="Click to expand and paste new user information here" ExpandedImageUrl="~/Images/User-Group-icon.png" DisabledImageUrl="~/Images/User-Group-icon.png" ImageUrl="~/Images/User-Group-icon.png">
+            <telerik:RadPanelItem ID="UserPanel" Text="CSV List Entries" Expanded="False" runat="server" ImagePosition="Left" ToolTip="Click to expand and paste new user information here" ExpandedImageUrl="~/Images/User-Group-icon.png" DisabledImageUrl="~/Images/User-Group-icon.png" ImageUrl="~/Images/User-Group-icon.png">
                 <ContentTemplate>
                     <asp:Table ID="Table1" runat="server" Height="350px" Width="100%">
                         <asp:TableRow ToolTip="Paste new user information using comma delimited format:<br> Email Address, [True/False] with *1 entry per line">
-                            <asp:TableCell >
-                                <asp:Label ID="Label1" runat="server" Text="Paste new user information using comma delimited format:<br> Email Address,[True/False] <br> *1 entry per line"></asp:Label></asp:TableCell>
+                            <asp:TableCell>
+                                <asp:Label ID="Label1" runat="server" Text="Paste new user information using comma delimited format:<br> Email Address,[True/False] <br> *1 entry per line"></asp:Label>
+                            </asp:TableCell>
                         </asp:TableRow>
 
                         <asp:TableRow Width="100%">
@@ -157,28 +110,26 @@
                         </asp:TableRow>
 
                         <asp:TableRow>
-                            <asp:TableCell  HorizontalAlign="Center">
+                            <asp:TableCell HorizontalAlign="Center">
                                 <asp:Button ID="Button1" runat="server" Text="Submit" OnClick="Submit_Click" />
                             </asp:TableCell>
-                                
+
                         </asp:TableRow>
                     </asp:Table>
                 </ContentTemplate>
             </telerik:RadPanelItem>
-
         </Items>
     </telerik:RadPanelBar>
     <br />
-      <center>  <asp:ImageButton ID="CreateNewUsers" runat="server"  ImageUrl="~/images/CreateUsersButton.png" ToolTip="Add the listed users to the HCIntel system." OnClick="CreateNewUsers_Click" /></center>
+    <center><asp:ImageButton ID="CreateNewUsers" runat="server"  ImageUrl="~/images/CreateUsersButton.png" ToolTip="Add the listed users to the HCIntel system." OnClick="CreateNewUsers_Click" /></center>
 </div>
 
 <%-- help sidebar --%>
 <div id="helpSidebarShow" class="helpSidebarShow">
-    <a onclick="ShowHide(); return false;" href="#">
-    H<br />
-    I<br />
-    N<br />
-    T
+    <a onclick="ShowHide(); return false;" href="#">H<br />
+        I<br />
+        N<br />
+        T
     </a>
 </div>
 <div id="helpSidebar" class="helpSidebar" style="display: none;">
@@ -219,7 +170,7 @@
         //if (Rows.length == 1)
         //    return Confirm("Are you certain you want to create this user?");
         //return Confirm("Are you certain you want to create these " + Rows.length + " users?");
-       
+
         return window.confirm("Are you certain you want to create these users?");
     }
 

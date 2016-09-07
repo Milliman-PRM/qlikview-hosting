@@ -15,6 +15,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 //  IisLogs has One PK and two FK (Group and User)
 //  Group has one PK, one Unique
 //  User has one PK, one Unique
+//  Report has one PK, and one FK (Report Type)
 //  in model creation, we marked them as Optional and make them null able properties in Iislog table.
 //  We created a reference in IisLog class for Group and User and in Group and User we added
 //  IisLog Navigation Property
@@ -33,8 +34,8 @@ namespace SystemReporting.Data.Database
         public ApplicationDbContext() :
             base(new NpgsqlConnection(ConnectionString), true)
         {
-            Configuration.LazyLoadingEnabled = false;
-            Configuration.ProxyCreationEnabled = false;
+            Configuration.LazyLoadingEnabled = true;
+            Configuration.ProxyCreationEnabled = true;
         }
 
         #endregion
@@ -47,6 +48,8 @@ namespace SystemReporting.Data.Database
         public DbSet<User> User { get; set; }
         public DbSet<Report> Report { get; set; }
         public DbSet<Group> Group { get; set; }
+        public DbSet<ReportType> ReportType { get; set; }
+
 
         #endregion
 
@@ -67,25 +70,27 @@ namespace SystemReporting.Data.Database
 
             ////Foreign Keys
             modelBuilder.Entity<User>().ToTable("user", dbSchema);
-            modelBuilder.Entity<Report>().ToTable("report", dbSchema);
+            modelBuilder.Entity<Report>().ToTable("report", dbSchema);           
             modelBuilder.Entity<Group>().ToTable("group", dbSchema);
+            modelBuilder.Entity<ReportType>().ToTable("reporttype", dbSchema);
 
             modelBuilder.Entity<IisLog>().HasKey(x => x.Id).ToTable("iislog", dbSchema);
             modelBuilder.Entity<IisLog>().HasOptional(c => c.User).WithMany(d => d.ListIisLog).HasForeignKey(c => c.fk_user_id);
             modelBuilder.Entity<IisLog>().HasOptional(c => c.Group).WithMany(d => d.ListIisLog).HasForeignKey(c => c.fk_group_id);
-            
+
             modelBuilder.Entity<AuditLog>().HasKey(x => x.Id).ToTable("qvauditlog", dbSchema);
             modelBuilder.Entity<AuditLog>().HasOptional(c => c.User).WithMany(d => d.ListAuditLog).HasForeignKey(c => c.fk_user_id);
             modelBuilder.Entity<AuditLog>().HasOptional(c => c.Group).WithMany(d => d.ListAuditLog).HasForeignKey(c => c.fk_group_id);
             modelBuilder.Entity<AuditLog>().HasOptional(c => c.Report).WithMany(d => d.ListAuditLog).HasForeignKey(c => c.fk_report_id);
-            
+
             modelBuilder.Entity<SessionLog>().HasKey(x => x.Id).ToTable("qvsessionlog", dbSchema);
             modelBuilder.Entity<SessionLog>().HasOptional(c => c.User).WithMany(d => d.ListSessionLog).HasForeignKey(c => c.fk_user_id);
             modelBuilder.Entity<SessionLog>().HasOptional(c => c.Group).WithMany(d => d.ListSessionLog).HasForeignKey(c => c.fk_group_id);
             modelBuilder.Entity<SessionLog>().HasOptional(c => c.Report).WithMany(d => d.ListSessionLog).HasForeignKey(c => c.fk_report_id);
 
+            modelBuilder.Entity<Report>().HasOptional(r => r.ReportType).WithMany(t=>t.ListReports).HasForeignKey(x => x.fk_report_type_id);
+
             base.OnModelCreating(modelBuilder);
         }
     }
 }
-

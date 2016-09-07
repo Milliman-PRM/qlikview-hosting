@@ -1,11 +1,10 @@
-﻿using SystemReporting.Data.Repository;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using SystemReporting.Entities.Models;
 using SystemReporting.Entities.Proxy;
 using SystemReporting.Service;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using SystemReporting.Utilities;
+using SystemReporting.Utilities.ExceptionHandling;
 
 namespace SystemReporting.Controller.BusinessLogic.Controller
 {
@@ -75,11 +74,12 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                     //Insert Report
                     if (!string.IsNullOrEmpty(entry.Report))
                     {
+                        //Parses the report and creates the report type
                         var report = new Report
                         {
-                            ReportName = entry.Report.Trim()
+                            ReportName = entry.Report.Trim(),
                         };
-                        var addOrGetReport = ControllerCommon.AddOrGetReport(report);
+                        var addOrGetReport = ControllerCommon.AddOrGetReport(report, logEntity.Document);
                         if (addOrGetReport != null)
                         {
                             //after insert set the id
@@ -101,9 +101,95 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
             catch (Exception ex)
             {
                 dbService.Dispose();
-                log.Error("Class AuditLogController. Method ProcessLogs.", ex);
+                ExceptionLogger.LogError(ex, "Exception Raised in Method ProcessLogs.", "AuditLog Controller Exception");
             }
             return blnSucessful;
-        }                
-    }
+        }
+
+        /// <summary>
+        /// get session log report by Group name
+        /// </summary>
+        /// <param name="startDate">todo: describe startDate parameter on GetSessionLogListForGroup</param>
+        /// <param name="endDate">todo: describe endDate parameter on GetSessionLogListForGroup</param>
+        /// <param name="paramId">todo: describe selectedItemId parameter on GetAuditLogListForGroup</param>
+        /// <returns></returns>
+        public List<AuditLog> GetAuditLogListForGroup(string startDate, string endDate, string paramId)
+        {
+            var dbService = new MillimanService();
+            var listResult = new List<AuditLog>();
+
+            Group obj = ControllerCommon.GetGroupById(paramId);
+
+            DateTime? dtStartDate = DateTime.Parse(startDate);
+            DateTime? dtEndDate = DateTime.Parse(endDate);
+
+            if (obj != null)
+            {
+                listResult = dbService.GetAuditLogs<AuditLog>(s => s.fk_group_id == obj.Id
+                                                                &&
+                                                                s.UserAccessDatetime.Value > dtStartDate
+                                                                &&
+                                                                s.UserAccessDatetime.Value <= dtEndDate)
+                                                                .OrderBy(a => a.UserAccessDatetime).ToList();
+            }
+            return listResult;
+        }
+        /// <summary>
+        /// get session log report by ReportName
+        /// </summary>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        /// <param name="paramId">todo: describe selectedItemId parameter on GetAuditLogListForReport</param>
+        /// <returns></returns>
+        public List<AuditLog> GetAuditLogListForReport(string startDate, string endDate, string paramId)
+        {
+            var dbService = new MillimanService();
+            var listResult = new List<AuditLog>();
+
+            Report obj = ControllerCommon.GetReportById(paramId);
+
+            DateTime? dtStartDate = DateTime.Parse(startDate);
+            DateTime? dtEndDate = DateTime.Parse(endDate);
+
+            if (obj != null)
+            {
+                listResult = dbService.GetAuditLogs<AuditLog>(s => s.fk_report_id == obj.Id
+                                                &&
+                                                s.UserAccessDatetime.Value > dtStartDate
+                                                &&
+                                                s.UserAccessDatetime.Value <= dtEndDate)
+                                                .OrderBy(a => a.UserAccessDatetime).ToList();
+            }
+            return listResult;
+        }
+
+        /// <summary>
+        /// get a session log report by user
+        /// </summary>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        /// <param name="paramId">todo: describe selectedItemId parameter on GetAuditLogListForUser</param>
+        /// <returns></returns>
+        public List<AuditLog> GetAuditLogListForUser(string startDate, string endDate, string paramId)
+        {
+            var dbService = new MillimanService();
+            var listResult = new List<AuditLog>();
+
+            User obj = ControllerCommon.GetUserById(paramId);
+
+            DateTime? dtStartDate = DateTime.Parse(startDate);
+            DateTime? dtEndDate = DateTime.Parse(endDate);
+
+            if (obj != null)
+            {
+                listResult = dbService.GetAuditLogs<AuditLog>(s => s.fk_user_id == obj.Id
+                                                &&
+                                                s.UserAccessDatetime.Value > dtStartDate
+                                                &&
+                                                s.UserAccessDatetime.Value <= dtEndDate)
+                                                .OrderBy(a => a.UserAccessDatetime).ToList();
+            }
+            return listResult;
+        }
+    }    
 }
