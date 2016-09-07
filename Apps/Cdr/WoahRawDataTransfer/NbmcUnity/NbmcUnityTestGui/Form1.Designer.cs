@@ -41,7 +41,7 @@
             // 
             // ButtonBuildMrnList
             // 
-            this.ButtonBuildMrnList.Location = new System.Drawing.Point(0, 19);
+            this.ButtonBuildMrnList.Location = new System.Drawing.Point(6, 19);
             this.ButtonBuildMrnList.Name = "ButtonBuildMrnList";
             this.ButtonBuildMrnList.Size = new System.Drawing.Size(260, 23);
             this.ButtonBuildMrnList.TabIndex = 0;
@@ -51,7 +51,7 @@
             // 
             // ButtonExtractDiagnoses
             // 
-            this.ButtonExtractDiagnoses.Location = new System.Drawing.Point(0, 19);
+            this.ButtonExtractDiagnoses.Location = new System.Drawing.Point(6, 19);
             this.ButtonExtractDiagnoses.Name = "ButtonExtractDiagnoses";
             this.ButtonExtractDiagnoses.Size = new System.Drawing.Size(260, 23);
             this.ButtonExtractDiagnoses.TabIndex = 1;
@@ -65,7 +65,7 @@
             // 
             // ButtonExploreSystem
             // 
-            this.ButtonExploreSystem.Location = new System.Drawing.Point(0, 62);
+            this.ButtonExploreSystem.Location = new System.Drawing.Point(6, 62);
             this.ButtonExploreSystem.Name = "ButtonExploreSystem";
             this.ButtonExploreSystem.Size = new System.Drawing.Size(260, 23);
             this.ButtonExploreSystem.TabIndex = 6;
@@ -78,7 +78,7 @@
             this.groupBox1.Controls.Add(this.ButtonBuildMrnList);
             this.groupBox1.Location = new System.Drawing.Point(12, 13);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(259, 62);
+            this.groupBox1.Size = new System.Drawing.Size(272, 62);
             this.groupBox1.TabIndex = 7;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Should be run from a domain computer";
@@ -88,16 +88,16 @@
             this.groupBox2.Controls.Add(this.ButtonExtractLabs);
             this.groupBox2.Controls.Add(this.ButtonExtractDiagnoses);
             this.groupBox2.Controls.Add(this.ButtonExploreSystem);
-            this.groupBox2.Location = new System.Drawing.Point(12, 81);
+            this.groupBox2.Location = new System.Drawing.Point(12, 103);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(259, 262);
+            this.groupBox2.Size = new System.Drawing.Size(272, 262);
             this.groupBox2.TabIndex = 8;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Should be run from prm-data-1.milliman.com";
             // 
             // ButtonExtractLabs
             // 
-            this.ButtonExtractLabs.Location = new System.Drawing.Point(0, 108);
+            this.ButtonExtractLabs.Location = new System.Drawing.Point(6, 108);
             this.ButtonExtractLabs.Name = "ButtonExtractLabs";
             this.ButtonExtractLabs.Size = new System.Drawing.Size(260, 23);
             this.ButtonExtractLabs.TabIndex = 7;
@@ -109,7 +109,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 377);
+            this.ClientSize = new System.Drawing.Size(296, 377);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
