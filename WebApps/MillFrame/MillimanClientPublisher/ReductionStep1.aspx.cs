@@ -399,8 +399,13 @@ namespace ClientPublisher
                     string NewHierarchyFile = System.IO.Path.Combine(WorkingDirectory, Settings.QVName + ".hierarchy_0");
                     MillimanCommon.MillimanTreeNode OldHierarchy = MillimanCommon.MillimanTreeNode.GetMemoryTree(OldHierarchyFile);
                     MillimanCommon.MillimanTreeNode NewHierarchy = MillimanCommon.MillimanTreeNode.GetMemoryTree(NewHierarchyFile);
-                    RepGen.GenerateNewItemsReport(OldHierarchy, NewHierarchy, Reports);  //pass in reports instance to update
-                    
+                    string ConceptFile = NewHierarchyFile.Replace(".hierarchy_0", ".concept_0");
+                    string Concept = "?";
+                    if (System.IO.File.Exists(ConceptFile))
+                    {
+                        Concept = System.IO.File.ReadAllText(ConceptFile);
+                    }
+                    RepGen.GenerateNewItemsReport(OldHierarchy, NewHierarchy, Reports, Concept);  //pass in reports instance to update                    
                     //Reports.AddItemToList(new MillimanCommon.QVWReportBank.NotSelectableClass("Username", "FieldName", "ConceptFieldName", "QVWName", "reasons"));
                     RepGen.GenerateNotSelectable(NewHierarchy, System.IO.Path.Combine(WorkingDirectory, Settings.QVName + @".hciprj"), Reports);
 
