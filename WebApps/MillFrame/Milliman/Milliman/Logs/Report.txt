@@ -44,21 +44,4 @@
    at MillimanCommon.UserRepo.StartFileWatcher(String RepoFilePath) in C:\Users\afsheen.khan\PRMDevelopment\Dev_08032016\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 245
    at MillimanCommon.UserRepo.Load() in C:\Users\afsheen.khan\PRMDevelopment\Dev_08032016\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 337
    at MillimanCommon.UserRepo.GetInstance() in C:\Users\afsheen.khan\PRMDevelopment\Dev_08032016\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 30
-   at MillimanDev.Global.Application_Start(Object sender, EventArgs e) in C:\Users\afsheen.khan\PRMDevelopment\Dev_08032016\WebApps\MillFrame\Milliman\Milliman\Global.asax.cs:line 77----------------------------------------8/30/2016 9:05:13 AMInfo           Application Start
-8/30/2016 9:15:05 AMInfo           Application Start
-8/30/2016 10:09:12 AMInfo           Application Start
-8/30/2016 10:21:36 AMInfo           Application Start
-8/30/2016 10:23:36 AMInfo           Application Start
-8/30/2016 10:25:35 AMInfo           Application Start
-8/30/2016 10:27:08 AMInfo           Application Start
-8/30/2016 12:55:56 PMInfo           Application Start
-8/30/2016 3:42:30 PMInfo           Application Start
-8/30/2016 3:58:21 PMInfo           Application Start
-8/30/2016 4:08:05 PMInfo           Application Start
-4:12:09 PM                    Error     Failed to get QV ticket\r\n----------------------------------------4:25:47 PM                    Error     Failed to get QV ticket\r\n----------------------------------------8/30/2016 4:39:43 PMInfo           Application Start
-8/30/2016 4:42:51 PMInfo           Application Start
-8/30/2016 4:56:03 PMInfo           Application Start
-8/30/2016 5:02:15 PMInfo           Application Start
-8/31/2016 10:04:31 AMInfo           Application Start
-8/31/2016 10:14:40 AMInfo           Application Start
-8/31/2016 10:20:29 AMInfo           Application Start
+   at MillimanDev.Global.Application_Start(Object sender, EventArgs e) in C:\Users\afsheen.khan\PRMDevelopment\Dev_08032016\WebApps\MillFrame\Milliman\Milliman\Global.asax.cs:line 77----------------------------------------9/5/2016 12:32:50 PMInfo           Application Start

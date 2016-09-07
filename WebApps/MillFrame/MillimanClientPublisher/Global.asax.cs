@@ -38,25 +38,25 @@ namespace ClientPublisher
         {
             string CurrentPage = Path.GetFileName(Request.PhysicalPath);
 
-            if ((string.Compare(CurrentPage, @"UserLogin.aspx", true) != 0) && (string.Compare(CurrentPage, @"LostPassword.aspx", true) != 0) && (string.Compare(CurrentPage, @"time.aspx", true) != 0)) //no recursive login voodoo
-            {
-                if (string.Compare(Request.CurrentExecutionFilePathExtension, @".aspx", true) == 0)  //only protect aspx pages
-                {
+            //if ((string.Compare(CurrentPage, @"UserLogin.aspx", true) != 0) && (string.Compare(CurrentPage, @"LostPassword.aspx", true) != 0) && (string.Compare(CurrentPage, @"time.aspx", true) != 0)) //no recursive login voodoo
+            //{
+            //    if (string.Compare(Request.CurrentExecutionFilePathExtension, @".aspx", true) == 0)  //only protect aspx pages
+            //    {
 
-                    try
-                    {
-                        System.Web.Security.MembershipUser MU = System.Web.Security.Membership.GetUser();
-                        if (MU == null)
-                            Response.Redirect("userlogin.aspx");
-                    }
-                    catch (Exception)
-                    {
-                        //not logged in
-                        Response.Redirect("userlogin.aspx");
-                    }
+            //        try
+            //        {
+            //            System.Web.Security.MembershipUser MU = System.Web.Security.Membership.GetUser();
+            //            if (MU == null)
+            //                Response.Redirect("userlogin.aspx");
+            //        }
+            //        catch (Exception)
+            //        {
+            //            //not logged in
+            //            Response.Redirect("userlogin.aspx");
+            //        }
 
-                }
-            }
+            //    }
+            //}
         }
 
         //probably want to use a logging framework for for now
