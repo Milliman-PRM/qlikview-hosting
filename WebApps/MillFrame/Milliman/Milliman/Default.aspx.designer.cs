@@ -40,13 +40,13 @@ namespace MillimanDev {
         protected global::System.Web.UI.ScriptManager ScriptMgr;
         
         /// <summary>
-        /// mnuOptions control.
+        /// RadMenu1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Telerik.Web.UI.RadMenu mnuOptions;
+        protected global::Telerik.Web.UI.RadMenu RadMenu1;
         
         /// <summary>
         /// FilterLabel control.
@@ -58,13 +58,13 @@ namespace MillimanDev {
         protected global::System.Web.UI.WebControls.Label FilterLabel;
         
         /// <summary>
-        /// ddlGroups control.
+        /// Groups control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlGroups;
+        protected global::System.Web.UI.WebControls.DropDownList Groups;
         
         /// <summary>
         /// ProductsPageTable control.

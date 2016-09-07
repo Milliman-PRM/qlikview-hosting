@@ -31,12 +31,6 @@ namespace ClientPublisher
                 Session["supergroup"] = PublishToSupergroup;
                 CacheCleaner(7); // cleanup the cache
 
-                //if (IsNewUser(Membership.GetUser().ProviderUserKey.ToString()) == true)
-                //{
-                //    Response.Redirect("profile.aspx?newuser=true");
-                //    return;
-                //}
-
                 LoadProjects(PublishToSupergroup);
 
                 //string[] UserRoles = MillimanCommon.UserAccessList.GetRolesForUser();
@@ -45,16 +39,6 @@ namespace ClientPublisher
 
         private string CheckForLogin()
         {
-            //if (Membership.GetUser() == null)
-            //{
-            //    //short circuit for development
-            //    string Me = "van.nanney@milliman.com";
-            //    bool Res = Membership.ValidateUser(Me, Membership.GetUser(Me).GetPassword());
-            //    FormsAuthentication.SetAuthCookie(Me, true);
-            //    Response.Redirect("Default.aspx");  
-            //}
-            //return "New York Projects";
-
             string Key = Request["key"];
 
             if (string.IsNullOrEmpty(Key) == false)
@@ -216,7 +200,7 @@ namespace ClientPublisher
             MillimanCommon.SuperGroup.SuperGroupContainer FoundSuperGroup = null;
 
             //make sure is a client admin trying to run, otherwise exit
-            if ( (IsPublishingAdmin() == false) && (IAmAdministrator() == false))
+            if ((IsPublishingAdmin() == false) && (IAmAdministrator() == false))
             {
                 System.Web.Security.FormsAuthentication.SignOut();
                 Session.Abandon();
@@ -234,16 +218,16 @@ namespace ClientPublisher
             }
             else
             {
-                foreach( MillimanCommon.SuperGroup.SuperGroupContainer SGC in SuperGroups )
+                foreach (MillimanCommon.SuperGroup.SuperGroupContainer SGC in SuperGroups)
                 {
-                    if ( string.Compare( PublishToSupergroup, SGC.ContainerName, true) == 0)
+                    if (string.Compare(PublishToSupergroup, SGC.ContainerName, true) == 0)
                     {
                         FoundSuperGroup = SGC;
                         break;
                     }
                 }
 
-                if ( FoundSuperGroup == null )
+                if (FoundSuperGroup == null)
                 {
                     System.Web.Security.FormsAuthentication.SignOut();
                     Session.Abandon();
@@ -255,10 +239,10 @@ namespace ClientPublisher
 
             int ProjectIndex = 0;
             IList<ProjectSettingsExtension> Projects = new List<ProjectSettingsExtension>();
-            foreach( string Group in FoundSuperGroup.GroupNames )
+            foreach (string Group in FoundSuperGroup.GroupNames)
             {
                List<string> GroupProjects = MillimanCommon.UserRepo.GetInstance().FindAllProjectsForRole(Group);
-               if ( GroupProjects != null )
+                if (GroupProjects != null)
                {
                    if (GroupProjects.Count > 1)
                    {
@@ -304,9 +288,6 @@ namespace ClientPublisher
 
 
         }
-
-  
-
 
         protected void btnLogout_Click(object sender, EventArgs e)
         {
@@ -383,6 +364,33 @@ namespace ClientPublisher
         protected void UpdatePanel_Button_Click(object sender, EventArgs e)
         {
             LoadProjects(Session["supergroup"].ToString());
+        }
+
+        protected void ToggleAvailability_Click(object sender, EventArgs e)
+        {
+
+            Telerik.Web.UI.RadButton RB = sender as Telerik.Web.UI.RadButton;
+            Telerik.Web.UI.RadListViewDataItem item = RB.Parent as Telerik.Web.UI.RadListViewDataItem;
+            int Index = item.DataItemIndex;
+            if (Session["Projects"] != null)
+            {
+                IList<ProjectSettingsExtension> Projects = Session["Projects"] as List<ProjectSettingsExtension>;
+                if (Index < Projects.Count)
+                {
+                    string QVWOnline = System.IO.Path.Combine(Projects[Index].AbsoluteProjectPath, Projects[Index].QVName + ".qvw");
+                    string QVWOffline = System.IO.Path.Combine(Projects[Index].AbsoluteProjectPath, Projects[Index].QVName + ".offline");
+                    if (System.IO.File.Exists(QVWOffline))
+                    {
+                        System.IO.File.Delete(QVWOffline);  //get rid of offline file, we want ot go online
+                        RB.Text = ProjectSettingsExtension.IsAvailable;
+                    }
+                    else
+                    {
+                        System.IO.File.WriteAllText(QVWOffline, System.DateTime.Now.ToString());  //create an offline file, can be empt
+                        RB.Text = ProjectSettingsExtension.IsOffline;
+                    }
+                }
+            }
         }
     }
 }

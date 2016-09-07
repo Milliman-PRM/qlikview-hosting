@@ -44,30 +44,51 @@
     </script>
 	<telerik:RadAjaxManager ID="RadAjaxManager1" runat="server">
 	</telerik:RadAjaxManager>
-    <table id="MainTable" style="position:absolute;top:10px;left:10px;width:100px;height:500px;overflow-x:auto;overflow-y:hidden" >
+    <table id="MainTable" style="position:absolute;top:10px;left:10px;width:100px;height:100px;visibility:hidden" >
         <tr style="height:20px;">
             <td>
                <center> <asp:Label ID="License" runat="server" Text=""></asp:Label></center>
             </td>
         </tr>
-        <tr>
-            <td style="text-align:right; font:normal 12px Segoe UI">
-                <div style="height:120px; width:100%;overflow:auto;border:1px solid gray">
-                <asp:CheckBoxList  ID="ReportList" runat="server" Height="100px" Width="100%" Font-Size="12px" Font-Names="Segoe UI" BorderWidth="0"></asp:CheckBoxList>
-                </div>
-           </td>
-        </tr>
-        <tr >
+        <tr style="height:50%">
             <td>
-                <telerik:RadGrid runat="server" ID="RadGrid1" AllowSorting="True"  AutoGenerateColumns="False" CellSpacing="5"  GridLines="None" OnItemCommand="RadGrid1_ItemCommand" AllowAutomaticDeletes="True" ViewStateMode="Enabled" MasterTableView-AllowAutomaticDeletes="True" ClientIDMode="AutoID" >
-                    <MasterTableView EditMode="Batch" CommandItemDisplay="Top" TableLayout="Fixed" Height="200px">
+                <telerik:RadPanelBar runat="server" ID="RadPanelBar1" Height="100%" Width="100%" ExpandMode="FullExpandedItem" >
+                  <Items>
+                    <telerik:RadPanelItem Expanded="True" Text="Data Restriction Selections" >
+                            <Items>
+                                <telerik:RadPanelItem Value="TreeHolder">
+                                    <ItemTemplate>
+                                        <telerik:RadTreeView runat="server" ID="AccessTree" CheckBoxes="True" CheckChildNodes="True" MultipleSelect="False" TriStateCheckBoxes="True" ClientIDMode="Static"></telerik:RadTreeView>
+                                    </ItemTemplate>
+                                </telerik:RadPanelItem>
+                            </Items>
+                    </telerik:RadPanelItem>
+                    <telerik:RadPanelItem Text="User Download Selections" Expanded="false">
+                            <Items>
+                               <telerik:RadPanelItem Value="DownloadHolder">
+                                    <ItemTemplate>
+                                        <telerik:RadTreeView runat="server" ID="DownloadTree" CheckBoxes="True" CheckChildNodes="True" MultipleSelect="False" TriStateCheckBoxes="True"></telerik:RadTreeView>
+                                    </ItemTemplate>
+                                </telerik:RadPanelItem>
+                            </Items>
+                    </telerik:RadPanelItem>
+                    </Items>
+                </telerik:RadPanelBar>
+            </td>
+        </tr>
+        <tr style="">
+            <td>
+                <telerik:RadGrid runat="server" ID="RadGrid1" AllowSorting="True"  AutoGenerateColumns="False" CellSpacing="5"  GridLines="None" OnItemCommand="RadGrid1_ItemCommand" AllowAutomaticDeletes="True" ViewStateMode="Enabled" MasterTableView-AllowAutomaticDeletes="True" ClientIDMode="AutoID">
+                    <MasterTableView EditMode="Batch" CommandItemDisplay="Top" TableLayout="Fixed">
                         <CommandItemTemplate>
-                           <asp:LinkButton ID="Add" runat="server" CommandName="Add" Visible="false"><asp:Image ID="Image1" runat="server" style="border:0px;vertical-align:middle;" alt="" ImageUrl="~/Images/Office-Girl-icon.png"/>Add List Entry</asp:LinkButton>&nbsp;&nbsp;
+                           <asp:LinkButton ID="Add" runat="server" CommandName="Add" Visible="true"><asp:Image ID="Image1" runat="server" style="border:0px;vertical-align:middle;" alt="" ImageUrl="~/Images/Office-Girl-icon.png"/>Add List Entry</asp:LinkButton>&nbsp;&nbsp;
                            <asp:LinkButton Width="100px" ID="Validate" runat="server" CommandName="Validate" Visible='<%# RadGrid1.EditIndexes.Count == 0 %>'><asp:Image ID="Image2" runat="server"  style="border:0px;vertical-align:middle;" alt="" ImageUrl="~/Images/process-icon.png"/>Validate</asp:LinkButton>&nbsp;&nbsp;
                
                            <asp:LinkButton ID="Clear"  runat="server" CommandName="Clear" Visible='<%# RadGrid1.EditIndexes.Count == 0 %>'><asp:Image ID="Image3" runat="server" style="border:0px;vertical-align:middle;" alt="" ImageUrl="~/Images/close_24.png"/>Clear List</asp:LinkButton>&nbsp;&nbsp;
                        </CommandItemTemplate>
                         <Columns>
+  
+
                               <telerik:GridTemplateColumn DataField="ValidationImage"  UniqueName="ValidationImageStatus" HeaderStyle-Width="25px"  >
                                 <ItemTemplate>
                                     <asp:Image ID="ValidationStatusImage" runat="server" ImageUrl='<%#Eval("ValidationImage") %>' ToolTip='<%#Eval("ErrorMsg") %>'/>
@@ -81,15 +102,7 @@
 
                                 <HeaderStyle Width="97%"></HeaderStyle>
                             </telerik:GridTemplateColumn>
-                 
-                            <telerik:GridTemplateColumn DataField="Password" HeaderText="Password" UniqueName="PasswordText" HeaderStyle-Width="97%" Visible="false"   >
-                                <ItemTemplate>
-                                    <asp:TextBox style="overflow:hidden" ReadOnly="true" ID="PasswordTextBox" runat="server" AutoPostBack="false" Text='<%#Eval("Password") %>' Width="100%" TextMode="MultiLine" Rows="1" ></asp:TextBox>
-                                </ItemTemplate>
-
-                                <HeaderStyle Width="97%"></HeaderStyle>
-                            </telerik:GridTemplateColumn> 
-                                       
+                            
                             <telerik:GridTemplateColumn DataField="SendWelcomeEmail" HeaderText="Send Welcome" UniqueName="SendWelcome" HeaderStyle-Width="100px" ItemStyle-HorizontalAlign="Center">
                                 <ItemTemplate>
                                     <asp:CheckBox ID="SendWelcomeCheckbox" runat="server" AutoPostBack="false" ViewStateMode="Enabled" Checked='<%#Eval("SendWelcomeEmail") %>' />
@@ -106,13 +119,14 @@
                                 <HeaderStyle Width="32px" />
                             </telerik:GridButtonColumn>
                         </Columns>
+
                     </MasterTableView>
                 </telerik:RadGrid> 
             </td>
         </tr>
-        <tr style="color: #000000;height:15px;font-size:14px;font-style:italic;">
+        <tr style="color: #FF9900;height:20px;font-size:14px;font-style:italic">
 <%--            <td><center>Paste multiple emails as comma, semi-colon, space or newline delimited and click 'Add List Entry' to create multiple accounts.</center></td>--%>
-            <td><center><asp:Label runat="server" ID="Msg"> </asp:Label></center></td>
+            <td><center>To create multiple new accounts with the above Data Restriction Selections, enter email addresses as comma, semi-colon, space or newline delimited, then click 'Add List Entry' to create multiple accounts.</center></td>
         </tr>
         <tr style="height:30px">
             <td><center><asp:Button ID="CreateUsers" runat="server" Text="Create Accounts" Width="200px" OnClientClick="return StartProcessing();" OnClick="CreateUsers_Click"/></center></td>
@@ -178,7 +192,6 @@
                // Parent.alert("Profile/Password information has been saved.");
                if (Parent.CloseAndRefresh)
                    Parent.CloseAndRefresh(Msg);
-
                //Parent.radalert(Msg, 350, 150, "Users Added");
                //window.setTimeout(function () { Parent.location.reload(); }, 5000);
                ThisDialog.close();

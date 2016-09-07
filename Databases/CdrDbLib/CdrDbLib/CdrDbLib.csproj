@@ -1,0 +1,171 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{CBEC3A92-5B09-4218-ACDB-286E61FF4CD8}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CdrDbLib</RootNamespace>
+    <AssemblyName>CdrDbLib</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Devart.Data, Version=5.0.1450.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL" />
+    <Reference Include="Devart.Data.Linq, Version=4.5.995.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL" />
+    <Reference Include="Devart.Data.PostgreSql, Version=7.5.658.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL" />
+    <Reference Include="Devart.Data.PostgreSql.Linq, Version=4.5.995.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CdrDbInterface.cs" />
+    <Compile Include="Data Context\CdrDataContext.CdrDataContext.cs" />
+    <Compile Include="Entities\CdrDataContext.Address.cs" />
+    <Compile Include="Entities\CdrDataContext.Address.Generated.cs">
+      <DependentUpon>CdrDataContext.Address.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\CdrDataContext.AddressType.cs" />
+    <Compile Include="Entities\CdrDataContext.AggregationRun.cs" />
+    <Compile Include="Entities\CdrDataContext.AggregationRun.Generated.cs">
+      <DependentUpon>CdrDataContext.AggregationRun.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\CdrDataContext.AggregationRunStatus.cs" />
+    <Compile Include="Entities\CdrDataContext.Charge.cs" />
+    <Compile Include="Entities\CdrDataContext.Charge.Generated.cs">
+      <DependentUpon>CdrDataContext.Charge.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\CdrDataContext.ChargeCode.cs" />
+    <Compile Include="Entities\CdrDataContext.ChargeCode.Generated.cs">
+      <DependentUpon>CdrDataContext.ChargeCode.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\CdrDataContext.CodedEntry.cs" />
+    <Compile Include="Entities\CdrDataContext.CodedEntry.Generated.cs">
+      <DependentUpon>CdrDataContext.CodedEntry.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\CdrDataContext.DataFeed.cs" />
+    <Compile Include="Entities\CdrDataContext.DataFeed.Generated.cs">
+      <DependentUpon>CdrDataContext.DataFeed.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\CdrDataContext.DentalDetail.cs" />
+    <Compile Include="Entities\CdrDataContext.DentalDetail.Generated.cs">
+      <DependentUpon>CdrDataContext.DentalDetail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\CdrDataContext.Diagnosis.cs" />
+    <Compile Include="Entities\CdrDataContext.Diagnosis.Generated.cs">
+      <DependentUpon>CdrDataContext.Diagnosis.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\CdrDataContext.Gender.cs" />
+    <Compile Include="Entities\CdrDataContext.Immunization.cs" />
+    <Compile Include="Entities\CdrDataContext.Immunization.Generated.cs">
+      <DependentUpon>CdrDataContext.Immunization.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\CdrDataContext.InsuranceCoverage.cs" />
+    <Compile Include="Entities\CdrDataContext.InsuranceCoverage.Generated.cs">
+      <DependentUpon>CdrDataContext.InsuranceCoverage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\CdrDataContext.MaritalStatus.cs" />
+    <Compile Include="Entities\CdrDataContext.Measurement.cs" />
+    <Compile Include="Entities\CdrDataContext.Measurement.Generated.cs">
+      <DependentUpon>CdrDataContext.Measurement.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\CdrDataContext.Medication.cs" />
+    <Compile Include="Entities\CdrDataContext.Medication.Generated.cs">
+      <DependentUpon>CdrDataContext.Medication.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\CdrDataContext.Organization.cs" />
+    <Compile Include="Entities\CdrDataContext.Organization.Generated.cs">
+      <DependentUpon>CdrDataContext.Organization.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\CdrDataContext.Patient.cs" />
+    <Compile Include="Entities\CdrDataContext.Patient.Generated.cs">
+      <DependentUpon>CdrDataContext.Patient.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\CdrDataContext.PatientIdentifier.cs" />
+    <Compile Include="Entities\CdrDataContext.PatientIdentifier.Generated.cs">
+      <DependentUpon>CdrDataContext.PatientIdentifier.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\CdrDataContext.PhoneNumber.cs" />
+    <Compile Include="Entities\CdrDataContext.PhoneNumber.Generated.cs">
+      <DependentUpon>CdrDataContext.PhoneNumber.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\CdrDataContext.PhoneType.cs" />
+    <Compile Include="Entities\CdrDataContext.PhysicalAddress.cs" />
+    <Compile Include="Entities\CdrDataContext.PhysicalAddress.Generated.cs">
+      <DependentUpon>CdrDataContext.PhysicalAddress.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\CdrDataContext.Problem.cs" />
+    <Compile Include="Entities\CdrDataContext.Problem.Generated.cs">
+      <DependentUpon>CdrDataContext.Problem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\CdrDataContext.Procedure.cs" />
+    <Compile Include="Entities\CdrDataContext.Procedure.Generated.cs">
+      <DependentUpon>CdrDataContext.Procedure.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\CdrDataContext.ResultNormal.cs" />
+    <Compile Include="Entities\CdrDataContext.TelephoneNumber.cs" />
+    <Compile Include="Entities\CdrDataContext.TelephoneNumber.Generated.cs">
+      <DependentUpon>CdrDataContext.TelephoneNumber.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\CdrDataContext.VisitEncounter.cs" />
+    <Compile Include="Entities\CdrDataContext.VisitEncounter.Generated.cs">
+      <DependentUpon>CdrDataContext.VisitEncounter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Data Context\CdrDataContext.CdrDataContextDiagram.view">
+      <DependentUpon>CdrDataContext.lqml</DependentUpon>
+    </None>
+    <None Include="Data Context\CdrDataContext.edps">
+      <DependentUpon>CdrDataContext.lqml</DependentUpon>
+    </None>
+    <None Include="Data Context\CdrDataContext.info">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CdrDataContext.lqml</DependentUpon>
+    </None>
+    <None Include="Data Context\CdrDataContext.lqml">
+      <Generator>DevartLinqToSqlGenerator</Generator>
+      <LastGenOutput>CdrDataContext.info</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

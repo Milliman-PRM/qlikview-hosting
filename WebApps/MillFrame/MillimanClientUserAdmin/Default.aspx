@@ -176,11 +176,6 @@
                                                         <asp:CheckBox ID="ShowCheckedOnly" runat="server" Text="Only show checked items." AutoPostBack="true" OnCheckedChanged="ShowCheckedOnly_CheckedChanged" ToolTip="Only show the checkbox items that are current 'checked'." />
                                                       </asp:TableCell>
                                                     </asp:TableRow>
-                                                    <asp:TableRow >
-                                                        <asp:TableCell style="text-align:right; font:normal 12px Segoe UI" ColumnSpan="2">
-                                                             <asp:CheckBoxList ID="ReportList" runat="server" Height="100px" Width="100%" Font-Size="12px" Font-Names="Segoe UI" BorderStyle="Outset" BorderWidth="1" BorderColor="Gray"></asp:CheckBoxList>
-                                                        </asp:TableCell>
-                                                    </asp:TableRow>
                                                   </asp:Table>
                                               </asp:TableCell>
                                           </asp:TableRow>
@@ -199,7 +194,7 @@
                                                              </Items>
                                                
                                                         </telerik:RadPanelItem>
-  <%--                                                      <telerik:RadPanelItem Expanded="false" Text="User Download Selections">
+                                                        <telerik:RadPanelItem Expanded="false" Text="User Download Selections">
                                                              <Items>
                                                                    <telerik:RadPanelItem Value="DownloadHolder">
                                                                         <ItemTemplate>
@@ -209,7 +204,7 @@
                                                                     </telerik:RadPanelItem>
                                                              </Items>
                                                
-                                                        </telerik:RadPanelItem>--%>
+                                                        </telerik:RadPanelItem>
                                                           </Items>
                                                   
                                                   </telerik:RadPanelBar>
@@ -242,7 +237,7 @@
 
         function CloseAndRefresh(Msg) {
             alert(Msg);
-            window.setTimeout(window.location.reload(), 333);
+            window.location.reload();
         }
         
         function StartProcessing() {
@@ -417,7 +412,7 @@
        function OpenAddUser()
        {
            var wnd = window.radopen("AddUser.aspx", "Add User(s)");
-           wnd.setSize(900, 700);
+           wnd.setSize(900, 550);
            wnd.set_modal(true);
            wnd.moveTo(0, 0);
            //wnd.Center();

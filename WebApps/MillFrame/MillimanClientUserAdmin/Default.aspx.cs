@@ -68,49 +68,40 @@ public partial class Default : System.Web.UI.Page
         return "";
     }
 
-    private List<UserItem> MembershipToUserItems(List<string> GroupNames)
+    private List<UserItem> MembershipToUserItems(string GroupName)
     {
-        List<string> AllUserList = new List<string>();
+        string[] Users = Roles.GetUsersInRole(GroupName);
         List<UserItem> UI = new List<UserItem>();
-        foreach (string GroupName in GroupNames)
+        foreach (string User in Users)
         {
-            string[] Users = Roles.GetUsersInRole(GroupName);
-            foreach (string User in Users)
+            if (Roles.IsUserInRole(User, "Administrator") == true)
+                continue;
+
+            MembershipUser MU = Membership.GetUser(User);
+            string Tooltip = "";
+            string _Status = UserStatus(MU.ProviderUserKey.ToString(), out Tooltip);
+            string Status = string.Empty;
+            if (MU.IsApproved == false)
             {
-                if (Roles.IsUserInRole(User, "Administrator") == true)
-                    continue;
-
-                if (AllUserList.Contains(User))
-                    continue;
-
-                AllUserList.Add(User);
-
-                MembershipUser MU = Membership.GetUser(User);
-                string Tooltip = "";
-                string _Status = UserStatus(MU.ProviderUserKey.ToString(), out Tooltip);
-                string Status = string.Empty;
-                if (MU.IsApproved == false)
-                {
-                    Status = "<center>Suspended</center>";
-                    Tooltip = "User account was suspended to prevent the user from logging into the PRM system.";
-                }
-                else if (MU.IsLockedOut)
-                {
-                    Status = "<center>Locked</center>";
-                    Tooltip = "User account is locked due to an excess of login attempts using an incorrect password. User account will unlock itself within 10 minutes of locking.";
-                }
-
-                else if ((string.IsNullOrEmpty(Status)) && (string.IsNullOrEmpty(_Status) == false))
-                {
-                    Status = _Status;
-                }
-                else
-                {
-                    Status = "<center>Active</center>";
-                    Tooltip = "User is active and last accessed the system on " + MU.LastActivityDate.ToString();
-                }
-                UI.Add(new UserItem(User, Status, Tooltip, GetAdminNote(User)));
+                Status = "<center>Suspended</center>";
+                Tooltip = "User account was suspended to prevent the user from logging into the PRM system.";
             }
+            else if (MU.IsLockedOut)
+            {
+                Status = "<center>Locked</center>";
+                Tooltip = "User account is locked due to an excess of login attempts using an incorrect password. User account will unlock itself within 10 minutes of locking.";
+            }
+
+            else if ((string.IsNullOrEmpty(Status)) && (string.IsNullOrEmpty(_Status) == false))
+            {
+                Status = _Status;
+            }
+            else
+            {
+                Status = "<center>Active</center>";
+                Tooltip = "User is active and last accessed the system on " + MU.LastActivityDate.ToString();
+            }
+            UI.Add(new UserItem(User, Status, Tooltip, GetAdminNote(User)));
         }
         return AddGlobalUserAdmins(UI);
     }
@@ -124,66 +115,27 @@ public partial class Default : System.Web.UI.Page
     {
         if (Roles.IsUserInRole("Administrator"))
         {
-            string DocumentRoot = System.Configuration.ConfigurationManager.AppSettings["QVDocumentRoot"];
-            List<string> AdminUserList = new List<string>();
-            MillimanCommon.SuperGroup.SuperGroupContainer SGC = Session["supergroup"] as MillimanCommon.SuperGroup.SuperGroupContainer;
+            string ProjectPath = System.IO.Path.GetDirectoryName(Session["ProjectPath"].ToString());
+            ProjectPath = System.IO.Path.Combine(ProjectPath, "ReducedUserQVWs");
             string[] Users = Roles.GetUsersInRole("Administrator");
-            foreach (string Group in SGC.GroupNames)
+            foreach (string User in Users)
             {
-                string ProjectPath = System.IO.Path.Combine(DocumentRoot, Group.Replace('_', '\\'));
-                ProjectPath = System.IO.Path.Combine(ProjectPath, "ReducedUserQVWs");
-              
-                foreach (string User in Users)
-                {
-                    //dont add underlying "admin" account
-                    if ( (string.Compare(User, "admin", true) != 0) && (AdminUserList.Contains(User) == false))
-                    {
-                        AdminUserList.Add(User);
-                        string Tooltip = "This user only visible if logged in as global administrator.";
-                        string Status = "<center>NA</center>";
-                        CurrentUsers.Add(new UserItem(User, Status, Tooltip, "", true));
-                        //Verify users have a directory created for reduced QVWs
-                        string UserDir = System.IO.Path.Combine(ProjectPath, MillimanCommon.Utilities.ConvertStringToHex(User));
-                        if (System.IO.Directory.Exists(UserDir) == false)
-                            System.IO.Directory.CreateDirectory(UserDir);
-                    }
+                //dont add underlying "admin" account
+                if ( string.Compare(User,"admin",true) != 0 )
+                { 
+                    string Tooltip = "This user only visible if logged in as global administrator.";
+                    string Status = "<center>NA</center>";
+                    CurrentUsers.Add(new UserItem(User, Status, Tooltip, "", true));
+                    //Verify users have a directory created for reduced QVWs
+                    string UserDir = System.IO.Path.Combine(ProjectPath, MillimanCommon.Utilities.ConvertStringToHex(User));
+                    if (System.IO.Directory.Exists(UserDir) == false)
+                        System.IO.Directory.CreateDirectory(UserDir);
                 }
             }
         }
         return CurrentUsers;
     }
 
-    private void SetUIBehavior()
-    {
-        //if only 1 report and not reduceable, then user admin only(not right hand pane)
-        //if multiple reports but none reducable then check boxs on right hand are visible, but no reduction tree
-        //if any report is reducable, show all
-
-        Dictionary<string, bool> Reduceable = Session["reductiondictionary"] as Dictionary<string, bool>;
-        MillimanCommon.SuperGroup.SuperGroupContainer SGC = Session["supergroup"] as MillimanCommon.SuperGroup.SuperGroupContainer;
-
-        bool ContainsReducableQVW = false;
-        foreach( KeyValuePair<string,bool> KVP in Reduceable)
-        {
-            if (KVP.Value == true)
-            {
-                ContainsReducableQVW = true;
-                break;
-            }
-        }
-
-        if (( SGC.GroupNames.Count == 1 ) && (ContainsReducableQVW == false) )
-        {
-            RadPane2.Visible = false;
-        }
-        else if (( SGC.GroupNames.Count > 1 ) && (ContainsReducableQVW == false) )
-        {
-            RadPanelBar1.Visible = false;
-            AutomaticInclusion.Visible = false;
-            ShowCheckedOnly.Visible = false;
-            ReportList.Enabled = true;
-        }
-    }
     /// <summary>
     /// this is a temp fix, we should be passed in the project name here, but instead we just get a group id
     /// so for now we only allow 1 project in the group to have a reducable QVW, we have to find that project
@@ -195,7 +147,7 @@ public partial class Default : System.Web.UI.Page
         FailureReason = FailedBecause.NOT_SET;
 
         string DocumentRoot = System.Configuration.ConfigurationManager.AppSettings["QVDocumentRoot"];
-        string QualifiedPath = System.IO.Path.Combine(DocumentRoot, Session["supergroup"].ToString().Replace('_','\\'));
+        string QualifiedPath = System.IO.Path.Combine(DocumentRoot, Session["groupid"].ToString().Replace('_','\\'));
         string[] Projects = System.IO.Directory.GetFiles(QualifiedPath, "*.hciprj");
         if (( Projects == null ) || (Projects.Length == 0 ))
         {
@@ -229,78 +181,36 @@ public partial class Default : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
 
-        
+        //Session["groupid"] = "0032ClinicalPath01_South_Medicare_alpha";
         if (!IsPostBack)
         {
-            string AdminThisSupergroup = CheckForLogin();
-            if (string.IsNullOrEmpty(AdminThisSupergroup))
+            Session["groupid"] = CheckForLogin();
+            if ( (Session["groupid"] == null ) || (Session["groupid"].ToString() == "") )
             {
                 Response.Redirect("NotAuthorizedIssue.html");
                 return;
             }
 
-            ////if more than one project in group stop now, don't allow an ambigious request result in PHI leak
-            //FailedBecause FailureReason = FailedBecause.NOT_SET;
-            //bool FoundProject = SetReducableProjectInSession( out FailureReason );
-            //if (FoundProject == false)
-            //{
-            //    if (FailureReason == FailedBecause.NO_PROJECTS)
-            //        Response.Redirect("noprojects.html");
-            //    else if (FailureReason == FailedBecause.MULTIPLE_PROJECTS)
-            //        Response.Redirect("multipleprojects.html");
-            //    return;  //halt processing
-            //}
+            //if more than one project in group stop now, don't allow an ambigious request result in PHI leak
+            FailedBecause FailureReason = FailedBecause.NOT_SET;
+            bool FoundProject = SetReducableProjectInSession( out FailureReason );
+            if (FoundProject == false)
+            {
+                if (FailureReason == FailedBecause.NO_PROJECTS)
+                    Response.Redirect("noprojects.html");
+                else if (FailureReason == FailedBecause.MULTIPLE_PROJECTS)
+                    Response.Redirect("multipleprojects.html");
+                return;  //halt processing
+            }
 
             ApplyChangesButton.Enabled = false;
 
-            MillimanCommon.SuperGroup.SuperGroupContainer SuperGroup = MillimanCommon.SuperGroup.GetInstance().FindSuper(AdminThisSupergroup);
-            Session["supergroup"] = SuperGroup;
-
-            List<UserItem> UI = MembershipToUserItems(SuperGroup.GroupNames);
-            UI.Sort((user1, user2) => user1.AccountName.CompareTo(user2.AccountName));
-            UserGrid.DataSource = UI;
-            UserGrid.DataBind();
-
-            int TotalLicense = 0;
-            //update report view and license block
-            foreach (string Group in SuperGroup.GroupNames)
+            if (MillimanCommon.MillimanGroupMap.GetInstance().MillimanGroupDictionary.ContainsKey(Session["groupid"].ToString()) == false)
             {
-                string[] GroupUsers = Roles.GetUsersInRole(Group);
-                TotalLicense += GroupUsers.Length;
-                ListItem NewItem = new ListItem(Group.Substring(Group.LastIndexOf('_') + 1) + "  (" + GroupUsers.Length.ToString() + " License in Use)", Group);
-                ReportList.Items.Add(NewItem);
+                MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "Group " + Session["groupid"] + " not found in external map.");
             }
 
-            //create a dictionary of the groups in the super group that have reducable QVWs  
-            Dictionary<string, bool> Reducable = new Dictionary<string, bool>();
-            string Msg = string.Empty;
-            int Index = 0;
-            foreach (string Group in SuperGroup.GroupNames)
-            {
-                Reducable.Add(Group, IsReducable(Group, out Msg));
-                if (string.IsNullOrEmpty(Msg) == false)
-                    ReportList.Items[Index].Attributes["title"] = Msg;
-                Index++;
-            }
-            Session["reductiondictionary"] = Reducable;  //make available for future calls
-
-            ReportList.Enabled = false;
-
-            SetUIBehavior();
-
-
-
-            string LabelTemplate = "Currently using " + TotalLicense.ToString() + " licenses for " + SuperGroup.GroupNames.Count.ToString() + " reports";
-            Session["totalusers"] = TotalLicense;
-            Session["totalgroups"] = SuperGroup.GroupNames.Count;
-
-            LicenseMessage.Text = LabelTemplate;
-
-            //if (MillimanCommon.MillimanGroupMap.GetInstance().MillimanGroupDictionary.ContainsKey(Session["supergroup"].ToString()) == false)
-            //{
-            //    MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "Group " + Session["supergroup"] + " not found in external map.");
-            //}
-
+            UpdateLicenseMessage();
             if (Membership.GetUser() != null)
             {
                 UserMessage.Text = "Welcome! " + Membership.GetUser().UserName;
@@ -310,124 +220,80 @@ public partial class Default : System.Web.UI.Page
                 Response.Redirect("NotLoggedIn.html");
                 return;
             }
+            //get login info, validate and put groupname into session
 
+            List<UserItem> UI = MembershipToUserItems(Session["groupid"].ToString());
+            UI.Sort( (user1,user2)=>user1.AccountName.CompareTo(user2.AccountName) );
+            UserGrid.DataSource = UI;
+            UserGrid.DataBind();
+
+            List<string> MasterQVWs = new List<string>();
+            List<System.Dynamic.ExpandoObject> QVWItems = MillimanCommon.UserRepo.GetInstance().FindAllQVProjectsForUser(Membership.GetUser().UserName, new string[] { Session["groupid"].ToString() }, false);
             string XML = string.Empty;
-            //GROUPNAME, QVW, Hiearchy, Reduceable
-            foreach (string Group in SuperGroup.GroupNames)
+            if (QVWItems != null)
             {
-                string QVW = string.Empty;
-                string Hierarchy = string.Empty;
-                bool IsReduceable = false;
-                if (GetParameters(Group, out QVW, out Hierarchy, out IsReduceable))
+                RadTreeView RTV = RadPanelBar1.FindItemByValue("TreeHolder").FindControl("AccessTree") as RadTreeView;
+                if (RTV != null)
                 {
-                    string Container = "<Node Text=\"_TEXT_\" Value=\"_VALUE_\" ImageUrl=\"_IMAGE_\">_XML_</Node>";
-                    Container = Container.Replace("_TEXT_", System.IO.Path.GetFileNameWithoutExtension(QVW));
-                    Container = Container.Replace("_VALUE_", QVW);
-                    Container = Container.Replace("_IMAGE_", "images/rootreport.gif");
-
-                    if (string.IsNullOrEmpty(Hierarchy) == false)
+                    foreach (System.Dynamic.ExpandoObject EO in QVWItems)
                     {
-                        MillimanCommon.MillimanTreeNode MTN = MillimanCommon.MillimanTreeNode.GetMemoryTree(Hierarchy);
+                        dynamic D = EO;
+                        List<string> HierarchyFiles = MillimanCommon.ReducedQVWUtilities.GetHierarchyFilenames(D.QVFilename.ToString());
+                        MasterQVWs.Add(D.QVFilename.ToString());
+                        foreach (string Hierarchy in HierarchyFiles)
+                        {
+                            string Container = "<Node Text=\"_TEXT_\" Value=\"_VALUE_\" ImageUrl=\"_IMAGE_\">_XML_</Node>";
+                            Container = Container.Replace("_TEXT_", System.IO.Path.GetFileNameWithoutExtension(D.QVFilename.ToString()));
+                            Container = Container.Replace("_VALUE_", D.QVFilename.ToString());
+                            Container = Container.Replace("_IMAGE_", "images/rootreport.gif");
 
-                        string ContainerXML = MTN.ToBindableXML();//System.IO.File.ReadAllText(Hierarchy);
-                        MTN.SubNodes.Clear();
-                        MTN = null;
+                            MillimanCommon.MillimanTreeNode MTN = MillimanCommon.MillimanTreeNode.GetMemoryTree(Hierarchy);
 
-                        Container = Container.Replace("_XML_", ContainerXML);
-                        XML += Container;  //append nodes
+                            string ContainerXML = MTN.ToBindableXML();//System.IO.File.ReadAllText(Hierarchy);
+                            MTN.SubNodes.Clear();
+                            MTN = null;
+
+                            Container = Container.Replace("_XML_", ContainerXML);
+                            XML += Container;
+                        }
                     }
-                    else
-                    {
-                        string SingleNodeContainer = "<Node Text=\"_TEXT_\" Value=\"_VALUE_\" ImageUrl=\"_IMAGE_\"></Node>";
-                        SingleNodeContainer = SingleNodeContainer.Replace("_TEXT_", System.IO.Path.GetFileNameWithoutExtension(QVW));
-                        SingleNodeContainer = SingleNodeContainer.Replace("_VALUE_", QVW);
-                        SingleNodeContainer = SingleNodeContainer.Replace("_IMAGE_", "images/rootreport.gif");
-                        XML = SingleNodeContainer + XML; //prepend single nodes
-                    }
+                    RTV.LoadXml("<Tree>" + XML + "</Tree>");
+
+                    ////sort tree per request
+                    ////SortCollection(RTV.Nodes);
+                    //foreach (RadTreeNode item in RTV.GetAllNodes())
+                    //{
+                    //    if (item.Nodes.Count > 0)
+                    //    {
+                    //        SortCollection(item.Nodes);
+                    //    }
+                    //}
+
+                    LoadDownloads(MasterQVWs);
                 }
             }
-            RadTreeView RTV = RadPanelBar1.FindItemByValue("TreeHolder").FindControl("AccessTree") as RadTreeView;
-            RTV.LoadXml("<Tree>" + XML + "</Tree>");
-
-            //    return;
-
-            //    List<string> MasterQVWs = new List<string>();
-            //    List<System.Dynamic.ExpandoObject> QVWItems = MillimanCommon.UserRepo.GetInstance().FindAllQVProjectsForUser(Membership.GetUser().UserName, new string[] { Session["supergroup"].ToString() }, false);
-            //    string XML = string.Empty;
-            //    if (QVWItems != null)
-            //    {
-            //        RadTreeView RTV = RadPanelBar1.FindItemByValue("TreeHolder").FindControl("AccessTree") as RadTreeView;
-            //        if (RTV != null)
-            //        {
-            //            foreach (System.Dynamic.ExpandoObject EO in QVWItems)
-            //            {
-            //                dynamic D = EO;
-            //                List<string> HierarchyFiles = MillimanCommon.ReducedQVWUtilities.GetHierarchyFilenames(D.QVFilename.ToString());
-            //                MasterQVWs.Add(D.QVFilename.ToString());
-            //                foreach (string Hierarchy in HierarchyFiles)
-            //                {
-            //                    string Container = "<Node Text=\"_TEXT_\" Value=\"_VALUE_\" ImageUrl=\"_IMAGE_\">_XML_</Node>";
-            //                    Container = Container.Replace("_TEXT_", System.IO.Path.GetFileNameWithoutExtension(D.QVFilename.ToString()));
-            //                    Container = Container.Replace("_VALUE_", D.QVFilename.ToString());
-            //                    Container = Container.Replace("_IMAGE_", "images/rootreport.gif");
-
-            //                    MillimanCommon.MillimanTreeNode MTN = MillimanCommon.MillimanTreeNode.GetMemoryTree(Hierarchy);
-
-            //                    string ContainerXML = MTN.ToBindableXML();//System.IO.File.ReadAllText(Hierarchy);
-            //                    MTN.SubNodes.Clear();
-            //                    MTN = null;
-
-            //                    Container = Container.Replace("_XML_", ContainerXML);
-            //                    XML += Container;
-            //                }
-            //            }
-            //            RTV.LoadXml("<Tree>" + XML + "</Tree>");
-
-            //            ////sort tree per request
-            //            ////SortCollection(RTV.Nodes);
-            //            //foreach (RadTreeNode item in RTV.GetAllNodes())
-            //            //{
-            //            //    if (item.Nodes.Count > 0)
-            //            //    {
-            //            //        SortCollection(item.Nodes);
-            //            //    }
-            //            //}
-
-            //           // LoadDownloads(MasterQVWs);
-            //        }
-            //    }
-            //    else
-            //    {
-            //        MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "User does not have access to any QVWs in group " + Session["supergroup"].ToString() + " to administer users");
-            //    }
-            //}
-
-            System.Collections.ArrayList selectedItems = null;
-            if (Session["selecteditems"] != null)
-                selectedItems = (System.Collections.ArrayList)Session["selecteditems"];
             else
-                selectedItems = new System.Collections.ArrayList();
-
-            if (selectedItems.Count == 0)
-                AccessTable.Enabled = false;
+            {
+                MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "User does not have access to any QVWs in group " + Session["groupid"].ToString() + " to administer users");
+            }
         }
+
+        System.Collections.ArrayList selectedItems = null;
+        if (Session["selecteditems"] != null)
+            selectedItems = (System.Collections.ArrayList)Session["selecteditems"];
+        else
+            selectedItems = new System.Collections.ArrayList();
+
+        if ( selectedItems.Count == 0 )
+            AccessTable.Enabled = false;
     }
+
     /// <summary>
     /// Returns a groupid if valid user
     /// </summary>
     /// <returns></returns>
     private string CheckForLogin()
     {
-        //if (Membership.GetUser() == null)
-        //{
-        //    //short circuit for development
-        //    string Me = "van.nanney@milliman.com";
-        //    bool Res = Membership.ValidateUser(Me, Membership.GetUser(Me).GetPassword());
-        //    FormsAuthentication.SetAuthCookie(Me, true);
-        //    Response.Redirect("Default.aspx");
-        //}
-        //return "Test No Reduction";
-
         string Key = Request["key"];
      
         if (string.IsNullOrEmpty(Key) == false)
@@ -436,58 +302,47 @@ public partial class Default : System.Web.UI.Page
             string CachePathFileName = System.IO.Path.Combine(CacheDir, Key);
             Session["SSOToken"] = CachePathFileName + ".xml";  //when the session expires we delete the cache file in global.asx
             MillimanCommon.CacheEntry CE = MillimanCommon.CacheEntry.Load(CachePathFileName);
-            if (string.IsNullOrEmpty(User.Identity.Name) == true) //if users is already authenticated, skip this check
+            if (CE != null)
             {
-                if (CE != null)
-                {
-                    if (CE.Expires < DateTime.Now)
-                    {
-                        Response.Redirect("NotAuthorizedIssue.html");
-                        return string.Empty;
-                    }
-                    else if ((Membership.GetUser(CE.UserName).ProviderUserKey.ToString() != CE.UserKey.ToString()) && (Membership.GetUser(CE.UserName).IsOnline == false))
-                    {
-                        Response.Redirect("NotAuthorizedIssue.html");
-                        return string.Empty;
-                    }
-
-                    if (System.IO.File.Exists(CachePathFileName))  //make sure cache file exists, there is a race condition btween session end and the metatag call back, this check is a last second check against the race condition
-                    {
-                        if (Membership.ValidateUser(CE.UserName, Membership.GetUser(CE.UserName).GetPassword()) == true)
-                        {
-                            FormsAuthentication.SetAuthCookie(CE.UserName, false);
-                            Response.Redirect("Default.aspx");  //we have to bounce the page to make sure authenication takes effect
-                        }
-                        else
-                        {
-                            Response.Redirect("NotAuthorizedIssue.html");
-                            return string.Empty;
-                        }
-                    }
-                    return CE.MillimanGroupName;
-                }
-                else
+                if (CE.Expires < DateTime.Now)
                 {
                     Response.Redirect("NotAuthorizedIssue.html");
+                    return string.Empty;
                 }
+                else if (( Membership.GetUser(CE.UserName).ProviderUserKey.ToString() != CE.UserKey.ToString() ) && ( Membership.GetUser(CE.UserName).IsOnline == false ) )
+                {
+                    Response.Redirect("NotAuthorizedIssue.html");
+                    return string.Empty;
+                }
+
+                if (System.IO.File.Exists(CachePathFileName))  //make sure cache file exists, there is a race condition btween session end and the metatag call back, this check is a last second check against the race condition
+                {
+                    if (Membership.ValidateUser(CE.UserName, Membership.GetUser(CE.UserName).GetPassword()) == true)
+                    {
+                        FormsAuthentication.SetAuthCookie(CE.UserName, false);
+                    }
+                    else
+                    {
+                        Response.Redirect("NotAuthorizedIssue.html");
+                        return string.Empty;
+                    }
+                }
+                return CE.MillimanGroupName;
             }
             else
             {
-                return CE.MillimanGroupName;
+                Response.Redirect("NotAuthorizedIssue.html");
             }
         }
         return "";
     }
 
-    /// <summary>
-    /// Not sure this is relevant now 
-    /// </summary>
     private void UpdateLicenseMessage()
     {
         try
         {
-            MillimanCommon.MillimanGroupMap.MillimanGroups MG = MillimanCommon.MillimanGroupMap.GetInstance().MillimanGroupDictionary[Session["supergroup"].ToString()];
-            string[] Users = Roles.GetUsersInRole(Session["supergroup"].ToString());
+            MillimanCommon.MillimanGroupMap.MillimanGroups MG = MillimanCommon.MillimanGroupMap.GetInstance().MillimanGroupDictionary[Session["groupid"].ToString()];
+            string[] Users = Roles.GetUsersInRole(Session["groupid"].ToString());
 
             int StandardUsers = 0;
             foreach (string User in Users)
@@ -553,7 +408,7 @@ public partial class Default : System.Web.UI.Page
     protected void RadGrid1_ItemCommand(object sender, GridCommandEventArgs e)
     {
         //make sure we have not timed out
-        if ((Session["supergroup"] == null) || (Session["supergroup"].ToString() == ""))
+        if ((Session["groupid"] == null) || (Session["groupid"].ToString() == ""))
         {
             Response.Redirect("NotAuthorizedIssue.html");
             return;
@@ -646,7 +501,7 @@ public partial class Default : System.Web.UI.Page
                 for (int Index = 0; Index < UserGrid.SelectedItems.Count; Index++)
                 {
                     Telerik.Web.UI.GridDataItem GDI = UserGrid.SelectedItems[Index] as GridDataItem;  //should be only 1
-                    string GroupID = Session["supergroup"].ToString();
+                    string GroupID = Session["groupid"].ToString();
                     Label AccountName = (Label)GDI.FindControl("AccountNameTextBox");
                     //don't allow the admin to delete thier on account, just skip it
                     if (string.Compare(AccountName.Text, Membership.GetUser().UserName, true) == 0)
@@ -689,9 +544,6 @@ public partial class Default : System.Web.UI.Page
                     //SelectedUsers.Add(AccountName.Text);
                     selectedItems.Add(AccountName.Text);
                 }
-                //uncheck all report list items
-                foreach( ListItem LI in ReportList.Items)
-                    LI.Selected = false;
                 //process on users
                 UpdateAccessView();  //do this to make views switch to new user
                 //if only showing checked, re-calc it
@@ -732,7 +584,7 @@ public partial class Default : System.Web.UI.Page
 
             // public string FindQualifedQVProject(string UserName, string QVProjectName, string[] Roles )
             MillimanCommon.UserRepo Repo = MillimanCommon.UserRepo.GetInstance();
-            string QVW = Repo.FindQualifedQVProject(AccountName.Text, System.IO.Path.GetFileName(Session["ProjectPath"].ToString()), new string[] { Session["supergroup"].ToString() });
+            string QVW = Repo.FindQualifedQVProject(AccountName.Text, System.IO.Path.GetFileName(Session["ProjectPath"].ToString()), new string[] { Session["groupid"].ToString() });
             if (string.IsNullOrEmpty(QVW) == false)
             {
                 //even though we looked up the qvw for a user, we want to display via our account so we always use a named
@@ -749,16 +601,14 @@ public partial class Default : System.Web.UI.Page
 
         }
         //cannot rebind especially on delete since this causes the radgrid to crash
-        //List<UserItem> UI = MembershipToUserItems(Session["supergroup"].ToString());
+        //List<UserItem> UI = MembershipToUserItems(Session["groupid"].ToString());
         //UserGrid.DataSource = UI;
         //UserGrid.DataBind();
         if (string.Compare(e.CommandName, "delete", true) == 0)
             Response.Redirect(Request.RawUrl);
         else
         {
-            MillimanCommon.SuperGroup.SuperGroupContainer SuperGroup = Session["supergroup"] as MillimanCommon.SuperGroup.SuperGroupContainer;
-
-            List<UserItem> UI = MembershipToUserItems(SuperGroup.GroupNames);
+            List<UserItem> UI = MembershipToUserItems(Session["groupid"].ToString());
             UI.Sort((user1, user2) => user1.AccountName.CompareTo(user2.AccountName));
             UserGrid.DataSource = UI;
             UserGrid.DataBind();
@@ -768,7 +618,7 @@ public partial class Default : System.Web.UI.Page
     protected void NotesTextBox_TextChanged(object sender, EventArgs e)
     {
         //make sure we have not timed out
-        if ((Session["supergroup"] == null) || (Session["supergroup"].ToString() == ""))
+        if ((Session["groupid"] == null) || (Session["groupid"].ToString() == ""))
         {
             Response.Redirect("NotAuthorizedIssue.html");
             return;
@@ -871,7 +721,7 @@ public partial class Default : System.Web.UI.Page
     protected void ApplyChangesButton_Click(object sender, EventArgs e)
     {
         //make sure we have not timed out
-        if ((Session["supergroup"] == null) || (Session["supergroup"].ToString() == ""))
+        if ((Session["groupid"] == null) || (Session["groupid"].ToString() == ""))
         {
             Response.Redirect("NotAuthorizedIssue.html");
             return;
@@ -914,7 +764,7 @@ public partial class Default : System.Web.UI.Page
             bool AllNodesSelected = false;
             List<MillimanCommon.TreeToFileUtilities.ReductionSelections> Selections = TTFU.GetAccessSelectionsForReduction(AccessTree, out AllNodesSelected);
             MillimanReportReduction.QVWReductionProcessor QVWRepProc = new MillimanReportReduction.QVWReductionProcessor();
-            string GroupID = Session["supergroup"].ToString();
+            string GroupID = Session["groupid"].ToString();
 
             if (QVWRepProc.ProcessUsers(GroupID, Accounts, Selections, AllNodesSelected) == false)
             {
@@ -939,6 +789,7 @@ public partial class Default : System.Web.UI.Page
             }
             else
             {
+                MillimanClientUserAdmin.AddUser.Promote(GroupID, Accounts);
 
                 string Msg = "Account(s):<br/><br/>";
                 if ( Accounts.Count == 1 )
@@ -1007,6 +858,9 @@ public partial class Default : System.Web.UI.Page
     private bool LoadViewsFor(string Account)
     {
 
+        RadTreeView Downloads = RadPanelBar1.FindItemByValue("DownloadHolder").FindControl("DownloadTree") as RadTreeView;
+        Downloads.UncheckAllNodes();
+
         //update checks on access tree
         RadTreeView RTV = RadPanelBar1.FindItemByValue("TreeHolder").FindControl("AccessTree") as RadTreeView;
         RTV.UncheckAllNodes();
@@ -1021,14 +875,19 @@ public partial class Default : System.Web.UI.Page
                 Polenter.Serialization.SharpSerializer SS = new Polenter.Serialization.SharpSerializer(false);
                 List<string> Selections = SS.Deserialize(AccessReadFrom) as List<string>;
                 FindAndCheckNodes(RTN, Selections);
+            }
+        }
 
-                if ( Selections.Count > 0 )
-                {
-                    string DocumentRoot = System.Configuration.ConfigurationManager.AppSettings["QVDocumentRoot"];
-                    string GroupName = System.IO.Path.GetDirectoryName(QVW);
-                    GroupName = GroupName.Substring(DocumentRoot.Length+1).Replace('\\', '_');
-                    ReportList.Items.FindByValue(GroupName).Selected = true;
-                }
+        foreach(RadTreeNode DownloadNode in Downloads.Nodes )
+        {
+            string QVW = DownloadNode.Value;
+            string DownloadsReadFrom = MillimanCommon.ReducedQVWUtilities.GetUsersReducedQVWName(QVW, Account);
+            DownloadsReadFrom = DownloadsReadFrom.ToLower().Replace(".qvw", ".downloads");
+            if (System.IO.File.Exists(DownloadsReadFrom))
+            {
+                Polenter.Serialization.SharpSerializer SS = new Polenter.Serialization.SharpSerializer(false);
+                List<string> Selections = SS.Deserialize(DownloadsReadFrom) as List<string>;
+                UpdateDownloadChecks(DownloadNode, Selections);
             }
         }
         return true;
@@ -1099,15 +958,25 @@ public partial class Default : System.Web.UI.Page
     protected void ShowCheckedOnly_CheckedChanged(object sender, EventArgs e)
     {
         //make sure we have not timed out
-        if ((Session["supergroup"] == null) || (Session["supergroup"].ToString() == ""))
+        if ((Session["groupid"] == null) || (Session["groupid"].ToString() == ""))
         {
             Response.Redirect("NotAuthorizedIssue.html");
             return;
         }
 
+        RadTreeView Downloads = RadPanelBar1.FindItemByValue("DownloadHolder").FindControl("DownloadTree") as RadTreeView;
         RadTreeView RTV = RadPanelBar1.FindItemByValue("TreeHolder").FindControl("AccessTree") as RadTreeView;
 
         CheckBox CB = sender as CheckBox;
+
+        List<RadTreeNode> DownloadTree = Downloads.GetAllNodes() as List<RadTreeNode>;
+        foreach( RadTreeNode RTN in DownloadTree )
+        {
+            if (CB.Checked)
+                RTN.Visible = RTN.Checked;
+            else
+                RTN.Visible = true;
+        }
 
         List<RadTreeNode> AccessTree = RTV.GetAllNodes() as List<RadTreeNode>;
         foreach (RadTreeNode RTN in AccessTree)
@@ -1120,6 +989,7 @@ public partial class Default : System.Web.UI.Page
 
         if (CB.Checked)
         {
+            Downloads.ExpandAllNodes();
             RTV.ExpandAllNodes();
         }
     }
@@ -1202,7 +1072,7 @@ public partial class Default : System.Web.UI.Page
     protected void AutomaticInclusion_CheckedChanged(object sender, EventArgs e)
     {
         //make sure we have not timed out
-        if ((Session["supergroup"] == null) || (Session["supergroup"].ToString() == ""))
+        if ((Session["groupid"] == null) || (Session["groupid"].ToString() == ""))
         {
             Response.Redirect("NotAuthorizedIssue.html");
             return;
@@ -1240,62 +1110,5 @@ public partial class Default : System.Web.UI.Page
        
     }
 
-    private bool IsReducable(string Group, out string Msg)
-    {
-        Msg = string.Empty;
-        string DocumentRoot = System.Configuration.ConfigurationManager.AppSettings["QVDocumentRoot"];
-        string DirectoryToReview = System.IO.Path.Combine(DocumentRoot, Group.Replace('_','\\'));
-        string[] QVW = System.IO.Directory.GetFiles(DirectoryToReview, "*.qvw", System.IO.SearchOption.TopDirectoryOnly);
-        if ( QVW.Length != 1)
-        {  //error condition, is ambigious 
-            MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "Directory '" + DirectoryToReview + "' contains multiple master QVWs, by group defination should only contain 1 QVW");
-            Msg = "Ambigious report - group contains multiple reports.";
-            return false;
-        }
-        else
-        {
-            string CanEmitKey = "can_emit";
-            MillimanCommon.XMLFileSignature signature = new MillimanCommon.XMLFileSignature(QVW[0]);
-            if ( signature.SignatureDictionary.ContainsKey(CanEmitKey))
-            {
-                return System.Convert.ToBoolean(signature.SignatureDictionary[CanEmitKey]);
-            }
-            return false;
-        }
-    }
    
-    /// <summary>
-    /// Return qualfiied filenames for QVWFile and HierarchyFile
-    /// </summary>
-    /// <param name="Group"></param>
-    /// <param name="QVWFile"></param>
-    /// <param name="HierarchyFile"></param>
-    /// <param name="IsReduceable"></param>
-    /// <returns></returns>
-    private bool GetParameters( string Group, out string QVWFile, out string HierarchyFile, out bool IsReduceable)
-    {
-        QVWFile = string.Empty;
-        HierarchyFile = string.Empty;
-        IsReduceable = false;
-
-        Dictionary<string, bool> Reduceable = Session["reductiondictionary"] as Dictionary<string, bool>;
-        MillimanCommon.SuperGroup.SuperGroupContainer SGC = Session["supergroup"] as MillimanCommon.SuperGroup.SuperGroupContainer;
-        
-        string DocumentRoot = System.Configuration.ConfigurationManager.AppSettings["QVDocumentRoot"];
-        string DirectoryToReview = System.IO.Path.Combine(DocumentRoot, Group.Replace('_', '\\'));
-
-        string[] QVWFiles = System.IO.Directory.GetFiles(DirectoryToReview, "*.qvw", System.IO.SearchOption.TopDirectoryOnly);
-        if (QVWFiles.Length != 1)
-            return false;
-
-        IsReduceable = Reduceable[Group];
-        QVWFile = QVWFiles[0];
-        if (IsReduceable == true)
-        {
-            HierarchyFile = QVWFile.ToLower().Replace(".qvw", ".hierarchy_0");
-            if (System.IO.File.Exists(HierarchyFile) == false)
-                return false;
-        }
-        return true;
-    }
 }

@@ -147,13 +147,18 @@
                                             <td >
                                                <table >
                                                     <tr>
-                                                        <td><telerik:RadButton ID="EditProject" runat="server" Text="Edit Project"  OnClientClicked="function(sender,args){Click(sender, args);}" AutoPostBack="false" CommandArgument= <%#Eval("ProjectIndex")%> /> </td>
+                                                        <td><telerik:RadButton Icon-PrimaryIconCssClass="rbEdit" ID="EditProject" runat="server" Text="Edit Project"  OnClientClicked="function(sender,args){Click(sender, args);}" AutoPostBack="false" CommandArgument= <%#Eval("ProjectIndex")%> RenderMode="Lightweight" Width="60px" Height="60px"/> </td>
                                                     </tr>
                                                    <tr>
                                                         <td>
-                                                            <telerik:RadButton ID="RadButton1" runat="server" Text="View QVW" onClick="ViewQVW_Click" ButtonType="LinkButton" NavigateUrl=<%# Eval("QVLauncher") %> Target="_blank"  />
+                                                            <telerik:RadButton Icon-PrimaryIconCssClass="rbNext" ID="RadButton1" runat="server" Text="View QVW" onClick="ViewQVW_Click" ButtonType="LinkButton" NavigateUrl=<%# Eval("QVLauncher") %> Target="_blank"  RenderMode="Lightweight" Width="60px" Height="60px"/>
                                                         </td>
                                                     </tr>
+                                                   <tr>
+                                                       <td>
+                                                          <telerik:RadButton Icon-PrimaryIconCssClass="rbConfig" ID="ToggleAvailability" runat="server" OnClick="ToggleAvailability_Click" OnClientClicking="VerifyStateChange" Text=<%# Eval("Availability")%> ToolTip=<%# Eval("AvailabilityTooltip")%>      RenderMode="Lightweight" Width="60px" Height="60px" />
+                                                      </td>
+                                                   </tr>
                                                 </table>
                                             </td>
                                         </tr>
@@ -226,13 +231,18 @@
                                             <td >
                                                <table >
                                                     <tr>
-                                                        <td><telerik:RadButton ID="EditProject" runat="server" Text="Edit Project"  OnClientClicked="function(sender,args){Click(sender, args);}" AutoPostBack="false" CommandArgument= <%#Eval("ProjectIndex")%> /> </td>
+                                                        <td><telerik:RadButton  runat="server" Text="Edit Project"  OnClientClicked="function(sender,args){Click(sender, args);}" AutoPostBack="false" CommandArgument= <%#Eval("ProjectIndex")%> Icon-PrimaryIconCssClass="rbEdit" RenderMode="Lightweight" Width="60px" Height="60px"/> </td>
                                                     </tr>
                                                    <tr>
                                                         <td>
-                                                            <telerik:RadButton ID="ViewQVW" runat="server" Text="View QVW" onClick="ViewQVW_Click" ButtonType="LinkButton" NavigateUrl=<%# Eval("QVLauncher")%> />
+                                                            <telerik:RadButton Icon-PrimaryIconCssClass="rbNext" ID="ViewQVW" runat="server" Text="View QVW" onClick="ViewQVW_Click" ButtonType="LinkButton" NavigateUrl=<%# Eval("QVLauncher")%> RenderMode="Lightweight" Width="60px" Height="60px"/>
                                                         </td>
                                                     </tr>
+                                                   <tr>
+                                                       <td>
+                                                          <telerik:RadButton Icon-PrimaryIconCssClass="rbConfig" ID="ToggleAvailability" runat="server" OnClick="ToggleAvailability_Click" OnClientClicking="VerifyStateChange" Text=<%# Eval("Availability")%> ToolTip=<%# Eval("AvailabilityTooltip")%>      RenderMode="Lightweight" Width="60px" Height="60px"/>
+                                                       </td>
+                                                   </tr>
                                                 </table>
                                             </td>
                                         </tr>
@@ -255,14 +265,33 @@
         </div>
 
         <asp:PlaceHolder runat="server" ID="test"></asp:PlaceHolder>
-        <telerik:RadWindowManager EnableShadow="true" Behaviors=" Close, Move, Resize" ID="RadWindowManager" DestroyOnClose="true" Opacity="100" runat="server" Width="450" Height="400" VisibleStatusbar="False" Style="z-index: 20000;">
+        <telerik:RadWindowManager EnableShadow="true" Behaviors=" Close, Move, Resize" ID="RadWindowManager" DestroyOnClose="true" Opacity="100" runat="server" VisibleStatusbar="False" Style="z-index: 20000;">
           <Windows>
-               <telerik:RadWindow ID="RadWindow1" runat="server" Animation="Fade" AutoSize="True" Behaviors="Close, Move" Modal="True"  Height="800px" Width="600px" InitialBehaviors="Close"  VisibleStatusbar="False"  VisibleTitlebar="False" />
+               <telerik:RadWindow ID="RadWindow1" runat="server" Animation="Fade" AutoSize="True" Behaviors="Close, Move" Modal="True"   InitialBehaviors="Close"  VisibleStatusbar="False"  VisibleTitlebar="False" />
           </Windows>
      </telerik:RadWindowManager>
     </form>
 
     <script language="javascript" type="text/javascript">
+   
+        function VerifyStateChange(button, args)
+        {
+            var ButtonLabel = button.get_text().toUpperCase();
+            if (ButtonLabel == "OFFLINE")
+            {
+                args.set_cancel(true);
+                alert(button.get_toolTip());
+            }
+            else if (ButtonLabel == "TAKE OFFLINE")
+            {
+                args.set_cancel(!confirm("Selecting this option will make the report UNAVAILABLE to users. Continue?"));
+            }
+            else if ( ButtonLabel == "TAKE ONLINE")
+            {
+                args.set_cancel(!confirm("Selecting this option will make the report AVAILABLE to users. Continue?"));
+            }
+        }
+
         function OpenProfile()
         {
 
@@ -274,7 +303,7 @@
             }
             else {
                 var wnd = window.radopen("ProjectEditor.aspx?key=" + args._commandArgument, "Project " + args._commandArgument);
-                wnd.setSize(900, 450);
+                wnd.setSize(930, 500);
                 wnd.Center();
                 wnd.set_title(args._commandArgument);
                 wnd.add_beforeClose(OnBeforeClose);
@@ -295,6 +324,8 @@
         {
 
         }
+
+
     </script>
 
 </body>

@@ -138,15 +138,6 @@ public partial class Default {
     protected global::System.Web.UI.WebControls.CheckBox ShowCheckedOnly;
     
     /// <summary>
-    /// ReportList control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::System.Web.UI.WebControls.CheckBoxList ReportList;
-    
-    /// <summary>
     /// RadPanelBar1 control.
     /// </summary>
     /// <remarks>
