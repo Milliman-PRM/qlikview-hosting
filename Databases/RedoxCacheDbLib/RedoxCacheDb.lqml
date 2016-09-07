@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database Name="Data" EntityNamespace="DbContext" ContextNamespace="DbContext" Class="RedoxCacheContext" xmlns:ed="http://devart.com/schemas/EntityDeveloper/1.0" ed:Guid="4510108b-bfc5-426b-accd-f5ef155de53e" Extended="true" xmlns="http://schemas.devart.com/linqconnect/mapping">
+  <Connection Mode="ConnectionString" ConnectionString="" Provider="" />
+  <Table Name="&quot;Public&quot;.scheduling" Member="Schedulings">
+    <Type Name="Scheduling" ed:Guid="834d7842-04cc-4a2d-83a3-d1c4283f1451">
+      <Column Name="dbid" Type="System.Int64" AutoSync="OnInsert" DbType="bigserial NOT NULL" IsReadOnly="true" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" ed:ValidateRequired="true" ed:Guid="cc3f91e5-45f2-4338-9f66-675f9b172215" />
+      <Column Name="meta" Member="Meta" Type="System.String" DbType="json NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="f9524522-bc4e-459f-b39c-a0338436d4f2" />
+      <Column Name="content" Member="Content" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="0c1d2813-86dc-42c7-9fb6-97ff374e8a2a" />
+    </Type>
+  </Table>
+</Database>

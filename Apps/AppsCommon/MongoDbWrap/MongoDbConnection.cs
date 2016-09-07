@@ -1,10 +1,11 @@
 ﻿using System;
+using System.IO;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Bson.IO;
+using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
 
 namespace MongoDbWrap
@@ -13,13 +14,43 @@ namespace MongoDbWrap
     {
         private IMongoClient _Client = null;
         private IMongoDatabase _Db = null;
+
+        public bool IsInitialized
+        {
+            get { return TestDatabaseAccess(); }
+        }
+
         public IMongoDatabase Db
         {
             get { return _Db; }
         }
 
-        //public MongoDbConnection()
-        //{}
+        public MongoDbConnection()
+        {}
+
+        public bool InitializeWithIni(String IniFileName, String SectionName)
+        {
+            if (!File.Exists(IniFileName) || String.IsNullOrEmpty(SectionName))
+            {
+                return false;
+            }
+
+            MongoDbConnectionParameters Params = new MongoDbConnectionParameters();
+            if (!Params.ReadFromIni(IniFileName, SectionName))
+            {
+                return false;
+            }
+
+            return ConnectMongo(Params);
+        }
+
+        public bool InitializeWithEnvironment(String MongoDbNameBase)
+        {
+            MongoDbConnectionParameters Params = new MongoDbConnectionParameters();
+            Params.ReadFromEnvironment(MongoDbNameBase);
+            // Trace.WriteLine("Mongo connection params: " + Params.ToString());  // Don't leave this on, password is logged
+            return ConnectMongo(Params);
+        }
 
         public MongoDbConnection(MongoDbConnectionParameters Params)
         {
@@ -33,8 +64,13 @@ namespace MongoDbWrap
 
         }
 
-        public void ConnectMongo(MongoDbConnectionParameters Params)
+        public bool ConnectMongo(MongoDbConnectionParameters Params)
         {
+            if (!Params.IsValid())
+            {
+                return false;
+            }
+
             var credential = MongoCredential.CreateCredential(Params._UserDomain, Params._User, Params._Password);
             var settings = new MongoClientSettings
             {
@@ -60,6 +96,8 @@ namespace MongoDbWrap
             {
                 AccessMongoDatabase(Params._Db);
             }
+
+            return _Client != null;
         }
 
         public void Disconnect()
@@ -87,6 +125,28 @@ namespace MongoDbWrap
             return true;
         }
 
+#if false
+        public List<Dictionary<String, String>> GetDocuments(String CollectionName, Dictionary<String,String> SearchFilter)
+        {
+            List<Dictionary<String, String>> ReturnDict = new List<Dictionary<String, String>>();
+            List<MongodbPersonEntity> ReturnPersons = new List<MongodbPersonEntity>();
+
+            if (_Db != null)
+            {
+                BsonDocument Filter = new BsonDocument(SearchFilter);
+                Filter = new BsonDocument ( );
+                //Filter = new BsonDocument { new BsonElement("last_name", new BsonString(SearchFilter["last_name"])) };
+                ProjectionDefinition<Dictionary<String, String>> Proj = Builders<Dictionary<String, String>>.Projection.Exclude("_id");
+
+                //ReturnValb = _Db.GetCollection<BsonDocument>(CollectionName).Find(x => x["last_name"] != "").ToList();
+                ReturnPersons = _Db.GetCollection<Person>(CollectionName).Find("{last_name: {$ne: \"\"}}").ToList();
+                ReturnDict = _Db.GetCollection<Dictionary<String, String>>(CollectionName).Find("{last_name: {$ne: \"\"}}").Project<Dictionary<String, String>>(Proj).ToList();
+            }
+
+            return ReturnDict;
+        }
+#endif
+
         public List<string> GetCollectionNames()
         {
             List<string> CollectionNames = new List<string>();
@@ -113,14 +173,25 @@ namespace MongoDbWrap
             return CollectionNames;
         }
 
-        public bool InsertDocument(string CollectionName, Dictionary<string, string> Content)
+        public bool DeleteDocuments(string CollectionName, Dictionary<string, string> Match, bool Async = false)
         {
-            BsonDocument NewDoc = new BsonDocument(Content);
-
-            // Insert the MongoDB document
             try
             {
-                _Db.GetCollection<BsonDocument>(CollectionName).InsertOneAsync(NewDoc);
+                DeleteResult Result;
+
+                BsonDocument MatchDoc = new BsonDocument();
+                foreach (String Key in Match.Keys)
+                {
+                    MatchDoc.Add(Key, Match[Key]);
+                }
+                if (Async)
+                {
+                    _Db.GetCollection<BsonDocument>(CollectionName).DeleteManyAsync(MatchDoc);
+                }
+                else
+                {
+                    Result = _Db.GetCollection<BsonDocument>(CollectionName).DeleteMany(MatchDoc);
+                }
             }
             catch (Exception)
             {
@@ -129,5 +200,99 @@ namespace MongoDbWrap
             return true;
         }
 
+        /// <summary>
+        /// Builds a bson document and inserts to MongoDB.
+        /// </summary>
+        /// <param name="CollectionName"></param>
+        /// <param name="Content"></param>
+        /// <param name="Async">Frequent use of async can result in lost inserts, beware</param>
+        /// <returns></returns>
+        public bool InsertDocument(string CollectionName, Dictionary<string, string> Content, bool Async = false)
+        {
+            // Insert the MongoDB document
+            try
+            {
+                BsonDocument NewDoc = new BsonDocument();
+                foreach (String Key in Content.Keys)
+                {
+                    NewDoc.Add(Key, Content[Key]);  // TODO get this value string parsed into a proper Bson type
+                }
+
+                if (Async)
+                {
+                    _Db.GetCollection<BsonDocument>(CollectionName).InsertOneAsync(NewDoc);
+                }
+                else
+                {
+                    _Db.GetCollection<BsonDocument>(CollectionName).InsertOne(NewDoc);
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Builds a bson document and inserts to MongoDB.
+        /// </summary>
+        /// <param name="CollectionName"></param>
+        /// <param name="JsonContentString"></param>
+        /// <param name="Async">Frequent use of async can result in lost inserts, beware</param>
+        /// <returns></returns>
+        public bool InsertDocument(string CollectionName, string JsonContentString, bool Async = false)
+        {
+            try
+            {
+                BsonDocument NewDoc = BsonDocument.Parse(JsonContentString);
+                if (Async)
+                {
+                    _Db.GetCollection<BsonDocument>(CollectionName).InsertOneAsync(NewDoc);
+                }
+                else
+                {
+                    _Db.GetCollection<BsonDocument>(CollectionName).InsertOne(NewDoc);
+                }
+            }
+            catch (Exception e)
+            {
+                String Msg = e.Message;
+                return false;
+            }
+            return true;
+        }
+
+        public bool DocumentExists(string CollectionName, Dictionary<string, string> Match)
+        {
+            long HowManyMatches;
+
+            try
+            {
+                //FilterDefinition<BsonDocument> FindFilterDef = Builders<BsonDocument>.Filter.Empty;
+                FilterDefinition<BsonDocument> FindFilterDef = null;
+                foreach (KeyValuePair<String,String> Criterion in Match)
+                {
+                    if (FindFilterDef == null)
+                    {
+                        FindFilterDef = Builders<BsonDocument>.Filter.AnyEq(Criterion.Key, Criterion.Value);
+                    }
+                    else
+                    {
+                        FindFilterDef = FindFilterDef & Builders<BsonDocument>.Filter.AnyEq(Criterion.Key, Criterion.Value);
+                    }
+                }
+
+                HowManyMatches = _Db.GetCollection<BsonDocument>(CollectionName).Find(FindFilterDef).Count();
+            }
+            catch (Exception e)
+            {
+                String Msg = e.Message;
+                return false;
+            }
+            return HowManyMatches > 0;
+        }
+
     }
+
 }

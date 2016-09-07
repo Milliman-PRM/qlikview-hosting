@@ -17,13 +17,22 @@ namespace MongoDbWrap
 
         /// <summary>
         /// Constructor, which immediately processes the .ini file with the provided name
+        /// If the file does not exist, an empty set of contents will be encapsulated and no error is 
         /// </summary>
         /// <param name="file">Name of the .ini file to be processed</param>
         public IniProcessor(string file)
         {
-            var txt = File.ReadAllText(file);
-
             Dictionary<string, string> currentSection = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+
+            String txt = "";
+            try
+            {
+                txt = File.ReadAllText(file); // this throws if file does not exist
+            }
+            catch (Exception e)
+            {
+                String x = e.Message;
+            }
 
             // create a global section
             ini[""] = currentSection;

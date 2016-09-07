@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<EntityDeveloper Version="6.0.11.0">
+  <ModelSettings xmlns:ed="http://devart.com/schemas/EntityDeveloper/1.0" AppConnectionStringName="CdrContextConnectionString" ConnectionStringInAppConfig="True" RegenareteConnectionStringInAppConfig="True" TargetFramework="Net45" DetectTPTInheritance="False">
+    <Generation>
+      <GeneratedFiles>
+        <File Name="CdrDataContext.CdrDataContext.cs" Project="CdrDbLib" ProjectFolder="Data Context" />
+        <File Name="CdrDataContext.Patient.cs" Project="CdrDbLib" ProjectFolder="Entities" OverwriteMode="None" />
+        <File Name="CdrDataContext.Patient.Generated.cs" Project="CdrDbLib" ProjectFolder="Entities" />
+        <File Name="CdrDataContext.Organization.cs" Project="CdrDbLib" ProjectFolder="Entities" OverwriteMode="None" />
+        <File Name="CdrDataContext.Organization.Generated.cs" Project="CdrDbLib" ProjectFolder="Entities" />
+        <File Name="CdrDataContext.PatientIdentifier.cs" Project="CdrDbLib" ProjectFolder="Entities" OverwriteMode="None" />
+        <File Name="CdrDataContext.PatientIdentifier.Generated.cs" Project="CdrDbLib" ProjectFolder="Entities" />
+        <File Name="CdrDataContext.PhysicalAddress.cs" Project="CdrDbLib" ProjectFolder="Entities" OverwriteMode="None" />
+        <File Name="CdrDataContext.PhysicalAddress.Generated.cs" Project="CdrDbLib" ProjectFolder="Entities" />
+        <File Name="CdrDataContext.TelephoneNumber.cs" Project="CdrDbLib" ProjectFolder="Entities" OverwriteMode="None" />
+        <File Name="CdrDataContext.TelephoneNumber.Generated.cs" Project="CdrDbLib" ProjectFolder="Entities" />
+        <File Name="CdrDataContext.DataFeed.cs" Project="CdrDbLib" ProjectFolder="Entities" OverwriteMode="None" />
+        <File Name="CdrDataContext.DataFeed.Generated.cs" Project="CdrDbLib" ProjectFolder="Entities" />
+        <File Name="CdrDataContext.VisitEncounter.cs" Project="CdrDbLib" ProjectFolder="Entities" OverwriteMode="None" />
+        <File Name="CdrDataContext.VisitEncounter.Generated.cs" Project="CdrDbLib" ProjectFolder="Entities" />
+        <File Name="CdrDataContext.Charge.cs" Project="CdrDbLib" ProjectFolder="Entities" OverwriteMode="None" />
+        <File Name="CdrDataContext.Charge.Generated.cs" Project="CdrDbLib" ProjectFolder="Entities" />
+        <File Name="CdrDataContext.Measurement.cs" Project="CdrDbLib" ProjectFolder="Entities" OverwriteMode="None" />
+        <File Name="CdrDataContext.Measurement.Generated.cs" Project="CdrDbLib" ProjectFolder="Entities" />
+        <File Name="CdrDataContext.Medication.cs" Project="CdrDbLib" ProjectFolder="Entities" OverwriteMode="None" />
+        <File Name="CdrDataContext.Medication.Generated.cs" Project="CdrDbLib" ProjectFolder="Entities" />
+        <File Name="CdrDataContext.Immunization.cs" Project="CdrDbLib" ProjectFolder="Entities" OverwriteMode="None" />
+        <File Name="CdrDataContext.Immunization.Generated.cs" Project="CdrDbLib" ProjectFolder="Entities" />
+        <File Name="CdrDataContext.InsuranceCoverage.cs" Project="CdrDbLib" ProjectFolder="Entities" OverwriteMode="None" />
+        <File Name="CdrDataContext.InsuranceCoverage.Generated.cs" Project="CdrDbLib" ProjectFolder="Entities" />
+        <File Name="CdrDataContext.Diagnosis.cs" Project="CdrDbLib" ProjectFolder="Entities" OverwriteMode="None" />
+        <File Name="CdrDataContext.Diagnosis.Generated.cs" Project="CdrDbLib" ProjectFolder="Entities" />
+        <File Name="CdrDataContext.Problem.cs" Project="CdrDbLib" ProjectFolder="Entities" OverwriteMode="None" />
+        <File Name="CdrDataContext.Problem.Generated.cs" Project="CdrDbLib" ProjectFolder="Entities" />
+        <File Name="CdrDataContext.AggregationRun.cs" Project="CdrDbLib" ProjectFolder="Entities" OverwriteMode="None" />
+        <File Name="CdrDataContext.AggregationRun.Generated.cs" Project="CdrDbLib" ProjectFolder="Entities" />
+        <File Name="CdrDataContext.ChargeCode.cs" Project="CdrDbLib" ProjectFolder="Entities" OverwriteMode="None" />
+        <File Name="CdrDataContext.ChargeCode.Generated.cs" Project="CdrDbLib" ProjectFolder="Entities" />
+        <File Name="CdrDataContext.Procedure.cs" Project="CdrDbLib" ProjectFolder="Entities" OverwriteMode="None" />
+        <File Name="CdrDataContext.Procedure.Generated.cs" Project="CdrDbLib" ProjectFolder="Entities" />
+        <File Name="CdrDataContext.Address.cs" Project="CdrDbLib" ProjectFolder="Entities" OverwriteMode="None" />
+        <File Name="CdrDataContext.Address.Generated.cs" Project="CdrDbLib" ProjectFolder="Entities" />
+        <File Name="CdrDataContext.PhoneNumber.cs" Project="CdrDbLib" ProjectFolder="Entities" OverwriteMode="None" />
+        <File Name="CdrDataContext.PhoneNumber.Generated.cs" Project="CdrDbLib" ProjectFolder="Entities" />
+        <File Name="CdrDataContext.CodedEntry.cs" Project="CdrDbLib" ProjectFolder="Entities" OverwriteMode="None" />
+        <File Name="CdrDataContext.CodedEntry.Generated.cs" Project="CdrDbLib" ProjectFolder="Entities" />
+        <File Name="CdrDataContext.DentalDetail.cs" Project="CdrDbLib" ProjectFolder="Entities" OverwriteMode="None" />
+        <File Name="CdrDataContext.DentalDetail.Generated.cs" Project="CdrDbLib" ProjectFolder="Entities" />
+        <File Name="CdrDataContext.Gender.cs" Project="CdrDbLib" ProjectFolder="Entities" />
+        <File Name="CdrDataContext.PhoneType.cs" Project="CdrDbLib" ProjectFolder="Entities" />
+        <File Name="CdrDataContext.MaritalStatus.cs" Project="CdrDbLib" ProjectFolder="Entities" />
+        <File Name="CdrDataContext.AggregationRunStatus.cs" Project="CdrDbLib" ProjectFolder="Entities" />
+        <File Name="CdrDataContext.AddressType.cs" Project="CdrDbLib" ProjectFolder="Entities" />
+        <File Name="CdrDataContext.ResultNormal.cs" Project="CdrDbLib" ProjectFolder="Entities" />
+      </GeneratedFiles>
+    </Generation>
+    <DatabaseFirstNamingRules>
+      <EntitySet PluralizationName="Pluralize" />
+      <Class UseSchemaAsPrefix="False" PluralizeCollectionNavigationPropertyName="True" RemoveUnderscores="True" RemoveInvalidCharacters="True" CodeCase="FirstLetterUppercase" AddPrefix="" AddSuffix="" RemovePrefixes="" RemoveSuffixes="" PluralizationName="Singularize" />
+      <Property RemoveUnderscores="True" RemoveInvalidCharacters="True" CodeCase="FirstLetterUppercase" AddPrefix="" AddSuffix="" RemovePrefixes="" RemoveSuffixes="" PluralizationName="Unchanged" />
+    </DatabaseFirstNamingRules>
+    <ModelFirst StorageSynchronizationEnabled="True" TargetSchema="public" ForeignKeyColumnRule="%master entity name%%master column name%">
+      <TargetServer Server="PostgreSQL" ServerVersion="9.5" />
+      <ModelFirstNamingRules>
+        <Table RemoveUnderscores="False" RemoveInvalidCharacters="True" CodeCase="Lower" AddPrefix="" AddSuffix="" RemovePrefixes="" RemoveSuffixes="" PluralizationName="Unchanged" />
+        <Column RemoveUnderscores="False" RemoveInvalidCharacters="True" CodeCase="Lower" AddPrefix="" AddSuffix="" RemovePrefixes="" RemoveSuffixes="" PluralizationName="Unchanged" />
+      </ModelFirstNamingRules>
+    </ModelFirst>
+    <Diagrams>
+      <Diagram Name="CdrDataContextDiagram" DefaultDiagram="True" />
+    </Diagrams>
+    <Templates>
+      <Template Name="LinqConnect" Description="Use this template to generate a strongly-typed DataContext class and persistence-aware classes." Enabled="True" PredefinedTemplateName="LinqConnect C#">
+        <ed:Property Name="ValidationFramework" Type="EntityDeveloper.TemplateEngine.ValidationFramework, EntityDeveloper.Common, Version=6.0.11.0, Culture=neutral, PublicKeyToken=09af7300eec23701">
+          <ValidationFramework>None</ValidationFramework>
+        </ed:Property>
+        <ed:Property Name="ValidationErrorMessages" Type="EntityDeveloper.TemplateEngine.ValidationErrorMessages, EntityDeveloper.Common, Version=6.0.11.0, Culture=neutral, PublicKeyToken=09af7300eec23701">
+          <ValidationErrorMessages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+        </ed:Property>
+        <ed:Property Name="FilePerClass" Type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+          <boolean>true</boolean>
+        </ed:Property>
+        <ed:Property Name="ModelNameAsFilesPrefix" Type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+          <boolean>true</boolean>
+        </ed:Property>
+        <ed:Property Name="HeaderTimestampVersionControlTag" Type="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+          <string d6p1:nil="true" xmlns:d6p1="http://www.w3.org/2001/XMLSchema-instance" />
+        </ed:Property>
+        <ed:Property Name="EntitiesOutput" Type="EntityDeveloper.TemplateEngine.OutputInfo, EntityDeveloper.Common, Version=6.0.11.0, Culture=neutral, PublicKeyToken=09af7300eec23701">
+          <OutputInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <Project>CdrDbLib</Project>
+            <ProjectFolder>Entities</ProjectFolder>
+            <DestinationFolder />
+          </OutputInfo>
+        </ed:Property>
+        <ed:Property Name="ContextOutput" Type="EntityDeveloper.TemplateEngine.OutputInfo, EntityDeveloper.Common, Version=6.0.11.0, Culture=neutral, PublicKeyToken=09af7300eec23701">
+          <OutputInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <Project>CdrDbLib</Project>
+            <ProjectFolder>Data Context</ProjectFolder>
+            <DestinationFolder />
+          </OutputInfo>
+        </ed:Property>
+        <ed:Property Name="GeneratePartialClass" Type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+          <boolean>true</boolean>
+        </ed:Property>
+        <ed:Property Name="ImplementCloneable" Type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+          <boolean>false</boolean>
+        </ed:Property>
+        <ed:Property Name="UseCompiledQueryCache" Type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+          <boolean>true</boolean>
+        </ed:Property>
+        <ed:Property Name="GenerateDummyComments" Type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+          <boolean>false</boolean>
+        </ed:Property>
+      </Template>
+    </Templates>
+    <AttributeAssemblies />
+    <NewClassProperties>﻿&lt;ArrayOfCopiedObjectInfo xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.datacontract.org/2004/07/EntityDeveloper"&gt;&lt;CopiedObjectInfo&gt;&lt;DependencyObjects xmlns:d3p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" /&gt;&lt;ModelObject z:Id="i1" xmlns:d3p1="http://schemas.datacontract.org/2004/07/EntityDeveloper.Linq" i:type="d3p1:LinqConnectProperty" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/"&gt;&lt;b&gt;dbid&lt;/b&gt;&lt;c /&gt;&lt;d&gt;true&lt;/d&gt;&lt;attributes xmlns:d4p1="http://schemas.datacontract.org/2004/07/Devart.ObjectModel" i:type="d4p1:ObservableCollectionOfAttributeValue7R2LQkUY" /&gt;&lt;a xmlns:d4p1="http://www.w3.org/2001/XMLSchema" i:type="d4p1:string" /&gt;&lt;b /&gt;&lt;c i:nil="true" /&gt;&lt;d i:nil="true" /&gt;&lt;documentation z:Id="i2"&gt;&lt;a /&gt;&lt;b /&gt;&lt;/documentation&gt;&lt;e /&gt;&lt;f&gt;None&lt;/f&gt;&lt;g&gt;-1&lt;/g&gt;&lt;h&gt;false&lt;/h&gt;&lt;i&gt;false&lt;/i&gt;&lt;inheritanceModifier&gt;None&lt;/inheritanceModifier&gt;&lt;j&gt;-1&lt;/j&gt;&lt;k&gt;-1&lt;/k&gt;&lt;l i:nil="true" /&gt;&lt;m i:nil="true" /&gt;&lt;n i:nil="true" /&gt;&lt;nullable&gt;false&lt;/nullable&gt;&lt;primaryKey&gt;true&lt;/primaryKey&gt;&lt;type xmlns:d4p1="http://www.w3.org/2001/XMLSchema" i:type="d4p1:string"&gt;System.Int64&lt;/type&gt;&lt;validateRequired&gt;true&lt;/validateRequired&gt;&lt;a xmlns:d4p1="http://schemas.datacontract.org/2004/07/EntityDeveloper.Mapping" z:Id="i3" i:type="d4p1:LinqPropertyMapping"&gt;&lt;d4p1:a z:Ref="i1" /&gt;&lt;d4p1:b z:Id="i4"&gt;&lt;d4p1:a&gt;&lt;d4p1:a xmlns:d7p1="http://schemas.datacontract.org/2004/07/System.Collections.ObjectModel"&gt;&lt;d7p1:list xmlns:d8p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" /&gt;&lt;/d4p1:a&gt;&lt;/d4p1:a&gt;&lt;d4p1:b i:nil="true" /&gt;&lt;d4p1:c z:Ref="i1" /&gt;&lt;d4p1:d&gt;Custom&lt;/d4p1:d&gt;&lt;d4p1:e xmlns:d6p1="http://schemas.datacontract.org/2004/07/Devart.ObjectModel" i:type="d6p1:ObservableCollectionOfMappableDbColumn_Sgy5EVeG"&gt;&lt;d6p1:MappableDbColumn z:Id="i5" i:type="d4p1:LinqMappingColumnObject"&gt;&lt;d4p1:a z:Ref="i4" /&gt;&lt;d4p1:b&gt;dbid&lt;/d4p1:b&gt;&lt;d4p1:a xmlns:d8p1="http://www.w3.org/2001/XMLSchema" i:type="d8p1:string" /&gt;&lt;d4p1:b&gt;bigserial&lt;/d4p1:b&gt;&lt;/d6p1:MappableDbColumn&gt;&lt;/d4p1:e&gt;&lt;/d4p1:b&gt;&lt;d4p1:c /&gt;&lt;/a&gt;&lt;d3p1:a&gt;Public&lt;/d3p1:a&gt;&lt;d3p1:b&gt;true&lt;/d3p1:b&gt;&lt;d3p1:c&gt;OnInsert&lt;/d3p1:c&gt;&lt;d3p1:d&gt;false&lt;/d3p1:d&gt;&lt;d3p1:e&gt;false&lt;/d3p1:e&gt;&lt;d3p1:f&gt;true&lt;/d3p1:f&gt;&lt;d3p1:g&gt;Never&lt;/d3p1:g&gt;&lt;/ModelObject&gt;&lt;ShapeViewInfo i:nil="true" /&gt;&lt;/CopiedObjectInfo&gt;&lt;/ArrayOfCopiedObjectInfo&gt;</NewClassProperties>
+  </ModelSettings>
+</EntityDeveloper>
