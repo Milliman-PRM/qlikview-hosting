@@ -65,8 +65,8 @@ public partial class bulk_admin_controls_create_user_with_role : System.Web.UI.U
                 RadGrid1.Rebind();
 
                 UserPanel.Expanded = false;
-                UserList.Text = "";
 
+                UserList.Text = "";
                 updPanelUserList.Update();
             }
             else
@@ -144,6 +144,10 @@ public partial class bulk_admin_controls_create_user_with_role : System.Web.UI.U
             RadGrid1.DataSource = uInfoList;
             RadGrid1.Rebind();
 
+            //clear control
+            ctrlUserRoles.LoadUserRoles();
+            updPanelUserRoles.Update();
+
             UserList.Text = string.Empty;
             updPanelUserList.Update();
         }
@@ -161,6 +165,8 @@ public partial class bulk_admin_controls_create_user_with_role : System.Web.UI.U
         UserType.SelectedIndex = 0;
         //clear control
         ctrlUserRoles.LoadUserRoles();
+        updPanelUserRoles.Update();
+
         //Clear all grid items
         foreach (GridDataItem item in RadGrid1.Items)
         {
@@ -185,7 +191,6 @@ public partial class bulk_admin_controls_create_user_with_role : System.Web.UI.U
         UserPanel.Expanded = false;
 
         UserList.Text = string.Empty;
-
         updPanelUserList.Update();
     }
 
@@ -242,7 +247,7 @@ public partial class bulk_admin_controls_create_user_with_role : System.Web.UI.U
                     p.AccessOptions.MustChangePassword = true;
                     p.Save();
 
-                    ctrlUserRoles.LoadUserRoles();
+                    InitilizeScreen();
 
                     try
                     {
