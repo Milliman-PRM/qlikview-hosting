@@ -147,9 +147,9 @@ namespace ClientPublisher
                     base.TaskProcessor(parms);
                     return;
                 }
-                //copy master QVW to reduction server working dir
+                //copy master QVW that user uploaded to reduction server working dir VWN
                 string QVWRemoteVersion = System.IO.Path.Combine(RemoteReductionDir, ProjectSettings.QVName + ".qvw");
-                string QVWLocalVersion = System.IO.Path.Combine(ProjectSettings.AbsoluteProjectPath, ProjectSettings.QVName + ".qvw");
+                string QVWLocalVersion = System.IO.Path.Combine(WorkingDirectory, ProjectSettings.QVName + ".qvw");
                 System.IO.File.Copy( QVWLocalVersion, QVWRemoteVersion);
                 if ( System.IO.File.Exists(QVWRemoteVersion) == false )
                 {
@@ -315,6 +315,10 @@ namespace ClientPublisher
                                 DestinationFile = System.IO.Path.Combine(WorkingDirectory, "configurations", System.IO.Path.GetFileName(File));
                             }
                             else if ( Extension == ".qvw")
+                            {
+                                DestinationFile = System.IO.Path.Combine(WorkingDirectory, "ReducedCachedQVWs", System.IO.Path.GetFileName(File));
+                            }
+                            else if ( Extension.Contains(".uniquevalues_"))
                             {
                                 DestinationFile = System.IO.Path.Combine(WorkingDirectory, "ReducedCachedQVWs", System.IO.Path.GetFileName(File));
                             }

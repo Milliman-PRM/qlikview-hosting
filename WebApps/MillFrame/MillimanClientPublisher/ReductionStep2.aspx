@@ -24,6 +24,7 @@
                     <telerik:RadTab Text="New Selectable Items" ImageUrl="../images/Places-user-identity-icon.png" ToolTip="Client administrator visible - provides a list of all new items per new report that have not been associated with any users."></telerik:RadTab>
                     <telerik:RadTab Text="Reduction Status" ToolTip="Detail breakdown of reduction per user processing."></telerik:RadTab>
                     <telerik:RadTab Text="General Processing Status" ToolTip="Processing status of all items associated with processing chain."></telerik:RadTab>
+                    <telerik:RadTab Text="Review/Approval" ToolTip="Review an authorize updating of the live site."></telerik:RadTab>
                 </Tabs>
             </telerik:RadTabStrip>
         </header>
@@ -35,12 +36,13 @@
                     <telerik:RadPageView ID="RadPageView3" runat="server" height="550px"  ContentUrl="ComplexReporting/NewItems.aspx"></telerik:RadPageView>
                     <telerik:RadPageView ID="RadPageView5" runat="server" height="550px"  ContentUrl="ComplexReporting/ReductionStatus.aspx"></telerik:RadPageView>
                     <telerik:RadPageView ID="RadPageView6" runat="server" height="550px"  ContentUrl="ComplexReporting/ReductionAudit.aspx"></telerik:RadPageView>
+                    <telerik:RadPageView ID="RadPageView7" runat="server" height="550px"  ContentUrl="ComplexReporting/ReviewApproval.aspx"></telerik:RadPageView>
                 </telerik:RadMultiPage>
             </div>
         </section>
 
         <footer style="text-align:center;height:30px">
-            <asp:Button ID="Publish" runat="server" Text="Publish to Production" OnClick="Publish_Click" OnClientClick="return confirm('By clicking \'OK\' you are acknowledging you have reviewed the results of processing your report and the information is correct to publish to a client.\n\nClicking \'OK\' will publish your report to the users.'); " />
+            <asp:Button ID="Publish" runat="server" Text="Publish to Production" OnClick="Publish_Click" OnClientClick="return confirm('By clicking \'OK\' you are acknowledging you have reviewed the results of processing your report and the information is correct to publish to a client.\n\nClicking \'OK\' will publish your report to the users.'); " Enabled="False" />
         </footer>
     </form>
     <script type="text/javascript">
