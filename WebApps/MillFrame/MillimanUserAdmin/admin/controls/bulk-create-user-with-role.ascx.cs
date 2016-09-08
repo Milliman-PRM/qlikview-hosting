@@ -6,6 +6,7 @@ using System.Configuration;
 using System.IO;
 using System.Web.Configuration;
 using System.Collections.Generic;
+using Telerik.Web.UI;
 
 public partial class bulk_admin_controls_create_user_with_role : System.Web.UI.UserControl
 {
@@ -15,161 +16,16 @@ public partial class bulk_admin_controls_create_user_with_role : System.Web.UI.U
     {
         if (!Page.IsPostBack)
         {
-
-            //// Reference the SpecifyRolesStep WizardStep
-            //WizardStep SpecifyRolesStep = RegisterUserWithRoles.FindControl("SpecifyRolesStep") as WizardStep;
-
-            //// Reference the RoleList CheckBoxList
-            //CheckBoxList RoleList = SpecifyRolesStep.FindControl("RoleList") as CheckBoxList;
-
-            //// Bind the set of roles to RoleList
-            //RoleList.DataSource = Roles.GetAllRoles();
-            //RoleList.DataBind();
-
-            //// find add focus to user name textbox
-            //TextBox UserName = CreateUserWizardStep1.ContentTemplateContainer.FindControl("UserName") as TextBox;
-            //UserName.Focus();
-
-            //LoginType_SelectedIndexChanged(null, null);
-
-            //List<string> T = new List<string>() { "one", "two", "three", "four", "00032FAI01_WINDOWX", "1234567890", "abcdef", "aaaa", "bbbb", "ccccccc", "eeeee", "ffff", "g", "h", "I", "j", "k" };
-            //Groups.DataSource = Roles.GetAllRoles();
-            //Groups.DataBind();
-
             //add an empty row
             List<UserInfo> UI = new List<UserInfo>();
             string TempPassword = PasswordGenerator.Generate("@");
             UI.Add(new UserInfo("", false, false));
             RadGrid1.DataSource = UI;
             RadGrid1.DataBind();
-
-            //List<int> DateValueSelectionValues = new List<int>() { 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,60,90,120,150,180,210,240,270,300,330 };
-            //DateValue.DataSource = DateValueSelectionValues;
-            //DateValue.DataBind();
-            //DateValue.SelectedIndex = 0;
-            //ViewState["RadGridDataSource"] = UI;
         }
     }
 
     #endregion
-
-    #region add user to role
-
-    protected void RegisterUserWithRoles_ActiveStepChanged(object sender, EventArgs e)
-    {
-        //// Have we JUST reached the Complete step?
-        //if (RegisterUserWithRoles.ActiveStep.Title == "Complete")
-        //{
-        //    // Reference the SpecifyRolesStep WizardStep
-        //    WizardStep SpecifyRolesStep = RegisterUserWithRoles.FindControl("SpecifyRolesStep") as WizardStep;
-
-        //    // Reference the RoleList CheckBoxList
-        //    CheckBoxList RoleList = SpecifyRolesStep.FindControl("RoleList") as CheckBoxList;
-
-        //    // Add the checked roles to the just-added user
-        //    foreach (ListItem li in RoleList.Items)
-        //    {
-        //        if (li.Selected)
-        //        {
-        //            Roles.AddUserToRole(RegisterUserWithRoles.UserName, li.Text);
-        //        }
-        //    }
-        //}
-
-    }
-
-    #endregion
-
-    #region do not show newly created user as online
-
-    // this code has been depricated as the number of online users now work 
-    // with the global.asax file. It won't hurt anything though.
-    protected void RegisterUserWithRoles_CreatedUser(object sender, EventArgs e)
-    {
-        //RadioButtonList RBL = RegisterUserWithRoles.CreateUserStep.ContentTemplateContainer.FindControl("LoginType") as RadioButtonList;
-        //CheckBox DBRequired = RegisterUserWithRoles.CreateUserStep.ContentTemplateContainer.FindControl("DBAccess") as CheckBox;
-        //TextBox UserName = CreateUserWizardStep1.ContentTemplateContainer.FindControl("UserName") as TextBox;
-        //TextBox Pswd = CreateUserWizardStep1.ContentTemplateContainer.FindControl("Password") as TextBox;
-
-        //// do not show newly created user as Online
-        //MembershipUser muser = Membership.GetUser(RegisterUserWithRoles.UserName);
-        //muser.LastActivityDate = DateTime.Parse("1/1/1800");  //set user last activity to Jan 1, 1800
-
-        //if (( RBL != null ) && (string.Compare(RBL.SelectedValue,MillimanCommon.Predefined.CovisintLoginType, true) == 0 ))
-        //{
-        //    muser.ChangePassword(Pswd.Text, MillimanCommon.Predefined.DefaultCovisintPassword);
-        //}
-
-        //Membership.UpdateUser(muser);
-
-        ////create a user profile, this info can be regurtated from the DB using the httpcontext profile - make sure web.config is setup corretly :-)
-        //if ((RBL != null) && (DBRequired != null) && (UserName != null) && (string.IsNullOrEmpty(UserName.Text) == false))
-        //{
-        //    ProfileCommon p = (ProfileCommon)ProfileCommon.Create(UserName.Text, true);
-        //    p.AccessOptions.AccessType = RBL.SelectedValue;
-        //    p.AccessOptions.DBRequired = DBRequired.Checked;
-        //    p.AccessOptions.MustChangePassword = true;
-        //    p.Save();
-        //}
-
-        //try
-        //{
-        //    //only right out a rest file for Milliman users - never for covisint
-        //    if (string.Compare(RBL.SelectedValue, MillimanCommon.Predefined.MillimanLoginType, true) == 0)
-        //    {
-        //        string ResetFile = System.IO.Path.Combine(ConfigurationManager.AppSettings["ResetUserInfoRoot"], muser.ProviderUserKey + ".rst");
-        //        System.IO.File.WriteAllText(ResetFile, muser.UserName + " added " + DateTime.Now.ToShortDateString());
-        //    }
-        //}
-        //catch (Exception)
-        //{
-        //    muser.IsApproved = false;
-        //    muser.Comment = "Account error on creation";
-        //    Membership.UpdateUser(muser);
-        //}
-    }
-
-    #endregion
-    protected void LoginType_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        //TextBox Pswd = CreateUserWizardStep1.ContentTemplateContainer.FindControl("Password") as TextBox;
-        //TextBox ConfPswd = CreateUserWizardStep1.ContentTemplateContainer.FindControl("ConfirmPassword") as TextBox;
-        //RadioButtonList RBL = RegisterUserWithRoles.CreateUserStep.ContentTemplateContainer.FindControl("LoginType") as RadioButtonList;
-
-        //Pswd.Enabled = (RBL.SelectedIndex == 1);
-        //ConfPswd.Enabled = (RBL.SelectedIndex == 1);
-        //Pswd.BackColor =  Pswd.Enabled ? System.Drawing.Color.White : System.Drawing.Color.LightGray;
-        //ConfPswd.BackColor = Pswd.BackColor;
-        //Pswd.Text = Pswd.Enabled ? "" : "[NOT REQUIRED]";
-        //ConfPswd.Text = Pswd.Text;
-        //Pswd.TextMode = Pswd.Enabled ? TextBoxMode.Password : TextBoxMode.SingleLine;
-        //ConfPswd.TextMode = Pswd.TextMode;
-    }
-    protected void RegisterUserWithRoles_CreatingUser(object sender, LoginCancelEventArgs e)
-    {
-
-    }
-
-    private UserInfo GetUserInfoFromString(string Info)
-    {
-        try
-        {
-            UserInfo NewUser = new UserInfo();
-
-            string[] UserTokens = Info.Split(new char[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
-
-            NewUser.Account_Name = UserTokens[0].Trim();
-
-            if (UserTokens.Length > 1)
-                NewUser.SendWelcomeEmail = System.Convert.ToBoolean(UserTokens[1]);
-            return NewUser;
-        }
-        catch (Exception)
-        {
-
-        }
-        return null;
-    }
 
     protected void Submit_Click(object sender, EventArgs e)
     {
@@ -177,11 +33,17 @@ public partial class bulk_admin_controls_create_user_with_role : System.Web.UI.U
         int Failed = 0;
         if (string.IsNullOrEmpty(UserList.Text) == false)
         {
-            UserList.Text = UserList.Text.Replace("\t", ",");
-            string[] UserRows = UserList.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            var userListFinal = string.Empty;
+            if (UserList.Text.Contains("[CSV Format]") || UserList.Text.Contains("[Excel Format]"))
+                userListFinal = UserList.Text.Replace("[CSV Format]", string.Empty).Replace("[Excel Format]", string.Empty);
+            else
+                userListFinal = UserList.Text;
+
+            UserList.Text = userListFinal.Replace("\t", ",");
+            var UserRows = UserList.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (string NewUserInfo in UserRows)
             {
-                UserInfo NewUser = GetUserInfoFromString(NewUserInfo);
+                var NewUser = GetUserInfoFromString(NewUserInfo);
                 if (NewUser != null)
                 {
                     UsersList.Add(NewUser);
@@ -194,17 +56,18 @@ public partial class bulk_admin_controls_create_user_with_role : System.Web.UI.U
 
             if (Failed == 0)
             {
-                List<UserInfo> Current = GridToList(RadGrid1);
+                var Current = new List<UserInfo>();
+                Current = GridToList(RadGrid1);
                 if (Current != null)
                     UsersList.AddRange(Current);
 
                 RadGrid1.DataSource = UsersList;
-
                 RadGrid1.Rebind();
-                UserPanel.Expanded = false;
-                UserList.Text = "";
 
-                EnableDisablePasswordColumns();
+                UserPanel.Expanded = false;
+
+                UserList.Text = "";
+                updPanelUserList.Update();
             }
             else
             {
@@ -215,6 +78,44 @@ public partial class bulk_admin_controls_create_user_with_role : System.Web.UI.U
         {
             MillimanCommon.Alert.Show("No user information has been entered");
         }
+
+    }
+
+
+    protected void CreateNewUsers_Click(object sender, ImageClickEventArgs e)
+    {
+        List<UserInfo> UIList = ValidateUserRequests();
+        bool AllGood = true;
+        var errorMsg = string.Empty;
+        foreach (UserInfo UIC in UIList)
+        {
+            if (string.IsNullOrEmpty(UIC.ErrorMsg) == false)
+            {
+                errorMsg = errorMsg + UIC.ErrorMsg;
+                AllGood = false;
+            }
+        }
+        if (AllGood == false)
+        {
+            RadGrid1.DataSource = UIList;
+            RadGrid1.Rebind();
+            MillimanCommon.Alert.Show(errorMsg + " To create users all errors must be corrected in the user list.  Check list items tagged with a red icon.");
+            return;
+        }
+        string CSVUsers = string.Empty;
+        string Results = CreateUsersFromList(UIList, out CSVUsers);
+        UserList.Text = "[CSV Format]\n" + CSVUsers;
+        UserList.Text += "\n\n[Excel Format]\n" + CSVUsers.Replace(",", "\t");
+
+        MillimanCommon.Alert.Show(Results);
+    }
+
+    protected void UserType_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        List<UserInfo> GridContents = GridToList(RadGrid1);
+        //process grid here if needed for validation
+        RadGrid1.DataSource = GridContents;
+        RadGrid1.Rebind();
     }
 
     protected void RadGrid1_ItemCommand(object sender, Telerik.Web.UI.GridCommandEventArgs e)
@@ -224,7 +125,6 @@ public partial class bulk_admin_controls_create_user_with_role : System.Web.UI.U
         if (string.Compare(e.CommandName, "add", true) == 0)
         {
             UI = GridToList(RadGrid1);
-
             UI.Add(new UserInfo("", false, false));
             RadGrid1.DataSource = UI;
             RadGrid1.Rebind();
@@ -238,40 +138,79 @@ public partial class bulk_admin_controls_create_user_with_role : System.Web.UI.U
         }
         else if (string.Compare(e.CommandName, "Clear", true) == 0)
         {
-            UI = new List<UserInfo>();
-            string TempPassword = PasswordGenerator.Generate("@");
-            UI.Add(new UserInfo("", false, false));
-            RadGrid1.DataSource = UI;
+            //add an empty row
+            var uInfoList = new List<UserInfo>();
+            uInfoList.Add(new UserInfo("", false, false));
+            RadGrid1.DataSource = uInfoList;
             RadGrid1.Rebind();
-            ctrlUserRoles.LoadUserRoles();
-        }
-        //else if (string.Compare(e.CommandName, "Create", true) == 0)
-        //{
-        //    List<UserInfo> UIList = ValidateUserRequests();
-        //    bool AllGood = true;
-        //    foreach (UserInfo UIC in UIList)
-        //    {
-        //        if (string.IsNullOrEmpty(UIC.ErrorMsg) == false)
-        //            AllGood = false;
-        //    }
-        //    if (AllGood == false)
-        //    {
-        //        RadWindowManager.RadAlert("To create users all errors must be corrected in the user list.  Check list items tagged with a red icon.", null, null, "User List Errors", "confirmCallBackFn");
-        //        return;
-        //    }
 
-        //    string Results = CreateUsersFromList(UIList);
-        //    RadWindowManager.RadAlert(Results, null, null, "User List Errors", "confirmCallBackFn");
-        //    RadGrid1.DataSource = UIList;
-        //    RadGrid1.Rebind();
-        //}
+            //clear control
+            ctrlUserRoles.LoadUserRoles();
+            updPanelUserRoles.Update();
+
+            UserList.Text = string.Empty;
+            updPanelUserList.Update();
+        }
         else if (string.Compare(e.CommandName, "Autocomplete", true) == 0)
         {
-            //RadWindowManager.RadConfirm("Are you sure you wish to <br><br><table><tr><td>cell 1</td><td>cell 2</td></tr><tr><td>cell 3</td><td>cell 4</td></tr></table>", "", 300, 100, null, "Summary", "");
             UI = AutoCompleteType();
             RadGrid1.DataSource = UI;
             RadGrid1.Rebind();
         }
+    }
+
+    private void InitilizeScreen()
+    {
+        //select the first option
+        UserType.SelectedIndex = 0;
+        //clear control
+        ctrlUserRoles.LoadUserRoles();
+        updPanelUserRoles.Update();
+
+        //Clear all grid items
+        foreach (GridDataItem item in RadGrid1.Items)
+        {
+            var AccountNameText = (TextBox)item["AccountNameText"].FindControl("AccountNameTextBox");
+            var SendWelcome = (CheckBox)item["SendWelcome"].FindControl("SendWelcomeCheckbox");
+            var DataAccessRequiredText = (CheckBox)item["DataAccessRequiredText"].FindControl("DataAccessRequiredTextBox");
+            AccountNameText.Text = "";
+            SendWelcome.Checked = false;
+            DataAccessRequiredText.Checked = false;
+        }
+        //reset grid
+        //add an empty row
+        var uInfoList = new List<UserInfo>();
+        uInfoList.Add(new UserInfo("", false, false));
+        RadGrid1.DataSource = uInfoList;
+        RadGrid1.Rebind();
+
+        //this will work if panel is added to ajaaax contol id for grid
+        RadPanelItem items = new RadPanelItem();
+        items = RadPanelBar1.FindItemByValue("UserPanel");
+        items.Expanded = false;
+        UserPanel.Expanded = false;
+
+        UserList.Text = string.Empty;
+        updPanelUserList.Update();
+    }
+
+    private UserInfo GetUserInfoFromString(string Info)
+    {
+        try
+        {
+            UserInfo NewUser = new UserInfo();
+            string[] UserTokens = Info.Split(new char[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            NewUser.Account_Name = UserTokens[0].Trim();
+
+            if (UserTokens.Length > 1)
+                NewUser.SendWelcomeEmail = System.Convert.ToBoolean(UserTokens[1]);
+            return NewUser;
+        }
+        catch (Exception)
+        {
+
+        }
+        return null;
     }
 
     private string CreateUsersFromList(List<UserInfo> UIList, out string CSVResults)
@@ -280,21 +219,8 @@ public partial class bulk_admin_controls_create_user_with_role : System.Web.UI.U
         CSVResults = string.Empty;
         try
         {
-            //create a list of all roles
-            ////List<string> RequestedRoles = new List<string>();
-            ////foreach (ListItem LI in Groups.Items)
-            ////{
-            ////    if (LI.Selected)
-            ////        RequestedRoles.Add(LI.Text);
-            ////}
-
             var userRoles = ctrlUserRoles.CheckedRoles;
-
             bool IsMillimanLogin = UserType.Items[0].Selected;
-            //bool WillAccountExpire = AccountExpires.Checked;
-            //DateTime? AccountExpiresOn = DateTime.MaxValue;
-            //if (WillAccountExpire)
-            //    AccountExpiresOn = DatePicker.SelectedDate;
 
             foreach (UserInfo UI in UIList)
             {
@@ -321,7 +247,7 @@ public partial class bulk_admin_controls_create_user_with_role : System.Web.UI.U
                     p.AccessOptions.MustChangePassword = true;
                     p.Save();
 
-                    ctrlUserRoles.LoadUserRoles();
+                    InitilizeScreen();
 
                     try
                     {
@@ -384,9 +310,7 @@ public partial class bulk_admin_controls_create_user_with_role : System.Web.UI.U
             //for some dump reason,  the items are not removed from the grid on post back
             //when deleted,  but they do not have values, so filter out delted rows with
             // logic below
-            if ((string.IsNullOrEmpty(AccountName.Text) == false) ||
-
-                (DBRequired.Checked == true))
+            if ((string.IsNullOrEmpty(AccountName.Text) == false) || (DBRequired.Checked == true))
             {
                 UI.Add(new UserInfo(AccountName.Text,
                                      SendWelcome.Checked,
@@ -395,57 +319,6 @@ public partial class bulk_admin_controls_create_user_with_role : System.Web.UI.U
         }
         return UI;
     }
-
-    protected void UserType_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        List<UserInfo> GridContents = GridToList(RadGrid1);
-        //process grid here if needed for validation
-        RadGrid1.DataSource = GridContents;
-        RadGrid1.Rebind();
-
-        EnableDisablePasswordColumns();
-    }
-
-    private void EnableDisablePasswordColumns()
-    {
-
-    }
-    //protected void AccountExpires_CheckedChanged(object sender, EventArgs e)
-    //{
-    //        DateValue.Enabled = AccountExpires.Checked;
-    //        DateType.Enabled = AccountExpires.Checked;
-    //        DatePicker.Enabled = AccountExpires.Checked;
-
-    //        if (AccountExpires.Checked == false)
-    //        {
-    //            DateValue.SelectedIndex = 0;
-    //            DateType.SelectedIndex = 0;
-    //            DatePicker.SelectedDate = null;
-    //        }
-
-    //}
-    //protected void DateValue_SelectedIndexChanged(object sender, EventArgs e)
-    //{
-    //    CalculateExpireDate();
-    //}
-    //protected void DateType_SelectedIndexChanged(object sender, EventArgs e)
-    //{
-    //    CalculateExpireDate();
-    //}
-
-    //private void CalculateExpireDate()
-    //{
-    //    DateTime Calculated = DateTime.Now;
-    //    if (string.Compare(DateType.SelectedValue, "year", true) == 0)
-    //       Calculated = Calculated.AddYears( System.Convert.ToInt32(DateValue.SelectedValue));
-    //    else if (string.Compare(DateType.SelectedValue, "month", true) == 0)
-    //        Calculated = Calculated.AddMonths(System.Convert.ToInt32(DateValue.SelectedValue));
-    //    else if (string.Compare(DateType.SelectedValue, "week", true) == 0)
-    //        Calculated = Calculated.AddDays(System.Convert.ToInt32(DateValue.SelectedValue) * 7);
-    //    else if (string.Compare(DateType.SelectedValue, "day", true) == 0)
-    //        Calculated = Calculated.AddDays(System.Convert.ToInt32(DateValue.SelectedValue));
-    //    DatePicker.SelectedDate = Calculated;
-    //}
 
     private List<UserInfo> AutoCompleteType()
     {
@@ -484,10 +357,6 @@ public partial class bulk_admin_controls_create_user_with_role : System.Web.UI.U
                 }
             }
 
-            //if (string.IsNullOrEmpty(UI.Email) == true)
-            //{
-            //    UI.ErrorMsg = "Email field cannot be left empty";
-            //}
             if (string.IsNullOrEmpty(UI.Account_Name) == false)
             {
                 if (UI.Account_Name.Contains(".") == false)
@@ -508,54 +377,9 @@ public partial class bulk_admin_controls_create_user_with_role : System.Web.UI.U
                     UI.ErrorMsg = "A user with this address already exists - duplicates may not be added.";
                 }
             }
-
-            //if (UI.Password != UI.Confirm_Password)
-            //{
-            //    UI.ErrorMsg = "Password and confirm password do not match.";
-            //}
-            //else if (UI.Password.Length < 8)
-            //{
-            //    UI.ErrorMsg = "Passwords must have a length of at least 8.";
-            //}
-            //else
-            //{
-            //    bool ContainsOneSpecialChar = false;
-            //    foreach (char C in UI.Password)
-            //    {
-            //        if (AlphaNums.Contains(C.ToString()) == false)
-            //            ContainsOneSpecialChar = true;
-            //    }
-            //    if (ContainsOneSpecialChar == false)
-            //    {
-            //        UI.ErrorMsg = "Password must contain at least one special character";
-            //    }
-            //}
         }
 
         return UIList;
     }
-    protected void CreateNewUsers_Click(object sender, ImageClickEventArgs e)
-    {
-        List<UserInfo> UIList = ValidateUserRequests();
-        bool AllGood = true;
-        foreach (UserInfo UIC in UIList)
-        {
-            if (string.IsNullOrEmpty(UIC.ErrorMsg) == false)
-                AllGood = false;
-        }
-        if (AllGood == false)
-        {
-            MillimanCommon.Alert.Show("To create users all errors must be corrected in the user list.  Check list items tagged with a red icon.");
-            RadGrid1.DataSource = UIList;
-            RadGrid1.Rebind();
-            return;
-        }
 
-        string CSVUsers = string.Empty;
-        string Results = CreateUsersFromList(UIList, out CSVUsers);
-        UserList.Text = "[CSV Format]\n" + CSVUsers;
-        UserList.Text += "\n\n[Excel Format]\n" + CSVUsers.Replace(",", "\t");
-
-        MillimanCommon.Alert.Show(Results);
-    }
 }
