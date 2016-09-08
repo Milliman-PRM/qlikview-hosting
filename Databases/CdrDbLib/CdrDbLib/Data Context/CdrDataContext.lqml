@@ -447,5 +447,6 @@
     <Member Name="Low" ed:Guid="8099edcd-ed38-494e-bcb5-73c4b1d7fb8d" />
     <Member Name="High" ed:Guid="8f9743ca-30a6-4966-a794-3ddc1cd46c89" />
     <Member Name="Abnormal" ed:Guid="d12ed5f3-f683-457a-813c-5eb3ddae687a" />
+    <Member Name="Normal" ed:Guid="0a5a0eb7-8bd1-4903-b081-46268c082bec" />
   </EnumType>
 </Database>

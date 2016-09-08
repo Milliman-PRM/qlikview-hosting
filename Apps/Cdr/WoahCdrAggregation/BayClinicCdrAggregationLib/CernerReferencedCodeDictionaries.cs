@@ -180,7 +180,9 @@ namespace BayClinicCernerAmbulatory
                     case "unknown":
                         return Gender.Unknown;
                     default:
-                        throw new Exception("Unsupported Patient-Gender encountered in GetOrganizationDbidForVisitLocationCode(): " + GenderCodeMeanings[CernerCode] + " with code " + CernerCode);
+                        String ErrMsg = "Unsupported Patient-Gender encountered in GetOrganizationDbidForVisitLocationCode(): " + GenderCodeMeanings[CernerCode] + " with code " + CernerCode;
+                        Trace.WriteLine(ErrMsg);
+                        throw new Exception(ErrMsg);
                 }
             }
 
@@ -208,7 +210,6 @@ namespace BayClinicCernerAmbulatory
                     case "prescription (printer output)":
                         return AddressType.PrescriptionWritten;
                     default:
-                        SystemSounds.Beep.Play();
                         String ErrMsg = "Unsupported Address-Type encountered: " + AddressTypeCodeMeanings[CernerCode] + " with code " + CernerCode;
                         Trace.WriteLine(ErrMsg);
                         throw new Exception(ErrMsg);
@@ -236,8 +237,12 @@ namespace BayClinicCernerAmbulatory
                         return PhoneType.Fax;
                     case "internal secure":
                         return PhoneType.Other;
+                    case "external secure":
+                        return PhoneType.Other;
                     default:
-                        throw new Exception("Unsupported Phone-Type encountered: " + PhoneTypeCodeMeanings[CernerCode] + " with code " + CernerCode);
+                        String ErrMsg = "Unsupported Phone-Type encountered: " + PhoneTypeCodeMeanings[CernerCode] + " with code " + CernerCode;
+                        Trace.WriteLine(ErrMsg);
+                        throw new Exception(ErrMsg);
                 }
             }
 
@@ -252,6 +257,8 @@ namespace BayClinicCernerAmbulatory
                 {
                     case "single":
                         return MaritalStatus.Single;
+                    case "married (living together)":
+                        return MaritalStatus.Married;
                     case "married":
                         return MaritalStatus.Married;
                     case "divorced":
@@ -274,7 +281,9 @@ namespace BayClinicCernerAmbulatory
                         return MaritalStatus.Unspecified;
 
                     default:
-                        throw new Exception("Unsupported Patient-MaritalStatus encountered: " + MaritalStatusCodeMeanings[CernerCode] + " with code " + CernerCode);
+                        String ErrMsg = "Unsupported Patient-MaritalStatus encountered: " + MaritalStatusCodeMeanings[CernerCode] + " with code " + CernerCode;
+                        Trace.WriteLine(ErrMsg);
+                        throw new Exception(ErrMsg);
                 }
             }
 
@@ -299,11 +308,17 @@ namespace BayClinicCernerAmbulatory
                         return ResultNormal.Abnormal;
                     case "unspecified":     // TODO This may indicate normal, have not tested this exhaustively
                         return ResultNormal.Unspecified;
-                    case "":                // TODO This may indicate normal, have not tested this exhaustively
+                    case "":                // TODO This may indicate unspecified or normal.  Need to switch RefCodes to use description field instead of display
+                        if (CernerCode == "214")
+                        {
+                            return ResultNormal.Normal;
+                        }
                         return ResultNormal.Unspecified;
 
                     default:
-                        throw new Exception("Unsupported Result-Normal code encountered: " + ResultNormalCodeMeanings[CernerCode] + " with code " + CernerCode);
+                        String ErrMsg = "Unsupported Result-Normal code encountered: " + ResultNormalCodeMeanings[CernerCode] + " with code " + CernerCode;
+                        Trace.WriteLine(ErrMsg);
+                        throw new Exception(ErrMsg);
                 }
             }
 
