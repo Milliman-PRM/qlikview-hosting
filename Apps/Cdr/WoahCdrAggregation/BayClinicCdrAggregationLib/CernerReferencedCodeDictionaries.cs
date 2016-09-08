@@ -203,9 +203,15 @@ namespace BayClinicCernerAmbulatory
                         return AddressType.Mailing;
                     case "eprescribing":
                         return AddressType.ePrescribing;
+                    case "email":
+                        return AddressType.EMail;
+                    case "prescription (printer output)":
+                        return AddressType.PrescriptionWritten;
                     default:
                         SystemSounds.Beep.Play();
-                        throw new Exception("Unsupported Address-Type encountered: " + AddressTypeCodeMeanings[CernerCode] + " with code " + CernerCode);
+                        String ErrMsg = "Unsupported Address-Type encountered: " + AddressTypeCodeMeanings[CernerCode] + " with code " + CernerCode;
+                        Trace.WriteLine(ErrMsg);
+                        throw new Exception(ErrMsg);
                 }
             }
 

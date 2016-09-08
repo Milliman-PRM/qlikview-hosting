@@ -439,6 +439,8 @@
     <Member Name="Business" ed:Guid="6b565ddb-c182-4a58-adf7-06a2fc09e5dd" />
     <Member Name="Mailing" ed:Guid="303fa9e3-16bd-404b-b68d-f383ed3ebbb5" />
     <Member Name="ePrescribing" ed:Guid="b4c88500-55d8-40d3-aac5-c33afaf64072" />
+    <Member Name="EMail" ed:Guid="6d61b006-4e19-4c43-b0c1-dffd5064888e" />
+    <Member Name="PrescriptionWritten" ed:Guid="7516266a-2583-464b-9dd6-2a6f06d9acd1" />
   </EnumType>
   <EnumType Name="ResultNormal" UnderlyingType="Int16" Type="ResultNormal" ed:Guid="f5772ebb-557e-4d6b-8cca-94a0256b9e30">
     <Member Name="Unspecified" ed:Guid="0f7ff4bd-b3f4-464a-a57f-164d21cc93e1" />
