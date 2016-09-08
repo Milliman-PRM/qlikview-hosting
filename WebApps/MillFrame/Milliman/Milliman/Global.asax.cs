@@ -90,8 +90,8 @@ namespace MillimanDev
             //LoadCertificate(SPCertKey, SPKeyFile, SPKeyPassword);
 
 
-            string MDFile = Path.Combine(Server.MapPath("~"), ConfigurationManager.AppSettings["SSOMetaData"]);
-            SSOConfiguration.LoadMetadataFromFile(MDFile);
+            //string MDFile = Path.Combine(Server.MapPath("~"), ConfigurationManager.AppSettings["SSOMetaData"]);
+            //SSOConfiguration.LoadMetadataFromFile(MDFile);
         }
 
         public static string GetParameter(string RawURL, string Parameter)
