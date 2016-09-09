@@ -76,9 +76,9 @@ public partial class admin_controls_create_user_with_role : System.Web.UI.UserCo
         MembershipUser muser = Membership.GetUser(RegisterUserWithRoles.UserName);
         muser.LastActivityDate = DateTime.Parse("1/1/1800");  //set user last activity to Jan 1, 1800
         
-        if (( RBL != null ) && (string.Compare(RBL.SelectedValue,MillimanCommon.Predefined.CovisintLoginType, true) == 0 ))
+        if (( RBL != null ) && (string.Compare(RBL.SelectedValue,MillimanCommon.Predefined.ExternalLoginType, true) == 0 ))
         {
-            muser.ChangePassword(Pswd.Text, MillimanCommon.Predefined.DefaultCovisintPassword);
+            muser.ChangePassword(Pswd.Text, MillimanCommon.Predefined.DefaultExternalPassword);
         }
 
         Membership.UpdateUser(muser);

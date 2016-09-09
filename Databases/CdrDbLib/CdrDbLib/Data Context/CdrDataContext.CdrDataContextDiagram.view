@@ -658,7 +658,7 @@
                     </Size>
                     <Enabled>false</Enabled>
                     <Oid xsi:type="SchemaModelOID">
-                      <Path>32687ab6-72e4-48ce-a9c8-d1c5f8473353</Path>
+                      <Path>220d5c17-9df9-4530-ba90-7aa3b7c65e27</Path>
                       <TypeName>EntityDeveloper.Linq.LinqConnectRelationProperty</TypeName>
                     </Oid>
                   </Model>
@@ -5561,7 +5561,7 @@
             <BendPoints>
               <PointD>
                 <X>688 px</X>
-                <Y>43.1192647346232 px</Y>
+                <Y>43.119264734623 px</Y>
               </PointD>
               <PointD>
                 <X>688 px</X>
@@ -7632,10 +7632,10 @@
         <GridSize>8 px</GridSize>
         <ViewPort>
           <ScaleMode>Free</ScaleMode>
-          <Scale>0.63</Scale>
+          <Scale>0.37</Scale>
           <Location>
-            <X>-739.682545281081 px</X>
-            <Y>-185.714287119928 px</Y>
+            <X>-1372.9729552788 px</X>
+            <Y>-689.18918030727 px</Y>
           </Location>
         </ViewPort>
         <Oid xsi:type="SchemaModelOID">

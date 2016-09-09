@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="476f67db-4236-46c4-852c-61f61a2f444b" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://tw151ga-azure.unitysandbox.com/unity/unityservice.svc/mex" Protocol="mex" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="Unity.wsdl" MetadataType="Wsdl" ID="a8579f1c-b6a7-484f-9f58-3dc95f866698" SourceId="1" SourceUrl="http://tw151ga-azure.unitysandbox.com/unity/unityservice.svc/mex" />
+    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="bb0fb3ff-8aba-482d-b306-ebf28f3d5b4d" SourceId="1" SourceUrl="http://tw151ga-azure.unitysandbox.com/unity/unityservice.svc/mex" />
+    <MetadataFile FileName="Unity.xsd" MetadataType="Schema" ID="0333a405-6fcc-496c-8622-86582e4a7205" SourceId="1" SourceUrl="http://tw151ga-azure.unitysandbox.com/unity/unityservice.svc/mex" />
+    <MetadataFile FileName="Message.xsd" MetadataType="Schema" ID="f2e29b99-bedf-450d-aabc-6d5b82638e57" SourceId="1" SourceUrl="http://tw151ga-azure.unitysandbox.com/unity/unityservice.svc/mex" />
+    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="15eec5de-2127-40a9-b108-c237b36d6f94" SourceId="1" SourceUrl="http://tw151ga-azure.unitysandbox.com/unity/unityservice.svc/mex" />
+    <MetadataFile FileName="Allscripts.Unity.Services.ObjectDeclarations.Unity.xsd" MetadataType="Schema" ID="b398403d-4c65-41aa-bef5-81c8bc92ac64" SourceId="1" SourceUrl="http://tw151ga-azure.unitysandbox.com/unity/unityservice.svc/mex" />
+    <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="ac48158c-2ddb-4f94-b475-33e674d329ba" SourceId="1" SourceUrl="http://tw151ga-azure.unitysandbox.com/unity/unityservice.svc/mex" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

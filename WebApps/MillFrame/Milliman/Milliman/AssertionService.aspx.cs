@@ -97,7 +97,8 @@ namespace MillimanDev
                     {
                     }
                 }
-                string KeyRoot = @"CovisintCert";
+                //this allows to have multiple certs that may be applied 
+                string KeyRoot = "<KEYHERE>";   //@"CovisintCert";
                 int Index = 1;
                 string CurrentKey = KeyRoot + @"_" + Index.ToString();
                 while (Application[CurrentKey] != null)
@@ -133,25 +134,26 @@ namespace MillimanDev
             {
                 foreach (Attribute A in AS.UnencryptedAttributes)
                 {
-                    //patient id is provided via the URL, not in an assertion
-                    if (string.Compare("patientid", A.Name, true) == 0)
-                    {
-                        Context = A.Values[0].ToString();
-                        if (string.IsNullOrEmpty(Context) == false)
-                            Context = Dashboard.MapToInternalID(Context);
-                    }
+                    //this has been left for refernce in case needed again with another provider specific portal
+                    ////patient id is provided via the URL, not in an assertion
+                    //if (string.Compare("patientid", A.Name, true) == 0)
+                    //{
+                    //    Context = A.Values[0].ToString();
+                    //    if (string.IsNullOrEmpty(Context) == false)
+                    //        Context = Dashboard.MapToInternalID(Context);
+                    //}
 
-                    else if (string.Compare("covisintapplicationid", A.Name, true) == 0)
-                    {
-                        //HACK:set the app id to the report name - we will use this below if provided
-                        ApplicationID = A.Values[0].ToString(); //first id is staging - papc10143671  second is production - papc11408229
-                        if ((string.Compare(ApplicationID, "papc10143671", true) == 0) || (relayState.ToLower().Contains("papc10143671") == true) ||
-                            (string.Compare(ApplicationID, "papc11408229", true) == 0) || ( relayState.ToLower().Contains("papc11408229") == true ) )
-                            ApplicationID = "POPULATION";
-                        else if ((string.Compare(ApplicationID, "papc10143675", true) == 0) || (relayState.ToLower().Contains("papc10143675") == true) || 
-                                 (string.Compare(ApplicationID, "papc11408223", true) == 0) || (relayState.ToLower().Contains("papc11408223") == true) )
-                            ApplicationID = "COSTMODEL";
-                    }
+                    //else if (string.Compare("covisintapplicationid", A.Name, true) == 0)
+                    //{
+                    //    //HACK:set the app id to the report name - we will use this below if provided
+                    //    ApplicationID = A.Values[0].ToString(); //first id is staging - papc10143671  second is production - papc11408229
+                    //    if ((string.Compare(ApplicationID, "papc10143671", true) == 0) || (relayState.ToLower().Contains("papc10143671") == true) ||
+                    //        (string.Compare(ApplicationID, "papc11408229", true) == 0) || ( relayState.ToLower().Contains("papc11408229") == true ) )
+                    //        ApplicationID = "POPULATION";
+                    //    else if ((string.Compare(ApplicationID, "papc10143675", true) == 0) || (relayState.ToLower().Contains("papc10143675") == true) || 
+                    //             (string.Compare(ApplicationID, "papc11408223", true) == 0) || (relayState.ToLower().Contains("papc11408223") == true) )
+                    //        ApplicationID = "COSTMODEL";
+                    //}
                 }
             }
 
@@ -168,7 +170,7 @@ namespace MillimanDev
                 resourceUrl = "Default.aspx";
             }
 
-            if ((Membership.ValidateUser(userName, MillimanCommon.Predefined.DefaultCovisintPassword) == true) || (Membership.ValidateUser(userName, MillimanCommon.Predefined.ExternalUserSSOPassword)))
+            if ((Membership.ValidateUser(userName, MillimanCommon.Predefined.DefaultExternalPassword) == true) || (Membership.ValidateUser(userName, MillimanCommon.Predefined.ExternalUserSSOPassword)))
             // if (FormsAuthentication.Authenticate(userName, Global.DefaultCovisintPassword) == true)
             {
                 // Create a login context for the asserted identity.
