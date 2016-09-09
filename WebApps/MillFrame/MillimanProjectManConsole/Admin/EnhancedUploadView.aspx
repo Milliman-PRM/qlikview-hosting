@@ -80,109 +80,128 @@
             <div class="page-header roundShadowContainer" style="width: 50%;">
                 <h2>Project Upload  <small>General Project Information</small></h2>
             </div>
+            <div class="row">&nbsp;</div>
             <div class="left-div">
-                <%--window for the user profile info--%>
                 <div id="divGeneralProjectInfo" class="roundShadowContainer">
-                    <h3>General Project Information</h3>
-                    <table class="table table-hover">
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <label for="ProjectName" class="labelweak">Project Name:</label>
-                                    <asp:TextBox ID="ProjectName" runat="server" Width="86%"
-                                        ToolTip="Name of this project - will be visible to client user as title"
-                                        OnTextChanged="ProjectName_TextChanged" class="form-control"></asp:TextBox>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label for="QVWName" class="labelweak">QVW Name:</label>
-                                    <asp:TextBox ID="QVWName" runat="server" Width="86%"
-                                        ToolTip="Name of this project - will be visible to client user as title"
-                                        OnTextChanged="ProjectName_TextChanged" class="form-control"></asp:TextBox>
-
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label for="Description" class="labelweak">Project Description:</label>
-                                    <asp:TextBox Height="97px" ID="Description" runat="server" Width="86%"
-                                        TextMode="MultiLine"
-                                        ToolTip="Description of the problem this report solves - will be visible to client user."
-                                        class="form-control" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label for="Notes" class="labelweak">Project Notes:</label>
-                                    <asp:TextBox Height="97px" ID="Notes" runat="server" Width="86%" TextMode="MultiLine"
-                                        ToolTip="Notes associated with this project - not visible to client users"
-                                        class="form-control" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label for="Tooltip" class="labelweak">Project Tooltip:</label>
-                                    <asp:TextBox Height="97px" ID="Tooltip" runat="server" Width="86%"
-                                        TextMode="SingleLine"
-                                        ToolTip="Tooltip that will be displayed on mouse-over of the launch icon - visible to client users"
-                                        class="form-control" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label for="PreviewImage" class="labelweak">Project Thumbnail(128x128)(*.jpg,*.gif, *.png):</label>
-                                    <asp:Image ID="PreviewImage" runat="server" Width="128px" Height="128px" />
-                                    <br />
-                                    <telerik:RadAsyncUpload runat="server" ID="PresentationThumbnail" Style="width: 95%"
-                                        AllowedFileExtensions="png,gif,jpg,jpeg" MaxFileSize="1000000000" MaxFileInputsCount="1">
-                                    </telerik:RadAsyncUpload>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label for="UserManualLabel" class="labelweak">User Manual:</label>
-                                    <asp:HyperLink runat="server" ID="UserManualLabel" ToolTip="User manual associated with this QVW - click to launch"></asp:HyperLink>
-                                </td>
-                            </tr>
-
-                        </tbody>
-                    </table>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h3>General Project Information</h3>
+                        </div>
+                    </div>
+                    <div class="row">&nbsp;</div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <label for="ProjectName" class="labelweak">Project Name:</label>
+                        </div>
+                        <div class="col-sm-8">
+                            <asp:TextBox ID="ProjectName" runat="server" Width="86%"
+                                ToolTip="Name of this project - will be visible to client user as title"
+                                OnTextChanged="ProjectName_TextChanged" class="form-control"></asp:TextBox>
+                        </div>
+                    </div>
+                    <div class="row">&nbsp;</div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <label for="QVWName" class="labelweak">QVW Name:</label>
+                        </div>
+                        <div class="col-sm-8">
+                            <asp:TextBox ID="QVWName" runat="server" Width="86%"
+                                ToolTip="Name of this project - will be visible to client user as title"
+                                OnTextChanged="ProjectName_TextChanged" class="form-control"></asp:TextBox>
+                        </div>
+                    </div>
+                    <div class="row">&nbsp;</div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <label for="Description" class="labelweak">Project Description:</label>
+                        </div>
+                        <div class="col-sm-8">
+                            <asp:TextBox Height="97px" ID="Description" runat="server" Width="86%"
+                                TextMode="MultiLine"
+                                ToolTip="Description of the problem this report solves - will be visible to client user."
+                                class="form-control" />
+                        </div>
+                    </div>
+                    <div class="row">&nbsp;</div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <label for="Notes" class="labelweak">Project Notes:</label>
+                        </div>
+                        <div class="col-sm-8">
+                            <asp:TextBox Height="97px" ID="Notes" runat="server" Width="86%" TextMode="MultiLine"
+                                ToolTip="Notes associated with this project - not visible to client users"
+                                class="form-control" />
+                        </div>
+                    </div>
+                    <div class="row">&nbsp;</div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <label for="Tooltip" class="labelweak">Project Tooltip:</label>
+                        </div>
+                        <div class="col-sm-8">
+                            <asp:TextBox Height="97px" ID="Tooltip" runat="server" Width="86%"
+                                TextMode="SingleLine"
+                                ToolTip="Tooltip that will be displayed on mouse-over of the launch icon - visible to client users"
+                                class="form-control" />
+                        </div>
+                    </div>
+                    <div class="row">&nbsp;</div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label for="PreviewImage" class="labelweak">Project Thumbnail(128x128)(*.jpg,*.gif, *.png):</label>
+                        </div>
+                        <div class="col-md-8">
+                            <asp:Image ID="PreviewImage" runat="server" Width="105px" Height="105px" />
+                            <br />
+                            <telerik:RadAsyncUpload runat="server" ID="PresentationThumbnail" Style="width: 95%"
+                                AllowedFileExtensions="png,gif,jpg,jpeg" MaxFileSize="1000000000" MaxFileInputsCount="1">
+                            </telerik:RadAsyncUpload>
+                        </div>
+                    </div>
+                    <div class="row">&nbsp;</div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label for="UserManualLabel" class="labelweak">User Manual:</label>
+                        </div>
+                        <div class="col-md-8">
+                            <asp:HyperLink runat="server" ID="UserManualLabel" ToolTip="User manual associated with this QVW - click to launch"></asp:HyperLink>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="right-div">
+            <div class="row">&nbsp;</div>
+            <div class="left-div">
                 <div id="divGroupAssignment" class="roundShadowContainer">
-                    <h3>Group Assignment/Modification</h3>
-                    <table class="table table-hover">
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <label for="NewGroup" class="labelweak">New Group:</label></td>
-                                <td>
-                                    <asp:TextBox runat="server" ID="NewGroupName"></asp:TextBox>
-                                </td>
-                                <td>
-                                    <asp:Button runat="server" ID="Button1" Text="Create Group" ToolTip="Create a group on the production server."
-                                        OnClick="CreateGroup_Click" CssClass="btn btn-secondary btn-sm" /></td>
-                                <td>
-                                    <asp:Button runat="server" ID="Button2" Text="Delete Group" ToolTip="Delete the 'checked' groups on the production server"
-                                        OnClick="Delete_Click" CssClass="btn btn-secondary btn-sm" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="4">
-                                    <div style="height: 400px; min-height: 50px; overflow-y: auto; margin: 0 auto;">
-                                        <asp:CheckBoxList runat="server" ID="SelectedGroups" RepeatColumns="1" onclick="SetTooltip()"></asp:CheckBoxList>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h3>Group Assignment/Modification</h3>
+                        </div>
+                    </div>
+                    <div class="row">&nbsp;</div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="text-left">
+                                <label for="NewGroup" class="labelweak">New Group:</label>
+                                <asp:TextBox runat="server" ID="NewGroupName" Width="45%"></asp:TextBox>
+                                <asp:Button runat="server" ID="Button1" Text="Create Group" ToolTip="Create a group on the production server."
+                                    OnClick="CreateGroup_Click" CssClass="btn btn-secondary btn-sm" />
+                                <asp:Button runat="server" ID="Button2" Text="Delete Group" ToolTip="Delete the 'checked' groups on the production server"
+                                    OnClick="Delete_Click" CssClass="btn btn-secondary btn-sm" />
+
+                            </div>
+                            <div class="row">&nbsp;</div>
+                            <div style="height: 400px; min-height: 50px; overflow-y: auto; margin: 0 auto; background: #eceaea;">
+                                <asp:CheckBoxList runat="server" ID="SelectedGroups"
+                                    RepeatColumns="1" onclick="SetTooltip()">
+                                </asp:CheckBoxList>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="space"></div>
+            <div class="row">&nbsp;</div>
             <div class="row">
-                <div class="center-block" style="float: none; width: 65%;">
+                <div class="center-block" style="float: none; width: 50%;">
                     <div class="alert alert-warning infoBox">
                         <strong>Important!</strong><span> Do not save if there are invalid characters like < or > or # in Description,Notes & Tooltip text boxes.</span>
                     </div>
@@ -207,6 +226,9 @@
 
     </form>
     <script type="text/javascript">
+        jQuery(function () {
+            jQuery('#tabs a:last').tab('show')
+        })
         //disable all the button in the form while uploading
         function Submitted() {
             var WorkingDiv = document.getElementById("WorkingDiv");
