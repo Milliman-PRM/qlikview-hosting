@@ -46,7 +46,7 @@ namespace MillimanDev {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::Telerik.Web.UI.RadMenu RadMenu1;
+        protected global::Telerik.Web.UI.RadMenu mnuOptions;
         
         /// <summary>
         /// FilterLabel control.
@@ -64,7 +64,7 @@ namespace MillimanDev {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList Groups;
+        protected global::System.Web.UI.WebControls.DropDownList ddlGroups;
         
         /// <summary>
         /// ProductsPageTable control.
