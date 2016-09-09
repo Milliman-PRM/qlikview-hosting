@@ -146,6 +146,9 @@
     <None Include="Data Context\CdrDataContext.CdrDataContextDiagram.view">
       <DependentUpon>CdrDataContext.lqml</DependentUpon>
     </None>
+    <None Include="Data Context\CdrDataContext.CdrWithTypes.view">
+      <DependentUpon>CdrDataContext.lqml</DependentUpon>
+    </None>
     <None Include="Data Context\CdrDataContext.edps">
       <DependentUpon>CdrDataContext.lqml</DependentUpon>
     </None>

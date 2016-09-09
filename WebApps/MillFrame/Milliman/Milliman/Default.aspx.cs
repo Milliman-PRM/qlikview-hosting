@@ -38,7 +38,7 @@ namespace MillimanDev
                 }
 
                 string MenuXML = System.IO.File.ReadAllText(Server.MapPath("~/MainMenuConfiguration/MainMenu.xml"));
-                RadMenu1.LoadXml(ProcessForPublisherAdmin(ProcessForClientAdmin(MenuXML)));
+                mnuOptions.LoadXml(ProcessForPublisherAdmin(ProcessForClientAdmin(MenuXML)));
 
                 LoadAnnouncements();
                 LoadProducts();
@@ -47,24 +47,24 @@ namespace MillimanDev
                 if (UserRoles.Length > 1)
                 {  //show filter options
                     FilterLabel.Visible = true;
-                    Groups.Visible = true;
-                    Groups.Items.Add(NoFilter); //add the don't filter anything string
+                    ddlGroups.Visible = true;
+                    ddlGroups.Items.Add(NoFilter); //add the don't filter anything string
                     foreach (string S in UserRoles)
-                        Groups.Items.Add(S);
-                    Groups.SelectedIndex = 0;
+                        ddlGroups.Items.Add(S);
+                    ddlGroups.SelectedIndex = 0;
                 }
 
                 string FilterUsers = WebConfigurationManager.AppSettings["ShowFilter"].ToLower();
                 if ((FilterUsers == null) || (FilterUsers.IndexOf(Membership.GetUser().UserName.ToLower()) == -1))
                 { //only filter user can see the groups which are really CC codes - only makes sense to Milliman employees
                     FilterLabel.Visible = false;
-                    Groups.Visible = false;
+                    ddlGroups.Visible = false;
                 }
             }
             else
             {
                 //this will correct the issue of postback for end-users for not for admins with "filter-by" permissions
-                if (Groups.SelectedItem == null)
+                if (ddlGroups.SelectedItem == null)
                 {
                     LoadProducts();
                 }
@@ -558,13 +558,13 @@ namespace MillimanDev
 
         protected void Groups_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (Groups.SelectedItem.Text.IndexOf(NoFilter) == 0)
+            if (ddlGroups.SelectedItem.Text.IndexOf(NoFilter) == 0)
             {
                 LoadProducts();
             }
             else
             {
-                string[] UserRoles = new string[] { Groups.SelectedItem.Text };
+                string[] UserRoles = new string[] { ddlGroups.SelectedItem.Text };
                 MillimanCommon.UserAccessList ACL = new MillimanCommon.UserAccessList(Membership.GetUser().UserName, UserRoles, false);
                 foreach (MillimanCommon.UserAccessList.UserAccess Access in ACL.ACL)
                 {
@@ -573,7 +573,7 @@ namespace MillimanDev
             }
         }
 
-        protected void RadMenu1_ItemClick(object sender, Telerik.Web.UI.RadMenuEventArgs e)
+        protected void mnuOptions_ItemClick(object sender, Telerik.Web.UI.RadMenuEventArgs e)
         {
             if (string.Compare(e.Item.Value.ToString(), "logout", true) == 0)
             {
