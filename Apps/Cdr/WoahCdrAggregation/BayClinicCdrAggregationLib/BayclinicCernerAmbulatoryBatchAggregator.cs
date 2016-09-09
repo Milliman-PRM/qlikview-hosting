@@ -24,7 +24,7 @@ namespace BayClinicCernerAmbulatory
         private String _PgConnectionName;
         //private String MembershipDataFileUsed;
 
-        private StreamWriter CsvWriter;
+        //private StreamWriter CsvWriter;
         private DateTime PatientLoopStart;
         long WriteCounter;
 
@@ -196,7 +196,8 @@ namespace BayClinicCernerAmbulatory
 
             bool Initialized;
 
-            CsvWriter = new StreamWriter("Performance_" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + ".csv");
+            //CsvWriter = new StreamWriter("Performance_" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + ".csv");
+            //CsvWriter.AutoFlush = true;
             WriteCounter = 0;
 
             EndThreadSignal = false;
@@ -240,6 +241,9 @@ namespace BayClinicCernerAmbulatory
 
             if (ClearRunNumbers)
             {
+                // TODO This would truncate patients and all tables directly or indirectly referencing patients through foreign keys.  
+                // CdrDb.Context.ExecuteCommand("TRUNCATE TABLE public.patient RESTART IDENTITY CASCADE");
+
                 MongoRunUpdater.ClearAllMongoAggregationRunNumbers();
             }
 
@@ -355,8 +359,13 @@ namespace BayClinicCernerAmbulatory
             }
 
 EndProcessing:
+            query = from Run in CdrDb.Context.AggregationRuns
+                    where Run.dbid == ThisAggregationRunDbid
+                    select Run;
+            AggRun = query.FirstOrDefault();  // Returns existing record or null
             AggRun.StatusFlags = AggregationRunStatus.Complete;
             CdrDb.Context.SubmitChanges();
+
             CdrDb = null;
 
             Trace.WriteLine("Processed   " + PersonCounter + " person documents from MongoDB");
@@ -413,7 +422,7 @@ EndProcessing:
             DateTime StoreStart = DateTime.Now;
             CdrDb.Context.SubmitChanges();
             DateTime StoreEnd = DateTime.Now;
-            CsvWriter.WriteLine((WriteCounter++).ToString() + " , " + (StoreEnd - PatientLoopStart).TotalSeconds + " , " + (StoreEnd - StoreStart).TotalSeconds);
+            //CsvWriter.WriteLine((WriteCounter++).ToString() + " , " + (StoreEnd - PatientLoopStart).TotalSeconds + " , " + (StoreEnd - StoreStart).TotalSeconds);
 
             MongoRunUpdater.PersonIdList.Add(PersonDocument.Id);
 

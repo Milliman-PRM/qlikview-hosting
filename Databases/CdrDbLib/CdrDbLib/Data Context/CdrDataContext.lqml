@@ -300,21 +300,22 @@
       <Column Name="statusflags" Member="StatusFlags" Type="AggregationRunStatus" DbType="int4 NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="6051d6fb-c111-4958-bace-202261af84ff">
         <Documentation>
           <Summary>Bit mask</Summary>
-          <LongDescription>Binary            Int     Meaning
-00000001       1         Value Reserved By Program
-00000010       2         Aggregation In Progress
-00000100       4         Complete
-00001000       8         future
-00010000      16        future 
-00100000      32         future
-01000000      64         future
-10000000     128         future
+          <LongDescription>
+            Binary            Int     Meaning
+            00000001       1         Value Reserved By Program
+            00000010       2         Aggregation In Progress
+            00000100       4         Complete
+            00001000       8         future
+            00010000      16         future
+            00100000      32         future
+            01000000      64         future
+            10000000     128         future
 
 
 
 
 
-</LongDescription>
+          </LongDescription>
         </Documentation>
       </Column>
       <Column Name="startdatetime" Member="StartDateTime" Type="System.DateTimeOffset" DbType="timestamp with time zone" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="0932eaa6-c850-4c68-b5da-21c1e8878eb1" />

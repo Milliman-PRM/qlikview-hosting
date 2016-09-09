@@ -93,6 +93,7 @@
     <Content Include="Images\eye-icon.png" />
     <Content Include="Images\eye-hide.png" />
     <Content Include="Images\InformationBulb.png" />
+    <Content Include="Images\missing.png" />
     <Content Include="Images\reportnotavailableADMINOVERIDE.gif" />
     <Content Include="Images\Secured.png" />
     <Content Include="Images\excel-icon.png" />

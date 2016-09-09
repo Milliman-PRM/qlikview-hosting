@@ -156,6 +156,8 @@ namespace BayClinicCernerAmbulatory
             {
                 case "Bay Clinic":
                     return CdrDb.EnsureOrganizationRecord(BayClinicCernerAmbulatoryBatchAggregator.WoahBayClinicOrganizationIdentity).dbid;
+                case "Bay Clinic Pediactrics":
+                    return CdrDb.EnsureOrganizationRecord(VisitLocationCodeMeanings[CernerCode]).dbid;
                 default:
                     Trace.WriteLine("WARNING: From CernerReferencedCodeDictionaries.GetOrganizationDbidForVisitLocationCode(), adding to database a non-default visit location >" + VisitLocationCodeMeanings[CernerCode] + "<");
                     return CdrDb.EnsureOrganizationRecord(VisitLocationCodeMeanings[CernerCode]).dbid;

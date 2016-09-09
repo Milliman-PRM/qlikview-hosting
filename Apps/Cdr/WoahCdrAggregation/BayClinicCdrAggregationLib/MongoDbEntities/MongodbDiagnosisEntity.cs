@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -117,9 +118,8 @@ namespace BayClinicCernerAmbulatory
         /// <param name="ReferencedCodes"></param>
         /// <param name="TerminologyRecord"></param>
         /// <returns>true if an existing record was modified, false if a new record was created</returns>
-        internal bool MergeWithExistingDiagnosis(ref Diagnosis DiagnosisRecord, ref Patient PatientRecord, VisitEncounter VisitRecord, CernerReferencedCodeDictionaries ReferencedCodes,CernerReferencedTerminologyDictionaries TerminologyCodes)
+        internal bool MergeWithExistingDiagnosis(ref Diagnosis DiagnosisRecord, ref Patient PatientRecord, VisitEncounter VisitRecord, CernerReferencedCodeDictionaries ReferencedCodes, CernerReferencedTerminologyDictionaries TerminologyDictionaries)
         {
-            String FullCode, CodeSystem;
             DateTime StartDateTime, EndDateTime, DiagDateTime, StatusDateTime;
             DateTime.TryParse(EffectiveBeginDateTime, out StartDateTime);
             DateTime.TryParse(EffectiveEndDateTime, out EndDateTime);
@@ -127,23 +127,16 @@ namespace BayClinicCernerAmbulatory
             DateTime.TryParse(ActiveStatusDateTime, out StatusDateTime);
 
             //Code parsing
-            
-
-            FullCode = TerminologyCodes.TerminologyConceptMeaning[UniqueTerminologyIdentifier];
-            if (FullCode.Contains("{") && FullCode.Contains("}"))
+            CodedEntry DiagnosisCode = new CodedEntry();
+            if (!String.IsNullOrEmpty(UniqueTerminologyIdentifier))
             {
-                CodeSystem = TerminologyCodes.TerminologyConceptMeaning[UniqueTerminologyIdentifier].Split('}')[0].Replace("{", "");
+                DiagnosisCode.Code = TerminologyDictionaries.TerminologyCodeMeaning[UniqueTerminologyIdentifier];
+                DiagnosisCode.CodeMeaning = TerminologyDictionaries.TerminologyConceptMeaning[UniqueTerminologyIdentifier];
+                if (UniqueTerminologyIdentifier != "0") {
+                    String TerminologyCode = TerminologyDictionaries.TerminologyTerminologyCode[UniqueTerminologyIdentifier];
+                    DiagnosisCode.CodeSystem = ReferencedCodes.TerminologyCodeMeanings[TerminologyCode];
+                }
             }
-            else
-            {
-                CodeSystem = "";
-            }
-            CodedEntry DiagnosisCode = new CodedEntry
-            {
-                Code = FullCode,
-                CodeMeaning = TerminologyCodes.TerminologyCodeMeaning[UniqueTerminologyIdentifier],
-                CodeSystem = CodeSystem
-            };
 
             if (DiagnosisRecord == null)
             {
@@ -158,7 +151,7 @@ namespace BayClinicCernerAmbulatory
                     ShortDescription = Display,
                     LongDescription = "",  // TODO Can I do better?  Maybe this field doesn't need to be here if there is no source of long description.  
                     DiagCode = DiagnosisCode,
-                    Status = "",  // TODO If this is just active and inactive maybe I don't need it.  Study.  
+                    Status = (Active == "1") ? "Active" : "Inactive",
                     StatusDateTime = StatusDateTime,         //Same as the update time
                     LastImportFileDate = ImportFileDate
                     // TODO There is a coded "type" field with values Discharge and Billing.  Figure out whether this should be used/interpreted
@@ -181,6 +174,7 @@ namespace BayClinicCernerAmbulatory
                 }
 
                 if (DiagnosisRecord.DiagCode != DiagnosisCode) { DiagnosisRecord.DiagCode = DiagnosisCode; }
+                DiagnosisRecord.Status = (Active == "1") ? "Active" : "Inactive";
 
                 if (DiagnosisRecord.DeterminationDateTime != DiagDateTime && !DiagnosisDateTime.Contains("2100") && !String.IsNullOrEmpty(DiagnosisDateTime))
                     DiagnosisRecord.DeterminationDateTime = DiagDateTime;

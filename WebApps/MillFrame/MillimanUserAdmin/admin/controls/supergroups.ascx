@@ -41,7 +41,7 @@
     <asp:ListBox ID="ClientAdminUsers" runat="server" style="z-index: 1; left: 322px; top: 368px; position: absolute; height: 105px; width: 285px" AutoPostBack="True" OnPreRender="Sorted_PreRender"></asp:ListBox>
     <asp:ImageButton style="position:absolute;top:421px; left:640px; height:24px; width:24px" ID="RemoveAdmin" runat="server" Text="&gt;&gt;&gt;" OnClick="RemoveAdmin_Click" ImageUrl="~/images/next.png"/>
     
-    <asp:ImageButton ID="AddAdmin" runat="server" style="z-index: 1; left: 640px; top: 380px; position: absolute; width: 24px; height: 24px; " Text="&lt;&lt;&lt;" OnClick="AddAdmin_Click" ImageUrl="~/images/back.png"/>
+    <asp:ImageButton ID="AddAdmin" runat="server" style="z-index: 1; left: 640px; top: 380px; position: absolute; width: 24px; height: 24px; " Text="&lt;&lt;&lt;" OnClick="AddAdmin_Click" ImageUrl="~/images/back.png" Enabled="False" ToolTip="This functionality is disabled until the release for Millframe 4.5"/>
     <asp:ListBox ID="AllAdmins" runat="server" style="z-index: 1; left: 692px; top: 368px; position: absolute; height: 99px; width: 300px" AutoPostBack="True" OnPreRender="Sorted_PreRender"></asp:ListBox>
     <asp:Label style="position:absolute;top:350px; left:693px; height:15px; width:221px" ID="Label3" runat="server" Text="All client admins with group access"></asp:Label>
 

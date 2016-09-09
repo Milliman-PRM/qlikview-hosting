@@ -8,7 +8,6 @@ using System.Web;
 using System.Web.Security;
 using System.Collections;
 using System.Collections.Generic;
-using MillimanCommon;
 
 namespace MillimanDev
 {
@@ -38,22 +37,34 @@ namespace MillimanDev
                     return;
                 }
 
-                LoadMenu();
+                string MenuXML = System.IO.File.ReadAllText(Server.MapPath("~/MainMenuConfiguration/MainMenu.xml"));
+                RadMenu1.LoadXml(ProcessForPublisherAdmin(ProcessForClientAdmin(MenuXML)));
+
                 LoadAnnouncements();
                 LoadProducts();
-                LoadDdlGroups();
+
+                string[] UserRoles = MillimanCommon.UserAccessList.GetRolesForUser();
+                if (UserRoles.Length > 1)
+                {  //show filter options
+                    FilterLabel.Visible = true;
+                    Groups.Visible = true;
+                    Groups.Items.Add(NoFilter); //add the don't filter anything string
+                    foreach (string S in UserRoles)
+                        Groups.Items.Add(S);
+                    Groups.SelectedIndex = 0;
+                }
 
                 string FilterUsers = WebConfigurationManager.AppSettings["ShowFilter"].ToLower();
                 if ((FilterUsers == null) || (FilterUsers.IndexOf(Membership.GetUser().UserName.ToLower()) == -1))
-                { //only filter user can see the ddlGroups which are really CC codes - only makes sense to Milliman employees
+                { //only filter user can see the groups which are really CC codes - only makes sense to Milliman employees
                     FilterLabel.Visible = false;
-                    ddlGroups.Visible = false;
+                    Groups.Visible = false;
                 }
             }
             else
             {
                 //this will correct the issue of postback for end-users for not for admins with "filter-by" permissions
-                if (ddlGroups.SelectedItem == null)
+                if (Groups.SelectedItem == null)
                 {
                     LoadProducts();
                 }
@@ -95,14 +106,73 @@ namespace MillimanDev
             }
         }
 
-        /// <summary>
-        /// Check to see if user is supposed to be able to admin thier own users,  if not
-        /// remove the option on the menu to launch client admin interface, otherwise look into adding options for
-        /// admin.  It is possible they are setup to admin clients, but not in a group, in this case remove the
-        /// menu option
-        /// </summary>
-        /// <param name="XML"></param>
-        /// <returns></returns>
+        //this version is for the next revision of Millframe that allows report selection
+        ///// <summary>
+        ///// Check to see if user is supposed to be able to admin thier own users,  if not
+        ///// remove the option on the menu to launch client admin interface, otherwise look into adding options for
+        ///// admin.  It is possible they are setup to admin clients, but not in a group, in this case remove the
+        ///// menu option
+        ///// </summary>
+        ///// <param name="XML"></param>
+        ///// <returns></returns>
+        //private string ProcessForClientAdmin(string XML)
+        //{
+        //    //<Item Text='User Administration' Width='200px' LeftLogo="images/user-group-icon.png">
+        //    //  <Group Flow='Vertical'>
+        //    //    <Item Text='Administer users for Francisan CIR' Value='CIR' PostBack='true'/>
+        //    //    <Item Text='Administer users for Francisan NIR' Value='NIR' />
+        //    //    <Item Text='Administer users for Francisan WIR' Value='WIR'/>
+        //    //  </Group>
+        //    //</Item> 
+        //    string ReplacementTag = "_INSERT_CLIENT_ADMIN_ITEM_";
+        //    bool IsUserAdmin = GetAdminByType( AdminType.User);
+        //    if (IsUserAdmin == false)
+        //    {
+        //        return XML.Replace(ReplacementTag, "");
+        //    }
+        //    else
+        //    {
+        //        MillimanCommon.SuperGroup SG = MillimanCommon.SuperGroup.GetInstance();
+
+        //         System.Collections.Generic.List<MillimanCommon.SuperGroup.SuperGroupContainer> SuperGroups = SG.GetSupersForClientAdmin(Membership.GetUser().UserName);
+
+        //        string MainEntry = @"<Item Text='User Administration' Width='200px' LeftLogo='images/user-group-icon.png' ToolTip='_TOOLTIP_'><Group Flow='Vertical'>_ITEMS_</Group></Item>";
+
+        //        string[] MyCurrentRoles = MillimanCommon.UserAccessList.GetRolesForUser();
+        //        System.Collections.Generic.List<string> MyRoles = new System.Collections.Generic.List<string>(MyCurrentRoles);
+        //        //don't use "Administrator" role - is build in default role
+        //        for (int Index = 0; Index < MyRoles.Count; Index++)
+        //        {
+        //            if (string.Compare(MyRoles[Index], "administrator", true) == 0)
+        //            {
+        //                MyRoles.RemoveAt(Index);
+        //                break;
+        //            }
+        //        }
+        //        if (SuperGroups.Count == 1)
+        //        {
+        //            string SubMenu = CreateMenuItem("User Administration", "Administer users for " + SuperGroups[0].ContainerName, SuperGroups[0].ContainerName);
+        //            return XML.Replace(ReplacementTag, SubMenu);
+        //        }
+        //        else if (SuperGroups.Count > 1)
+        //        {
+        //            string SubMenus = string.Empty;
+        //            foreach (MillimanCommon.SuperGroup.SuperGroupContainer SGC in SuperGroups)
+        //            {
+        //                string SubMenu = CreateMenuItem("Administer users for " + SGC.ContainerName, SGC.ContainerDescription, SGC.ContainerName);
+        //                SubMenus += SubMenu;
+        //            }
+        //            MainEntry = MainEntry.Replace("_ITEMS_", SubMenus);
+        //            MainEntry = MainEntry.Replace("_TOOLTIP_", "Administer users and control access rights.");
+        //            return XML.Replace(ReplacementTag, MainEntry);
+        //        }
+        //        else //am client admin but not in a group - get rid of menu option
+        //        {
+        //            return XML.Replace(ReplacementTag, "");
+        //        }
+        //    }
+        //}
+
         private string ProcessForClientAdmin(string XML)
         {
             //<Item Text='User Administration' Width='200px' LeftLogo="images/user-group-icon.png">
@@ -120,13 +190,12 @@ namespace MillimanDev
             }
             else
             {
-                SuperGroup SG = SuperGroup.GetInstance();
-                List<SuperGroup.SuperGroupContainer> SuperGroups = SG.GetSupersForClientAdmin(Membership.GetUser().UserName);
+                MillimanCommon.MillimanGroupMap MGM = MillimanCommon.MillimanGroupMap.GetInstance();
 
                 string MainEntry = @"<Item Text='User Administration' Width='200px' LeftLogo='images/user-group-icon.png' ToolTip='_TOOLTIP_'><Group Flow='Vertical'>_ITEMS_</Group></Item>";
 
-                string[] MyCurrentRoles = UserAccessList.GetRolesForUser();
-                List<string> MyRoles = new List<string>(MyCurrentRoles);
+                string[] MyCurrentRoles = MillimanCommon.UserAccessList.GetRolesForUser();
+                System.Collections.Generic.List<string> MyRoles = new System.Collections.Generic.List<string>(MyCurrentRoles);
                 //don't use "Administrator" role - is build in default role
                 for (int Index = 0; Index < MyRoles.Count; Index++)
                 {
@@ -136,18 +205,31 @@ namespace MillimanDev
                         break;
                     }
                 }
-                if (SuperGroups.Count == 1)
+                string FriendlyGroupName = "????";
+                if (MyRoles.Count == 1)
                 {
-                    string SubMenu = CreateMenuItem("User Administration", "Administer users for " + SuperGroups[0].ContainerName, SuperGroups[0].ContainerName);
-                    return XML.Replace(ReplacementTag, SubMenu);
+                    FriendlyGroupName = MGM.MillimanGroupDictionary[MyRoles[0]].FriendlyGroupName;
+                    string SubMenu = CreateMenuItem("User Administration", "Administer users for " + FriendlyGroupName, MyRoles[0]);
+                    //don't show if no users are allowed
+                    if (MGM.MillimanGroupDictionary[MyRoles[0]].MaximumnUsers > 0)
+                        return XML.Replace(ReplacementTag, SubMenu);
+                    return "";
                 }
-                else if (SuperGroups.Count > 1)
+                else if (MyRoles.Count > 1)
                 {
                     string SubMenus = string.Empty;
-                    foreach (SuperGroup.SuperGroupContainer SGC in SuperGroups)
+                    foreach (string Role in MyRoles)
                     {
-                        string SubMenu = CreateMenuItem("Administer users for " + SGC.ContainerName, SGC.ContainerDescription, SGC.ContainerName);
-                        SubMenus += SubMenu;
+                        if (MGM.MillimanGroupDictionary.ContainsKey(Role) == true)
+                        {  //if we do not have a friendly name dont show a menu item
+                            FriendlyGroupName = MGM.MillimanGroupDictionary[Role].FriendlyGroupName;
+                            if (string.IsNullOrEmpty(FriendlyGroupName) == false)
+                            {
+                                string SubMenu = CreateMenuItem("Administer users for " + FriendlyGroupName, "", Role);
+                                if (MGM.MillimanGroupDictionary[Role].MaximumnUsers > 0)
+                                    SubMenus += SubMenu;
+                            }
+                        }
                     }
                     MainEntry = MainEntry.Replace("_ITEMS_", SubMenus);
                     MainEntry = MainEntry.Replace("_TOOLTIP_", "Administer users and control access rights.");
@@ -160,74 +242,6 @@ namespace MillimanDev
             }
         }
 
-        //private string ProcessForClientAdmin(string XML)
-        //{
-        //    //<Item Text='User Administration' Width='200px' LeftLogo="images/user-group-icon.png">
-        //    //  <Group Flow='Vertical'>
-        //    //    <Item Text='Administer users for Francisan CIR' Value='CIR' PostBack='true'/>
-        //    //    <Item Text='Administer users for Francisan NIR' Value='NIR' />
-        //    //    <Item Text='Administer users for Francisan WIR' Value='WIR'/>
-        //    //  </Group>
-        //    //</Item> 
-        //    string ReplacementTag = "_INSERT_CLIENT_ADMIN_ITEM_";
-        //    bool IsUserAdmin = GetAdminByType(AdminType.User);
-        //    if (IsUserAdmin == false)
-        //    {
-        //        return XML.Replace(ReplacementTag, "");
-        //    }
-        //    else
-        //    {
-        //        MillimanCommon.MillimanGroupMap MGM = MillimanCommon.MillimanGroupMap.GetInstance();
-
-        //        string MainEntry = @"<Item Text='User Administration' Width='200px' LeftLogo='images/user-group-icon.png' ToolTip='_TOOLTIP_'><Group Flow='Vertical'>_ITEMS_</Group></Item>";
-
-        //        string[] MyCurrentRoles = MillimanCommon.UserAccessList.GetRolesForUser();
-        //        System.Collections.Generic.List<string> MyRoles = new System.Collections.Generic.List<string>(MyCurrentRoles);
-        //        //don't use "Administrator" role - is build in default role
-        //        for (int Index = 0; Index < MyRoles.Count; Index++)
-        //        {
-        //            if (string.Compare(MyRoles[Index], "administrator", true) == 0)
-        //            {
-        //                MyRoles.RemoveAt(Index);
-        //                break;
-        //            }
-        //        }
-        //        string FriendlyGroupName = "????";
-        //        if (MyRoles.Count == 1)
-        //        {
-        //            FriendlyGroupName = MGM.MillimanGroupDictionary[MyRoles[0]].FriendlyGroupName;
-        //            string SubMenu = CreateMenuItem("User Administration", "Administer users for " + FriendlyGroupName, MyRoles[0]);
-        //            //don't show if no users are allowed
-        //            if (MGM.MillimanGroupDictionary[MyRoles[0]].MaximumnUsers > 0)
-        //                return XML.Replace(ReplacementTag, SubMenu);
-        //            return "";
-        //        }
-        //        else if (MyRoles.Count > 1)
-        //        {
-        //            string SubMenus = string.Empty;
-        //            foreach (string Role in MyRoles)
-        //            {
-        //                if (MGM.MillimanGroupDictionary.ContainsKey(Role) == true)
-        //                {  //if we do not have a friendly name dont show a menu item
-        //                    FriendlyGroupName = MGM.MillimanGroupDictionary[Role].FriendlyGroupName;
-        //                    if (string.IsNullOrEmpty(FriendlyGroupName) == false)
-        //                    {
-        //                        string SubMenu = CreateMenuItem("Administer users for " + FriendlyGroupName, "", Role);
-        //                        if (MGM.MillimanGroupDictionary[Role].MaximumnUsers > 0)
-        //                            SubMenus += SubMenu;
-        //                    }
-        //                }
-        //            }
-        //            MainEntry = MainEntry.Replace("_ITEMS_", SubMenus);
-        //            MainEntry = MainEntry.Replace("_TOOLTIP_", "Administer users and control access rights.");
-        //            return XML.Replace(ReplacementTag, MainEntry);
-        //        }
-        //        else //am client admin but not in a group - get rid of menu option
-        //        {
-        //            return XML.Replace(ReplacementTag, "");
-        //        }
-        //    }
-        //}
         private string CreateMenuItem(string DisplayText, string ToolTip, string ParameterItem, bool LaunchPublisher = false)
         {
             string SubEntry = @"<Item Text='_GROUPFRIENDLYNAME_' NavigateUrl='_URL_' Target='_blank' ToolTip='_TOOLTIP_' ImageUrl='images/User-Group-icon.png'/>";
@@ -238,10 +252,7 @@ namespace MillimanDev
             string CachePathFileName = System.IO.Path.Combine(CacheDir, CacheFileName);
             SubEntry = SubEntry.Replace("_GROUPFRIENDLYNAME_", DisplayText);
             SubEntry = SubEntry.Replace("_TOOLTIP_", ToolTip);
-            CacheEntry CE = new CacheEntry(Membership.GetUser().ProviderUserKey.ToString(),
-                                            Membership.GetUser().UserName,
-                                            ParameterItem,
-                                            DateTime.Now.AddHours(2.0));
+            MillimanCommon.CacheEntry CE = new MillimanCommon.CacheEntry(Membership.GetUser().ProviderUserKey.ToString(), Membership.GetUser().UserName, ParameterItem, DateTime.Now.AddHours(2.0));
             CE.Save(CachePathFileName);
             string ClientAdminApplication = WebConfigurationManager.AppSettings["ClientAdminApp"];
             if (LaunchPublisher)
@@ -491,56 +502,6 @@ namespace MillimanDev
                 }
             }
             return false;
-        }        
-
-        protected void Groups_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            LoadProductsForSelectedGroup();
-        }
-               
-        protected void mnuOptions_ItemClick(object sender, Telerik.Web.UI.RadMenuEventArgs e)
-        {
-            //Telerik.Web.UI.RadMenuItem ItemClicked = e.Item;
-            if (string.Compare(e.Item.Value.ToString(), "logout", true) == 0)
-            {
-                try
-                {
-                    System.Threading.Thread.Sleep(2000); //seleep 2 seconds, to give other handlers chance to complete
-                                                         // Logout locally.
-                    System.Web.Security.FormsAuthentication.SignOut();
-                    Session.Abandon();
-                    if (this.Session["milliman"] == null)
-                    {
-                        // Create a logout request.
-                        LogoutRequest logoutRequest = new LogoutRequest();
-                        logoutRequest.Issuer = new Issuer(Util.GetAbsoluteUrl(this, "~/"));
-                        logoutRequest.NameId = new NameId(Context.User.Identity.Name);
-
-                        // Send the logout request to the IdP over HTTP redirect.
-                        string logoutUrl = SSOConfiguration.IdPLogoutIdProviderUrl;
-                        X509Certificate2 x509Certificate = (X509Certificate2)Application[Global.SPCertKey];
-                        logoutRequest.Redirect(Response, logoutUrl, string.Empty, x509Certificate.PrivateKey, "Sha1");
-                    }
-                    else
-                    {
-                        Response.Redirect("UserLogin.aspx");
-                    }
-                }
-                catch (Exception exception)
-                {
-                    Trace.Write("ServiceProvider", "Error on logout page", exception);
-                }
-            }
-            else
-            {
-                LoadProductsForSelectedGroup();
-            }
-        }
-
-        private void LoadMenu()
-        {
-            string MenuXML = System.IO.File.ReadAllText(Server.MapPath("~/MainMenuConfiguration/MainMenu.xml"));
-            mnuOptions.LoadXml(ProcessForPublisherAdmin(ProcessForClientAdmin(MenuXML)));
         }
 
         private void LoadProducts()
@@ -560,37 +521,6 @@ namespace MillimanDev
                     MembershipUser MUT = Membership.GetUser();
                 }
                 foreach (MillimanCommon.UserAccessList.UserAccess Access in ACL.ACL)
-                {
-                    LoadProduct(Access);
-                }
-            }
-        }
-
-        private void LoadDdlGroups()
-        {
-            var UserRoles = UserAccessList.GetRolesForUser();
-            if (UserRoles.Length > 1)
-            {  //show filter options
-                FilterLabel.Visible = true;
-                ddlGroups.Visible = true;
-                ddlGroups.Items.Add(NoFilter); //add the don't filter anything string
-                foreach (string S in UserRoles)
-                    ddlGroups.Items.Add(S);
-                ddlGroups.SelectedIndex = 0;
-            }
-        }             
-
-        private void LoadProductsForSelectedGroup()
-        {
-            if (ddlGroups.SelectedItem.Text.IndexOf(NoFilter) == 0)
-            {
-                LoadProducts();
-            }
-            else
-            {
-                string[] UserRoles = new string[] { ddlGroups.SelectedItem.Text };
-                UserAccessList ACL = new UserAccessList(Membership.GetUser().UserName, UserRoles, false);
-                foreach (UserAccessList.UserAccess Access in ACL.ACL)
                 {
                     LoadProduct(Access);
                 }
@@ -619,6 +549,64 @@ namespace MillimanDev
                 FirstAndOnlyRow.Cells[1].Visible = false;
             }
         }
+
+
+        protected void btnLogout_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void Groups_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (Groups.SelectedItem.Text.IndexOf(NoFilter) == 0)
+            {
+                LoadProducts();
+            }
+            else
+            {
+                string[] UserRoles = new string[] { Groups.SelectedItem.Text };
+                MillimanCommon.UserAccessList ACL = new MillimanCommon.UserAccessList(Membership.GetUser().UserName, UserRoles, false);
+                foreach (MillimanCommon.UserAccessList.UserAccess Access in ACL.ACL)
+                {
+                    LoadProduct(Access);
+                }
+            }
+        }
+
+        protected void RadMenu1_ItemClick(object sender, Telerik.Web.UI.RadMenuEventArgs e)
+        {
+            if (string.Compare(e.Item.Value.ToString(), "logout", true) == 0)
+            {
+                try
+                {
+                    System.Threading.Thread.Sleep(2000); //seleep 2 seconds, to give other handlers chance to complete
+                    // Logout locally.
+                    System.Web.Security.FormsAuthentication.SignOut();
+                    Session.Abandon();
+                    if (this.Session["milliman"] == null)
+                    {
+                        // Create a logout request.
+                        LogoutRequest logoutRequest = new LogoutRequest();
+                        logoutRequest.Issuer = new Issuer(Util.GetAbsoluteUrl(this, "~/"));
+                        logoutRequest.NameId = new NameId(Context.User.Identity.Name);
+
+                        // Send the logout request to the IdP over HTTP redirect.
+                        string logoutUrl = SSOConfiguration.IdPLogoutIdProviderUrl;
+                        X509Certificate2 x509Certificate = (X509Certificate2)Application[Global.SPCertKey];
+                        logoutRequest.Redirect(Response, logoutUrl, string.Empty, x509Certificate.PrivateKey, "Sha1");
+                    }
+                    else
+                    {
+                        Response.Redirect("UserLogin.aspx");
+                    }
+                }
+                catch (Exception exception)
+                {
+                    Trace.Write("ServiceProvider", "Error on logout page", exception);
+                }
+            }
+        }
+
 
     }
 }
