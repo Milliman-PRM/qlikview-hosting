@@ -18,7 +18,7 @@ namespace MillimanDev
         public const string SPCertKey = "SPCertKey";
         public const string IdPCertKey = "IdPCertKey";
 
-        public const string DefaultCovisintPassword = "covisint_federated_user";
+      
         /// <summary>
         /// Verifies the remote Secure Sockets Layer (SSL) certificate used for authentication.
         /// </summary>
@@ -53,7 +53,7 @@ namespace MillimanDev
         ///    <add key="CovisintCert_2" value="SSOConfigure\tibcert.crt" />
         /// </summary>
         /// <param name="RootCacheKey"></param>
-        private void LoadAllCovisintCerts(string RootCacheKey)
+        private void LoadAllCerts(string RootCacheKey)
         {
             int Index = 1;
             while (true)
@@ -90,8 +90,8 @@ namespace MillimanDev
             //LoadCertificate(SPCertKey, SPKeyFile, SPKeyPassword);
 
 
-            string MDFile = Path.Combine(Server.MapPath("~"), ConfigurationManager.AppSettings["SSOMetaData"]);
-            SSOConfiguration.LoadMetadataFromFile(MDFile);
+            //string MDFile = Path.Combine(Server.MapPath("~"), ConfigurationManager.AppSettings["SSOMetaData"]);
+            //SSOConfiguration.LoadMetadataFromFile(MDFile);
         }
 
         public static string GetParameter(string RawURL, string Parameter)
