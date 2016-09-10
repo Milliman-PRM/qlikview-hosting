@@ -31,6 +31,12 @@ namespace NbmcUnityTestGui
         {
             DateTime LaunchTimestamp = DateTime.Now;
 
+            String TraceFileName = "TraceLog_" + LaunchTimestamp.ToString("yyyyMMdd-HHmmss") + ".txt";
+
+            TraceListener ThisTraceListener = new TextWriterTraceListener(TraceFileName);
+            Trace.Listeners.Add(ThisTraceListener);
+            Trace.WriteLine("Operation launched " + LaunchTimestamp.ToString("yyyyMMdd-HHmmss"));
+
             // database connections
             MongoDbConnection MongoDb = new MongoDbConnection();
             MongoDb.InitializeWithIni(@"H:\.prm_config\.mongodb", "MongoCredentials");
@@ -129,6 +135,8 @@ namespace NbmcUnityTestGui
             }
 
             CsvWriter.Close();
+            Trace.WriteLine("Extract operation completed at " + DateTime.Now.ToString("yyyyMMdd-HHmmss"));
+            Trace.Listeners.Remove(ThisTraceListener);
 
             Trace.WriteLine("WOAH ID  count: " + WoahIdCounter);
             Trace.WriteLine("NBMC MRN count: " + WoahIdCounter);
@@ -154,13 +162,16 @@ namespace NbmcUnityTestGui
             int.TryParse(ConfigurationManager.AppSettings["MrnCountLimit"], out MrnCountLimit);
 
             int[] OutInt = new int[4] { 0, 0, 0, 0 };
-            String[] RunDurationLimitSettingStrings = ConfigurationManager.AppSettings["RunDurationLimit"].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-            if (RunDurationLimitSettingStrings.Count() == 4)
+            if (ConfigurationManager.AppSettings["RunDurationLimit"] != null)
             {
-                OutInt[0] = int.Parse(RunDurationLimitSettingStrings[0]);
-                OutInt[1] = int.Parse(RunDurationLimitSettingStrings[1]);
-                OutInt[2] = int.Parse(RunDurationLimitSettingStrings[2]);
-                OutInt[3] = int.Parse(RunDurationLimitSettingStrings[3]);
+                String[] RunDurationLimitSettingStrings = ConfigurationManager.AppSettings["RunDurationLimit"].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                if (RunDurationLimitSettingStrings.Count() == 4)
+                {
+                    OutInt[0] = int.Parse(RunDurationLimitSettingStrings[0]);
+                    OutInt[1] = int.Parse(RunDurationLimitSettingStrings[1]);
+                    OutInt[2] = int.Parse(RunDurationLimitSettingStrings[2]);
+                    OutInt[3] = int.Parse(RunDurationLimitSettingStrings[3]);
+                }
             }
             TimeSpan RunDurationLimit = new TimeSpan(OutInt[0], OutInt[1], OutInt[2], OutInt[3]);
             #endregion
