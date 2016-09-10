@@ -658,7 +658,7 @@
                     </Size>
                     <Enabled>false</Enabled>
                     <Oid xsi:type="SchemaModelOID">
-                      <Path>e23418e6-58ae-42ee-a8da-86fe896d7d8e</Path>
+                      <Path>1b6268b1-0445-415f-9feb-3813a6084645</Path>
                       <TypeName>EntityDeveloper.Linq.LinqConnectRelationProperty</TypeName>
                     </Oid>
                   </Model>
@@ -7875,8 +7875,8 @@
           <ScaleMode>Free</ScaleMode>
           <Scale>0.63</Scale>
           <Location>
-            <X>-2304.76192220629 px</X>
-            <Y>296.825399072022 px</Y>
+            <X>-919.047626003747 px</X>
+            <Y>-160.317461530878 px</Y>
           </Location>
         </ViewPort>
         <Oid xsi:type="SchemaModelOID">
