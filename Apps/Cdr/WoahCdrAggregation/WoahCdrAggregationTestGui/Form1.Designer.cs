@@ -39,6 +39,7 @@
             this.buttonEndAllThreads = new System.Windows.Forms.Button();
             this.timerUiUpdate = new System.Windows.Forms.Timer(this.components);
             this.checkBoxResetMongoDB = new System.Windows.Forms.CheckBox();
+            this.ButtonAddICD10CodeMeanings = new System.Windows.Forms.Button();
             this.groupFeedSelection.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -119,7 +120,7 @@
             // 
             this.buttonEndAllThreads.Location = new System.Drawing.Point(458, 355);
             this.buttonEndAllThreads.Name = "buttonEndAllThreads";
-            this.buttonEndAllThreads.Size = new System.Drawing.Size(159, 23);
+            this.buttonEndAllThreads.Size = new System.Drawing.Size(160, 23);
             this.buttonEndAllThreads.TabIndex = 2;
             this.buttonEndAllThreads.Text = "End All Threads";
             this.buttonEndAllThreads.UseVisualStyleBackColor = true;
@@ -139,11 +140,22 @@
             this.checkBoxResetMongoDB.Text = "Reset MongoDB";
             this.checkBoxResetMongoDB.UseVisualStyleBackColor = true;
             // 
+            // ButtonAddICD10CodeMeanings
+            // 
+            this.ButtonAddICD10CodeMeanings.Location = new System.Drawing.Point(458, 91);
+            this.ButtonAddICD10CodeMeanings.Name = "ButtonAddICD10CodeMeanings";
+            this.ButtonAddICD10CodeMeanings.Size = new System.Drawing.Size(160, 23);
+            this.ButtonAddICD10CodeMeanings.TabIndex = 4;
+            this.ButtonAddICD10CodeMeanings.Text = "Add ICD10 Code Meanings";
+            this.ButtonAddICD10CodeMeanings.UseVisualStyleBackColor = true;
+            this.ButtonAddICD10CodeMeanings.Click += new System.EventHandler(this.ButtonAddICD10CodeMeanings_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(629, 390);
+            this.Controls.Add(this.ButtonAddICD10CodeMeanings);
             this.Controls.Add(this.checkBoxResetMongoDB);
             this.Controls.Add(this.buttonEndAllThreads);
             this.Controls.Add(this.buttonAggregate);
@@ -169,6 +181,7 @@
         private System.Windows.Forms.Label labelNbmcPatientsCompleted;
         private System.Windows.Forms.Label labelElapsedTime;
         private System.Windows.Forms.CheckBox checkBoxResetMongoDB;
+        private System.Windows.Forms.Button ButtonAddICD10CodeMeanings;
     }
 }
 

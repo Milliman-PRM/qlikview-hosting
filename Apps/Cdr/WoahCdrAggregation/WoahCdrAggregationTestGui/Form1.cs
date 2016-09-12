@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using BayClinicCdrAggregationLib;
-using NorthBendCdrAggregationLib;
+using BayClinicCernerAmbulatory;
 
 namespace WoahCdrAggregationTestGui
 {
@@ -69,6 +69,13 @@ namespace WoahCdrAggregationTestGui
                 labelElapsedTime.Text = (DateTime.Now - StartDateTime).ToString();
             }
             //labelNbmcPatientsCompleted.Text = NbmcProcesses[0].GetNumberOfPatientsDone().ToString();
+        }
+
+        private void ButtonAddICD10CodeMeanings_Click(object sender, EventArgs e)
+        {
+            BayClinicSpecialTasks TaskObject = new BayClinicSpecialTasks();
+
+            TaskObject.AddAllIcd10CodeMeanings();
         }
     }
 }

@@ -32,7 +32,7 @@ namespace BayClinicCernerAmbulatory
                 var TerminologyQuery = RefTerminologyCollection.AsQueryable();
                 foreach(MongodbReferenceTerminologyEntity ReferenceTerminologyDoc in TerminologyQuery)
                 {
-                    TerminologyConceptMeaning[ReferenceTerminologyDoc.UniqueTerminologyIdentifier] = ReferenceTerminologyDoc.Concept;
+                    TerminologyConceptMeaning[ReferenceTerminologyDoc.UniqueTerminologyIdentifier] = ReferenceTerminologyDoc.Text;
                     TerminologyCodeMeaning[ReferenceTerminologyDoc.UniqueTerminologyIdentifier] = ReferenceTerminologyDoc.Code;
                     TerminologyTerminologyCode[ReferenceTerminologyDoc.UniqueTerminologyIdentifier] = ReferenceTerminologyDoc.Terminology;
                 }
