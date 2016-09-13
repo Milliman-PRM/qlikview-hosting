@@ -13,13 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MongoDbWrap", "..\..\AppsCo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WoahCdrAggregationTestGui", "WoahCdrAggregationTestGui\WoahCdrAggregationTestGui.csproj", "{4F7B25B9-91DD-420B-B9C0-30F1E37E9E45}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SasDataSetLib", "ClassLibrary1\SasDataSetLib.csproj", "{22B8EAF5-B70C-4064-B4E6-979DF14F6709}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLiteLib", "ClassLibrary2\SQLiteLib.csproj", "{D5149A31-D65E-4064-A4F4-CF68069EC55C}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WoahCdrAggregationConsoleApp", "WoahCdrAggregationConsoleApp\WoahCdrAggregationConsoleApp.csproj", "{F2FF6A34-75F5-4B74-BC00-400C896C12DC}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkAccess", "..\..\AppsCommon\NetworkAccess\NetworkAccess.csproj", "{6045ED57-9C70-4A16-B6FD-C46EA652203C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,22 +41,10 @@ Global
 		{4F7B25B9-91DD-420B-B9C0-30F1E37E9E45}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F7B25B9-91DD-420B-B9C0-30F1E37E9E45}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F7B25B9-91DD-420B-B9C0-30F1E37E9E45}.Release|Any CPU.Build.0 = Release|Any CPU
-		{22B8EAF5-B70C-4064-B4E6-979DF14F6709}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{22B8EAF5-B70C-4064-B4E6-979DF14F6709}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{22B8EAF5-B70C-4064-B4E6-979DF14F6709}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{22B8EAF5-B70C-4064-B4E6-979DF14F6709}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D5149A31-D65E-4064-A4F4-CF68069EC55C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D5149A31-D65E-4064-A4F4-CF68069EC55C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D5149A31-D65E-4064-A4F4-CF68069EC55C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D5149A31-D65E-4064-A4F4-CF68069EC55C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F2FF6A34-75F5-4B74-BC00-400C896C12DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F2FF6A34-75F5-4B74-BC00-400C896C12DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F2FF6A34-75F5-4B74-BC00-400C896C12DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F2FF6A34-75F5-4B74-BC00-400C896C12DC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6045ED57-9C70-4A16-B6FD-C46EA652203C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6045ED57-9C70-4A16-B6FD-C46EA652203C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6045ED57-9C70-4A16-B6FD-C46EA652203C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6045ED57-9C70-4A16-B6FD-C46EA652203C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

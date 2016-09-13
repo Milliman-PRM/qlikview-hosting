@@ -45,3 +45,9 @@
    at MillimanCommon.UserRepo.Load() in C:\Users\afsheen.khan\PRMDevelopment\Dev_08032016\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 337
    at MillimanCommon.UserRepo.GetInstance() in C:\Users\afsheen.khan\PRMDevelopment\Dev_08032016\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 30
    at MillimanDev.Global.Application_Start(Object sender, EventArgs e) in C:\Users\afsheen.khan\PRMDevelopment\Dev_08032016\WebApps\MillFrame\Milliman\Milliman\Global.asax.cs:line 77----------------------------------------9/5/2016 12:32:50 PMInfo           Application Start
+9/7/2016 2:05:40 PM Info           Application Start
+9/8/2016 6:01:17 AM Info           Application Start
+6:01:38 AM                    Error     \r\nException trace: System.ArgumentNullException: Value cannot be null.
+Parameter name: path2
+   at System.IO.Path.Combine(String path1, String path2)
+   at MillimanDev.Global.Application_Start(Object sender, EventArgs e) in E:\Story1162TechDebtCovisent\WebApps\MillFrame\Milliman\Milliman\Global.asax.cs:line 93----------------------------------------9/8/2016 6:01:56 AM Info           Application Start
