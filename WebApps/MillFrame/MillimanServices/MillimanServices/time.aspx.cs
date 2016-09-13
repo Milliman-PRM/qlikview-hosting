@@ -87,7 +87,7 @@ namespace Milliman
 
         private string GetDBStatus(out bool Status, out int StatusCode)
         {
-            string CovisintUsers = string.Empty;
+            string ExternalUsers = string.Empty;
             string Health = @"true";
             Status = true;
             StatusCode = 200;
@@ -102,11 +102,11 @@ namespace Milliman
                     if (MU.IsLockedOut)
                         MU.UnlockUser();
 
-                    if (string.Compare(MU.GetPassword(), MillimanCommon.Predefined.DefaultCovisintPassword) == 0)
+                    if (string.Compare(MU.GetPassword(), MillimanCommon.Predefined.DefaultExternalPassword) == 0)
                     {
-                        if (string.IsNullOrEmpty(CovisintUsers) == false)
-                            CovisintUsers += ",";
-                        CovisintUsers += MU.UserName;
+                        if (string.IsNullOrEmpty(ExternalUsers) == false)
+                            ExternalUsers += ",";
+                        ExternalUsers += MU.UserName;
                     }
                 }
             }
@@ -115,10 +115,10 @@ namespace Milliman
                 Health = "false";
                 Status = false;
                 StatusCode = 555;
-                CovisintUsers = string.Empty;
+                ExternalUsers = string.Empty;
             }
 
-            return @"<DBConnections>" + Health.ToLower() + @"</DBConnections><ids>" + CovisintUsers + "</ids>";
+            return @"<DBConnections>" + Health.ToLower() + @"</DBConnections><ids>" + ExternalUsers + "</ids>";
         }
 
         private string GetMemoryStatus(out bool Status, out int StatusCode)

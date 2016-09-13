@@ -93,7 +93,7 @@ namespace MillimanDev2
 
         private string GetDBStatus(string MembershipProviderKey, out bool Status, out int StatusCode)
         {
-            string CovisintUsers = string.Empty;
+            string ExternalUsers = string.Empty;
             string Health = @"true";
             Status = true;
             StatusCode = 200;
@@ -108,11 +108,11 @@ namespace MillimanDev2
                     if (MU.IsLockedOut)
                         MU.UnlockUser();
 
-                    if (string.Compare(MU.GetPassword(), MillimanCommon.Predefined.DefaultCovisintPassword) == 0)
+                    if (string.Compare(MU.GetPassword(), MillimanCommon.Predefined.DefaultExternalPassword) == 0)
                     {
-                        if (string.IsNullOrEmpty(CovisintUsers) == false)
-                            CovisintUsers += ",";
-                        CovisintUsers += MU.UserName;
+                        if (string.IsNullOrEmpty(ExternalUsers) == false)
+                            ExternalUsers += ",";
+                        ExternalUsers += MU.UserName;
                     }
                 }
             }
@@ -121,10 +121,10 @@ namespace MillimanDev2
                 Health = "false";
                 Status = false;
                 StatusCode = 555;
-                CovisintUsers = string.Empty;
+                ExternalUsers = string.Empty;
             }
 
-            return @"<DBConnections>" + Health.ToLower() + @"</DBConnections><ids>" + CovisintUsers + "</ids>";
+            return @"<DBConnections>" + Health.ToLower() + @"</DBConnections><ids>" + ExternalUsers + "</ids>";
         }
 
         private string GetMemoryStatus(out bool Status, out int StatusCode)

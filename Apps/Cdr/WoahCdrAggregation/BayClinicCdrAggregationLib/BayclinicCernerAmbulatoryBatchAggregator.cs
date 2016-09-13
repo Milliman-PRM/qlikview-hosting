@@ -53,9 +53,6 @@ namespace BayClinicCernerAmbulatory
         private String NewBayClinicEmrMongoCredentialConfigFile = ConfigurationManager.AppSettings["NewBayClinicEmrMongoCredentialConfigFile"];
         private String NewBayClinicEmrMongoCredentialSection = ConfigurationManager.AppSettings["NewBayClinicEmrMongoCredentialSection"];
 
-        // Instantiate the the interface to the SQLite membership dataset
-        // WOHSQLiteInterface WOHMembershipData = new WOHSQLiteInterface();
-
         private CdrDbInterface CdrDb;
         private long OrganizationDbid;
         private long ThisAggregationRunDbid;
@@ -196,35 +193,6 @@ namespace BayClinicCernerAmbulatory
             {
                 Trace.WriteLine("MongoDB connection failed");
             }
-
-            /* not using SQLite for now
-            /*  This block works well for authenticated access to network resources when running as SYSTEM user
-             *  uses reference to project "NetworkAccess" in Apps/AppsCommon
-            MembershipDataFileUsed = null;
-            if (!Environment.ExpandEnvironmentVariables("<%ephi_username%><%ephi_password%>").Contains("<%"))
-            {
-                NetworkCredential KDriveCredentials = new NetworkCredential
-                {
-                    UserName = EphiUserName,
-                    Password = EphiPassword,
-                    Domain = "ROOT_MILLIMAN"
-                };
-
-                using (new NetworkConnection(@"\\indy-netapp\prm_phi", KDriveCredentials))
-                {
-                    DirectoryInfo SupportFilesFolder = new DirectoryInfo(@"\\indy-netapp\prm_phi\phi\0273WOH\3.005-0273WOH06\5-Support_files");
-                    DirectoryInfo LatestSubfolder = SupportFilesFolder.GetDirectories().OrderByDescending(f => f.Name).First();
-                    String WoahMembershipDataFile = Path.Combine(LatestSubfolder.FullName, @"035_Staging_Membership\Members_3.005-0273WOH06.sqlite");
-                    File.Copy(WoahMembershipDataFile, @".\Members_3.005-0273WOH06.sqlite", true);
-                    Trace.WriteLine("File.Copy returned at " + DateTime.Now);
-
-                    MembershipDataFileUsed = Path.GetFullPath(@".\Members_3.005-0273WOH06.sqlite");
-                }
-            }
-
-            //Connect to the SQLite membership database
-            WOHMembershipData.ConnectToMembershipData(MembershipDataFileUsed);
-            */
 
             bool Initialized;
 
@@ -393,18 +361,9 @@ namespace BayClinicCernerAmbulatory
             }
 
 EndProcessing:
-/* not using SQLite for now
-WOHMembershipData.Disconnect();
-
-if (!String.IsNullOrEmpty(MembershipDataFileUsed) && File.Exists(MembershipDataFileUsed))
-{
-    File.Delete(MembershipDataFileUsed);
-}
-*/
-
             query = from Run in CdrDb.Context.AggregationRuns
-                        where Run.dbid == ThisAggregationRunDbid
-                        select Run;
+                    where Run.dbid == ThisAggregationRunDbid
+                    select Run;
             AggRun = query.FirstOrDefault();  // Returns existing record or null
             AggRun.StatusFlags = AggregationRunStatus.Complete;
             CdrDb.Context.SubmitChanges();
