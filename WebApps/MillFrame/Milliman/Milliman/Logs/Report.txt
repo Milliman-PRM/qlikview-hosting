@@ -44,76 +44,10 @@
    at MillimanCommon.UserRepo.StartFileWatcher(String RepoFilePath) in C:\Users\afsheen.khan\PRMDevelopment\Dev_08032016\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 245
    at MillimanCommon.UserRepo.Load() in C:\Users\afsheen.khan\PRMDevelopment\Dev_08032016\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 337
    at MillimanCommon.UserRepo.GetInstance() in C:\Users\afsheen.khan\PRMDevelopment\Dev_08032016\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 30
-   at MillimanDev.Global.Application_Start(Object sender, EventArgs e) in C:\Users\afsheen.khan\PRMDevelopment\Dev_08032016\WebApps\MillFrame\Milliman\Milliman\Global.asax.cs:line 77----------------------------------------8/30/2016 9:05:13 AMInfo           Application Start
-8/30/2016 9:15:05 AMInfo           Application Start
-8/30/2016 10:09:12 AMInfo           Application Start
-8/30/2016 10:21:36 AMInfo           Application Start
-8/30/2016 10:23:36 AMInfo           Application Start
-8/30/2016 10:25:35 AMInfo           Application Start
-8/30/2016 10:27:08 AMInfo           Application Start
-8/30/2016 12:55:56 PMInfo           Application Start
-8/30/2016 3:42:30 PMInfo           Application Start
-8/30/2016 3:58:21 PMInfo           Application Start
-8/30/2016 4:08:05 PMInfo           Application Start
-4:12:09 PM                    Error     Failed to get QV ticket\r\n----------------------------------------4:25:47 PM                    Error     Failed to get QV ticket\r\n----------------------------------------8/30/2016 4:39:43 PMInfo           Application Start
-8/30/2016 4:42:51 PMInfo           Application Start
-8/30/2016 4:56:03 PMInfo           Application Start
-8/30/2016 5:02:15 PMInfo           Application Start
-8/31/2016 10:04:31 AMInfo           Application Start
-8/31/2016 10:14:40 AMInfo           Application Start
-8/31/2016 10:20:29 AMInfo           Application Start
-8/31/2016 2:51:30 PMInfo           Application Start
-8/31/2016 3:25:18 PMInfo           Application Start
-3:27:45 PM                    Error     Could not change user password for user afsheen.khan@milliman.com Error-System.ArgumentException: Non alpha numeric characters in 'newPassword' needs to be greater than or equal to '1'.
-   at System.Web.Security.SqlMembershipProvider.ChangePassword(String username, String oldPassword, String newPassword)
-   at System.Web.Security.MembershipUser.ChangePassword(String oldPassword, String newPassword)
-   at MillimanDev2.Profile.ValidateData() in C:\Users\afsheen.khan\PRMDevelopment\Dev_Aug31\WebApps\MillFrame\Milliman\Milliman\Profile.aspx.cs:line 122\r\n----------------------------------------8/31/2016 3:43:42 PMInfo           Application Start
-8/31/2016 3:50:59 PMInfo           Application Start
-8/31/2016 3:52:25 PMInfo           Application Start
-8/31/2016 3:53:01 PMInfo           Application Start
-8/31/2016 3:54:02 PMInfo           Application Start
-8/31/2016 3:58:23 PMInfo           Application Start
-8/31/2016 4:07:37 PMInfo           Application Start
-8/31/2016 4:32:07 PMInfo           Application Start
-8/31/2016 4:38:38 PMInfo           Application Start
-8/31/2016 4:47:14 PMInfo           Application Start
-8/31/2016 4:53:49 PMInfo           Application Start
-8/31/2016 4:58:11 PMInfo           Application Start
-8/31/2016 5:04:45 PMInfo           Application Start
-8/31/2016 5:21:24 PMInfo           Application Start
-8/31/2016 5:31:10 PMInfo           Application Start
-8/31/2016 5:34:05 PMInfo           Application Start
-9/1/2016 9:41:35 AM Info           Application Start
-9/1/2016 9:56:37 AM Info           Application Start
-9/1/2016 10:03:36 AMInfo           Application Start
-9/1/2016 10:09:11 AMInfo           Application Start
-9/1/2016 12:15:19 PMInfo           Application Start
-9/1/2016 12:31:59 PMInfo           Application Start
-9/1/2016 12:33:21 PMInfo           Application Start
-9/1/2016 1:40:41 PM Info           Application Start
-9/1/2016 1:51:09 PM Info           Application Start
-9/1/2016 2:12:11 PM Info           Application Start
-9/1/2016 9:26:11 PM Info           Application Start
-9/1/2016 9:58:45 PM Info           Application Start
-9/1/2016 10:00:46 PMInfo           Application Start
-9/2/2016 1:17:59 PM Info           Application Start
-9/2/2016 1:20:31 PM Info           Application Start
-9/2/2016 1:32:20 PM Info           Application Start
-9/2/2016 1:39:55 PM Info           Application Start
-9/2/2016 2:02:08 PM Info           Application Start
-9/2/2016 2:14:55 PM Info           Application Start
-9/2/2016 2:16:11 PM Info           Application Start
-9/2/2016 2:18:29 PM Info           Application Start
-9/2/2016 2:19:19 PM Info           Application Start
-9/2/2016 2:22:44 PM Info           Application Start
-9/2/2016 2:30:32 PM Info           Application Start
-9/2/2016 2:38:54 PM Info           Application Start
-9/2/2016 2:43:46 PM Info           Application Start
-9/2/2016 2:44:59 PM Info           Application Start
-9/2/2016 2:49:12 PM Info           Application Start
-9/2/2016 2:59:54 PM Info           Application Start
-9/2/2016 3:18:55 PM Info           Application Start
-9/2/2016 3:36:15 PM Info           Application Start
-9/2/2016 3:37:25 PM Info           Application Start
-9/2/2016 4:00:43 PM Info           Application Start
-9/2/2016 4:11:18 PM Info           Application Start
+   at MillimanDev.Global.Application_Start(Object sender, EventArgs e) in C:\Users\afsheen.khan\PRMDevelopment\Dev_08032016\WebApps\MillFrame\Milliman\Milliman\Global.asax.cs:line 77----------------------------------------9/5/2016 12:32:50 PMInfo           Application Start
+9/7/2016 2:05:40 PM Info           Application Start
+9/8/2016 6:01:17 AM Info           Application Start
+6:01:38 AM                    Error     \r\nException trace: System.ArgumentNullException: Value cannot be null.
+Parameter name: path2
+   at System.IO.Path.Combine(String path1, String path2)
+   at MillimanDev.Global.Application_Start(Object sender, EventArgs e) in E:\Story1162TechDebtCovisent\WebApps\MillFrame\Milliman\Milliman\Global.asax.cs:line 93----------------------------------------9/8/2016 6:01:56 AM Info           Application Start

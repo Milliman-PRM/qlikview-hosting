@@ -172,7 +172,6 @@
     <Content Include="SamlArtifactResolve.aspx" />
     <Content Include="SingleLogoutService.aspx" />
     <Content Include="Site.css" />
-    <Content Include="SSOConfigure\tib_metadata_for_sp.xml" />
     <Content Include="templates\email.html" />
     <Content Include="ToDo_Notes.txt" />
     <Content Include="UserLogin.aspx" />
@@ -283,10 +282,8 @@
     <Content Include="Css\glyphicons-halflings-regular.woff" />
     <Content Include="Javascript\jquery.min.v2.1.1.js" />
     <None Include="Properties\PublishProfiles\MillimanDebug.pubxml" />
-    <Content Include="SSOConfigure\tibcert.crt" />
     <Content Include="SSOConfigure\HCIntel.cer" />
     <None Include="Properties\PublishProfiles\MillimanProduction.pubxml" />
-    <Content Include="SSOConfigure\HCO-Prod-cert.crt" />
     <Content Include="Reflector.ashx" />
     <None Include="Properties\PublishProfiles\Staging.pubxml" />
     <None Include="Web.Debug.config">
