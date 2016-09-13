@@ -13701,11 +13701,17 @@ File name: 'E:\PRM\WIP\ClientPublisher\images\missing.png'
 2/4/2016 12:59:49 PMInfo           Application Start
 2/4/2016 12:59:49 PMInfo           Loaded user repo
 2/4/2016 12:59:49 PMInfo           Loaded super groups
-9/4/2016 1:58:44 PM Info           Application Start
-9/4/2016 1:58:44 PM Info           Loaded user repo
-9/4/2016 1:58:44 PM Info           Loaded super groups
-2:17:17 PM                    Error     \r\nException trace: System.Web.HttpCompileException (0x80004005): e:\Story1269CodeRollback\WebApps\MillFrame\MillimanClientPublisher\Default.aspx(238): error CS1061: 'ASP.default_aspx' does not contain a definition for 'ProjectOnline_CheckedChanged' and no extension method 'ProjectOnline_CheckedChanged' accepting a first argument of type 'ASP.default_aspx' could be found (are you missing a using directive or an assembly reference?)
-   at System.Web.Compilation.BuildManager.CompileWebFile(VirtualPath virtualPath)
+6/24/2016 8:52:08 PMInfo           Application Start
+6/24/2016 8:52:08 PMInfo           Loaded user repo
+6/24/2016 8:52:08 PMInfo           Loaded super groups
+6/24/2016 8:58:06 PMInfo           Application Start
+6/24/2016 8:58:06 PMInfo           Loaded user repo
+6/24/2016 8:58:07 PMInfo           Loaded super groups
+6/24/2016 9:08:19 PMInfo           Application Start
+6/24/2016 9:08:19 PMInfo           Loaded user repo
+6/24/2016 9:08:19 PMInfo           Loaded super groups
+11:34:07 AM                   Error     \r\nException trace: System.Web.HttpException (0x80004005): The file '/NoReduction.aspx' does not exist.
+   at System.Web.UI.Util.CheckVirtualFileExists(VirtualPath virtualPath)
    at System.Web.Compilation.BuildManager.GetVPathBuildResultInternal(VirtualPath virtualPath, Boolean noBuild, Boolean allowCrossApp, Boolean allowBuildInPrecompile, Boolean throwIfNotFound, Boolean ensureIsUpToDate)
    at System.Web.Compilation.BuildManager.GetVPathBuildResultWithNoAssert(HttpContext context, VirtualPath virtualPath, Boolean noBuild, Boolean allowCrossApp, Boolean allowBuildInPrecompile, Boolean throwIfNotFound, Boolean ensureIsUpToDate)
    at System.Web.Compilation.BuildManager.GetVirtualPathObjectFactory(VirtualPath virtualPath, HttpContext context, Boolean allowCrossApp, Boolean throwIfNotFound)
@@ -13713,150 +13719,72 @@ File name: 'E:\PRM\WIP\ClientPublisher\images\missing.png'
    at System.Web.UI.PageHandlerFactory.GetHandlerHelper(HttpContext context, String requestType, VirtualPath virtualPath, String physicalPath)
    at System.Web.UI.PageHandlerFactory.GetHandler(HttpContext context, String requestType, String virtualPath, String path)
    at System.Web.HttpApplication.MaterializeHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
-   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)----------------------------------------9/4/2016 2:20:55 PM Info           Application Start
-9/4/2016 2:20:55 PM Info           Loaded user repo
-9/4/2016 2:20:55 PM Info           Loaded super groups
-9/5/2016 8:47:53 AM Info           Application Start
-9/5/2016 8:47:53 AM Info           Loaded user repo
-9/5/2016 8:47:53 AM Info           Loaded super groups
-8:47:54 AM                    Error     \r\nException trace: System.Web.HttpParseException (0x80004005): The server tag is not well formed. ---> System.Web.HttpException (0x80004005): The server tag is not well formed.
-   at System.Web.UI.TemplateParser.ProcessError(String message)
-   at System.Web.UI.TemplateParser.DetectSpecialServerTagError(String text, Int32 textPos)
-   at System.Web.UI.TemplateParser.ParseStringInternal(String text, Encoding fileEncoding)
-   at System.Web.UI.TemplateParser.ParseString(String text, VirtualPath virtualPath, Encoding fileEncoding)
-   at System.Web.UI.TemplateParser.ParseString(String text, VirtualPath virtualPath, Encoding fileEncoding)
-   at System.Web.UI.TemplateParser.ParseFile(String physicalPath, VirtualPath virtualPath)
-   at System.Web.UI.TemplateParser.ParseInternal()
-   at System.Web.UI.TemplateParser.Parse()
-   at System.Web.Compilation.BaseTemplateBuildProvider.get_CodeCompilerType()
-   at System.Web.Compilation.BuildProvider.GetCompilerTypeFromBuildProvider(BuildProvider buildProvider)
-   at System.Web.Compilation.BuildProvidersCompiler.ProcessBuildProviders()
-   at System.Web.Compilation.BuildProvidersCompiler.PerformBuild()
-   at System.Web.Compilation.BuildManager.CompileWebFile(VirtualPath virtualPath)
-   at System.Web.Compilation.BuildManager.GetVPathBuildResultInternal(VirtualPath virtualPath, Boolean noBuild, Boolean allowCrossApp, Boolean allowBuildInPrecompile, Boolean throwIfNotFound, Boolean ensureIsUpToDate)
-   at System.Web.Compilation.BuildManager.GetVPathBuildResultWithNoAssert(HttpContext context, VirtualPath virtualPath, Boolean noBuild, Boolean allowCrossApp, Boolean allowBuildInPrecompile, Boolean throwIfNotFound, Boolean ensureIsUpToDate)
-   at System.Web.Compilation.BuildManager.GetVirtualPathObjectFactory(VirtualPath virtualPath, HttpContext context, Boolean allowCrossApp, Boolean throwIfNotFound)
-   at System.Web.Compilation.BuildManager.CreateInstanceFromVirtualPath(VirtualPath virtualPath, Type requiredBaseType, HttpContext context, Boolean allowCrossApp)
-   at System.Web.UI.PageHandlerFactory.GetHandlerHelper(HttpContext context, String requestType, VirtualPath virtualPath, String physicalPath)
-   at System.Web.UI.PageHandlerFactory.GetHandler(HttpContext context, String requestType, String virtualPath, String path)
-   at System.Web.HttpApplication.MaterializeHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
-   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)----------------------------------------8:52:58 AM                    Error     \r\nException trace: System.Web.HttpParseException (0x80004005): The server tag is not well formed. ---> System.Web.HttpException (0x80004005): The server tag is not well formed.
-   at System.Web.UI.TemplateParser.ProcessError(String message)
-   at System.Web.UI.TemplateParser.DetectSpecialServerTagError(String text, Int32 textPos)
-   at System.Web.UI.TemplateParser.ParseStringInternal(String text, Encoding fileEncoding)
-   at System.Web.UI.TemplateParser.ParseString(String text, VirtualPath virtualPath, Encoding fileEncoding)
-   at System.Web.UI.TemplateParser.ParseString(String text, VirtualPath virtualPath, Encoding fileEncoding)
-   at System.Web.UI.TemplateParser.ParseFile(String physicalPath, VirtualPath virtualPath)
-   at System.Web.UI.TemplateParser.ParseInternal()
-   at System.Web.UI.TemplateParser.Parse()
-   at System.Web.Compilation.BaseTemplateBuildProvider.get_CodeCompilerType()
-   at System.Web.Compilation.BuildProvider.GetCompilerTypeFromBuildProvider(BuildProvider buildProvider)
-   at System.Web.Compilation.BuildProvidersCompiler.ProcessBuildProviders()
-   at System.Web.Compilation.BuildProvidersCompiler.PerformBuild()
-   at System.Web.Compilation.BuildManager.CompileWebFile(VirtualPath virtualPath)
-   at System.Web.Compilation.BuildManager.GetVPathBuildResultInternal(VirtualPath virtualPath, Boolean noBuild, Boolean allowCrossApp, Boolean allowBuildInPrecompile, Boolean throwIfNotFound, Boolean ensureIsUpToDate)
-   at System.Web.Compilation.BuildManager.GetVPathBuildResultWithNoAssert(HttpContext context, VirtualPath virtualPath, Boolean noBuild, Boolean allowCrossApp, Boolean allowBuildInPrecompile, Boolean throwIfNotFound, Boolean ensureIsUpToDate)
-   at System.Web.Compilation.BuildManager.GetVirtualPathObjectFactory(VirtualPath virtualPath, HttpContext context, Boolean allowCrossApp, Boolean throwIfNotFound)
-   at System.Web.Compilation.BuildManager.CreateInstanceFromVirtualPath(VirtualPath virtualPath, Type requiredBaseType, HttpContext context, Boolean allowCrossApp)
-   at System.Web.UI.PageHandlerFactory.GetHandlerHelper(HttpContext context, String requestType, VirtualPath virtualPath, String physicalPath)
-   at System.Web.UI.PageHandlerFactory.GetHandler(HttpContext context, String requestType, String virtualPath, String path)
-   at System.Web.HttpApplication.MaterializeHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
-   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)----------------------------------------8:54:26 AM                    Error     \r\nException trace: System.Web.HttpParseException (0x80004005): The server tag is not well formed. ---> System.Web.HttpException (0x80004005): The server tag is not well formed.
-   at System.Web.UI.TemplateParser.ProcessError(String message)
-   at System.Web.UI.TemplateParser.DetectSpecialServerTagError(String text, Int32 textPos)
-   at System.Web.UI.TemplateParser.ParseStringInternal(String text, Encoding fileEncoding)
-   at System.Web.UI.TemplateParser.ParseString(String text, VirtualPath virtualPath, Encoding fileEncoding)
-   at System.Web.UI.TemplateParser.ParseString(String text, VirtualPath virtualPath, Encoding fileEncoding)
-   at System.Web.UI.TemplateParser.ParseFile(String physicalPath, VirtualPath virtualPath)
-   at System.Web.UI.TemplateParser.ParseInternal()
-   at System.Web.UI.TemplateParser.Parse()
-   at System.Web.Compilation.BaseTemplateBuildProvider.get_CodeCompilerType()
-   at System.Web.Compilation.BuildProvider.GetCompilerTypeFromBuildProvider(BuildProvider buildProvider)
-   at System.Web.Compilation.BuildProvidersCompiler.ProcessBuildProviders()
-   at System.Web.Compilation.BuildProvidersCompiler.PerformBuild()
-   at System.Web.Compilation.BuildManager.CompileWebFile(VirtualPath virtualPath)
-   at System.Web.Compilation.BuildManager.GetVPathBuildResultInternal(VirtualPath virtualPath, Boolean noBuild, Boolean allowCrossApp, Boolean allowBuildInPrecompile, Boolean throwIfNotFound, Boolean ensureIsUpToDate)
-   at System.Web.Compilation.BuildManager.GetVPathBuildResultWithNoAssert(HttpContext context, VirtualPath virtualPath, Boolean noBuild, Boolean allowCrossApp, Boolean allowBuildInPrecompile, Boolean throwIfNotFound, Boolean ensureIsUpToDate)
-   at System.Web.Compilation.BuildManager.GetVirtualPathObjectFactory(VirtualPath virtualPath, HttpContext context, Boolean allowCrossApp, Boolean throwIfNotFound)
-   at System.Web.Compilation.BuildManager.CreateInstanceFromVirtualPath(VirtualPath virtualPath, Type requiredBaseType, HttpContext context, Boolean allowCrossApp)
-   at System.Web.UI.PageHandlerFactory.GetHandlerHelper(HttpContext context, String requestType, VirtualPath virtualPath, String physicalPath)
-   at System.Web.UI.PageHandlerFactory.GetHandler(HttpContext context, String requestType, String virtualPath, String path)
-   at System.Web.HttpApplication.MaterializeHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
-   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)----------------------------------------9/5/2016 9:08:01 AM Info           Application Start
-9/5/2016 9:08:01 AM Info           Loaded user repo
-9/5/2016 9:08:02 AM Info           Loaded super groups
-9/5/2016 9:10:04 AM Info           Application Start
-9/5/2016 9:10:04 AM Info           Loaded user repo
-9/5/2016 9:10:04 AM Info           Loaded super groups
-9/5/2016 9:12:34 AM Info           Application Start
-9/5/2016 9:12:34 AM Info           Loaded user repo
-9/5/2016 9:12:34 AM Info           Loaded super groups
-9/5/2016 9:18:59 AM Info           Application Start
-9/5/2016 9:19:00 AM Info           Loaded user repo
-9/5/2016 9:19:00 AM Info           Loaded super groups
-9:21:06 AM                    Error     \r\nException trace: System.Web.HttpCompileException (0x80004005): e:\Story1269CodeRollback\WebApps\MillFrame\MillimanClientPublisher\Default.aspx(243): error CS1061: 'ASP.default_aspx' does not contain a definition for 'ToggleAvailability_Click' and no extension method 'ToggleAvailability_Click' accepting a first argument of type 'ASP.default_aspx' could be found (are you missing a using directive or an assembly reference?)
-   at System.Web.Compilation.BuildManager.CompileWebFile(VirtualPath virtualPath)
-   at System.Web.Compilation.BuildManager.GetVPathBuildResultInternal(VirtualPath virtualPath, Boolean noBuild, Boolean allowCrossApp, Boolean allowBuildInPrecompile, Boolean throwIfNotFound, Boolean ensureIsUpToDate)
-   at System.Web.Compilation.BuildManager.GetVPathBuildResultWithNoAssert(HttpContext context, VirtualPath virtualPath, Boolean noBuild, Boolean allowCrossApp, Boolean allowBuildInPrecompile, Boolean throwIfNotFound, Boolean ensureIsUpToDate)
-   at System.Web.Compilation.BuildManager.GetVirtualPathObjectFactory(VirtualPath virtualPath, HttpContext context, Boolean allowCrossApp, Boolean throwIfNotFound)
-   at System.Web.Compilation.BuildManager.CreateInstanceFromVirtualPath(VirtualPath virtualPath, Type requiredBaseType, HttpContext context, Boolean allowCrossApp)
-   at System.Web.UI.PageHandlerFactory.GetHandlerHelper(HttpContext context, String requestType, VirtualPath virtualPath, String physicalPath)
-   at System.Web.UI.PageHandlerFactory.GetHandler(HttpContext context, String requestType, String virtualPath, String path)
-   at System.Web.HttpApplication.MaterializeHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
-   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)----------------------------------------9/5/2016 9:22:51 AM Info           Application Start
-9/5/2016 9:22:51 AM Info           Loaded user repo
-9/5/2016 9:22:51 AM Info           Loaded super groups
-9/5/2016 9:26:19 AM Info           Application Start
-9/5/2016 9:26:19 AM Info           Loaded user repo
-9/5/2016 9:26:19 AM Info           Loaded super groups
-9/5/2016 9:28:23 AM Info           Application Start
-9/5/2016 9:28:23 AM Info           Loaded user repo
-9/5/2016 9:28:23 AM Info           Loaded super groups
-9/5/2016 9:31:47 AM Info           Application Start
-9/5/2016 9:31:47 AM Info           Loaded user repo
-9/5/2016 9:31:47 AM Info           Loaded super groups
-9/5/2016 9:37:31 AM Info           Application Start
-9/5/2016 9:37:31 AM Info           Loaded user repo
-9/5/2016 9:37:31 AM Info           Loaded super groups
-9/5/2016 9:40:37 AM Info           Application Start
-9/5/2016 9:40:38 AM Info           Loaded user repo
-9/5/2016 9:40:38 AM Info           Loaded super groups
-9/5/2016 9:47:21 AM Info           Application Start
-9/5/2016 9:47:21 AM Info           Loaded user repo
-9/5/2016 9:47:21 AM Info           Loaded super groups
-9/5/2016 9:50:27 AM Info           Application Start
-9/5/2016 9:50:27 AM Info           Loaded user repo
-9/5/2016 9:50:27 AM Info           Loaded super groups
-9/5/2016 10:02:56 AMInfo           Application Start
-9/5/2016 10:02:56 AMInfo           Loaded user repo
-9/5/2016 10:02:56 AMInfo           Loaded super groups
-9/5/2016 10:22:08 AMInfo           Application Start
-9/5/2016 10:22:08 AMInfo           Loaded user repo
-9/5/2016 10:22:08 AMInfo           Loaded super groups
-9/5/2016 11:07:18 AMInfo           Application Start
-9/5/2016 11:07:18 AMInfo           Loaded user repo
-9/5/2016 11:07:18 AMInfo           Loaded super groups
-9/5/2016 11:10:46 AMInfo           Application Start
-9/5/2016 11:10:46 AMInfo           Loaded user repo
-9/5/2016 11:10:46 AMInfo           Loaded super groups
-9/5/2016 11:11:37 AMInfo           Application Start
-9/5/2016 11:11:37 AMInfo           Loaded user repo
-9/5/2016 11:11:37 AMInfo           Loaded super groups
-9/5/2016 11:21:14 AMInfo           Application Start
-9/5/2016 11:21:15 AMInfo           Loaded user repo
-9/5/2016 11:21:15 AMInfo           Loaded super groups
-9/5/2016 11:24:06 AMInfo           Application Start
-9/5/2016 11:24:06 AMInfo           Loaded user repo
-9/5/2016 11:24:06 AMInfo           Loaded super groups
-9/5/2016 11:29:29 AMInfo           Application Start
-9/5/2016 11:29:29 AMInfo           Loaded user repo
-9/5/2016 11:29:29 AMInfo           Loaded super groups
-9/5/2016 11:33:37 AMInfo           Application Start
-9/5/2016 11:33:37 AMInfo           Loaded user repo
-9/5/2016 11:33:37 AMInfo           Loaded super groups
-9/5/2016 11:38:26 AMInfo           Application Start
-9/5/2016 11:38:26 AMInfo           Loaded user repo
-9/5/2016 11:38:26 AMInfo           Loaded super groups
-9/5/2016 12:32:54 PMInfo           Application Start
-9/5/2016 12:32:54 PMInfo           Loaded user repo
-9/5/2016 12:32:54 PMInfo           Loaded super groups
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)----------------------------------------6/25/2016 4:15:50 PMInfo           Application Start
+6/25/2016 4:15:50 PMInfo           Loaded user repo
+6/25/2016 4:15:50 PMInfo           Loaded super groups
+6/25/2016 6:24:47 PMInfo           Application Start
+6/25/2016 6:24:47 PMInfo           Loaded user repo
+6/25/2016 6:24:47 PMInfo           Loaded super groups
+6/25/2016 6:26:07 PMInfo           Application Start
+6/25/2016 6:26:07 PMInfo           Loaded user repo
+6/25/2016 6:26:07 PMInfo           Loaded super groups
+6/25/2016 6:26:58 PMInfo           Application Start
+6/25/2016 6:26:58 PMInfo           Loaded user repo
+6/25/2016 6:26:58 PMInfo           Loaded super groups
+6/25/2016 6:58:28 PMInfo           Application Start
+6/25/2016 6:58:28 PMInfo           Loaded user repo
+6/25/2016 6:58:28 PMInfo           Loaded super groups
+6/26/2016 7:09:25 AMInfo           Application Start
+6/26/2016 7:09:25 AMInfo           Loaded user repo
+6/26/2016 7:09:25 AMInfo           Loaded super groups
+6/26/2016 7:48:56 AMInfo           Application Start
+6/26/2016 7:48:56 AMInfo           Loaded user repo
+6/26/2016 7:48:56 AMInfo           Loaded super groups
+6/26/2016 8:37:19 AMInfo           Application Start
+6/26/2016 8:37:19 AMInfo           Loaded user repo
+6/26/2016 8:37:19 AMInfo           Loaded super groups
+6/26/2016 9:09:27 AMInfo           Application Start
+6/26/2016 9:09:27 AMInfo           Loaded user repo
+6/26/2016 9:09:27 AMInfo           Loaded super groups
+6/26/2016 9:51:00 AMInfo           Application Start
+6/26/2016 9:51:00 AMInfo           Loaded user repo
+6/26/2016 9:51:00 AMInfo           Loaded super groups
+6/26/2016 9:56:43 AMInfo           Application Start
+6/26/2016 9:56:43 AMInfo           Loaded user repo
+6/26/2016 9:56:43 AMInfo           Loaded super groups
+6/26/2016 10:12:51 AMInfo           Application Start
+6/26/2016 10:12:51 AMInfo           Loaded user repo
+6/26/2016 10:12:51 AMInfo           Loaded super groups
+6/26/2016 10:13:26 AMInfo           Application Start
+6/26/2016 10:13:26 AMInfo           Loaded user repo
+6/26/2016 10:13:26 AMInfo           Loaded super groups
+6/26/2016 10:13:54 AMInfo           Application Start
+6/26/2016 10:13:54 AMInfo           Loaded user repo
+6/26/2016 10:13:54 AMInfo           Loaded super groups
+6/26/2016 10:17:43 AMInfo           Application Start
+6/26/2016 10:17:43 AMInfo           Loaded user repo
+6/26/2016 10:17:43 AMInfo           Loaded super groups
+6/26/2016 11:20:57 AMInfo           Application Start
+6/26/2016 11:20:57 AMInfo           Loaded user repo
+6/26/2016 11:20:57 AMInfo           Loaded super groups
+6/26/2016 11:37:15 AMInfo           Application Start
+6/26/2016 11:37:15 AMInfo           Loaded user repo
+6/26/2016 11:37:15 AMInfo           Loaded super groups
+6/26/2016 12:32:06 PMInfo           Application Start
+6/26/2016 12:32:06 PMInfo           Loaded user repo
+6/26/2016 12:32:06 PMInfo           Loaded super groups
+6/26/2016 12:38:29 PMInfo           Application Start
+6/26/2016 12:38:29 PMInfo           Loaded user repo
+6/26/2016 12:38:29 PMInfo           Loaded super groups
+6/26/2016 12:43:48 PMInfo           Application Start
+6/26/2016 12:43:48 PMInfo           Loaded user repo
+6/26/2016 12:43:48 PMInfo           Loaded super groups
+6/26/2016 12:54:00 PMInfo           Application Start
+6/26/2016 12:54:00 PMInfo           Loaded user repo
+6/26/2016 12:54:00 PMInfo           Loaded super groups
+7/11/2016 5:19:21 AMInfo           Application Start
+7/11/2016 5:19:21 AMInfo           Loaded user repo
+7/11/2016 5:19:21 AMInfo           Loaded super groups
+7/26/2016 12:14:24 PMInfo           Application Start
+7/26/2016 12:14:24 PMInfo           Loaded user repo
+7/26/2016 12:14:24 PMInfo           Loaded super groups
