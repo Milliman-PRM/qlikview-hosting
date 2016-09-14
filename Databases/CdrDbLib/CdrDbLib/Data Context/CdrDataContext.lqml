@@ -180,6 +180,16 @@
       <Column Name="visitencounterdbid" Member="VisitEncounterdbid" Type="System.Int64" AutoSync="Always" DbType="int8" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="ff2b6a66-382d-4d70-a996-cdd8736fa67a" />
       <Column Name="updatetime" Member="UpdateTime" Type="System.DateTime" DbType="timestamp NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="0e9f636b-966a-4491-b77a-6cb141de58b6" />
       <Column Name="lastimportfiledate" Member="LastImportFileDate" Type="System.String" DbType="varchar NOT NULL" CanBeNull="false" UpdateCheck="Never" ed:ValidateRequired="true" ed:Guid="73aef72f-4921-4336-a521-a408394d50b3" />
+      <Column Name="bc_startdatetime" Member="BC_StartDateTime" Type="System.DateTime" DbType="timestamp" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="f73b3f5e-cf31-46b9-89c1-7d71105977ca" />
+      <Column Name="bc_enddatetime" Member="BC_EndDateTime" Type="System.DateTime" DbType="timestamp" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="c055ff8c-bcbc-4e02-99db-17df46d4f730" />
+      <Column Name="bc_performeddatetime" Member="BC_PerformedDateTime" Type="System.DateTime" DbType="timestamp" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="6a576a18-2f32-45a2-ab35-04b6d09dfde4" />
+      <Column Name="bc_verifieddatetime" Member="BC_VerifiedDateTime" Type="System.DateTime" DbType="timestamp" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="3c2b881e-7663-485d-a902-a3baa610de50" />
+      <Column Name="bc_administrationstartdatetime" Member="BC_AdministrationStartDateTime" Type="System.DateTime" DbType="timestamp" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="b66b61cd-5672-4127-8e7a-e3c6c655dea4" />
+      <Column Name="bc_administrationenddatetime" Member="BC_AdministrationEndDateTime" Type="System.DateTime" DbType="timestamp" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="938dca98-f800-44e2-b480-3b08b88ae4e0" />
+      <Column Name="bc_expiredatetime" Member="BC_ExpireDateTime" Type="System.DateTime" DbType="timestamp" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="9cff140b-7e5d-47b5-b3d4-53826216e910" />
+      <Column Name="bc_effectivebegindatetime" Member="BC_EffectiveBeginDateTime" Type="System.DateTime" DbType="timestamp" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="c17f4d41-c609-4c44-9289-b73b89ed5162" />
+      <Column Name="bc_effectiveenddatetime" Member="BC_EffectiveEndDateTime" Type="System.DateTime" DbType="timestamp" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="7e2277c4-f106-4a35-b629-c76d1551ce63" />
+      <Column Name="bc_updatedatetime" Member="BC_UpdateDateTime" Type="System.DateTime" DbType="timestamp" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="436bddd1-21db-4996-b917-a92a1d521e5b" />
       <Association Name="Patient_Measurement" ed:AssociationGuid="6946cc8f-e055-4653-bbb0-f25fc3fd22e9" Member="Patient" ed:Guid="2148c52b-ad49-494e-ae5d-ca23658bc83f" ThisKey="Patientdbid" OtherKey="dbid" Type="Patient" DeleteOnNull="true" IsForeignKey="true" />
       <Association Name="VisitEncounter_Measurement" ed:AssociationGuid="bc3fb1df-ff46-4835-ad1a-2363523d73a4" Member="VisitEncounter" ed:Guid="9717abde-619d-438b-9cee-561dbf6194c8" ThisKey="VisitEncounterdbid" OtherKey="dbid" Type="VisitEncounter" IsForeignKey="true" />
     </Type>
@@ -429,11 +439,14 @@
     <Member Name="Business" ed:Guid="6b565ddb-c182-4a58-adf7-06a2fc09e5dd" />
     <Member Name="Mailing" ed:Guid="303fa9e3-16bd-404b-b68d-f383ed3ebbb5" />
     <Member Name="ePrescribing" ed:Guid="b4c88500-55d8-40d3-aac5-c33afaf64072" />
+    <Member Name="EMail" ed:Guid="6d61b006-4e19-4c43-b0c1-dffd5064888e" />
+    <Member Name="PrescriptionWritten" ed:Guid="7516266a-2583-464b-9dd6-2a6f06d9acd1" />
   </EnumType>
   <EnumType Name="ResultNormal" UnderlyingType="Int16" Type="ResultNormal" ed:Guid="f5772ebb-557e-4d6b-8cca-94a0256b9e30">
     <Member Name="Unspecified" ed:Guid="0f7ff4bd-b3f4-464a-a57f-164d21cc93e1" />
     <Member Name="Low" ed:Guid="8099edcd-ed38-494e-bcb5-73c4b1d7fb8d" />
     <Member Name="High" ed:Guid="8f9743ca-30a6-4966-a794-3ddc1cd46c89" />
     <Member Name="Abnormal" ed:Guid="d12ed5f3-f683-457a-813c-5eb3ddae687a" />
+    <Member Name="Normal" ed:Guid="0a5a0eb7-8bd1-4903-b081-46268c082bec" />
   </EnumType>
 </Database>

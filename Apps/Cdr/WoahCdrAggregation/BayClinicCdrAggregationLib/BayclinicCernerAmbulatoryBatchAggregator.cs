@@ -325,7 +325,9 @@ namespace BayClinicCernerAmbulatory
 
                     foreach (MongodbPersonEntity PersonDocument in PersonCursor.Current)
                     {
-                        bool IsMember = IsWOAHMember(PersonDocument);
+                        // TODO The following is temporary to aggregate all patients and skip filtering out non-members.  
+                        bool IsMember = true;   // bool IsMember = IsWOAHMember(PersonDocument);
+
                         if (IsMember)
                         {
                             DateTime AggregateStart = DateTime.Now;
@@ -398,7 +400,7 @@ EndProcessing:
             CdrDb.Context.Connection.Open();
             CdrDb.Context.Transaction = CdrDb.Context.Connection.BeginTransaction();
 
-            // Store to database
+            // Merge fields with existing record or create new object in the case that no existing record was found
             bool Merged = PersonDocument.MergeWithExistingPatient(ref PatientRecord, ReferencedCodes);
 
             // Aggregate entities that are linked to this patient (entities linked to patient and visit are called from the visit aggregation method)
