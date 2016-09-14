@@ -35,6 +35,7 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.ButtonExtractLabs = new System.Windows.Forms.Button();
+            this.CheckboxUse9SamplePatients = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -85,6 +86,7 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.CheckboxUse9SamplePatients);
             this.groupBox2.Controls.Add(this.ButtonExtractLabs);
             this.groupBox2.Controls.Add(this.ButtonExtractDiagnoses);
             this.groupBox2.Controls.Add(this.ButtonExploreSystem);
@@ -105,6 +107,16 @@
             this.ButtonExtractLabs.UseVisualStyleBackColor = true;
             this.ButtonExtractLabs.Click += new System.EventHandler(this.ButtonExtractLabs_Click);
             // 
+            // CheckboxUse9SamplePatients
+            // 
+            this.CheckboxUse9SamplePatients.AutoSize = true;
+            this.CheckboxUse9SamplePatients.Location = new System.Drawing.Point(6, 239);
+            this.CheckboxUse9SamplePatients.Name = "CheckboxUse9SamplePatients";
+            this.CheckboxUse9SamplePatients.Size = new System.Drawing.Size(133, 17);
+            this.CheckboxUse9SamplePatients.TabIndex = 8;
+            this.CheckboxUse9SamplePatients.Text = "Use 9 Sample Patients";
+            this.CheckboxUse9SamplePatients.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -118,6 +130,7 @@
             this.Text = "NBMC Unity Driver GUI";
             this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -131,6 +144,7 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button ButtonExtractLabs;
+        private System.Windows.Forms.CheckBox CheckboxUse9SamplePatients;
     }
 }
 

@@ -18,8 +18,6 @@ namespace NbmcUnityTestGui
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            Trace.Listeners.Clear();
-            Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
             Trace.AutoFlush = true;
 
             Application.Run(new Form1());
