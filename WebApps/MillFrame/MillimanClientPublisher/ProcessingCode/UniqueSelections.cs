@@ -84,12 +84,14 @@ namespace ClientPublisher.ProcessingCode
 
             string MasterQVWName = CurrentProject.QVName + @".qvw";
             string RequestedMasterStatusLog = CurrentProject.QVName + "_master.log";
-            List<MillimanCommon.NVPair> RequestedUniqueValuesFromReducedColumns = GetDMColumns(CurrentProject, DataModelFile);
+            List<MillimanCommon.NVPair> RequestedUniqueValuesFromReducedColumns = null; //GetDMColumns(CurrentProject, DataModelFile, );
             string RequestedReducedQVWStatusLog = "";
             int Index = 0;
             //now loop over entries and create the reduce configurationf files
             foreach( KeyValuePair<string, UniqueSelection> Current in UniqueSelectionDictionary )
             {
+                //this isn't very efficient, but we need the unique values per column file name to change on each iteration
+                RequestedUniqueValuesFromReducedColumns = GetDMColumns(CurrentProject, DataModelFile, Current.Value.RequestedReducedQVWName);
                 //create a new processor for each item, slower but safer
                 Processor Proc = new Processor();
                 RequestedReducedQVWStatusLog = CurrentProject.QVName + "_" + Index.ToString() + ".log" ;
@@ -121,7 +123,7 @@ namespace ClientPublisher.ProcessingCode
         /// <param name="CurrentProject"></param>
         /// <param name="SelectionFile"></param>
         /// <returns></returns>
-        private List<MillimanCommon.NVPair> GetDMColumns(ProjectSettingsExtension CurrentProject, string SelectionFile)
+        private List<MillimanCommon.NVPair> GetDMColumns(ProjectSettingsExtension CurrentProject, string SelectionFile, string BaseFile)
         {
             List<MillimanCommon.NVPair> Selections = new List<MillimanCommon.NVPair>();
             Polenter.Serialization.SharpSerializer SS = new Polenter.Serialization.SharpSerializer(false);
@@ -137,7 +139,8 @@ namespace ClientPublisher.ProcessingCode
                         {
                             MillimanCommon.NVPair TokenItem = new MillimanCommon.NVPair();
                             TokenItem.FieldName = Token;
-                            TokenItem.Value = Guid.NewGuid().ToString("N") + ".values";
+                            TokenItem.Value = BaseFile + ".uniquevalues_" + Token.Replace(' ', '_');  //just in case get rid of blanks
+                            Selections.Add(TokenItem);
                         }
                     }
                 }

@@ -87,8 +87,13 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
-    <Reference Include="Telerik.Web.UI">
-      <HintPath>..\MillimanServices\MillimanReportReduction\bin\Debug\Telerik.Web.UI.dll</HintPath>
+    <Reference Include="Telerik.Web.Design, Version=2016.1.113.45, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3rdPartyAssemblies\Telerik.Web.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Web.UI, Version=2015.3.1111.40, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3rdPartyAssemblies\Telerik.Web.UI.dll</HintPath>
     </Reference>
     <Reference Include="Telerik.Web.UI.Skins, Version=2015.3.1111.40, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -109,6 +114,7 @@
     <Content Include="ComplexReporting\NotSelectable.aspx" />
     <Content Include="ComplexReporting\ReductionAudit.aspx" />
     <Content Include="ComplexReporting\ReductionStatus.aspx" />
+    <Content Include="ComplexReporting\ReviewApproval.aspx" />
     <Content Include="HTML\CleanupIssue.html" />
     <Content Include="images\ajax-loader.gif" />
     <Content Include="images\copy.png" />
@@ -149,7 +155,6 @@
     <None Include="Properties\PublishProfiles\Staging.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
-      <SubType>Designer</SubType>
     </None>
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -266,6 +271,13 @@
     </Compile>
     <Compile Include="ComplexReporting\ReductionStatus.aspx.designer.cs">
       <DependentUpon>ReductionStatus.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ComplexReporting\ReviewApproval.aspx.cs">
+      <DependentUpon>ReviewApproval.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ComplexReporting\ReviewApproval.aspx.designer.cs">
+      <DependentUpon>ReviewApproval.aspx</DependentUpon>
     </Compile>
     <Compile Include="ReductionStep2.aspx.cs">
       <DependentUpon>ReductionStep2.aspx</DependentUpon>

@@ -314,7 +314,7 @@ namespace Milliman.Common.TreeUtilities {
         /// <param name="ExtractedDataDirectory">data extraction directory</param>
         /// <param name="DataModelItems">Data model fields names - matched to 1st line hearders of each file found in extract directory</param>
         /// <returns></returns>
-        private List<string> FindCandidateFiles(string ExtractedDataDirectory, List<string> DataModelItems) {
+        public List<string> FindCandidateFiles(string ExtractedDataDirectory, List<string> DataModelItems) {
             string[] AllFiles = System.IO.Directory.GetFiles(ExtractedDataDirectory, "*.txt");
             List<string> CandidateFiles = new List<string>();
             foreach( string FN in AllFiles ) {

@@ -22,6 +22,9 @@ namespace NbmcUnityTestGui
 {
     public partial class Form1 : Form
     {
+        private String[] NinePatientMrns =   {"56961", "331086", "333380", "354482", "355586", "372470", "745490", "782190", "821450" };
+        private String[] NinePatientEmrIds = {"138923", "85434", "95494", "103457", "106424", "125250", "174441", "179065", "183840" };
+
         public Form1()
         {
             InitializeComponent();
@@ -30,6 +33,12 @@ namespace NbmcUnityTestGui
         private void ButtonBuildMrnList_Click(object sender, EventArgs e)
         {
             DateTime LaunchTimestamp = DateTime.Now;
+
+            String TraceFileName = "TraceLog_" + LaunchTimestamp.ToString("yyyyMMdd-HHmmss") + ".txt";
+
+            TraceListener ThisTraceListener = new TextWriterTraceListener(TraceFileName);
+            Trace.Listeners.Add(ThisTraceListener);
+            Trace.WriteLine("Operation launched " + LaunchTimestamp.ToString("yyyyMMdd-HHmmss"));
 
             // database connections
             MongoDbConnection MongoDb = new MongoDbConnection();
@@ -129,6 +138,8 @@ namespace NbmcUnityTestGui
             }
 
             CsvWriter.Close();
+            Trace.WriteLine("Extract operation completed at " + DateTime.Now.ToString("yyyyMMdd-HHmmss"));
+            Trace.Listeners.Remove(ThisTraceListener);
 
             Trace.WriteLine("WOAH ID  count: " + WoahIdCounter);
             Trace.WriteLine("NBMC MRN count: " + WoahIdCounter);
@@ -154,28 +165,19 @@ namespace NbmcUnityTestGui
             int.TryParse(ConfigurationManager.AppSettings["MrnCountLimit"], out MrnCountLimit);
 
             int[] OutInt = new int[4] { 0, 0, 0, 0 };
-            String[] RunDurationLimitSettingStrings = ConfigurationManager.AppSettings["RunDurationLimit"].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-            if (RunDurationLimitSettingStrings.Count() == 4)
+            if (ConfigurationManager.AppSettings["RunDurationLimit"] != null)
             {
-                OutInt[0] = int.Parse(RunDurationLimitSettingStrings[0]);
-                OutInt[1] = int.Parse(RunDurationLimitSettingStrings[1]);
-                OutInt[2] = int.Parse(RunDurationLimitSettingStrings[2]);
-                OutInt[3] = int.Parse(RunDurationLimitSettingStrings[3]);
+                String[] RunDurationLimitSettingStrings = ConfigurationManager.AppSettings["RunDurationLimit"].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                if (RunDurationLimitSettingStrings.Count() == 4)
+                {
+                    OutInt[0] = int.Parse(RunDurationLimitSettingStrings[0]);
+                    OutInt[1] = int.Parse(RunDurationLimitSettingStrings[1]);
+                    OutInt[2] = int.Parse(RunDurationLimitSettingStrings[2]);
+                    OutInt[3] = int.Parse(RunDurationLimitSettingStrings[3]);
+                }
             }
             TimeSpan RunDurationLimit = new TimeSpan(OutInt[0], OutInt[1], OutInt[2], OutInt[3]);
             #endregion
-
-            openFileDialog1.InitialDirectory = ".";
-            openFileDialog1.Filter = "csv files (*.csv)|*.csv";
-            openFileDialog1.FilterIndex = 2;
-            openFileDialog1.RestoreDirectory = true;
-
-            if (openFileDialog1.ShowDialog() != DialogResult.OK)
-            {
-                Trace.WriteLine("ID map .csv file not found, not processing");
-                MessageBox.Show("ID map .csv file not found, not processing");
-                return;
-            }
 
             String OutputPath = @".\Output";
             String CsvFileName = "Diagnoses_" + LaunchTimestamp.ToString("yyyyMMdd-HHmmss") + ".csv";
@@ -198,47 +200,71 @@ namespace NbmcUnityTestGui
                                 "Diagnosis_ICD10code|" +
                                 "Diagnosis_ICD10diagnosis");
 
-            using (StreamReader IdMapStream = new StreamReader(openFileDialog1.OpenFile()))
+            if (CheckboxUse9SamplePatients.Checked)
             {
-                String[] FieldNames = IdMapStream.ReadLine().Split(new char[]{ '|'}, StringSplitOptions.RemoveEmptyEntries);
-
-                while (!IdMapStream.EndOfStream)
+                for (int EmrIdCounter =0; EmrIdCounter < NinePatientEmrIds.Length; EmrIdCounter++)
                 {
-                    String[] Fields = IdMapStream.ReadLine().Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
-                    if (Fields.Count() != 3)
-                    {
-                        continue;
-                    }
-                    String WoahId = Fields[0];
-                    String[] Mrns = Fields[1].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-                    String[] EmrIds = Fields[2].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-                    if (Mrns.Count() == 0 || EmrIds.Count() == 0)
-                    {
-                        continue;
-                    }
+                    MrnCounter++;
+                    Trace.WriteLine("Starting Unity operations on EmrId " + NinePatientEmrIds[EmrIdCounter]);
+                    //PatExplorer.ExplorePatientEmrId(NinePatientEmrIds[EmrIdCounter], false, true, false, CsvWriter, NinePatientMrns[EmrIdCounter], "");
+                }
+            }
+            else
+            {
+                openFileDialog1.InitialDirectory = ".";
+                openFileDialog1.Filter = "csv files (*.csv)|*.csv";
+                openFileDialog1.FilterIndex = 2;
+                openFileDialog1.RestoreDirectory = true;
 
-                    if (Mrns.Count() != EmrIds.Count())
-                    {
-                        Trace.WriteLine("For WOAH ID " + WoahId + " Mrn count " + Mrns.Count() + " and EMRId count " + EmrIds.Count() + " are not the same");
-                        continue;
-                    }
+                if (openFileDialog1.ShowDialog() != DialogResult.OK)
+                {
+                    Trace.WriteLine("ID map .csv file not found, not processing");
+                    MessageBox.Show("ID map .csv file not found, not processing");
+                    return;
+                }
 
-                    for (int EmrIdCounter = 0; EmrIdCounter < EmrIds.Count(); EmrIdCounter++)
-                    {
-                        MrnCounter++;
-                        Trace.WriteLine("Starting Unity operations on WOAH ID " + WoahId + ", Mrn " + Mrns[EmrIdCounter] + ", EmrId " + EmrIds[EmrIdCounter]);
-                        PatExplorer.ExplorePatientEmrId(EmrIds[EmrIdCounter], false, true, false, CsvWriter, Mrns[EmrIdCounter], WoahId);
-                    }
+                using (StreamReader IdMapStream = new StreamReader(openFileDialog1.OpenFile()))
+                {
+                    String[] FieldNames = IdMapStream.ReadLine().Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
 
-                    if (MrnCountLimit > 0 && MrnCounter >= MrnCountLimit)
+                    while (!IdMapStream.EndOfStream)
                     {
-                        Trace.WriteLine("Completed the configured limit of " + MrnCounter + " MRN operations, breaking");
-                        break;
-                    }
-                    if (RunDurationLimit.TotalSeconds > 0.0 && (DateTime.Now-LaunchTimestamp) > RunDurationLimit)
-                    {
-                        Trace.WriteLine("Run duration reached the configured limit of " + RunDurationLimit.ToString() + ", breaking");
-                        break;
+                        String[] Fields = IdMapStream.ReadLine().Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+                        if (Fields.Count() != 3)
+                        {
+                            continue;
+                        }
+                        String WoahId = Fields[0];
+                        String[] Mrns = Fields[1].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                        String[] EmrIds = Fields[2].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                        if (Mrns.Count() == 0 || EmrIds.Count() == 0)
+                        {
+                            continue;
+                        }
+
+                        if (Mrns.Count() != EmrIds.Count())
+                        {
+                            Trace.WriteLine("For WOAH ID " + WoahId + " Mrn count " + Mrns.Count() + " and EMRId count " + EmrIds.Count() + " are not the same");
+                            continue;
+                        }
+
+                        for (int EmrIdCounter = 0; EmrIdCounter < EmrIds.Count(); EmrIdCounter++)
+                        {
+                            MrnCounter++;
+                            Trace.WriteLine("Starting Unity operations on WOAH ID " + WoahId + ", Mrn " + Mrns[EmrIdCounter] + ", EmrId " + EmrIds[EmrIdCounter]);
+                            PatExplorer.ExplorePatientEmrId(EmrIds[EmrIdCounter], false, true, false, CsvWriter, Mrns[EmrIdCounter], WoahId);
+                        }
+
+                        if (MrnCountLimit > 0 && MrnCounter >= MrnCountLimit)
+                        {
+                            Trace.WriteLine("Completed the configured limit of " + MrnCounter + " MRN operations, breaking");
+                            break;
+                        }
+                        if (RunDurationLimit.TotalSeconds > 0.0 && (DateTime.Now - LaunchTimestamp) > RunDurationLimit)
+                        {
+                            Trace.WriteLine("Run duration reached the configured limit of " + RunDurationLimit.ToString() + ", breaking");
+                            break;
+                        }
                     }
                 }
             }
@@ -294,18 +320,6 @@ namespace NbmcUnityTestGui
             TimeSpan RunDurationLimit = new TimeSpan(OutInt[0], OutInt[1], OutInt[2], OutInt[3]);
             #endregion
 
-            openFileDialog1.InitialDirectory = ".";
-            openFileDialog1.Filter = "csv files (*.csv)|*.csv";
-            openFileDialog1.FilterIndex = 2;
-            openFileDialog1.RestoreDirectory = true;
-
-            if (openFileDialog1.ShowDialog() != DialogResult.OK)
-            {
-                Trace.WriteLine("ID map .csv file not found, not processing");
-                MessageBox.Show("ID map .csv file not found, not processing");
-                return;
-            }
-
             String OutputPath = @".\Output";
             String CsvFileName = "Labs_" + LaunchTimestamp.ToString("yyyyMMdd-HHmmss") + ".csv";
             CsvFileName = Path.Combine(OutputPath, CsvFileName);
@@ -327,47 +341,71 @@ namespace NbmcUnityTestGui
                                 "Diagnosis_ICD10code|" +
                                 "Diagnosis_ICD10diagnosis");
 
-            using (StreamReader IdMapStream = new StreamReader(openFileDialog1.OpenFile()))
+            if (CheckboxUse9SamplePatients.Checked)
             {
-                String[] FieldNames = IdMapStream.ReadLine().Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
-
-                while (!IdMapStream.EndOfStream)
+                for (int EmrIdCounter = 0; EmrIdCounter < NinePatientEmrIds.Length; EmrIdCounter++)
                 {
-                    String[] Fields = IdMapStream.ReadLine().Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
-                    if (Fields.Count() != 3)
-                    {
-                        continue;
-                    }
-                    String WoahId = Fields[0];
-                    String[] Mrns = Fields[1].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-                    String[] EmrIds = Fields[2].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-                    if (Mrns.Count() == 0 || EmrIds.Count() == 0)
-                    {
-                        continue;
-                    }
+                    MrnCounter++;
+                    Trace.WriteLine("Starting Unity operations on Mrn " + NinePatientMrns[EmrIdCounter] + ", EmrId " + NinePatientEmrIds[EmrIdCounter]);
+                    PatExplorer.ExplorePatientLabs(NinePatientEmrIds[EmrIdCounter], CsvWriter, NinePatientMrns[EmrIdCounter]);
+                }
+            }
+            else
+            {
+                openFileDialog1.InitialDirectory = ".";
+                openFileDialog1.Filter = "csv files (*.csv)|*.csv";
+                openFileDialog1.FilterIndex = 2;
+                openFileDialog1.RestoreDirectory = true;
 
-                    if (Mrns.Count() != EmrIds.Count())
-                    {
-                        Trace.WriteLine("For WOAH ID " + WoahId + " Mrn count " + Mrns.Count() + " and EMRId count " + EmrIds.Count() + " are not the same");
-                        continue;
-                    }
+                if (openFileDialog1.ShowDialog() != DialogResult.OK)
+                {
+                    Trace.WriteLine("ID map .csv file not found, not processing");
+                    MessageBox.Show("ID map .csv file not found, not processing");
+                    return;
+                }
 
-                    for (int EmrIdCounter = 0; EmrIdCounter < EmrIds.Count(); EmrIdCounter++)
-                    {
-                        MrnCounter++;
-                        Trace.WriteLine("Starting Unity operations on WOAH ID " + WoahId + ", Mrn " + Mrns[EmrIdCounter] + ", EmrId " + EmrIds[EmrIdCounter]);
-                        PatExplorer.ExplorePatientLabs(EmrIds[EmrIdCounter], CsvWriter, Mrns[EmrIdCounter], WoahId);
-                    }
+                using (StreamReader IdMapStream = new StreamReader(openFileDialog1.OpenFile()))
+                {
+                    String[] FieldNames = IdMapStream.ReadLine().Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
 
-                    if (MrnCountLimit > 0 && MrnCounter >= MrnCountLimit)
+                    while (!IdMapStream.EndOfStream)
                     {
-                        Trace.WriteLine("Completed the configured limit of " + MrnCounter + " MRN operations, breaking");
-                        break;
-                    }
-                    if (RunDurationLimit.TotalSeconds > 0.0 && (DateTime.Now - LaunchTimestamp) > RunDurationLimit)
-                    {
-                        Trace.WriteLine("Run duration reached the configured limit of " + RunDurationLimit.ToString() + ", breaking");
-                        break;
+                        String[] Fields = IdMapStream.ReadLine().Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+                        if (Fields.Count() != 3)
+                        {
+                            continue;
+                        }
+                        String WoahId = Fields[0];
+                        String[] Mrns = Fields[1].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                        String[] EmrIds = Fields[2].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                        if (Mrns.Count() == 0 || EmrIds.Count() == 0)
+                        {
+                            continue;
+                        }
+
+                        if (Mrns.Count() != EmrIds.Count())
+                        {
+                            Trace.WriteLine("For WOAH ID " + WoahId + " Mrn count " + Mrns.Count() + " and EMRId count " + EmrIds.Count() + " are not the same");
+                            continue;
+                        }
+
+                        for (int EmrIdCounter = 0; EmrIdCounter < EmrIds.Count(); EmrIdCounter++)
+                        {
+                            MrnCounter++;
+                            Trace.WriteLine("Starting Unity operations on WOAH ID " + WoahId + ", Mrn " + Mrns[EmrIdCounter] + ", EmrId " + EmrIds[EmrIdCounter]);
+                            PatExplorer.ExplorePatientLabs(EmrIds[EmrIdCounter], CsvWriter, Mrns[EmrIdCounter], WoahId);
+                        }
+
+                        if (MrnCountLimit > 0 && MrnCounter >= MrnCountLimit)
+                        {
+                            Trace.WriteLine("Completed the configured limit of " + MrnCounter + " MRN operations, breaking");
+                            break;
+                        }
+                        if (RunDurationLimit.TotalSeconds > 0.0 && (DateTime.Now - LaunchTimestamp) > RunDurationLimit)
+                        {
+                            Trace.WriteLine("Run duration reached the configured limit of " + RunDurationLimit.ToString() + ", breaking");
+                            break;
+                        }
                     }
                 }
             }

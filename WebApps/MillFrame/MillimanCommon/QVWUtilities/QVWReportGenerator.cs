@@ -23,7 +23,7 @@ namespace MillimanCommon
         /// <param name="CurrentHierTree"></param>
         /// <param name="NewHierTree"></param>
         /// <param name="PathItems"></param>
-        public void GenerateNewItemsReport(MillimanCommon.MillimanTreeNode CurrentHierTree, MillimanCommon.MillimanTreeNode NewHierTree, QVWReportBank Reports, List<string> PathItems = null)
+        public void GenerateNewItemsReport(MillimanCommon.MillimanTreeNode CurrentHierTree, MillimanCommon.MillimanTreeNode NewHierTree, QVWReportBank Reports, string Concept, List<string> PathItems = null)
         {
             if (PathItems == null)
                 PathItems = new List<string>();
@@ -35,14 +35,12 @@ namespace MillimanCommon
 
                 if (Exists(PathItems, CurrentHierTree) == false)
                 {
-                    //VWN where does concept name come from
-                    string ConceptName = "?";
-                    Reports.AddItemToList(new MillimanCommon.QVWReportBank.NewItemClass(ConceptName, NewHierTree.DisplayFieldName));
+                    Reports.AddItemToList(new MillimanCommon.QVWReportBank.NewItemClass(Concept, NewHierTree.DisplayFieldName));
                 }
             }
             foreach (KeyValuePair<string, MillimanCommon.MillimanTreeNode> KVP in NewHierTree.SubNodes)
             {
-                GenerateNewItemsReport(CurrentHierTree, KVP.Value, Reports, PathItems);
+                GenerateNewItemsReport(CurrentHierTree, KVP.Value, Reports, Concept, PathItems);
             }
             if (PathItems.Count > 0)
                 PathItems.RemoveAt(PathItems.Count - 1);
