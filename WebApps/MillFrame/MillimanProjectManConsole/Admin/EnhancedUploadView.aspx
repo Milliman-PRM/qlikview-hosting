@@ -291,7 +291,7 @@
             if (controlValue != "") {
                 var regexInvalid = new RegExp(/[><#]/g);
                 if (controlValue.match(regexInvalid)) {
-                    showErrorAlert('You have enered invalid character(s) in string <b>' + controlValue + '</b> . Please correct the entry before you save data.');
+                    showErrorAlert('You have enered invalid character(s) in string ' + controlValue + ' . Please correct the entry before you save data.');
                     return false;
                 }
             }
