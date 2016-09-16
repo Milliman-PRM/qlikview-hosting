@@ -151,6 +151,7 @@ namespace BayClinicCernerAmbulatory
         /// <returns>true if an existing record was modified, false if a new record was created</returns>
         internal bool MergeWithExistingMeasurement(ref Measurement MeasurementRecord, ref Patient PatientRecord, VisitEncounter VisitRecord, CernerReferencedCodeDictionaries ReferencedCodes)
         {
+            DateTime ParsedDateTime;
             DateTime PerformedDate, UpdateTime;
             DateTime.TryParse(PerformedDateTime, out PerformedDate);
             DateTime.TryParse(UpdateDateTime, out UpdateTime);
@@ -172,7 +173,19 @@ namespace BayClinicCernerAmbulatory
                     NormalRangeHigh = NormalHigh,
                     NormalType = ReferencedCodes.GetResultNormalCodeEnum(NormalCode),
                     UpdateTime = UpdateTime,
-                    LastImportFileDate = ImportFileDate
+                    LastImportFileDate = ImportFileDate,
+
+                    // TODO The following are exploratory attributes.  This should be revised for long term production.  
+                    BC_StartDateTime = DateTime.TryParse(StartDateTime, out ParsedDateTime) ? ParsedDateTime : (DateTime?)null,
+                    BC_EndDateTime = DateTime.TryParse(EndDateTime, out ParsedDateTime) ? ParsedDateTime : (DateTime?)null,
+                    BC_PerformedDateTime = DateTime.TryParse(PerformedDateTime, out ParsedDateTime) ? ParsedDateTime : (DateTime?)null,
+                    BC_VerifiedDateTime = DateTime.TryParse(VerifiedDateTime, out ParsedDateTime) ? ParsedDateTime : (DateTime?)null,
+                    BC_AdministrationStartDateTime = DateTime.TryParse(AdministrationStartDateTime, out ParsedDateTime) ? ParsedDateTime : (DateTime?)null,
+                    BC_AdministrationEndDateTime = DateTime.TryParse(AdministrationEndDateTime, out ParsedDateTime) ? ParsedDateTime : (DateTime?)null,
+                    BC_ExpireDateTime = DateTime.TryParse(ExpireDateTime, out ParsedDateTime) ? ParsedDateTime : (DateTime?)null,
+                    BC_EffectiveBeginDateTime = DateTime.TryParse(EffectiveBeginDateTime, out ParsedDateTime) ? ParsedDateTime : (DateTime?)null,
+                    BC_EffectiveEndDateTime = DateTime.TryParse(EffectiveEndDateTime, out ParsedDateTime) ? ParsedDateTime : (DateTime?)null,
+                    BC_UpdateDateTime = DateTime.TryParse(UpdateDateTime, out ParsedDateTime) ? ParsedDateTime : (DateTime?)null,
                 };
                 return false;
             }
@@ -198,6 +211,17 @@ namespace BayClinicCernerAmbulatory
 
                 MeasurementRecord.LastImportFileDate = new string[] { MeasurementRecord.LastImportFileDate, ImportFileDate }.Max();
 
+                // TODO The following are exploratory attributes.  This should be revised for long term production.  
+                MeasurementRecord.BC_StartDateTime = DateTime.TryParse(StartDateTime, out ParsedDateTime) ? ParsedDateTime : (DateTime?)null;
+                MeasurementRecord.BC_EndDateTime = DateTime.TryParse(EndDateTime, out ParsedDateTime) ? ParsedDateTime : (DateTime?)null;
+                MeasurementRecord.BC_PerformedDateTime = DateTime.TryParse(PerformedDateTime, out ParsedDateTime) ? ParsedDateTime : (DateTime?)null;
+                MeasurementRecord.BC_VerifiedDateTime = DateTime.TryParse(VerifiedDateTime, out ParsedDateTime) ? ParsedDateTime : (DateTime?)null;
+                MeasurementRecord.BC_AdministrationStartDateTime = DateTime.TryParse(AdministrationStartDateTime, out ParsedDateTime) ? ParsedDateTime : (DateTime?)null;
+                MeasurementRecord.BC_AdministrationEndDateTime = DateTime.TryParse(AdministrationEndDateTime, out ParsedDateTime) ? ParsedDateTime : (DateTime?)null;
+                MeasurementRecord.BC_ExpireDateTime = DateTime.TryParse(ExpireDateTime, out ParsedDateTime) ? ParsedDateTime : (DateTime?)null;
+                MeasurementRecord.BC_EffectiveBeginDateTime = DateTime.TryParse(EffectiveBeginDateTime, out ParsedDateTime) ? ParsedDateTime : (DateTime?)null;
+                MeasurementRecord.BC_EffectiveEndDateTime = DateTime.TryParse(EffectiveEndDateTime, out ParsedDateTime) ? ParsedDateTime : (DateTime?)null;
+                MeasurementRecord.BC_UpdateDateTime = DateTime.TryParse(UpdateDateTime, out ParsedDateTime) ? ParsedDateTime : (DateTime?)null;
             }
 
             return true;

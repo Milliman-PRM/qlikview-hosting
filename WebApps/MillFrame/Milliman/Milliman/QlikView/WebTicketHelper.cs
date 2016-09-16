@@ -60,8 +60,8 @@ namespace MillimanDev
 
             BackUrl = _ErrorURL;
 
-            //this is just a check to see if we are on PRM production machine or not, we default to HTTP
-            if (System.Configuration.ConfigurationManager.AppSettings["ExternalServerName"].ToLower().Contains("prm.milliman.com"))
+            //this is just a check to see if we need to use SSL
+            if ( (System.Configuration.ConfigurationManager.AppSettings["UseSSLForQVServiceCalls"] != null) && (System.Convert.ToBoolean(System.Configuration.ConfigurationManager.AppSettings["UseSSLForQVServiceCalls"])))
                 AccessPointServer = "https://127.0.0.1/";
 
 

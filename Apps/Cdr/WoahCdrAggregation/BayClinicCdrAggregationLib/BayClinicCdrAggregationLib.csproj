@@ -62,6 +62,7 @@
   <ItemGroup>
     <Compile Include="BayClinicAggregationWorkerThreadManager.cs" />
     <Compile Include="BayclinicCernerAmbulatoryBatchAggregator.cs" />
+    <Compile Include="BayClinicSpecialTasks.cs" />
     <Compile Include="CernerReferencedCodeDictionaries.cs" />
     <Compile Include="CernerReferencedTerminologyDictionary.cs" />
     <Compile Include="CernerReferenceHealthPlanDictionaries.cs" />
