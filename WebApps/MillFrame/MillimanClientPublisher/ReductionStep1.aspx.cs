@@ -147,9 +147,9 @@ namespace ClientPublisher
                     base.TaskProcessor(parms);
                     return;
                 }
-                //copy master QVW to reduction server working dir
+                //copy master QVW that user uploaded to reduction server working dir VWN
                 string QVWRemoteVersion = System.IO.Path.Combine(RemoteReductionDir, ProjectSettings.QVName + ".qvw");
-                string QVWLocalVersion = System.IO.Path.Combine(ProjectSettings.AbsoluteProjectPath, ProjectSettings.QVName + ".qvw");
+                string QVWLocalVersion = System.IO.Path.Combine(WorkingDirectory, ProjectSettings.QVName + ".qvw");
                 System.IO.File.Copy( QVWLocalVersion, QVWRemoteVersion);
                 if ( System.IO.File.Exists(QVWRemoteVersion) == false )
                 {
@@ -318,6 +318,10 @@ namespace ClientPublisher
                             {
                                 DestinationFile = System.IO.Path.Combine(WorkingDirectory, "ReducedCachedQVWs", System.IO.Path.GetFileName(File));
                             }
+                            else if ( Extension.Contains(".uniquevalues_"))
+                            {
+                                DestinationFile = System.IO.Path.Combine(WorkingDirectory, "ReducedCachedQVWs", System.IO.Path.GetFileName(File));
+                            }
                             System.IO.File.Delete(DestinationFile);
                             System.IO.File.Copy(File, DestinationFile);
                         }
@@ -395,8 +399,13 @@ namespace ClientPublisher
                     string NewHierarchyFile = System.IO.Path.Combine(WorkingDirectory, Settings.QVName + ".hierarchy_0");
                     MillimanCommon.MillimanTreeNode OldHierarchy = MillimanCommon.MillimanTreeNode.GetMemoryTree(OldHierarchyFile);
                     MillimanCommon.MillimanTreeNode NewHierarchy = MillimanCommon.MillimanTreeNode.GetMemoryTree(NewHierarchyFile);
-                    RepGen.GenerateNewItemsReport(OldHierarchy, NewHierarchy, Reports);  //pass in reports instance to update
-                    
+                    string ConceptFile = NewHierarchyFile.Replace(".hierarchy_0", ".concept_0");
+                    string Concept = "?";
+                    if (System.IO.File.Exists(ConceptFile))
+                    {
+                        Concept = System.IO.File.ReadAllText(ConceptFile);
+                    }
+                    RepGen.GenerateNewItemsReport(OldHierarchy, NewHierarchy, Reports, Concept);  //pass in reports instance to update                    
                     //Reports.AddItemToList(new MillimanCommon.QVWReportBank.NotSelectableClass("Username", "FieldName", "ConceptFieldName", "QVWName", "reasons"));
                     RepGen.GenerateNotSelectable(NewHierarchy, System.IO.Path.Combine(WorkingDirectory, Settings.QVName + @".hciprj"), Reports);
 
