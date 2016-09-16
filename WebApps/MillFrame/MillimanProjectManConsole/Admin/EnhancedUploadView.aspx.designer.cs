@@ -12,6 +12,33 @@
 public partial class EnhancedUploadView {
     
     /// <summary>
+    /// lnkBootstrapcss control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.HtmlControls.HtmlLink lnkBootstrapcss;
+    
+    /// <summary>
+    /// lnkBootstrapDialogcss control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.HtmlControls.HtmlLink lnkBootstrapDialogcss;
+    
+    /// <summary>
+    /// Link1 control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.HtmlControls.HtmlLink Link1;
+    
+    /// <summary>
     /// form1 control.
     /// </summary>
     /// <remarks>
@@ -28,15 +55,6 @@ public partial class EnhancedUploadView {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::Telerik.Web.UI.RadScriptManager RadScriptManager1;
-    
-    /// <summary>
-    /// Label1 control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::System.Web.UI.WebControls.Label Label1;
     
     /// <summary>
     /// ProjectName control.
@@ -111,15 +129,6 @@ public partial class EnhancedUploadView {
     protected global::System.Web.UI.WebControls.HyperLink UserManualLabel;
     
     /// <summary>
-    /// PresentationLabel control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::System.Web.UI.WebControls.Label PresentationLabel;
-    
-    /// <summary>
     /// NewGroupName control.
     /// </summary>
     /// <remarks>
@@ -129,22 +138,22 @@ public partial class EnhancedUploadView {
     protected global::System.Web.UI.WebControls.TextBox NewGroupName;
     
     /// <summary>
-    /// CreateGroup control.
+    /// Button1 control.
     /// </summary>
     /// <remarks>
     /// Auto-generated field.
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
-    protected global::System.Web.UI.WebControls.Button CreateGroup;
+    protected global::System.Web.UI.WebControls.Button Button1;
     
     /// <summary>
-    /// Delete control.
+    /// Button2 control.
     /// </summary>
     /// <remarks>
     /// Auto-generated field.
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
-    protected global::System.Web.UI.WebControls.Button Delete;
+    protected global::System.Web.UI.WebControls.Button Button2;
     
     /// <summary>
     /// SelectedGroups control.

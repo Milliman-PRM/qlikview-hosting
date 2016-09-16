@@ -54,10 +54,11 @@
                                  border-radius:5px;box-shadow:0 1px 3px #ccc;display:none;font-size:.8em;
                                  height:161px;padding:6px;position:absolute;width:365px;z-index:2000}
          /*Layout*/
-      .containerWrap{text-align:center;padding:15px;width:100%}
+      .containerWrap{text-align:center;padding:15px;background-color: #f5f5f5;width: 100%;}
       .left-div{display:inline-block;max-width:435px;text-align:left;padding:3px;margin:3px;vertical-align:top}
       .right-div{display:inline-block;max-width:435px;text-align:left;padding:3px;margin:3px}
-
+      /* info box*/
+        .infoBox{color:#8a6d3b;background-color:#fcf8e3;border-color:#faebcc;margin:0 auto!important}
     </style>
 
     <script type="text/javascript">
@@ -84,7 +85,7 @@
 <body style="background-color: white; background-image: url(images/watermark.png); background-repeat: repeat;" onload="OnLoad();">
     <form id="form1" runat="server">
         <div class="containerWrap">
-            <div class="page-header roundShadowContainer" style="width:880px;">
+            <div class="page-header roundShadowContainer" style="width:50%;">
               <h2>User Profile  <small>Password Settings</small></h2>
             </div>
             <div class="left-div">
@@ -244,22 +245,24 @@
                 </div>
                 <%--window for the user Password Recovery Settings--%>
             </div>
-        </div>
-        <div class="space"></div>
-        <div class="row">
-            <div class="center-block" style="float: none;width: 415px;">
-                <div class="alert alert-warning">
-                    <strong>Important!</strong> All required fields are marked with an asterisk (*).
-                </div>
-                <div class="col-md-8" style="float: none;">
-                    <asp:Button ID="Button1" runat="server" CommandName="ChangePassword" Text="Apply Changes"
-                        OnClick="ChangePasswordPushButton_Click" CssClass="btn btn-primary"
-                        OnClientClick="return Validate();" />
-                    <asp:Button ID="Button2" runat="server" CommandName="ResetForm" Text="Reset Form" CssClass="btn btn-primary"
-                        OnClientClick="ClearTextboxes();" />
+            <div class="space"></div>
+            <div class="row">
+                <div class="center-block" style="float: none;width: 415px;">
+                    <div class="alert alert-warning infoBox">
+                        <strong>Important!</strong> All required fields are marked with an asterisk (*).
+                    </div>
+                    <div class="space"></div>
+                    <div class="col-md-8" style="float: none;">
+                        <asp:Button ID="Button1" runat="server" CommandName="ChangePassword" Text="Apply Changes"
+                            OnClick="ChangePasswordPushButton_Click" CssClass="btn btn-primary"
+                            OnClientClick="return Validate();" />
+                        <asp:Button ID="Button2" runat="server" CommandName="ResetForm" Text="Reset Form" CssClass="btn btn-primary"
+                            OnClientClick="ClearTextboxes();" />
+                    </div>
                 </div>
             </div>
         </div>
+
         <div id="footer" style="height: 25px; bottom: 0; position: absolute; left: 10px; right: 10px; overflow: hidden; vertical-align: bottom; display: none">
             <table style="width: 100%; height: 100%; overflow: hidden">
                 <tr>
