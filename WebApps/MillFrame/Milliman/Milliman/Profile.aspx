@@ -656,7 +656,7 @@
 
                     ConfirmNewPassword.attr('disabled', 'disabled');
                     if (messagePasswordUserNameChars != "") {
-                        showErrorAlert(messagePasswordUserNameChars + '<br> Your password does not match the all password rules. Please make sure your password matches the password rules. [Check the Password Hint.]');
+                        showErrorAlert(messagePasswordUserNameChars);
                         return false;
                     }
                     else {
