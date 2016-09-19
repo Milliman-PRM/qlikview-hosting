@@ -196,7 +196,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <label for="ConfirmNewPassword" class="labelweak required">Confirm Password:&nbsp;</label></td>
+                                    <label for="ConfirmNewPassword" class="labelweak required">Confirm New Password:&nbsp;</label></td>
                                 <td>
                                     <input id="ConfirmNewPassword" name="ConfirmNewPassword" type="password" runat="server" class="form-control"
                                         style="width: 185px;" tabindex="6" onclick="this.select(); removeClass(this, 'textbox-focus');" />

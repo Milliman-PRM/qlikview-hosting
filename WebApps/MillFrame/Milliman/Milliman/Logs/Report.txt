@@ -108,4 +108,16 @@ Parameter name: path2
    at MillimanCommon.UserRepo.StartFileWatcher(String RepoFilePath) in C:\Users\afsheen.khan\PRMDevelopment\SprintSept12toSept30\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 245
    at MillimanCommon.UserRepo.Load() in C:\Users\afsheen.khan\PRMDevelopment\SprintSept12toSept30\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 337
    at MillimanCommon.UserRepo.GetInstance() in C:\Users\afsheen.khan\PRMDevelopment\SprintSept12toSept30\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 30
-   at MillimanDev.Global.Application_Start(Object sender, EventArgs e) in C:\Users\afsheen.khan\PRMDevelopment\SprintSept12toSept30\WebApps\MillFrame\Milliman\Milliman\Global.asax.cs:line 77----------------------------------------
+   at MillimanDev.Global.Application_Start(Object sender, EventArgs e) in C:\Users\afsheen.khan\PRMDevelopment\SprintSept12toSept30\WebApps\MillFrame\Milliman\Milliman\Global.asax.cs:line 77----------------------------------------9/19/2016 2:47:18 PMInfo           Application Start
+2:47:18 PM                    Error     \r\nException trace: System.ArgumentException: The directory name E:\InstalledApplications\PRM\Rules is invalid.
+   at System.IO.FileSystemWatcher..ctor(String path, String filter)
+   at MillimanCommon.UserRepo.StartFileWatcher(String RepoFilePath) in C:\Users\afsheen.khan\PRMDevelopment\SprintSept12toSept30\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 245
+   at MillimanCommon.UserRepo.Load() in C:\Users\afsheen.khan\PRMDevelopment\SprintSept12toSept30\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 337
+   at MillimanCommon.UserRepo.GetInstance() in C:\Users\afsheen.khan\PRMDevelopment\SprintSept12toSept30\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 30
+   at MillimanDev.Global.Application_Start(Object sender, EventArgs e) in C:\Users\afsheen.khan\PRMDevelopment\SprintSept12toSept30\WebApps\MillFrame\Milliman\Milliman\Global.asax.cs:line 77----------------------------------------9/19/2016 2:48:38 PMInfo           Application Start
+2:48:38 PM                    Error     \r\nException trace: System.ArgumentException: The directory name E:\InstalledApplications\PRM\Rules is invalid.
+   at System.IO.FileSystemWatcher..ctor(String path, String filter)
+   at MillimanCommon.UserRepo.StartFileWatcher(String RepoFilePath) in C:\Users\afsheen.khan\PRMDevelopment\SprintSept12toSept30\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 245
+   at MillimanCommon.UserRepo.Load() in C:\Users\afsheen.khan\PRMDevelopment\SprintSept12toSept30\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 337
+   at MillimanCommon.UserRepo.GetInstance() in C:\Users\afsheen.khan\PRMDevelopment\SprintSept12toSept30\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 30
+   at MillimanDev.Global.Application_Start(Object sender, EventArgs e) in C:\Users\afsheen.khan\PRMDevelopment\SprintSept12toSept30\WebApps\MillFrame\Milliman\Milliman\Global.asax.cs:line 77----------------------------------------9/19/2016 2:49:02 PMInfo           Application Start
