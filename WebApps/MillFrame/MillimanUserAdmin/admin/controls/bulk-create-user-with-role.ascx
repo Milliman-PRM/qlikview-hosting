@@ -30,11 +30,11 @@
     }
 </style>
 
-<div class="adminHelp">
+<%--<div class="adminHelp">
     1.) Minimum Required Password Length = 7 char.<br />
     2.) Minimum Required Non-Alphanumeric char = 1.<br />
     3.) Passwords are case sensitive.
-</div>
+</div>--%>
 
 <%-- gridview banner --%>
 <div class="gvBanner">

@@ -605,6 +605,10 @@ namespace MillimanDev
                     Trace.Write("ServiceProvider", "Error on logout page", exception);
                 }
             }
+            else
+            {
+                LoadProducts();
+            }
         }
 
 
