@@ -51,3 +51,8 @@
 Parameter name: path2
    at System.IO.Path.Combine(String path1, String path2)
    at MillimanDev.Global.Application_Start(Object sender, EventArgs e) in E:\Story1162TechDebtCovisent\WebApps\MillFrame\Milliman\Milliman\Global.asax.cs:line 93----------------------------------------9/8/2016 6:01:56 AM Info           Application Start
+9/19/2016 1:57:10 PMInfo           Application Start
+9/19/2016 2:05:18 PMInfo           Application Start
+9/19/2016 2:32:00 PMInfo           Application Start
+9/19/2016 2:55:09 PMInfo           Application Start
+9/19/2016 3:55:46 PMInfo           Application Start
