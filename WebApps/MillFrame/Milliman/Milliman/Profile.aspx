@@ -54,14 +54,15 @@
                                  border-radius:5px;box-shadow:0 1px 3px #ccc;display:none;font-size:.8em;
                                  height:161px;padding:6px;position:absolute;width:365px;z-index:2000}
          /*Layout*/
-      .containerWrap{text-align:center;padding:15px;width:100%}
+      .containerWrap{text-align:center;padding:15px;background-color: #f5f5f5;width: 100%;}
       .left-div{display:inline-block;max-width:435px;text-align:left;padding:3px;margin:3px;vertical-align:top}
       .right-div{display:inline-block;max-width:435px;text-align:left;padding:3px;margin:3px}
+      /* info box*/
+        .infoBox{color:#8a6d3b;background-color:#fcf8e3;border-color:#faebcc;margin:0 auto!important}
 
     </style>
 
     <script type="text/javascript">
-
         function getRadWindow() {
             var oWindow = null;
             if (window.radWindow)
@@ -83,9 +84,9 @@
 </head>
 <body style="background-color: white; background-image: url(images/watermark.png); background-repeat: repeat;" onload="OnLoad();">
     <form id="form1" runat="server">
-        <div class="containerWrap">
-            <div class="page-header roundShadowContainer" style="width:880px;">
-              <h2>User Profile  <small>Password Settings</small></h2>
+         <div class="containerWrap">
+            <div class="page-header roundShadowContainer" style="width: 50%;">
+                <h2>User Profile  <small>Password Settings</small></h2>
             </div>
             <div class="left-div">
                 <%--window for the user profile info--%>
@@ -244,22 +245,24 @@
                 </div>
                 <%--window for the user Password Recovery Settings--%>
             </div>
-        </div>
-        <div class="space"></div>
-        <div class="row">
-            <div class="center-block" style="float: none;width: 415px;">
-                <div class="alert alert-warning">
-                    <strong>Important!</strong> All required fields are marked with an asterisk (*).
-                </div>
-                <div class="col-md-8" style="float: none;">
-                    <asp:Button ID="Button1" runat="server" CommandName="ChangePassword" Text="Apply Changes"
-                        OnClick="ChangePasswordPushButton_Click" CssClass="btn btn-primary"
-                        OnClientClick="return Validate();" />
-                    <asp:Button ID="Button2" runat="server" CommandName="ResetForm" Text="Reset Form" CssClass="btn btn-primary"
-                        OnClientClick="ClearTextboxes();" />
+            <div class="space"></div>
+            <div class="row">
+                <div class="center-block" style="float: none;width: 415px;">
+                    <div class="alert alert-warning infoBox">
+                        <strong>Important!</strong> All required fields are marked with an asterisk (*).
+                    </div>
+                    <div class="space"></div>
+                    <div class="col-md-8" style="float: none;">
+                        <asp:Button ID="Button1" runat="server" CommandName="ChangePassword" Text="Apply Changes"
+                            OnClick="ChangePasswordPushButton_Click" CssClass="btn btn-primary"
+                            OnClientClick="return Validate();" />
+                        <asp:Button ID="Button2" runat="server" CommandName="ResetForm" Text="Reset Form" CssClass="btn btn-primary"
+                            OnClientClick="ClearTextboxes();" />
+                    </div>
                 </div>
             </div>
         </div>
+
         <div id="footer" style="height: 25px; bottom: 0; position: absolute; left: 10px; right: 10px; overflow: hidden; vertical-align: bottom; display: none">
             <table style="width: 100%; height: 100%; overflow: hidden">
                 <tr>
@@ -368,8 +371,6 @@
             element.bln = !element.bln;
         }
 
-        //raise the key up even for ConfirmNewPassword 
-        $("#ConfirmNewPassword").keyup(validatePasswordMatch);
 
         //function to validate data
         function Validate() {
@@ -418,37 +419,7 @@
                         showErrorAlert(msg);                        
                         return false;
                     }
-
-                    //the passwrod should not contain 3 or more char from user name
-                    //find user name 
-                    var username = '<%=Context.User.Identity.Name%>';
-                    //get new password value
-                    var password = $('#NewPassword').val();                                      
-
-                    //divide the user name into 3 letters so abcdefghi@somthing.com will look like [abd def ghi @som thi ng. com]
-                    // example: ["abc", "def", "g.h", "ijk", "@em", "ail", ".co", "m"]
-                    var partsOfThreeLettersUsernameArray = username.match(/.{3}/g)
-                                        .concat(
-                                                username.substr(1).match(/.{3}/g),
-                                                username.substr(2).match(/.{3}/g)
-                                               );
                     
-                    //example: ["afs", "Ujn", "8*c", "fsU", "jn8", "*co", "sUj", "n8*", "com"]
-                    var partsOfThreeLettersPasswordArray = password.match(/.{3}/g)
-                                            .concat(
-                                                    password.substr(1).match(/.{3}/g),
-                                                    password.substr(2).match(/.{3}/g)
-                                                   );
-                   
-                    var result = matchWordsinStringArray(partsOfThreeLettersUsernameArray, partsOfThreeLettersPasswordArray);
-                    if (result != null)
-                    {
-                        var elementValue = password.match(new RegExp(result.passwordElement, "i"));
-                        $('#NewPassword').addClass('textbox-focus');
-                        showErrorAlert('The password you entered cannot contain substring <b>' + elementValue[0] + '</b>, since <b>' + elementValue[0] + '</b> is a substring in your account name.  The password cannot contain 3 or more contiguous characters from the account name.');
-                        return false;
-                    }
-
                     if (confirmPassword == '') {
                         var msg = ('The password setting Confirm New Password filed cannot be empty.');
                         $('#ConfirmNewPassword').addClass('textbox-focus');
@@ -470,6 +441,7 @@
                         return false;
                     }
                 }
+
                 if ((newPassword != '') || (confirmPassword != '')) {
                     if (CurPassword == '') {
                         var msg = ('To change your password, your Current Password must be provided along with the requested New Password and Confirm New Password.');
@@ -525,65 +497,133 @@
             return arrayMatchfound;
         }
 
+       var badData = false;
+        var messagePasswordUserNameChars = "";
         //Password Check
         $('input.NewPassword').keyup(function () {
-            // set password variable
-            var newpasswordValue = $(this).val();
+                // set password variable
+                var newpasswordValue = $(this).val();
+                
+                //validate the length
+                if (newpasswordValue.length > 8) {
+                    $('#length').removeClass('invalidPassword').addClass('validPassword');
+                    badData = false;
+                } else {
+                    $('#length').removeClass('validPassword').addClass('invalidPassword');
+                    badData = true;
+                }
 
-            //validate the length
-            if (newpasswordValue.length < 8) {
-                $('#length').removeClass('validPassword').addClass('invalidPassword');
-            } else {
-                $('#length').removeClass('invalidPassword').addClass('validPassword');
-            }
+                //validate any uppercase letter
+                if (newpasswordValue.match(/[A-Z]/)) {
+                    $('#capital').removeClass('invalidPassword').addClass('validPassword');
+                    if (badData) {
+                        badData = true;
+                    }
+                    else {
+                        badData = false;
+                    }
+                } else {
+                    $('#capital').removeClass('validPassword').addClass('invalidPassword');
+                    badData = true;
+                }
 
-            //validate any uppercase letter
-            if (newpasswordValue.match(/[A-Z]/)) {
-                $('#capital').removeClass('invalidPassword').addClass('validPassword');
-            } else {
-                $('#capital').removeClass('validPassword').addClass('invalidPassword');
-            }
+                //validate any lower case letter
+                if (newpasswordValue.match(/[a-z]/)) {
+                    $('#lowercase').removeClass('invalidPassword').addClass('validPassword');
+                    if (badData) {
+                        badData = true;
+                    }
+                    else {
+                        badData = false;
+                    }
+                } else {
+                    $('#lowercase').removeClass('validPassword').addClass('invalidPassword');
+                    badData = true;
+                }
 
-            //validate any lower case letter
-            if (newpasswordValue.match(/[a-z]/)) {
-                $('#lowercase').removeClass('invalidPassword').addClass('validPassword');
-            } else {
-                $('#lowercase').removeClass('validPassword').addClass('invalidPassword');
-            }
+                //validate a number
+                if (newpasswordValue.match(/[0-9]/)) {
+                    $('#number').removeClass('invalidPassword').addClass('validPassword');
+                    if (badData) {
+                        badData = true;
+                    }
+                    else {
+                        badData = false;
+                    }
+                } else {
+                    $('#number').removeClass('validPassword').addClass('invalidPassword');
+                    badData = true;
+                }
 
-            //validate a number
-            if (newpasswordValue.match(/[0-9]/)) {
-                $('#number').removeClass('invalidPassword').addClass('validPassword');
-            } else {
-                $('#number').removeClass('validPassword').addClass('invalidPassword');
-            }
+                //validate allowed special
+                if (newpasswordValue.match(/[~!@#$%^&*;?+_.]/)) {
+                    $('#special').removeClass('invalidPassword').addClass('validPassword');
+                    if (badData) {
+                        badData = true;
+                    }
+                    else {
+                        badData = false;
+                    }
+                } else {
+                    $('#special').removeClass('validPassword').addClass('invalidPassword');
+                    badData = true;
+                }
 
-            //validate allowed special
-            if (newpasswordValue.match(/[~!@#$%^&*;?+_.]/)) {
-                $('#special').removeClass('invalidPassword').addClass('validPassword');
-            } else {
-                $('#special').removeClass('validPassword').addClass('invalidPassword');
-            }
+                //not allowed chars
+                var regexChar = new RegExp(/[`,<>;':"/[\]|{}()=-]/);
+                if (newpasswordValue.match(regexChar)) {
+                    showErrorAlert('The character you entered is not valid.');
+                    return false;
+                }
 
-            //not allowed chars
-            var regexChar = new RegExp(/[`,<>;':"/[\]|{}()=-]/);
-            if (newpasswordValue.match(regexChar)) {
-                showErrorAlert('The character you entered is not valid.');
-                return false;
-            }
-            ////not allowed continus repeated chars
-            //var regex = new RegExp(/([A-Za-z])\1\1\1/);
-            //if (newpasswordValue.match(regex)) {
-            //    showErrorAlert('You can not have more than 3 continus repeated chars.');
-            //    return false;
-            //}
+                //validate non-printable chars 
+                if (newpasswordValue.match(/[^\u0000-\u007F]/)) {
+                    showErrorAlert('You can not have non-printable chars.');
+                    return false;
+                }
 
-            //validate non-printable chars 
-            if (newpasswordValue.match(/[^\u0000-\u007F]/)) {
-                showErrorAlert('You can not have non-printable chars.');
-                return false;
-            }        
+                //the passwrod should not contain 3 or more char from user name
+                //find user name 
+                var username = '<%=Context.User.Identity.Name%>';
+                //get new password value
+                var newPasswordVal = $('#NewPassword').val();
+                //divide the user name into 3 letters so abcdefghi@somthing.com will look like [abd def ghi @som thi ng. com]
+                // example: ["abc", "def", "g.h", "ijk", "@em", "ail", ".co", "m"]
+                var partsOfThreeLettersUsernameArray = username.match(/.{3}/g)
+                                    .concat(
+                                            username.substr(1).match(/.{3}/g),
+                                            username.substr(2).match(/.{3}/g)
+                                            );
 
+                //example: ["afs", "Ujn", "8*c", "fsU", "jn8", "*co", "sUj", "n8*", "com"]
+                var partsOfThreeLettersPasswordArray = newPasswordVal.match(/.{3}/g)
+                                        .concat(
+                                                newPasswordVal.substr(1).match(/.{3}/g),
+                                                newPasswordVal.substr(2).match(/.{3}/g)
+                                                );
+
+                
+                var result = matchWordsinStringArray(partsOfThreeLettersUsernameArray, partsOfThreeLettersPasswordArray);
+                if (result != null) {
+                    var elementValue = newPasswordVal.match(new RegExp(result.passwordElement, "i"));               
+                    //showErrorAlert('The password you entered cannot contain substring <b>' + elementValue[0] + '</b>, since <b>' + elementValue[0] + '</b> is a substring in your account name.  The password cannot contain 3 or more contiguous characters from the account name.');
+                    messagePasswordUserNameChars = 'The password you entered cannot contain substring <b>' + elementValue[0] + '</b>, since <b>' + elementValue[0] + '</b> is a substring in your account name.  The password cannot contain 3 or more contiguous characters from the account name.';
+                    badData = true;
+                }
+                else
+                {
+                    messagePasswordUserNameChars = "";
+                    if (badData)
+                    {
+                        badData = true;
+                    }
+                    else
+                    {
+                        badData = false;
+                    }
+                    
+                }
+                    
 
         }).focus(function () {
             $('#divPasswordCriteriaContainer').show();
@@ -591,17 +631,71 @@
             $('#divPasswordCriteriaContainer').hide();
         });
 
+        var newPasswrdInput = document.getElementById ("NewPassword");
+        newPasswrdInput.addEventListener("blur", verifyBadPassword, false);
+
+        function verifyBadPassword() {
+
+            var ConfirmNewPassword = $('#ConfirmNewPassword');
+            var NewPassword = $('#NewPassword')            
+            if (NewPassword.val() === "")
+            {
+                NewPassword.removeClass('textbox-focus');
+                ConfirmNewPassword.val('');
+                resetPasswordMatch();
+                ConfirmNewPassword.removeAttr('disabled');//enable
+                return true;
+            }
+            else
+            {
+                if (badData) {
+
+                    NewPassword.addClass('textbox-focus');
+                    ConfirmNewPassword.val('');
+                    resetPasswordMatch();
+
+                    ConfirmNewPassword.attr('disabled', 'disabled');
+                    if (messagePasswordUserNameChars != "") {
+                        showErrorAlert(messagePasswordUserNameChars + '<br> Your password does not match the all password rules. Please make sure your password matches the password rules. [Check the Password Hint.]');
+                        return false;
+                    }
+                    else {
+                        showErrorAlert('Your password does not match the all password rules. Please make sure your password matches the password rules. [Check the Password Hint.]');
+                        return false;
+                    }
+
+                }
+                else {
+                    ConfirmNewPassword.removeAttr('disabled');//enable
+                    ConfirmNewPassword.focus();
+                    return true;
+                }
+            }            
+        }
+
+        var ConfirmNewPasswordInput = document.getElementById("ConfirmNewPassword");
+        ConfirmNewPasswordInput.addEventListener("blur", validatePasswordMatch, false);
+
+        //raise the key up even for ConfirmNewPassword 
+       // $("#ConfirmNewPassword").keyup(validatePasswordMatch);
+
         //function to check if the two password matches
         var message = document.getElementById('passwordMatchMessage');
         function validatePasswordMatch() {
+       
             var newPassword = $("#NewPassword").val();
             var confirmPassword = $("#ConfirmNewPassword").val();
+
+            if (newPassword === "" || confirmPassword === "")
+            {
+                resetPasswordMatch();
+                return true;
+            }
+
             if (newPassword != confirmPassword) {
                 message.innerHTML = "Passwords Do Not Match!"
                 $('#passwordMatchMessage').addClass('badMatch');
-            }
-            else {
-                resetPasswordMatch();
+                return false;
             }
         }
 

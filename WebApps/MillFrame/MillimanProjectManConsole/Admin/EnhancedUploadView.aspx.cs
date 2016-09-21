@@ -21,6 +21,7 @@ public partial class EnhancedUploadView : System.Web.UI.Page
             LoadPresets();
             string VirtualDir = string.Empty;
             string Groups = string.Empty;
+
              MillimanCommon.ProjectSettings _Settings =  LoadSettings(out VirtualDir, out Groups, true);  //pass in true to update display
              if (string.IsNullOrEmpty(_Settings.ProjectName) == false)
              {
