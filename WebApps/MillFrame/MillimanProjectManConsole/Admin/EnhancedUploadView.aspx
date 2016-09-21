@@ -37,45 +37,45 @@
     <script src="../js/js/bootstrap.min.v3.3.7.js" type="text/javascript"></script>
     <script src="../js/js/bootstrap-dialog.min.js" type="text/javascript"></script>
 
-    <script language="javascript" type="text/javascript">
-        function getRadWindow() {
-            var oWindow = null;
+     <script language="javascript" type="text/javascript">
+         function getRadWindow() {
+             var oWindow = null;
             if (window.radWindow) {
-                oWindow = window.radWindow;
+                 oWindow = window.radWindow;
             }
             else if (window.frameElement != null) {
                 if (window.frameElement.radWindow) {
-                    oWindow = window.frameElement.radWindow;
+                 oWindow = window.frameElement.radWindow;
                 }
             }
-            return oWindow;
-        }
+             return oWindow;
+         }
 
-        // Reload parent page
-        function CloseDialog() {
-            var ThisDialog = getRadWindow();
-            var Parent = getRadWindow().BrowserWindow;
-            //don't auto close
-            //ThisDialog.close();
-            //need to update parent when closing, may be new project
-            if (Parent) {
-                Parent.Closer();
-            }
-        }
+         // Reload parent page
+         function CloseDialog() {
+             var ThisDialog = getRadWindow();
+             var Parent = getRadWindow().BrowserWindow;
+             //don't auto close
+             //ThisDialog.close();
+             //need to update parent when closing, may be new project
+             if (Parent) {
+                 Parent.Closer();
+             }
+         }
 
-        function AutoSize() {
+         function AutoSize() {
             if (getRadWindow()) {
-                getRadWindow().autoSize();
-            }
+                 getRadWindow().autoSize();
+             }
         }
-
-    </script>
+         
+</script>
     <title></title>
-
+         
 </head>
 <body style="font-size: 11pt; font-weight: 400; background-image: url( ../images/dialog-bg.png ); background-size: 100% 100%" onload="AutoSize();">
     <form id="form1" runat="server">
-        <telerik:RadScriptManager runat="server" ID="RadScriptManager1" />
+       <telerik:RadScriptManager runat="server" ID="RadScriptManager1" />
         <div class="containerWrap">
             <div class="page-header roundShadowContainer" style="width: 50%;">
                 <h2>Project Upload  <small>General Project Information</small></h2>
@@ -154,8 +154,8 @@
                             <asp:Image ID="PreviewImage" runat="server" Width="105px" Height="105px" />
                             <br />
                             <telerik:RadAsyncUpload runat="server" ID="PresentationThumbnail" Style="width: 95%"
-                                AllowedFileExtensions="png,gif,jpg,jpeg" MaxFileSize="1000000000" MaxFileInputsCount="1">
-                            </telerik:RadAsyncUpload>
+                                    AllowedFileExtensions="png,gif,jpg,jpeg" MaxFileSize="1000000000" MaxFileInputsCount="1">
+                                </telerik:RadAsyncUpload>
                         </div>
                     </div>
                     <div class="row">&nbsp;</div>
@@ -214,15 +214,15 @@
             </div>
             <div id="ImBusy" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none">
                 <table style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; visibility: visible">
-                    <tr>
+                        <tr>
                         <td style="vertical-align: middle; text-align: center;">
                             <img src="../images/ajax-loader.gif" style="border-width: 0px" /><br />
                             Project Upload and Configuration in Progress
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </div>
+                            </td>
+                        </tr>
+                            </table>
+    </div>
+      </div>
 
     </form>
     <script type="text/javascript">
@@ -253,7 +253,7 @@
                 var TooltipText = '';
                 for (var i = 0; i < CheckBoxListArray.length; i++) {
                     var checkBoxRef = CheckBoxListArray[i];
-
+ 
                     if (checkBoxRef.checked == true) {
                         if (TooltipText != '')
                             TooltipText += "\x0A";  //add a new line
@@ -315,7 +315,7 @@
                 }],
             });
         }
-
+      
     </script>
-</body>
+    </body>
 </html>
