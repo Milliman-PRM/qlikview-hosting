@@ -88,8 +88,17 @@ namespace MillimanDev
             }
             else if (MyItems.Count == 1)
             {
-                string MenuItem = CreateMenuItem("Publish Content", "Publish new report content", Membership.GetUser().UserName, true);
-                return XML.Replace(ReplacementTag, MenuItem);
+                string ContainerName = MyItems[0].ContainerName; //get container name
+                if (string.IsNullOrEmpty(ContainerName) == false) //if not null or empty pass to menu creator
+                {
+                    string MenuItem = CreateMenuItem("Publish Content", "Publish new report content", ContainerName, true);
+                    return XML.Replace(ReplacementTag, MenuItem);
+                }
+                else
+                {   //if container name empty or null, log error, and remove from menu
+                    MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "Invalid publish menu item generated from super group");
+                    return XML.Replace(ReplacementTag, "");
+                }
             }
             else
             {

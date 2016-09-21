@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Menu>
+<Menu EnableAutoScroll="true">
   <Group Flow='Horizontal'>
     <Item  Text='Products' Href='javascript:location.reload(true);'  Width='100px' Target='' LeftLogo="images/products.png" />
     <Item Text='Profile' Href='javascript:OpenProfile();' Width='100px' LeftLogo="images/administrator-icon.png" />
