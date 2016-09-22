@@ -115,7 +115,7 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
 
         foreach (string Role in AllRoles)
         {
-            if ( (string.Compare(Role, "administrator", true)) != 0 && (GroupsAlreadyAdded.Contains(Role) == false) )
+            if ((string.Compare(Role, "administrator", true)) != 0 && (GroupsAlreadyAdded.Contains(Role) == false))
             {
                 //the role can only have 1 QVW in it, or we will have issues in publisher and client admin
                 if (Repo.FindAllQVProjectsForRole(Role).Count == 1)
@@ -290,12 +290,10 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
         {
             if (string.IsNullOrEmpty(SuperGroups.SelectedValue))
                 return;
-
-            SuperGroups.Items.RemoveAt(SuperGroups.SelectedIndex);
-
+                        
             string DeleteGroup = SuperGroups.SelectedValue;
+            SuperGroups.Items.RemoveAt(SuperGroups.SelectedIndex);
             MillimanCommon.SuperGroup SG = MillimanCommon.SuperGroup.GetInstance();
-
             MillimanCommon.SuperGroup.SuperGroupContainer SGC = SG.FindSuper(DeleteGroup);
             if (SGC != null) //tis not an error if null, may be a new item not saved in list yet
                 SG.DeleteSuper(DeleteGroup);

@@ -77,7 +77,7 @@
     <form id="form1" runat="server">
        <telerik:RadScriptManager runat="server" ID="RadScriptManager1" />
         <div class="containerWrap">
-            <div class="page-header roundShadowContainer" style="width: 50%;">
+            <div class="page-header engravedHeader">
                 <h2>Project Upload  <small>General Project Information</small></h2>
             </div>
             <div class="row">&nbsp;</div>

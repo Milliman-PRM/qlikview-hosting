@@ -18,23 +18,18 @@
 
     .left {
         float: left;
-        margin: 3px;
+        margin: 0px -7px 0px 4px;
         text-align: left;
         padding: 2px;
     }
 
     .right {
         float: right;
-        margin: -3px;
+        margin: 0px -7px 0px 4px;
         text-align: left;
     }
 </style>
 
-<%--<div class="adminHelp">
-    1.) Minimum Required Password Length = 7 char.<br />
-    2.) Minimum Required Non-Alphanumeric char = 1.<br />
-    3.) Passwords are case sensitive.
-</div>--%>
 
 <%-- gridview banner --%>
 <div class="gvBanner">
@@ -56,8 +51,10 @@
 </telerik:RadWindowManager>
 
 <div class="centerElement roundShadowContainer">
-    <div class="softRoundContainerStyle" style="height: 23px; width: 333px;">
-        <div class="left"><span class="navyHeaderFont">Login Type:</span></div>
+
+    <div style="height: 23px; width: 333px;">
+        <div class="left"><span class="engravedHeader">Login Type:</span></div>
+        <div class="clearfix"></div>
         <div class="right">
             <%--panel for UserType--%>
             <asp:RadioButtonList ID="UserType" runat="server" AutoPostBack="True"
@@ -68,16 +65,13 @@
         </div>
     </div>
     <div class="space"></div>
-    <div class="softRoundContainerStyle">
-        <span class="navyHeaderFont" style="background: #e4dfdf;">Group Selection</span>
-        <div id="divUserRole" class="softRoundContainerStyle" style="height: 200px; overflow-y: scroll;">
-            <%--panel for updPanelUserRoles--%>
-            <asp:UpdatePanel ID="updPanelUserRoles" runat="server" ChildrenAsTriggers="true" UpdateMode="Conditional">
-                <ContentTemplate>
-                    <urs:userRoleSelector ID="ctrlUserRoles" runat="server" />
-                </ContentTemplate>
-            </asp:UpdatePanel>
-        </div>
+    <div id="divUserRole" class="softRoundContainerStyle">
+        <%--panel for updPanelUserRoles--%>
+        <asp:UpdatePanel ID="updPanelUserRoles" runat="server" ChildrenAsTriggers="true" UpdateMode="Conditional">
+            <ContentTemplate>
+                <urs:userRoleSelector ID="ctrlUserRoles" runat="server" />
+            </ContentTemplate>
+        </asp:UpdatePanel>
     </div>
     <div class="space"></div>
     <div class="softRoundContainerStyle">
@@ -104,7 +98,7 @@
                     </telerik:GridTemplateColumn>
                     <telerik:GridTemplateColumn DataField="SendWelcomeEmail" HeaderText="Send Welcome" UniqueName="SendWelcome" HeaderStyle-Width="100px" ItemStyle-HorizontalAlign="Center">
                         <ItemTemplate>
-                            <asp:CheckBox ID="SendWelcomeCheckbox" runat="server" AutoPostBack="false" Checked='<%#Eval("SendWelcomeEmail") %>'/>
+                            <asp:CheckBox ID="SendWelcomeCheckbox" runat="server" AutoPostBack="false" Checked='<%#Eval("SendWelcomeEmail") %>' />
                         </ItemTemplate>
                     </telerik:GridTemplateColumn>
                     <telerik:GridTemplateColumn DataField="DataAccess_Required" HeaderText="<center>Database Access</center>" UniqueName="DataAccessRequiredText">

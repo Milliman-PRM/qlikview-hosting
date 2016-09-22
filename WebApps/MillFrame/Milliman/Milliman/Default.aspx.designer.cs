@@ -40,7 +40,7 @@ namespace MillimanDev {
         protected global::System.Web.UI.ScriptManager ScriptMgr;
         
         /// <summary>
-        /// RadMenu1 control.
+        /// mnuOptions control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
@@ -58,7 +58,7 @@ namespace MillimanDev {
         protected global::System.Web.UI.WebControls.Label FilterLabel;
         
         /// <summary>
-        /// Groups control.
+        /// ddlGroups control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.

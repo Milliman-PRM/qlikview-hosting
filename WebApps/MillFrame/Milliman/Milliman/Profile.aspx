@@ -44,6 +44,7 @@
          td{padding:4px!important}
         .form-control{height:30px}
         .table{margin-bottom:5px}
+        .page-header {padding-bottom: 10px;margin: 5px 0 10px;border-bottom: 1px solid #eee;}
         /*password hint*/
         .PWHsmallContainer{background: #f4f9fb none repeat scroll 0 0;border: 2px dashed #ddd;width: 349px;}     
         .PWHshowHideDivHeader{width: 123px;padding:0;margin:4px 8px 9px 1px;cursor:pointer;}
@@ -54,12 +55,12 @@
                                  border-radius:5px;box-shadow:0 1px 3px #ccc;display:none;font-size:.8em;
                                  height:161px;padding:6px;position:absolute;width:365px;z-index:2000}
          /*Layout*/
-      .containerWrap{text-align:center;padding:15px;background-color: #f5f5f5;width: 100%;}
-      .left-div{display:inline-block;max-width:435px;text-align:left;padding:3px;margin:3px;vertical-align:top}
-      .right-div{display:inline-block;max-width:435px;text-align:left;padding:3px;margin:3px}
+          .containerWrap{text-align:center;padding:15px;background-color: #f5f5f5;width: 100%;}
+          .left-div{display:inline-block;max-width:435px;text-align:left;padding:3px;margin:3px;vertical-align:top}
+          .right-div{display:inline-block;max-width:435px;text-align:left;padding:3px;margin:3px}
       /* info box*/
         .infoBox{color:#8a6d3b;background-color:#fcf8e3;border-color:#faebcc;margin:0 auto!important}
-
+        .engravedHeader{color:#333;font: 80px 'LeagueGothicRegular'; text-shadow: 0px 1px 0px rgba(255,255,255,255);}
     </style>
 
     <script type="text/javascript">
@@ -85,7 +86,7 @@
 <body style="background-color: white; background-image: url(images/watermark.png); background-repeat: repeat;" onload="OnLoad();">
     <form id="form1" runat="server">
          <div class="containerWrap">
-            <div class="page-header roundShadowContainer" style="width: 50%;">
+            <div class="page-header engravedHeader">
                 <h2>User Profile  <small>Password Settings</small></h2>
             </div>
             <div class="left-div">
@@ -196,7 +197,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <label for="ConfirmNewPassword" class="labelweak required">Confirm Password:&nbsp;</label></td>
+                                    <label for="ConfirmNewPassword" class="labelweak required">Confirm New Password:&nbsp;</label></td>
                                 <td>
                                     <input id="ConfirmNewPassword" name="ConfirmNewPassword" type="password" runat="server" class="form-control"
                                         style="width: 185px;" tabindex="6" onclick="this.select(); removeClass(this, 'textbox-focus');" />
@@ -371,28 +372,116 @@
             element.bln = !element.bln;
         }
 
+        var AllowedSpecialCharactersInUserName = "<%= System.Configuration.ConfigurationManager.AppSettings["AllowedSpecialCharactersInUserName"].ToString() %>"
+   
+        var UserFirstNameInput = document.getElementById("UserFirstName");
+        UserFirstNameInput.addEventListener("blur", verifyUserNameInput, false);
+
+        var UserFirstLastInput = document.getElementById("UserLastName");
+        UserFirstLastInput.addEventListener("blur", verifyUserNameInput, false);
+            
+        function verifyUserNameInput(element)
+        {
+            var elementID = element.target.id;
+            var elementValue = element.target.value;
+            var elementTarget = element.target;
+
+            var alphabets = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            var number = "0123456789";
+            var badData = false;
+            //check for the non-numeric vals (alphabets)
+            for (var i = 0; i < elementValue.length; i++) {
+                if (!alphabets.indexOf(elementValue.charAt(i)) < 0) {
+                    badData = true;
+                }
+            }
+            //check for the numeric vals (1234)
+            for (var i = 0; i < elementValue.length; i++) {
+                if (number.indexOf(elementValue.charAt(i)) >= 0) {
+                    badData = true;
+                }
+            }
+
+            //if there are specail in name then check if they are allowed
+            var allSpecialChars = new RegExp(/[~!@#$%^&*;?+_.`,<>;':/[\]|{}()=-]/);
+
+            if (elementValue.match(new RegExp(allSpecialChars, "gi"))) {
+                //allowed special chars from web.config
+                var allowedSplChars = AllowedSpecialCharactersInUserName.trim();
+
+                var allFoundCharacters = elementValue.match(new RegExp(allSpecialChars, "gi"));
+                //alert(allFoundCharacters + "" + allFoundCharacters.length);//count
+
+                //match the chars from name
+                var result = invalidCharsInUserName(allFoundCharacters, allowedSplChars);
+                var allowedChars = "";
+                if (result != null) {
+                    if (result.$lowerKeyallFoundCharacters.length != allFoundCharacters.length)
+                    {
+                        badData = true;
+                    }
+                    else
+                    {
+                        badData = false;
+                    }
+                        
+                }
+                else {   
+                        badData = true;
+                }
+            }
+
+            if (badData) {
+                highlight(elementID);
+                showErrorAlert(' You have entered invalid data. This field only allows alpahebts [a-z] and certian special characters like [' + AllowedSpecialCharactersInUserName + ']. Please re-enter valid data.');
+                return false;
+            }
+
+            return true;
+
+        }
+
+        function invalidCharsInUserName(allFoundCharacters, allowedSplCharsArray) {
+            var arrayMatchfound = null;
+            try {
+                for (var i = 0; i < allFoundCharacters.length && !arrayMatchfound; i++) {
+                    var $lowerKeyallFoundCharacters = allFoundCharacters[i].toLowerCase();
+
+                    for (var j = 0, wLen = allowedSplCharsArray.length; j < wLen && !arrayMatchfound; j++) {
+                        var $lowerKeyallowedSplChar = allowedSplCharsArray[j].toLowerCase();
+
+                        if ($lowerKeyallFoundCharacters == $lowerKeyallowedSplChar) {
+                            arrayMatchfound = {
+                                $lowerKeyallFoundCharacters,
+                                $lowerKeyallowedSplChar
+                            };
+                        }
+                    }
+                }
+
+            }
+            catch (err) {
+                return false;
+                var txt = 'Error=>' + err.description;
+                showDangerAlert(txt);
+            }
+
+            return arrayMatchfound;
+        }
+
+        function highlight(elementID)
+        {
+            if (elementID == "UserFirstName") {
+                $('#UserFirstName').addClass('textbox-focus');
+            }
+            if (elementID == "UserLastName") {
+                $('#UserLastName').addClass('textbox-focus');
+            }
+        }
 
         //function to validate data
         function Validate() {
             try {
-
-                //allow only alphabets
-                var regixCharsOnly = new RegExp(/^[a-zA-Z]*$/);
-                if ($('#UserFirstName').val() != '') {
-                    if (!$('#UserFirstName').val().match(regixCharsOnly)) {
-                        $('#UserFirstName').addClass('textbox-focus');
-                        showErrorAlert('The First name can be characters only.');                        
-                        return false;
-                    }
-                }
-                if ($('#UserLastName').val() != '') {
-                    if (!$('#UserLastName').val().match(regixCharsOnly)) {
-                        $('#UserLastName').addClass('textbox-focus');
-                        showErrorAlert('The last name can be characters only.');                        
-                        return false;
-                    }
-                }
-
                 var Phone = $('#Phone').val();
                 if (Phone == '') {
                     $('#Phone').addClass('textbox-focus');
@@ -622,8 +711,7 @@
                         badData = false;
                     }
                     
-                }
-                    
+                }                    
 
         }).focus(function () {
             $('#divPasswordCriteriaContainer').show();
@@ -656,7 +744,7 @@
 
                     ConfirmNewPassword.attr('disabled', 'disabled');
                     if (messagePasswordUserNameChars != "") {
-                        showErrorAlert(messagePasswordUserNameChars + '<br> Your password does not match the all password rules. Please make sure your password matches the password rules. [Check the Password Hint.]');
+                        showErrorAlert(messagePasswordUserNameChars);
                         return false;
                     }
                     else {
@@ -675,9 +763,6 @@
 
         var ConfirmNewPasswordInput = document.getElementById("ConfirmNewPassword");
         ConfirmNewPasswordInput.addEventListener("blur", validatePasswordMatch, false);
-
-        //raise the key up even for ConfirmNewPassword 
-       // $("#ConfirmNewPassword").keyup(validatePasswordMatch);
 
         //function to check if the two password matches
         var message = document.getElementById('passwordMatchMessage');

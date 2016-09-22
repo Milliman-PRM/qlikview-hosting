@@ -4,7 +4,6 @@
 <%@ Register Src="~/js/js/jquery.ascx" TagName="jquery" TagPrefix="uc4" %>
 <%@ Register Src="~/admin/controls/UserRolesSelector.ascx" TagName="userRoleSelector" TagPrefix="urs" %>
 
-
 <style type="text/css">
    .cuwWrap {
         margin: 0 !important;
@@ -20,13 +19,13 @@
                 <cc1:TabPanel ID="TabPanel2" runat="server" HeaderText="General User Info" CssClass="softRoundContainerStyle softRoundContainer-editor backgroundColor">
                     <ContentTemplate>
                         <div class="contentTemplate softRoundContainerStyle softRoundContainer-editor backgroundColor">
-                            <div class="softRoundContainerStyle softRoundContainer-editor backgroundColor" style="height: 116px; overflow-y: scroll;">
+                            <div class="softRoundContainerStyle">
                                 <urs:userRoleSelector ID="ctrlUserRoles" runat="server" />
                             </div>
                             <br />
                             <div id="divUserDetails" class="softRoundContainerStyle softRoundContainer-editor backgroundColor">
                                 <div class="formSectionTitle2">
-                                    <span class="headers">USER INFO</span>
+                                    <span class="engravedHeader">USER INFO</span>
                                 </div>
                                 <asp:DetailsView AutoGenerateRows="False" DataSourceID="MemberData" ID="UserInfo" runat="server"
                                     OnItemUpdating="UserInfo_ItemUpdating" DefaultMode="Edit" CssClass="dv" GridLines="None" OnItemCreated="UserInfo_ItemCreated">
