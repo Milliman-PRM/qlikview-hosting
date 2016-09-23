@@ -143,10 +143,10 @@
                                 <legend id="litLegend" class="addBar">Your password must:</legend>
                                 <ul class="listUL">
                                     <li class="listLi">Be at least 8 characters long</li>
-                                    <li class="listLi">Conatin a capital letter [A-Z]</li>
-                                    <li class="listLi">Conatin a lowercase letter [a-z]</li>
-                                    <li class="listLi">Conatin a number [0-9]</li>
-                                    <li class="listLi">Conatin a special character [~!@#$%^&*;?+_.]</li>
+                                    <li class="listLi">Contain a capital letter [A-Z]</li>
+                                    <li class="listLi">Contain a lowercase letter [a-z]</li>
+                                    <li class="listLi">Contain a number [0-9]</li>
+                                    <li class="listLi">Contain a special character [~!@#$%^&*;?+_.]</li>
                                 </ul>
                             </fieldset>
                         </div>

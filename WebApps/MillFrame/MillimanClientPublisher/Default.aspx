@@ -267,7 +267,10 @@
         <asp:PlaceHolder runat="server" ID="test"></asp:PlaceHolder>
         <telerik:RadWindowManager EnableShadow="true" Behaviors=" Close, Move, Resize" ID="RadWindowManager" DestroyOnClose="true" Opacity="100" runat="server" VisibleStatusbar="False" Style="z-index: 20000;">
           <Windows>
-               <telerik:RadWindow ID="RadWindow1" runat="server" Animation="Fade" AutoSize="True" Behaviors="Close, Move" Modal="True"   InitialBehaviors="Close"  VisibleStatusbar="False"  VisibleTitlebar="False" />
+               <telerik:RadWindow ID="RadWindow1" runat="server" Animation="Fade" AutoSize="True" 
+                   Behaviors="Close, Move, Reload" Modal="True"   InitialBehaviors="Close"  
+                   VisibleStatusbar="False"  VisibleTitlebar="False" 
+                   Height="630px" Width="1008px"/>
           </Windows>
      </telerik:RadWindowManager>
     </form>
@@ -303,7 +306,7 @@
             }
             else {
                 var wnd = window.radopen("ProjectEditor.aspx?key=" + args._commandArgument, "Project " + args._commandArgument);
-                wnd.setSize(930, 500);
+                wnd.setSize(1008, 630);
                 wnd.Center();
                 wnd.set_title(args._commandArgument);
                 wnd.add_beforeClose(OnBeforeClose);
