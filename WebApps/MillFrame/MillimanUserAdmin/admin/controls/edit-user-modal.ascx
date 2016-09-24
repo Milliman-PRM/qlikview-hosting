@@ -344,7 +344,7 @@
                                 <br />
                                 <br />
                                 <div>
-                                    <asp:Button ID="ChangePasswordButtonSecureLink" CssClass="inputButton" runat="server" OnClick="ChangePasswordSecureLink_OnClick" Text="Reset Password( Secure Link Email )" ToolTip="Send the user a secure link password for password reset.  Do no use the Secure Link functionality with 'Manual' password reset." Width="300px" />
+                                    <asp:Button ID="ChangePasswordButtonSecureLink" CssClass="inputButton" runat="server" OnClick="ChangePasswordSecureLink_OnClick" Text="Reset Password (Secure Link Email)" ToolTip="Send the user a secure link password for password reset.  Do no use the Secure Link functionality with 'Manual' password reset." Width="300px" />
                                 </div>
                                 <br />
                             </div>
