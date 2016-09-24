@@ -81,7 +81,7 @@
                 <telerik:RadGrid runat="server" ID="RadGrid1" AllowSorting="True"  AutoGenerateColumns="False" CellSpacing="5"  GridLines="None" OnItemCommand="RadGrid1_ItemCommand" AllowAutomaticDeletes="True" ViewStateMode="Enabled" MasterTableView-AllowAutomaticDeletes="True" ClientIDMode="AutoID">
                     <MasterTableView EditMode="Batch" CommandItemDisplay="Top" TableLayout="Fixed">
                         <CommandItemTemplate>
-                           <asp:LinkButton ID="Add" runat="server" CommandName="Add" Visible="true"><asp:Image ID="Image1" runat="server" style="border:0px;vertical-align:middle;" alt="" ImageUrl="~/Images/Office-Girl-icon.png"/>Add List Entry</asp:LinkButton>&nbsp;&nbsp;
+                           <asp:LinkButton ID="Add" runat="server" CommandName="Add" Visible="true" ToolTip="Click to enter email addresses as comma, semi-colon, space or newline delimited."><asp:Image ID="Image1" runat="server" style="border:0px;vertical-align:middle;" alt="" ImageUrl="~/Images/Office-Girl-icon.png"/>Add List Entry</asp:LinkButton>&nbsp;&nbsp;
                            <asp:LinkButton Width="100px" ID="Validate" runat="server" CommandName="Validate" Visible='<%# RadGrid1.EditIndexes.Count == 0 %>'><asp:Image ID="Image2" runat="server"  style="border:0px;vertical-align:middle;" alt="" ImageUrl="~/Images/process-icon.png"/>Validate</asp:LinkButton>&nbsp;&nbsp;
                
                            <asp:LinkButton ID="Clear"  runat="server" CommandName="Clear" Visible='<%# RadGrid1.EditIndexes.Count == 0 %>'><asp:Image ID="Image3" runat="server" style="border:0px;vertical-align:middle;" alt="" ImageUrl="~/Images/close_24.png"/>Clear List</asp:LinkButton>&nbsp;&nbsp;
@@ -126,7 +126,7 @@
         </tr>
         <tr style="color: #FF9900;height:20px;font-size:14px;font-style:italic">
 <%--            <td><center>Paste multiple emails as comma, semi-colon, space or newline delimited and click 'Add List Entry' to create multiple accounts.</center></td>--%>
-            <td><center>To create multiple new accounts with the above Data Restriction Selections, enter email addresses as comma, semi-colon, space or newline delimited, then click 'Add List Entry' to create multiple accounts.</center></td>
+            <td><center>To create multiple new accounts with the above Data Restriction Selections, enter email addresses as comma, semi-colon, space or newline delimited, then click 'Add List Entry' button.</center></td>
         </tr>
         <tr style="height:30px">
             <td><center><asp:Button ID="CreateUsers" runat="server" Text="Create Accounts" Width="200px" OnClientClick="return StartProcessing();" OnClick="CreateUsers_Click"/></center></td>
