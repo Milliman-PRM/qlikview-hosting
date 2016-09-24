@@ -46,6 +46,12 @@ public partial class controls_login_with_captcha : System.Web.UI.UserControl
             TextBox UserName = Login1.FindControl("UserName") as TextBox;
             UserName.Focus();
         }
+        else if (System.Web.Security.Membership.GetUser() != null)
+        {   //user already has a session, but for security, make them exit and reapply credentials
+            System.Web.Security.FormsAuthentication.SignOut();
+            Session.Abandon();
+            Response.Redirect("login.aspx");  //force re-login
+        }
     }
 
     #endregion
