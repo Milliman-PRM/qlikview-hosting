@@ -13,17 +13,6 @@ namespace MillimanProjectManagementConsoleServices
         {
             if (!IsPostBack)
             {
-                try
-                {
-                    Status.Text = DateTime.Now.ToString();
-                    MillimanProjectManagementConsoleServices.MPMCServices MP = new MPMCServices();
-                    Status.Text = MP.ValidUser("van.nanney@milliman.com", "vnanney@@1").ToString();
-                    List<string> Gr = MP.GetGroups();
-                }
-                catch (Exception ex)
-                {
-                    Status.Text = ex.ToString();
-                }
 
             }
         }
