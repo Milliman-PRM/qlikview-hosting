@@ -67,7 +67,6 @@ namespace MillimanCommon
         private string RepoFilePath { get; set; }
         private static System.IO.FileSystemWatcher FileWatcher { get; set; }
 
-        /////
         public bool Save()
         {
             StopFileWatcher();  //we are a producer,  stop watching since we always write things
@@ -78,6 +77,10 @@ namespace MillimanCommon
             return true;
         }
 
+        /// <summary>
+        /// Allocate and start a file watcher
+        /// </summary>
+        /// <param name="RepoFilePath"></param>
         public static void StartFileWatcher(string RepoFilePath)
         {
             //start watching if not already watching
@@ -90,8 +93,15 @@ namespace MillimanCommon
             }
         }
 
+        /// <summary>
+        /// We have triggered that a change happened, so reprocess the group map
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public static void FileWatcher_Changed(object sender, System.IO.FileSystemEventArgs e)
         {
+            StopFileWatcher();  //stop looking we have already been signaled for a change
+
             //wait for at least 30 seconds to load
             string RepoFilePath = ConfigurationManager.AppSettings["MillimanGroupMap"];
             FileInfo FI = new FileInfo(RepoFilePath);
@@ -104,11 +114,22 @@ namespace MillimanCommon
                 System.Threading.Thread.Sleep(1000);
             }
 
+            //following two lines corrects the issue of the group map not reloading
+            //kill this instance of the group map
+            KillInstance();
+            //rebuild and reload it
+            GetInstance();
+
             //this will null out the current instance and reload it with new data
             UserRepo.KillInstance();
             UserRepo.GetInstance(); //this will reload everything
         }
 
+        /// <summary>
+        /// Look to see if the file is locked by another process that may be writing it
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
         public static bool IsFileLocked(FileInfo file)
         {
             FileStream stream = null;
@@ -135,41 +156,24 @@ namespace MillimanCommon
             return false;
         }
 
+        /// <summary>
+        /// Turn off the file watcher for now
+        /// </summary>
         public static void StopFileWatcher()
         {
             if (FileWatcher != null)
                 FileWatcher.EnableRaisingEvents = false;
         }
 
-        public void TestData()
-        {
-            string[] R = Roles.GetAllRoles();
-            foreach (string S in R)
-            {
-                MillimanGroups MG = new MillimanGroups();
-                MG.MillimanGroupName = S;
-                MG.MaximumnUsers = 0;
-                MG.GroupCategory = "";
-                MillimanGroupDictionary.Add(S, MG);
-            }
-
-        }
-
         public static MillimanGroupMap Load()
         {
-            //un comment to generate test file
-            //MillimanGroupMap MGM = new MillimanGroupMap();
-            //MGM.TestData();
-            //MGM.Save();
-
             //this gets called first
             string GroupMapFile = ConfigurationManager.AppSettings["MillimanGroupMap"];
-            StartFileWatcher(GroupMapFile);
+            StartFileWatcher(GroupMapFile); // this will create the watcher if necessary
             //we need to make sure events are off while we load
-            //apparently sharp deserialize mods the file in some way thus we get
-            //multiple events that prompt loading
-            bool EventsEnabled = FileWatcher.EnableRaisingEvents;
-            FileWatcher.EnableRaisingEvents = false;
+            StopFileWatcher();  //don't let it run while we are loading from file
+
+            //start loading the group map
             MillimanGroupMap Repo = null;
             var serializer = new SharpSerializer(false);
             if (System.IO.File.Exists(GroupMapFile))
@@ -177,7 +181,7 @@ namespace MillimanCommon
                 Repo = serializer.Deserialize(GroupMapFile) as MillimanGroupMap;
                 Repo.RepoFilePath = GroupMapFile;
             }
-            FileWatcher.EnableRaisingEvents = EventsEnabled; //set back to original state
+            FileWatcher.EnableRaisingEvents = true;
             return Repo;
         }
     }
