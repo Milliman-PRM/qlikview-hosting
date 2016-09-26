@@ -214,6 +214,7 @@
     <Content Include="images\Equal.png" />
     <Content Include="images\firefox.png" />
     <Content Include="images\header.gif" />
+    <Content Include="images\history.png" />
     <Content Include="images\hover.gif" />
     <Content Include="images\login-bg.png" />
     <Content Include="images\magnify.png" />
