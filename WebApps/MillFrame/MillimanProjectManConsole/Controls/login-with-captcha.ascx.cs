@@ -122,19 +122,19 @@ public partial class controls_login_with_captcha : System.Web.UI.UserControl
         string loginPassword = Login1.Password;
 
         // find captcha control in login control
-        //WebControlCaptcha.CaptchaControl loginCAPTCHA = (WebControlCaptcha.CaptchaControl)Login1.FindControl("CAPTCHA");
+        WebControlCaptcha.CaptchaControl loginCAPTCHA = (WebControlCaptcha.CaptchaControl)Login1.FindControl("CAPTCHA");
         MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Info, "starting validation");
 
         //VWN bypass captcha for now
         // First, check if CAPTCHA matches up
-        //if (!loginCAPTCHA.UserValidated)
-        //{
-        //    // CAPTCHA invalid
-        //    lblFailureText.Text = "Security Code MISSING or INCORRECT!";
-        //    lblFailureText.Visible = true;
-        //    e.Authenticated = false;
-        //}
-        //else
+        if (!loginCAPTCHA.UserValidated)
+        {
+            // CAPTCHA invalid
+            lblFailureText.Text = "Security Code MISSING or INCORRECT!";
+            lblFailureText.Visible = true;
+            e.Authenticated = false;
+        }
+        else
         {
             //sync local cache to remote authentication cache
             SyncToRemoteServer(loginUsername, loginPassword); 
