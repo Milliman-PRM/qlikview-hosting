@@ -336,7 +336,7 @@
                             </div>
                             <div class="formLabelsText">
                                 <asp:TextBox ID="OldPasswordTextbox" runat="server" TextMode="Password" Width="140px" Visible="False"></asp:TextBox>
-                                <asp:RequiredFieldValidator ID="OldPasswordRequiredValidator" runat="server" ControlToValidate="OldPasswordTextbox" Display="Dynamic" ErrorMessage="Required" ValidationGroup="changepassword"></asp:RequiredFieldValidator>
+<%--                                <asp:RequiredFieldValidator ID="OldPasswordRequiredValidator" runat="server" ControlToValidate="OldPasswordTextbox" Display="Dynamic" ErrorMessage="Required" ValidationGroup="changepassword"></asp:RequiredFieldValidator>--%>
                                 <span class="currentPW">
                                     <asp:TextBox Style="background-color: transparent; width: 300px" ID="lblCurrentPassword" runat="server" EnableViewState="False" ReadOnly="True"></asp:TextBox>
                                 </span>
