@@ -309,7 +309,8 @@ public partial class Default : System.Web.UI.Page
                     Response.Redirect("NotAuthorizedIssue.html");
                     return string.Empty;
                 }
-                else if (( Membership.GetUser(CE.UserName).ProviderUserKey.ToString() != CE.UserKey.ToString() ) && ( Membership.GetUser(CE.UserName).IsOnline == false ) )
+                ///               this checks to see if the user is the origin of the token                   this to see if the token originator is OFFLINE
+                else if (( Membership.GetUser().ProviderUserKey.ToString() != CE.UserKey.ToString() ) || ( Membership.GetUser(CE.UserName).IsOnline == false ) )
                 {
                     Response.Redirect("NotAuthorizedIssue.html");
                     return string.Empty;
