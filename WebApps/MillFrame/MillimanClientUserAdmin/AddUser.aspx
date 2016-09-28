@@ -63,7 +63,7 @@
                                 </telerik:RadPanelItem>
                             </Items>
                     </telerik:RadPanelItem>
-                    <telerik:RadPanelItem Text="User Download Selections" Expanded="false">
+                    <telerik:RadPanelItem Text="User Download Selections" Expanded="false" Visible="False">
                             <Items>
                                <telerik:RadPanelItem Value="DownloadHolder">
                                     <ItemTemplate>
