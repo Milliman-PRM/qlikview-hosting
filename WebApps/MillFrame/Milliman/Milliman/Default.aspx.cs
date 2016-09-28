@@ -222,7 +222,7 @@ namespace MillimanDev
                     //don't show if no users are allowed
                     if (MGM.MillimanGroupDictionary[MyRoles[0]].MaximumnUsers > 0)
                         return XML.Replace(ReplacementTag, SubMenu);
-                    return "";
+                    return XML.Replace(ReplacementTag, "");
                 }
                 else if (MyRoles.Count > 1)
                 {
