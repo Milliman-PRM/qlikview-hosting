@@ -96,7 +96,7 @@ namespace MillimanCommon
             {
             }
 
-            public SuperGroupContainer(string Name, string Description, List<string> AdminAccounts, List<string> PublishingAccounts, List<string> Groups, bool SemiColonForEmails = false )
+            public SuperGroupContainer(string Name, string Description, List<string> AdminAccounts, List<string> PublishingAccounts, List<string> Groups, bool SemiColonForEmails = false)
             {
                 _ContainerName = Name;
                 _ContainerDescription = Description;
@@ -121,10 +121,14 @@ namespace MillimanCommon
         /// <returns></returns>
         public List<SuperGroupContainer> GetSupersForClientAdmin(string ClientAdminName)
         {
+            //Verify the settings are valid each time a user attempts access, could have
+            //changed via group being removed from user
+            ValidateUserForSuperGroup(ClientAdminName);
+
             List<SuperGroupContainer> Supers = new List<SuperGroupContainer>();
             if (SuperGroupContainers == null)
             {
-                Report.Log( Report.ReportType.Error, "Super group file is missing - '" + SuperGroupFilePath + @"'");
+                Report.Log(Report.ReportType.Error, "Super group file is missing - '" + SuperGroupFilePath + @"'");
                 return Supers;
             }
             foreach (SuperGroupContainer SGC in SuperGroupContainers)
@@ -151,6 +155,10 @@ namespace MillimanCommon
         /// <returns></returns>
         public List<SuperGroupContainer> GetSupersForPublishingAdmin(string ClientAdminName)
         {
+            //Verify the settings are valid each time a user attempts access, could have
+            //changed via group being removed from user
+            ValidateUserForSuperGroup(ClientAdminName);
+
             List<SuperGroupContainer> Supers = new List<SuperGroupContainer>();
             if (SuperGroupContainers == null)
             {
@@ -174,25 +182,59 @@ namespace MillimanCommon
             return Supers;
         }
 
-        public SuperGroupContainer FindSuper( string SuperGroupName )
+        /// <summary>
+        /// Check to see if the user exists in all the groups in the supegroup
+        /// before we show the user a menu - if we mod the supergroup we need to
+        /// resave so it shows up correctly in the user admin console
+        /// </summary>
+        /// <param name="SuperGroup"></param>
+        /// <param name="User"></param>
+        private void ValidateUserForSuperGroup(string User)
+        {
+            //if we have not supers or I am an admin, don't scrub
+            if ((SuperGroupContainers == null) || (System.Web.Security.Roles.IsUserInRole("administrator")))
+                return;  //nothing to do
+
+            bool Modified = false;
+            foreach (SuperGroupContainer Current in SuperGroupContainers)
+            {
+                foreach (string GroupName in Current.GroupNames)
+                {
+                    //check to see user is in EVERY role of supergroup
+                    if (System.Web.Security.Roles.IsUserInRole(User, GroupName) == false)
+                    {
+                        Current.PublisherUserAccounts.Remove(User);
+                        Current.AdminUserAccounts.Remove(User);
+                        Modified = true;
+                    }
+                }
+            }
+            if ((Modified) && (SuperGroupContainers != null))
+            {
+                //user not in every group - we removed them so re-save
+                Save();
+            }
+        }
+
+        public SuperGroupContainer FindSuper(string SuperGroupName)
         {
             if (SuperGroupContainers == null)
                 return null;
-            foreach( SuperGroupContainer SGC in SuperGroupContainers)
+            foreach (SuperGroupContainer SGC in SuperGroupContainers)
             {
                 if (string.Compare(SGC.ContainerName, SuperGroupName, true) == 0)
                     return SGC;
             }
-            return null ;
+            return null;
         }
 
-        public bool DeleteSuper( string SuperGroupName )
+        public bool DeleteSuper(string SuperGroupName)
         {
             if (SuperGroupContainers == null)
                 return false;
-            for( int Index = SuperGroupContainers.Count-1; Index >= 0; Index--)
+            for (int Index = SuperGroupContainers.Count - 1; Index >= 0; Index--)
             {
-                if ( string.Compare(SuperGroupContainers[Index].ContainerName, SuperGroupName, true) == 0 )
+                if (string.Compare(SuperGroupContainers[Index].ContainerName, SuperGroupName, true) == 0)
                 {
                     SuperGroupContainers.RemoveAt(Index);
                     Save();
@@ -243,7 +285,7 @@ namespace MillimanCommon
         {
             StopFileWatcher();  //we are a producer,  stop watching since we always write things
             var serializer = new SharpSerializer(false);
-            serializer.Serialize(this,SuperGroupFilePath);
+            serializer.Serialize(this, SuperGroupFilePath);
             return true;
         }
 
@@ -278,7 +320,7 @@ namespace MillimanCommon
             SuperGroup.GetInstance(); //this will reload everything
         }
 
-        public static bool IsFileLocked( System.IO.FileInfo file)
+        public static bool IsFileLocked(System.IO.FileInfo file)
         {
             System.IO.FileStream stream = null;
 
