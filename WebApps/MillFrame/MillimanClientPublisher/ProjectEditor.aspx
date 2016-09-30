@@ -81,7 +81,7 @@
         .form-control{height:30px}
         .table{margin-bottom:5px}
         .page-header   {padding-bottom: 2px; margin: 5px 0 7px;border-bottom: 1px solid #eee;}
-        .RadUpload .ruInputs li {    list-style: none;}
+        .RadUpload .ruInputs li {list-style: none;}
         .borderless td, .borderless th {border: none;}
 
     </style>
@@ -182,11 +182,10 @@
             </div>
         </div>
         <!-- Modal ends Here -->
-
-
+        
         <div class="containerWrap">
             <div class="page-header engravedHeader">
-                <h5>Edit Project Settings</h5>
+                <h2>Edit Project Settings</h2>
             </div>
             <div class="left-div">
                 <%--window for the user profile info--%>
