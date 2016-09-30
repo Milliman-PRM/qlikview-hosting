@@ -62,7 +62,7 @@
     <div class="softRoundContainerStyle">
         <telerik:RadGrid runat="server" ID="RadGrid1" AllowSorting="True" AutoGenerateColumns="False" CellSpacing="5" GridLines="None"
             OnItemCommand="RadGrid1_ItemCommand"
-            AllowAutomaticDeletes="True" ViewStateMode="Enabled" MasterTableView-AllowAutomaticDeletes="True" ClientIDMode="AutoID">
+            AllowAutomaticDeletes="True" ViewStateMode="Enabled" MasterTableView-AllowAutomaticDeletes="True" ClientIDMode="AutoID" ClientSettings-ClientEvents-OnRowDeleting="RowDeleting">
             <MasterTableView EditMode="Batch" CommandItemDisplay="Top" TableLayout="Fixed">
                 <CommandItemTemplate>
                     <asp:LinkButton ID="Add" runat="server" CommandName="Add" Visible="true"><asp:Image runat="server" style="border:0px;vertical-align:middle;" alt="" ImageUrl="~/Images/Office-Girl-icon.png"/>Add List Entry</asp:LinkButton>&nbsp;&nbsp;
@@ -172,14 +172,35 @@
 <uc3:js ID="js3" runat="server" />
 <%-- jquery js --%>
 <uc4:jquery ID="jquery1" runat="server" />
-<script type="text/javascript">
 
-    function EnableDisable() {
-        return false;
-    }
+<telerik:RadScriptBlock ID="radscript3" runat="server"> 
+    <script type="text/javascript">
 
-    function ConfirmAction() {
-        return window.confirm("Are you certain you want to create these users?");
-    }
+        function EnableDisable() {
+            return false;
+        }
 
-</script>
+        function ConfirmAction() {
+            return window.confirm("Are you certain you want to create these users?");
+        }
+          //This method is used when deleting the 'last' row in the grid, it cancels the removal of the 
+            //last row and clear then values in the row.  Event is attached to deleting row of RadGrid
+            function RowDeleting(sender, eventArgs)
+            {
+                var grid = $find('<%=RadGrid1.ClientID %>');
+                if (grid) {
+                    var MasterTable = grid.get_masterTableView();
+                    if (MasterTable) {
+                        var Rows = MasterTable.get_dataItems();
+                        if (Rows.length == 1) { //only when 1 row
+                            //clear the values
+                            Rows[0].get_cell("AccountNameText").childNodes[1].value = "";
+                            Rows[0].get_cell("SendWelcome").childNodes[1].checked = false;
+                            eventArgs.set_cancel(true);
+                        }
+                    }
+                }
+            }
+
+    </script>
+</telerik:RadScriptBlock>

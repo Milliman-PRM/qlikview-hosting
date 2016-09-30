@@ -380,6 +380,16 @@ namespace MillimanCommon
 
                 SS.Serialize(this, PathFilename);
 
+                //Issue1298 - this issue is caused by client publisher deriving off the project settings
+                //class.  When serializing, it uses the type of the derived class instead of project
+                //settings.  This could be corrected by a copy contructor to create a new instance, or 
+                //by a custom searilize - however both are alot of work to accomplish changing
+                //the searlize type - when the following 3 lines below corrects it
+                var fileContents = System.IO.File.ReadAllText(PathFilename);
+                fileContents = fileContents.Replace("ClientPublisher.ProjectSettingsExtension, ClientPublisher", "MillimanCommon.ProjectSettings, MillimanCommon");
+                System.IO.File.WriteAllText(PathFilename, fileContents);
+
+
                 return true;
             }
             catch (Exception)
