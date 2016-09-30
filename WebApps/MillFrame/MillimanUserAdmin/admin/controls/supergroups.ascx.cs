@@ -26,21 +26,21 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
         base.OnLoad(e);
     }
 
-    private void ActiveInterface( bool IsActive )
+    private void ActiveInterface(bool IsActive)
     {
         Description.Enabled = IsActive;
         UseCommaDelimited.Enabled = IsActive;
         SmartLinkOn.Enabled = IsActive;
         RemoveGroup.Enabled = IsActive;
         AddToSuperGroup.Enabled = IsActive;
-        RemoveAdmin.Enabled = IsActive;
-        AddAdmin.Enabled = IsActive;
+        //RemoveAdmin.Enabled = IsActive;    commented out waiting on Millframe 4.5
+        //AddAdmin.Enabled = IsActive;       commented out waiting on Millframe 4.5
         RemovePublisher.Enabled = IsActive;
         AddPublisher.Enabled = IsActive;
         AllGroups.Enabled = IsActive;
-        AllAdmins.Enabled = IsActive;
+        //AllAdmins.Enabled = IsActive;       commented out waiting on Millframe 4.5
         AllPublishers.Enabled = IsActive;
-        if ( IsActive == false )
+        if (IsActive == false)
         {
             GroupsInSuper.Items.Clear();
             PublishingUsers.Items.Clear();
@@ -69,17 +69,17 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
         {
             ActiveInterface(true);
 
-            SelectedSuperGroup.Text = SelectedSGC.ContainerName ;
+            SelectedSuperGroup.Text = SelectedSGC.ContainerName;
 
             Description.Text = SelectedSGC.ContainerDescription;
-
-            ClientAdminUsers.DataSource = SelectedSGC.AdminUserAccounts;
+            //don't allow a null binding to be passed in - null binding will not clear control
+            ClientAdminUsers.DataSource = (SelectedSGC.AdminUserAccounts == null ? new List<string>() : SelectedSGC.AdminUserAccounts);
             ClientAdminUsers.DataBind();
-
-            PublishingUsers.DataSource = SelectedSGC.PublisherUserAccounts;
+            //don't allow a null binding to be passed in - null binding will not clear control
+            PublishingUsers.DataSource = (SelectedSGC.PublisherUserAccounts == null ? new List<string>() : SelectedSGC.PublisherUserAccounts);
             PublishingUsers.DataBind();
-
-            GroupsInSuper.DataSource = SelectedSGC.GroupNames;
+            //don't allow a null binding to be passed in - null binding will not clear control
+            GroupsInSuper.DataSource = (SelectedSGC.GroupNames == null ? new List<string>() : SelectedSGC.GroupNames);
             GroupsInSuper.DataBind();
 
             UseCommaDelimited.Checked = SelectedSGC.SemiColonDelimitedEmail;
@@ -89,7 +89,7 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
 
             List<string> ClientAdmins = null;
             List<string> PublisherAdmins = null;
-            if ( GetValidAdminsForGroups( SelectedSGC.GroupNames, out ClientAdmins, out PublisherAdmins))
+            if (GetValidAdminsForGroups(SelectedSGC.GroupNames, out ClientAdmins, out PublisherAdmins))
             {
                 MutuallyExclusiveLists(SelectedSGC.AdminUserAccounts, ref ClientAdmins);  //remove redundanate selections
                 MutuallyExclusiveLists(SelectedSGC.PublisherUserAccounts, ref PublisherAdmins);
@@ -134,22 +134,22 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
     /// <param name="ClientAdmins"></param>
     /// <param name="PublisherAdmins"></param>
     /// <returns></returns>
-    private bool GetValidAdminsForGroups(List<string> GroupNames, out List<string> ClientAdmins, out List<string> PublisherAdmins )
+    private bool GetValidAdminsForGroups(List<string> GroupNames, out List<string> ClientAdmins, out List<string> PublisherAdmins)
     {
-        if ( GroupNames.Count == 0 )
+        if (GroupNames.Count == 0)
         {   //no groups, just give back empty lists
             ClientAdmins = new List<string>();
             PublisherAdmins = new List<string>();
             return true;
         }
-        if ( GetAllClientUserAndPublisherAdmins(out ClientAdmins, out PublisherAdmins ))
+        if (GetAllClientUserAndPublisherAdmins(out ClientAdmins, out PublisherAdmins))
         {
-            foreach( string Group in GroupNames )
+            foreach (string Group in GroupNames)
             {
-                for( int Index = ClientAdmins.Count-1; Index >= 0; Index--)
+                for (int Index = ClientAdmins.Count - 1; Index >= 0; Index--)
                 {
                     //admins are always good :-)
-                    if (Roles.IsUserInRole(ClientAdmins[Index], "administrator") == false )
+                    if (Roles.IsUserInRole(ClientAdmins[Index], "administrator") == false)
                     {
                         if (Roles.IsUserInRole(ClientAdmins[Index], Group) == false)
                             ClientAdmins.RemoveAt(Index);
@@ -168,7 +168,7 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
             return true;
         }
 
-        return false ;
+        return false;
     }
 
 
@@ -181,26 +181,28 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
     /// <returns></returns>
     private bool GetAllClientUserAndPublisherAdmins(out List<string> ClientAdmins, out List<string> PublisherAdmins)
     {
-        if ((Session["ALLCLIENTADMINS"] != null) && (Session["ALLPUBLISHERADMINS"] != null))
-        {
-            ClientAdmins = Session["ALLCLIENTADMINS"] as List<string>;
-            PublisherAdmins = Session["ALLPUBLISHERADMINS"] as List<string>;
-            return true;
-        }
+        //removed optimized version - can result in issues
+        //if ((Session["ALLCLIENTADMINS"] != null) && (Session["ALLPUBLISHERADMINS"] != null))
+        //{
+        //    ClientAdmins = Session["ALLCLIENTADMINS"] as List<string>;
+        //    PublisherAdmins = Session["ALLPUBLISHERADMINS"] as List<string>;
+        //    return true;
+        //}
 
         bool ClientResults = GetAdmins(AdminType.User, out ClientAdmins);
         bool PublisherResults = GetAdmins(AdminType.Publisher, out PublisherAdmins);
 
-        if (( ClientResults == false ) || (PublisherResults == false))
+        if ((ClientResults == false) || (PublisherResults == false))
         {
             ClientAdmins = new List<string>();
             PublisherAdmins = new List<string>();
             MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "Failed to retrieve publisher and client admins from DB");
         }
 
+        //removed optimized version - can result in issues
         //to save on processing time put these in session to cache for now
-        Session["ALLCLIENTADMINS"] = ClientAdmins;
-        Session["ALLPUBLISHERADMINS"] = PublisherAdmins;
+        //Session["ALLCLIENTADMINS"] = ClientAdmins;
+        //Session["ALLPUBLISHERADMINS"] = PublisherAdmins;
 
         return true;
     }
@@ -212,7 +214,7 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
     protected void Update_Click(object sender, EventArgs e)
     {
         //save all changes for group
-        if ( string.IsNullOrEmpty(SuperGroups.SelectedValue))
+        if (string.IsNullOrEmpty(SuperGroups.SelectedValue))
             return;
 
         MillimanCommon.SuperGroup SG = MillimanCommon.SuperGroup.GetInstance();
@@ -245,7 +247,7 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
     protected void AddNewSuperGroup_Click(object sender, EventArgs e)
     {
         string SGName = NewSuperGroupName.Text;
-        if ( string.IsNullOrEmpty(SGName))
+        if (string.IsNullOrEmpty(SGName))
         {
             MillimanCommon.Alert.Show("A super group name was not entered");
             NewSuperGroupName.Focus();
@@ -260,7 +262,7 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
                 Found = true;
             }
         }
-        if ( Found )
+        if (Found)
         {
             MillimanCommon.Alert.Show("'" + SGName + "' is already in use. Please choose another name.");
             NewSuperGroupName.Text = "";
@@ -281,7 +283,7 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
             AllPublishers.Items.Clear();
             AddGroups(new List<string>());
             ActiveInterface(true);
-        
+
         }
     }
     protected void DeleteSuperGroup_Click(object sender, EventArgs e)
@@ -290,7 +292,7 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
         {
             if (string.IsNullOrEmpty(SuperGroups.SelectedValue))
                 return;
-                        
+
             string DeleteGroup = SuperGroups.SelectedValue;
             SuperGroups.Items.RemoveAt(SuperGroups.SelectedIndex);
             MillimanCommon.SuperGroup SG = MillimanCommon.SuperGroup.GetInstance();
@@ -336,11 +338,12 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
     }
     protected void RemoveAdmin_Click(object sender, EventArgs e)
     {
-        if (ClientAdminUsers.SelectedIndex >= 0)
-        {
-            AllAdmins.Items.Add(ClientAdminUsers.SelectedValue);
-            ClientAdminUsers.Items.RemoveAt(ClientAdminUsers.SelectedIndex);
-        }
+        //commented out waiting on Millframe 4.5
+        //if (ClientAdminUsers.SelectedIndex >= 0)
+        //{
+        //    AllAdmins.Items.Add(ClientAdminUsers.SelectedValue);
+        //    ClientAdminUsers.Items.RemoveAt(ClientAdminUsers.SelectedIndex);
+        //}
     }
     protected void RemovePublisher_Click(object sender, EventArgs e)
     {
@@ -377,15 +380,16 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
     }
     protected void AddAdmin_Click(object sender, EventArgs e)
     {
-        if (AllAdmins.SelectedIndex >= 0)
-        {
-            string Admin = AllAdmins.SelectedValue;
-            if (ClientAdminUsers.Items.IndexOf(new ListItem(Admin)) == -1)
-            {
-                ClientAdminUsers.Items.Add(Admin);
-                AllAdmins.Items.RemoveAt(AllAdmins.SelectedIndex);  //remove from all list
-            }
-        }
+        //commented out waiting on Millframe 4.5
+        //if (AllAdmins.SelectedIndex >= 0)
+        //{
+        //    string Admin = AllAdmins.SelectedValue;
+        //    if (ClientAdminUsers.Items.IndexOf(new ListItem(Admin)) == -1)
+        //    {
+        //        ClientAdminUsers.Items.Add(Admin);
+        //        AllAdmins.Items.RemoveAt(AllAdmins.SelectedIndex);  //remove from all list
+        //    }
+        //}
     }
     protected void AddPublisher_Click(object sender, EventArgs e)
     {
@@ -400,7 +404,7 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
         }
     }
 
-    private List<string> ListItemsToStringList( ListBox LB)
+    private List<string> ListItemsToStringList(ListBox LB)
     {
         if (LB == null)
             return null;
@@ -412,7 +416,7 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
     }
 
     enum AdminType { User, Publisher }
-    private bool GetAdmins( AdminType Admin,out List<string> AdminAccounts)
+    private bool GetAdmins(AdminType Admin, out List<string> AdminAccounts)
     {
         AdminAccounts = new List<string>();
         //select aspnet_users.UserName from aspnet_users, aspnet_CustomProfile where (aspnet_users.UserId = aspnet_CustomProfile.UserId) AND (aspnet_CustomProfile.IsPublishingAdministrator = 'true')
@@ -450,7 +454,7 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
     /// </summary>
     /// <param name="IfInThisList"></param>
     /// <param name="RemoveFromThisList"></param>
-    private void MutuallyExclusiveLists( List<string> IfInThisList, ref List<string> RemoveFromThisList)
+    private void MutuallyExclusiveLists(List<string> IfInThisList, ref List<string> RemoveFromThisList)
     {
         if ((IfInThisList != null) && (RemoveFromThisList != null))
         {
