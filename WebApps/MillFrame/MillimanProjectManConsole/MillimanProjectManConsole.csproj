@@ -200,6 +200,22 @@
     <Content Include="ComplexUpload\QVWExtractor.aspx" />
     <Content Include="ComplexUpload\ReportGenerator.aspx" />
     <Content Include="ComplexUpload\SignatureVerification.aspx" />
+    <Content Include="Content\Images\eye-hide.png" />
+    <Content Include="Content\Images\eye-icon.png" />
+    <Content Include="Content\Images\Info-blue.png" />
+    <Content Include="Content\Images\InformationBulb.png" />
+    <Content Include="Content\Script\bootstrap-dialog.min.js" />
+    <Content Include="Content\Script\bootstrap.js" />
+    <Content Include="Content\Script\bootstrap.min.v3.3.7.js" />
+    <Content Include="Content\Script\jquery.min.js" />
+    <Content Include="Content\Script\jquery.min.v2.0.0.js" />
+    <Content Include="Content\Script\jquery.min.v2.1.1.js" />
+    <Content Include="Content\Script\jquery.v1.7.1.js" />
+    <Content Include="Content\Script\maskedinput.js" />
+    <Content Include="Content\Style\bootstrap-dialog.min.css" />
+    <Content Include="Content\Style\bootstrap.css" />
+    <Content Include="Content\Style\bootstrap.min.css" />
+    <Content Include="Content\Style\MillframeStyle.css" />
     <Content Include="Controls\login-with-captcha.ascx" />
     <Content Include="Css\styles.css" />
     <Content Include="DebugFileTemplate\Care_Coordinator_Report.txt" />
@@ -215,6 +231,7 @@
     <Content Include="images\firefox.png" />
     <Content Include="images\header.gif" />
     <Content Include="images\hover.gif" />
+    <Content Include="images\Info-blue.png" />
     <Content Include="images\login-bg.png" />
     <Content Include="images\magnify.png" />
     <Content Include="images\Milliman.gif" />
@@ -815,6 +832,9 @@
     <Content Include="Properties\DataSources\MillimanReportReduction.QMSAPIService.TriggerEDXTaskResult.datasource" />
     <Content Include="Properties\DataSources\MillimanReportReduction.QMSAPIService.UserCALs.datasource" />
     <Content Include="Properties\DataSources\System.Data.DataSet.datasource" />
+    <Content Include="Content\Images\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\Images\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\Images\glyphicons-halflings-regular.ttf" />
     <None Include="Properties\PublishProfiles\Debug.pubxml" />
     <Content Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
