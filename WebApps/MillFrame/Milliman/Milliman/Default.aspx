@@ -114,13 +114,13 @@
             <center>Copyright &copy Milliman 2016</center>
         </div>
 
-        <telerik:RadWindowManager EnableShadow="true" Behaviors="Resize, Close, Reload, Move" ID="RadWindowManager" 
+        <telerik:RadWindowManager EnableShadow="true" Behaviors="Resize, Close, Reload" ID="RadWindowManager" 
                                 DestroyOnClose="true" Opacity="100" runat="server" Width="450" Height="400" 
                                 VisibleStatusbar="False" Style="z-index: 20000;">
             <Windows>
                 <telerik:RadWindow ID="RadWindow1" runat="server" Animation="Fade" AutoSize="True" 
-                    Behaviors="Close, Move, Reload" Modal="True"
-                    Height="630px" Width="1008px" InitialBehaviors="Close" 
+                    Behaviors="Close, Reload" Modal="True"
+                    Height="600px" Width="1008px" InitialBehaviors="Close" 
                    Title="User Profile/Password Settings" VisibleStatusbar="False" VisibleTitlebar="False" />
             </Windows>
         </telerik:RadWindowManager>
@@ -132,7 +132,7 @@
             //$('#RadWindow1').html('<iframe border=0 width="100%" height ="100%" src="' + "profile.aspx.aspx" + '"> </iframe>');
             var wnd = window.radopen("profile.aspx", "User Profile/Password Settings", scrollbars = 1);
             ////setting window size
-            wnd.setSize(1008, 630);
+            wnd.setSize(1008, 600);
             wnd.set_modal(true);
             //windoScroll();
             wnd.Center();

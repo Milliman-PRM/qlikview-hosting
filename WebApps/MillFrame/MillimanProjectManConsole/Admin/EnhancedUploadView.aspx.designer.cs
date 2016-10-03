@@ -12,22 +12,22 @@
 public partial class EnhancedUploadView {
     
     /// <summary>
-    /// lnkBootstrapcss control.
+    /// lnkBS control.
     /// </summary>
     /// <remarks>
     /// Auto-generated field.
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
-    protected global::System.Web.UI.HtmlControls.HtmlLink lnkBootstrapcss;
+    protected global::System.Web.UI.HtmlControls.HtmlLink lnkBS;
     
     /// <summary>
-    /// lnkBootstrapDialogcss control.
+    /// lnkBSD control.
     /// </summary>
     /// <remarks>
     /// Auto-generated field.
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
-    protected global::System.Web.UI.HtmlControls.HtmlLink lnkBootstrapDialogcss;
+    protected global::System.Web.UI.HtmlControls.HtmlLink lnkBSD;
     
     /// <summary>
     /// Link1 control.
@@ -55,6 +55,15 @@ public partial class EnhancedUploadView {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::Telerik.Web.UI.RadScriptManager RadScriptManager1;
+    
+    /// <summary>
+    /// img2 control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.HtmlControls.HtmlImage img2;
     
     /// <summary>
     /// ProjectName control.

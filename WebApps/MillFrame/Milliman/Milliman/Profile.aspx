@@ -5,87 +5,56 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>User Profile/Password Settings</title>
-    <link id="lnkBootstrapcss" runat="server" rel="stylesheet" type="text/css" href="~/Css/bootstrap.css" />
+    <link id="lnkBootstrapcss" runat="server" rel="stylesheet" type="text/css" href="~/Content/Style/bootstrap.css" />
+    <link id="Link1" runat="server" rel="stylesheet" type="text/css" href="~/Content/Style/MillframeStyle.css" />
     <style type="text/css">
-        html {overflow:scroll;}
+        html{overflow:scroll}
         html,button,input,select,textarea,label{font-family:arial,"Times New Roman",Times,serif,sans-serif;font-size:12px;color:#222}
         body{margin:20px}
-        /*Standard Generic*/
-        .space{margin-bottom:5px}
-        .alert{border:1px solid transparent;border-radius:4px!important;margin-bottom:6px!important;padding:4px!important}
-        .weak{color:#999;font-size:14px}
-        .labelweak{color:#5f6162;font-size:12px;margin:5px -6px 3px 8px}
-        .required:after{content:" *";font-weight:700;color:#c1c1c1;font-size:20px;margin:0;float:right}
-        .textbox-focus{border:2px solid #00C;background:#def}
-        .roundShadowContainer{background:#fefefe;border:1px solid #c4cddb;padding:0;margin:0 auto;border-top-color:#d3dbde;border-bottom-color:#bfc9dc;box-shadow:0 1px 1px #ccc;border-radius:5px;}
-        .roundShadowContainer h2{margin:0;padding:10px 0;font-size:18px;text-align:center;background:#ebebec;border-bottom:1px solid #dde0e7;box-shadow:0 -1px 0 #fff inset;border-radius:5px 5px 0 0;text-shadow:1px 1px 0 #fff;font-weight:700}
-        .roundShadowContainer h3{margin:0;padding:10px 0;font-size:16px;text-align:center;background:#ebebec;border-bottom:1px solid #dde0e7;box-shadow:0 -1px 0 #fff inset;border-radius:5px 5px 0 0;text-shadow:1px 1px 0 #fff;font-weight:700}
-        .roundShadowContainer ul,li{margin:0;padding:0;list-style-type:square}
-        .roundShadowContainer input{border:1px solid #d5d9da;border-radius:5px;box-shadow:0 0 5px #e8e9eb inset;outline:0}
-        .roundShadowContainer {width:435px;}
-        .fieldSetWithBorder{border:2px dashed #eee;margin:2px 2px 3px 3px;overflow:hidden;padding:2px;width:217px}
-        .fieldSetWithBorder legend{font-size:14px;line-height:inherit}
-         .first-of-type{margin:4px 3px 4px -2px}
-        .addBar{font-size:14px;font-weight:700;margin:-1px 36px -3px;overflow:hidden;width:300px}
-        .ddl{border:2px solid #d5d9da;border-radius:3px;padding:3px;text-indent:.01px;font-size:13px;font-family:Georgia;margin:6px 6px 0 2px}
-         /*Password Generic*/
-        #divPasswordCriteriaContainer{font-size:.8em;}
-        #divPasswordCriteriaContainer{display:none;padding:6px;position:absolute;width:236px;z-index:2000;}
-        #divPasswordCriteriaContainer:before{content:"\25B2";position:absolute;top:-10px;left:45%;font-size:14px;line-height:12px;color:#ddd;display:block}
-        #divPasswordCriteriaContainer h1,h2,h3,h4{margin:0 0 10px;padding:0;font-weight:400}
-        #divPasswordCriteriaContainer ul,li{list-style-type:circle;margin:4px 3px 4px 4px;padding:2px 1px 3px 9px;width:203px}
-        .invalidPassword,.validPassword{padding-left:6px;line-height:12px}
-        .invalidPassword{color:#ec3f41}
-        .validPassword{color:#3a7d34}
-        .badMatch{color:#f66}
-        .dashedSeparator{margin:25px 0;border-bottom:dashed 1px #666}
-        /*bootstra specifc*/
-        .container{width:832px}
-         td{padding:4px!important}
-        .form-control{height:30px}
-        .table{margin-bottom:5px}
-        .page-header {padding-bottom: 10px;margin: 5px 0 10px;border-bottom: 1px solid #eee;}
-        /*password hint*/
-        .PWHsmallContainer{background: #f4f9fb none repeat scroll 0 0;border: 2px dashed #ddd;width: 349px;}     
-        .PWHshowHideDivHeader{width: 123px;padding:0;margin:4px 8px 9px 1px;cursor:pointer;}
-        .showPassword{float:right;margin:-25px 13px 0 0}          
-        .listUL{font-size:12px;list-style-type:square;margin:2px 0 1px 12px;padding:2px 1px 1px 6px;width:312px}
-        .listLi{font-size:12px;list-style-type:square;margin:3px 0 -2px 32px;padding:2px 1px 1px 6px;width:267px}   
-        #divPasswordHintCriteria{background:#fefefe none repeat scroll 0 0;border:1px solid #ddd;
-                                 border-radius:5px;box-shadow:0 1px 3px #ccc;display:none;font-size:.8em;
-                                 height:161px;padding:6px;position:absolute;width:365px;z-index:2000}
-         /*Layout*/
-          .containerWrap{text-align:center;padding:15px;background-color: #f5f5f5;width: 100%;}
-          .left-div{display:inline-block;max-width:435px;text-align:left;padding:3px;margin:3px;vertical-align:top}
-          .right-div{display:inline-block;max-width:435px;text-align:left;padding:3px;margin:3px}
-      /* info box*/
-        .infoBox{color:#8a6d3b;background-color:#fcf8e3;border-color:#faebcc;margin:0 auto!important}
-        .engravedHeader{color:#333;font: 80px 'LeagueGothicRegular'; text-shadow: 0px 1px 0px rgba(255,255,255,255);}
     </style>
 
+    <script src="Content/Script/jquery.v1.7.1.js"></script>
     <script type="text/javascript">
-        function getRadWindow() {
-            var oWindow = null;
-            if (window.radWindow)
-                oWindow = window.radWindow;
-            else if (window.frameElement.radWindow)
-                oWindow = window.frameElement.radWindow;
-            return oWindow;
-        }
+            function getRadWindow() {
+                var oWindow = null;
+                if (window.radWindow)
+                    oWindow = window.radWindow;
+                else if (window.frameElement.radWindow)
+                    oWindow = window.frameElement.radWindow;
+                return oWindow;
+            };
 
         // Reload parent page
-        function CloseDialog() {
-            var ThisDialog = getRadWindow();
-            var Parent = getRadWindow().BrowserWindow;
-            Parent.radalert('Profile/Password information has been saved.', 350, 150, "Information Saved");
-            ThisDialog.close();
-        }              
+            function CloseDialog() {
+                var ThisDialog = getRadWindow();
+                var Parent = getRadWindow().BrowserWindow;
+                Parent.radalert('Profile/Password information has been saved.', 350, 150, "Information Saved");
+                ThisDialog.close();
+            };
 
     </script>
 </head>
 <body style="background-color: white; background-image: url(images/watermark.png); background-repeat: repeat;" onload="OnLoad();">
     <form id="form1" runat="server">
-         <div class="containerWrap">
+
+        <div class="containerWrap">
+        <%--divImportantHint hint--%>
+        <div id="divImportant" class="divImportant" style="width: 23px; float: left;">
+            <img id="img2" src="~/Content/Images/Info-blue.png" runat="server" width="18" height="18" style="margin: 2px 6px 6px 2px;" />
+            <i class="glyphicons glyphicons-info-sign"></i>
+            <div id="divImportantHint">
+                <div class="alert alert-warning infoBox text-justify">
+                    <strong>Important!</strong> 
+                    <br />
+                    Please complete all required fields marked with an asterisk (*).
+                     <%--Allowed special Chars--%>
+                    <div id="divSpecialChars">
+                        Allowed Special Characters in name:&nbsp;&nbsp;<asp:Label ID="lblAllowedChars" runat="server"></asp:Label>
+                    </div>                    
+                </div>                
+            </div>           
+        </div>
+        <%--divImportantHint hint--%>
             <div class="page-header engravedHeader">
                 <h2>User Profile  <small>Password Settings</small></h2>
             </div>
@@ -99,8 +68,8 @@
                                 <td>
                                     <label for="UserFirstName" class="labelweak">First Name:</label></td>
                                 <td>
-                                    <input id="UserFirstName" name="UserFirstName" type="text" runat="server" class="form-control" 
-                                        placeholder="first name..."    maxlength="50" style="width: 185px;" tabindex="1" 
+                                    <input id="UserFirstName" name="UserFirstName" type="text" runat="server" class="form-control"
+                                        placeholder="first name..." maxlength="50" style="width: 185px;" tabindex="1"
                                         onclick="this.select(); removeClass(this, 'textbox-focus');" />
                                 </td>
                             </tr>
@@ -125,34 +94,35 @@
                                 </td>
                                 <td>
                                     <input id="Phone" name="Phone" type="text" runat="server" class="form-control phone" placeholder="(000)000-0000"
-                                         style="width: 185px;" tabindex="3" onclick="removeClass(this, 'textbox-focus');" />
+                                        style="width: 185px;" tabindex="3" onclick="removeClass(this, 'textbox-focus');" />
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
                 <%--window for the user profile info--%>
-                <%--password hint--%>
-                <div id="divPasswordHint" class="PWHshowHideDivHeader">
-                    <span class="weak">Password Hint&nbsp;<img id="imgShow" src="~/Images/InformationBulb.png" runat="server"
-                        width="18" height="18" style="margin: 2px 6px 6px 2px;" />
-                    </span>
-                    <div id="divPasswordHintCriteria">
-                        <div class="PWHsmallContainer">
-                            <fieldset class="first-of-type">
-                                <legend id="litLegend" class="addBar">Your password must:</legend>
-                                <ul class="listUL">
-                                    <li class="listLi">Be at least 8 characters long</li>
-                                    <li class="listLi">Contain a capital letter [A-Z]</li>
-                                    <li class="listLi">Contain a lowercase letter [a-z]</li>
-                                    <li class="listLi">Contain a number [0-9]</li>
-                                    <li class="listLi">Contain a special character [~!@#$%^&*;?+_.]</li>
-                                </ul>
-                            </fieldset>
+                <div id="divHints">
+                    <%--password hint--%>
+                    <div id="divPasswordHint" class="divPasswordHintHeader">
+                        <span class="weak">Password Hint&nbsp;<img id="imgShow" src="~/Content/Images/InformationBulb.png" runat="server"
+                            width="18" height="18" style="margin: 2px 6px 6px 2px;" />
+                        </span>
+                        <div id="divPasswordHintCriteria">
+                            <div class="divPasswordHintSmallContainer">
+                                <fieldset class="first-of-type">
+                                    <legend id="litLegend" class="addBar">Your password must:</legend>
+                                    <ul class="listUL">
+                                        <li class="listLi">Be at least 8 characters long</li>
+                                        <li class="listLi">Contain a capital letter [A-Z]</li>
+                                        <li class="listLi">Contain a lowercase letter [a-z]</li>
+                                        <li class="listLi">Contain a number [0-9]</li>
+                                        <li class="listLi">Contain a special character <asp:Label ID="lblAllowedSpecialCharactersInPassword" runat="server"></asp:Label></li>
+                                    </ul>
+                                </fieldset>
+                            </div>
                         </div>
-                    </div>
+                    </div>                    
                 </div>
-                <%--password hint--%>
             </div>
             <div class="right-div">
                 <%--window for the user Password Verification info--%>
@@ -164,9 +134,7 @@
                                 <td>
                                     <label for="CurrentPassword" class="labelweak required">Current Password:&nbsp;</label></td>
                                 <td>
-<%--                                    <input id="CurrentPassword" name="CurrentPassword" type="password" runat="server" class="form-control"
-                                        style="width: 185px;" tabindex="4" onclick="this.select(); removeClass(this, 'textbox-focus');" />--%>
-                                    <asp:TextBox ID="CurrentPassword" runat="server" class="form-control" TextMode="Password" Width="185px" onclick="this.select(); removeClass(this, 'textbox-focus');" >
+                                    <asp:TextBox ID="CurrentPassword" runat="server" class="form-control" TextMode="Password" Width="185px" onclick="this.select(); removeClass(this, 'textbox-focus');">
                                     </asp:TextBox>
                                 </td>
                             </tr>
@@ -175,15 +143,14 @@
                                     <label for="NewPassword" class="labelweak required">New Password:&nbsp;</label></td>
                                 <td>
                                     <input id="NewPassword" name="NewPassword" type="password" runat="server" class="NewPassword form-control"
-                                        style="width: 185px;" tabindex="5" onclick="this.select(); removeClass(this, 'textbox-focus');" />
-
-                                    <img src="Images/eye-icon.png" class="showPassword"
+                                        style="width: 185px;" tabindex="5" onclick="this.select(); removeClass(this, 'textbox-focus');" />                                 
+                                    <img src="Content/Images/eye-icon.png" class="showPassword"
                                         id="imageShowPassword" onclick="changeImage(this)" width="18" height="18" />
                                     <div id="divPasswordCriteriaContainer" class="passwordCriteria roundShadowContainer">
                                         <fieldset class="fieldSetWithBorder">
                                             <legend>Password Criteria</legend>
                                             <div id="divcriteria" style="margin: -15px 0 0 1px;">
-                                                <ul>                                                   
+                                                <ul>
                                                     <li id="capital" class="invalidPassword">At least <strong>one capital letter</strong></li>
                                                     <li id="lowercase" class="invalidPassword">At least <strong>one lowercase letter</strong></li>
                                                     <li id="number" class="invalidPassword">At least <strong>one number</strong></li>
@@ -238,7 +205,7 @@
                                     <label for="Answer" class="labelweak required">Answer:&nbsp;</label></td>
                                 <td>
                                     <input id="Answer" name="Answer" type="text" runat="server" class="form-control"
-                                        style="width: 295px;" tabindex="7" maxlength="128"  onclick="this.select(); removeClass(this, 'textbox-focus');" />
+                                        style="width: 295px;" tabindex="7" maxlength="128" onclick="this.select(); removeClass(this, 'textbox-focus');" />
                                 </td>
                             </tr>
                         </tbody>
@@ -248,16 +215,12 @@
             </div>
             <div class="space"></div>
             <div class="row">
-                <div class="center-block" style="float: none;width: 415px;">
-                    <div class="alert alert-warning infoBox">
-                        <strong>Important!</strong> All required fields are marked with an asterisk (*).
-                    </div>
-                    <div class="space"></div>
-                    <div class="col-md-8" style="float: none;">
+                <div class="center-block" style="float: none; width: 415px;">
+                    <div class="col-md-9">
                         <asp:Button ID="Button1" runat="server" CommandName="ChangePassword" Text="Apply Changes"
                             OnClick="ChangePasswordPushButton_Click" CssClass="btn btn-primary"
                             OnClientClick="return Validate();" />
-                        <asp:Button ID="Button2" runat="server" CommandName="ResetForm" Text="Reset Form" CssClass="btn btn-primary"
+                        <asp:Button ID="Button2" runat="server" CommandName="ResetForm" Text="Clear" CssClass="btn btn-primary"
                             OnClientClick="ClearTextboxes();" />
                     </div>
                 </div>
@@ -276,18 +239,18 @@
 
     </form>
 
-    <script src="Javascript/jquery.min.v2.1.1.js"></script>
-    <script src="Javascript/bootstrap.min.v3.3.7.js"></script>
-    <script src="Javascript/bootstrap-dialog.min.js"></script>
-    <script src="Javascript/maskedinput.js" type="text/javascript"></script>
-    <link href="Css/bootstrap-dialog.min.css" rel="stylesheet" />
+    <script src="Content/Script/jquery.v1.7.1.js"></script>
+    <script src="Content/Script/jquery.min.v2.1.1.js"></script>
+    <script src="Content/Script/bootstrap.min.v3.3.7.js"></script>
+    <script src="Content/Script/bootstrap-dialog.min.js"></script>
+    <script src="Content/Script/maskedinput.js" type="text/javascript"></script>
+    <link href="Content/Style/bootstrap-dialog.min.css" rel="stylesheet" />
 
     <script type="text/javascript">
 
         //form load
         function OnLoad() {
             var msg = 'You are required to change your password and complete your profile information before continuing.&nbsp <br>Passwords must have a minimum length of 8 characters with at least 1 non-alphanumeric character.';
-            var CurPassword = $('#CurrentPassword');
             if (window.location.href.indexOf('newuser') == -1) {
                 //do nothing   -- this is not a new user       
             }
@@ -296,12 +259,11 @@
             }
         }
 
-        //Clear the Text Boxes
+        //***************** Clear the Text Boxes ******************************//
         function ClearTextboxes() {
             try {
                 document.getElementById('UserFirstName').value = '';
                 document.getElementById('UserLastName').value = '';
-                //document.getElementById('Email').value = '';
                 document.getElementById('Phone').value = '';
                 document.getElementById('CurrentPassword').value = '';
                 document.getElementById('NewPassword').value = '';
@@ -316,27 +278,59 @@
                 var txt = 'Error=>' + err.description;
                 showDangerAlert(txt);
             }
-        }       
+        }  
+        //*****************  Common ******************************//
 
         //set phone mask
         $("#Phone").mask("(999) 999-9999");
+        
+        //turn off autocomplete
+        // Opera 8.0+
+        var isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+        // Firefox 1.0+
+        var isFirefox = typeof InstallTrigger !== 'undefined';
+        // Safari <= 9 "[object HTMLElementConstructor]" 
+        var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
+        // Internet Explorer 6-11
+        var isIE = /*@cc_on!@*/false || !!document.documentMode;
+        // Edge 20+
+        var isEdge = !isIE && !!window.StyleMedia;
+        // Chrome 1+
+        var isChrome = !!window.chrome && !!window.chrome.webstore;
+        // Blink engine detection
+        var isBlink = (isChrome || isOpera) && !!window.CSS;
 
-        // Code to display the password hint next to the image
+        if (isChrome || isIE || isEdge || isFirefox || isSafari || isOpera) {
+            $('input[name="CurrentPassword"]').attr('autocomplete', 'off');
+            $('input[name="NewPassword"]').attr('autocomplete', 'off');
+            $('input[name="ConfirmNewPassword"]').attr('autocomplete', 'off');
+        }
+
+        //***************** display the importatn hint next to the image ******************************//
         var moveLeft = 10;
         var moveDown = 20;
-        $('.PWHshowHideDivHeader').hover(function (e) {
+        $('.divImportant').hover(function (e) {
+            $('#divImportantHint').show();
+        }, function () {
+            $('#divImportantHint').hide();
+        });
+   
+        //***************** display the password hint next to the image ******************************//
+        var moveLeft = 10;
+        var moveDown = 20;
+        $('.divPasswordHintHeader').hover(function (e) {
             $('#divPasswordHintCriteria').show();
         }, function () {
             $('#divPasswordHintCriteria').hide();
         });
 
-        $('.PWHshowHideDivHeader').mousemove(function (e) {
+        $('.divPasswordHintHeader').mousemove(function (e) {
             $("#divPasswordHintCriteria")
                 .css('top', e.pageY + moveDown)
                 .css('left', e.pageX + moveLeft);
         });
 
-        //code to show the password criteria next to input box
+        //***************** show the password criteria next to input box ******************************//
         var newPassword = document.querySelector('#NewPassword');
         newPassword.onmouseup = function (e) {
             var div = document.querySelector('#divPasswordCriteriaContainer');
@@ -351,7 +345,7 @@
             div.style.display = 'none';
         }
 
-        //function to switch between show hide image
+        //***************** switch between show hide image ******************************//
         $("#imageShowPassword").on('click', function () {
             //show password for the class of NewPassword
             var $pwd = $(".NewPassword");
@@ -365,27 +359,53 @@
             }
         });
 
+        //***************** Change Image ******************************//
         function changeImage(element) {
-            var right = "./Images/eye-icon.png";
-            var left = "./Images/eye-hide.png";
+            var right = "./Content/Images/eye-icon.png";
+            var left = "./Content/Images/eye-hide.png";
             element.src = element.bln ? right : left;
             element.bln = !element.bln;
         }
 
+        //***************** Allowed Special Characters in Password ******************************//
+        //if there are values for allwoed character then display it
+        var lblAllowedSpecialCharactersInPassword = "<%= System.Configuration.ConfigurationManager.AppSettings["AllowedSpecialCharactersInPassword"].ToString() %>"
+        if (lblAllowedSpecialCharactersInPassword.length > 1) {
+            document.getElementById("lblAllowedSpecialCharactersInPassword").innerText = lblAllowedSpecialCharactersInPassword.trim();
+        }
+        
+        //***************** Allowed Special Characters in Name ******************************//
+        //if there are values for allwoed character then display it
         var AllowedSpecialCharactersInUserName = "<%= System.Configuration.ConfigurationManager.AppSettings["AllowedSpecialCharactersInUserName"].ToString() %>"
-   
+        if (AllowedSpecialCharactersInUserName.length > 1) {
+            $('#divSpecialChars').show();
+            var regex = new RegExp(',', 'g')
+            document.getElementById("lblAllowedChars").innerText = AllowedSpecialCharactersInUserName.replace(regex,' ');
+        }  
+        else
+        {
+            $('#divSpecialChars').hide();
+        }
+
+        //***************** Start User name checks ******************************//
         var UserFirstNameInput = document.getElementById("UserFirstName");
         UserFirstNameInput.addEventListener("blur", verifyUserNameInput, false);
 
-        var UserFirstLastInput = document.getElementById("UserLastName");
-        UserFirstLastInput.addEventListener("blur", verifyUserNameInput, false);
+        var UserLastInput = document.getElementById("UserLastName");
+        UserLastInput.addEventListener("blur", verifyUserNameInput, false);
             
-        function verifyUserNameInput(element)
+        function verifyUserNameInput(elementFocusEvent)
         {
-            var elementID = element.target.id;
-            var elementValue = element.target.value;
-            var elementTarget = element.target;
+            var elementID = elementFocusEvent.target.id;
+            var elementValue = elementFocusEvent.target.value;
 
+            CheckUserNameInput(elementValue,elementID);           
+            
+            return true;
+        }
+
+        function CheckUserNameInput(elementValue,elementID)
+        {
             var alphabets = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
             var number = "0123456789";
             var badData = false;
@@ -405,71 +425,37 @@
             //if there are specail in name then check if they are allowed
             var allSpecialChars = new RegExp(/[~!@#$%^&*;?+_.`,<>;':/[\]|{}()=-]/);
 
-            if (elementValue.match(new RegExp(allSpecialChars, "gi"))) {
+            if (elementValue.match(new RegExp(allSpecialChars, "gi")))
+            {
                 //allowed special chars from web.config
-                var allowedSplChars = AllowedSpecialCharactersInUserName.trim();
+                var allowedSplChars = AllowedSpecialCharactersInUserName.trim().split(',');
 
-                var allFoundCharacters = elementValue.match(new RegExp(allSpecialChars, "gi"));
-                //alert(allFoundCharacters + "" + allFoundCharacters.length);//count
+                var allPresentCharactersInName = elementValue.match(new RegExp(allSpecialChars, "gi"));
 
-                //match the chars from name
-                var result = invalidCharsInUserName(allFoundCharacters, allowedSplChars);
-                var allowedChars = "";
-                if (result != null) {
-                    if (result.$lowerKeyallFoundCharacters.length != allFoundCharacters.length)
-                    {
-                        badData = true;
+                var found = [];
+                var badFound = [];
+                for (var i = 0; i < allPresentCharactersInName.length; i++) {
+                    if (allowedSplChars.indexOf(allPresentCharactersInName[i]) !== -1) {
+                        found.push(allPresentCharactersInName[i]);
                     }
                     else
                     {
-                        badData = false;
-                    }
-                        
-                }
-                else {   
+                        badFound.push(allPresentCharactersInName[i]);
                         badData = true;
-                }
-            }
-
-            if (badData) {
-                highlight(elementID);
-                showErrorAlert(' You have entered invalid data. This field only allows alpahebts [a-z] and certian special characters like [' + AllowedSpecialCharactersInUserName + ']. Please re-enter valid data.');
-                return false;
-            }
-
-            return true;
-
-        }
-
-        function invalidCharsInUserName(allFoundCharacters, allowedSplCharsArray) {
-            var arrayMatchfound = null;
-            try {
-                for (var i = 0; i < allFoundCharacters.length && !arrayMatchfound; i++) {
-                    var $lowerKeyallFoundCharacters = allFoundCharacters[i].toLowerCase();
-
-                    for (var j = 0, wLen = allowedSplCharsArray.length; j < wLen && !arrayMatchfound; j++) {
-                        var $lowerKeyallowedSplChar = allowedSplCharsArray[j].toLowerCase();
-
-                        if ($lowerKeyallFoundCharacters == $lowerKeyallowedSplChar) {
-                            arrayMatchfound = {
-                                $lowerKeyallFoundCharacters,
-                                $lowerKeyallowedSplChar
-                            };
-                        }
                     }
-                }
-
+                }                
             }
-            catch (err) {
+             if (badData)
+            {
+                highlightUserNameInput(elementID);
+                showErrorAlert(' You have entered invalid special characters ' + badFound + '. This field only allows alpahebts [a-z] and certian special characters like [' + AllowedSpecialCharactersInUserName + ']. Please re-enter valid data.');
                 return false;
-                var txt = 'Error=>' + err.description;
-                showDangerAlert(txt);
             }
 
-            return arrayMatchfound;
+             return true;            
         }
 
-        function highlight(elementID)
+        function highlightUserNameInput(elementID)
         {
             if (elementID == "UserFirstName") {
                 $('#UserFirstName').addClass('textbox-focus');
@@ -478,8 +464,9 @@
                 $('#UserLastName').addClass('textbox-focus');
             }
         }
+        //***************** End User name checks ******************************//
 
-        //function to validate data
+        //***************** Validate Data ******************************//
         function Validate() {
             try {
                 var Phone = $('#Phone').val();
@@ -489,6 +476,22 @@
                     return false;
                 }
 
+                var UserFirstNameInput = document.getElementById("UserFirstName");
+                var UserLastInput = document.getElementById("UserLastName");
+                //check if the names are goo
+                var goodFirstName = CheckUserNameInput(UserFirstNameInput.value, UserFirstNameInput.id);
+                if (goodFirstName){
+                    var goodUserLast = CheckUserNameInput(UserLastInput.value, UserLastInput.id);
+                    //check if both names are good
+                    if (!goodUserLast){
+                        return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }                
+                
                 var CurPassword = $('#CurrentPassword').val();
                 var newPassword = $('#NewPassword').val(); 
                 var confirmPassword = $('#ConfirmNewPassword').val();
@@ -496,7 +499,7 @@
                 //check the password only if CurPassword is entered
                 if (CurPassword != '') {
                     if (newPassword == '') {
-                        var msg = ('The password setting New Password filed cannot be empty.');
+                        var msg = ('The password verification field New Password filed cannot be empty.');
                         $('#NewPassword').addClass('textbox-focus');
                         showErrorAlert(msg);                        
                         return false;
@@ -510,7 +513,7 @@
                     }
                     
                     if (confirmPassword == '') {
-                        var msg = ('The password setting Confirm New Password filed cannot be empty.');
+                        var msg = ('The password verification, Confirm New Password filed cannot be empty.');
                         $('#ConfirmNewPassword').addClass('textbox-focus');
                         showErrorAlert(msg);                        
                         return false;
@@ -523,7 +526,7 @@
                         return false;
                     }
                     if (newPassword != confirmPassword) {
-                        var msg = ('The password setting New Password filed and Confirm New Password field do not match!');
+                        var msg = ('The password verification, New Password filed and Confirm New Password field do not match!');
                         showErrorAlert(msg);
                         $('#NewPassword').addClass('textbox-focus');
                         $("#NewPassword").select()
@@ -556,6 +559,139 @@
             return true;
         }
         
+        //***************** Start Validate Password Data ******************************//       
+        var badInputData = false;
+        var messagePasswordUserNameChars = "";
+        //Password Check
+        $('input.NewPassword').keyup(function () {
+                // set password variable
+                var newpasswordValue = $(this).val();
+                
+                //validate the length
+                if (newpasswordValue.length > 8) {
+                    $('#length').removeClass('invalidPassword').addClass('validPassword');
+                    badInputData = false;
+                } else {
+                    $('#length').removeClass('validPassword').addClass('invalidPassword');
+                    badInputData = true;
+                }
+
+                //validate any uppercase letter
+                if (newpasswordValue.match(/[A-Z]/)) {
+                    $('#capital').removeClass('invalidPassword').addClass('validPassword');
+                    if (badInputData) {
+                        badInputData = true;
+                    }
+                    else {
+                        badInputData = false;
+                    }
+                } else {
+                    $('#capital').removeClass('validPassword').addClass('invalidPassword');
+                    badInputData = true;
+                }
+
+                //validate any lower case letter
+                if (newpasswordValue.match(/[a-z]/)) {
+                    $('#lowercase').removeClass('invalidPassword').addClass('validPassword');
+                    if (badInputData) {
+                        badInputData = true;
+                    }
+                    else {
+                        badInputData = false;
+                    }
+                } else {
+                    $('#lowercase').removeClass('validPassword').addClass('invalidPassword');
+                    badInputData = true;
+                }
+
+                //validate a number
+                if (newpasswordValue.match(/[0-9]/)) {
+                    $('#number').removeClass('invalidPassword').addClass('validPassword');
+                    if (badInputData) {
+                        badInputData = true;
+                    }
+                    else {
+                        badInputData = false;
+                    }
+                } else {
+                    $('#number').removeClass('validPassword').addClass('invalidPassword');
+                    badInputData = true;
+                }
+
+                //validate allowed special
+                if (newpasswordValue.match(/[~!@#$%^&*;?+_.]/)) {
+                    $('#special').removeClass('invalidPassword').addClass('validPassword');
+                    if (badInputData) {
+                        badInputData = true;
+                    }
+                    else {
+                        badInputData = false;
+                    }
+                } else {
+                    $('#special').removeClass('validPassword').addClass('invalidPassword');
+                    badInputData = true;
+                }
+
+                //not allowed chars
+                var regexChar = new RegExp(/[`,<>;':"/[\]|{}()=-]/);
+                if (newpasswordValue.match(regexChar)) {
+                    showErrorAlert('The character you entered is not valid.');
+                    return false;
+                }
+
+                //validate non-printable chars 
+                if (newpasswordValue.match(/[^\u0000-\u007F]/)) {
+                    showErrorAlert('You can not have non-printable chars.');
+                    return false;
+                }
+
+                //the passwrod should not contain 3 or more char from user name
+                //find user name 
+                var username = '<%=Context.User.Identity.Name%>';
+                //get new password value
+                var newPasswordVal = $('#NewPassword').val();
+                //divide the user name into 3 letters so abcdefghi@somthing.com will look like [abd def ghi @som thi ng. com]
+                // example: ["abc", "def", "g.h", "ijk", "@em", "ail", ".co", "m"]
+                var partsOfThreeLettersUsernameArray = username.match(/.{3}/g)
+                                    .concat(
+                                            username.substr(1).match(/.{3}/g),
+                                            username.substr(2).match(/.{3}/g)
+                                            );
+
+                if (newPasswordVal != '' && newPasswordVal.length > 1) {
+                    //example: ["afs", "Ujn", "8*c", "fsU", "jn8", "*co", "sUj", "n8*", "com"]
+                    var partsOfThreeLettersPasswordArray = newPasswordVal.match(/.{3}/g)
+                                            .concat(
+                                                    newPasswordVal.substr(1).match(/.{3}/g),
+                                                    newPasswordVal.substr(2).match(/.{3}/g)
+                                                    );
+
+
+                    var result = matchWordsinStringArray(partsOfThreeLettersUsernameArray, partsOfThreeLettersPasswordArray);
+                    if (result != null) {
+                        var elementValue = newPasswordVal.match(new RegExp(result.passwordElement, "i"));
+                        //showErrorAlert('The password you entered cannot contain substring <b>' + elementValue[0] + '</b>, since <b>' + elementValue[0] + '</b> is a substring in your account name.  The password cannot contain 3 or more contiguous characters from the account name.');
+                        messagePasswordUserNameChars = 'The password you entered cannot contain substring <b>' + elementValue[0] + '</b>, since <b>' + elementValue[0] + '</b> is a substring in your account name.  The password cannot contain 3 or more contiguous characters from the account name.';
+                        badInputData = true;
+                    }
+                    else {
+                        messagePasswordUserNameChars = "";
+                        if (badInputData) {
+                            badInputData = true;
+                        }
+                        else {
+                            badInputData = false;
+                        }
+
+                    }
+                }
+
+        }).focus(function () {
+            $('#divPasswordCriteriaContainer').show();
+        }).blur(function () {
+            $('#divPasswordCriteriaContainer').hide();
+        });
+        
         function matchWordsinStringArray(usernameArray, passwordArray) {
             var arrayMatchfound = null;
             try
@@ -586,139 +722,6 @@
             return arrayMatchfound;
         }
 
-       var badData = false;
-        var messagePasswordUserNameChars = "";
-        //Password Check
-        $('input.NewPassword').keyup(function () {
-                // set password variable
-                var newpasswordValue = $(this).val();
-                
-                //validate the length
-                if (newpasswordValue.length > 8) {
-                    $('#length').removeClass('invalidPassword').addClass('validPassword');
-                    badData = false;
-                } else {
-                    $('#length').removeClass('validPassword').addClass('invalidPassword');
-                    badData = true;
-                }
-
-                //validate any uppercase letter
-                if (newpasswordValue.match(/[A-Z]/)) {
-                    $('#capital').removeClass('invalidPassword').addClass('validPassword');
-                    if (badData) {
-                        badData = true;
-                    }
-                    else {
-                        badData = false;
-                    }
-                } else {
-                    $('#capital').removeClass('validPassword').addClass('invalidPassword');
-                    badData = true;
-                }
-
-                //validate any lower case letter
-                if (newpasswordValue.match(/[a-z]/)) {
-                    $('#lowercase').removeClass('invalidPassword').addClass('validPassword');
-                    if (badData) {
-                        badData = true;
-                    }
-                    else {
-                        badData = false;
-                    }
-                } else {
-                    $('#lowercase').removeClass('validPassword').addClass('invalidPassword');
-                    badData = true;
-                }
-
-                //validate a number
-                if (newpasswordValue.match(/[0-9]/)) {
-                    $('#number').removeClass('invalidPassword').addClass('validPassword');
-                    if (badData) {
-                        badData = true;
-                    }
-                    else {
-                        badData = false;
-                    }
-                } else {
-                    $('#number').removeClass('validPassword').addClass('invalidPassword');
-                    badData = true;
-                }
-
-                //validate allowed special
-                if (newpasswordValue.match(/[~!@#$%^&*;?+_.]/)) {
-                    $('#special').removeClass('invalidPassword').addClass('validPassword');
-                    if (badData) {
-                        badData = true;
-                    }
-                    else {
-                        badData = false;
-                    }
-                } else {
-                    $('#special').removeClass('validPassword').addClass('invalidPassword');
-                    badData = true;
-                }
-
-                //not allowed chars
-                var regexChar = new RegExp(/[`,<>;':"/[\]|{}()=-]/);
-                if (newpasswordValue.match(regexChar)) {
-                    showErrorAlert('The character you entered is not valid.');
-                    return false;
-                }
-
-                //validate non-printable chars 
-                if (newpasswordValue.match(/[^\u0000-\u007F]/)) {
-                    showErrorAlert('You can not have non-printable chars.');
-                    return false;
-                }
-
-                //the passwrod should not contain 3 or more char from user name
-                //find user name 
-                var username = '<%=Context.User.Identity.Name%>';
-                //get new password value
-                var newPasswordVal = $('#NewPassword').val();
-                //divide the user name into 3 letters so abcdefghi@somthing.com will look like [abd def ghi @som thi ng. com]
-                // example: ["abc", "def", "g.h", "ijk", "@em", "ail", ".co", "m"]
-                var partsOfThreeLettersUsernameArray = username.match(/.{3}/g)
-                                    .concat(
-                                            username.substr(1).match(/.{3}/g),
-                                            username.substr(2).match(/.{3}/g)
-                                            );
-
-                //example: ["afs", "Ujn", "8*c", "fsU", "jn8", "*co", "sUj", "n8*", "com"]
-                var partsOfThreeLettersPasswordArray = newPasswordVal.match(/.{3}/g)
-                                        .concat(
-                                                newPasswordVal.substr(1).match(/.{3}/g),
-                                                newPasswordVal.substr(2).match(/.{3}/g)
-                                                );
-
-                
-                var result = matchWordsinStringArray(partsOfThreeLettersUsernameArray, partsOfThreeLettersPasswordArray);
-                if (result != null) {
-                    var elementValue = newPasswordVal.match(new RegExp(result.passwordElement, "i"));               
-                    //showErrorAlert('The password you entered cannot contain substring <b>' + elementValue[0] + '</b>, since <b>' + elementValue[0] + '</b> is a substring in your account name.  The password cannot contain 3 or more contiguous characters from the account name.');
-                    messagePasswordUserNameChars = 'The password you entered cannot contain substring <b>' + elementValue[0] + '</b>, since <b>' + elementValue[0] + '</b> is a substring in your account name.  The password cannot contain 3 or more contiguous characters from the account name.';
-                    badData = true;
-                }
-                else
-                {
-                    messagePasswordUserNameChars = "";
-                    if (badData)
-                    {
-                        badData = true;
-                    }
-                    else
-                    {
-                        badData = false;
-                    }
-                    
-                }                    
-
-        }).focus(function () {
-            $('#divPasswordCriteriaContainer').show();
-        }).blur(function () {
-            $('#divPasswordCriteriaContainer').hide();
-        });
-
         var newPasswrdInput = document.getElementById ("NewPassword");
         newPasswrdInput.addEventListener("blur", verifyBadPassword, false);
 
@@ -736,7 +739,7 @@
             }
             else
             {
-                if (badData) {
+                if (badInputData) {
 
                     NewPassword.addClass('textbox-focus');
                     ConfirmNewPassword.val('');
@@ -748,7 +751,7 @@
                         return false;
                     }
                     else {
-                        showErrorAlert('Your password does not match the all password rules. Please make sure your password matches the password rules. [Check the Password Hint.]');
+                        showErrorAlert('Your password does not match all password rules. Please make sure your password matches the password rules. [Check the Password Hint.]');
                         return false;
                     }
 
@@ -789,7 +792,9 @@
             $('#passwordMatchMessage').removeClass('badMatch');
         }
 
-        //show error
+        //***************** End  Validate Password Data ******************************// 
+
+        //***************** Alert Messages ******************************// 
         function showErrorAlert(alertMessage) {
             BootstrapDialog.show({
                 title: 'Data Entry Issue',
@@ -845,7 +850,9 @@
                 }],
             });
         }
+        //***************** Alert Messages ******************************// 
 
+        //***************** Element Class ******************************// 
         //funchion to chane class on element
         function changeClass(btn, cls) {
             if (!hasClass(btn, cls)) {
@@ -867,6 +874,8 @@
                 ele.className = ele.className.replace(reg, ' ');
             }
         }
+
+        //***************** Element Class ******************************// 
 
     </script>
 </body>

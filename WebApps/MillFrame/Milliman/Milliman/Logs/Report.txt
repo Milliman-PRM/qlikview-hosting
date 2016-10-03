@@ -180,59 +180,50 @@ Parameter name: path2
 9/21/2016 1:43:43 PMInfo           Application Start
 9/21/2016 2:07:15 PMInfo           Application Start
 9/21/2016 2:57:23 PMInfo           Application Start
-9/22/2016 11:26:26 AMInfo           Application Start
-9/22/2016 11:26:32 AMInfo           Application Start
-9/22/2016 11:26:42 AMInfo           Application Start
-9/22/2016 11:28:35 AMInfo           Application Start
-9/22/2016 11:28:52 AMInfo           Application Start
-9/22/2016 11:43:07 AMInfo           Application Start
-9/22/2016 2:09:02 PMInfo           Application Start
-9/22/2016 2:23:13 PMInfo           Application Start
-9/22/2016 2:25:44 PMInfo           Application Start
-9/22/2016 2:28:21 PMInfo           Application Start
-9/22/2016 2:28:37 PMInfo           Application Start
-9/22/2016 2:37:27 PMInfo           Application Start
-9/22/2016 2:51:18 PMInfo           Application Start
-9/22/2016 2:51:38 PMInfo           Application Start
-9/22/2016 3:12:21 PMInfo           Application Start
-9/23/2016 10:02:31 AMInfo           Application Start
-9/23/2016 11:55:06 AMInfo           Application Start
-9/23/2016 12:13:10 PMInfo           Application Start
-9/23/2016 12:36:06 PMInfo           Application Start
-9/23/2016 12:47:27 PMInfo           Application Start
-9/23/2016 12:59:27 PMInfo           Application Start
-9/23/2016 1:25:20 PMInfo           Application Start
-9/23/2016 2:07:51 PMInfo           Application Start
-9/23/2016 2:43:58 PMInfo           Application Start
-9/23/2016 2:44:43 PMInfo           Application Start
-9/23/2016 3:27:54 PMInfo           Application Start
-9/23/2016 3:33:48 PMInfo           Application Start
-9/23/2016 3:36:05 PMInfo           Application Start
-9/23/2016 3:54:36 PMInfo           Application Start
-9/23/2016 3:55:10 PMInfo           Application Start
-3:55:54 PM                    Error     \r\nException trace: System.Web.HttpUnhandledException (0x80004005): Exception of type 'System.Web.HttpUnhandledException' was thrown. ---> Polenter.Serialization.Core.DeserializingException: An error occured during the deserialization. Details are in the inner exception. ---> System.IO.FileNotFoundException: Could not load file or assembly 'ClientPublisher' or one of its dependencies. The system cannot find the file specified.
-   at System.RuntimeTypeHandle.GetTypeByName(String name, Boolean throwOnError, Boolean ignoreCase, Boolean reflectionOnly, StackCrawlMarkHandle stackMark, IntPtr pPrivHostBinder, Boolean loadTypeFromPartialName, ObjectHandleOnStack type)
-   at System.RuntimeTypeHandle.GetTypeByName(String name, Boolean throwOnError, Boolean ignoreCase, Boolean reflectionOnly, StackCrawlMark& stackMark, IntPtr pPrivHostBinder, Boolean loadTypeFromPartialName)
-   at System.RuntimeType.GetType(String typeName, Boolean throwOnError, Boolean ignoreCase, Boolean reflectionOnly, StackCrawlMark& stackMark)
-   at System.Type.GetType(String typeName, Boolean throwOnError)
-   at Polenter.Serialization.Advanced.TypeNameConverter.ConvertToType(String typeName)
-   at Polenter.Serialization.Advanced.DefaultXmlReader.GetAttributeAsType(String attributeName)
-   at Polenter.Serialization.Advanced.XmlPropertyDeserializer.deserialize(PropertyArt propertyArt, Type expectedType)
-   at Polenter.Serialization.Advanced.XmlPropertyDeserializer.Deserialize()
-   at Polenter.Serialization.SharpSerializer.Deserialize(Stream stream)
-   --- End of inner exception stack trace ---
-   at Polenter.Serialization.SharpSerializer.Deserialize(Stream stream)
-   at Polenter.Serialization.SharpSerializer.Deserialize(String filename)
-   at MillimanCommon.ProjectSettings.Load(String PathFilename) in D:\InstalledApplications\PRM_Staging_AK\SourceCode\SprintSept12ToSept30\WebApps\MillFrame\MillimanCommon\ProjectSettings.cs:line 353
-   at MillimanCommon.UserAccessList.UserAccess..ctor(String QVFile, QVEntity _QV, String ReducedQVFile) in D:\InstalledApplications\PRM_Staging_AK\SourceCode\SprintSept12ToSept30\WebApps\MillFrame\MillimanCommon\UserAccessList.cs:line 94
-   at CallSite.Target(Closure , CallSite , Type , Object , Object , Object )
-   at MillimanCommon.UserAccessList.ResolveACL(String UserName, String[] UserRoles, Boolean IsClientAdmin) in D:\InstalledApplications\PRM_Staging_AK\SourceCode\SprintSept12ToSept30\WebApps\MillFrame\MillimanCommon\UserAccessList.cs:line 156
-   at MillimanCommon.UserAccessList..ctor(String UserName, String[] UserRoles, Boolean IsClientAdmin) in D:\InstalledApplications\PRM_Staging_AK\SourceCode\SprintSept12ToSept30\WebApps\MillFrame\MillimanCommon\UserAccessList.cs:line 128
-   at MillimanDev._Default.LoadProducts() in D:\InstalledApplications\PRM_Staging_AK\SourceCode\SprintSept12ToSept30\WebApps\MillFrame\Milliman\Milliman\Default.aspx.cs:line 527
-   at MillimanDev._Default.Page_Load(Object sender, EventArgs e) in D:\InstalledApplications\PRM_Staging_AK\SourceCode\SprintSept12ToSept30\WebApps\MillFrame\Milliman\Milliman\Default.aspx.cs:line 44
-   at System.Web.Util.CalliEventHandlerDelegateProxy.Callback(Object sender, EventArgs e)
-   at System.Web.UI.Control.OnLoad(EventArgs e)
+9/21/2016 3:54:45 PMInfo           Application Start
+3:54:57 PM                    Error     \r\nException trace: System.Web.HttpUnhandledException (0x80004005): Exception of type 'System.Web.HttpUnhandledException' was thrown. ---> System.Data.SqlClient.SqlException (0x80131904): Cannot open database "PortalDB_SK" requested by the login. The login failed.
+Login failed for user 'ROOT_MILLIMAN\afsheen.khan'.
+   at System.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, DbConnectionPool pool, String accessToken, Boolean applyTransientFaultHandling)
+   at System.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, Object poolGroupProviderInfo, DbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
+   at System.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(DbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)
+   at System.Data.ProviderBase.DbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   at System.Data.ProviderBase.DbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   at System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   at System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   at System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   at System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   at System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   at System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   at System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   at System.Data.SqlClient.SqlConnection.Open()
+   at System.Web.DataAccess.SqlConnectionHolder.Open(HttpContext context, Boolean revertImpersonate)
+   at System.Web.DataAccess.SqlConnectionHelper.GetConnection(String connectionString, Boolean revertImpersonation)
+   at System.Web.Security.SqlMembershipProvider.GetUser(String username, Boolean userIsOnline)
+   at System.Web.Security.Membership.GetUser(String username, Boolean userIsOnline)
+   at System.Web.Security.Membership.GetUser()
+   at MillimanDev.UserLogin.OnLoad(EventArgs e) in C:\Users\afsheen.khan\PRMDevelopment\SprintSept12toSept30\WebApps\MillFrame\Milliman\Milliman\UserLogin.aspx.cs:line 123
    at System.Web.UI.Control.LoadRecursive()
+   at System.Web.UI.Page.ProcessRequestMain(Boolean includeStagesBeforeAsyncPoint, Boolean includeStagesAfterAsyncPoint)
+ClientConnectionId:6de039d6-62c9-4d06-93e2-b5147bea854c
+Error Number:4060,State:1,Class:11
+   at System.Web.UI.Page.HandleError(Exception e)
+   at System.Web.UI.Page.ProcessRequestMain(Boolean includeStagesBeforeAsyncPoint, Boolean includeStagesAfterAsyncPoint)
+   at System.Web.UI.Page.ProcessRequest(Boolean includeStagesBeforeAsyncPoint, Boolean includeStagesAfterAsyncPoint)
+   at System.Web.UI.Page.ProcessRequest()
+   at System.Web.UI.Page.ProcessRequestWithNoAssert(HttpContext context)
+   at System.Web.UI.Page.ProcessRequest(HttpContext context)
+   at ASP.userlogin_aspx.ProcessRequest(HttpContext context) in c:\Users\afsheen.khan\AppData\Local\Temp\Temporary ASP.NET Files\vs\b26324eb\64dd48a8\App_Web_yhx4255s.10.cs:line 0
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)----------------------------------------9/21/2016 3:56:51 PMInfo           Application Start
+9/29/2016 10:49:46 AMInfo           Application Start
+10:50:10 AM                   Error     \r\nException trace: System.Web.HttpUnhandledException (0x80004005): Exception of type 'System.Web.HttpUnhandledException' was thrown. ---> System.NullReferenceException: Object reference not set to an instance of an object.
+   at ASP.profile_aspx.__Render__control1(HtmlTextWriter __w, Control parameterContainer) in c:\Users\afsheen.khan\PRMDevelopment\SprintSept12toSept30\WebApps\MillFrame\Milliman\Milliman\Profile.aspx:line 375
+   at System.Web.UI.Control.RenderChildrenInternal(HtmlTextWriter writer, ICollection children)
+   at System.Web.UI.Control.RenderChildren(HtmlTextWriter writer)
+   at System.Web.UI.Page.Render(HtmlTextWriter writer)
+   at System.Web.UI.Control.RenderControlInternal(HtmlTextWriter writer, ControlAdapter adapter)
+   at System.Web.UI.Control.RenderControl(HtmlTextWriter writer, ControlAdapter adapter)
+   at System.Web.UI.Control.RenderControl(HtmlTextWriter writer)
    at System.Web.UI.Page.ProcessRequestMain(Boolean includeStagesBeforeAsyncPoint, Boolean includeStagesAfterAsyncPoint)
    at System.Web.UI.Page.HandleError(Exception e)
    at System.Web.UI.Page.ProcessRequestMain(Boolean includeStagesBeforeAsyncPoint, Boolean includeStagesAfterAsyncPoint)
@@ -240,6 +231,109 @@ Parameter name: path2
    at System.Web.UI.Page.ProcessRequest()
    at System.Web.UI.Page.ProcessRequestWithNoAssert(HttpContext context)
    at System.Web.UI.Page.ProcessRequest(HttpContext context)
-   at ASP.default_aspx.ProcessRequest(HttpContext context) in c:\Windows\Microsoft.NET\Framework\v4.0.30319\Temporary ASP.NET Files\vs\435e14f3\8e097f0b\App_Web_xqghg5y4.9.cs:line 0
+   at ASP.profile_aspx.ProcessRequest(HttpContext context) in c:\Users\afsheen.khan\AppData\Local\Temp\Temporary ASP.NET Files\vs\b26324eb\64dd48a8\App_Web_bwrm0ge5.0.cs:line 0
    at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
-   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)----------------------------------------9/23/2016 3:59:19 PMInfo           Application Start
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)----------------------------------------10:50:46 AM                   Error     \r\nException trace: System.Web.HttpUnhandledException (0x80004005): Exception of type 'System.Web.HttpUnhandledException' was thrown. ---> System.NullReferenceException: Object reference not set to an instance of an object.
+   at ASP.profile_aspx.__Render__control1(HtmlTextWriter __w, Control parameterContainer) in c:\Users\afsheen.khan\PRMDevelopment\SprintSept12toSept30\WebApps\MillFrame\Milliman\Milliman\Profile.aspx:line 375
+   at System.Web.UI.Control.RenderChildrenInternal(HtmlTextWriter writer, ICollection children)
+   at System.Web.UI.Control.RenderChildren(HtmlTextWriter writer)
+   at System.Web.UI.Page.Render(HtmlTextWriter writer)
+   at System.Web.UI.Control.RenderControlInternal(HtmlTextWriter writer, ControlAdapter adapter)
+   at System.Web.UI.Control.RenderControl(HtmlTextWriter writer, ControlAdapter adapter)
+   at System.Web.UI.Control.RenderControl(HtmlTextWriter writer)
+   at System.Web.UI.Page.ProcessRequestMain(Boolean includeStagesBeforeAsyncPoint, Boolean includeStagesAfterAsyncPoint)
+   at System.Web.UI.Page.HandleError(Exception e)
+   at System.Web.UI.Page.ProcessRequestMain(Boolean includeStagesBeforeAsyncPoint, Boolean includeStagesAfterAsyncPoint)
+   at System.Web.UI.Page.ProcessRequest(Boolean includeStagesBeforeAsyncPoint, Boolean includeStagesAfterAsyncPoint)
+   at System.Web.UI.Page.ProcessRequest()
+   at System.Web.UI.Page.ProcessRequestWithNoAssert(HttpContext context)
+   at System.Web.UI.Page.ProcessRequest(HttpContext context)
+   at ASP.profile_aspx.ProcessRequest(HttpContext context) in c:\Users\afsheen.khan\AppData\Local\Temp\Temporary ASP.NET Files\vs\b26324eb\64dd48a8\App_Web_mqcjfvz1.2.cs:line 0
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)----------------------------------------10:51:32 AM                   Error     \r\nException trace: System.Web.HttpUnhandledException (0x80004005): Exception of type 'System.Web.HttpUnhandledException' was thrown. ---> System.NullReferenceException: Object reference not set to an instance of an object.
+   at ASP.profile_aspx.__Render__control1(HtmlTextWriter __w, Control parameterContainer) in c:\Users\afsheen.khan\PRMDevelopment\SprintSept12toSept30\WebApps\MillFrame\Milliman\Milliman\Profile.aspx:line 375
+   at System.Web.UI.Control.RenderChildrenInternal(HtmlTextWriter writer, ICollection children)
+   at System.Web.UI.Control.RenderChildren(HtmlTextWriter writer)
+   at System.Web.UI.Page.Render(HtmlTextWriter writer)
+   at System.Web.UI.Control.RenderControlInternal(HtmlTextWriter writer, ControlAdapter adapter)
+   at System.Web.UI.Control.RenderControl(HtmlTextWriter writer, ControlAdapter adapter)
+   at System.Web.UI.Control.RenderControl(HtmlTextWriter writer)
+   at System.Web.UI.Page.ProcessRequestMain(Boolean includeStagesBeforeAsyncPoint, Boolean includeStagesAfterAsyncPoint)
+   at System.Web.UI.Page.HandleError(Exception e)
+   at System.Web.UI.Page.ProcessRequestMain(Boolean includeStagesBeforeAsyncPoint, Boolean includeStagesAfterAsyncPoint)
+   at System.Web.UI.Page.ProcessRequest(Boolean includeStagesBeforeAsyncPoint, Boolean includeStagesAfterAsyncPoint)
+   at System.Web.UI.Page.ProcessRequest()
+   at System.Web.UI.Page.ProcessRequestWithNoAssert(HttpContext context)
+   at System.Web.UI.Page.ProcessRequest(HttpContext context)
+   at ASP.profile_aspx.ProcessRequest(HttpContext context) in c:\Users\afsheen.khan\AppData\Local\Temp\Temporary ASP.NET Files\vs\b26324eb\64dd48a8\App_Web_gwhti4ip.4.cs:line 0
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)----------------------------------------10:51:35 AM                   Error     \r\nException trace: System.Web.HttpUnhandledException (0x80004005): Exception of type 'System.Web.HttpUnhandledException' was thrown. ---> System.NullReferenceException: Object reference not set to an instance of an object.
+   at ASP.profile_aspx.__Render__control1(HtmlTextWriter __w, Control parameterContainer) in c:\Users\afsheen.khan\PRMDevelopment\SprintSept12toSept30\WebApps\MillFrame\Milliman\Milliman\Profile.aspx:line 375
+   at System.Web.UI.Control.RenderChildrenInternal(HtmlTextWriter writer, ICollection children)
+   at System.Web.UI.Control.RenderChildren(HtmlTextWriter writer)
+   at System.Web.UI.Page.Render(HtmlTextWriter writer)
+   at System.Web.UI.Control.RenderControlInternal(HtmlTextWriter writer, ControlAdapter adapter)
+   at System.Web.UI.Control.RenderControl(HtmlTextWriter writer, ControlAdapter adapter)
+   at System.Web.UI.Control.RenderControl(HtmlTextWriter writer)
+   at System.Web.UI.Page.ProcessRequestMain(Boolean includeStagesBeforeAsyncPoint, Boolean includeStagesAfterAsyncPoint)
+   at System.Web.UI.Page.HandleError(Exception e)
+   at System.Web.UI.Page.ProcessRequestMain(Boolean includeStagesBeforeAsyncPoint, Boolean includeStagesAfterAsyncPoint)
+   at System.Web.UI.Page.ProcessRequest(Boolean includeStagesBeforeAsyncPoint, Boolean includeStagesAfterAsyncPoint)
+   at System.Web.UI.Page.ProcessRequest()
+   at System.Web.UI.Page.ProcessRequestWithNoAssert(HttpContext context)
+   at System.Web.UI.Page.ProcessRequest(HttpContext context)
+   at ASP.profile_aspx.ProcessRequest(HttpContext context) in c:\Users\afsheen.khan\AppData\Local\Temp\Temporary ASP.NET Files\vs\b26324eb\64dd48a8\App_Web_gwhti4ip.4.cs:line 0
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)----------------------------------------10:51:37 AM                   Error     \r\nException trace: System.Web.HttpUnhandledException (0x80004005): Exception of type 'System.Web.HttpUnhandledException' was thrown. ---> System.NullReferenceException: Object reference not set to an instance of an object.
+   at ASP.profile_aspx.__Render__control1(HtmlTextWriter __w, Control parameterContainer) in c:\Users\afsheen.khan\PRMDevelopment\SprintSept12toSept30\WebApps\MillFrame\Milliman\Milliman\Profile.aspx:line 375
+   at System.Web.UI.Control.RenderChildrenInternal(HtmlTextWriter writer, ICollection children)
+   at System.Web.UI.Control.RenderChildren(HtmlTextWriter writer)
+   at System.Web.UI.Page.Render(HtmlTextWriter writer)
+   at System.Web.UI.Control.RenderControlInternal(HtmlTextWriter writer, ControlAdapter adapter)
+   at System.Web.UI.Control.RenderControl(HtmlTextWriter writer, ControlAdapter adapter)
+   at System.Web.UI.Control.RenderControl(HtmlTextWriter writer)
+   at System.Web.UI.Page.ProcessRequestMain(Boolean includeStagesBeforeAsyncPoint, Boolean includeStagesAfterAsyncPoint)
+   at System.Web.UI.Page.HandleError(Exception e)
+   at System.Web.UI.Page.ProcessRequestMain(Boolean includeStagesBeforeAsyncPoint, Boolean includeStagesAfterAsyncPoint)
+   at System.Web.UI.Page.ProcessRequest(Boolean includeStagesBeforeAsyncPoint, Boolean includeStagesAfterAsyncPoint)
+   at System.Web.UI.Page.ProcessRequest()
+   at System.Web.UI.Page.ProcessRequestWithNoAssert(HttpContext context)
+   at System.Web.UI.Page.ProcessRequest(HttpContext context)
+   at ASP.profile_aspx.ProcessRequest(HttpContext context) in c:\Users\afsheen.khan\AppData\Local\Temp\Temporary ASP.NET Files\vs\b26324eb\64dd48a8\App_Web_gwhti4ip.4.cs:line 0
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)----------------------------------------9/29/2016 10:54:07 AMInfo           Application Start
+9/29/2016 11:45:52 AMInfo           Application Start
+9/29/2016 12:22:36 PMInfo           Application Start
+9/29/2016 1:16:53 PMInfo           Application Start
+9/29/2016 1:33:01 PMInfo           Application Start
+9/29/2016 1:44:09 PMInfo           Application Start
+9/29/2016 1:55:08 PMInfo           Application Start
+9/29/2016 1:58:31 PMInfo           Application Start
+9/29/2016 2:04:40 PMInfo           Application Start
+9/29/2016 2:23:57 PMInfo           Application Start
+9/29/2016 2:41:03 PMInfo           Application Start
+9/29/2016 2:51:40 PMInfo           Application Start
+9/29/2016 3:40:15 PMInfo           Application Start
+9/29/2016 4:16:25 PMInfo           Application Start
+9/29/2016 4:40:01 PMInfo           Application Start
+9/29/2016 4:41:07 PMInfo           Application Start
+9/29/2016 5:16:06 PMInfo           Application Start
+9/30/2016 10:31:45 AMInfo           Application Start
+9/30/2016 10:54:11 AMInfo           Application Start
+9/30/2016 11:05:19 AMInfo           Application Start
+9/30/2016 11:09:45 AMInfo           Application Start
+9/30/2016 11:34:51 AMInfo           Application Start
+9/30/2016 11:36:23 AMInfo           Application Start
+9/30/2016 11:43:28 AMInfo           Application Start
+9/30/2016 11:46:01 AMInfo           Application Start
+9/30/2016 11:50:11 AMInfo           Application Start
+9/30/2016 11:57:02 AMInfo           Application Start
+9/30/2016 12:25:57 PMInfo           Application Start
+9/30/2016 12:36:20 PMInfo           Application Start
+9/30/2016 12:42:50 PMInfo           Application Start
+9/30/2016 1:08:23 PMInfo           Application Start
+9/30/2016 1:54:56 PMInfo           Application Start
+9/30/2016 2:51:08 PMInfo           Application Start
+9/30/2016 3:22:03 PMInfo           Application Start
+9/30/2016 3:31:16 PMInfo           Application Start
+9/30/2016 3:44:36 PMInfo           Application Start

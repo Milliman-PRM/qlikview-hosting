@@ -86,9 +86,25 @@
     <Content Include="Announcements\Announcements.xml" />
     <Content Include="Announcements\AnnouncementsTemplate.xml" />
     <Content Include="AssertionService.aspx" />
-    <Content Include="Css\bootstrap-dialog.min.css" />
-    <Content Include="Css\bootstrap.css" />
-    <Content Include="Css\bootstrap.min.css" />
+    <Content Include="Content\Images\eye-hide.png" />
+    <Content Include="Content\Images\eye-icon.png" />
+    <Content Include="Content\Images\Info-blue.png" />
+    <Content Include="Content\Images\InformationBulb.png" />
+    <Content Include="Content\Script\bootstrap-dialog.min.js" />
+    <Content Include="Content\Script\bootstrap.js" />
+    <Content Include="Content\Script\bootstrap.min.v3.3.7.js" />
+    <Content Include="Content\Script\jquery.min.js" />
+    <Content Include="Content\Script\jquery.min.v2.0.0.js" />
+    <Content Include="Content\Script\jquery.min.v2.1.1.js" />
+    <Content Include="Content\Script\jquery.v1.7.1.js" />
+    <Content Include="Content\Script\maskedinput.js" />
+    <Content Include="Content\Style\bootstrap-dialog.min.css" />
+    <Content Include="Content\Style\bootstrap.css" />
+    <Content Include="Content\Style\bootstrap.min.css" />
+    <Content Include="Content\Style\MillframeStyle.css" />
+    <Content Include="Css\DeleteMeLater-bootstrap-dialog.min.css" />
+    <Content Include="Css\DeleteMeLater-bootstrap.css" />
+    <Content Include="Css\DeleteMeLater-bootstrap.min.css" />
     <Content Include="Css\Milliman_small.png" />
     <Content Include="email_templates\resetpassword.htm" />
     <Content Include="email_templates\welcome.htm" />
@@ -112,6 +128,7 @@
     <Content Include="Javascript\bootstrap-dialog.min.js" />
     <Content Include="Javascript\bootstrap.js" />
     <Content Include="Javascript\bootstrap.min.v3.3.7.js" />
+    <Content Include="Javascript\jquery.v1.7.1.js" />
     <Content Include="Javascript\maskedinput.js" />
     <Content Include="Javascript\npm.js" />
     <Content Include="Logs\placeholder.txt" />
@@ -275,10 +292,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="MimeTypeMap\Mime.dat" />
-    <Content Include="Css\glyphicons-halflings-regular.eot" />
-    <Content Include="Css\glyphicons-halflings-regular.ttf" />
-    <Content Include="Css\glyphicons-halflings-regular.woff" />
+    <Content Include="Css\DeleteMeLater-glyphicons-halflings-regular.eot" />
+    <Content Include="Css\DeleteMeLater-glyphicons-halflings-regular.ttf" />
+    <Content Include="Css\DeleteMeLater-glyphicons-halflings-regular.woff" />
     <Content Include="Javascript\jquery.min.v2.1.1.js" />
+    <Content Include="Javascript\jquery.min.v2.0.0.js" />
+    <Content Include="Content\Images\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\Images\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\Images\glyphicons-halflings-regular.ttf" />
     <None Include="Properties\PublishProfiles\milliman-sk.pubxml" />
     <None Include="Properties\PublishProfiles\MillimanDebug.pubxml" />
     <Content Include="SSOConfigure\HCIntel.cer" />
@@ -312,6 +333,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Properties\licenses.licx" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

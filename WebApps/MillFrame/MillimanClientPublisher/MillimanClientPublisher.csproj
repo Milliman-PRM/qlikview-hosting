@@ -115,20 +115,22 @@
     <Content Include="ComplexReporting\ReductionAudit.aspx" />
     <Content Include="ComplexReporting\ReductionStatus.aspx" />
     <Content Include="ComplexReporting\ReviewApproval.aspx" />
+    <Content Include="Content\Images\eye-hide.png" />
+    <Content Include="Content\Images\eye-icon.png" />
+    <Content Include="Content\Images\Info-blue.png" />
+    <Content Include="Content\Images\InformationBulb.png" />
     <Content Include="Content\Script\bootstrap-dialog.min.js" />
     <Content Include="Content\Script\bootstrap.js" />
     <Content Include="Content\Script\bootstrap.min.v3.3.7.js" />
     <Content Include="Content\Script\jquery.min.js" />
+    <Content Include="Content\Script\jquery.min.v2.0.0.js" />
     <Content Include="Content\Script\jquery.min.v2.1.1.js" />
-    <Content Include="Content\Style\MillframeStyle.css" />
-    <Content Include="Css\ajax-loader-LoadingText.gif" />
-    <Content Include="Css\ajax-loader-round.gif" />
-    <Content Include="Css\ajax-loader-RoundBig.gif" />
-    <Content Include="Css\ajax-loader.gif" />
-    <Content Include="Css\ajaxLoaderBlue50.gif" />
+    <Content Include="Content\Script\jquery.v1.7.1.js" />
+    <Content Include="Content\Script\maskedinput.js" />
     <Content Include="Content\Style\bootstrap-dialog.min.css" />
     <Content Include="Content\Style\bootstrap.css" />
     <Content Include="Content\Style\bootstrap.min.css" />
+    <Content Include="Content\Style\MillframeStyle.css" />
     <Content Include="HTML\CleanupIssue.html" />
     <Content Include="images\ajax-loader.gif" />
     <Content Include="images\copy.png" />
@@ -165,6 +167,9 @@
     <Content Include="ProjectEditor.aspx" />
     <Content Include="Reflector.ashx" />
     <Content Include="packages.config" />
+    <Content Include="Content\Images\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\Images\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\Images\glyphicons-halflings-regular.ttf" />
     <None Include="Properties\PublishProfiles\LocalPublish.pubxml" />
     <None Include="Properties\PublishProfiles\Staging.pubxml" />
     <None Include="Web.Debug.config">
@@ -449,6 +454,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Code\" />
+    <Folder Include="Content\Images\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MillimanCommon\MillimanCommon.csproj">

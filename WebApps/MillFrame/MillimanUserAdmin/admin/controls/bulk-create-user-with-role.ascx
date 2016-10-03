@@ -5,29 +5,10 @@
 <%@ Register Src="~/admin/controls/UserRolesSelector.ascx" TagName="userRoleSelector" TagPrefix="urs" %>
 
 <style>
-    .roundShadowContainer {
-        width: 754px;
-        margin-top: 10px;
-    }
-
-    .containerWrap {
-        margin: 0 auto;
-        padding: 2px;
-        width: 20%;
-    }
-
-    .left {
-        float: left;
-        margin: 0px -7px 0px 4px;
-        text-align: left;
-        padding: 2px;
-    }
-
-    .right {
-        float: right;
-        margin: 0px -7px 0px 4px;
-        text-align: left;
-    }
+    .roundShadowContainer{width:754px;margin-top:10px}
+    .containerWrap{margin:0 auto;padding:2px;width:20%}
+    .left{float:left;margin:0 -7px 0 4px;text-align:left;padding:2px}
+    .right{float:right;margin:0 -7px 0 4px;text-align:left}
 </style>
 
 
@@ -57,11 +38,15 @@
         <div class="clearfix"></div>
         <div class="right">
             <%--panel for UserType--%>
+             <asp:UpdatePanel ID="updPanelUserType" runat="server" ChildrenAsTriggers="true" UpdateMode="Conditional">
+            <ContentTemplate>
             <asp:RadioButtonList ID="UserType" runat="server" AutoPostBack="True"
                 OnSelectedIndexChanged="UserType_SelectedIndexChanged" RepeatDirection="Horizontal">
                 <asp:ListItem Selected="true">Milliman Login</asp:ListItem>
                 <asp:ListItem>External SSO Login</asp:ListItem>
             </asp:RadioButtonList>
+                 </ContentTemplate>
+        </asp:UpdatePanel>
         </div>
     </div>
     <div class="space"></div>
@@ -82,7 +67,7 @@
                 <CommandItemTemplate>
                     <asp:LinkButton ID="Add" runat="server" CommandName="Add" Visible="true"><asp:Image runat="server" style="border:0px;vertical-align:middle;" alt="" ImageUrl="~/Images/Office-Girl-icon.png"/>Add List Entry</asp:LinkButton>&nbsp;&nbsp;
                     <asp:LinkButton Width="100px" ID="Validate" runat="server" CommandName="Validate" Visible='<%# RadGrid1.EditIndexes.Count == 0 %>'><asp:Image runat="server"  style="border:0px;vertical-align:middle;" alt="" ImageUrl="~/Images/process-icon.png"/>Validate</asp:LinkButton>&nbsp;&nbsp;
-                    <asp:LinkButton ID="Clear" runat="server" CommandName="Clear" ToolTip="Clears the selected group, User Accounts in grid and CSV list" Visible='<%# RadGrid1.EditIndexes.Count == 0 %>'><asp:Image runat="server" style="border:0px;vertical-align:middle;" alt="" ImageUrl="~/Images/Actions-edit-delete-icon16x16.png"/>Clear List</asp:LinkButton>&nbsp;&nbsp;
+                    <asp:LinkButton ID="Clear" runat="server" CommandName="Clear" ToolTip="Clears the selected group, User Accounts in grid and CSV list" Visible='<%# RadGrid1.EditIndexes.Count == 0 %>'><asp:Image runat="server" style="border:0px;vertical-align:middle;" alt="" ImageUrl="~/Images/Actions-edit-delete-icon16x16.png"/>Clear</asp:LinkButton>&nbsp;&nbsp;
                 </CommandItemTemplate>
                 <Columns>
                     <telerik:GridTemplateColumn DataField="ValidationImage" UniqueName="ValidationImageStatus" HeaderStyle-Width="20px">
@@ -117,7 +102,7 @@
 
     <div class="softRoundContainerStyle">
 
-        <telerik:RadPanelBar ID="RadPanelBar1" runat="server" Width="100%" CollapseDelay="100" ExpandDelay="100" ExpandMode="MultipleExpandedItems">
+        <telerik:RadPanelBar ID="RadPanelBar1" runat="server" Width="100%" CollapseDelay="100" ExpandDelay="100" ExpandMode="MultipleExpandedItems" AllowCollapseAllItems="True" >
             <Items>
                 <telerik:RadPanelItem ID="UserPanel" Value="UserPanel" Text="CSV List Entries" Expanded="False" runat="server" ImagePosition="Left" ToolTip="Click to expand and paste new user information here" ExpandedImageUrl="~/Images/User-Group-icon.png" DisabledImageUrl="~/Images/User-Group-icon.png" ImageUrl="~/Images/User-Group-icon.png">
                     <ContentTemplate>

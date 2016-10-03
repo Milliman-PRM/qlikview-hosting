@@ -151,12 +151,53 @@ namespace MillimanClientUserAdmin
             }
             else if (string.Compare(e.CommandName, "clear", true) == 0)
             {
-                List<UserInfo> UL = new List<UserInfo>();
-                if (UL != null)
+                //Clear all grid items
+                foreach (GridDataItem item in RadGrid1.Items)
                 {
-                    UL.Add(new UserInfo());
-                    RadGrid1.DataSource = UL;
-                    RadGrid1.DataBind();
+                    var AccountNameText = (TextBox)item["AccountNameText"].FindControl("AccountNameTextBox");
+                    var SendWelcome = (CheckBox)item["SendWelcome"].FindControl("SendWelcomeCheckbox");
+                    var DataAccessRequiredText = (CheckBox)item["DataAccessRequiredText"].FindControl("DataAccessRequiredTextBox");
+                    AccountNameText.Text = "";
+                    SendWelcome.Checked = false;
+                    DataAccessRequiredText.Checked = false;
+                }
+
+                //add an empty row
+                var uInfoList = new List<UserInfo>();
+                uInfoList.Add(new UserInfo("", false, false));
+                RadGrid1.DataSource = uInfoList;
+                RadGrid1.Rebind();
+
+                //save all the tree info to file
+                RadTreeView AccessTree = RadPanelBar1.FindItemByValue("TreeHolder").FindControl("AccessTree") as RadTreeView;
+                RadTreeView DownloadTree = RadPanelBar1.FindItemByValue("DownloadHolder").FindControl("DownloadTree") as RadTreeView;
+
+                foreach (RadTreeNode node in AccessTree.Nodes)
+                {
+                    if (node.Selected)
+                        node.Selected = false;
+                    if (node.Nodes.Count > 0)
+                    {
+                        foreach (RadTreeNode subNode in node.Nodes)
+                        {
+                            if (subNode.Selected)
+                                subNode.Selected = false;
+                        }
+                    }
+                }
+
+                foreach (RadTreeNode node in DownloadTree.Nodes)
+                {
+                    if (node.Selected)
+                        node.Selected = false;
+                    if (node.Nodes.Count > 0)
+                    {
+                        foreach (RadTreeNode subNode in node.Nodes)
+                        {
+                            if (subNode.Selected)
+                                subNode.Selected = false;
+                        }
+                    }
                 }
             }
         }

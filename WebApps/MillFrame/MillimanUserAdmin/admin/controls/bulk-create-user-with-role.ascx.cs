@@ -138,18 +138,20 @@ public partial class bulk_admin_controls_create_user_with_role : System.Web.UI.U
         }
         else if (string.Compare(e.CommandName, "Clear", true) == 0)
         {
-            //add an empty row
-            var uInfoList = new List<UserInfo>();
-            uInfoList.Add(new UserInfo("", false, false));
-            RadGrid1.DataSource = uInfoList;
-            RadGrid1.Rebind();
+            ////add an empty row
+            //var uInfoList = new List<UserInfo>();
+            //uInfoList.Add(new UserInfo("", false, false));
+            //RadGrid1.DataSource = uInfoList;
+            //RadGrid1.Rebind();
 
-            //clear control
-            ctrlUserRoles.LoadUserRoles();
-            updPanelUserRoles.Update();
+            ////clear control
+            //ctrlUserRoles.LoadUserRoles();
+            //updPanelUserRoles.Update();
 
-            UserList.Text = string.Empty;
-            updPanelUserList.Update();
+            //UserList.Text = string.Empty;
+            //updPanelUserList.Update();
+
+            InitilizeScreen();
         }
         else if (string.Compare(e.CommandName, "Autocomplete", true) == 0)
         {
@@ -163,6 +165,7 @@ public partial class bulk_admin_controls_create_user_with_role : System.Web.UI.U
     {
         //select the first option
         UserType.SelectedIndex = 0;
+        updPanelUserType.Update();
         //clear control
         ctrlUserRoles.LoadUserRoles();
         updPanelUserRoles.Update();
@@ -189,7 +192,7 @@ public partial class bulk_admin_controls_create_user_with_role : System.Web.UI.U
         items = RadPanelBar1.FindItemByValue("UserPanel");
         items.Expanded = false;
         UserPanel.Expanded = false;
-
+        
         UserList.Text = string.Empty;
         updPanelUserList.Update();
     }
