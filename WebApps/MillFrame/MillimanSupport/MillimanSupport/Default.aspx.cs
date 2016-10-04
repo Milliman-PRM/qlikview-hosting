@@ -63,18 +63,7 @@ namespace MillimanSupport
 
         protected void btnLogout_Click(object sender, EventArgs e)
         {
-            try
-            {
-                // Logout locally.
-                System.Web.Security.FormsAuthentication.SignOut();
-                Session.Abandon();
 
-            }
-
-            catch (Exception exception)
-            {
-                Trace.Write("ServiceProvider", "Error on logout page", exception);
-            }
         }
 
       

@@ -15959,3 +15959,10 @@ File name: 'E:\PRM\WIP\ClientPublisher\images\missing.png'
 9/30/2016 12:06:36 PMInfo           Application Start
 9/30/2016 12:06:36 PMInfo           Loaded user repo
 9/30/2016 12:06:36 PMInfo           Loaded super groups
+10/4/2016 12:15:40 PMInfo           Application Start
+12:15:40 PM                   Error     \r\nException trace: System.ArgumentException: The directory name D:\InstalledApplications\PRM_Staging_SK\Rules is invalid.
+   at System.IO.FileSystemWatcher..ctor(String path, String filter)
+   at MillimanCommon.UserRepo.StartFileWatcher(String RepoFilePath) in E:\Oct4_Issues\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 245
+   at MillimanCommon.UserRepo.Load() in E:\Oct4_Issues\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 337
+   at MillimanCommon.UserRepo.GetInstance() in E:\Oct4_Issues\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 30
+   at ClientPublisher.Global.Application_Start(Object sender, EventArgs e) in E:\Oct4_Issues\WebApps\MillFrame\MillimanClientPublisher\Global.asax.cs:line 15----------------------------------------

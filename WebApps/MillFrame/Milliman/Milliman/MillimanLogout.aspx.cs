@@ -14,9 +14,6 @@ namespace MillimanDev
         {
             try
             {
-                // Logout locally.
-                System.Web.Security.FormsAuthentication.SignOut();
-                Session.Abandon();
 
                 if (this.Session["milliman"] == null)
                 {

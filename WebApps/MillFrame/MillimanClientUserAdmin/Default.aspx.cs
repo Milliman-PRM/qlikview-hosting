@@ -11,7 +11,7 @@ using System.Web.UI.HtmlControls;
 using Telerik.Web.UI;
 using System.Collections.Generic;
 
-public partial class Default : System.Web.UI.Page 
+public partial class Default : System.Web.UI.Page
 {
     public class UserItem
     {
@@ -37,7 +37,7 @@ public partial class Default : System.Web.UI.Page
     /// </summary>
     /// <param name="UserID"></param>
     /// <returns></returns>
-    private string UserStatus(string UserID, out string Tooltip )
+    private string UserStatus(string UserID, out string Tooltip)
     {
         Tooltip = string.Empty;
         try
@@ -121,8 +121,8 @@ public partial class Default : System.Web.UI.Page
             foreach (string User in Users)
             {
                 //dont add underlying "admin" account
-                if ( string.Compare(User,"admin",true) != 0 )
-                { 
+                if (string.Compare(User, "admin", true) != 0)
+                {
                     string Tooltip = "This user only visible if logged in as global administrator.";
                     string Status = "<center>NA</center>";
                     CurrentUsers.Add(new UserItem(User, Status, Tooltip, "", true));
@@ -141,15 +141,15 @@ public partial class Default : System.Web.UI.Page
     /// so for now we only allow 1 project in the group to have a reducable QVW, we have to find that project
     /// in the group and place that in session for reporting
     /// </summary>
-    private enum FailedBecause {  NO_PROJECTS, MULTIPLE_PROJECTS, NOT_SET }
-    private bool SetReducableProjectInSession(out FailedBecause FailureReason )
+    private enum FailedBecause { NO_PROJECTS, MULTIPLE_PROJECTS, NOT_SET }
+    private bool SetReducableProjectInSession(out FailedBecause FailureReason)
     {
         FailureReason = FailedBecause.NOT_SET;
 
         string DocumentRoot = System.Configuration.ConfigurationManager.AppSettings["QVDocumentRoot"];
-        string QualifiedPath = System.IO.Path.Combine(DocumentRoot, Session["groupid"].ToString().Replace('_','\\'));
+        string QualifiedPath = System.IO.Path.Combine(DocumentRoot, Session["groupid"].ToString().Replace('_', '\\'));
         string[] Projects = System.IO.Directory.GetFiles(QualifiedPath, "*.hciprj");
-        if (( Projects == null ) || (Projects.Length == 0 ))
+        if ((Projects == null) || (Projects.Length == 0))
         {
             FailureReason = FailedBecause.NO_PROJECTS;
             return false;
@@ -185,21 +185,21 @@ public partial class Default : System.Web.UI.Page
         if (!IsPostBack)
         {
             Session["groupid"] = CheckForLogin();
-            if ( (Session["groupid"] == null ) || (Session["groupid"].ToString() == "") )
+            if ((Session["groupid"] == null) || (Session["groupid"].ToString() == ""))
             {
-                Response.Redirect("NotAuthorizedIssue.html");
+                Response.Redirect("HTML/NotAuthorizedIssue.html");
                 return;
             }
 
             //if more than one project in group stop now, don't allow an ambigious request result in PHI leak
             FailedBecause FailureReason = FailedBecause.NOT_SET;
-            bool FoundProject = SetReducableProjectInSession( out FailureReason );
+            bool FoundProject = SetReducableProjectInSession(out FailureReason);
             if (FoundProject == false)
             {
                 if (FailureReason == FailedBecause.NO_PROJECTS)
-                    Response.Redirect("noprojects.html");
+                    Response.Redirect("HTML/noprojects.html");
                 else if (FailureReason == FailedBecause.MULTIPLE_PROJECTS)
-                    Response.Redirect("multipleprojects.html");
+                    Response.Redirect("HTML/multipleprojects.html");
                 return;  //halt processing
             }
 
@@ -217,13 +217,13 @@ public partial class Default : System.Web.UI.Page
             }
             else
             {
-                Response.Redirect("NotLoggedIn.html");
+                Response.Redirect("HTML/NotLoggedIn.html");
                 return;
             }
             //get login info, validate and put groupname into session
 
             List<UserItem> UI = MembershipToUserItems(Session["groupid"].ToString());
-            UI.Sort( (user1,user2)=>user1.AccountName.CompareTo(user2.AccountName) );
+            UI.Sort((user1, user2) => user1.AccountName.CompareTo(user2.AccountName));
             UserGrid.DataSource = UI;
             UserGrid.DataBind();
 
@@ -284,55 +284,77 @@ public partial class Default : System.Web.UI.Page
         else
             selectedItems = new System.Collections.ArrayList();
 
-        if ( selectedItems.Count == 0 )
+        if (selectedItems.Count == 0)
             AccessTable.Enabled = false;
+
+        //always check if I'm not authenticated, I should not be here
+        if (string.IsNullOrEmpty(User.Identity.Name) == true)
+        {
+            Response.Redirect("HTML/NotLoggedIn.html");
+        }
     }
 
-    /// <summary>
-    /// Returns a groupid if valid user
-    /// </summary>
-    /// <returns></returns>
+
     private string CheckForLogin()
     {
         string Key = Request["key"];
-     
+
         if (string.IsNullOrEmpty(Key) == false)
         {
             string CacheDir = System.Configuration.ConfigurationManager.AppSettings["HCIntelCache"];  //should be full path in web.config
             string CachePathFileName = System.IO.Path.Combine(CacheDir, Key);
             Session["SSOToken"] = CachePathFileName + ".xml";  //when the session expires we delete the cache file in global.asx
             MillimanCommon.CacheEntry CE = MillimanCommon.CacheEntry.Load(CachePathFileName);
-            if (CE != null)
+            if (string.IsNullOrEmpty(User.Identity.Name) == false) //hmmm, there is a user with access, but is the the correct user or a trick
             {
-                if (CE.Expires < DateTime.Now)
+                MembershipUser CurrentLoggedInUser = Membership.GetUser();
+                string CurrentLoggedInUserID = (CurrentLoggedInUser == null ? "[notloggedin]" : CurrentLoggedInUser.ProviderUserKey.ToString());
+                if (CE != null)
                 {
-                    Response.Redirect("NotAuthorizedIssue.html");
-                    return string.Empty;
-                }
-                ///               this checks to see if the user is the origin of the token                   this to see if the token originator is OFFLINE
-                else if (( Membership.GetUser().ProviderUserKey.ToString() != CE.UserKey.ToString() ) || ( Membership.GetUser(CE.UserName).IsOnline == false ) )
-                {
-                    Response.Redirect("NotAuthorizedIssue.html");
-                    return string.Empty;
-                }
-
-                if (System.IO.File.Exists(CachePathFileName))  //make sure cache file exists, there is a race condition btween session end and the metatag call back, this check is a last second check against the race condition
-                {
-                    if (Membership.ValidateUser(CE.UserName, Membership.GetUser(CE.UserName).GetPassword()) == true)
+                    //tokens are only good for 2 hours
+                    if (CE.Expires < DateTime.Now)
                     {
-                        FormsAuthentication.SetAuthCookie(CE.UserName, false);
-                    }
-                    else
-                    {
-                        Response.Redirect("NotAuthorizedIssue.html");
+                        Response.Redirect("HTML/NotAuthorizedIssue.html");
                         return string.Empty;
                     }
+                    //make sure I am the origin of the token and not somebody trying to trick the system to get in via cut/paste of URLs                    
+                    else if (CurrentLoggedInUserID != CE.UserKey.ToString())
+                    {
+                        Response.Redirect("HTML/NotAuthorizedIssue.html");
+                        return string.Empty;
+                    }
+                    //check to see if the indicated user is online via main application
+                    else if ((Membership.GetUser(CE.UserName).IsOnline == false))
+                    {
+                        Response.Redirect("HTML/NotLoggedIn.html");
+                        return string.Empty;
+                    }
+                    //don't do this, causes cookie issues - if you got here you are already authenticated
+                    //if (System.IO.File.Exists(CachePathFileName))  //make sure cache file exists, there is a race condition btween session end and the metatag call back, this check is a last second check against the race condition
+                    //{
+                    //    if (Membership.ValidateUser(CE.UserName, Membership.GetUser(CE.UserName).GetPassword()) == true)
+                    //    {
+                    //        FormsAuthentication.SetAuthCookie(CE.UserName, false);
+                    //        Response.Redirect("Default.aspx");  //we have to bounce the page to make sure authenication takes effect
+                    //    }
+                    //    else
+                    //    {
+                    //        Response.Redirect("HTML/NotAuthorizedIssue.html");
+                    //        return string.Empty;
+                    //    }
+                    //}
+                    Session["Account"] = CE.UserName;
+                    return CE.MillimanGroupName;
                 }
-                return CE.MillimanGroupName;
+                else
+                {
+                    Response.Redirect("HTML/NotAuthorizedIssue.html");
+                }
             }
             else
             {
-                Response.Redirect("NotAuthorizedIssue.html");
+                Response.Redirect("HTML/NotLoggedIn.html");
+                return string.Empty;
             }
         }
         return "";
@@ -350,7 +372,7 @@ public partial class Default : System.Web.UI.Page
             {
                 //dont count admin people these are typically milliman persons
                 if (Roles.IsUserInRole(User, "Administrator") == false)
-                    StandardUsers++;  
+                    StandardUsers++;
             }
             string LabelTemplate = "Currently using " + StandardUsers.ToString() + " of " + MG.MaximumnUsers.ToString() + " licenses for " + MG.FriendlyGroupName;
             LicenseMessage.Text = LabelTemplate;
@@ -411,7 +433,7 @@ public partial class Default : System.Web.UI.Page
         //make sure we have not timed out
         if ((Session["groupid"] == null) || (Session["groupid"].ToString() == ""))
         {
-            Response.Redirect("NotAuthorizedIssue.html");
+            Response.Redirect("HTML/NotAuthorizedIssue.html");
             return;
         }
 
@@ -429,10 +451,10 @@ public partial class Default : System.Web.UI.Page
                 //don't allow reset, suspend or delete to affect ADMINS
                 if (Roles.IsUserInRole(selectedItems[0].ToString(), "Administrator") == true)
                 {
-                   if ( (string.Compare(e.CommandName,"reset",true) == 0) ||
-                        (string.Compare(e.CommandName, "suspend", true) == 0) ||
-                        (string.Compare(e.CommandName,"delete",true) == 0) )
-                    return; //if we are a global admin dont allow any of this to affect us
+                    if ((string.Compare(e.CommandName, "reset", true) == 0) ||
+                         (string.Compare(e.CommandName, "suspend", true) == 0) ||
+                         (string.Compare(e.CommandName, "delete", true) == 0))
+                        return; //if we are a global admin dont allow any of this to affect us
                 }
             }
         }
@@ -522,9 +544,9 @@ public partial class Default : System.Web.UI.Page
                             Membership.DeleteUser(AccountName.Text);
                     }
                     //always cleanup this stuff, is specifid for the user and this project
-                    string ProjectDirectory = System.IO.Path.Combine(System.Configuration.ConfigurationManager.AppSettings["QVDocumentRoot"], GroupID.Replace("_","\\"));
+                    string ProjectDirectory = System.IO.Path.Combine(System.Configuration.ConfigurationManager.AppSettings["QVDocumentRoot"], GroupID.Replace("_", "\\"));
                     string UserDirectory = MillimanCommon.ReducedQVWUtilities.GetUserDir(ProjectDirectory, AccountName.Text);
-                    if ( System.IO.Directory.Exists( UserDirectory ))  //if they have a dir, kill it
+                    if (System.IO.Directory.Exists(UserDirectory))  //if they have a dir, kill it
                         System.IO.Directory.Delete(UserDirectory, true);
                     selectedItems.Add(AccountName.Text);
                 }
@@ -552,7 +574,7 @@ public partial class Default : System.Web.UI.Page
                     ShowCheckedOnly_CheckedChanged(ShowCheckedOnly, null);
             }
         }
-            //row double click is not ACTIVE at this time
+        //row double click is not ACTIVE at this time
         else if (string.Compare(e.CommandName, "rowdoubleclick", true) == 0)
         {
             e.Item.Selected = true;
@@ -566,7 +588,7 @@ public partial class Default : System.Web.UI.Page
                     Label AccountName = (Label)GDI.FindControl("AccountNameTextBox");
                     if (selectedItems.Contains(AccountName.Text) == false)
                         SingleItem = AccountName.Text;
-                    
+
                 }
                 selectedItems.Clear();
                 selectedItems.Add(SingleItem);
@@ -579,7 +601,7 @@ public partial class Default : System.Web.UI.Page
         }
         else if (string.Compare(e.CommandName, "launchqvw", true) == 0)
         {
-            int TrueRowIndex = e.Item.RowIndex - 2 ;  //first two rows are headers, so sub off 2
+            int TrueRowIndex = e.Item.RowIndex - 2;  //first two rows are headers, so sub off 2
             Telerik.Web.UI.GridDataItem GDI = UserGrid.Items[TrueRowIndex] as GridDataItem;  //should be only 1
             Label AccountName = (Label)GDI.FindControl("AccountNameTextBox");
 
@@ -591,12 +613,12 @@ public partial class Default : System.Web.UI.Page
                 //even though we looked up the qvw for a user, we want to display via our account so we always use a named
                 //license for client admins
                 string ClientAdminAccount = Membership.GetUser().UserName;
-                if ( Launch( ClientAdminAccount, QVW, "", "") == false )
+                if (Launch(ClientAdminAccount, QVW, "", "") == false)
                     MillimanCommon.Alert.Show("User '" + AccountName.Text + "' has an associated QVW but it failed launch.");
             }
             else
             {
-                Response.Redirect("NoReducedVersion.html");
+                Response.Redirect("HTML/NoReducedVersion.html");
             }
 
 
@@ -621,7 +643,7 @@ public partial class Default : System.Web.UI.Page
         //make sure we have not timed out
         if ((Session["groupid"] == null) || (Session["groupid"].ToString() == ""))
         {
-            Response.Redirect("NotAuthorizedIssue.html");
+            Response.Redirect("HTML/NotAuthorizedIssue.html");
             return;
         }
 
@@ -643,7 +665,7 @@ public partial class Default : System.Web.UI.Page
             int index = item.ItemIndex;
             TextBox txtbx = (TextBox)item["NotesText"].FindControl("NotesTextBox");
             txtbx.Attributes.Add("OnClick", "return Select('" + index + "');");
-            
+
         }
         else if (e.Item is GridCommandItem)
         {
@@ -706,7 +728,7 @@ public partial class Default : System.Web.UI.Page
                         GridDataItem dataItem = (GridDataItem)item;
                         Label AccountName = (Label)dataItem.FindControl("AccountNameTextBox");
 
-                        if ( selectedItems.Contains( AccountName.Text) )
+                        if (selectedItems.Contains(AccountName.Text))
                         {
                             dataItem.Selected = true;
                             //dataItem.BackColor = System.Drawing.Color.AliceBlue;
@@ -718,13 +740,13 @@ public partial class Default : System.Web.UI.Page
         }
 
     }
-  
+
     protected void ApplyChangesButton_Click(object sender, EventArgs e)
     {
         //make sure we have not timed out
         if ((Session["groupid"] == null) || (Session["groupid"].ToString() == ""))
         {
-            Response.Redirect("NotAuthorizedIssue.html");
+            Response.Redirect("HTML/NotAuthorizedIssue.html");
             return;
         }
 
@@ -744,7 +766,7 @@ public partial class Default : System.Web.UI.Page
 
             bool RequiresReduction = true;
             MillimanCommon.TreeToFileUtilities TTFU = new MillimanCommon.TreeToFileUtilities();
-            if (TTFU.SaveSettings(MillimanCommon.ProjectSettings.Load(Session["ProjectPath"].ToString()),AccessTree, DownloadTree, Accounts, out RequiresReduction) == false)
+            if (TTFU.SaveSettings(MillimanCommon.ProjectSettings.Load(Session["ProjectPath"].ToString()), AccessTree, DownloadTree, Accounts, out RequiresReduction) == false)
                 MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "Failed to save settings");
 
             if (RequiresReduction == false)
@@ -781,7 +803,7 @@ public partial class Default : System.Web.UI.Page
                 {
                     if (string.IsNullOrEmpty(QVWList) == false)
                         QVWList += ",";
-                    QVWList += "\"" + System.IO.Path.GetFileName( RS.QualafiedQVW) + "\"";
+                    QVWList += "\"" + System.IO.Path.GetFileName(RS.QualafiedQVW) + "\"";
                 }
                 MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "Failed to reduced " + QVWList + " for users " + UserList);
 
@@ -793,7 +815,7 @@ public partial class Default : System.Web.UI.Page
                 MillimanClientUserAdmin.AddUser.Promote(GroupID, Accounts);
 
                 string Msg = "Account(s):<br/><br/>";
-                if ( Accounts.Count == 1 )
+                if (Accounts.Count == 1)
                     Msg = "Account:<br/><br/>";
                 foreach (string User in Accounts)
                     Msg += User + "<br/>&nbsp;&nbsp;&nbsp;";
@@ -803,56 +825,7 @@ public partial class Default : System.Web.UI.Page
                 //MillimanCommon.Alert.Show(Msg, true);
                 RadWindowManager.RadAlert(Msg, 300, null, "Accounts Modified", "");
             }
-            //Dictionary<string, List<string>> AccessSaveSelections = null;
-            //List<string> SelectedItems = GetAccessSelections(out AccessSaveSelections);
-            
-            ////issue reduction on selectedItems - HERE 
-
-            //foreach( string Account in Accounts )
-            //{
-            //    //store access save selections
-            //    foreach( KeyValuePair<string, List<string>> Selection in AccessSaveSelections )
-            //    {
-            //        string SaveTo = MillimanCommon.ReducedQVWUtilities.ReducedQVW(Selection.Key, Account);
-            //        SaveTo = SaveTo.ToLower().Replace(".qvw", ".selections");
-            //        System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(SaveTo));
-            //        System.IO.File.Delete(SaveTo);
-            //        Polenter.Serialization.SharpSerializer SS = new Polenter.Serialization.SharpSerializer(false);
-            //        SS.Serialize(Selection.Value, SaveTo);
-            //    }
-                
-            //    Dictionary<string, List<string>> DownloadSaveSelections = null;
-            //    List<string> DownloadItems = GetDownloadSelections(out DownloadSaveSelections);
-            //    //store access save selections
-            //    foreach (KeyValuePair<string, List<string>> Selection in DownloadSaveSelections)
-            //    {
-            //        string SaveTo = MillimanCommon.ReducedQVWUtilities.ReducedQVW(Selection.Key, Account);
-            //        string SaveToDownloads = SaveTo.ToLower().Replace(".qvw", ".downloads");
-            //        System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(SaveToDownloads));
-            //        System.IO.File.Delete(SaveToDownloads);
-            //        Polenter.Serialization.SharpSerializer SS = new Polenter.Serialization.SharpSerializer(false);
-            //        SS.Serialize(Selection.Value, SaveToDownloads);
-
-            //        //update custom user downloads
-            //        MillimanCommon.CustomUserDownloads CUD = MillimanCommon.CustomUserDownloads.GetInstance();
-            //        CUD.ClearItems(Account, MillimanCommon.QVWUtilities.AbsoluteToVirtualFromQVDocRoot(SaveTo));
-            //        string Icon;
-            //        string Mime;
-            //        string Tooltip;
-            //        foreach (string SelectedDownloads in Selection.Value)
-            //        {
-            //            string[] SDTokens = SelectedDownloads.Split(new char[] { '|' });
-            //            string DownloadItem = SDTokens[1];
-            //            string RelativeDownloadItem = MillimanCommon.QVWUtilities.AbsoluteToVirtualFromQVDocRoot(DownloadItem);
-            //            Icon = MillimanCommon.ImageUtilities.GetIcon(DownloadItem, out Mime);
-            //            Tooltip = SDTokens[SDTokens.Length - 1];
-                  
-            //            CUD.AddorUpdateItem(Account, MillimanCommon.QVWUtilities.AbsoluteToVirtualFromQVDocRoot(SaveTo), RelativeDownloadItem, Icon, Mime, Tooltip);
-            //        }
-            //    }
-            //}
-
-        }      
+        }
     }
 
 
@@ -879,7 +852,7 @@ public partial class Default : System.Web.UI.Page
             }
         }
 
-        foreach(RadTreeNode DownloadNode in Downloads.Nodes )
+        foreach (RadTreeNode DownloadNode in Downloads.Nodes)
         {
             string QVW = DownloadNode.Value;
             string DownloadsReadFrom = MillimanCommon.ReducedQVWUtilities.GetUsersReducedQVWName(QVW, Account);
@@ -924,7 +897,7 @@ public partial class Default : System.Web.UI.Page
                                   List<string> Selections)
     {
 
-        foreach( string S in Selections )
+        foreach (string S in Selections)
         {
             if (FindAndCheckNode(StartingNode, S) == false)
                 MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "Failed to find node '" + S + "' in QVW tree '" + StartingNode.Value + "'");
@@ -961,7 +934,7 @@ public partial class Default : System.Web.UI.Page
         //make sure we have not timed out
         if ((Session["groupid"] == null) || (Session["groupid"].ToString() == ""))
         {
-            Response.Redirect("NotAuthorizedIssue.html");
+            Response.Redirect("HTML/NotAuthorizedIssue.html");
             return;
         }
 
@@ -971,7 +944,7 @@ public partial class Default : System.Web.UI.Page
         CheckBox CB = sender as CheckBox;
 
         List<RadTreeNode> DownloadTree = Downloads.GetAllNodes() as List<RadTreeNode>;
-        foreach( RadTreeNode RTN in DownloadTree )
+        foreach (RadTreeNode RTN in DownloadTree)
         {
             if (CB.Checked)
                 RTN.Visible = RTN.Checked;
@@ -995,7 +968,7 @@ public partial class Default : System.Web.UI.Page
         }
     }
 
-    private string GetAdminNote(string UserAccount )
+    private string GetAdminNote(string UserAccount)
     {
         MembershipUser MU = Membership.GetUser(UserAccount);
         string Note = string.Empty;
@@ -1013,7 +986,7 @@ public partial class Default : System.Web.UI.Page
                 System.Data.SqlClient.SqlDataReader cursor = comm.ExecuteReader();
                 while (cursor.Read())
                 {
-                    Note =  cursor["AdminNote"].ToString();
+                    Note = cursor["AdminNote"].ToString();
                 }
                 comm.Connection.Close();
             }
@@ -1075,7 +1048,7 @@ public partial class Default : System.Web.UI.Page
         //make sure we have not timed out
         if ((Session["groupid"] == null) || (Session["groupid"].ToString() == ""))
         {
-            Response.Redirect("NotAuthorizedIssue.html");
+            Response.Redirect("HTML/NotAuthorizedIssue.html");
             return;
         }
 
@@ -1098,7 +1071,7 @@ public partial class Default : System.Web.UI.Page
             if (item.ItemType == GridItemType.Item || item.ItemType == GridItemType.AlternatingItem)
             {
                 System.Web.UI.WebControls.ImageButton imgBtn = (System.Web.UI.WebControls.ImageButton)item["LaunchQVW"].Controls[0];
-               
+
                 if (imgBtn != null)
                 {
                     //have to set document target to blank to launch new window, and then a timer to reset form back to self, otherwise clicking
@@ -1108,8 +1081,8 @@ public partial class Default : System.Web.UI.Page
             }
         }
 
-       
+
     }
 
-   
+
 }
