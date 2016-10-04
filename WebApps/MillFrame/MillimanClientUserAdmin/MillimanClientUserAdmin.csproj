@@ -94,6 +94,13 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="HTML\GeneralIssue.aspx.cs">
+      <DependentUpon>GeneralIssue.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="HTML\GeneralIssue.aspx.designer.cs">
+      <DependentUpon>GeneralIssue.aspx</DependentUpon>
+    </Compile>
     <Compile Include="ImageReflector.aspx.cs">
       <DependentUpon>ImageReflector.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -212,6 +219,27 @@
     <Content Include="Content\Style\MillframeStyle.css" />
     <Content Include="email_templates\resetpassword.htm" />
     <Content Include="Global.asax" />
+    <Content Include="HTML\CleanupIssue.html" />
+    <Content Include="HTML\DashboardMissingIssue.html" />
+    <Content Include="HTML\FailedSignature.html" />
+    <Content Include="HTML\GeneralIssue.aspx" />
+    <Content Include="HTML\GroupContainsMultipleProjects.html" />
+    <Content Include="HTML\MissingProject.html" />
+    <Content Include="HTML\MultipleGroupsAllocated.html" />
+    <Content Include="HTML\MultipleQVWsInUpload.html" />
+    <Content Include="HTML\NoGroupsAllocated.html" />
+    <Content Include="HTML\NoneClientAdmin.html" />
+    <Content Include="HTML\NoProjectsReady.html" />
+    <Content Include="HTML\NotAuthorizedIssue.html" />
+    <Content Include="HTML\NotLoggedIn.html" />
+    <Content Include="HTML\ProjectSaved.html" />
+    <Content Include="HTML\ProjectSavedFailed.html" />
+    <Content Include="HTML\ReductionIssue .html" />
+    <Content Include="HTML\ReductionMoveIssue.html" />
+    <Content Include="HTML\SecureLinkIssue.html" />
+    <Content Include="HTML\SecureLinkUsed.html" />
+    <Content Include="HTML\SystemReportingError.html" />
+    <Content Include="HTML\UnspecifiedIssue.html" />
     <Content Include="Images\admin.png" />
     <Content Include="Images\remove-key-icon.png" />
     <Content Include="Images\reportlaunch.png" />
@@ -336,7 +364,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties UseAjaxifiedTemplates="True" UseJQuerySupport="True" />
+      <UserProperties UseJQuerySupport="True" UseAjaxifiedTemplates="True" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

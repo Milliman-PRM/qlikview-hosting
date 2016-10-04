@@ -87,7 +87,7 @@ namespace ClientPublisher
                 string WorkingProject = string.Empty;
                 if (ContainsFilesToPublish(out WorkingDirectory, out WorkingProject) == false)
                 {
-                    Response.Redirect("NoFilesToPublish.html");
+                    Response.Redirect("HTML/NoFilesToPublish.html");
                     return;
                 }
                 //look to see if there is a new QVW to publish, if not we need to hide some tabs
