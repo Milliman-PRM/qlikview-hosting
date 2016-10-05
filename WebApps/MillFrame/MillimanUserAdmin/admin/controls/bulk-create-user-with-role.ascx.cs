@@ -81,35 +81,6 @@ public partial class bulk_admin_controls_create_user_with_role : System.Web.UI.U
 
     }
 
-
-    protected void CreateNewUsers_Click(object sender, ImageClickEventArgs e)
-    {
-        List<UserInfo> UIList = ValidateUserRequests();
-        bool AllGood = true;
-        var errorMsg = string.Empty;
-        foreach (UserInfo UIC in UIList)
-        {
-            if (string.IsNullOrEmpty(UIC.ErrorMsg) == false)
-            {
-                errorMsg = errorMsg + UIC.ErrorMsg;
-                AllGood = false;
-            }
-        }
-        if (AllGood == false)
-        {
-            RadGrid1.DataSource = UIList;
-            RadGrid1.Rebind();
-            MillimanCommon.Alert.Show(errorMsg + " To create users all errors must be corrected in the user list.  Check list items tagged with a red icon.");
-            return;
-        }
-        string CSVUsers = string.Empty;
-        string Results = CreateUsersFromList(UIList, out CSVUsers);
-        UserList.Text = "[CSV Format]\n" + CSVUsers;
-        UserList.Text += "\n\n[Excel Format]\n" + CSVUsers.Replace(",", "\t");
-
-        MillimanCommon.Alert.Show(Results);
-    }
-
     protected void UserType_SelectedIndexChanged(object sender, EventArgs e)
     {
         List<UserInfo> GridContents = GridToList(RadGrid1);
@@ -385,4 +356,31 @@ public partial class bulk_admin_controls_create_user_with_role : System.Web.UI.U
         return UIList;
     }
 
+    protected void CreateNewUsers_Click(object sender, EventArgs e)
+    {
+        List<UserInfo> UIList = ValidateUserRequests();
+        bool AllGood = true;
+        var errorMsg = string.Empty;
+        foreach (UserInfo UIC in UIList)
+        {
+            if (string.IsNullOrEmpty(UIC.ErrorMsg) == false)
+            {
+                errorMsg = errorMsg + UIC.ErrorMsg;
+                AllGood = false;
+            }
+        }
+        if (AllGood == false)
+        {
+            RadGrid1.DataSource = UIList;
+            RadGrid1.Rebind();
+            MillimanCommon.Alert.Show(errorMsg + " To create users all errors must be corrected in the user list.  Check list items tagged with a red icon.");
+            return;
+        }
+        string CSVUsers = string.Empty;
+        string Results = CreateUsersFromList(UIList, out CSVUsers);
+        UserList.Text = "[CSV Format]\n" + CSVUsers;
+        UserList.Text += "\n\n[Excel Format]\n" + CSVUsers.Replace(",", "\t");
+
+        MillimanCommon.Alert.Show(Results);
+    }
 }
