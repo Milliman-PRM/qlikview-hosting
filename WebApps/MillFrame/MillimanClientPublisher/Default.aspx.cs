@@ -18,7 +18,7 @@ namespace ClientPublisher
                 string PublishToSupergroup = CheckForLogin();
                 if (string.IsNullOrEmpty(PublishToSupergroup))
                 {
-                    Response.Redirect("NotAuthorizedIssue.html");
+                    Response.Redirect("HTML/NotAuthorizedIssue.html");
                     return;
                 }
 
@@ -32,11 +32,20 @@ namespace ClientPublisher
                 CacheCleaner(7); // cleanup the cache
 
                 LoadProjects(PublishToSupergroup);
+            }
 
-                //string[] UserRoles = MillimanCommon.UserAccessList.GetRolesForUser();
+            //always check if I'm not authenticated, I should not be here
+            if (string.IsNullOrEmpty(User.Identity.Name) == true)
+            {
+                Response.Redirect("HTML/NotLoggedIn.html");
             }
         }
 
+        /// <summary>
+        /// Check for login will verify the authentication cookie against the server side token to 
+        /// ensure someone is not trying to break in via user emulation
+        /// </summary>
+        /// <returns></returns>
         private string CheckForLogin()
         {
             string Key = Request["key"];
@@ -47,45 +56,56 @@ namespace ClientPublisher
                 string CachePathFileName = System.IO.Path.Combine(CacheDir, Key);
                 Session["SSOToken"] = CachePathFileName + ".xml";  //when the session expires we delete the cache file in global.asx
                 MillimanCommon.CacheEntry CE = MillimanCommon.CacheEntry.Load(CachePathFileName);
-                if (string.IsNullOrEmpty(User.Identity.Name) == true) //if users is already authenticated, skip this check
+                if (string.IsNullOrEmpty(User.Identity.Name) == false) //hmmm, there is a user with access, but is the the correct user or a trick
                 {
+                    MembershipUser CurrentLoggedInUser = Membership.GetUser();
+                    string CurrentLoggedInUserID = (CurrentLoggedInUser == null ? "[notloggedin]" : CurrentLoggedInUser.ProviderUserKey.ToString());
                     if (CE != null)
                     {
+                        //tokens are only good for 2 hours
                         if (CE.Expires < DateTime.Now)
                         {
-                            Response.Redirect("NotAuthorizedIssue.html");
+                            Response.Redirect("HTML/NotAuthorizedIssue.html");
                             return string.Empty;
                         }
-                        ///               this checks to see if the user is the origin of the token                   this to see if the token originator is OFFLINE
-                        else if ((Membership.GetUser().ProviderUserKey.ToString() != CE.UserKey.ToString()) || (Membership.GetUser(CE.UserName).IsOnline == false))
+                        //make sure I am the origin of the token and not somebody trying to trick the system to get in via cut/paste of URLs                    
+                        else if (CurrentLoggedInUserID != CE.UserKey.ToString())
                         {
-                            Response.Redirect("NotAuthorizedIssue.html");
+                            Response.Redirect("HTML/NotAuthorizedIssue.html");
                             return string.Empty;
                         }
-
-                        if (System.IO.File.Exists(CachePathFileName))  //make sure cache file exists, there is a race condition btween session end and the metatag call back, this check is a last second check against the race condition
+                        //check to see if the indicated user is online via main application
+                        else if ((Membership.GetUser(CE.UserName).IsOnline == false))
                         {
-                            if (Membership.ValidateUser(CE.UserName, Membership.GetUser(CE.UserName).GetPassword()) == true)
-                            {
-                                FormsAuthentication.SetAuthCookie(CE.UserName, false);
-                                Response.Redirect("Default.aspx");  //we have to bounce the page to make sure authenication takes effect
-                            }
-                            else
-                            {
-                                Response.Redirect("NotAuthorizedIssue.html");
-                                return string.Empty;
-                            }
+                            Response.Redirect("HTML/NotLoggedIn.html");
+                            return string.Empty;
                         }
+                        //don't do this, causes cookie issues - if you got here you are already authenticated
+                        //if (System.IO.File.Exists(CachePathFileName))  //make sure cache file exists, there is a race condition btween session end and the metatag call back, this check is a last second check against the race condition
+                        //{
+                        //    if (Membership.ValidateUser(CE.UserName, Membership.GetUser(CE.UserName).GetPassword()) == true)
+                        //    {
+                        //        FormsAuthentication.SetAuthCookie(CE.UserName, false);
+                        //        Response.Redirect("Default.aspx");  //we have to bounce the page to make sure authenication takes effect
+                        //    }
+                        //    else
+                        //    {
+                        //        Response.Redirect("HTML/NotAuthorizedIssue.html");
+                        //        return string.Empty;
+                        //    }
+                        //}
+                        Session["Account"] = CE.UserName;
                         return CE.MillimanGroupName;
                     }
                     else
                     {
-                        Response.Redirect("NotAuthorizedIssue.html");
+                        Response.Redirect("HTML/NotAuthorizedIssue.html");
                     }
                 }
                 else
                 {
-                    return CE.MillimanGroupName;
+                    Response.Redirect("HTML/NotLoggedIn.html");
+                    return string.Empty;
                 }
             }
             return "";
@@ -203,8 +223,6 @@ namespace ClientPublisher
             //make sure is a client admin trying to run, otherwise exit
             if ((IsPublishingAdmin() == false) && (IAmAdministrator() == false))
             {
-                System.Web.Security.FormsAuthentication.SignOut();
-                Session.Abandon();
                 Response.Redirect("HTML/NoneClientAdmin.html");
                 return;
             }
@@ -212,8 +230,6 @@ namespace ClientPublisher
             List<MillimanCommon.SuperGroup.SuperGroupContainer> SuperGroups = MillimanCommon.SuperGroup.GetInstance().GetSupersForPublishingAdmin(Membership.GetUser().UserName);
             if (SuperGroups == null)
             {
-                System.Web.Security.FormsAuthentication.SignOut();
-                Session.Abandon();
                 Response.Redirect("HTML/NoGroupsAllocated.html");
                 return;
             }
@@ -230,9 +246,7 @@ namespace ClientPublisher
 
                 if (FoundSuperGroup == null)
                 {
-                    System.Web.Security.FormsAuthentication.SignOut();
-                    Session.Abandon();
-                    Response.Redirect("NoProjectsReady.html");
+                    Response.Redirect("HTML/NoProjectsReady.html");
                 }
 
             }
@@ -247,8 +261,6 @@ namespace ClientPublisher
                {
                    if (GroupProjects.Count > 1)
                    {
-                       System.Web.Security.FormsAuthentication.SignOut();
-                       Session.Abandon();
                        Response.Redirect("HTML/GroupContainsMultipleProjects.html");
                        return;
                    }
@@ -276,8 +288,6 @@ namespace ClientPublisher
 
             if (Projects.Count == 0)
             {
-                System.Web.Security.FormsAuthentication.SignOut();
-                Session.Abandon();
                 Response.Redirect("HTML/NoProjectsReady.html");
                 return;
             }
@@ -301,11 +311,6 @@ namespace ClientPublisher
             {
                 try
                 {
-                    System.Threading.Thread.Sleep(2000); //seleep 2 seconds, to give other handlers chance to complete
-                    // Logout locally.
-                    System.Web.Security.FormsAuthentication.SignOut();
-                    Session.Abandon();
- 
                     Response.Redirect("UserLogin.aspx");
                 }
                 catch (Exception exception)

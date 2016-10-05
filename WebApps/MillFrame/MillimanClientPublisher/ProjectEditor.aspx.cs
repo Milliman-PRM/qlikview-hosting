@@ -276,7 +276,7 @@ namespace ClientPublisher
                 if (Signature.SaveChanges() == false )
                 {
                     MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "Failed to sign new QVW for project -'" + CurrentProject.ProjectName + "'");
-                    Response.Redirect("FailedSignature.html");
+                    Response.Redirect("HTML/FailedSignature.html");
                     return;
                 }
                 if ( CanEmit )
