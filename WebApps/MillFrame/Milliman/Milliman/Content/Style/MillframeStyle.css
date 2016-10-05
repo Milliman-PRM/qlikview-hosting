@@ -45,6 +45,10 @@ td{padding:4px!important}
 .right-div{display:inline-block;max-width:435px;text-align:left;padding:3px;margin:3px}
 /* info box*/
 .infoBox{color:#8a6d3b;background-color:#fcf8e3;border-color:#faebcc;margin:0 auto!important}
-.engravedHeader{color:#333;font:80px LeagueGothicRegular;text-shadow:0 1px 0 rgba(255,255,255,255)}
-#divImportantHint{display:none;position:absolute;z-index:2000}
-.divImportant{cursor:pointer}
+.engravedHeader{color:#333;font-family:LeagueGothicRegular;text-shadow:0 1px 0 rgba(255,255,255,255)}
+#divImportantHint{display:none;position:absolute;z-index:2000;}
+.divImportant{cursor:pointer;}
+/* info box*/
+input[type="radio"]{
+  margin: 4px 8px 0px 16px;
+}

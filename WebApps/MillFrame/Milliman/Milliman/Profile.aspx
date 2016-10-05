@@ -8,53 +8,61 @@
     <link id="lnkBootstrapcss" runat="server" rel="stylesheet" type="text/css" href="~/Content/Style/bootstrap.css" />
     <link id="Link1" runat="server" rel="stylesheet" type="text/css" href="~/Content/Style/MillframeStyle.css" />
     <style type="text/css">
-        html{overflow:scroll}
-        html,button,input,select,textarea,label{font-family:arial,"Times New Roman",Times,serif,sans-serif;font-size:12px;color:#222}
-        body{margin:20px}
+        html {
+            overflow: scroll;
+        }
+
+        html, button, input, select, textarea, label {
+            font-family: arial,"Times New Roman",Times,serif,sans-serif;
+            font-size: 12px;
+            color: #222;
+        }
+
+        body {
+            margin: 20px;
+        }
     </style>
 
     <script src="Content/Script/jquery.v1.7.1.js"></script>
     <script type="text/javascript">
-            function getRadWindow() {
-                var oWindow = null;
-                if (window.radWindow)
-                    oWindow = window.radWindow;
-                else if (window.frameElement.radWindow)
-                    oWindow = window.frameElement.radWindow;
-                return oWindow;
-            };
+        function getRadWindow() {
+            var oWindow = null;
+            if (window.radWindow)
+                oWindow = window.radWindow;
+            else if (window.frameElement.radWindow)
+                oWindow = window.frameElement.radWindow;
+            return oWindow;
+        };
 
         // Reload parent page
-            function CloseDialog() {
-                var ThisDialog = getRadWindow();
-                var Parent = getRadWindow().BrowserWindow;
-                Parent.radalert('Profile/Password information has been saved.', 350, 150, "Information Saved");
-                ThisDialog.close();
-            };
+        function CloseDialog() {
+            var ThisDialog = getRadWindow();
+            var Parent = getRadWindow().BrowserWindow;
+            Parent.radalert('Profile/Password information has been saved.', 350, 150, "Information Saved");
+            ThisDialog.close();
+        };
 
     </script>
 </head>
 <body style="background-color: white; background-image: url(images/watermark.png); background-repeat: repeat;" onload="OnLoad();">
     <form id="form1" runat="server">
-
         <div class="containerWrap">
-        <%--divImportantHint hint--%>
-        <div id="divImportant" class="divImportant" style="width: 23px; float: left;">
-            <img id="img2" src="~/Content/Images/Info-blue.png" runat="server" width="18" height="18" style="margin: 2px 6px 6px 2px;" />
-            <i class="glyphicons glyphicons-info-sign"></i>
-            <div id="divImportantHint">
-                <div class="alert alert-warning infoBox text-justify">
-                    <strong>Important!</strong> 
-                    <br />
-                    Please complete all required fields marked with an asterisk (*).
+            <%--divImportantHint hint--%>
+            <div id="divImportant" class="divImportant" style="width: 23px; float: left;">
+                <img id="img2" src="~/Content/Images/Info-blue.png" runat="server" width="18" height="18" style="margin: 2px 6px 6px 2px;" />
+                <div id="divImportantHint">
+                    <div class="alert alert-warning infoBox text-justify">
+                        <strong>Important!</strong>
+                        <br />
+                        Please complete all required fields marked with an asterisk (*).
                      <%--Allowed special Chars--%>
-                    <div id="divSpecialChars">
-                        Allowed Special Characters in name:&nbsp;&nbsp;<asp:Label ID="lblAllowedChars" runat="server"></asp:Label>
-                    </div>                    
-                </div>                
-            </div>           
-        </div>
-        <%--divImportantHint hint--%>
+                        <div id="divSpecialChars">
+                            Allowed Special Characters in name:&nbsp;&nbsp;<asp:Label ID="lblAllowedChars" runat="server"></asp:Label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <%--divImportantHint hint--%>
             <div class="page-header engravedHeader">
                 <h2>User Profile  <small>Password Settings</small></h2>
             </div>
@@ -116,12 +124,13 @@
                                         <li class="listLi">Contain a capital letter [A-Z]</li>
                                         <li class="listLi">Contain a lowercase letter [a-z]</li>
                                         <li class="listLi">Contain a number [0-9]</li>
-                                        <li class="listLi">Contain a special character <asp:Label ID="lblAllowedSpecialCharactersInPassword" runat="server"></asp:Label></li>
+                                        <li class="listLi">Contain a special character
+                                            <asp:Label ID="lblAllowedSpecialCharactersInPassword" runat="server"></asp:Label></li>
                                     </ul>
                                 </fieldset>
                             </div>
                         </div>
-                    </div>                    
+                    </div>
                 </div>
             </div>
             <div class="right-div">
@@ -143,7 +152,7 @@
                                     <label for="NewPassword" class="labelweak required">New Password:&nbsp;</label></td>
                                 <td>
                                     <input id="NewPassword" name="NewPassword" type="password" runat="server" class="NewPassword form-control"
-                                        style="width: 185px;" tabindex="5" onclick="this.select(); removeClass(this, 'textbox-focus');" />                                 
+                                        style="width: 185px;" tabindex="5" onclick="this.select(); removeClass(this, 'textbox-focus');" />
                                     <img src="Content/Images/eye-icon.png" class="showPassword"
                                         id="imageShowPassword" onclick="changeImage(this)" width="18" height="18" />
                                     <div id="divPasswordCriteriaContainer" class="passwordCriteria roundShadowContainer">
@@ -217,10 +226,10 @@
             <div class="row">
                 <div class="center-block" style="float: none; width: 415px;">
                     <div class="col-md-9">
-                        <asp:Button ID="Button1" runat="server" CommandName="ChangePassword" Text="Apply Changes"
+                        <asp:Button ID="Button1" runat="server" CommandName="ChangePassword" Text="Save Changes"
                             OnClick="ChangePasswordPushButton_Click" CssClass="btn btn-primary"
                             OnClientClick="return Validate();" />
-                        <asp:Button ID="Button2" runat="server" CommandName="ResetForm" Text="Clear" CssClass="btn btn-primary"
+                        <asp:Button ID="Button2" runat="server" CommandName="ResetForm" Text="Clear All" CssClass="btn btn-primary"
                             OnClientClick="ClearTextboxes();" />
                     </div>
                 </div>
@@ -278,12 +287,12 @@
                 var txt = 'Error=>' + err.description;
                 showDangerAlert(txt);
             }
-        }  
+        }
         //*****************  Common ******************************//
 
         //set phone mask
         $("#Phone").mask("(999) 999-9999");
-        
+
         //turn off autocomplete
         // Opera 8.0+
         var isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
@@ -314,7 +323,13 @@
         }, function () {
             $('#divImportantHint').hide();
         });
-   
+
+        $('.divImportant').mousemove(function (e) {
+            $("#divImportantHint")
+                .css('top', e.pageY + moveDown)
+                .css('left', e.pageX + moveLeft);
+        });
+
         //***************** display the password hint next to the image ******************************//
         var moveLeft = 10;
         var moveDown = 20;
@@ -373,17 +388,16 @@
         if (lblAllowedSpecialCharactersInPassword.length > 1) {
             document.getElementById("lblAllowedSpecialCharactersInPassword").innerText = lblAllowedSpecialCharactersInPassword.trim();
         }
-        
+
         //***************** Allowed Special Characters in Name ******************************//
         //if there are values for allwoed character then display it
         var AllowedSpecialCharactersInUserName = "<%= System.Configuration.ConfigurationManager.AppSettings["AllowedSpecialCharactersInUserName"].ToString() %>"
         if (AllowedSpecialCharactersInUserName.length > 1) {
             $('#divSpecialChars').show();
             var regex = new RegExp(',', 'g')
-            document.getElementById("lblAllowedChars").innerText = AllowedSpecialCharactersInUserName.replace(regex,' ');
-        }  
-        else
-        {
+            document.getElementById("lblAllowedChars").innerText = AllowedSpecialCharactersInUserName.replace(regex, ' ');
+        }
+        else {
             $('#divSpecialChars').hide();
         }
 
@@ -393,19 +407,17 @@
 
         var UserLastInput = document.getElementById("UserLastName");
         UserLastInput.addEventListener("blur", verifyUserNameInput, false);
-            
-        function verifyUserNameInput(elementFocusEvent)
-        {
+
+        function verifyUserNameInput(elementFocusEvent) {
             var elementID = elementFocusEvent.target.id;
             var elementValue = elementFocusEvent.target.value;
 
-            CheckUserNameInput(elementValue,elementID);           
-            
+            CheckUserNameInput(elementValue, elementID);
+
             return true;
         }
 
-        function CheckUserNameInput(elementValue,elementID)
-        {
+        function CheckUserNameInput(elementValue, elementID) {
             var alphabets = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
             var number = "0123456789";
             var badData = false;
@@ -425,8 +437,7 @@
             //if there are specail in name then check if they are allowed
             var allSpecialChars = new RegExp(/[~!@#$%^&*;?+_.`,<>;':/[\]|{}()=-]/);
 
-            if (elementValue.match(new RegExp(allSpecialChars, "gi")))
-            {
+            if (elementValue.match(new RegExp(allSpecialChars, "gi"))) {
                 //allowed special chars from web.config
                 var allowedSplChars = AllowedSpecialCharactersInUserName.trim().split(',');
 
@@ -438,25 +449,22 @@
                     if (allowedSplChars.indexOf(allPresentCharactersInName[i]) !== -1) {
                         found.push(allPresentCharactersInName[i]);
                     }
-                    else
-                    {
+                    else {
                         badFound.push(allPresentCharactersInName[i]);
                         badData = true;
                     }
-                }                
+                }
             }
-             if (badData)
-            {
+            if (badData) {
                 highlightUserNameInput(elementID);
                 showErrorAlert(' You have entered invalid special characters ' + badFound + '. This field only allows alpahebts [a-z] and certian special characters like [' + AllowedSpecialCharactersInUserName + ']. Please re-enter valid data.');
                 return false;
             }
 
-             return true;            
+            return true;
         }
 
-        function highlightUserNameInput(elementID)
-        {
+        function highlightUserNameInput(elementID) {
             if (elementID == "UserFirstName") {
                 $('#UserFirstName').addClass('textbox-focus');
             }
@@ -472,7 +480,7 @@
                 var Phone = $('#Phone').val();
                 if (Phone == '') {
                     $('#Phone').addClass('textbox-focus');
-                    showErrorAlert('The Phone field is required.');                    
+                    showErrorAlert('The Phone field is required.');
                     return false;
                 }
 
@@ -480,20 +488,19 @@
                 var UserLastInput = document.getElementById("UserLastName");
                 //check if the names are goo
                 var goodFirstName = CheckUserNameInput(UserFirstNameInput.value, UserFirstNameInput.id);
-                if (goodFirstName){
+                if (goodFirstName) {
                     var goodUserLast = CheckUserNameInput(UserLastInput.value, UserLastInput.id);
                     //check if both names are good
-                    if (!goodUserLast){
+                    if (!goodUserLast) {
                         return false;
                     }
                 }
-                else
-                {
+                else {
                     return false;
-                }                
-                
+                }
+
                 var CurPassword = $('#CurrentPassword').val();
-                var newPassword = $('#NewPassword').val(); 
+                var newPassword = $('#NewPassword').val();
                 var confirmPassword = $('#ConfirmNewPassword').val();
 
                 //check the password only if CurPassword is entered
@@ -501,28 +508,28 @@
                     if (newPassword == '') {
                         var msg = ('The password verification field New Password filed cannot be empty.');
                         $('#NewPassword').addClass('textbox-focus');
-                        showErrorAlert(msg);                        
+                        showErrorAlert(msg);
                         return false;
                     }
 
                     if (newPassword.length < 8) {
                         var msg = ('The New Password field length must be at least 8 chars.');
                         $('#NewPassword').addClass('textbox-focus');
-                        showErrorAlert(msg);                        
+                        showErrorAlert(msg);
                         return false;
                     }
-                    
+
                     if (confirmPassword == '') {
                         var msg = ('The password verification, Confirm New Password filed cannot be empty.');
                         $('#ConfirmNewPassword').addClass('textbox-focus');
-                        showErrorAlert(msg);                        
+                        showErrorAlert(msg);
                         return false;
                     }
 
                     if (confirmPassword.length < 8) {
                         var msg = ('The Confirm Password length must be at least 8 chars.');
                         $('#ConfirmNewPassword').addClass('textbox-focus');
-                        showErrorAlert(msg);                       
+                        showErrorAlert(msg);
                         return false;
                     }
                     if (newPassword != confirmPassword) {
@@ -538,14 +545,14 @@
                     if (CurPassword == '') {
                         var msg = ('To change your password, your Current Password must be provided along with the requested New Password and Confirm New Password.');
                         $('#CurrentPassword').addClass('textbox-focus');
-                        showErrorAlert(msg);                        
+                        showErrorAlert(msg);
                         return false;
                     }
                 }
 
                 var passwordAnswer = $('#Answer').val();
                 if (passwordAnswer == '') {
-                    var msg = ('The password retrieval setting Answer field is required.');                    
+                    var msg = ('The password retrieval setting Answer field is required.');
                     $('#Answer').addClass('textbox-focus');
                     showErrorAlert(msg);
                     return false;
@@ -558,100 +565,100 @@
             }
             return true;
         }
-        
+
         //***************** Start Validate Password Data ******************************//       
         var badInputData = false;
         var messagePasswordUserNameChars = "";
         //Password Check
         $('input.NewPassword').keyup(function () {
-                // set password variable
-                var newpasswordValue = $(this).val();
-                
-                //validate the length
-                if (newpasswordValue.length > 8) {
-                    $('#length').removeClass('invalidPassword').addClass('validPassword');
+            // set password variable
+            var newpasswordValue = $(this).val();
+
+            //validate the length
+            if (newpasswordValue.length > 8) {
+                $('#length').removeClass('invalidPassword').addClass('validPassword');
+                badInputData = false;
+            } else {
+                $('#length').removeClass('validPassword').addClass('invalidPassword');
+                badInputData = true;
+            }
+
+            //validate any uppercase letter
+            if (newpasswordValue.match(/[A-Z]/)) {
+                $('#capital').removeClass('invalidPassword').addClass('validPassword');
+                if (badInputData) {
+                    badInputData = true;
+                }
+                else {
                     badInputData = false;
-                } else {
-                    $('#length').removeClass('validPassword').addClass('invalidPassword');
+                }
+            } else {
+                $('#capital').removeClass('validPassword').addClass('invalidPassword');
+                badInputData = true;
+            }
+
+            //validate any lower case letter
+            if (newpasswordValue.match(/[a-z]/)) {
+                $('#lowercase').removeClass('invalidPassword').addClass('validPassword');
+                if (badInputData) {
                     badInputData = true;
                 }
+                else {
+                    badInputData = false;
+                }
+            } else {
+                $('#lowercase').removeClass('validPassword').addClass('invalidPassword');
+                badInputData = true;
+            }
 
-                //validate any uppercase letter
-                if (newpasswordValue.match(/[A-Z]/)) {
-                    $('#capital').removeClass('invalidPassword').addClass('validPassword');
-                    if (badInputData) {
-                        badInputData = true;
-                    }
-                    else {
-                        badInputData = false;
-                    }
-                } else {
-                    $('#capital').removeClass('validPassword').addClass('invalidPassword');
+            //validate a number
+            if (newpasswordValue.match(/[0-9]/)) {
+                $('#number').removeClass('invalidPassword').addClass('validPassword');
+                if (badInputData) {
                     badInputData = true;
                 }
+                else {
+                    badInputData = false;
+                }
+            } else {
+                $('#number').removeClass('validPassword').addClass('invalidPassword');
+                badInputData = true;
+            }
 
-                //validate any lower case letter
-                if (newpasswordValue.match(/[a-z]/)) {
-                    $('#lowercase').removeClass('invalidPassword').addClass('validPassword');
-                    if (badInputData) {
-                        badInputData = true;
-                    }
-                    else {
-                        badInputData = false;
-                    }
-                } else {
-                    $('#lowercase').removeClass('validPassword').addClass('invalidPassword');
+            //validate allowed special
+            if (newpasswordValue.match(/[~!@#$%^&*;?+_.]/)) {
+                $('#special').removeClass('invalidPassword').addClass('validPassword');
+                if (badInputData) {
                     badInputData = true;
                 }
-
-                //validate a number
-                if (newpasswordValue.match(/[0-9]/)) {
-                    $('#number').removeClass('invalidPassword').addClass('validPassword');
-                    if (badInputData) {
-                        badInputData = true;
-                    }
-                    else {
-                        badInputData = false;
-                    }
-                } else {
-                    $('#number').removeClass('validPassword').addClass('invalidPassword');
-                    badInputData = true;
+                else {
+                    badInputData = false;
                 }
+            } else {
+                $('#special').removeClass('validPassword').addClass('invalidPassword');
+                badInputData = true;
+            }
 
-                //validate allowed special
-                if (newpasswordValue.match(/[~!@#$%^&*;?+_.]/)) {
-                    $('#special').removeClass('invalidPassword').addClass('validPassword');
-                    if (badInputData) {
-                        badInputData = true;
-                    }
-                    else {
-                        badInputData = false;
-                    }
-                } else {
-                    $('#special').removeClass('validPassword').addClass('invalidPassword');
-                    badInputData = true;
-                }
+            //not allowed chars
+            var regexChar = new RegExp(/[`,<>;':"/[\]|{}()=-]/);
+            if (newpasswordValue.match(regexChar)) {
+                showErrorAlert('The character you entered is not valid.');
+                return false;
+            }
 
-                //not allowed chars
-                var regexChar = new RegExp(/[`,<>;':"/[\]|{}()=-]/);
-                if (newpasswordValue.match(regexChar)) {
-                    showErrorAlert('The character you entered is not valid.');
-                    return false;
-                }
+            //validate non-printable chars 
+            if (newpasswordValue.match(/[^\u0000-\u007F]/)) {
+                showErrorAlert('You can not have non-printable chars.');
+                return false;
+            }
 
-                //validate non-printable chars 
-                if (newpasswordValue.match(/[^\u0000-\u007F]/)) {
-                    showErrorAlert('You can not have non-printable chars.');
-                    return false;
-                }
-
-                //the passwrod should not contain 3 or more char from user name
-                //find user name 
-                var username = '<%=Context.User.Identity.Name%>';
-                //get new password value
+            //the passwrod should not contain 3 or more char from user name
+            //find user name 
+            var username = '<%=Context.User.Identity.Name%>';
+            //get new password value
                 var newPasswordVal = $('#NewPassword').val();
-                //divide the user name into 3 letters so abcdefghi@somthing.com will look like [abd def ghi @som thi ng. com]
-                // example: ["abc", "def", "g.h", "ijk", "@em", "ail", ".co", "m"]
+            //divide the user name into 3 letters so abcdefghi@somthing.com will look like [abd def ghi @som thi ng. com]
+            // example: ["abc", "def", "g.h", "ijk", "@em", "ail", ".co", "m"]
                 var partsOfThreeLettersUsernameArray = username.match(/.{3}/g)
                                     .concat(
                                             username.substr(1).match(/.{3}/g),
@@ -691,191 +698,187 @@
         }).blur(function () {
             $('#divPasswordCriteriaContainer').hide();
         });
-        
-        function matchWordsinStringArray(usernameArray, passwordArray) {
-            var arrayMatchfound = null;
-            try
-            {
-                for (var i = 0; i < passwordArray.length && !arrayMatchfound; i++) {
-                    var $lowerKeyPassword = passwordArray[i].toLowerCase();
-                    
-                    for (var j = 0, wLen = usernameArray.length; j < wLen && !arrayMatchfound; j++) {
-                        var $lowerKeyUserName = usernameArray[j].toLowerCase();
 
-                        if ($lowerKeyPassword  == $lowerKeyUserName) {
-                            arrayMatchfound = {
-                                usernameElement: $lowerKeyUserName,
-                                passwordElement: $lowerKeyPassword
-                            };
-                            return arrayMatchfound;
+            function matchWordsinStringArray(usernameArray, passwordArray) {
+                var arrayMatchfound = null;
+                try {
+                    for (var i = 0; i < passwordArray.length && !arrayMatchfound; i++) {
+                        var $lowerKeyPassword = passwordArray[i].toLowerCase();
+
+                        for (var j = 0, wLen = usernameArray.length; j < wLen && !arrayMatchfound; j++) {
+                            var $lowerKeyUserName = usernameArray[j].toLowerCase();
+
+                            if ($lowerKeyPassword == $lowerKeyUserName) {
+                                arrayMatchfound = {
+                                    usernameElement: $lowerKeyUserName,
+                                    passwordElement: $lowerKeyPassword
+                                };
+                                return arrayMatchfound;
+                            }
                         }
                     }
+
+                }
+                catch (err) {
+                    return false;
+                    var txt = 'Error=>' + err.description;
+                    showDangerAlert(txt);
                 }
 
+                return arrayMatchfound;
             }
-            catch (err) {
-                return false;
-                var txt = 'Error=>' + err.description;
-                showDangerAlert(txt);
-            }
-          
-            return arrayMatchfound;
-        }
 
-        var newPasswrdInput = document.getElementById ("NewPassword");
-        newPasswrdInput.addEventListener("blur", verifyBadPassword, false);
+            var newPasswrdInput = document.getElementById("NewPassword");
+            newPasswrdInput.addEventListener("blur", verifyBadPassword, false);
 
-        function verifyBadPassword() {
+            function verifyBadPassword() {
 
-            var ConfirmNewPassword = $('#ConfirmNewPassword');
-            var NewPassword = $('#NewPassword')            
-            if (NewPassword.val() === "")
-            {
-                NewPassword.removeClass('textbox-focus');
-                ConfirmNewPassword.val('');
-                resetPasswordMatch();
-                ConfirmNewPassword.removeAttr('disabled');//enable
-                return true;
-            }
-            else
-            {
-                if (badInputData) {
-
-                    NewPassword.addClass('textbox-focus');
+                var ConfirmNewPassword = $('#ConfirmNewPassword');
+                var NewPassword = $('#NewPassword')
+                if (NewPassword.val() === "") {
+                    NewPassword.removeClass('textbox-focus');
                     ConfirmNewPassword.val('');
                     resetPasswordMatch();
-
-                    ConfirmNewPassword.attr('disabled', 'disabled');
-                    if (messagePasswordUserNameChars != "") {
-                        showErrorAlert(messagePasswordUserNameChars);
-                        return false;
-                    }
-                    else {
-                        showErrorAlert('Your password does not match all password rules. Please make sure your password matches the password rules. [Check the Password Hint.]');
-                        return false;
-                    }
-
-                }
-                else {
                     ConfirmNewPassword.removeAttr('disabled');//enable
-                    ConfirmNewPassword.focus();
                     return true;
                 }
-            }            
-        }
+                else {
+                    if (badInputData) {
 
-        var ConfirmNewPasswordInput = document.getElementById("ConfirmNewPassword");
-        ConfirmNewPasswordInput.addEventListener("blur", validatePasswordMatch, false);
+                        NewPassword.addClass('textbox-focus');
+                        ConfirmNewPassword.val('');
+                        resetPasswordMatch();
 
-        //function to check if the two password matches
-        var message = document.getElementById('passwordMatchMessage');
-        function validatePasswordMatch() {
-       
-            var newPassword = $("#NewPassword").val();
-            var confirmPassword = $("#ConfirmNewPassword").val();
+                        ConfirmNewPassword.attr('disabled', 'disabled');
+                        if (messagePasswordUserNameChars != "") {
+                            showErrorAlert(messagePasswordUserNameChars);
+                            return false;
+                        }
+                        else {
+                            showErrorAlert('Your password does not match all password rules. Please make sure your password matches the password rules. [Check the Password Hint.]');
+                            return false;
+                        }
 
-            if (newPassword === "" || confirmPassword === "")
-            {
-                resetPasswordMatch();
-                return true;
-            }
-
-            if (newPassword != confirmPassword) {
-                message.innerHTML = "Passwords Do Not Match!"
-                $('#passwordMatchMessage').addClass('badMatch');
-                return false;
-            }
-        }
-
-        function resetPasswordMatch() {
-            message.innerHTML = "";
-            $('#passwordMatchMessage').removeClass('badMatch');
-        }
-
-        //***************** End  Validate Password Data ******************************// 
-
-        //***************** Alert Messages ******************************// 
-        function showErrorAlert(alertMessage) {
-            BootstrapDialog.show({
-                title: 'Data Entry Issue',
-                message: alertMessage,
-                type: BootstrapDialog.TYPE_WARNING, // <-- Default value is BootstrapDialog.TYPE_PRIMARY
-                closable: true, // <-- Default value is false
-                draggable: true, // <-- Default value is false
-                buttons: [{
-                    label: 'OK',
-                    hotkey: 13, // Keycode of keyup event of key 'A' is 65.
-                    cssClass: 'btn-warning',
-                    action: function (dialog) {
-                        dialog.close();
                     }
-                }],
-            });
-        }
-
-        //show error
-        function showDangerAlert(alertMessage) {
-            BootstrapDialog.show({
-                title: 'Error!',
-                message: alertMessage,
-                type: BootstrapDialog.TYPE_DANGER, // <-- Default value is BootstrapDialog.TYPE_PRIMARY
-                closable: true, // <-- Default value is false
-                draggable: true, // <-- Default value is false
-                buttons: [{
-                    label: 'OK',
-                    hotkey: 13, // Keycode of keyup event of key 'A' is 65.
-                    cssClass: 'btn-danger',
-                    action: function (dialog) {
-                        dialog.close();
+                    else {
+                        ConfirmNewPassword.removeAttr('disabled');//enable
+                        ConfirmNewPassword.focus();
+                        return true;
                     }
-                }],
-            });
-        }
-
-        //show info
-        function showInformationAlert(alertMessage) {
-            BootstrapDialog.show({
-                title: 'Information',
-                message: alertMessage,
-                type: BootstrapDialog.TYPE_INFO, // <-- Default value is BootstrapDialog.TYPE_PRIMARY
-                closable: true, // <-- Default value is false
-                draggable: true, // <-- Default value is false
-                buttons: [{
-                    label: 'OK',
-                    hotkey: 13, // Keycode of keyup event of key 'A' is 65.
-                    cssClass: 'btn-info',
-                    action: function (dialog) {
-                        dialog.close();
-                    }
-                }],
-            });
-        }
-        //***************** Alert Messages ******************************// 
-
-        //***************** Element Class ******************************// 
-        //funchion to chane class on element
-        function changeClass(btn, cls) {
-            if (!hasClass(btn, cls)) {
-                addClass(btn, cls);
+                }
             }
-        }
-        //cehck for a class
-        function hasClass(ele, cls) {
-            return ele.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
-        }
-        //add a class
-        function addClass(ele, cls) {
-            if (!hasClass(ele, cls)) ele.className += " " + cls;
-        }
-        //remove class
-        function removeClass(ele, cls) {
-            if (hasClass(ele, cls)) {
-                var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
-                ele.className = ele.className.replace(reg, ' ');
-            }
-        }
 
-        //***************** Element Class ******************************// 
+            var ConfirmNewPasswordInput = document.getElementById("ConfirmNewPassword");
+            ConfirmNewPasswordInput.addEventListener("blur", validatePasswordMatch, false);
+
+            //function to check if the two password matches
+            var message = document.getElementById('passwordMatchMessage');
+            function validatePasswordMatch() {
+
+                var newPassword = $("#NewPassword").val();
+                var confirmPassword = $("#ConfirmNewPassword").val();
+
+                if (newPassword === "" || confirmPassword === "") {
+                    resetPasswordMatch();
+                    return true;
+                }
+
+                if (newPassword != confirmPassword) {
+                    message.innerHTML = "Passwords Do Not Match!"
+                    $('#passwordMatchMessage').addClass('badMatch');
+                    return false;
+                }
+            }
+
+            function resetPasswordMatch() {
+                message.innerHTML = "";
+                $('#passwordMatchMessage').removeClass('badMatch');
+            }
+
+            //***************** End  Validate Password Data ******************************// 
+
+            //***************** Alert Messages ******************************// 
+            function showErrorAlert(alertMessage) {
+                BootstrapDialog.show({
+                    title: 'Data Entry Issue',
+                    message: alertMessage,
+                    type: BootstrapDialog.TYPE_WARNING, // <-- Default value is BootstrapDialog.TYPE_PRIMARY
+                    closable: true, // <-- Default value is false
+                    draggable: true, // <-- Default value is false
+                    buttons: [{
+                        label: 'OK',
+                        hotkey: 13, // Keycode of keyup event of key 'A' is 65.
+                        cssClass: 'btn-warning',
+                        action: function (dialog) {
+                            dialog.close();
+                        }
+                    }],
+                });
+            }
+
+            //show error
+            function showDangerAlert(alertMessage) {
+                BootstrapDialog.show({
+                    title: 'Error!',
+                    message: alertMessage,
+                    type: BootstrapDialog.TYPE_DANGER, // <-- Default value is BootstrapDialog.TYPE_PRIMARY
+                    closable: true, // <-- Default value is false
+                    draggable: true, // <-- Default value is false
+                    buttons: [{
+                        label: 'OK',
+                        hotkey: 13, // Keycode of keyup event of key 'A' is 65.
+                        cssClass: 'btn-danger',
+                        action: function (dialog) {
+                            dialog.close();
+                        }
+                    }],
+                });
+            }
+
+            //show info
+            function showInformationAlert(alertMessage) {
+                BootstrapDialog.show({
+                    title: 'Information',
+                    message: alertMessage,
+                    type: BootstrapDialog.TYPE_INFO, // <-- Default value is BootstrapDialog.TYPE_PRIMARY
+                    closable: true, // <-- Default value is false
+                    draggable: true, // <-- Default value is false
+                    buttons: [{
+                        label: 'OK',
+                        hotkey: 13, // Keycode of keyup event of key 'A' is 65.
+                        cssClass: 'btn-info',
+                        action: function (dialog) {
+                            dialog.close();
+                        }
+                    }],
+                });
+            }
+            //***************** Alert Messages ******************************// 
+
+            //***************** Element Class ******************************// 
+            //funchion to chane class on element
+            function changeClass(btn, cls) {
+                if (!hasClass(btn, cls)) {
+                    addClass(btn, cls);
+                }
+            }
+            //cehck for a class
+            function hasClass(ele, cls) {
+                return ele.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
+            }
+            //add a class
+            function addClass(ele, cls) {
+                if (!hasClass(ele, cls)) ele.className += " " + cls;
+            }
+            //remove class
+            function removeClass(ele, cls) {
+                if (hasClass(ele, cls)) {
+                    var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
+                    ele.className = ele.className.replace(reg, ' ');
+                }
+            }
+
+            //***************** Element Class ******************************// 
 
     </script>
 </body>

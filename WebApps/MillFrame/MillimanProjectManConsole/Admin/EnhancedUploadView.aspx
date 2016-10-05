@@ -235,7 +235,7 @@
             <div class="row">
                 <div class="center-block" style="float: none; width: 415px;">
                     <div class="col-md-9">
-                        <asp:Button ID="Upload" runat="server" Text="Save Defaults" OnClick="Upload_Click" OnClientClick="Submitted()"
+                        <asp:Button ID="Upload" runat="server" Text="Save Changes" OnClick="Upload_Click" OnClientClick="Submitted()"
                             CssClass="btn btn-primary" />
                     </div>
                 </div>
