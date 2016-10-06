@@ -15,17 +15,49 @@ public partial class bulk_admin_controls_create_user_with_role : System.Web.UI.U
     protected void Page_Load(object sender, EventArgs e)
     {
         if (!Page.IsPostBack)
-        {
-            //add an empty row
-            List<UserInfo> UI = new List<UserInfo>();
+        {   
             string TempPassword = PasswordGenerator.Generate("@");
-            UI.Add(new UserInfo("", false, false));
-            RadGrid1.DataSource = UI;
-            RadGrid1.DataBind();
+            var uInfoList = new List<UserInfo>();
+            uInfoList.Add(new UserInfo("", false, false));
+            RadGrid1.DataSource = uInfoList;
+            RadGrid1.Rebind();
         }
     }
 
     #endregion
+
+    protected void CreateNewUsers_Click(object sender, EventArgs e)
+    {
+        List<UserInfo> UIList = ValidateUserRequests();
+        bool AllGood = true;
+        var errorMsg = string.Empty;
+        foreach (UserInfo UIC in UIList)
+        {
+            if (string.IsNullOrEmpty(UIC.ErrorMsg) == false)
+            {
+                errorMsg = errorMsg + UIC.ErrorMsg;
+                AllGood = false;
+            }
+        }
+        if (AllGood == false)
+        {
+            RadGrid1.DataSource = UIList;
+            RadGrid1.Rebind();
+            MillimanCommon.Alert.Show(errorMsg + " To create users all errors must be corrected in the user list.  Check list items tagged with a red icon.");
+            return;
+        }
+        string CSVUsers = string.Empty;
+        string Results = CreateUsersFromList(UIList, out CSVUsers);
+        UserList.Text = "[CSV Format]\n" + CSVUsers;
+        UserList.Text += "\n\n[Excel Format]\n" + CSVUsers.Replace(",", "\t");
+
+        MillimanCommon.Alert.Show(Results);
+    }
+
+    protected void Reset_Click(object sender, EventArgs e)
+    {
+        InitilizeScreen();
+    }
 
     protected void Submit_Click(object sender, EventArgs e)
     {
@@ -107,23 +139,7 @@ public partial class bulk_admin_controls_create_user_with_role : System.Web.UI.U
             RadGrid1.Rebind();
 
         }
-        else if (string.Compare(e.CommandName, "Clear", true) == 0)
-        {
-            ////add an empty row
-            //var uInfoList = new List<UserInfo>();
-            //uInfoList.Add(new UserInfo("", false, false));
-            //RadGrid1.DataSource = uInfoList;
-            //RadGrid1.Rebind();
-
-            ////clear control
-            //ctrlUserRoles.LoadUserRoles();
-            //updPanelUserRoles.Update();
-
-            //UserList.Text = string.Empty;
-            //updPanelUserList.Update();
-
-            InitilizeScreen();
-        }
+        
         else if (string.Compare(e.CommandName, "Autocomplete", true) == 0)
         {
             UI = AutoCompleteType();
@@ -138,21 +154,11 @@ public partial class bulk_admin_controls_create_user_with_role : System.Web.UI.U
         UserType.SelectedIndex = 0;
         updPanelUserType.Update();
         //clear control
+        ctrlUserRoles.UnAllcheckUserRoles();
         ctrlUserRoles.LoadUserRoles();
         updPanelUserRoles.Update();
 
-        //Clear all grid items
-        foreach (GridDataItem item in RadGrid1.Items)
-        {
-            var AccountNameText = (TextBox)item["AccountNameText"].FindControl("AccountNameTextBox");
-            var SendWelcome = (CheckBox)item["SendWelcome"].FindControl("SendWelcomeCheckbox");
-            var DataAccessRequiredText = (CheckBox)item["DataAccessRequiredText"].FindControl("DataAccessRequiredTextBox");
-            AccountNameText.Text = "";
-            SendWelcome.Checked = false;
-            DataAccessRequiredText.Checked = false;
-        }
-        //reset grid
-        //add an empty row
+        //reset grid  //add an empty row
         var uInfoList = new List<UserInfo>();
         uInfoList.Add(new UserInfo("", false, false));
         RadGrid1.DataSource = uInfoList;
@@ -297,7 +303,6 @@ public partial class bulk_admin_controls_create_user_with_role : System.Web.UI.U
     private List<UserInfo> AutoCompleteType()
     {
         List<UserInfo> UIList = GridToList(RadGrid1);
-
         return UIList;
     }
 
@@ -356,31 +361,5 @@ public partial class bulk_admin_controls_create_user_with_role : System.Web.UI.U
         return UIList;
     }
 
-    protected void CreateNewUsers_Click(object sender, EventArgs e)
-    {
-        List<UserInfo> UIList = ValidateUserRequests();
-        bool AllGood = true;
-        var errorMsg = string.Empty;
-        foreach (UserInfo UIC in UIList)
-        {
-            if (string.IsNullOrEmpty(UIC.ErrorMsg) == false)
-            {
-                errorMsg = errorMsg + UIC.ErrorMsg;
-                AllGood = false;
-            }
-        }
-        if (AllGood == false)
-        {
-            RadGrid1.DataSource = UIList;
-            RadGrid1.Rebind();
-            MillimanCommon.Alert.Show(errorMsg + " To create users all errors must be corrected in the user list.  Check list items tagged with a red icon.");
-            return;
-        }
-        string CSVUsers = string.Empty;
-        string Results = CreateUsersFromList(UIList, out CSVUsers);
-        UserList.Text = "[CSV Format]\n" + CSVUsers;
-        UserList.Text += "\n\n[Excel Format]\n" + CSVUsers.Replace(",", "\t");
 
-        MillimanCommon.Alert.Show(Results);
-    }
 }

@@ -226,10 +226,10 @@
             <div class="row">
                 <div class="center-block" style="float: none; width: 415px;">
                     <div class="col-md-9">
-                        <asp:Button ID="Button1" runat="server" CommandName="ChangePassword" Text="Save Changes"
+                        <asp:Button ID="Button1" runat="server" CommandName="ChangePassword" Text="Save"
                             OnClick="ChangePasswordPushButton_Click" CssClass="btn btn-primary"
                             OnClientClick="return Validate();" />
-                        <asp:Button ID="Button2" runat="server" CommandName="ResetForm" Text="Clear All" CssClass="btn btn-primary"
+                        <asp:Button ID="Button2" runat="server" CommandName="ResetForm" Text="Reset" CssClass="btn btn-primary"
                             OnClientClick="ClearTextboxes();" />
                     </div>
                 </div>
@@ -240,7 +240,9 @@
             <table style="width: 100%; height: 100%; overflow: hidden">
                 <tr>
                     <td valign="middle">
-                        <center>Copyright &copy Milliman 2015</center>
+                        
+                        <%--THIS CRASH IN IE  <center>Copyright &copy Milliman 2015</center>--%>
+                        <center>"Copyright" "&copy;" "Milliman 2016"</center>
                     </td>
                 </tr>
             </table>
@@ -665,7 +667,7 @@
                                             username.substr(2).match(/.{3}/g)
                                             );
 
-                if (newPasswordVal != '' && newPasswordVal.length > 1) {
+                if (newPasswordVal != '' && newPasswordVal.length > 3) {
                     //example: ["afs", "Ujn", "8*c", "fsU", "jn8", "*co", "sUj", "n8*", "com"]
                     var partsOfThreeLettersPasswordArray = newPasswordVal.match(/.{3}/g)
                                             .concat(

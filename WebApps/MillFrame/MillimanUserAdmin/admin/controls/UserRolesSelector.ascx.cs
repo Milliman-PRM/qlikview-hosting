@@ -144,18 +144,22 @@ public partial class admin_controls_UserRolesSelector : System.Web.UI.UserContro
     {
         try
         {
+            //create data set
             var ds = new DataSet();
 
+            //create Parent data table 
             var dtparent = new DataTable();
             dtparent = FillParentTable();
             dtparent.DefaultView.Sort = "[colGroupCategory] ASC";
             dtparent.TableName = "dtparent";
 
+            //create child data table
             var dtchild = new DataTable();
             dtchild = FillParentTable();
             dtchild.DefaultView.Sort = "[colRoleName] ASC";
             dtchild.TableName = "dtchild";
 
+            //add tables to ds
             ds.Tables.Add(dtparent);
             ds.Tables.Add(dtchild);
 
@@ -270,21 +274,21 @@ public partial class admin_controls_UserRolesSelector : System.Web.UI.UserContro
                                     roleName,
                                     groupCategory
                                 };
-            dt.Rows.Add(roleRow);
+            dt.Rows.Add(roleRow); 
         }
 
         var newTable = from row in dt.AsEnumerable()
-                       group row by new
-                       {
-                           colGroupCategory = row.Field<string>("colGroupCategory"),
-                           colRoleName = row.Field<string>("colRoleName")
-                       }
-                      into grp
-                       select new
-                       {
-                           colGroupCategory = grp.Key.colGroupCategory,
-                           colRoleName = grp.Key.colRoleName
-                       };
+        group row by new
+        {
+            colGroupCategory = row.Field<string>("colGroupCategory"),
+            colRoleName = row.Field<string>("colRoleName")
+        }
+        into grp
+        select new
+        {
+            colGroupCategory = grp.Key.colGroupCategory,
+            colRoleName = grp.Key.colRoleName
+        };
 
         var finalTable = newTable.OrderBy(a => a.colGroupCategory).ThenBy(b=>b.colRoleName);
         var dtUniqRecords = new DataTable();
