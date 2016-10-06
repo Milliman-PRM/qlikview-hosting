@@ -82,6 +82,22 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Administration.asmx" />
+    <Content Include="Content\Images\eye-hide.png" />
+    <Content Include="Content\Images\eye-icon.png" />
+    <Content Include="Content\Images\Info-blue.png" />
+    <Content Include="Content\Images\InformationBulb.png" />
+    <Content Include="Content\Script\bootstrap-dialog.min.js" />
+    <Content Include="Content\Script\bootstrap.js" />
+    <Content Include="Content\Script\bootstrap.min.v3.3.7.js" />
+    <Content Include="Content\Script\jquery.min.js" />
+    <Content Include="Content\Script\jquery.min.v2.0.0.js" />
+    <Content Include="Content\Script\jquery.min.v2.1.1.js" />
+    <Content Include="Content\Script\jquery.v1.7.1.js" />
+    <Content Include="Content\Script\maskedinput.js" />
+    <Content Include="Content\Style\bootstrap-dialog.min.css" />
+    <Content Include="Content\Style\bootstrap.css" />
+    <Content Include="Content\Style\bootstrap.min.css" />
+    <Content Include="Content\Style\MillframeStyle.css" />
     <Content Include="DebugView.aspx" />
     <Content Include="Images\Document-icon.png" />
     <Content Include="Images\NortonSecured.png" />
@@ -199,6 +215,9 @@
     <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Images\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\Images\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\Images\glyphicons-halflings-regular.woff" />
     <None Include="Properties\PublishProfiles\MillimanDebug.pubxml" />
     <None Include="Properties\PublishProfiles\MillimanProduction.pubxml" />
     <Content Include="Reflector.ashx" />
