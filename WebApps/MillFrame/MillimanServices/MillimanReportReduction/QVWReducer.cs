@@ -255,7 +255,7 @@ namespace MillimanReportReduction
                     {
                         throw new System.Exception("Task " + TaskID + " for document '" + QualifiedQVWNameToReduce + "' was not found by QV publisher - Finished");
                     }
-                    else if ((taskStatus.Extended != null) && (string.IsNullOrEmpty(taskStatus.Extended.LastLogMessages)))
+                    else if ((taskStatus.Extended != null) && (string.IsNullOrEmpty(taskStatus.Extended.LastLogMessages)==false))
                     {
                         break;
                     }
