@@ -26,27 +26,10 @@ namespace MillimanClientUserAdmin
                 string LabelTemplate = "Currently using " + StandardUsers.ToString() + " of " + MG.MaximumnUsers.ToString() + " licenses for " + MG.FriendlyGroupName;
                 License.Text = LabelTemplate;
 
-                //create some test data
-                //MillimanCommon.DownloadDescriptions DD = new MillimanCommon.DownloadDescriptions();
-                //DD.DownloadItem = "186156_treeinpanelbar.zip";
-                //DD.IconFile = "placeholder.gif";
-                //DD.Description = "Lorem ipsum dolor sit amet, eos rebum persius scaevola at, ea vel quod voluptatum interesset, cu eam euismod atomorum antiopam. Sea et dolore adipiscing, est posse dicat an. Sonet iracundia argumentum ex pro. Copiosae perpetua quo te, graece reprimique omittantur id pri. Pri harum munere ad, eum at nobis persecuti theophrastus. In erant quidam mei, usu in timeam aliquip argumentum, no sit etiam molestiae. Diceret noluisse ex nam.";
-                //DD.Save(@"C:\inetpub\wwwroot\InstalledApplications\MillimanSite\QVDocuments\Demo\Care_Coordinator_Report_Data\186156_treeinpanelbar.description");
-                //
-
                 List<UserInfo> UL = new List<UserInfo>();
-                    UL.Add(new UserInfo());
+                UL.Add(new UserInfo());
                 RadGrid1.DataSource = UL;
                 RadGrid1.DataBind();
-
-                //RadTreeView RTV = RadPanelBar1.FindItemByValue("TreeHolder").FindControl("AccessTree") as RadTreeView;
-                //if (RTV != null)
-                //{
-                //    string XML = System.IO.File.ReadAllText(@"C:\inetpub\wwwroot\InstalledApplications\MillimanSite\QVDocuments\Demo\Care Coordinator Report.hierarchy_0");
-                //    RTV.LoadXml("<Tree>" + XML + "</Tree>");
-                //}
-
-                //LoadDownloads();
 
                 List<string> MasterQVWs = new List<string>();
                 List<System.Dynamic.ExpandoObject> QVWItems = MillimanCommon.UserRepo.GetInstance().FindAllQVProjectsForUser("van.nanney@milliman.com", new string[] { Session["groupid"].ToString() }, false);
@@ -78,15 +61,7 @@ namespace MillimanClientUserAdmin
                         }
                         RTV.LoadXml("<Tree>" + XML + "</Tree>");
                         LoadDownloads(MasterQVWs);
-                        //sort tree per request
-                        //SortCollection(RTV.Nodes);
-                        //foreach (RadTreeNode item in RTV.GetAllNodes())
-                        //{
-                        //    if (item.Nodes.Count > 0)
-                        //    {
-                        //        SortCollection(item.Nodes);
-                        //    }
-                        //}
+
                     }
                     foreach (RadTreeNode RTN in RTV.GetAllNodes())
                     {
@@ -101,7 +76,7 @@ namespace MillimanClientUserAdmin
             }
         }
 
-  
+
         private void LoadDownloads(List<string> MasterQVWs)
         {
             RadTreeView Downloads = RadPanelBar1.FindItemByValue("DownloadHolder").FindControl("DownloadTree") as RadTreeView;
@@ -135,7 +110,6 @@ namespace MillimanClientUserAdmin
                     return;
                 }
 
-
                 RadGrid1.DataSource = UL;
                 RadGrid1.DataBind();
 
@@ -151,58 +125,51 @@ namespace MillimanClientUserAdmin
             }
             else if (string.Compare(e.CommandName, "clear", true) == 0)
             {
-                //Clear all grid items
-                foreach (GridDataItem item in RadGrid1.Items)
-                {
-                    var AccountNameText = (TextBox)item["AccountNameText"].FindControl("AccountNameTextBox");
-                    var SendWelcome = (CheckBox)item["SendWelcome"].FindControl("SendWelcomeCheckbox");
-                    var DataAccessRequiredText = (CheckBox)item["DataAccessRequiredText"].FindControl("DataAccessRequiredTextBox");
-                    AccountNameText.Text = "";
-                    SendWelcome.Checked = false;
-                    DataAccessRequiredText.Checked = false;
-                }
-
-                //add an empty row
-                var uInfoList = new List<UserInfo>();
-                uInfoList.Add(new UserInfo("", false, false));
-                RadGrid1.DataSource = uInfoList;
-                RadGrid1.Rebind();
-
-                //save all the tree info to file
-                RadTreeView AccessTree = RadPanelBar1.FindItemByValue("TreeHolder").FindControl("AccessTree") as RadTreeView;
-                RadTreeView DownloadTree = RadPanelBar1.FindItemByValue("DownloadHolder").FindControl("DownloadTree") as RadTreeView;
-
-                foreach (RadTreeNode node in AccessTree.Nodes)
-                {
-                    if (node.Selected)
-                        node.Selected = false;
-                    if (node.Nodes.Count > 0)
-                    {
-                        foreach (RadTreeNode subNode in node.Nodes)
-                        {
-                            if (subNode.Selected)
-                                subNode.Selected = false;
-                        }
-                    }
-                }
-
-                foreach (RadTreeNode node in DownloadTree.Nodes)
-                {
-                    if (node.Selected)
-                        node.Selected = false;
-                    if (node.Nodes.Count > 0)
-                    {
-                        foreach (RadTreeNode subNode in node.Nodes)
-                        {
-                            if (subNode.Selected)
-                                subNode.Selected = false;
-                        }
-                    }
-                }
+                InitilizeScreen();
             }
         }
         // Page.ClientScript.RegisterClientScriptBlock(GetType(), "CloseScript", "CloseDialog()", true);
 
+        private void InitilizeScreen()
+        {
+            //Clear all grid items
+            foreach (GridDataItem item in RadGrid1.Items)
+            {
+                var AccountNameText = (TextBox)item["AccountNameText"].FindControl("AccountNameTextBox");
+                var SendWelcome = (CheckBox)item["SendWelcome"].FindControl("SendWelcomeCheckbox");
+                var DataAccessRequiredText = (CheckBox)item["DataAccessRequiredText"].FindControl("DataAccessRequiredTextBox");
+                AccountNameText.Text = "";
+                SendWelcome.Checked = false;
+                DataAccessRequiredText.Checked = false;
+            }
+            //reset grid
+            //add an empty row
+            var uInfoList = new List<UserInfo>();
+            uInfoList.Add(new UserInfo("", false, false));
+            RadGrid1.DataSource = uInfoList;
+            RadGrid1.Rebind();
+
+            RadTreeView AccessTree = (RadTreeView)RadPanelBar1.Items[0].Items[0].FindControl("AccessTree");
+
+            if (AccessTree.Nodes.Count > 0)
+            {
+                AccessTree.SelectedNodes.Clear();
+                foreach (RadTreeNode node in AccessTree.Nodes)
+                {
+                    if (node.Checked)
+                        node.Checked = false;
+                    if (node.Nodes.Count > 0)
+                    {
+                        foreach (RadTreeNode subNode in node.Nodes)
+                        {
+                            if (subNode.Checked)
+                                subNode.Checked = false;
+                        }
+                    }
+                }
+            }
+
+        }
         private List<UserInfo> GridToList(Telerik.Web.UI.RadGrid theGrid)
         {
             List<UserInfo> UI = new List<UserInfo>();
@@ -228,7 +195,7 @@ namespace MillimanClientUserAdmin
         }
 
         private string AlphaNums = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-       private string AccountValidChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-@.";
+        private string AccountValidChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-@.";
         private string EmailLocalSectionValidChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%&'*+-/=?^_`{|}~.";
         private string EmailServerValidChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-.";
         private List<UserInfo> ValidateUserRequests()
@@ -279,7 +246,7 @@ namespace MillimanClientUserAdmin
 
                 //just call to check, sets error message and icon as needed
                 UI.IsValidPassword();
-                    
+
             }
 
             return UIList;
@@ -292,7 +259,7 @@ namespace MillimanClientUserAdmin
             char[] Delimiters = new char[] { ',', ';', '\r', '\n', ' ' };
             foreach (UserInfo User in UI)
             {
-                string[] Tokens = User.Account_Name.Split( Delimiters, StringSplitOptions.RemoveEmptyEntries);
+                string[] Tokens = User.Account_Name.Split(Delimiters, StringSplitOptions.RemoveEmptyEntries);
                 if (Tokens.Count() > 1)
                 {
                     ParsedItems = true;
@@ -359,54 +326,54 @@ namespace MillimanClientUserAdmin
                     if (System.Web.Security.Roles.RoleExists(GroupID) == true)
                     {
                         List<string> UserDirectories = new List<string>(); //save list for possible rollack
-                try
-                {
-                            string ProjectDir = System.Configuration.ConfigurationManager.AppSettings["QVDocumentRoot"];
-                            ProjectDir = System.IO.Path.Combine(ProjectDir, GroupID.Replace("_","\\"));  //groups use underscore,  to convert to directory use slash
-                    foreach (UserInfo User in UI)
-                    {
-                        bool AccountCreated = false;
-                        System.Web.Security.MembershipUser MU = System.Web.Security.Membership.GetUser(User.Account_Name_No_Password);
-                        if (MU == null)
+                        try
                         {
-                            string Password = User.Password;
-                            if (string.IsNullOrEmpty(Password))
-                                Password = "@" + Guid.NewGuid().ToString();
-                            MU = System.Web.Security.Membership.CreateUser(User.Account_Name_No_Password, Password, User.Account_Name_No_Password);
-                            AccountCreated = true;
-                            NewUsers.Add(User.Account_Name_No_Password);
-                                    }
-                        if (MU == null)
-                            throw new Exception("User account not created for: " + User.Account_Name_No_Password);
-                        CreatedUsers.Add(User.Account_Name_No_Password);
+                            string ProjectDir = System.Configuration.ConfigurationManager.AppSettings["QVDocumentRoot"];
+                            ProjectDir = System.IO.Path.Combine(ProjectDir, GroupID.Replace("_", "\\"));  //groups use underscore,  to convert to directory use slash
+                            foreach (UserInfo User in UI)
+                            {
+                                bool AccountCreated = false;
+                                System.Web.Security.MembershipUser MU = System.Web.Security.Membership.GetUser(User.Account_Name_No_Password);
+                                if (MU == null)
+                                {
+                                    string Password = User.Password;
+                                    if (string.IsNullOrEmpty(Password))
+                                        Password = "@" + Guid.NewGuid().ToString();
+                                    MU = System.Web.Security.Membership.CreateUser(User.Account_Name_No_Password, Password, User.Account_Name_No_Password);
+                                    AccountCreated = true;
+                                    NewUsers.Add(User.Account_Name_No_Password);
+                                }
+                                if (MU == null)
+                                    throw new Exception("User account not created for: " + User.Account_Name_No_Password);
+                                CreatedUsers.Add(User.Account_Name_No_Password);
                                 if (System.Web.Security.Roles.IsUserInRole(User.Account_Name_No_Password, GroupID) == false)
                                     System.Web.Security.Roles.AddUserToRole(User.Account_Name_No_Password, GroupID);
-                        UserCount++;
-                        //create user password reset file
-                        string ResetFile = System.IO.Path.Combine(System.Configuration.ConfigurationManager.AppSettings["ResetUserInfoRoot"], MU.ProviderUserKey + ".rst");
-                        string WasWelcomed = User.SendWelcomeEmail == true ? "welcome" : "nowelcome";
+                                UserCount++;
+                                //create user password reset file
+                                string ResetFile = System.IO.Path.Combine(System.Configuration.ConfigurationManager.AppSettings["ResetUserInfoRoot"], MU.ProviderUserKey + ".rst");
+                                string WasWelcomed = User.SendWelcomeEmail == true ? "welcome" : "nowelcome";
 
-                        //if a new account, then make them reset thier password, otherwise don't force a password reset
-                        if (AccountCreated == true)
-                        {
-                            System.IO.File.WriteAllText(ResetFile, MU.UserName + " added " + DateTime.Now.ToShortDateString() + " " + WasWelcomed);
-                            ResetFiles.Add(ResetFile);
-                        }
+                                //if a new account, then make them reset thier password, otherwise don't force a password reset
+                                if (AccountCreated == true)
+                                {
+                                    System.IO.File.WriteAllText(ResetFile, MU.UserName + " added " + DateTime.Now.ToShortDateString() + " " + WasWelcomed);
+                                    ResetFiles.Add(ResetFile);
+                                }
 
                                 string UserDir = MillimanCommon.ReducedQVWUtilities.GetUserDir(ProjectDir, User.Account_Name_No_Password);
                                 if (System.IO.Directory.Exists(UserDir) == false)
                                 {
                                     System.IO.Directory.CreateDirectory(UserDir);
-                    }
-                }
+                                }
+                            }
                         }
-                catch (Exception ex)
-                {
-                    UserCount = 0;
+                        catch (Exception ex)
+                        {
+                            UserCount = 0;
                             RollBack(CreatedUsers, GroupID, NewUsers, ResetFiles);
-                    MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "Unspecified", ex);
-                }
-            }
+                            MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "Unspecified", ex);
+                        }
+                    }
                     else
                     {
                         MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, GroupID + " was passed in for adding user but stated role does not exist in system");
@@ -446,7 +413,7 @@ namespace MillimanClientUserAdmin
 
                     if (QVWRepProc.ProcessUsers(GroupID, CreatedUsers, Selections, AllNodesSelected) == false)
                     {
-                        
+
                         string UserList = string.Empty;
                         foreach (string S in CreatedUsers)
                         {
@@ -477,7 +444,7 @@ namespace MillimanClientUserAdmin
                             if (CreatedUsers.Contains(U.Account_Name_No_Password))
                             {
                                 //only send emails to "NEW" users that do not have an account
-                                if ( (U.SendWelcomeEmail) && (NewUsers.Contains(U.Account_Name_No_Password)) && (U.HasPassword == false)) //if a password was provided don't send an email
+                                if ((U.SendWelcomeEmail) && (NewUsers.Contains(U.Account_Name_No_Password)) && (U.HasPassword == false)) //if a password was provided don't send an email
                                 {
                                     //if email checked - send email
                                     //string SecureLink = MillimanCommon.SecureLink.CreateSecureLink(System.Web.Security.Membership.GetUser().UserName, U.Account_Name, System.Web.Security.Membership.GetUser(U.Account_Name).ProviderUserKey.ToString());
@@ -497,20 +464,20 @@ namespace MillimanClientUserAdmin
 
                     AddUser.Promote(GroupID, CreatedUsers);
 
-                        string Msg = "User accounts(s):\\n\\n";
-                    foreach( string User in CreatedUsers )
-                            Msg += User + "\\n";
-                        Msg += "\\n have been added to the system.";
+                    string Msg = "User accounts(s):\\n\\n";
+                    foreach (string User in CreatedUsers)
+                        Msg += User + "\\n";
+                    Msg += "\\n have been added to the system.";
 
-                        string script = "<script type=\"text/javascript\">CloseDialog('" + Msg + "');</script>";
-                        //string script = "<script type=\"text/javascript\">CloseDialog('" + Msg + "');</script>";
-                        // Gets the executing web page
-                        Page page = HttpContext.Current.CurrentHandler as Page;
-                        // Checks if the handler is a Page and that the script isn't allready on the Page
-                        if (page != null && !page.ClientScript.IsStartupScriptRegistered("CloseMe"))
-                        {
-                            page.ClientScript.RegisterStartupScript(typeof(AddUser), "CloseMe", script);
-                        }
+                    string script = "<script type=\"text/javascript\">CloseDialog('" + Msg + "');</script>";
+                    //string script = "<script type=\"text/javascript\">CloseDialog('" + Msg + "');</script>";
+                    // Gets the executing web page
+                    Page page = HttpContext.Current.CurrentHandler as Page;
+                    // Checks if the handler is a Page and that the script isn't allready on the Page
+                    if (page != null && !page.ClientScript.IsStartupScriptRegistered("CloseMe"))
+                    {
+                        page.ClientScript.RegisterStartupScript(typeof(AddUser), "CloseMe", script);
+                    }
 
                 }
                 else
@@ -533,7 +500,7 @@ namespace MillimanClientUserAdmin
         static public void Promote(string Group, List<string> UserList)
         {
             string QVRoot = System.Configuration.ConfigurationManager.AppSettings["QVDocumentRoot"];
-            string Dir = System.IO.Path.Combine(QVRoot, Group.Replace('_','\\'));  //replace underscroes in group name with back slash
+            string Dir = System.IO.Path.Combine(QVRoot, Group.Replace('_', '\\'));  //replace underscroes in group name with back slash
             string[] TempFiles = System.IO.Directory.GetFiles(Dir, "*.*_tmp", System.IO.SearchOption.AllDirectories);
             string OriginalFile = string.Empty;
             foreach (string S in TempFiles)
@@ -541,7 +508,7 @@ namespace MillimanClientUserAdmin
                 OriginalFile = S.Replace("_tmp", "");
                 System.IO.File.Delete(OriginalFile);
                 System.IO.File.Move(S, OriginalFile);
-        }
+            }
 
             MillimanReportReduction.QVWReductionProcessor.AuthorizeAllQVWs();
         }
@@ -555,7 +522,7 @@ namespace MillimanClientUserAdmin
             string QVRoot = System.Configuration.ConfigurationManager.AppSettings["QVDocumentRoot"];
             string Dir = System.IO.Path.Combine(QVRoot, Group);
             string[] TempFiles = System.IO.Directory.GetFiles(Dir, "*.*_tmp");
-            foreach( string S in TempFiles )
+            foreach (string S in TempFiles)
                 System.IO.File.Delete(S);
         }
         ////SelectionsPerQVW ==
@@ -565,6 +532,6 @@ namespace MillimanClientUserAdmin
         ////[3]: "2|mem_report_hier_3|exc_mem_report_hier_3|Provider Location Name 0002"
         ////[4]: "2|mem_report_hier_3|exc_mem_report_hier_3|Provider Location Name 0007"
 
-     
+
     }
 }

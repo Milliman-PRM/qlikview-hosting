@@ -5,89 +5,17 @@
 <%@ Register Src="~/admin/controls/UserRolesSelector.ascx" TagName="userRoleSelector" TagPrefix="urs" %>
 
 <style>
-    .roundShadowContainer {
-        margin-top: 10px;
-    }
-
-    .containerWrap {
-        padding: 4px;
-        width: 75%;
-        background-color: #fdfdfd;
-    }
-
-    .left {
-        float: left;
-        margin: 3px 0 0 6px;
-        text-align: left;
-        padding: 2px;
-    }
-
-    .right {
-        float: right;
-        margin: -5px -23px 0 0;
-        text-align: left;
-    }
-
-    .engravedHeader {
-        font-size: 14px;
-    }
-
-    #divOuter {
-        width: 770px;
-    }
-
-    #divLoginType {
-        height: 31px;
-        width: 400px;
-        margin: 7px 10px 9px 59px;
-        padding: 2px 42px 5px 5px;
-        border: 2px dashed #eee;
-        font-weight: 400;
-    }
-
-    #divUserRole {
-        margin: 8px 9px 10px 58px;
-            width: 650px;
-    }
-
-    #divResults {
-        width: 750px;
-    }
-
-    #divUserAddList {
-        width: 750px;
-        margin: 0 auto;
-    }
-
-    #divCreate {
-        margin-bottom: 8px;
-    }
-
-    .radioButtonlabel {
-        font-weight: 400;
-        font-size: 12px;
-    }
-
-    .userList {
-        margin: 0 -11px -2px 2px;
-        padding: 2px;
-    }
-    /*#divImportantHint{float:right;top:110px;width:550px}*/
-    .imageContainer {
-        position: relative;
-    }
-
-    .tag {
-        float: left;
-        position: absolute;
-        left: 0px;
-        top: 0px;
-        z-index: 1000;
-        background-color: #92AD40;
-        padding: 5px;
-        color: #FFFFFF;
-        font-weight: bold;
-    }
+.roundShadowContainer{margin-top:10px}
+.containerWrap{padding:4px;width:75%;background-color:#fdfdfd}
+.left{float:left;margin:3px 0 0 6px;text-align:left;padding:2px}
+.right{float:right;margin:-5px -23px 0 0;text-align:left}
+.engravedHeader{font-size:14px}
+#divOuter{width:770px}
+#divLoginType{height:31px;width:400px;margin:5px 0 1px 10px;padding:2px 42px 5px 5px;border:2px dashed #eee;font-weight:400}
+#divUserRole{margin:-1px 0 1px 10px;width:748px}
+#divResults{width:750px}
+#divUserAddList{width:750px;margin:0 auto}          
+.userList{    margin: -11px -4px 1px 11px;}                                                                                                                                                                                                                                                                                                                                                            .imageButtonClass{height:15px}
 </style>
 
 
@@ -145,14 +73,19 @@
         <div id="divResults" class="roundShadowContainer">
             <telerik:RadGrid runat="server" ID="RadGrid1" AllowSorting="True" AutoGenerateColumns="False" CellSpacing="5" GridLines="None"
                 OnItemCommand="RadGrid1_ItemCommand"
-                AllowAutomaticDeletes="True" ViewStateMode="Enabled" MasterTableView-AllowAutomaticDeletes="True" ClientIDMode="AutoID" ClientSettings-ClientEvents-OnRowDeleting="RowDeleting">
+                AllowAutomaticDeletes="True" ViewStateMode="Enabled" MasterTableView-AllowAutomaticDeletes="True" ClientIDMode="AutoID"
+                ClientSettings-ClientEvents-OnRowDeleting="RowDeleting">
                 <MasterTableView EditMode="Batch" CommandItemDisplay="Top" TableLayout="Fixed">
                     <CommandItemTemplate>
-                        <asp:LinkButton ID="Add" runat="server" CommandName="Add" Visible="true"><asp:Image runat="server" style="border:0px;vertical-align:middle;" alt="" ImageUrl="~/Images/Office-Girl-icon.png"/>Add New</asp:LinkButton>&nbsp;&nbsp;
-                    <asp:LinkButton Width="100px" ID="Validate" runat="server" CommandName="Validate" Visible='<%# RadGrid1.EditIndexes.Count == 0 %>'><asp:Image runat="server"  style="border:0px;vertical-align:middle;" alt="" ImageUrl="~/Images/process-icon.png"/>Validate</asp:LinkButton>&nbsp;&nbsp;
-                    <asp:LinkButton ID="Clear" runat="server" CommandName="Clear" ToolTip="Clears the selected group, User Accounts in grid and CSV list" Visible='<%# RadGrid1.EditIndexes.Count == 0 %>'><asp:Image runat="server" style="border:0px;vertical-align:middle;" alt="" ImageUrl="~/Images/Actions-edit-delete-icon16x16.png"/>Clear All</asp:LinkButton>&nbsp;&nbsp;
                     </CommandItemTemplate>
                     <Columns>
+                        <telerik:GridButtonColumn Text="Add new row" CommandName="Add" ButtonType="ImageButton"
+                            UniqueName="Add"
+                            ButtonCssClass="imageButtonClass" HeaderTooltip="Add new row"
+                            ImageUrl="~/Content/Images/Add-Blue.png" HeaderStyle-Width="25px" Resizable="false">
+                            <HeaderStyle Width="25px" />
+                            <ItemStyle Width="25px" />
+                        </telerik:GridButtonColumn>
                         <telerik:GridTemplateColumn DataField="ValidationImage" UniqueName="ValidationImageStatus" HeaderStyle-Width="20px">
                             <ItemTemplate>
                                 <asp:Image ID="ValidationStatusImage" runat="server" ImageUrl='<%#Eval("ValidationImage") %>' ToolTip='<%#Eval("ErrorMsg") %>' />
@@ -174,8 +107,11 @@
                                 <center><asp:CheckBox ID="DataAccessRequiredTextBox" AutoPostBack="false" runat="server" Checked='<%#Eval("DataAccess_Required") %>'/></center>
                             </ItemTemplate>
                         </telerik:GridTemplateColumn>
-                        <telerik:GridButtonColumn Text="Delete" CommandName="Delete" ButtonType="ImageButton" ConfirmText="Delete this user from the list?" ConfirmDialogType="Classic">
-                            <HeaderStyle Width="32px" />
+                        <telerik:GridButtonColumn Text="Delete entry" CommandName="Delete" ButtonType="ImageButton"
+                            ImageUrl="~/Content/Images/Delete.png" ButtonCssClass="imageButtonClass" HeaderTooltip="Delete entry"
+                            ConfirmText="Delete this user from the list?" ConfirmDialogType="Classic">
+                            <HeaderStyle Width="25px" />
+                            <ItemStyle Width="25px" />
                         </telerik:GridButtonColumn>
                     </Columns>
                 </MasterTableView>
@@ -188,6 +124,21 @@
                 <Items>
                     <telerik:RadPanelItem ID="UserPanel" Value="UserPanel" Text="Add New by CSV List" Expanded="False" runat="server" ImagePosition="Left" ToolTip="Click to expand and paste new user information here" ExpandedImageUrl="~/Images/User-Group-icon.png" DisabledImageUrl="~/Images/User-Group-icon.png" ImageUrl="~/Images/User-Group-icon.png">
                         <ContentTemplate>
+                            <%--divImportantHint hint--%>
+                            <div id="divImportant" class="divImportant" style="float: left;">
+                                <img id="img2" src="~/Content/Images/Info-blue.png" runat="server" width="18" height="18" style="margin: 2px 6px 6px 2px;" />
+                                <div id="divImportantHint" style="position: fixed; display: none;" onmouseover="hoverdiv(event,'divImportantHint')"
+                                    onmouseout="hoverdiv(event,'divImportantHint')">
+                                    <div class="alert alert-warning infoBox text-justify">
+                                        <strong>Important!</strong>
+                                        <br />
+                                        <span>&nbsp;&nbsp;Paste new user information using comma delimited format such as;</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>Email Address,[True/False]</span>
+                                        <br />
+                                        <span><i>&nbsp;&nbsp;*Only 1 entry per line</i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <%--divImportantHint hint--%>
                             <asp:Table ID="Table1" runat="server" Height="218px" Width="100%">
                                 <asp:TableRow Width="100%">
                                     <asp:TableCell Width="100%">
@@ -200,22 +151,7 @@
                                 </asp:TableRow>
                                 <asp:TableRow>
                                     <asp:TableCell HorizontalAlign="Center">
-                                        <%--divImportantHint hint--%>
-                                        <div id="divImportant" class="divImportant" style="float: left;">
-                                            <img id="img2" src="~/Content/Images/Info-blue.png" runat="server" width="18" height="18" style="margin: 2px 6px 6px 2px;" />
-                                            <div id="divImportantHint" style="position: fixed; display: none;" onmouseover="hoverdiv(event,'divImportantHint')"
-                                                onmouseout="hoverdiv(event,'divImportantHint')">
-                                                <div class="alert alert-warning infoBox text-justify">
-                                                    <strong>Important!</strong>
-                                                    <br />
-                                                    <span>&nbsp;&nbsp;Paste new user information using comma delimited format such as;</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>Email Address,[True/False]</span>
-                                                    <br />
-                                                    <span><i>&nbsp;&nbsp;*Only 1 entry per line</i></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <%--divImportantHint hint--%>
-                                        <div id="divSubmit" class="center-block" style="margin: 0px 30px 2px 2px;">
+                                        <div id="divSubmit" class="center-block" style="margin: 0px 30px 2px 22px;">
                                             <asp:Button ID="Button1" runat="server" Text="Submit List" OnClick="Submit_Click" CssClass="btn btn-primary" />
                                         </div>
                                     </asp:TableCell>
@@ -228,43 +164,16 @@
         </div>
         <div class="space"></div>
         <div id="divCreate" class="center-block">
-            <asp:Button ID="CreateNewUsers" runat="server" CommandName="CreateNewUsers" Text="Save Changes" CssClass="btn btn-primary"
+            <asp:Button ID="CreateNewUsers" runat="server" CommandName="CreateNewUsers" Text="Save" CssClass="btn btn-primary"
                 OnClick="CreateNewUsers_Click" />
+            <asp:Button ID="Reset" runat="server" CommandName="Reset" Text="Reset" CssClass="btn btn-primary"
+               OnClick="Reset_Click"  />
         </div>
+         <div class="space"></div>
     </div>
 </div>
 
 
-<%-- help sidebar --%>
-<div id="helpSidebarShow" class="helpSidebarShow">
-    <a onclick="ShowHide(); return false;" href="#">H<br />
-        I<br />
-        N<br />
-        T
-    </a>
-</div>
-<div id="helpSidebar" class="helpSidebar" style="display: none;">
-    <span class="helpSidebarClose">
-        <a onclick="ShowHide(); return false;" href="#">CLOSE</a>
-    </span>
-    <div class="clearBoth2"></div>
-    <div class="helpHintIcon"></div>
-    <div>
-        <asp:Repeater ID="rptHelp" runat="server" DataSourceID="xmlHelp">
-            <ItemTemplate>
-                <div class="helpTitle">
-                    <asp:Literal ID="ltlTitle" runat="server" Text='<%#XPath("title")%>'></asp:Literal>
-                </div>
-                <div class="helpText">
-                    <asp:Literal ID="ltlText" runat="server" Text='<%#XPath("text")%>'></asp:Literal>
-                </div>
-            </ItemTemplate>
-        </asp:Repeater>
-        <asp:XmlDataSource ID="xmlHelp" runat="server" DataFile="~/admin/help/create-user-with-role.xml"></asp:XmlDataSource>
-    </div>
-</div>
-<%-- sidebar help js --%>
-<uc3:js ID="js3" runat="server" />
 <%-- jquery js --%>
 <uc4:jquery ID="jquery1" runat="server" />
 
@@ -282,13 +191,9 @@
             $('#divImportantHint').hide();
         });
 
-        //$('.divImportant').mousemove(function (e) {
-        //    $("#divImportantHint").css('top', moveTop);
-        //});
-
+        
 
         function hoverdiv(e, divid) {
-
             var left = e.clientX + "px";
             var top = e.clientY + "px";
 
@@ -322,6 +227,10 @@
                         //clear the values
                         Rows[0].get_cell("AccountNameText").childNodes[1].value = "";
                         Rows[0].get_cell("SendWelcome").childNodes[1].checked = false;
+                        if (Rows[0].get_cell("ValidationStatusImage") != null)
+                        {
+                            Rows[0].get_cell("ValidationStatusImage").display = false;
+                        }                     
                         eventArgs.set_cancel(true);
                     }
                 }
@@ -330,3 +239,4 @@
 
     </script>
 </telerik:RadScriptBlock>
+

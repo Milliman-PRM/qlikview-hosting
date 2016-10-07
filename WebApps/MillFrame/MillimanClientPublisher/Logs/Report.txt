@@ -15965,4 +15965,67 @@ File name: 'E:\PRM\WIP\ClientPublisher\images\missing.png'
    at MillimanCommon.UserRepo.StartFileWatcher(String RepoFilePath) in E:\Oct4_Issues\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 245
    at MillimanCommon.UserRepo.Load() in E:\Oct4_Issues\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 337
    at MillimanCommon.UserRepo.GetInstance() in E:\Oct4_Issues\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 30
-   at ClientPublisher.Global.Application_Start(Object sender, EventArgs e) in E:\Oct4_Issues\WebApps\MillFrame\MillimanClientPublisher\Global.asax.cs:line 15----------------------------------------
+   at ClientPublisher.Global.Application_Start(Object sender, EventArgs e) in E:\Oct4_Issues\WebApps\MillFrame\MillimanClientPublisher\Global.asax.cs:line 15----------------------------------------10/5/2016 2:13:39 PMInfo           Application Start
+10/5/2016 2:13:59 PMInfo           Application Start
+2:13:59 PM                    Error     \r\nException trace: System.ArgumentException: The directory name D:\InstalledApplications\PRM_Staging_SK\Rules is invalid.
+   at System.IO.FileSystemWatcher..ctor(String path, String filter)
+   at MillimanCommon.UserRepo.StartFileWatcher(String RepoFilePath) in C:\Users\afsheen.khan\PRMDevelopment\SprintOct3ToOct21\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 245
+   at MillimanCommon.UserRepo.Load() in C:\Users\afsheen.khan\PRMDevelopment\SprintOct3ToOct21\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 337
+   at MillimanCommon.UserRepo.GetInstance() in C:\Users\afsheen.khan\PRMDevelopment\SprintOct3ToOct21\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 30
+   at ClientPublisher.Global.Application_Start(Object sender, EventArgs e) in C:\Users\afsheen.khan\PRMDevelopment\SprintOct3ToOct21\WebApps\MillFrame\MillimanClientPublisher\Global.asax.cs:line 15----------------------------------------10/5/2016 2:17:12 PMInfo           Application Start
+2:17:12 PM                    Error     \r\nException trace: System.ArgumentException: The directory name D:\InstalledApplications\PRM_Staging_SK\Rules is invalid.
+   at System.IO.FileSystemWatcher..ctor(String path, String filter)
+   at MillimanCommon.UserRepo.StartFileWatcher(String RepoFilePath) in C:\Users\afsheen.khan\PRMDevelopment\SprintOct3ToOct21\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 245
+   at MillimanCommon.UserRepo.Load() in C:\Users\afsheen.khan\PRMDevelopment\SprintOct3ToOct21\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 337
+   at MillimanCommon.UserRepo.GetInstance() in C:\Users\afsheen.khan\PRMDevelopment\SprintOct3ToOct21\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 30
+   at ClientPublisher.Global.Application_Start(Object sender, EventArgs e) in C:\Users\afsheen.khan\PRMDevelopment\SprintOct3ToOct21\WebApps\MillFrame\MillimanClientPublisher\Global.asax.cs:line 15----------------------------------------10/5/2016 2:17:33 PMInfo           Application Start
+10/5/2016 2:17:33 PMInfo           Loaded user repo
+10/5/2016 2:17:33 PMInfo           Loaded super groups
+10/6/2016 10:15:32 AMInfo           Application Start
+10/6/2016 10:15:32 AMInfo           Loaded user repo
+10/6/2016 10:15:32 AMInfo           Loaded super groups
+10/6/2016 11:13:08 AMInfo           Application Start
+10/6/2016 11:13:08 AMInfo           Loaded user repo
+10/6/2016 11:13:08 AMInfo           Loaded super groups
+10/6/2016 11:27:37 AMInfo           Application Start
+10/6/2016 11:27:37 AMInfo           Loaded user repo
+10/6/2016 11:27:37 AMInfo           Loaded super groups
+10/6/2016 1:06:32 PMInfo           Application Start
+10/6/2016 1:06:32 PMInfo           Loaded user repo
+10/6/2016 1:06:33 PMInfo           Loaded super groups
+10/6/2016 1:15:07 PMInfo           Application Start
+10/6/2016 1:15:08 PMInfo           Loaded user repo
+10/6/2016 1:15:08 PMInfo           Loaded super groups
+10/6/2016 1:20:01 PMInfo           Application Start
+10/6/2016 1:20:01 PMInfo           Loaded user repo
+10/6/2016 1:20:01 PMInfo           Loaded super groups
+10/6/2016 1:28:01 PMInfo           Application Start
+10/6/2016 1:28:01 PMInfo           Loaded user repo
+10/6/2016 1:28:01 PMInfo           Loaded super groups
+10/6/2016 1:38:08 PMInfo           Application Start
+10/6/2016 1:38:08 PMInfo           Loaded user repo
+10/6/2016 1:38:08 PMInfo           Loaded super groups
+10/6/2016 1:41:29 PMInfo           Application Start
+10/6/2016 1:41:29 PMInfo           Loaded user repo
+10/6/2016 1:41:29 PMInfo           Loaded super groups
+10/6/2016 1:44:26 PMInfo           Application Start
+10/6/2016 1:44:26 PMInfo           Loaded user repo
+10/6/2016 1:44:26 PMInfo           Loaded super groups
+10/6/2016 2:03:20 PMInfo           Application Start
+10/6/2016 2:03:20 PMInfo           Loaded user repo
+10/6/2016 2:03:20 PMInfo           Loaded super groups
+10/6/2016 2:10:54 PMInfo           Application Start
+10/6/2016 2:10:54 PMInfo           Loaded user repo
+10/6/2016 2:10:54 PMInfo           Loaded super groups
+10/6/2016 2:11:38 PMInfo           Application Start
+10/6/2016 2:11:38 PMInfo           Loaded user repo
+10/6/2016 2:11:38 PMInfo           Loaded super groups
+10/6/2016 2:15:40 PMInfo           Application Start
+10/6/2016 2:15:40 PMInfo           Loaded user repo
+10/6/2016 2:15:40 PMInfo           Loaded super groups
+10/6/2016 4:50:23 PMInfo           Application Start
+10/6/2016 4:50:24 PMInfo           Loaded user repo
+10/6/2016 4:50:24 PMInfo           Loaded super groups
+10/6/2016 6:01:35 PMInfo           Application Start
+10/6/2016 6:01:35 PMInfo           Loaded user repo
+10/6/2016 6:01:35 PMInfo           Loaded super groups

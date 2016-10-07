@@ -152,37 +152,7 @@
 <div class="messageWrap">
     <asp:HyperLink ID="Msg" runat="server" Visible="False" EnableViewState="false"></asp:HyperLink>
 </div>
-<%-- help sidebar --%>
-<div id="helpSidebarShow" class="helpSidebarShow">
-    <a onclick="ShowHide(); return false;" href="#">
-    H<br />
-    I<br />
-    N<br />
-    T
-    </a>
-</div>
-<div id="helpSidebar" class="helpSidebar" style="display: none;">
-    <span class="helpSidebarClose">
-        <a onclick="ShowHide(); return false;" href="#">CLOSE</a>
-    </span>
-    <div class="clearBoth2"></div>
-    <div class="helpHintIcon"></div>
-    <div>
-        <asp:Repeater ID="rptHelp" runat="server" DataSourceID="xmlHelp">
-            <ItemTemplate>
-                <div class="helpTitle">
-                    <asp:Literal ID="ltlTitle" runat="server" Text='<%#XPath("title")%>'></asp:Literal>
-                </div>
-                <div class="helpText">
-                    <asp:Literal ID="ltlText" runat="server" Text='<%#XPath("text")%>'></asp:Literal>
-                </div>
-            </ItemTemplate>
-        </asp:Repeater>
-        <asp:XmlDataSource ID="xmlHelp" runat="server" DataFile="~/admin/help/admin-edit-hints.xml"></asp:XmlDataSource>
-    </div>
-</div>
-<%-- sidebar help js --%>
-<uc3:js ID="js3" runat="server" />
+
 <%-- jquery js --%>
 <uc4:jquery ID="jquery1" runat="server" />
 <uc1:js ID="js1" runat="server" />
