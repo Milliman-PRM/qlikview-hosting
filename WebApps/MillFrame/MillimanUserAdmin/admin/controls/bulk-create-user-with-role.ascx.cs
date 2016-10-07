@@ -90,8 +90,10 @@ public partial class bulk_admin_controls_create_user_with_role : System.Web.UI.U
             {
                 var Current = new List<UserInfo>();
                 Current = GridToList(RadGrid1);
-                if (Current != null)
+                if (Current != null && Current.Count > 0)
                     UsersList.AddRange(Current);
+                else
+                    UsersList.Add(new UserInfo("", false, false));
 
                 RadGrid1.DataSource = UsersList;
                 RadGrid1.Rebind();
