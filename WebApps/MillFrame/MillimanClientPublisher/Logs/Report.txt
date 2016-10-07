@@ -16029,3 +16029,36 @@ File name: 'E:\PRM\WIP\ClientPublisher\images\missing.png'
 10/6/2016 6:01:35 PMInfo           Application Start
 10/6/2016 6:01:35 PMInfo           Loaded user repo
 10/6/2016 6:01:35 PMInfo           Loaded super groups
+10/6/2016 7:21:34 PMInfo           Application Start
+7:21:37 PM                    Error     \r\nException trace: System.ArgumentException: The directory name D:\InstalledApplications\PRM_Staging_SK\Rules is invalid.
+   at System.IO.FileSystemWatcher..ctor(String path, String filter)
+   at MillimanCommon.UserRepo.StartFileWatcher(String RepoFilePath) in C:\Users\afsheen.khan\PRMDevelopment\SprintOct3ToOct21\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 245
+   at MillimanCommon.UserRepo.Load() in C:\Users\afsheen.khan\PRMDevelopment\SprintOct3ToOct21\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 337
+   at MillimanCommon.UserRepo.GetInstance() in C:\Users\afsheen.khan\PRMDevelopment\SprintOct3ToOct21\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 30
+   at ClientPublisher.Global.Application_Start(Object sender, EventArgs e) in C:\Users\afsheen.khan\PRMDevelopment\SprintOct3ToOct21\WebApps\MillFrame\MillimanClientPublisher\Global.asax.cs:line 15----------------------------------------10/7/2016 1:02:12 PMInfo           Application Start
+1:02:12 PM                    Error     \r\nException trace: System.ArgumentException: The directory name D:\InstalledApplications\PRM_Staging_SK\Rules is invalid.
+   at System.IO.FileSystemWatcher..ctor(String path, String filter)
+   at MillimanCommon.UserRepo.StartFileWatcher(String RepoFilePath) in C:\Users\afsheen.khan\PRMDevelopment\SprintOct3ToOct21\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 245
+   at MillimanCommon.UserRepo.Load() in C:\Users\afsheen.khan\PRMDevelopment\SprintOct3ToOct21\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 337
+   at MillimanCommon.UserRepo.GetInstance() in C:\Users\afsheen.khan\PRMDevelopment\SprintOct3ToOct21\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 30
+   at ClientPublisher.Global.Application_Start(Object sender, EventArgs e) in C:\Users\afsheen.khan\PRMDevelopment\SprintOct3ToOct21\WebApps\MillFrame\MillimanClientPublisher\Global.asax.cs:line 15----------------------------------------10/7/2016 1:19:55 PMInfo           Application Start
+1:19:56 PM                    Error     \r\nException trace: System.ArgumentException: The directory name D:\InstalledApplications\PRM_Staging_SK\Rules is invalid.
+   at System.IO.FileSystemWatcher..ctor(String path, String filter)
+   at MillimanCommon.UserRepo.StartFileWatcher(String RepoFilePath) in C:\Users\afsheen.khan\PRMDevelopment\SprintOct3ToOct21\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 245
+   at MillimanCommon.UserRepo.Load() in C:\Users\afsheen.khan\PRMDevelopment\SprintOct3ToOct21\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 337
+   at MillimanCommon.UserRepo.GetInstance() in C:\Users\afsheen.khan\PRMDevelopment\SprintOct3ToOct21\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 30
+   at ClientPublisher.Global.Application_Start(Object sender, EventArgs e) in C:\Users\afsheen.khan\PRMDevelopment\SprintOct3ToOct21\WebApps\MillFrame\MillimanClientPublisher\Global.asax.cs:line 15----------------------------------------10/7/2016 1:31:20 PMInfo           Application Start
+1:31:20 PM                    Error     \r\nException trace: System.ArgumentException: The directory name D:\InstalledApplications\PRM_Staging_SK\Rules is invalid.
+   at System.IO.FileSystemWatcher..ctor(String path, String filter)
+   at MillimanCommon.UserRepo.StartFileWatcher(String RepoFilePath) in C:\Users\afsheen.khan\PRMDevelopment\SprintOct3ToOct21\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 245
+   at MillimanCommon.UserRepo.Load() in C:\Users\afsheen.khan\PRMDevelopment\SprintOct3ToOct21\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 337
+   at MillimanCommon.UserRepo.GetInstance() in C:\Users\afsheen.khan\PRMDevelopment\SprintOct3ToOct21\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 30
+   at ClientPublisher.Global.Application_Start(Object sender, EventArgs e) in C:\Users\afsheen.khan\PRMDevelopment\SprintOct3ToOct21\WebApps\MillFrame\MillimanClientPublisher\Global.asax.cs:line 15----------------------------------------10/7/2016 1:31:49 PMInfo           Application Start
+10/7/2016 1:31:49 PMInfo           Loaded user repo
+10/7/2016 1:31:49 PMInfo           Loaded super groups
+10/7/2016 1:52:39 PMInfo           Application Start
+10/7/2016 1:52:39 PMInfo           Loaded user repo
+10/7/2016 1:52:39 PMInfo           Loaded super groups
+10/7/2016 2:08:20 PMInfo           Application Start
+10/7/2016 2:08:20 PMInfo           Loaded user repo
+10/7/2016 2:08:20 PMInfo           Loaded super groups

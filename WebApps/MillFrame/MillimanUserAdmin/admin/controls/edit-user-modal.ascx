@@ -71,7 +71,7 @@
                                             <EditItemTemplate>
                                                 <div class="clearBoth2">
                                                 </div>
-                                                <asp:Button ID="Button1" CssClass="inputButton" runat="server" CausesValidation="True" CommandName="Update" Text="Save Changes" OnClientClick="return confirm('This will UPDATE the User Info. Click OK to continue.')" />
+                                                <asp:Button ID="Button1" CssClass="inputButton" runat="server" CausesValidation="True" CommandName="Update" Text="Save" OnClientClick="return confirm('This will UPDATE the User Info. Click OK to continue.')" />
                                                 <asp:Button ID="Button2" CssClass="inputButton" runat="server" CausesValidation="False" CommandName="Cancel" Text="Cancel" />
                                                 <asp:Button ID="Button4" CssClass="inputButton" runat="server" Text="Unlock" OnClick="UnlockUser" OnClientClick="return confirm('Click OK to unlock this user.')" />
                                                 <asp:Button ID="Button5" CssClass="inputButton" runat="server" Text="Delete" OnClick="DeleteUser" OnClientClick="return confirm('Are you sure? This will delete all information related to this user including the user profile.')" />

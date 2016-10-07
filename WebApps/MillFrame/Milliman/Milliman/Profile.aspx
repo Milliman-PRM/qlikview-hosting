@@ -641,13 +641,6 @@
                 badInputData = true;
             }
 
-            //not allowed chars
-            var regexChar = new RegExp(/[`,<>;':"/[\]|{}()=-]/);
-            if (newpasswordValue.match(regexChar)) {
-                showErrorAlert('The character you entered is not valid.');
-                return false;
-            }
-
             //validate non-printable chars 
             if (newpasswordValue.match(/[^\u0000-\u007F]/)) {
                 showErrorAlert('You can not have non-printable chars.');

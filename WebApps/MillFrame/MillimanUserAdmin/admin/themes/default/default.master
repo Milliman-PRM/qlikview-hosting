@@ -54,7 +54,7 @@
             </table>
         </div>
         <%-- navigation menu --%>
-        <div class="aspMenuDivWrap" style="padding: 0px; vertical-align: middle; height: 26px">
+        <div class="aspMenuDivWrap">
             <asp:Menu ID="Menu1" runat="server" Orientation="Horizontal" CssSelectorClass="Menu1" DataSourceID="SiteMapDataSource1"
                 OnMenuItemDataBound="Menu1_MenuItemDataBound" TabIndex="-1" StaticMenuItemStyle-VerticalPadding="20px">
             </asp:Menu>

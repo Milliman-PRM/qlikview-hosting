@@ -22,7 +22,7 @@
 <%-- gridview banner --%>
 <div class="gvBanner">
     <span class="gvBannerUsers">
-        <asp:Image ID="Image1" runat="server" ImageAlign="AbsMiddle" ImageUrl="~/images/decoy-icon-36px.png" /></span> Create Users With Group
+        <asp:Image ID="Image1" runat="server" ImageAlign="AbsMiddle" ImageUrl="~/images/decoy-icon-36px.png" /></span> Add Users With Group
 </div>
 
 <telerik:RadAjaxManager ID="RadAjaxManager2" runat="server">
