@@ -79,6 +79,7 @@
                                     <input id="UserFirstName" name="UserFirstName" type="text" runat="server" class="form-control"
                                         placeholder="first name..." maxlength="50" style="width: 185px;" tabindex="1"
                                         onclick="this.select(); removeClass(this, 'textbox-focus');" />
+                                        <asp:HiddenField ID="hdAllChars" runat="server" />
                                 </td>
                             </tr>
                             <tr>
@@ -242,7 +243,8 @@
                     <td valign="middle">
                         
                         <%--THIS CRASH IN IE  <center>Copyright &copy Milliman 2015</center>--%>
-                        <center>"Copyright" "&copy;" "Milliman 2016"</center>
+                        <%--<center>"Copyright" "&copy;" "Milliman 2016"</center>--%>
+                        <center> Copyright ©  <script> new Date().getFullYear(); </script> "Milliman 2016" </center>
                     </td>
                 </tr>
             </table>
@@ -403,6 +405,13 @@
             $('#divSpecialChars').hide();
         }
 
+        //***************** All Special Characters ******************************//
+        //if there are values for allwoed character then display it
+        var AllSpecialChars = "<%= System.Configuration.ConfigurationManager.AppSettings["AllSpecialChars"].ToString() %>"
+        if (AllSpecialChars.length > 1) {
+            $('#hdAllChars').val(AllSpecialChars);
+        }
+
         //***************** Start User name checks ******************************//
         var UserFirstNameInput = document.getElementById("UserFirstName");
         UserFirstNameInput.addEventListener("blur", verifyUserNameInput, false);
@@ -437,13 +446,10 @@
             }
 
             //if there are specail in name then check if they are allowed
-            //var allSpecialChars = new RegExp(/[~!@#$%^&*;?+_.`,<>;':/[\]|{}(-)=]/);
-            var allSpecialChars = new RegExp(/[~!@#$%^&*;?+_.`,<>;':/[\]|{}(-)=]/gi);
-            if (elementValue.match(allSpecialChars)) {
+            if (elementValue.match(new RegExp($('#hdAllChars').val(), "gi"))) {
                 //allowed special chars from web.config
                 var allowedSplChars = AllowedSpecialCharactersInUserName.trim().split(',');
-
-                var allPresentCharactersInName = elementValue.match(new RegExp(allSpecialChars, "gi"));
+                var allPresentCharactersInName = elementValue.match(new RegExp( $('#hdAllChars').val(), "gi"));
 
                 var found = [];
                 var badFound = [];
@@ -639,6 +645,13 @@
             } else {
                 $('#special').removeClass('validPassword').addClass('invalidPassword');
                 badInputData = true;
+            }
+
+            //not allowed chars
+            var regexChar = new RegExp(/[`,<>;':"/[\]|{}()=-]/);
+            if (newpasswordValue.match(regexChar)) {
+                showErrorAlert('The character you entered is not valid.');
+                return false;
             }
 
             //validate non-printable chars 
