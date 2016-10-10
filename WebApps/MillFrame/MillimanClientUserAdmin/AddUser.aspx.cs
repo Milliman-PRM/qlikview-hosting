@@ -15,7 +15,10 @@ namespace MillimanClientUserAdmin
         {
             if (!IsPostBack)
             {
+                
                 MillimanCommon.MillimanGroupMap.MillimanGroups MG = MillimanCommon.MillimanGroupMap.GetInstance().MillimanGroupDictionary[Session["groupid"].ToString()];
+                
+                
                 string[] Users = System.Web.Security.Roles.GetUsersInRole(Session["groupid"].ToString());
                 int StandardUsers = 0;
                 foreach (string User in Users)
@@ -130,18 +133,12 @@ namespace MillimanClientUserAdmin
         }
         // Page.ClientScript.RegisterClientScriptBlock(GetType(), "CloseScript", "CloseDialog()", true);
 
+        protected void Reset_Click(object sender, EventArgs e)
+        {
+            InitilizeScreen();
+        }
         private void InitilizeScreen()
         {
-            //Clear all grid items
-            foreach (GridDataItem item in RadGrid1.Items)
-            {
-                var AccountNameText = (TextBox)item["AccountNameText"].FindControl("AccountNameTextBox");
-                var SendWelcome = (CheckBox)item["SendWelcome"].FindControl("SendWelcomeCheckbox");
-                var DataAccessRequiredText = (CheckBox)item["DataAccessRequiredText"].FindControl("DataAccessRequiredTextBox");
-                AccountNameText.Text = "";
-                SendWelcome.Checked = false;
-                DataAccessRequiredText.Checked = false;
-            }
             //reset grid
             //add an empty row
             var uInfoList = new List<UserInfo>();

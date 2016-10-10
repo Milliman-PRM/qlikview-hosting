@@ -272,7 +272,7 @@
             if (AccessTree) {
                 //we do not allow a user to be added if access rights are not selected
                 if (AccessTree.get_checkedNodes().length == 0) {
-                    alert("Selecting the user access rights from the 'Data Restrictions Selections' tree is required to add user accounts.");
+                    alert("Selecting the user access rights from the 'Data Restriction Selections' tree is required to modify user accounts.");
                     return false;
                 }
             }

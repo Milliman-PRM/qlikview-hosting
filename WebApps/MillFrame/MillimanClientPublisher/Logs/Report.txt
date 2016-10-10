@@ -16029,3 +16029,51 @@ File name: 'E:\PRM\WIP\ClientPublisher\images\missing.png'
 10/6/2016 6:01:35 PMInfo           Application Start
 10/6/2016 6:01:35 PMInfo           Loaded user repo
 10/6/2016 6:01:35 PMInfo           Loaded super groups
+10/10/2016 1:04:42 PMInfo           Application Start
+10/10/2016 1:04:42 PMInfo           Loaded user repo
+10/10/2016 1:04:42 PMInfo           Loaded super groups
+10/10/2016 1:05:34 PMInfo           Application Start
+10/10/2016 1:05:34 PMInfo           Loaded user repo
+10/10/2016 1:05:34 PMInfo           Loaded super groups
+10/10/2016 1:08:04 PMInfo           Application Start
+10/10/2016 1:08:04 PMInfo           Loaded user repo
+10/10/2016 1:08:04 PMInfo           Loaded super groups
+10/10/2016 1:12:48 PMInfo           Application Start
+10/10/2016 1:12:48 PMInfo           Loaded user repo
+10/10/2016 1:12:48 PMInfo           Loaded super groups
+10/10/2016 1:16:11 PMInfo           Application Start
+10/10/2016 1:16:11 PMInfo           Loaded user repo
+10/10/2016 1:16:11 PMInfo           Loaded super groups
+10/10/2016 2:04:39 PMInfo           Application Start
+10/10/2016 2:04:39 PMInfo           Loaded user repo
+10/10/2016 2:04:39 PMInfo           Loaded super groups
+10/10/2016 2:05:02 PMInfo           Application Start
+10/10/2016 2:05:02 PMInfo           Loaded user repo
+10/10/2016 2:05:02 PMInfo           Loaded super groups
+10/10/2016 2:20:56 PMInfo           Application Start
+10/10/2016 2:20:56 PMInfo           Loaded user repo
+10/10/2016 2:20:56 PMInfo           Loaded super groups
+10/10/2016 2:21:26 PMInfo           Application Start
+10/10/2016 2:21:26 PMInfo           Loaded user repo
+10/10/2016 2:21:26 PMInfo           Loaded super groups
+10/10/2016 2:22:48 PMInfo           Application Start
+10/10/2016 2:22:48 PMInfo           Loaded user repo
+10/10/2016 2:22:48 PMInfo           Loaded super groups
+10/10/2016 2:34:07 PMInfo           Application Start
+10/10/2016 2:34:07 PMInfo           Loaded user repo
+10/10/2016 2:34:07 PMInfo           Loaded super groups
+10/10/2016 3:00:00 PMInfo           Application Start
+10/10/2016 3:00:00 PMInfo           Loaded user repo
+10/10/2016 3:00:00 PMInfo           Loaded super groups
+10/10/2016 3:17:19 PMInfo           Application Start
+10/10/2016 3:17:19 PMInfo           Loaded user repo
+10/10/2016 3:17:19 PMInfo           Loaded super groups
+10/10/2016 3:20:49 PMInfo           Application Start
+10/10/2016 3:20:49 PMInfo           Loaded user repo
+10/10/2016 3:20:49 PMInfo           Loaded super groups
+10/10/2016 3:22:43 PMInfo           Application Start
+10/10/2016 3:22:43 PMInfo           Loaded user repo
+10/10/2016 3:22:43 PMInfo           Loaded super groups
+10/10/2016 3:22:53 PMInfo           Application Start
+10/10/2016 3:22:53 PMInfo           Loaded user repo
+10/10/2016 3:22:53 PMInfo           Loaded super groups
