@@ -1,4 +1,5 @@
 ﻿<%@ Page Title="Login" Language="C#" MasterPageFile="~/themes/defaults/default.master" AutoEventWireup="True" CodeBehind="login.aspx.cs" Inherits="login" EnableViewState="false" %>
+
 <%@ Register Src="controls/login-with-captcha.ascx" TagName="LoginWithCaptcha" TagPrefix="uc1" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
@@ -7,3 +8,6 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
   <uc1:LoginWithCaptcha ID="LoginWithCaptcha1" runat="server" />
 </asp:Content>
+
+
+

@@ -52,7 +52,6 @@
             </tr>
             <tr style="height: 50%">
                 <td>
-
                     <telerik:RadPanelBar runat="server" ID="RadPanelBar1" Height="100%" Width="100%" ExpandMode="FullExpandedItem">
                         <Items>
                             <telerik:RadPanelItem runat="server" Expanded="True" Text="Data Restriction Selections" Value="panItemAccessTree">
@@ -79,7 +78,6 @@
                             </telerik:RadPanelItem>
                         </Items>
                     </telerik:RadPanelBar>
-
                 </td>
             </tr>
             <tr style="">
@@ -89,7 +87,7 @@
                         ClientIDMode="AutoID" ClientSettings-ClientEvents-OnRowDeleting="RowDeleting">
                         <MasterTableView EditMode="Batch" CommandItemDisplay="Top" TableLayout="Fixed">
                             <CommandItemTemplate>
-                                <asp:LinkButton ID="Add" runat="server" CommandName="Add" Visible="true" ToolTip="Click to enter email addresses as comma, semi-colon, space or newline delimited.">
+                                <%--<asp:LinkButton ID="Add" runat="server" CommandName="Add" Visible="true" ToolTip="Click to enter email addresses as comma, semi-colon, space or newline delimited.">
                                     <asp:Image ID="Image1" runat="server" Style="border: 0px; vertical-align: middle;" alt="" ImageUrl="~/Images/Office-Girl-icon.png" />Add New
                                 </asp:LinkButton>&nbsp;&nbsp;
                                <asp:LinkButton Width="100px" ID="Validate" runat="server" CommandName="Validate" Visible='<%# RadGrid1.EditIndexes.Count == 0 %>'>
@@ -97,9 +95,16 @@
                                </asp:LinkButton>&nbsp;&nbsp;               
                                <asp:LinkButton ID="Clear" runat="server" CommandName="Clear" Visible='<%# RadGrid1.EditIndexes.Count == 0 %>'>
                                    <asp:Image ID="Image3" runat="server" Style="border: 0px; vertical-align: middle;" alt="" ImageUrl="~/Images/close_24.png" />Reset
-                               </asp:LinkButton>&nbsp;&nbsp;
+                               </asp:LinkButton>&nbsp;&nbsp;--%>
                             </CommandItemTemplate>
                             <Columns>
+                                <telerik:GridButtonColumn Text="Add new row" CommandName="Add" ButtonType="ImageButton"
+                                    UniqueName="Add"
+                                    ButtonCssClass="imageButtonClass" HeaderTooltip="Add new row"
+                                    ImageUrl="~/Content/Images/Add-Blue.png" HeaderStyle-Width="25px" Resizable="false">
+                                    <HeaderStyle Width="25px" />
+                                    <ItemStyle Width="25px" />
+                                </telerik:GridButtonColumn>
                                 <telerik:GridTemplateColumn DataField="ValidationImage" UniqueName="ValidationImageStatus" HeaderStyle-Width="25px">
                                     <ItemTemplate>
                                         <asp:Image ID="ValidationStatusImage" runat="server" ImageUrl='<%#Eval("ValidationImage") %>' ToolTip='<%#Eval("ErrorMsg") %>' />
@@ -108,7 +113,7 @@
 
                                 <telerik:GridTemplateColumn DataField="Account_Name" HeaderText="Account Name" UniqueName="AccountNameText" HeaderStyle-Width="97%">
                                     <ItemTemplate>
-                                        <asp:TextBox Style="overflow: hidden" ID="AccountNameTextBox" runat="server" AutoPostBack="false" Text='<%#Eval("Account_Name") %>' Width="100%" TextMode="MultiLine" Rows="1"></asp:TextBox>
+                                        <asp:TextBox Style="overflow: hidden" ID="AccountNameTextBox" runat="server" AutoPostBack="false" Text='<%#Eval("Account_Name") %>' Width="90%" Height="27px" CssClass="standardTextBox"></asp:TextBox>
                                     </ItemTemplate>
 
                                     <HeaderStyle Width="97%"></HeaderStyle>
@@ -124,9 +129,11 @@
                                         <center><asp:CheckBox ID="DataAccessRequiredTextBox" AutoPostBack="false" runat="server" Checked='<%#Eval("DataAccess_Required") %>'/></center>
                                     </ItemTemplate>
                                 </telerik:GridTemplateColumn>
-
-                                <telerik:GridButtonColumn Text="Delete" CommandName="Delete" ButtonType="ImageButton" ConfirmText="Delete this user from the list?" ConfirmDialogType="Classic">
-                                    <HeaderStyle Width="32px" />
+                                <telerik:GridButtonColumn Text="Delete entry" CommandName="Delete" ButtonType="ImageButton"
+                                    ImageUrl="~/Content/Images/Delete.png" ButtonCssClass="imageButtonClass" HeaderTooltip="Delete entry"
+                                    ConfirmText="Delete this user from the list?" ConfirmDialogType="Classic">
+                                    <HeaderStyle Width="25px" />
+                                    <ItemStyle Width="25px" />
                                 </telerik:GridButtonColumn>
                             </Columns>
 
@@ -154,6 +161,9 @@
             Account modifications in progress.....
         </div>
 
+        <script src="Content/Script/jquery.v1.7.1.js"></script>
+        <script src="Content/Script/jquery.min.v2.1.1.js"></script>
+        <script src="Content/Script/bootstrap.min.v3.3.7.js"></script>
         <script type="text/javascript">
 
             function StartProcessing() {
@@ -251,6 +261,9 @@
                             //clear the values
                             Rows[0].get_cell("AccountNameText").childNodes[1].value = "";
                             Rows[0].get_cell("SendWelcome").childNodes[1].checked = false;
+                            if (Rows[0].get_cell("ValidationStatusImage") != null) {
+                                Rows[0].get_cell("ValidationStatusImage").display = false;
+                            }
                             eventArgs.set_cancel(true);
                         }
                     }

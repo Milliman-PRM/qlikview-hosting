@@ -5,23 +5,52 @@
 <head>
     <title>Milliman Health Care Intelligence</title>
     <link rel="Stylesheet" href="Css/Styles.css" />
-</head>
-<body style="background-color:white;background-image:url("~images/watermark.png");background-repeat:repeat">
-    <form id="form1" runat="server">
-        <div style="position:fixed;top:50%;left:50%;width:400px;height:230px;margin-top:-115px;margin-left:-200px;border:1px solid #999999">
+    <link href="../Content/Style/bootstrap.css" rel="stylesheet" />
+    <link href="../Content/Style/MillframeStyle.css" rel="stylesheet" />
+     <style type="text/css">
+        .containerWrap {
+            width: 850px;
+        }
 
-                    <table style="padding:20px">
-                        <tr>
-                            <td style="height:30px;"></td>
-                        </tr>
-                        <tr>
-                            <td colspan="2" style="text-align:center;">
-                                <asp:Label ID="ErrorMsg" runat="server" Text="An unspecified error condition has halted processing.  Please contact a system administrator."></asp:Label>
-                            </td>
-                        </tr>
-                    </table>
-  
-       </div>
+        div#divMain {
+            width: 500px;
+            height: 170px;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+        }
+
+        div#divImage {
+            width: 433px;
+            vertical-align: middle;
+            text-align: left;
+        }
+    </style>
+</head>
+<body style="background-color:white;background-image:url(Images/watermark.png);background-repeat:repeat">
+    <form id="form1" runat="server">
+        <div id="divMain" class="containerWrap center-block">
+        <div class="row">
+            <div class="roundShadowContainer alert-info center-block">
+                <div id="divImage">
+                    <img src="../Images/PRMLogo_height80.png" style="width:200px;" alt="Milliman Logo" />
+                </div>
+                <div class="space"></div>
+                <div class="space"></div>
+                <div class="space"></div>
+                <p class="text-justify" style="padding:6px;">
+                    An unspecified error condition has halted processing. 
+                    <br />
+                    Please contact a system administrator.
+                    <br />
+                    <asp:Label ID="ErrorMsg" runat="server"></asp:Label>
+                </p>
+            </div>
+        </div>
+    </div>
    </form>
 </body>
 </html>

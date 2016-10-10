@@ -5,17 +5,67 @@
 <%@ Register Src="~/admin/controls/UserRolesSelector.ascx" TagName="userRoleSelector" TagPrefix="urs" %>
 
 <style>
-.roundShadowContainer{margin-top:10px}
-.containerWrap{padding:4px;width:75%;background-color:#fdfdfd}
-.left{float:left;margin:3px 0 0 6px;text-align:left;padding:2px}
-.right{float:right;margin:-5px -23px 0 0;text-align:left}
-.engravedHeader{font-size:14px}
-#divOuter{width:770px}
-#divLoginType{height:31px;width:400px;margin:5px 0 1px 10px;padding:2px 42px 5px 5px;border:2px dashed #eee;font-weight:400}
-#divUserRole{margin:-1px 0 1px 10px;width:748px}
-#divResults{width:750px}
-#divUserAddList{width:750px;margin:0 auto}          
-.userList{    margin: -11px -4px 1px 11px;}                                                                                                                                                                                                                                                                                                                                                            .imageButtonClass{height:15px}
+    .roundShadowContainer {
+        margin-top: 10px;
+    }
+
+    .containerWrap {
+        padding: 4px;
+        width: 75%;
+        background-color: #fdfdfd;
+    }
+
+    .left {
+        float: left;
+        margin: 3px 0 0 6px;
+        text-align: left;
+        padding: 2px;
+    }
+
+    .right {
+        float: right;
+        margin: -5px -23px 0 0;
+        text-align: left;
+    }
+
+    .engravedHeader {
+        font-size: 14px;
+    }
+
+    #divOuter {
+        width: 770px;
+    }
+
+    #divLoginType {
+        height: 31px;
+        width: 400px;
+        margin: 5px 0 1px 10px;
+        padding: 2px 42px 5px 5px;
+        border: 2px dashed #eee;
+        font-weight: 400;
+    }
+
+    #divUserRole {
+        margin: -1px 0 1px 10px;
+        width: 748px;
+    }
+
+    #divResults {
+        width: 750px;
+    }
+
+    #divUserAddList {
+        width: 750px;
+        margin: 0 auto;
+    }
+
+    .userList {
+        margin: -11px -4px 1px 11px;
+    }
+
+    .imageButtonClass {
+        height: 15px;
+    }
 </style>
 
 
@@ -120,7 +170,8 @@
         <div class="space"></div>
 
         <div id="divUserAddList" class="roundShadowContainer">
-            <telerik:RadPanelBar ID="RadPanelBar1" runat="server" Width="100%" CollapseDelay="100" ExpandDelay="100" ExpandMode="MultipleExpandedItems" AllowCollapseAllItems="True">
+            <telerik:RadPanelBar ID="RadPanelBar1" runat="server" Width="100%" CollapseDelay="100" ExpandDelay="100" ExpandMode="MultipleExpandedItems" AllowCollapseAllItems="True"
+                OnClientItemClicking="OnClientItemClicking">
                 <Items>
                     <telerik:RadPanelItem ID="UserPanel" Value="UserPanel" Text="Add New by CSV List" Expanded="False" runat="server" ImagePosition="Left" ToolTip="Click to expand and paste new user information here" ExpandedImageUrl="~/Images/User-Group-icon.png" DisabledImageUrl="~/Images/User-Group-icon.png" ImageUrl="~/Images/User-Group-icon.png">
                         <ContentTemplate>
@@ -167,9 +218,9 @@
             <asp:Button ID="CreateNewUsers" runat="server" CommandName="CreateNewUsers" Text="Save" CssClass="btn btn-primary"
                 OnClick="CreateNewUsers_Click" />
             <asp:Button ID="Reset" runat="server" CommandName="Reset" Text="Reset" CssClass="btn btn-primary"
-               OnClick="Reset_Click"  />
+                OnClick="Reset_Click" />
         </div>
-         <div class="space"></div>
+        <div class="space"></div>
     </div>
 </div>
 
@@ -191,7 +242,6 @@
             $('#divImportantHint').hide();
         });
 
-        
 
         function hoverdiv(e, divid) {
             var left = e.clientX + "px";
@@ -227,14 +277,30 @@
                         //clear the values
                         Rows[0].get_cell("AccountNameText").childNodes[1].value = "";
                         Rows[0].get_cell("SendWelcome").childNodes[1].checked = false;
-                        if (Rows[0].get_cell("ValidationStatusImage") != null)
-                        {
+                        if (Rows[0].get_cell("ValidationStatusImage") != null) {
                             Rows[0].get_cell("ValidationStatusImage").display = false;
-                        }                     
+                        }
                         eventArgs.set_cancel(true);
                     }
                 }
             }
+        }
+
+        function OnClientItemClicking(sender, args) {
+            debugger;
+            var uList = "[CSV Format]\n";
+            uList += "\n\n[Excel Format]\n";
+            var UserList = $('#UserList');
+            //if (UserList.val.length === 0)
+            //{
+                //UserList.val(uList);
+                //UserList.innerHTML = uList;
+
+            //}
+            //document.getElementById("UserList").value = uList;
+            var panelBar = $find("<%= RadPanelBar1.ClientID %>"); 
+            var item = panelBar.findItemByValue("#UserList");
+            item.value = uList;
         }
 
     </script>

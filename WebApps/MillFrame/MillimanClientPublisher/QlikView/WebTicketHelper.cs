@@ -25,11 +25,11 @@ namespace ClientPublisher
         // Server where the QlikView AccessPoint resides (ends with slash) - must be 127.0.0.1 to be trusted by server
         //private string AccessPointServer = "https://127.0.0.1/";
         //private string ExternalAccessPointServer = "https://hcintel.milliman.com";
-       
+
         //for production server this must be HTTPS://127.0.0.1 to work
         //we have code below that will look to see if the external server name is PRM.MILLIMAN.COM and default to HTTPS if needed
-        private string AccessPointServer = "https://127.0.0.1/";
-       // private string ExternalAccessPointServer = "http://hcintel.cloudapp.net";
+        private string AccessPointServer = "http://127.0.0.1/";
+        // private string ExternalAccessPointServer = "http://hcintel.cloudapp.net";
 
         #endregion
 
@@ -60,15 +60,9 @@ namespace ClientPublisher
 
             BackUrl = _ErrorURL;
 
-            //this is just a check to see if we are on PRM production machine or not, we default to HTTP
-            if (System.Configuration.ConfigurationManager.AppSettings["ExternalServerName"].ToLower().Contains("prm.milliman.com"))
+            //this is just a check to see if we need to use SSL - note to access via https://127.0.0.1 we rely on the global.asax to overided the certificate check since it will fail for SSL
+            if ((System.Configuration.ConfigurationManager.AppSettings["UseSSLForQVServiceCalls"] != null) && (System.Convert.ToBoolean(System.Configuration.ConfigurationManager.AppSettings["UseSSLForQVServiceCalls"])))
                 AccessPointServer = "https://127.0.0.1/";
-
-            //turn off SSL when working with some servers like dev machines
-            if (System.Convert.ToBoolean(System.Configuration.ConfigurationManager.AppSettings["RunWithoutSSL"]) == true)
-            {
-                AccessPointServer = AccessPointServer.Replace("https://", "http://");
-            }
 
             if (GetWebTicket() == false)
                 return false; 

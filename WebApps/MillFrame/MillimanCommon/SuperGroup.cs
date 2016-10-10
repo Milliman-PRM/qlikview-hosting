@@ -198,14 +198,18 @@ namespace MillimanCommon
             bool Modified = false;
             foreach (SuperGroupContainer Current in SuperGroupContainers)
             {
-                foreach (string GroupName in Current.GroupNames)
+                //only check a super group that has USER as part of items
+                if (Current.PublisherUserAccounts.Contains(User, StringComparer.OrdinalIgnoreCase) || Current.AdminUserAccounts.Contains(User, StringComparer.OrdinalIgnoreCase))
                 {
-                    //check to see user is in EVERY role of supergroup
-                    if (System.Web.Security.Roles.IsUserInRole(User, GroupName) == false)
+                    foreach (string GroupName in Current.GroupNames)
                     {
-                        Current.PublisherUserAccounts.Remove(User);
-                        Current.AdminUserAccounts.Remove(User);
-                        Modified = true;
+                        //check to see user is in EVERY role of supergroup
+                        if (System.Web.Security.Roles.IsUserInRole(User, GroupName) == false)
+                        {
+                            Current.PublisherUserAccounts.Remove(User);
+                            Current.AdminUserAccounts.Remove(User);
+                            Modified = true;
+                        }
                     }
                 }
             }
