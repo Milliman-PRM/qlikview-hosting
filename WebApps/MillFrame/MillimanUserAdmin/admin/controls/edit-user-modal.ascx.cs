@@ -420,7 +420,7 @@ public partial class admin_controls_edit_user_modal : System.Web.UI.UserControl
             if (u.ChangePassword(u.GetPassword(), PasswordTextbox.Text))
             {
                 CreatePasswordReset(u);
-                Msg.Text = "Password changed successfully and will show upon refresh.";
+                Msg.Text = "Password changed successfully.";
             }
             else
             {

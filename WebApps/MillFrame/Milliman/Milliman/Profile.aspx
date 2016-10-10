@@ -437,9 +437,9 @@
             }
 
             //if there are specail in name then check if they are allowed
-            var allSpecialChars = new RegExp(/[~!@#$%^&*;?+_.`,<>;':/[\]|{}()=-]/);
-
-            if (elementValue.match(new RegExp(allSpecialChars, "gi"))) {
+            //var allSpecialChars = new RegExp(/[~!@#$%^&*;?+_.`,<>;':/[\]|{}(-)=]/);
+            var allSpecialChars = new RegExp(/[~!@#$%^&*;?+_.`,<>;':/[\]|{}(-)=]/gi);
+            if (elementValue.match(allSpecialChars)) {
                 //allowed special chars from web.config
                 var allowedSplChars = AllowedSpecialCharactersInUserName.trim().split(',');
 
