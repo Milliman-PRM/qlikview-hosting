@@ -53,8 +53,9 @@ namespace ClientPublisher
                     return sr.ReadToEnd().Trim();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "Failed to get QV ticket", ex);
                 return null;
             }
         }
