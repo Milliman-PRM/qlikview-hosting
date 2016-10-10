@@ -3,27 +3,49 @@
 <head>
     <title>Milliman PRM</title>
     <link rel="Stylesheet" href="Css/Styles.css" />
+    <link href="Content/Style/bootstrap.css" rel="stylesheet" />
+    <link href="Content/Style/MillframeStyle.css" rel="stylesheet" />
+    <style type="text/css">
+        .containerWrap {
+            width: 850px;
+        }
+
+        div#divMain {
+            position: absolute;
+            top: 20%;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 500px;
+            height: 220px;
+            margin: 0 auto;
+        }
+
+        div#divImage {
+            width: 433px;
+            vertical-align: middle;
+            text-align: left;
+        }
+    </style>
 </head>
 <body style="background-color:white;background-image:url(images/watermark.png);background-repeat:repeat">
-    <div style="position:fixed;top:50%;left:50%;width:300px;height:200px;margin-top:-100px;margin-left:-150px;border:1px solid #999999">
-
-                <table style="padding:20px">
-                    <tr>
-                        <td style="text-align:left;" class="Col1Style">
-                            <img src="Images/PRMLogo_height80.png" style="width:200px;height:auto;" alt="Milliman Logo" />
-                        </td>
-                        <td style="width:100px;">&nbsp;</td>
-                    </tr>
-                    <tr>
-                        <td style="height:30px;"></td>
-                    </tr>
-                    <tr>
-                        <td colspan="2" style="text-align:center;">
-                             Your access to the client administration page has timed out.  If you need to make additional user updates, please re-launch the page from the PRM website menu.
-                        </td>
-                    </tr>
-                </table>
-  
-   </div>
+    <div id="divMain" class="containerWrap center-block">
+        <div class="row">
+            <div class="roundShadowContainer">
+                <div id="divImage">
+                    <img src="Images/PRMLogo_height80.png" style="width:200px;" alt="Milliman Logo" />
+                </div>
+                <div class="space"></div>
+                <div class="space"></div>
+                <div class="space"></div>
+                <p class="text-justify" style="padding:6px;">
+                    Your access to the client administration page has timed out.  
+                    <br />
+                    <br />
+                    If you need to make additional user updates, please re-launch the page from the PRM website menu.
+                </p>
+            </div>
+        </div>
+    </div>      
 </body>
 </html>
