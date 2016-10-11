@@ -136,7 +136,13 @@
                         <asp:Label ID="lblErrorMessage" CssClass="error-1" runat="server">*A valid email and password are required!</asp:Label>
                     </td>
                     <td style="text-align:right;background-color:#3D3D3D;color:white;height:30px;vertical-align:bottom;" colspan="4">
-                        &copy; Powered by Milliman 2014
+                        <center>                             
+                            <div>
+                    Copyright © Milliman &nbsp
+                                <asp:Label ID="lblcopyrightYear" runat="server"></asp:Label>
+                    <script type="text/javascript">document.getElementById("lblcopyrightYear").innerHTML = new Date().getFullYear();</script>
+                </div>
+                        </center>
                     </td>
                 </tr>
             </table> 

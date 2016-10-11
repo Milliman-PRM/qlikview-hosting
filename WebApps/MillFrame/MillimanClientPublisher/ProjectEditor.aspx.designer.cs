@@ -202,13 +202,13 @@ namespace ClientPublisher {
         protected global::System.Web.UI.WebControls.TextBox Notes;
         
         /// <summary>
-        /// AutoInclusionMsg control.
+        /// divMsg control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label AutoInclusionMsg;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divMsg;
         
         /// <summary>
         /// RestrictedViewsMsg control.
@@ -218,6 +218,15 @@ namespace ClientPublisher {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label RestrictedViewsMsg;
+        
+        /// <summary>
+        /// AutoInclusionMsg control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label AutoInclusionMsg;
         
         /// <summary>
         /// ApplyChanges control.

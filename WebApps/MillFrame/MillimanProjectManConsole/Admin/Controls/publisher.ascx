@@ -8,11 +8,14 @@
     <div  style="width:100%;height:100%;margin:5px" >
 
     <div style="width:100%;height:100%;border:solid 1px lightgray" id="RadFileExplorerContainer">
-        <telerik:RadFileExplorer  ID="RadFileExplorer1"  runat="server" EnableCopy="true"  OnClientItemSelected="OnClientItemSelected" Configuration-AllowFileExtensionRename="False" Configuration-AllowMultipleSelection="False" Width="100px" OnClientLoad="OnClientLoad" ViewStateMode="Enabled" Height="100px" BorderStyle="Solid" BorderWidth="1" BorderColor="LightGray" />
+        <telerik:RadFileExplorer  ID="RadFileExplorer1"  runat="server" EnableCopy="true"  OnClientItemSelected="OnClientItemSelected" 
+            Configuration-AllowFileExtensionRename="False" Configuration-AllowMultipleSelection="False" Width="100px"
+             OnClientLoad="OnClientLoad" ViewStateMode="Enabled" Height="100px" BorderStyle="Solid" BorderWidth="1" BorderColor="LightGray" />
         <asp:HiddenField ID="hidden" runat="server" /> <%--needed to push selected node in grid back to codebehind--%>
     </div>  
 
-        <telerik:RadWindow ID="UploadWindow" runat="server" Animation="Fade" AutoSize="False" Behaviors="Close, Move, Reload" Modal="True"  InitialBehaviors="Close" VisibleStatusbar="False" OnClientClose="OnClientclose"  ShowContentDuringLoad="False" DestroyOnClose="False" />
+        <telerik:RadWindow ID="UploadWindow" runat="server" Animation="Fade" AutoSize="False" Behaviors="Close, Move, Reload" Modal="True"  
+            InitialBehaviors="Close" VisibleStatusbar="False" OnClientClose="OnClientclose"  ShowContentDuringLoad="False" DestroyOnClose="False" />
         <asp:UpdatePanel ID="UpdatePanel1" runat="server">  </asp:UpdatePanel>
     </div>
 
@@ -24,20 +27,20 @@
         LastSelectedFilePath = args.get_path();
 
         var EE = document.getElementById('<%= hidden.ClientID %>');
-         EE.value = args.get_item()._name;
+        EE.value = args.get_item()._name;
 
-         if (EE.value.indexOf(".hciprj") > 0) {
-             //launch rad window somehow
-         }
-     }
+        if (EE.value.indexOf(".hciprj") > 0) {
+            //launch rad window somehow
+        }
+    }
 
-     function OnClientLoad(explorer, args) {
-         setTimeout(function () { ResizeExplorer(); }, 0);
-         explorer.refresh();
-     }
+    function OnClientLoad(explorer, args) {
+        setTimeout(function () { ResizeExplorer(); }, 0);
+        explorer.refresh();
+    }
 
-     function Closer() {
-         var oExplorer = $find("<%=RadFileExplorer1.ClientID%>");
+    function Closer() {
+        var oExplorer = $find("<%=RadFileExplorer1.ClientID%>");
          if (oExplorer)
              oExplorer.refresh();
 
@@ -226,17 +229,17 @@ document.body.onload = function () {
         window.onresize = Resizer;
     }
     var explorer = $find("<%=RadFileExplorer1.ClientID%>");
-         if (explorer) {
-             explorer.get_gridContextMenu().add_itemClicked(GridItemClicked);
-             explorer.get_toolbar().add_buttonClicked(toolbarClicked);
-         }
-     }
+    if (explorer) {
+        explorer.get_gridContextMenu().add_itemClicked(GridItemClicked);
+        explorer.get_toolbar().add_buttonClicked(toolbarClicked);
+    }
+}
 
 
-     function toolbarClicked(toolbar, args) {
-         var buttonValue = args.get_item().get_value();
-         if (buttonValue == "Import") {
-             var MyUploadWindow = $find("<%=UploadWindow.ClientID%>");
+function toolbarClicked(toolbar, args) {
+    var buttonValue = args.get_item().get_value();
+    if (buttonValue == "Import") {
+        var MyUploadWindow = $find("<%=UploadWindow.ClientID%>");
              if (MyUploadWindow) {
                  MyUploadWindow.Title = "Create Project from QVW Import";
                  MyUploadWindow.setUrl('QVWImport.aspx');

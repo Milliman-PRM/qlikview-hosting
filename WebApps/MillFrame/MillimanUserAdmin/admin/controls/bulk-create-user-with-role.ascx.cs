@@ -15,7 +15,7 @@ public partial class bulk_admin_controls_create_user_with_role : System.Web.UI.U
     protected void Page_Load(object sender, EventArgs e)
     {
         if (!Page.IsPostBack)
-        {   
+        {
             string TempPassword = PasswordGenerator.Generate("@");
             var uInfoList = new List<UserInfo>();
             uInfoList.Add(new UserInfo("", false, false));
@@ -57,6 +57,28 @@ public partial class bulk_admin_controls_create_user_with_role : System.Web.UI.U
     protected void Reset_Click(object sender, EventArgs e)
     {
         InitilizeScreen();
+    }
+
+    protected void RadPanelBar1_ItemClick(object sender, Telerik.Web.UI.RadPanelBarEventArgs e)
+    {
+        if (e.Item.Expanded)
+        {
+            RadPanelItem ItemClicked = e.Item;
+            TextBox UserList = (TextBox)ItemClicked.FindControl("UserList");
+            string CSVUsers = string.Empty;
+            List<UserInfo> UIList = new List<UserInfo>();
+            string Results = CreateUsersFromList(UIList, out CSVUsers);
+            UserList.Text = "[CSV Format]\n" + CSVUsers;
+            UserList.Text += "\n\n[Excel Format]\n" + CSVUsers.Replace(",", "\t");
+            updPanelUserList.Update();
+        }
+        else
+        {
+            RadPanelItem ItemClicked = e.Item;
+            TextBox UserList = (TextBox)ItemClicked.FindControl("UserList");
+            UserList.Text = "";
+            updPanelUserList.Update();
+        }
     }
 
     protected void Submit_Click(object sender, EventArgs e)
@@ -141,7 +163,7 @@ public partial class bulk_admin_controls_create_user_with_role : System.Web.UI.U
             RadGrid1.Rebind();
 
         }
-        
+
         else if (string.Compare(e.CommandName, "Autocomplete", true) == 0)
         {
             UI = AutoCompleteType();
@@ -171,7 +193,7 @@ public partial class bulk_admin_controls_create_user_with_role : System.Web.UI.U
         items = RadPanelBar1.FindItemByValue("UserPanel");
         items.Expanded = false;
         UserPanel.Expanded = false;
-        
+
         UserList.Text = string.Empty;
         updPanelUserList.Update();
     }

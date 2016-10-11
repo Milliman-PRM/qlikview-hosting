@@ -15,29 +15,33 @@
     <style type="text/css">
         h4 {
             text-align: right;
-            vertical-align:bottom;
-            background-color:red;
+            vertical-align: bottom;
+            background-color: red;
         }
-        
+
         .tableRow {
-        border-bottom: 1px solid gray;
+            border-bottom: 1px solid gray;
         }
 
         /*restyle the radwindow alert box to make it not look bad*/
         .RadWindow .rwWindowContent .radalert {
-            background-image: none !important; /* removes the excalamtion mark icon */   
+            background-image: none !important; /* removes the excalamtion mark icon */
             padding-left: 0px !important;
         }
+
         .RadWindow .rwDialogText {
-             margin-left: 10px !important; 
+            margin-left: 10px !important;
         }
+
         .RadWindow .rwPopupButton {
-            margin-left:100px !important;
+            margin-left: 100px !important;
         }
+
         .auto-style1 {
             width: 600px;
             height: 17px;
         }
+
         .auto-style2 {
             height: 17px;
         }
@@ -104,7 +108,12 @@
         </div>
     
          <div id="footer" style="height:25px;bottom:0px;position:absolute;left:5px;left:10px;right:10px;overflow:hidden;vertical-align:bottom">
-             <center>Copyright &copy Milliman 2014&nbsp;&nbsp;&nbsp;&nbsp;<asp:Button ID="Clear" runat="server" Text="Clear Debug Messages" BorderColor="Silver" BorderStyle="Solid" BorderWidth="1px" Height="20px" OnClick="Clear_Click" ToolTip="Click to clear all debug messages from the queue" /></center>
+             <center>                            <div>
+                    Copyright © Milliman &nbsp
+                                <asp:Label ID="lblcopyrightYear" runat="server"></asp:Label>
+                    <script type="text/javascript">document.getElementById("lblcopyrightYear").innerHTML = new Date().getFullYear();</script>
+                </div>
+                 &nbsp;&nbsp;&nbsp;&nbsp;<asp:Button ID="Clear" runat="server" Text="Clear Debug Messages" BorderColor="Silver" BorderStyle="Solid" BorderWidth="1px" Height="20px" OnClick="Clear_Click" ToolTip="Click to clear all debug messages from the queue" /></center>
         </div>
 
         <telerik:RadWindowManager EnableShadow="true" Behaviors="Close, Reload, Move" ID="RadWindowManager" DestroyOnClose="true" Opacity="100" runat="server" Width="450" Height="400" VisibleStatusbar="False">
@@ -115,8 +124,7 @@
     </form>
 
     <script language="javascript" type="text/javascript">
-        function OpenWindow()
-        {
+        function OpenWindow() {
             var wnd = window.radopen("profile.aspx", "User Profile/Password Settings");
             wnd.setSize(900, 550);
             wnd.Center();

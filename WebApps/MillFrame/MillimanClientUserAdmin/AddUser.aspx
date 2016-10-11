@@ -31,6 +31,10 @@
             font-family: 'Segoe UI';
             overflow: hidden;
         }
+
+        .labelweak {
+            margin: 8px 7px -4px 7px;
+        }
     </style>
 </head>
 <body onresize="FullSize('MainTable');" style="overflow: hidden;">
@@ -93,7 +97,7 @@
                             ClientIDMode="AutoID" ClientSettings-ClientEvents-OnRowDeleting="RowDeleting">
                             <MasterTableView EditMode="Batch" CommandItemDisplay="Top" TableLayout="Fixed">
                                 <CommandItemTemplate>
-                                    <%-- <asp:LinkButton ID="Add" runat="server" CommandName="Add" Visible="true" ToolTip="Click to enter email addresses as comma, semi-colon, space or newline delimited.">
+<%--                                     <asp:LinkButton ID="Add" runat="server" CommandName="Add" Visible="true" ToolTip="Click to enter email addresses as comma, semi-colon, space or newline delimited.">
                                     <asp:Image ID="Image1" runat="server" Style="border: 0px; vertical-align: middle;" alt="" ImageUrl="~/Images/Office-Girl-icon.png" />Add New
                                 </asp:LinkButton>&nbsp;&nbsp;
                                <asp:LinkButton Width="100px" ID="Validate" runat="server" CommandName="Validate" Visible='<%# RadGrid1.EditIndexes.Count == 0 %>'>
@@ -119,6 +123,7 @@
 
                                     <telerik:GridTemplateColumn DataField="Account_Name" HeaderText="Account Name" UniqueName="AccountNameText" HeaderStyle-Width="97%">
                                         <ItemTemplate>
+                                            <label for="AccountNameTextBox" class="labelweak required"></label>
                                             <asp:TextBox Style="overflow: hidden" ID="AccountNameTextBox" runat="server" AutoPostBack="false" Text='<%#Eval("Account_Name") %>' Width="100%" TextMode="MultiLine" Rows="1"></asp:TextBox>
                                         </ItemTemplate>
 
@@ -149,7 +154,7 @@
                             </MasterTableView>
                         </telerik:RadGrid>
                     </div>
-                    
+
                 </td>
             </tr>
             <tr style="color: #FF9900; height: 20px; font-size: 14px; font-style: italic">
@@ -164,7 +169,7 @@
                     <div class="space"></div>
                     <div id="divCreate" class="center-block">
                         <asp:Button ID="CreateUsers" runat="server" CommandName="CreateNewUsers" Text="Save" CssClass="btn btn-primary"
-                            OnClick="CreateUsers_Click" OnClientClick="return StartProcessing();"/>
+                            OnClick="CreateUsers_Click" OnClientClick="return StartProcessing();" />
                         <asp:Button ID="Reset" runat="server" CommandName="Reset" Text="Reset" CssClass="btn btn-primary"
                             OnClick="Reset_Click" />
                     </div>
