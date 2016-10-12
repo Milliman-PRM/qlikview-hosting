@@ -68,7 +68,17 @@
     }
 
     .labelweak {
-        margin: 8px 7px -4px 7px;
+        margin: 8px 7px -4px;
+    }
+
+    #divUserList {
+        margin: 4px;
+        padding: 4px;
+    }
+    #divSubmit
+    {
+        margin: 4px;
+        padding: 4px;
     }
 </style>
 
@@ -176,7 +186,7 @@
 
         <div id="divUserAddList" class="roundShadowContainer">
             <telerik:RadPanelBar ID="RadPanelBar1" runat="server" Width="100%" CollapseDelay="100" ExpandDelay="100" ExpandMode="MultipleExpandedItems"
-                AllowCollapseAllItems="True" OnItemClick="RadPanelBar1_ItemClick">
+                AllowCollapseAllItems="True">
                 <Items>
                     <telerik:RadPanelItem ID="UserPanel" Value="UserPanel" Text="Add New by CSV List" Expanded="False" runat="server" ImagePosition="Left" ToolTip="Click to expand and paste new user information here" ExpandedImageUrl="~/Images/User-Group-icon.png" DisabledImageUrl="~/Images/User-Group-icon.png" ImageUrl="~/Images/User-Group-icon.png">
                         <ContentTemplate>
@@ -199,14 +209,14 @@
                             <div id="divUserList">
                                 <asp:UpdatePanel ID="updPanelUserList" runat="server" ChildrenAsTriggers="true" UpdateMode="Conditional">
                                     <ContentTemplate>
-                                        <asp:TextBox runat="server" ID="UserList" TextMode="MultiLine" Rows="20" Width="98%" Height="150px" CssClass="userList"></asp:TextBox>
+                                        <asp:TextBox runat="server" ID="UserList" TextMode="MultiLine" Rows="20" Width="98%" Height="150px"></asp:TextBox>
                                     </ContentTemplate>
                                 </asp:UpdatePanel>
-                                <div class="space"></div>
-                                <div class="space"></div>
-                                <div id="divSubmit" class="center-block" style="margin: 0 auto!important;">
-                                    <asp:Button ID="Button2" runat="server" Text="Submit List" OnClick="Submit_Click" CssClass="btn btn-primary" />
-                                </div>
+                            </div>
+                            <div class="space"></div>
+                            <div class="space"></div>
+                            <div id="divSubmit" class="center-block"  align="center">
+                                <asp:Button ID="Button2" runat="server" Text="Submit List" OnClick="Submit_Click" CssClass="btn btn-primary" />
                             </div>
                         </ContentTemplate>
                     </telerik:RadPanelItem>
@@ -267,7 +277,7 @@
         }
         //This method is used when deleting the 'last' row in the grid, it cancels the removal of the 
         //last row and clear then values in the row.  Event is attached to deleting row of RadGrid
-        function RowDeleting(sender, eventArgs) {
+        <%-- function RowDeleting(sender, eventArgs) {
             debugger;
             var grid = $find('<%=RadGrid1.ClientID %>');
             if (grid) {
@@ -278,37 +288,61 @@
                         //clear the values
                         var AccountNameText = $(Rows[0].get_element()).find("input[id*='AccountNameText']").get(0);
                         AccountNameText.value = "";
-
                         var SendWelcome = $(Rows[0].get_element()).find("input[id*='SendWelcome']").get(0);
                         SendWelcome.checked = false;
-
                         var ValidationStatusImage = $(Rows[0].get_element()).find("imag[id*='ValidationStatusImage']").get(0);
                         if (ValidationStatusImage != null) {
                             ValidationStatusImage.display = false;
-                        }           
-
+                        }     
                         var imageState = MasterTable.get_dataItems()[0].findControl('ValidationStatusImage');
+                        eventArgs.set_cancel(true);
+                    }
+                }
+            }
+        }--%>
 
+       <%-- function findTextBoxInPanelBar(sender, args) {
+
+            debugger;
+            var radPanelBar = $find("<%=RadPanelBar1.ClientID %>");
+            var radPanelItem = radPanelBar.findItemByText("Add New by CSV List");
+            var updPanelUserList = radPanelItem.findControl("updPanelUserList");
+            var UserList = updPanelUserList.findControl("UserPanel");
+        }--%>
+
+
+
+        //This method is used when deleting the 'last' row in the grid, it cancels the removal of the 
+        //last row and clear then values in the row.  Event is attached to deleting row of RadGrid
+        function RowDeleting(sender, eventArgs) {
+            var grid = $find('<%=RadGrid1.ClientID %>');
+            if (grid) {
+                var MasterTable = grid.get_masterTableView();
+                if (MasterTable) {
+                    var Rows = MasterTable.get_dataItems();
+                    if (Rows.length == 1) { //only when 1 row
+                        //clear the values
+                        Rows[0].get_cell("AccountNameText").childNodes[1].value = "";
+                        Rows[0].get_cell("SendWelcome").childNodes[1].checked = false;
+
+                        //clear the values
+                        var AccountNameText = $(Rows[0].get_element()).find("input[id*='AccountNameText']").get(0);
+                        AccountNameText.value = "";
+                        var SendWelcome = $(Rows[0].get_element()).find("input[id*='SendWelcome']").get(0);
+                        SendWelcome.checked = false;
+
+                        var ValidationStatusImage = $(Rows[0].get_element()).find("input[id*='ValidationStatusImage']").get(0);
+                        //ValidationStatusImage.style.visibility = "hidden";
+                        
+                        if (ValidationStatusImage != null) {
+                            ValidationStatusImage.display = false;
+                        }
                         eventArgs.set_cancel(true);
                     }
                 }
             }
         }
 
-        function RefreshGrid() {
-<%--            var masterTable = $find("<%= RadGrid1.ClientID %>").get_masterTableView();
-            var tableView = $find("<%= RadGrid1.ClientID %>").get_masterTableView(); 
-            tableView.insertItem();
-            masterTable.rebind();--%>
-
-            <%--var grid = $find("<%= RadGrid1.ClientID %>");
-            var masterTable = grid.get_masterTableView();
-            masterTable.rebind();--%>
-
-            var view = $find("<%=  RadGrid1.ClientID %>").get_masterTableView(); 
-            view.set_dataSource([]); 
-            view.dataBind(); 
-        }
     </script>
 </telerik:RadScriptBlock>
 

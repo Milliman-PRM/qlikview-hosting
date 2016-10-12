@@ -1,18 +1,16 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="AddUser.aspx.cs" Inherits="MillimanClientUserAdmin.AddUser" Async="true" %>
 
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-
+<html xmlns="http://www.w3.org/1999/xhtml">    
 <head runat="server">
     <title></title>
-    <link id="lnkBootstrapcss" runat="server" rel="stylesheet" type="text/css" href="~/Content/Style/bootstrap.css" />
-    <link id="Link1" runat="server" rel="stylesheet" type="text/css" href="~/Content/Style/MillframeStyle.css" />
+    <%--<link id="lnkBootstrapcss" runat="server" rel="stylesheet" type="text/css" href="~/Content/Style/bootstrap.css" />
+    <link id="Link1" runat="server" rel="stylesheet" type="text/css" href="~/Content/Style/MillframeStyle.css" />--%>
     <style type="text/css">
         .LockOff {
             display: none;
             visibility: hidden;
         }
-
         .LockOn {
             display: block;
             visibility: visible;
@@ -30,10 +28,6 @@
             font: 500 12px italic;
             font-family: 'Segoe UI';
             overflow: hidden;
-        }
-
-        .labelweak {
-            margin: 8px 7px -4px 7px;
         }
     </style>
 </head>
@@ -91,13 +85,12 @@
             </tr>
             <tr style="">
                 <td>
-                    <div id="divOuter" class="roundShadowContainer">
-                        <telerik:RadGrid runat="server" ID="RadGrid1" AllowSorting="True" AutoGenerateColumns="False" CellSpacing="5" GridLines="None"
-                            OnItemCommand="RadGrid1_ItemCommand" AllowAutomaticDeletes="True" ViewStateMode="Enabled" MasterTableView-AllowAutomaticDeletes="True"
-                            ClientIDMode="AutoID" ClientSettings-ClientEvents-OnRowDeleting="RowDeleting">
-                            <MasterTableView EditMode="Batch" CommandItemDisplay="Top" TableLayout="Fixed">
-                                <CommandItemTemplate>
-<%--                                     <asp:LinkButton ID="Add" runat="server" CommandName="Add" Visible="true" ToolTip="Click to enter email addresses as comma, semi-colon, space or newline delimited.">
+                    <telerik:RadGrid runat="server" ID="RadGrid1" AllowSorting="True" AutoGenerateColumns="False" CellSpacing="5" GridLines="None"
+                        OnItemCommand="RadGrid1_ItemCommand" AllowAutomaticDeletes="True" ViewStateMode="Enabled" MasterTableView-AllowAutomaticDeletes="True"
+                        ClientIDMode="AutoID" ClientSettings-ClientEvents-OnRowDeleting="RowDeleting">
+                        <MasterTableView EditMode="Batch" CommandItemDisplay="Top" TableLayout="Fixed">
+                            <CommandItemTemplate>
+                                <asp:LinkButton ID="Add" runat="server" CommandName="Add" Visible="true" ToolTip="Click to enter email addresses as comma, semi-colon, space or newline delimited.">
                                     <asp:Image ID="Image1" runat="server" Style="border: 0px; vertical-align: middle;" alt="" ImageUrl="~/Images/Office-Girl-icon.png" />Add New
                                 </asp:LinkButton>&nbsp;&nbsp;
                                <asp:LinkButton Width="100px" ID="Validate" runat="server" CommandName="Validate" Visible='<%# RadGrid1.EditIndexes.Count == 0 %>'>
@@ -105,56 +98,39 @@
                                </asp:LinkButton>&nbsp;&nbsp;               
                                <asp:LinkButton ID="Clear" runat="server" CommandName="Clear" Visible='<%# RadGrid1.EditIndexes.Count == 0 %>'>
                                    <asp:Image ID="Image3" runat="server" Style="border: 0px; vertical-align: middle;" alt="" ImageUrl="~/Images/close_24.png" />Reset
-                               </asp:LinkButton>&nbsp;&nbsp;--%>
-                                </CommandItemTemplate>
-                                <Columns>
-                                    <telerik:GridButtonColumn Text="Add new row" CommandName="Add" ButtonType="ImageButton"
-                                        UniqueName="Add"
-                                        ButtonCssClass="imageButtonClass" HeaderTooltip="Add new row"
-                                        ImageUrl="~/Content/Images/Add-Blue.png" HeaderStyle-Width="25px" Resizable="false">
-                                        <HeaderStyle Width="25px" />
-                                        <ItemStyle Width="25px" />
-                                    </telerik:GridButtonColumn>
-                                    <telerik:GridTemplateColumn DataField="ValidationImage" UniqueName="ValidationImageStatus" HeaderStyle-Width="25px">
-                                        <ItemTemplate>
-                                            <asp:Image ID="ValidationStatusImage" runat="server" ImageUrl='<%#Eval("ValidationImage") %>' ToolTip='<%#Eval("ErrorMsg") %>' />
-                                        </ItemTemplate>
-                                    </telerik:GridTemplateColumn>
+                               </asp:LinkButton>&nbsp;&nbsp;
+                            </CommandItemTemplate>
+                            <Columns>
+                                <telerik:GridTemplateColumn DataField="ValidationImage" UniqueName="ValidationImageStatus" HeaderStyle-Width="25px">
+                                    <ItemTemplate>
+                                        <asp:Image ID="ValidationStatusImage" runat="server" ImageUrl='<%#Eval("ValidationImage") %>' ToolTip='<%#Eval("ErrorMsg") %>' />
+                                    </ItemTemplate>
+                                </telerik:GridTemplateColumn>
+                                <telerik:GridTemplateColumn DataField="Account_Name" HeaderText="Account Name" UniqueName="AccountNameText" HeaderStyle-Width="97%">
+                                    <ItemTemplate>
+                                         <asp:TextBox Style="overflow: hidden" ID="AccountNameTextBox" runat="server" AutoPostBack="false" Text='<%#Eval("Account_Name") %>' Width="90%" TextMode="MultiLine" Rows="1" CssClass="required"></asp:TextBox>
+                                    </ItemTemplate>
+                                    <HeaderStyle Width="97%"></HeaderStyle>
+                                </telerik:GridTemplateColumn>
+                                <telerik:GridTemplateColumn DataField="SendWelcomeEmail" HeaderText="Send Welcome" UniqueName="SendWelcome" HeaderStyle-Width="100px" ItemStyle-HorizontalAlign="Center">
+                                    <ItemTemplate>
+                                        <asp:CheckBox ID="SendWelcomeCheckbox" runat="server" AutoPostBack="false" ViewStateMode="Enabled" Checked='<%#Eval("SendWelcomeEmail") %>' />
+                                    </ItemTemplate>
+                                </telerik:GridTemplateColumn>
 
-                                    <telerik:GridTemplateColumn DataField="Account_Name" HeaderText="Account Name" UniqueName="AccountNameText" HeaderStyle-Width="97%">
-                                        <ItemTemplate>
-                                            <label for="AccountNameTextBox" class="labelweak required"></label>
-                                            <asp:TextBox Style="overflow: hidden" ID="AccountNameTextBox" runat="server" AutoPostBack="false" Text='<%#Eval("Account_Name") %>' Width="100%" TextMode="MultiLine" Rows="1"></asp:TextBox>
-                                        </ItemTemplate>
+                                <telerik:GridTemplateColumn DataField="DataAccess_Required" HeaderText="<center>Database Access</center>" UniqueName="DataAccessRequiredText">
+                                    <ItemTemplate>
+                                        <center><asp:CheckBox ID="DataAccessRequiredTextBox" AutoPostBack="false" runat="server" Checked='<%#Eval("DataAccess_Required") %>'/></center>
+                                    </ItemTemplate>
+                                </telerik:GridTemplateColumn>
 
-                                        <HeaderStyle Width="97%"></HeaderStyle>
-                                    </telerik:GridTemplateColumn>
-                                    <telerik:GridTemplateColumn DataField="SendWelcomeEmail" HeaderText="Send Welcome" UniqueName="SendWelcome" HeaderStyle-Width="100px" ItemStyle-HorizontalAlign="Center">
-                                        <ItemTemplate>
-                                            <asp:CheckBox ID="SendWelcomeCheckbox" runat="server" AutoPostBack="false" ViewStateMode="Enabled" Checked='<%#Eval("SendWelcomeEmail") %>' />
-                                        </ItemTemplate>
-                                    </telerik:GridTemplateColumn>
-
-                                    <telerik:GridTemplateColumn DataField="DataAccess_Required" HeaderText="<center>Database Access</center>" UniqueName="DataAccessRequiredText">
-                                        <ItemTemplate>
-                                            <center><asp:CheckBox ID="DataAccessRequiredTextBox" AutoPostBack="false" runat="server" Checked='<%#Eval("DataAccess_Required") %>'/></center>
-                                        </ItemTemplate>
-                                    </telerik:GridTemplateColumn>
-                                    <%--                                <telerik:GridButtonColumn Text="Delete" CommandName="Delete" ButtonType="ImageButton" ConfirmText="Delete this user from the list?" ConfirmDialogType="Classic">
+                                <telerik:GridButtonColumn Text="Delete" CommandName="Delete" ButtonType="ImageButton" ConfirmText="Delete this user from the list?" ConfirmDialogType="Classic">
                                     <HeaderStyle Width="32px" />
-                                </telerik:GridButtonColumn>--%>
-                                    <telerik:GridButtonColumn Text="Delete entry" CommandName="Delete" ButtonType="ImageButton"
-                                        ImageUrl="~/Content/Images/Delete.png" ButtonCssClass="imageButtonClass" HeaderTooltip="Delete entry"
-                                        ConfirmText="Delete this user from the list?" ConfirmDialogType="Classic">
-                                        <HeaderStyle Width="25px" />
-                                        <ItemStyle Width="25px" />
-                                    </telerik:GridButtonColumn>
-                                </Columns>
+                                </telerik:GridButtonColumn>
+                            </Columns>
 
-                            </MasterTableView>
-                        </telerik:RadGrid>
-                    </div>
-
+                        </MasterTableView>
+                    </telerik:RadGrid>
                 </td>
             </tr>
             <tr style="color: #FF9900; height: 20px; font-size: 14px; font-style: italic">
@@ -165,15 +141,7 @@
             </tr>
             <tr style="height: 30px">
                 <td>
-                    <%--<center><asp:Button ID="CreateUsers" runat="server" Text="Save" Width="200px" OnClientClick="return StartProcessing();" OnClick="CreateUsers_Click"/></center>--%>
-                    <div class="space"></div>
-                    <div id="divCreate" class="center-block">
-                        <asp:Button ID="CreateUsers" runat="server" CommandName="CreateNewUsers" Text="Save" CssClass="btn btn-primary"
-                            OnClick="CreateUsers_Click" OnClientClick="return StartProcessing();" />
-                        <asp:Button ID="Reset" runat="server" CommandName="Reset" Text="Reset" CssClass="btn btn-primary"
-                            OnClick="Reset_Click" />
-                    </div>
-                    <div class="space"></div>
+                    <center><asp:Button ID="CreateUsers" runat="server" Text="Save" Width="200px" OnClientClick="return StartProcessing();" OnClick="CreateUsers_Click"/></center>
                 </td>
             </tr>
         </table>
@@ -193,7 +161,7 @@
                 if (AccessTree) {
                     //we do not allow a user to be added if access rights are not selected
                     if (AccessTree.get_checkedNodes().length == 0) {
-                        alert("Selecting the user access rights from the 'Data Restriction Selections' tree is required to modify user accounts.");
+                        alert("Selecting the user access rights from the 'Data Restrictions Selections' tree is required to add user accounts.");
                         return false;
                     }
                 }

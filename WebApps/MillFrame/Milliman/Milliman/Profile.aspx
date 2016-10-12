@@ -8,19 +8,14 @@
     <link id="lnkBootstrapcss" runat="server" rel="stylesheet" type="text/css" href="~/Content/Style/bootstrap.css" />
     <link id="Link1" runat="server" rel="stylesheet" type="text/css" href="~/Content/Style/MillframeStyle.css" />
     <style type="text/css">
-        html {
-            overflow: scroll;
-        }
-
+        html {overflow: scroll;}
         html, button, input, select, textarea, label {
             font-family: arial,"Times New Roman",Times,serif,sans-serif;
             font-size: 12px;
             color: #222;
         }
 
-        body {
-            margin: 20px;
-        }
+        body { margin: 20px;   }
     </style>
 
     <script src="Content/Script/jquery.v1.7.1.js"></script>

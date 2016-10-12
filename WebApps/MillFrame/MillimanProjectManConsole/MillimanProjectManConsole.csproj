@@ -200,6 +200,13 @@
     <Content Include="ComplexUpload\QVWExtractor.aspx" />
     <Content Include="ComplexUpload\ReportGenerator.aspx" />
     <Content Include="ComplexUpload\SignatureVerification.aspx" />
+    <Content Include="Content\Images\Add-Blue.png" />
+    <Content Include="Content\Images\ajax-loader-LoadingText.gif" />
+    <Content Include="Content\Images\ajax-loader-round.gif" />
+    <Content Include="Content\Images\ajax-loader-RoundBig.gif" />
+    <Content Include="Content\Images\ajax-loader.gif" />
+    <Content Include="Content\Images\ajaxLoaderBlue50.gif" />
+    <Content Include="Content\Images\Delete.png" />
     <Content Include="Content\Images\eye-hide.png" />
     <Content Include="Content\Images\eye-icon.png" />
     <Content Include="Content\Images\Info-blue.png" />
@@ -834,8 +841,8 @@
     <Content Include="Properties\DataSources\MillimanReportReduction.QMSAPIService.UserCALs.datasource" />
     <Content Include="Properties\DataSources\System.Data.DataSet.datasource" />
     <Content Include="Content\Images\glyphicons-halflings-regular.eot" />
-    <Content Include="Content\Images\glyphicons-halflings-regular.woff" />
     <Content Include="Content\Images\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\Images\glyphicons-halflings-regular.woff" />
     <None Include="Properties\PublishProfiles\Debug.pubxml" />
     <Content Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

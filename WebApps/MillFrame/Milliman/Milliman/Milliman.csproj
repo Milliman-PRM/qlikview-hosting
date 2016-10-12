@@ -86,6 +86,13 @@
     <Content Include="Announcements\Announcements.xml" />
     <Content Include="Announcements\AnnouncementsTemplate.xml" />
     <Content Include="AssertionService.aspx" />
+    <Content Include="Content\Images\Add-Blue.png" />
+    <Content Include="Content\Images\ajax-loader-LoadingText.gif" />
+    <Content Include="Content\Images\ajax-loader-round.gif" />
+    <Content Include="Content\Images\ajax-loader-RoundBig.gif" />
+    <Content Include="Content\Images\ajax-loader.gif" />
+    <Content Include="Content\Images\ajaxLoaderBlue50.gif" />
+    <Content Include="Content\Images\Delete.png" />
     <Content Include="Content\Images\eye-hide.png" />
     <Content Include="Content\Images\eye-icon.png" />
     <Content Include="Content\Images\Info-blue.png" />

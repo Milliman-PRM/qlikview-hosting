@@ -271,7 +271,7 @@
 
         <asp:PlaceHolder runat="server" ID="test"></asp:PlaceHolder>
         <telerik:RadWindowManager EnableShadow="true" Behaviors="Close,Reload,Resize" ID="RadWindowManager"
-            DestroyOnClose="true" Opacity="100" runat="server" VisibleStatusbar="False" Style="z-index: 20000;">
+            DestroyOnClose="true" Opacity="100" runat="server" Width="450" Height="400" VisibleStatusbar="False" Style="z-index: 20000;">
             <Windows>
                 <telerik:RadWindow ID="RadWindow1" runat="server" Animation="Fade" AutoSize="True"
                     Behaviors="Close, Reload" Modal="True" InitialBehaviors="Close"
@@ -301,7 +301,6 @@
 
         }
         function Click(button, args) {
-            debugger;
             var FoundWinodw = $find("Project " + args._commandArgument);
             if (FoundWinodw) {
                 FoundWinodw.show();
