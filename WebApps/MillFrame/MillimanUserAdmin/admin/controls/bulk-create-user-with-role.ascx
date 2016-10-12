@@ -5,81 +5,20 @@
 <%@ Register Src="~/admin/controls/UserRolesSelector.ascx" TagName="userRoleSelector" TagPrefix="urs" %>
 
 <style>
-    .roundShadowContainer {
-        margin-top: 10px;
-    }
-
-    .containerWrap {
-        padding: 4px;
-        width: 75%;
-        background-color: #fdfdfd;
-    }
-
-    .left {
-        float: left;
-        margin: 3px 0 0 6px;
-        text-align: left;
-        padding: 2px;
-    }
-
-    .right {
-        float: right;
-        margin: -5px -23px 0 0;
-        text-align: left;
-    }
-
-    .engravedHeader {
-        font-size: 14px;
-    }
-
-    #divOuter {
-        width: 770px;
-    }
-
-    #divLoginType {
-        height: 31px;
-        width: 400px;
-        margin: 5px 0 1px 10px;
-        padding: 2px 42px 5px 5px;
-        border: 2px dashed #eee;
-        font-weight: 400;
-    }
-
-    #divUserRole {
-        margin: -1px 0 1px 10px;
-        width: 748px;
-    }
-
-    #divResults {
-        width: 750px;
-    }
-
-    #divUserAddList {
-        width: 750px;
-        margin: 0 auto;
-    }
-
-    .userList {
-        margin: -11px -4px 1px 11px;
-    }
-
-    .imageButtonClass {
-        height: 15px;
-    }
-
-    .labelweak {
-        margin: 8px 7px -4px;
-    }
-
-    #divUserList {
-        margin: 4px;
-        padding: 4px;
-    }
-    #divSubmit
-    {
-        margin: 4px;
-        padding: 4px;
-    }
+.roundShadowContainer{margin-top:10px}.containerWrap{padding:4px;width:75%;background-color:#fdfdfd}
+.left{float:left;margin:3px 0 0 6px;text-align:left;padding:2px}
+.right{float:right;margin:-5px -23px 0 0;text-align:left}
+.engravedHeader{font-size:14px}#divOuter{width:770px}
+#divLoginType{height:31px;width:400px;margin:5px 0 1px 10px;padding:2px 42px 5px 5px;border:2px dashed #eee;font-weight:400}
+#divUserRole{margin:-1px 0 1px 10px;width:748px}
+#divResults{width:750px}
+#divUserAddList{width:750px;margin:0 auto}
+.userList{margin:-11px -4px 1px 11px}
+.imageButtonClass{height:15px}
+.labelweak{margin:8px 7px -4px}
+#divUserList{margin:4px;padding:4px}
+#divSubmit{margin:4px;padding:4px}
+.centerDiv{margin: 0 auto;width: 100px;}
 </style>
 
 
@@ -186,7 +125,7 @@
 
         <div id="divUserAddList" class="roundShadowContainer">
             <telerik:RadPanelBar ID="RadPanelBar1" runat="server" Width="100%" CollapseDelay="100" ExpandDelay="100" ExpandMode="MultipleExpandedItems"
-                AllowCollapseAllItems="True">
+                AllowCollapseAllItems="True"  OnClientItemClicked="OnClientItemClicked">
                 <Items>
                     <telerik:RadPanelItem ID="UserPanel" Value="UserPanel" Text="Add New by CSV List" Expanded="False" runat="server" ImagePosition="Left" ToolTip="Click to expand and paste new user information here" ExpandedImageUrl="~/Images/User-Group-icon.png" DisabledImageUrl="~/Images/User-Group-icon.png" ImageUrl="~/Images/User-Group-icon.png">
                         <ContentTemplate>
@@ -215,7 +154,7 @@
                             </div>
                             <div class="space"></div>
                             <div class="space"></div>
-                            <div id="divSubmit" class="center-block"  align="center">
+                            <div id="divSubmit" class="center-block centerDiv" style="margin: 0 auto;width: 100px;">
                                 <asp:Button ID="Button2" runat="server" Text="Submit List" OnClick="Submit_Click" CssClass="btn btn-primary" />
                             </div>
                         </ContentTemplate>
@@ -237,7 +176,6 @@
 
 <%-- jquery js --%>
 <uc4:jquery ID="jquery1" runat="server" />
-
 <script src="../../Content/Script/jquery.v1.7.1.js"></script>
 <script src="../../Content/Script/jquery.min.v2.1.1.js"></script>
 <script src="../../Content/Script/bootstrap.min.v3.3.7.js"></script>
@@ -258,14 +196,12 @@
             var top = e.clientY + "px";
 
             var div = document.getElementById(divid);
-
             div.style.left = left;
             div.style.top = top;
 
             $("#" + divid).toggle();
             return false;
         }
-
 
         //top: 125px;
         function EnableDisable() {
@@ -275,43 +211,7 @@
         function ConfirmAction() {
             return window.confirm("Are you certain you want to create these users?");
         }
-        //This method is used when deleting the 'last' row in the grid, it cancels the removal of the 
-        //last row and clear then values in the row.  Event is attached to deleting row of RadGrid
-        <%-- function RowDeleting(sender, eventArgs) {
-            debugger;
-            var grid = $find('<%=RadGrid1.ClientID %>');
-            if (grid) {
-                var MasterTable = grid.get_masterTableView();
-                if (MasterTable) {
-                    var Rows = MasterTable.get_dataItems();
-                    if (Rows.length == 1) { //only when 1 row
-                        //clear the values
-                        var AccountNameText = $(Rows[0].get_element()).find("input[id*='AccountNameText']").get(0);
-                        AccountNameText.value = "";
-                        var SendWelcome = $(Rows[0].get_element()).find("input[id*='SendWelcome']").get(0);
-                        SendWelcome.checked = false;
-                        var ValidationStatusImage = $(Rows[0].get_element()).find("imag[id*='ValidationStatusImage']").get(0);
-                        if (ValidationStatusImage != null) {
-                            ValidationStatusImage.display = false;
-                        }     
-                        var imageState = MasterTable.get_dataItems()[0].findControl('ValidationStatusImage');
-                        eventArgs.set_cancel(true);
-                    }
-                }
-            }
-        }--%>
-
-       <%-- function findTextBoxInPanelBar(sender, args) {
-
-            debugger;
-            var radPanelBar = $find("<%=RadPanelBar1.ClientID %>");
-            var radPanelItem = radPanelBar.findItemByText("Add New by CSV List");
-            var updPanelUserList = radPanelItem.findControl("updPanelUserList");
-            var UserList = updPanelUserList.findControl("UserPanel");
-        }--%>
-
-
-
+        
         //This method is used when deleting the 'last' row in the grid, it cancels the removal of the 
         //last row and clear then values in the row.  Event is attached to deleting row of RadGrid
         function RowDeleting(sender, eventArgs) {
@@ -321,28 +221,43 @@
                 if (MasterTable) {
                     var Rows = MasterTable.get_dataItems();
                     if (Rows.length == 1) { //only when 1 row
-                        //clear the values
-                        Rows[0].get_cell("AccountNameText").childNodes[1].value = "";
-                        Rows[0].get_cell("SendWelcome").childNodes[1].checked = false;
-
-                        //clear the values
-                        var AccountNameText = $(Rows[0].get_element()).find("input[id*='AccountNameText']").get(0);
-                        AccountNameText.value = "";
-                        var SendWelcome = $(Rows[0].get_element()).find("input[id*='SendWelcome']").get(0);
-                        SendWelcome.checked = false;
-
-                        var ValidationStatusImage = $(Rows[0].get_element()).find("input[id*='ValidationStatusImage']").get(0);
-                        //ValidationStatusImage.style.visibility = "hidden";
-                        
-                        if (ValidationStatusImage != null) {
-                            ValidationStatusImage.display = false;
+                        //ValidationStatusImage
+                        if (Rows[0]._element.cells[1].childNodes[1].id == "ctl00_ContentPlaceHolder1_create1_RadGrid1_ctl00_ctl04_ValidationStatusImage")
+                        {                          
+                                var eleImage = Rows[0]._element.cells[1].childNodes[1];
+                                eleImage.style.visiblity = 'hidden';
+                                eleImage.style.display = 'none';                            
                         }
+                        //AccountNameText
+                        if (Rows[0]._element.cells[2].childNodes[3].id == "ctl00_ContentPlaceHolder1_create1_RadGrid1_ctl00_ctl04_AccountNameTextBox")
+                        {
+                            Rows[0]._element.cells[2].childNodes[3].value = "";
+                           
+                        }
+                        //SendWelcome
+                        if (Rows[0]._element.cells[3].childNodes[1].id == "ctl00_ContentPlaceHolder1_create1_RadGrid1_ctl00_ctl04_SendWelcomeCheckbox")
+                        {
+                            Rows[0]._element.cells[3].childNodes[1].checked = false;
+                        }
+                                        
                         eventArgs.set_cancel(true);
                     }
                 }
             }
         }
 
+        function OnClientItemClicked(sender, args) {
+            var panelbar = $find("<%= RadPanelBar1.ClientID %>");
+            var item = panelbar.findItemByValue("UserPanel");
+            var UserList = '<%=UserList.ClientID %>';
+
+            var uList = "[CSV Format]\n";
+                uList += "\n\n[Excel Format]\n";
+                $('#' + UserList).val(uList);
+
+            var updPanelUserList = '<%=updPanelUserList.ClientID%>';//ctl00_ContentPlaceHolder1_create1_RadPanelBar1_i0_updPanelUserLis
+            __doPostBack(updPanelUserList, '');
+          }
     </script>
 </telerik:RadScriptBlock>
 
