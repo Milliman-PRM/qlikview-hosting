@@ -3,10 +3,47 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>404 - File Not Found</title>
-    <meta name="robots" content="NOINDEX, NOFOLLOW"/>
+    <meta name="robots" content="NOINDEX, NOFOLLOW" />
+    <link href="Content/Style/bootstrap.css" rel="stylesheet" />
+    <link href="Content/Style/MillframeStyle.css" rel="stylesheet" />
+    <style type="text/css">
+        .containerWrap {
+            width: 850px;
+        }
+        .roundShadowContainer
+        {
+             width: 700px;
+        }
+        div#divMain {
+            position: absolute;
+            top: 20%;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            height:550px;
+        }
+
+        div#divImage {
+            width: 433px;
+            vertical-align: middle;
+            text-align: left;
+        }
+        .listExample
+        {
+            width: 433px;
+            margin:0 auto;
+            text-align:justify;
+        }
+        .divInfo
+        {
+            padding:8px;
+            margin:8px;
+        }
+    </style>
 </head>
 <body>
-    <div style="width: 84%; margin: 35px auto 30px auto; font-size: 20px; color: #000000;">
+    <!--<div style="width: 84%; margin: 35px auto 30px auto; font-size: 20px; color: #000000;">
         Oops! There was a problem processing your request...</div>
     <div style="width: 84%; margin: 35px auto 0px auto; font-size: 12px; color: #000000;">
         Possible Reasons:
@@ -18,6 +55,44 @@
         <p style="margin-left: 40px">Please click your back button and try again...</p>
         <p style="margin-left: 40px">&nbsp;</p>
         <p style="margin-left: 40px">Thank You!</p>
+    </div>-->
+    <div class="divOuter">
+        <div id="divMain" class="containerWrap center-block">
+            <div class="row">
+                <div class="roundShadowContainer">
+                    <div id="divImage">
+                        <img src="images/PRMLogo_height80.png" style="width:200px;" alt="Milliman Logo" />
+                    </div>
+                    <div class="space"></div>
+                    <div class="divInfo">
+                        <p class="text-justify" style="padding:6px;">
+                            Oops! There was a problem processing your request...
+                            <br />
+                            <br />
+                            Possible Reasons:
+                            <br />
+                            <br />
+                            <div class="listExample">
+                                <ul class="list-group">
+                                    <li class="list-group-item">Error 404 - File Not Found.</li>
+                                    <li class="list-group-item">The resource you are looking for (or one of its dependencies) could have been removed, had its name changed, or is temporarily unavailable.</li>
+                                    <li class="list-group-item">Please review the following URL and make sure that it is spelled correctly.</li>
+                                </ul>
+                            </div>
+                            <br />
+                            <br />
+                            Please click your back button and try again...
+                            <br />
+                            <br />
+                            <br />
+                            Thank You!
+                        </p>
+                    </div>
+                    
+
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>

@@ -123,7 +123,13 @@
         </div>
 
          <div id="footer" style="height:25px;bottom:0px;position:absolute;left:5px;left:10px;right:10px;overflow:hidden;vertical-align:bottom">
-             <center>Copyright &copy Milliman 2014</center>
+             <center>
+                  <div>
+                    Copyright © Milliman &nbsp
+                                <asp:Label ID="lblcopyrightYear" runat="server"></asp:Label>
+                    <script type="text/javascript">document.getElementById("lblcopyrightYear").innerHTML = new Date().getFullYear();</script>
+                </div>
+             </center>
         </div>
 
         <telerik:RadWindowManager EnableShadow="true" Behaviors="Close, Reload, Move" ID="RadWindowManager" DestroyOnClose="true" Opacity="100" runat="server" Width="450" Height="400" VisibleStatusbar="False">

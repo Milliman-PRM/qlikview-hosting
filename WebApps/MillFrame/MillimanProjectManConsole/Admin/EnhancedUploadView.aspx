@@ -96,7 +96,7 @@
         <div class="containerWrap">
             <%--divImportantHint hint--%>
             <div id="divImportant" class="divImportant" style="width: 23px; float: left;">
-                <img id="img2" src="~/Content/Images/Info-blue.png" runat="server" width="18" height="18" />
+                <img id="img2" src="~/Content/Images/Info-blue.png" runat="server" width="18" height="18" alt="Info" />
                 <i class="glyphicons glyphicons-info-sign"></i>
                 <div id="divImportantHint">
                     <div class="alert alert-warning infoBox text-justify">
@@ -235,7 +235,7 @@
             <div class="row">
                 <div class="center-block" style="float: none; width: 415px;">
                     <div class="col-md-9">
-                        <asp:Button ID="Upload" runat="server" Text="Save" Width="200px" OnClick="Upload_Click" OnClientClick="Submitted()"
+                        <asp:Button ID="Upload" runat="server" Text="Save" OnClick="Upload_Click" OnClientClick="Submitted()"
                             CssClass="btn btn-primary" />
                     </div>
                 </div>

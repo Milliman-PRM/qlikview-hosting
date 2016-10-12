@@ -6,21 +6,7 @@
     <meta name="robots" content="NOINDEX, NOFOLLOW" />
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
-    <script type="text/javascript">
-        //***************** Allowed loginWithCaptcha ******************************//
-        //if there are values for loginWithCaptcha then display it
-        var loginWithCaptcha = "<%= System.Configuration.ConfigurationManager.AppSettings["loginWithCaptcha"].ToString() %>"
-        debugger;
-        if (loginWithCaptcha.length > 1) {
-            $('#divloginWithCaptcha').show();
-        }
-        else {
-            $('#divloginWithCaptcha').hide();
-        }
-    </script>
-    <div id="divloginWithCaptcha">
         <uc1:LoginWithCaptcha ID="LoginWithCaptcha1" runat="server" />
-    </div>
 </asp:Content>
 
 

@@ -116,20 +116,15 @@
                             <td>&nbsp;</td>
  
                            <td style="text-align:right;background-color:#3D3D3D;color:white;height:30px;vertical-align:bottom;" colspan="4">
-                                &copy; Powered by Milliman 2015
+                               <center> <div>
+                                Powered by Milliman &nbsp;<asp:Label ID="lblcopyrightYear" runat="server"></asp:Label>
+                                <script type="text/javascript">document.getElementById("lblcopyrightYear").innerHTML = new Date().getFullYear();</script>
+                            </div> </center>
                             </td>
                         </tr>
                     </table>
                     </td>
                 </tr>
-            <%--    <tr >
-                    <td style="text-align:center;background-color:#3D3D3D;vertical-align:middle;" colspan="" class="Col1Style">
-                       
-                    </td>
-                    <td style="text-align:right;background-color:#3D3D3D;color:white;height:30px;vertical-align:bottom;" colspan="4">
-                        &copy; Powered by Milliman 2014
-                    </td>
-                </tr>--%>
             </table>
             <asp:HiddenField runat="server" ID="Step" Value="0" />
             <asp:HiddenField runat="server" ID="UserName" Value="0" />

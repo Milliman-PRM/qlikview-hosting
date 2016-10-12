@@ -13,77 +13,27 @@
     <link href="Content/Style/MillframeStyle.css" rel="stylesheet" />
 
     <style type="text/css">
-
-       .LockOff { 
-          display: none; 
-          visibility: hidden; 
-       } 
-
-       .LockOn { 
-          display: block; 
-          visibility: visible; 
-          position: absolute; 
-          z-index: 999; 
-          top: 0px; 
-          left: 0px; 
-          width: 110%; 
-          height: 110%; 
-          background-color: #ccc; 
-          text-align: center; 
-          padding-top: 20%; 
-          filter: alpha(opacity=95); 
-          opacity: 0.95; 
-          font:500 12px italic;
-          font-family:'Segoe UI';
-          overflow:hidden;
-       } 
-
-	    .TFtableCol{
-		    width:100%; 
-		    border-collapse:collapse; 
-	    }
-	    .TFtableCol td{ 
-		    padding:7px; border:#ebeaea; 1px solid;
-	    }
-	    /* improve visual readability for IE8 and below */
-	    .TFtableCol tr{
-		    background: #b8d1f3;
-	    }
-	    /*  Define the background color for all the ODD table columns  */
-	    .TFtableCol tr td:nth-child(odd){ 
-		    background: #b8d1f3;
-	    }
-	    /*  Define the background color for all the EVEN table columns  */
-	    .TFtableCol tr td:nth-child(even){
-		    background: #dae5f4;
-	    }
-
-        .demo-container fieldset {
-            display: inline-block;
-            *zoom: 1;
-            *display: inline;
-            vertical-align: top;
-            margin-top: 20px;
-            width: 400px;
-            height:350px;
-            background-color:white;
-        }
-
-        .fieldlabel {
-            font-size:smaller;
-            font-weight:bold;
-            font-style:italic;
-            text-align:right;
-        }
-
+        html {overflow: scroll;}
+        body {margin: 20px 20px 20px 20px;}
+        .LockOff{display:none;visibility:hidden}
+        .LockOn{display:block;visibility:visible;position:absolute;z-index:999;top:0;left:0;width:110%;height:110%;background-color:#ccc;text-align:center;padding-top:20%;filter:alpha(opacity=95);opacity:.95;font:500 12px italic;font-family:'Segoe UI';overflow:hidden}
+        .TFtableCol{width:100%;border-collapse:collapse}
+        .TFtableCol td{padding:7px;border:1px solid #ebeaea}
+        /* improve visual readability for IE8 and below */
+        .TFtableCol tr {background: #b8d1f3;}
+        /*  Define the background color for all the ODD table columns  */
+        .TFtableCol tr td:nth-child(odd) {background: #b8d1f3;}
+        /*  Define the background color for all the EVEN table columns  */
+        .TFtableCol tr td:nth-child(even) {background: #dae5f4;}
+        .demo-container fieldset{display:inline-block;*zoom:1;*display:inline;vertical-align:top;margin-top:20px;width:400px;height:350px;background-color:#fff}
+        .fieldlabel{font-size:smaller;font-weight:700;font-style:italic;text-align:right}
         /*bootstra specifc*/
-        td{padding:4px!important}
-        .form-control{height:30px}
-        .table{margin-bottom:5px}
-        .page-header   {padding-bottom: 2px; margin: 5px 0 7px;border-bottom: 1px solid #eee;}
+        td {padding: 4px !important;}
+        .form-control {height: 30px;}
+        .table {margin-bottom: 5px;}
+        .page-header {padding-bottom: 2px;margin: 5px 0 7px;border-bottom: 1px solid #eee;}
         .RadUpload .ruInputs li {list-style: none;}
         .borderless td, .borderless th {border: none;}
-
     </style>
     <telerik:RadCodeBlock ID="RadCodeBlock1" runat="server">
         <script type="text/javascript">
@@ -124,18 +74,15 @@
             }
 
             function SizeToFit() {
+                debugger;
                 window.setTimeout(
                     function () {
                         var oWnd = GetRadWindow();
-                        //this results in the window being way to large
-                        //oWnd.SetWidth(document.body.scrollWidth + 70);
-                        //oWnd.SetHeight(document.body.scrollHeight + 70);
-
                         var lock = document.getElementById('LockPane');
                         if (lock)
                             lock.className = 'LockOff';
 
-                    }, 500);
+                    },1000);
             }
 
             function onClientFileUploading(sender, args) {
@@ -182,7 +129,7 @@
             </div>
         </div>
         <!-- Modal ends Here -->
-        
+
         <div class="containerWrap">
             <div class="page-header engravedHeader">
                 <h2>Edit Project Settings</h2>
@@ -191,7 +138,7 @@
                 <%--window for the user profile info--%>
                 <div id="divUserProfileSettingsContainer" class="roundShadowContainer">
                     <h3>Client Visible Project Settings</h3>
-                    <table class="table borderless">
+                    <table class="table table-striped">
                         <tbody>
                             <tr>
                                 <td>
@@ -273,13 +220,13 @@
                                 <td>
                                     <label for="QVWUpdatePanel" class="labelweak">Tool Tip:</label></td>
                                 <td colspan="2">
-                                    <asp:TextBox ID="ToolTipTextBox" runat="server" Width="100%" Enabled="true" ViewStateMode="Enabled"></asp:TextBox></td>
+                                    <asp:TextBox ID="ToolTipTextBox" runat="server" Width="100%" Enabled="true" ViewStateMode="Enabled" CssClass="form-control"></asp:TextBox></td>
                             </tr>
                             <tr>
                                 <td>
                                     <label for="QVWUpdatePanel" class="labelweak">Description:</label></td>
                                 <td rowspan="2" colspan="2">
-                                    <asp:TextBox ID="DescriptionTextBox" runat="server" Width="100%" Height="90px" Enabled="true" TextMode="MultiLine" ViewStateMode="Enabled"></asp:TextBox></td>
+                                    <asp:TextBox ID="DescriptionTextBox" runat="server" Width="100%" Height="90px" Enabled="true" TextMode="MultiLine" ViewStateMode="Enabled" CssClass="form-control"></asp:TextBox></td>
                             </tr>
                         </tbody>
                     </table>
@@ -289,7 +236,7 @@
                 <%--window for the user Password Verification info--%>
                 <div class="roundShadowContainer">
                     <h3>Project Settings</h3>
-                    <table class="table borderless">
+                    <table class="table table-responsive">
                         <tbody>
                             <tr>
                                 <td>
@@ -317,37 +264,53 @@
                                     <label for="Notes" class="labelweak">Notes:</label>
                                 </td>
                                 <td>
-                                    <asp:TextBox ID="Notes" runat="server" Width="100%" Height="150px" Enabled="true" TextMode="MultiLine" ViewStateMode="Enabled"></asp:TextBox></td>
+                                    <asp:TextBox ID="Notes" runat="server" Width="100%" Height="150px" Enabled="true" TextMode="MultiLine" ViewStateMode="Enabled" CssClass="form-control"></asp:TextBox></td>
                             </tr>
                             <tr>
                                 <td>
-                                    <asp:Label Style="font-style: italic" ID="AutoInclusionMsg" runat="server" Text="*&quot;Auto Inclusion&quot; cannot be modified due to administrative settings!" Visible="False"></asp:Label></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <asp:Label Style="font-style: italic" ID="RestrictedViewsMsg" runat="server" Text="*&quot;Restricted Views&quot; cannot be modified due to administrative settings!" Visible="False"></asp:Label></td>
+                                    <div id="divMsg" runat="server">
+                                        <asp:Label Style="font-style: italic" ID="RestrictedViewsMsg" runat="server" Visible="false">
+                                        *&quot;Restricted Views&quot; cannot be modified due to administrative settings!
+                                        </asp:Label>
+                                        <br />
+                                        <asp:Label Style="font-style: italic" ID="AutoInclusionMsg" runat="server" Visible="false">
+                                        *&quot;Auto Inclusion&quot; cannot be modified due to administrative settings!
+                                        </asp:Label>
+                                    </div>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
             <div class="space"></div>
-                <div class="row">
-                    <div class="center-block" style="float: none; width: 415px;">
-                        <div class="space"></div>
-                        <div class="col-md-8" style="float: none;">
-                            <asp:Button ID="ApplyChanges" runat="server" Text="Apply Changes" ViewStateMode="Enabled" OnClick="ApplyChanges_Click" CssClass="btn btn-primary" />
-                        </div>
+            <div class="row">
+                <div class="center-block" style="float: none; width: 415px;">
+                    <div class="space"></div>
+                    <div class="col-md-8" style="float: none;">
+                        <asp:Button ID="ApplyChanges" runat="server" Text="Save" ViewStateMode="Enabled" OnClick="ApplyChanges_Click" CssClass="btn btn-primary" />
                     </div>
                 </div>
+            </div>
         </div>
 
-
+        <style type="text/css">
+            /*Modal Pop up*/
+            .loaderImage{background:none repeat scroll 0 0 #FBFBFB;height:100px;left:50%;margin-left:-50px;position:absolute;top:17%;width:100px}
+            .progressBarWindow{background:none repeat scroll 0 0 #454444;border:4px solid #FBFBFB;border-radius:20px 20px 20px 20px;box-shadow:0 0 20px #222;height:213px;margin: -2em 0em 0em 17em;padding:61px;position:absolute;width:493px;z-index:13000;-moz-border-radius:20px;-webkit-border-radius:20px 20px 20px 20px;border-radius:20px 20px 20px 20px}
+            #progressBackgroundFilter{position:fixed;top:0;bottom:0;left:0;right:0;overflow:hidden;padding:0;margin:0;background-color:#000;filter:alpha(opacity=50);opacity:.5;z-index:1000}
+            .waitCaption{cursor:pointer;left:41%;position:absolute;top:64%}                                                                                                                                                                                            
+            .wait{font:bold 100% "Lucida Grande",Arial,sans-serif;color:#000!important;font-weight:700;text-decoration:none;padding:.5em 2em .5em .75em;text-shadow:1px 1px 0 #FFF}
+        </style>
         <div id="LockPane" class="LockOn">
-            <iframe frameborder="0" style="border: none; overflow: hidden;" width="50" height="50" src="Images/frameanimation.aspx" name="imgbox" id="imgbox" seamless="seamless"></iframe>
-            <br />
-            <br />
-            Loading Project Editor.....
+            <div id="progressBackgroundFilter">
+            </div>
+            <div id="progressBarWindow" class="progressBarWindow">
+                <asp:Image ID="loaderImage" runat="server" CssClass="loaderImage" ImageUrl="~/Content/Images/ajax-loader-LoadingText.gif"/>
+                <div id="Div1" class="center-block" align="center" valign="middle" runat="server">
+                    <span class="wait waitCaption">Please Wait....</span>
+                </div>
+            </div>
         </div>
     </form>
 

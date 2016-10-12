@@ -131,18 +131,7 @@ namespace MillimanClientUserAdmin
         // Page.ClientScript.RegisterClientScriptBlock(GetType(), "CloseScript", "CloseDialog()", true);
 
         private void InitilizeScreen()
-        {
-            //Clear all grid items
-            foreach (GridDataItem item in RadGrid1.Items)
-            {
-                var AccountNameText = (TextBox)item["AccountNameText"].FindControl("AccountNameTextBox");
-                var SendWelcome = (CheckBox)item["SendWelcome"].FindControl("SendWelcomeCheckbox");
-                var DataAccessRequiredText = (CheckBox)item["DataAccessRequiredText"].FindControl("DataAccessRequiredTextBox");
-                AccountNameText.Text = "";
-                SendWelcome.Checked = false;
-                DataAccessRequiredText.Checked = false;
-            }
-            //reset grid
+        {            
             //add an empty row
             var uInfoList = new List<UserInfo>();
             uInfoList.Add(new UserInfo("", false, false));

@@ -20,34 +20,54 @@
     <script src="https://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
     <%--   <script src="script.js"></script>--%>
     <link rel="Stylesheet" href="Css/Styles.css" />
-    <style type="text/css">  
-        h4{text-align:right;vertical-align:bottom;background-color:red}
-        .tableRow{border-bottom:1px solid gray}
-        /*restyle the radwindow alert box to make it not look bad*/
-        .RadWindow .rwWindowContent .radalert{background-image:none!important;padding-left:0!important}/* removes the excalamtion mark icon */
-        .RadWindow .rwDialogText{margin-left:10px!important}
-         div.menu {
-                min-width: 846px;
-                border-bottom: 1px solid #F4CB79;
-                border-top: 1px solid #FAE5BC;
-                height: 28px;
-                background-color: #F4F4F4;
-                background-image: url('Images/header.gif');
-                background-repeat: repeat;
-                padding: 2px;
+    <style type="text/css">
+        h4 {
+            text-align: right;
+            vertical-align: bottom;
+            background-color: red;
         }
+
+        .tableRow {
+            border-bottom: 1px solid gray;
+        }
+        /*restyle the radwindow alert box to make it not look bad*/
+        .RadWindow .rwWindowContent .radalert {
+            background-image: none !important;
+            padding-left: 0 !important;
+        }
+        /* removes the excalamtion mark icon */
+        .RadWindow .rwDialogText {
+            margin-left: 10px !important;
+        }
+
+        div.menu {
+            min-width: 846px;
+            border-bottom: 1px solid #F4CB79;
+            border-top: 1px solid #FAE5BC;
+            height: 28px;
+            background-color: #F4F4F4;
+            background-image: url('Images/header.gif');
+            background-repeat: repeat;
+            padding: 2px;
+        }
+
         .clear {
             clear: both;
             float: none;
         }
+
         div.RadMenu {
             float: left;
         }
+
         .menuDropdownFilter {
             float: right !important;
             margin-right: 26px;
-        }        
-                                                                                                                                                                                             .RadWindow .rwPopupButton{margin-left:100px!important}
+        }
+
+        .RadWindow .rwPopupButton {
+            margin-left: 100px !important;
+        }
     </style>
 </head>
 <body>
@@ -71,7 +91,7 @@
             </div>
             <div class="menu">
                 <telerik:RadMenu ID="mnuOptions" runat="server" EnableRoundedCorners="true"
-                    EnableShadows="true" OnItemClick="mnuOptions_ItemClick" >
+                    EnableShadows="true" OnItemClick="mnuOptions_ItemClick">
                     <CollapseAnimation Duration="200" Type="OutQuint" />
                 </telerik:RadMenu>
                 <div class="menuDropdownFilter">
@@ -111,17 +131,23 @@
         </div>
 
         <div id="footer" style="height: 25px; bottom: 0px; position: absolute; left: 5px; left: 10px; right: 10px; overflow: hidden; vertical-align: bottom">
-            <center>Copyright &copy Milliman 2016</center>
+            <center>
+                <div>
+                    Copyright © Milliman &nbsp<asp:Label ID="lblcopyrightYear" runat="server"></asp:Label>
+                    <script type="text/javascript">document.getElementById("lblcopyrightYear").innerHTML = new Date().getFullYear();</script>
+                </div>
+
+            </center>
         </div>
 
-        <telerik:RadWindowManager EnableShadow="true" Behaviors="Resize, Close, Reload" ID="RadWindowManager" 
-                                DestroyOnClose="true" Opacity="100" runat="server" Width="450" Height="400" 
-                                VisibleStatusbar="False" Style="z-index: 20000;">
+        <telerik:RadWindowManager EnableShadow="true" Behaviors="Resize, Close, Reload" ID="RadWindowManager"
+            DestroyOnClose="true" Opacity="100" runat="server" Width="450" Height="400"
+            VisibleStatusbar="False" Style="z-index: 20000;">
             <Windows>
-                <telerik:RadWindow ID="RadWindow1" runat="server" Animation="Fade" AutoSize="True" 
+                <telerik:RadWindow ID="RadWindow1" runat="server" Animation="Fade" AutoSize="True"
                     Behaviors="Close, Reload" Modal="True"
-                    Height="600px" Width="1008px" InitialBehaviors="Close" 
-                   Title="User Profile/Password Settings" VisibleStatusbar="False" VisibleTitlebar="False" />
+                    Height="600px" Width="1008px" InitialBehaviors="Close"
+                    Title="User Profile/Password Settings" VisibleStatusbar="False" VisibleTitlebar="False" />
             </Windows>
         </telerik:RadWindowManager>
 

@@ -16,7 +16,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MillimanProjectManConsole",
 		{567257AE-B788-4C06-B687-0D4EFB504878} = {567257AE-B788-4C06-B687-0D4EFB504878}
 	EndProjectSection
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "MillimanUserAdmin", "MillimanUserAdmin\", "{308AAB17-DF36-478A-89CA-D4D2517B45FB}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "MillimanUserAdmin(1)", "MillimanUserAdmin\", "{308AAB17-DF36-478A-89CA-D4D2517B45FB}"
 	ProjectSection(WebsiteProperties) = preProject
 		SccProjectName = "SAK"
 		SccAuxPath = "SAK"
@@ -38,7 +38,7 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "MillimanUserAdmin", "Millim
 		Release.AspNetCompiler.ForceOverwrite = "true"
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
-		VWDPort = "15332"
+		VWDPort = "15334"
 		SlnRelativePath = "MillimanUserAdmin\"
 	EndProjectSection
 EndProject

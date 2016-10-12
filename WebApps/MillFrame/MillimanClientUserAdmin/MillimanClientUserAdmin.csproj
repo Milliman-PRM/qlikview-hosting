@@ -201,6 +201,13 @@
     <Content Include="App_Data\RadCaptcha\X.wav" />
     <Content Include="App_Data\RadCaptcha\Y.wav" />
     <Content Include="App_Data\RadCaptcha\Z.wav" />
+    <Content Include="Content\Images\Add-Blue.png" />
+    <Content Include="Content\Images\ajax-loader-LoadingText.gif" />
+    <Content Include="Content\Images\ajax-loader-round.gif" />
+    <Content Include="Content\Images\ajax-loader-RoundBig.gif" />
+    <Content Include="Content\Images\ajax-loader.gif" />
+    <Content Include="Content\Images\ajaxLoaderBlue50.gif" />
+    <Content Include="Content\Images\Delete.png" />
     <Content Include="Content\Images\eye-hide.png" />
     <Content Include="Content\Images\eye-icon.png" />
     <Content Include="Content\Images\Info-blue.png" />
@@ -310,8 +317,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Images\glyphicons-halflings-regular.eot" />
-    <Content Include="Content\Images\glyphicons-halflings-regular.woff" />
     <Content Include="Content\Images\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\Images\glyphicons-halflings-regular.woff" />
     <None Include="Properties\PublishProfiles\ReleaseCandidateProfile.pubxml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
@@ -352,11 +359,11 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>False</UseIIS>
+          <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>49573</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:14359/</IISUrl>
+          <IISUrl>http://localhost:49574/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

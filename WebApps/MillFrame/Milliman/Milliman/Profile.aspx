@@ -8,19 +8,14 @@
     <link id="lnkBootstrapcss" runat="server" rel="stylesheet" type="text/css" href="~/Content/Style/bootstrap.css" />
     <link id="Link1" runat="server" rel="stylesheet" type="text/css" href="~/Content/Style/MillframeStyle.css" />
     <style type="text/css">
-        html {
-            overflow: scroll;
-        }
-
+        html {overflow: scroll;}
         html, button, input, select, textarea, label {
             font-family: arial,"Times New Roman",Times,serif,sans-serif;
             font-size: 12px;
             color: #222;
         }
 
-        body {
-            margin: 20px;
-        }
+        body { margin: 20px;   }
     </style>
 
     <script src="Content/Script/jquery.v1.7.1.js"></script>
@@ -78,7 +73,8 @@
                                 <td>
                                     <input id="UserFirstName" name="UserFirstName" type="text" runat="server" class="form-control"
                                         placeholder="first name..." maxlength="50" style="width: 185px;" tabindex="1"
-                                        onclick="this.select(); removeClass(this, 'textbox-focus');" />
+                                        onclick="this.select();" />
+                                    <asp:HiddenField ID="hdAllChars" runat="server" />
                                 </td>
                             </tr>
                             <tr>
@@ -86,7 +82,7 @@
                                     <label for="UserLastName" class="labelweak">Last Name:</label></td>
                                 <td>
                                     <input id="UserLastName" name="UserLastName" type="text" runat="server" class="form-control" placeholder="last name..."
-                                        maxlength="50" style="width: 185px;" tabindex="2" onclick="this.select(); removeClass(this, 'textbox-focus');" />
+                                        maxlength="50" style="width: 185px;" tabindex="2" onclick="this.select();" />
                                 </td>
                             </tr>
                             <tr>
@@ -102,7 +98,7 @@
                                 </td>
                                 <td>
                                     <input id="Phone" name="Phone" type="text" runat="server" class="form-control phone" placeholder="(000)000-0000"
-                                        style="width: 185px;" tabindex="3" onclick="removeClass(this, 'textbox-focus');" />
+                                        style="width: 185px;" tabindex="3" />
                                 </td>
                             </tr>
                         </tbody>
@@ -143,7 +139,8 @@
                                 <td>
                                     <label for="CurrentPassword" class="labelweak required">Current Password:&nbsp;</label></td>
                                 <td>
-                                    <asp:TextBox ID="CurrentPassword" runat="server" class="form-control" TextMode="Password" Width="185px" onclick="this.select(); removeClass(this, 'textbox-focus');">
+                                    <asp:TextBox ID="CurrentPassword" runat="server" class="form-control" TextMode="Password" Width="185px"
+                                        onclick="this.select();">
                                     </asp:TextBox>
                                 </td>
                             </tr>
@@ -152,7 +149,7 @@
                                     <label for="NewPassword" class="labelweak required">New Password:&nbsp;</label></td>
                                 <td>
                                     <input id="NewPassword" name="NewPassword" type="password" runat="server" class="NewPassword form-control"
-                                        style="width: 185px;" tabindex="5" onclick="this.select(); removeClass(this, 'textbox-focus');" />
+                                        style="width: 185px;" tabindex="5" onclick="this.select();" />
                                     <img src="Content/Images/eye-icon.png" class="showPassword"
                                         id="imageShowPassword" onclick="changeImage(this)" width="18" height="18" />
                                     <div id="divPasswordCriteriaContainer" class="passwordCriteria roundShadowContainer">
@@ -176,7 +173,7 @@
                                     <label for="ConfirmNewPassword" class="labelweak required">Confirm New Password:&nbsp;</label></td>
                                 <td>
                                     <input id="ConfirmNewPassword" name="ConfirmNewPassword" type="password" runat="server" class="form-control"
-                                        style="width: 185px;" tabindex="6" onclick="this.select(); removeClass(this, 'textbox-focus');" />
+                                        style="width: 185px;" tabindex="6" onclick="this.select();" />
 
                                     <span id="passwordMatchMessage" class="passwordMatchMessage"></span>
                                 </td>
@@ -214,7 +211,7 @@
                                     <label for="Answer" class="labelweak required">Answer:&nbsp;</label></td>
                                 <td>
                                     <input id="Answer" name="Answer" type="text" runat="server" class="form-control"
-                                        style="width: 295px;" tabindex="7" maxlength="128" onclick="this.select(); removeClass(this, 'textbox-focus');" />
+                                        style="width: 295px;" tabindex="7" maxlength="128" onclick="this.select();" />
                                 </td>
                             </tr>
                         </tbody>
@@ -240,9 +237,11 @@
             <table style="width: 100%; height: 100%; overflow: hidden">
                 <tr>
                     <td valign="middle">
-                        
-                        <%--THIS CRASH IN IE  <center>Copyright &copy Milliman 2015</center>--%>
-                        <center>"Copyright" "&copy;" "Milliman 2016"</center>
+                       <center> <div>
+                    Copyright © Milliman &nbsp
+                                <asp:Label ID="lblcopyrightYear" runat="server"></asp:Label>
+                    <script type="text/javascript">document.getElementById("lblcopyrightYear").innerHTML = new Date().getFullYear();</script>
+                </div></center>
                     </td>
                 </tr>
             </table>
@@ -403,6 +402,13 @@
             $('#divSpecialChars').hide();
         }
 
+        //***************** All Special Characters ******************************//
+        //if there are values for allwoed character then display it
+        var AllSpecialChars = "<%= System.Configuration.ConfigurationManager.AppSettings["AllSpecialChars"].ToString() %>"
+        if (AllSpecialChars.length > 1) {
+            $('#hdAllChars').val(AllSpecialChars);
+        }
+
         //***************** Start User name checks ******************************//
         var UserFirstNameInput = document.getElementById("UserFirstName");
         UserFirstNameInput.addEventListener("blur", verifyUserNameInput, false);
@@ -437,13 +443,10 @@
             }
 
             //if there are specail in name then check if they are allowed
-            var allSpecialChars = new RegExp(/[~!@#$%^&*;?+_.`,<>;':/[\]|{}()=-]/);
-
-            if (elementValue.match(new RegExp(allSpecialChars, "gi"))) {
+            if (elementValue.match(new RegExp($('#hdAllChars').val(), "gi"))) {
                 //allowed special chars from web.config
                 var allowedSplChars = AllowedSpecialCharactersInUserName.trim().split(',');
-
-                var allPresentCharactersInName = elementValue.match(new RegExp(allSpecialChars, "gi"));
+                var allPresentCharactersInName = elementValue.match(new RegExp($('#hdAllChars').val(), "gi"));
 
                 var found = [];
                 var badFound = [];
@@ -658,42 +661,42 @@
             //find user name 
             var username = '<%=Context.User.Identity.Name%>';
             //get new password value
-                var newPasswordVal = $('#NewPassword').val();
+            var newPasswordVal = $('#NewPassword').val();
             //divide the user name into 3 letters so abcdefghi@somthing.com will look like [abd def ghi @som thi ng. com]
             // example: ["abc", "def", "g.h", "ijk", "@em", "ail", ".co", "m"]
-                var partsOfThreeLettersUsernameArray = username.match(/.{3}/g)
-                                    .concat(
-                                            username.substr(1).match(/.{3}/g),
-                                            username.substr(2).match(/.{3}/g)
-                                            );
+            var partsOfThreeLettersUsernameArray = username.match(/.{3}/g)
+                                .concat(
+                                        username.substr(1).match(/.{3}/g),
+                                        username.substr(2).match(/.{3}/g)
+                                        );
 
-                if (newPasswordVal != '' && newPasswordVal.length > 3) {
-                    //example: ["afs", "Ujn", "8*c", "fsU", "jn8", "*co", "sUj", "n8*", "com"]
-                    var partsOfThreeLettersPasswordArray = newPasswordVal.match(/.{3}/g)
-                                            .concat(
-                                                    newPasswordVal.substr(1).match(/.{3}/g),
-                                                    newPasswordVal.substr(2).match(/.{3}/g)
-                                                    );
+            if (newPasswordVal != '' && newPasswordVal.length > 3) {
+                //example: ["afs", "Ujn", "8*c", "fsU", "jn8", "*co", "sUj", "n8*", "com"]
+                var partsOfThreeLettersPasswordArray = newPasswordVal.match(/.{3}/g)
+                                        .concat(
+                                                newPasswordVal.substr(1).match(/.{3}/g),
+                                                newPasswordVal.substr(2).match(/.{3}/g)
+                                                );
 
 
-                    var result = matchWordsinStringArray(partsOfThreeLettersUsernameArray, partsOfThreeLettersPasswordArray);
-                    if (result != null) {
-                        var elementValue = newPasswordVal.match(new RegExp(result.passwordElement, "i"));
-                        //showErrorAlert('The password you entered cannot contain substring <b>' + elementValue[0] + '</b>, since <b>' + elementValue[0] + '</b> is a substring in your account name.  The password cannot contain 3 or more contiguous characters from the account name.');
-                        messagePasswordUserNameChars = 'The password you entered cannot contain substring <b>' + elementValue[0] + '</b>, since <b>' + elementValue[0] + '</b> is a substring in your account name.  The password cannot contain 3 or more contiguous characters from the account name.';
+                var result = matchWordsinStringArray(partsOfThreeLettersUsernameArray, partsOfThreeLettersPasswordArray);
+                if (result != null) {
+                    var elementValue = newPasswordVal.match(new RegExp(result.passwordElement, "i"));
+                    //showErrorAlert('The password you entered cannot contain substring <b>' + elementValue[0] + '</b>, since <b>' + elementValue[0] + '</b> is a substring in your account name.  The password cannot contain 3 or more contiguous characters from the account name.');
+                    messagePasswordUserNameChars = 'The password you entered cannot contain substring <b>' + elementValue[0] + '</b>, since <b>' + elementValue[0] + '</b> is a substring in your account name.  The password cannot contain 3 or more contiguous characters from the account name.';
+                    badInputData = true;
+                }
+                else {
+                    messagePasswordUserNameChars = "";
+                    if (badInputData) {
                         badInputData = true;
                     }
                     else {
-                        messagePasswordUserNameChars = "";
-                        if (badInputData) {
-                            badInputData = true;
-                        }
-                        else {
-                            badInputData = false;
-                        }
-
+                        badInputData = false;
                     }
+
                 }
+            }
 
         }).focus(function () {
             $('#divPasswordCriteriaContainer').show();
@@ -701,186 +704,230 @@
             $('#divPasswordCriteriaContainer').hide();
         });
 
-            function matchWordsinStringArray(usernameArray, passwordArray) {
-                var arrayMatchfound = null;
-                try {
-                    for (var i = 0; i < passwordArray.length && !arrayMatchfound; i++) {
-                        var $lowerKeyPassword = passwordArray[i].toLowerCase();
+        function matchWordsinStringArray(usernameArray, passwordArray) {
+            var arrayMatchfound = null;
+            try {
+                for (var i = 0; i < passwordArray.length && !arrayMatchfound; i++) {
+                    var $lowerKeyPassword = passwordArray[i].toLowerCase();
 
-                        for (var j = 0, wLen = usernameArray.length; j < wLen && !arrayMatchfound; j++) {
-                            var $lowerKeyUserName = usernameArray[j].toLowerCase();
+                    for (var j = 0, wLen = usernameArray.length; j < wLen && !arrayMatchfound; j++) {
+                        var $lowerKeyUserName = usernameArray[j].toLowerCase();
 
-                            if ($lowerKeyPassword == $lowerKeyUserName) {
-                                arrayMatchfound = {
-                                    usernameElement: $lowerKeyUserName,
-                                    passwordElement: $lowerKeyPassword
-                                };
-                                return arrayMatchfound;
-                            }
+                        if ($lowerKeyPassword == $lowerKeyUserName) {
+                            arrayMatchfound = {
+                                usernameElement: $lowerKeyUserName,
+                                passwordElement: $lowerKeyPassword
+                            };
+                            return arrayMatchfound;
                         }
                     }
-
-                }
-                catch (err) {
-                    return false;
-                    var txt = 'Error=>' + err.description;
-                    showDangerAlert(txt);
                 }
 
-                return arrayMatchfound;
+            }
+            catch (err) {
+                return false;
+                var txt = 'Error=>' + err.description;
+                showDangerAlert(txt);
             }
 
-            var newPasswrdInput = document.getElementById("NewPassword");
-            newPasswrdInput.addEventListener("blur", verifyBadPassword, false);
+            return arrayMatchfound;
+        }
 
-            function verifyBadPassword() {
+        var newPasswrdInput = document.getElementById("NewPassword");
+        newPasswrdInput.addEventListener("blur", verifyBadPassword, false);
 
-                var ConfirmNewPassword = $('#ConfirmNewPassword');
-                var NewPassword = $('#NewPassword')
-                if (NewPassword.val() === "") {
-                    NewPassword.removeClass('textbox-focus');
+        function verifyBadPassword() {
+
+            var ConfirmNewPassword = $('#ConfirmNewPassword');
+            var NewPassword = $('#NewPassword')
+            if (NewPassword.val() === "") {
+                NewPassword.removeClass('textbox-focus');
+                ConfirmNewPassword.val('');
+                resetPasswordMatch();
+                ConfirmNewPassword.removeAttr('disabled');//enable
+                return true;
+            }
+            else {
+                if (badInputData) {
+
+                    NewPassword.addClass('textbox-focus');
                     ConfirmNewPassword.val('');
                     resetPasswordMatch();
-                    ConfirmNewPassword.removeAttr('disabled');//enable
-                    return true;
-                }
-                else {
-                    if (badInputData) {
 
-                        NewPassword.addClass('textbox-focus');
-                        ConfirmNewPassword.val('');
-                        resetPasswordMatch();
-
-                        ConfirmNewPassword.attr('disabled', 'disabled');
-                        if (messagePasswordUserNameChars != "") {
-                            showErrorAlert(messagePasswordUserNameChars);
-                            return false;
-                        }
-                        else {
-                            showErrorAlert('Your password does not match all password rules. Please make sure your password matches the password rules. [Check the Password Hint.]');
-                            return false;
-                        }
-
+                    ConfirmNewPassword.attr('disabled', 'disabled');
+                    if (messagePasswordUserNameChars != "") {
+                        showErrorAlert(messagePasswordUserNameChars);
+                        return false;
                     }
                     else {
-                        ConfirmNewPassword.removeAttr('disabled');//enable
-                        ConfirmNewPassword.focus();
-                        return true;
+                        showErrorAlert('Your password does not match all password rules. Please make sure your password matches the password rules. [Check the Password Hint.]');
+                        return false;
                     }
+
                 }
-            }
-
-            var ConfirmNewPasswordInput = document.getElementById("ConfirmNewPassword");
-            ConfirmNewPasswordInput.addEventListener("blur", validatePasswordMatch, false);
-
-            //function to check if the two password matches
-            var message = document.getElementById('passwordMatchMessage');
-            function validatePasswordMatch() {
-
-                var newPassword = $("#NewPassword").val();
-                var confirmPassword = $("#ConfirmNewPassword").val();
-
-                if (newPassword === "" || confirmPassword === "") {
-                    resetPasswordMatch();
+                else {
+                    ConfirmNewPassword.removeAttr('disabled');//enable
+                    ConfirmNewPassword.focus();
                     return true;
                 }
-
-                if (newPassword != confirmPassword) {
-                    message.innerHTML = "Passwords Do Not Match!"
-                    $('#passwordMatchMessage').addClass('badMatch');
-                    return false;
-                }
             }
+        }
 
-            function resetPasswordMatch() {
-                message.innerHTML = "";
-                $('#passwordMatchMessage').removeClass('badMatch');
-            }
+        var ConfirmNewPasswordInput = document.getElementById("ConfirmNewPassword");
+        ConfirmNewPasswordInput.addEventListener("blur", validatePasswordMatch, false);
 
-            //***************** End  Validate Password Data ******************************// 
+        //function to check if the two password matches
+        var message = document.getElementById('passwordMatchMessage');
+        function validatePasswordMatch() {
 
-            //***************** Alert Messages ******************************// 
-            function showErrorAlert(alertMessage) {
-                BootstrapDialog.show({
-                    title: 'Data Entry Issue',
-                    message: alertMessage,
-                    type: BootstrapDialog.TYPE_WARNING, // <-- Default value is BootstrapDialog.TYPE_PRIMARY
-                    closable: true, // <-- Default value is false
-                    draggable: true, // <-- Default value is false
-                    buttons: [{
-                        label: 'OK',
-                        hotkey: 13, // Keycode of keyup event of key 'A' is 65.
-                        cssClass: 'btn-warning',
-                        action: function (dialog) {
-                            dialog.close();
-                        }
-                    }],
-                });
+            var newPassword = $("#NewPassword").val();
+            var confirmPassword = $("#ConfirmNewPassword").val();
+
+            if (newPassword === "" || confirmPassword === "") {
+                resetPasswordMatch();
+                return true;
             }
 
-            //show error
-            function showDangerAlert(alertMessage) {
-                BootstrapDialog.show({
-                    title: 'Error!',
-                    message: alertMessage,
-                    type: BootstrapDialog.TYPE_DANGER, // <-- Default value is BootstrapDialog.TYPE_PRIMARY
-                    closable: true, // <-- Default value is false
-                    draggable: true, // <-- Default value is false
-                    buttons: [{
-                        label: 'OK',
-                        hotkey: 13, // Keycode of keyup event of key 'A' is 65.
-                        cssClass: 'btn-danger',
-                        action: function (dialog) {
-                            dialog.close();
-                        }
-                    }],
-                });
+            if (newPassword != confirmPassword) {
+                message.innerHTML = "Passwords Do Not Match!"
+                $('#passwordMatchMessage').addClass('badMatch');
+                return false;
             }
+        }
 
-            //show info
-            function showInformationAlert(alertMessage) {
-                BootstrapDialog.show({
-                    title: 'Information',
-                    message: alertMessage,
-                    type: BootstrapDialog.TYPE_INFO, // <-- Default value is BootstrapDialog.TYPE_PRIMARY
-                    closable: true, // <-- Default value is false
-                    draggable: true, // <-- Default value is false
-                    buttons: [{
-                        label: 'OK',
-                        hotkey: 13, // Keycode of keyup event of key 'A' is 65.
-                        cssClass: 'btn-info',
-                        action: function (dialog) {
-                            dialog.close();
-                        }
-                    }],
-                });
-            }
-            //***************** Alert Messages ******************************// 
+        function resetPasswordMatch() {
+            message.innerHTML = "";
+            $('#passwordMatchMessage').removeClass('badMatch');
+        }
 
-            //***************** Element Class ******************************// 
-            //funchion to chane class on element
-            function changeClass(btn, cls) {
-                if (!hasClass(btn, cls)) {
-                    addClass(btn, cls);
-                }
-            }
-            //cehck for a class
-            function hasClass(ele, cls) {
-                return ele.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
-            }
-            //add a class
-            function addClass(ele, cls) {
-                if (!hasClass(ele, cls)) ele.className += " " + cls;
-            }
-            //remove class
-            function removeClass(ele, cls) {
-                if (hasClass(ele, cls)) {
-                    var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
-                    ele.className = ele.className.replace(reg, ' ');
-                }
-            }
+        //***************** End  Validate Password Data ******************************// 
 
-            //***************** Element Class ******************************// 
+        //***************** Alert Messages ******************************// 
+        function showErrorAlert(alertMessage) {
+            BootstrapDialog.show({
+                title: 'Data Entry Issue',
+                message: alertMessage,
+                type: BootstrapDialog.TYPE_WARNING, // <-- Default value is BootstrapDialog.TYPE_PRIMARY
+                closable: true, // <-- Default value is false
+                draggable: true, // <-- Default value is false
+                buttons: [{
+                    label: 'OK',
+                    hotkey: 13, // Keycode of keyup event of key 'A' is 65.
+                    cssClass: 'btn-warning',
+                    action: function (dialog) {
+                        dialog.close();
+                    }
+                }],
+            });
+        }
+
+        //show error
+        function showDangerAlert(alertMessage) {
+            BootstrapDialog.show({
+                title: 'Error!',
+                message: alertMessage,
+                type: BootstrapDialog.TYPE_DANGER, // <-- Default value is BootstrapDialog.TYPE_PRIMARY
+                closable: true, // <-- Default value is false
+                draggable: true, // <-- Default value is false
+                buttons: [{
+                    label: 'OK',
+                    hotkey: 13, // Keycode of keyup event of key 'A' is 65.
+                    cssClass: 'btn-danger',
+                    action: function (dialog) {
+                        dialog.close();
+                    }
+                }],
+            });
+        }
+
+        //show info
+        function showInformationAlert(alertMessage) {
+            BootstrapDialog.show({
+                title: 'Information',
+                message: alertMessage,
+                type: BootstrapDialog.TYPE_INFO, // <-- Default value is BootstrapDialog.TYPE_PRIMARY
+                closable: true, // <-- Default value is false
+                draggable: true, // <-- Default value is false
+                buttons: [{
+                    label: 'OK',
+                    hotkey: 13, // Keycode of keyup event of key 'A' is 65.
+                    cssClass: 'btn-info',
+                    action: function (dialog) {
+                        dialog.close();
+                    }
+                }],
+            });
+        }
+        //***************** Alert Messages ******************************// 
+
+        //UserFirstName.addEventListener("onclick", removeElementClass(), false);
+        var UserFirstName = document.getElementById("UserFirstName");
+        UserFirstName.onclick = function (event) {
+            removeElementClass(UserFirstName, 'textbox-focus');
+        };
+
+        var UserLastName = document.getElementById("UserLastName");
+        UserLastName.onclick = function (event) {
+            removeElementClass(UserLastName, 'textbox-focus');
+        };
+
+        var Phone = document.getElementById("Phone");
+        Phone.onclick = function (event) {
+            removeElementClass(Phone, 'textbox-focus');
+        };
+
+        var CurrentPassword = document.getElementById("CurrentPassword");
+        CurrentPassword.onclick = function (event) {
+            removeElementClass(CurrentPassword, 'textbox-focus');
+        };
+
+        var NewPassword = document.getElementById("NewPassword");
+        NewPassword.onclick = function (event) {
+            removeElementClass(NewPassword, 'textbox-focus');
+        };
+
+        var ConfirmNewPassword = document.getElementById("ConfirmNewPassword");
+        ConfirmNewPassword.onclick = function (event) {
+            removeElementClass(ConfirmNewPassword, 'textbox-focus');
+        };
+
+        var Answer = document.getElementById("Answer");
+        Answer.onclick = function (event) {
+            removeElementClass(Answer, 'textbox-focus');
+        };
+
+        //***************** Element Class ******************************// 
+
+        //remove class
+        // Check whether element has a classname
+        function hasClass(ele, cls) {
+            var clsChecker = new RegExp("\\b" + cls + "\\b");
+            return clsChecker.test(ele.className);
+        }
+        // Add a classname
+        function addClass(ele, cls) {
+            var clsChecker = new RegExp("\\b" + cls + "\\b");
+            if(clsChecker.test(ele.className)) {
+                // ele already has the className, don't need to do anything
+                return;
+            }
+            ele.className += (' '+ cls);
+        }
+
+        // Remove a classname
+        function removeElementClass(ele, cls) {
+            //var clsChecker = new RegExp("\\b" + cls + "\\b");
+            //if(clsChecker.test(ele.className)) {
+            //    // ele does have the className, remove them all (in case repeated)
+            //    ele.className.split(clsChecker).join('');
+            //}
+            if (hasClass(ele, cls)) {
+                var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
+                ele.className = ele.className.replace(reg, ' ');
+            }
+        }
+
+        //***************** Element Class ******************************// 
 
     </script>
 </body>

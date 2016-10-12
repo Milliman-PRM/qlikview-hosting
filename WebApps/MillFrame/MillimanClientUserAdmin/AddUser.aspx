@@ -1,15 +1,16 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="AddUser.aspx.cs" Inherits="MillimanClientUserAdmin.AddUser" Async="true" %>
 
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml">    
 <head runat="server">
     <title></title>
+    <%--<link id="lnkBootstrapcss" runat="server" rel="stylesheet" type="text/css" href="~/Content/Style/bootstrap.css" />
+    <link id="Link1" runat="server" rel="stylesheet" type="text/css" href="~/Content/Style/MillframeStyle.css" />--%>
     <style type="text/css">
         .LockOff {
             display: none;
             visibility: hidden;
         }
-
         .LockOn {
             display: block;
             visibility: visible;
@@ -105,12 +106,10 @@
                                         <asp:Image ID="ValidationStatusImage" runat="server" ImageUrl='<%#Eval("ValidationImage") %>' ToolTip='<%#Eval("ErrorMsg") %>' />
                                     </ItemTemplate>
                                 </telerik:GridTemplateColumn>
-
                                 <telerik:GridTemplateColumn DataField="Account_Name" HeaderText="Account Name" UniqueName="AccountNameText" HeaderStyle-Width="97%">
                                     <ItemTemplate>
-                                        <asp:TextBox Style="overflow: hidden" ID="AccountNameTextBox" runat="server" AutoPostBack="false" Text='<%#Eval("Account_Name") %>' Width="100%" TextMode="MultiLine" Rows="1"></asp:TextBox>
+                                         <asp:TextBox Style="overflow: hidden" ID="AccountNameTextBox" runat="server" AutoPostBack="false" Text='<%#Eval("Account_Name") %>' Width="90%" TextMode="MultiLine" Rows="1" CssClass="required"></asp:TextBox>
                                     </ItemTemplate>
-
                                     <HeaderStyle Width="97%"></HeaderStyle>
                                 </telerik:GridTemplateColumn>
                                 <telerik:GridTemplateColumn DataField="SendWelcomeEmail" HeaderText="Send Welcome" UniqueName="SendWelcome" HeaderStyle-Width="100px" ItemStyle-HorizontalAlign="Center">
