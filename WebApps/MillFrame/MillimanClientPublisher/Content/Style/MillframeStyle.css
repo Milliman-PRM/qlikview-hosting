@@ -54,4 +54,3 @@ td{padding:4px!important}
  #progressBackgroundFilter{position:fixed;top:0;bottom:0;left:0;right:0;overflow:hidden;padding:0;margin:0;background-color:#000;filter:alpha(opacity=50);opacity:.5;z-index:1000}
 .waitCaption{cursor:pointer;left:41%;position:absolute;top:64%}                                                                                                                                                                                            
 .wait{font:bold 100% "Lucida Grande",Arial,sans-serif;color:#000!important;font-weight:700;text-decoration:none;padding:.5em 2em .5em .75em;text-shadow:1px 1px 0 #FFF}
- 
