@@ -18,6 +18,7 @@
 .labelweak{margin:8px 7px -4px}
 #divUserList{margin:4px;padding:4px}
 #divSubmit{margin:4px;padding:4px}
+.centerDiv{margin: 0 auto;width: 100px;}
 </style>
 
 
@@ -153,7 +154,7 @@
                             </div>
                             <div class="space"></div>
                             <div class="space"></div>
-                            <div id="divSubmit" class="center-block"  align="center">
+                            <div id="divSubmit" class="center-block centerDiv" style="margin: 0 auto;width: 100px;">
                                 <asp:Button ID="Button2" runat="server" Text="Submit List" OnClick="Submit_Click" CssClass="btn btn-primary" />
                             </div>
                         </ContentTemplate>
