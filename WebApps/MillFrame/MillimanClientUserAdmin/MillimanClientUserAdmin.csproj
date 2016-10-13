@@ -236,6 +236,7 @@
     <Content Include="HTML\MultipleQVWsInUpload.html" />
     <Content Include="HTML\NoGroupsAllocated.html" />
     <Content Include="HTML\NoneClientAdmin.html" />
+    <Content Include="HTML\NoReducedVersion.html" />
     <Content Include="HTML\NoProjectsReady.html" />
     <Content Include="HTML\NotAuthorizedIssue.html" />
     <Content Include="HTML\NotLoggedIn.html" />
@@ -371,7 +372,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties UseAjaxifiedTemplates="True" UseJQuerySupport="True" />
+      <UserProperties UseJQuerySupport="True" UseAjaxifiedTemplates="True" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
