@@ -267,13 +267,13 @@
                                     <asp:TextBox ID="Notes" runat="server" Width="100%" Height="150px" Enabled="true" TextMode="MultiLine" ViewStateMode="Enabled" CssClass="form-control"></asp:TextBox></td>
                             </tr>
                             <tr>
-                                <td>
+                                <td colspan="2">
                                     <div id="divMsg" runat="server">
-                                        <asp:Label Style="font-style: italic" ID="RestrictedViewsMsg" runat="server" Visible="false">
+                                        <asp:Label Style="font-style: italic;font-size:10px;" ID="RestrictedViewsMsg" runat="server" Visible="false">
                                         *&quot;Restricted Views&quot; cannot be modified due to administrative settings!
                                         </asp:Label>
                                         <br />
-                                        <asp:Label Style="font-style: italic" ID="AutoInclusionMsg" runat="server" Visible="false">
+                                        <asp:Label Style="font-style: italic;font-size:10px;" ID="AutoInclusionMsg" runat="server" Visible="false">
                                         *&quot;Auto Inclusion&quot; cannot be modified due to administrative settings!
                                         </asp:Label>
                                     </div>

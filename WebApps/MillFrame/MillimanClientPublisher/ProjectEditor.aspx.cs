@@ -131,6 +131,17 @@ namespace ClientPublisher
                 AutoInclusion.SelectedValue = PSE.AutomaticInclusion.ToString();
 
                 RestrictedViews.SelectedValue = PSE.SupportsReduction.ToString();
+
+                Notes.Text = PSE.Notes;
+
+                //Story 1528 - for this version we are not going to allow the user to override the default project settings
+                //there isn't a need for it in the way NY operates and is somewhat dangerous
+                AutoInclusion.Enabled = false;
+                RestrictedViews.Enabled = false;
+                AutoInclusionMsg.Visible = true;
+                RestrictedViewsMsg.Visible = true;             
+                //end temp version change
+
             }
         }
 

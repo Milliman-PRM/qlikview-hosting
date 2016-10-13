@@ -141,13 +141,17 @@
     <Content Include="HTML\CleanupIssue.html" />
     <Content Include="HTML\NotLoggedIn.html" />
     <Content Include="images\ajax-loader.gif" />
+    <Content Include="images\checkbox.png" />
     <Content Include="images\copy.png" />
     <Content Include="images\decoy-icon-36px.png" />
     <Content Include="images\DefaultProjectImage.gif" />
     <Content Include="images\delete.png" />
+    <Content Include="images\generalstatus.png" />
     <Content Include="images\missing.png" />
     <Content Include="images\OK-icon.png" />
     <Content Include="images\Places-user-identity-icon.png" />
+    <Content Include="images\plus.png" />
+    <Content Include="images\status.png" />
     <Content Include="images\stop-icon.png" />
     <Content Include="images\warning-icon.png" />
     <Content Include="ReductionStep2.aspx" />
@@ -178,6 +182,7 @@
     <Content Include="Content\Images\glyphicons-halflings-regular.eot" />
     <Content Include="Content\Images\glyphicons-halflings-regular.ttf" />
     <Content Include="Content\Images\glyphicons-halflings-regular.woff" />
+    <None Include="Properties\PublishProfiles\Debug_vn.pubxml" />
     <None Include="Properties\PublishProfiles\LocalPublish.pubxml" />
     <None Include="Properties\PublishProfiles\Staging.pubxml" />
     <None Include="Web.Debug.config">
