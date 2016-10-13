@@ -149,17 +149,25 @@
                                                         <table>
                                                             <tr>
                                                                 <td>
-                                                                    <telerik:RadButton Icon-PrimaryIconCssClass="rbEdit" ID="EditProject" runat="server" Text="Edit Project" OnClientClicked="function(sender,args){Click(sender, args);}" AutoPostBack="false" CommandArgument='<%#Eval("ProjectIndex")%>' RenderMode="Lightweight" Width="60px" Height="60px" />
+                                                                    <telerik:RadButton
+                                                                        ID="EditProject" runat="server" Text="Edit Project" OnClientClicked="function(sender,args){Click(sender, args);}"
+                                                                        AutoPostBack="false" CommandArgument='<%#Eval("ProjectIndex")%>' RenderMode="Lightweight" Width="60px" Height="60px" />
                                                                 </td>
                                                             </tr>
                                                             <tr>
                                                                 <td>
-                                                                    <telerik:RadButton Icon-PrimaryIconCssClass="rbNext" ID="RadButton1" runat="server" Text="View QVW" OnClick="ViewQVW_Click" ButtonType="LinkButton" NavigateUrl='<%# Eval("QVLauncher") %>' Target="_blank" RenderMode="Lightweight" Width="60px" Height="60px" />
+                                                                    <telerik:RadButton ID="RadButton1"
+                                                                        runat="server" Text="View QVW" OnClick="ViewQVW_Click"
+                                                                        ButtonType="LinkButton" NavigateUrl='<%# Eval("QVLauncher") %>'
+                                                                        Target="_blank" RenderMode="Lightweight" Width="60px" Height="60px" />
                                                                 </td>
                                                             </tr>
                                                             <tr>
                                                                 <td>
-                                                                    <telerik:RadButton Icon-PrimaryIconCssClass="rbConfig" ID="ToggleAvailability" runat="server" OnClick="ToggleAvailability_Click" OnClientClicking="VerifyStateChange" Text='<%# Eval("Availability")%>' ToolTip='<%# Eval("AvailabilityTooltip")%>' RenderMode="Lightweight" Width="60px" Height="60px" />
+                                                                    <telerik:RadButton ID="ToggleAvailability"
+                                                                        runat="server" OnClick="ToggleAvailability_Click"
+                                                                        OnClientClicking="VerifyStateChange" Text='<%# Eval("Availability")%>'
+                                                                        ToolTip='<%# Eval("AvailabilityTooltip")%>' RenderMode="Lightweight" Width="60px" Height="60px" />
                                                                 </td>
                                                             </tr>
                                                         </table>
@@ -232,17 +240,29 @@
                                                         <table>
                                                             <tr>
                                                                 <td>
-                                                                    <telerik:RadButton runat="server" Text="Edit Project" OnClientClicked="function(sender,args){Click(sender, args);}" AutoPostBack="false" CommandArgument='<%#Eval("ProjectIndex")%>' Icon-PrimaryIconCssClass="rbEdit" RenderMode="Lightweight" Width="60px" Height="60px" />
+                                                                    <telerik:RadButton runat="server" Text="Edit Project"
+                                                                        OnClientClicked="function(sender,args){Click(sender, args);}"
+                                                                        AutoPostBack="false" CommandArgument='<%#Eval("ProjectIndex")%>'
+                                                                        RenderMode="Lightweight" Width="60px" Height="60px" />
                                                                 </td>
                                                             </tr>
                                                             <tr>
                                                                 <td>
-                                                                    <telerik:RadButton Icon-PrimaryIconCssClass="rbNext" ID="ViewQVW" runat="server" Text="View QVW" OnClick="ViewQVW_Click" ButtonType="LinkButton" NavigateUrl='<%# Eval("QVLauncher")%>' RenderMode="Lightweight" Width="60px" Height="60px" />
+                                                                    <telerik:RadButton
+                                                                        ID="ViewQVW"
+                                                                        runat="server" Text="View QVW" OnClick="ViewQVW_Click"
+                                                                        ButtonType="LinkButton" NavigateUrl='<%# Eval("QVLauncher")%>'
+                                                                        RenderMode="Lightweight" Width="60px" Height="60px" />
                                                                 </td>
                                                             </tr>
                                                             <tr>
                                                                 <td>
-                                                                    <telerik:RadButton Icon-PrimaryIconCssClass="rbConfig" ID="ToggleAvailability" runat="server" OnClick="ToggleAvailability_Click" OnClientClicking="VerifyStateChange" Text='<%# Eval("Availability")%>' ToolTip='<%# Eval("AvailabilityTooltip")%>' RenderMode="Lightweight" Width="60px" Height="60px" />
+                                                                    <telerik:RadButton
+                                                                        ID="ToggleAvailability" runat="server"
+                                                                        OnClick="ToggleAvailability_Click"
+                                                                        OnClientClicking="VerifyStateChange"
+                                                                        Text='<%# Eval("Availability")%>' ToolTip='<%# Eval("AvailabilityTooltip")%>'
+                                                                        RenderMode="Lightweight" Width="60px" Height="60px" />
                                                                 </td>
                                                             </tr>
                                                         </table>

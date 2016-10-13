@@ -46,4 +46,13 @@ public partial class controls_login_with_captcha {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.LoginView loginBox;
+    
+    /// <summary>
+    /// divSecCodeInfo control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.HtmlControls.HtmlGenericControl divSecCodeInfo;
 }

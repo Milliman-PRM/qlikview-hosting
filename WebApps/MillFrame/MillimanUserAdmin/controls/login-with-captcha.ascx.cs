@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Mail;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Security;
 using System.Web.UI.WebControls;
 
@@ -52,6 +53,18 @@ public partial class controls_login_with_captcha : System.Web.UI.UserControl
             Session.Abandon();
             Response.Redirect("login.aspx");  //force re-login
         }
+
+        //read value from web.config
+        string ShowHideCaptcha = WebConfigurationManager.AppSettings["ShowHideCaptcha"];
+        //if it has value then enter that Captcha
+        if (!string.IsNullOrEmpty(ShowHideCaptcha))
+        {           
+            divSecCodeInfo.Visible = false;
+        }
+        else
+        {
+            divSecCodeInfo.Visible = true;
+        }        
     }
 
     #endregion
@@ -68,19 +81,48 @@ public partial class controls_login_with_captcha : System.Web.UI.UserControl
         string loginUsername = Login1.UserName;
         string loginPassword = Login1.Password;
 
-        // find captcha control in login control
-        WebControlCaptcha.CaptchaControl loginCAPTCHA = (WebControlCaptcha.CaptchaControl)Login1.FindControl("CAPTCHA");
-
-        // First, check if CAPTCHA matches up
-        if (!loginCAPTCHA.UserValidated)
+        //read value from web.config
+        string ShowHideCaptcha = WebConfigurationManager.AppSettings["ShowHideCaptcha"];
+        //if it has value then enter that Captcha
+        if (!string.IsNullOrEmpty(ShowHideCaptcha))
         {
-            // CAPTCHA invalid
-            lblFailureText.Text = "Security Code MISSING or INCORRECT!";
-            lblFailureText.Visible = true;
-            e.Authenticated = false;
+            divSecCodeInfo.Visible = false;
+            // find captcha control in login control
+            WebControlCaptcha.CaptchaControl loginCAPTCHA = (WebControlCaptcha.CaptchaControl)Login1.FindControl("CAPTCHA");
+            // First, check if CAPTCHA matches up
+            if (!loginCAPTCHA.UserValidated)
+            {
+                // CAPTCHA invalid
+                lblFailureText.Text = "Security Code MISSING or INCORRECT!";
+                lblFailureText.Visible = true;
+                e.Authenticated = false;
+            }
+            else
+            {
+                // Next, determine if the user's username/password are valid
+                if (Membership.ValidateUser(loginUsername, loginPassword))
+                {
+                    if (Roles.IsUserInRole(loginUsername, "Administrator") == true)
+                        e.Authenticated = true;
+                    else
+                    {
+                        e.Authenticated = false;
+                        lblFailureText.Text = "User is not authorized to access this system.";
+                        lblFailureText.Visible = true;
+                    }
+                }
+                else
+                {
+                    e.Authenticated = false;
+                    lblFailureText.Text = "User Name and/or Password did not match.";
+                    lblFailureText.Visible = true;
+                }
+            }            
+
         }
         else
         {
+            divSecCodeInfo.Visible = true;
             // Next, determine if the user's username/password are valid
             if (Membership.ValidateUser(loginUsername, loginPassword))
             {
