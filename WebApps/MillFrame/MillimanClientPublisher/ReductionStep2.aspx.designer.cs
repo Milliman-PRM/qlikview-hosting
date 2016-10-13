@@ -94,15 +94,6 @@ namespace ClientPublisher {
         protected global::Telerik.Web.UI.RadPageView RadPageView5;
         
         /// <summary>
-        /// RadPageView6 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::Telerik.Web.UI.RadPageView RadPageView6;
-        
-        /// <summary>
         /// RadPageView7 control.
         /// </summary>
         /// <remarks>

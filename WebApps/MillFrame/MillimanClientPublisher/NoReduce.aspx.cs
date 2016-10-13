@@ -52,7 +52,7 @@ namespace ClientPublisher
                 {
                     DisplayMessage = "Update starting....";
                     List<string> IconExtensions = new List<string>() { ".jpg", ".jpeg", ".gif", ".png" };
-                    List<string> DocumentExtensions = new List<string>() { ".docx", ".xlsx", ".txt", ".pdf" };
+                    List<string> DocumentExtensions = new List<string>() { ".docx", ".xlsx", ".txt", ".pdf", ".hciprj" };
                     string[] Files = System.IO.Directory.GetFiles(WorkingDirectory, "*.*");
                     if (Files != null)
                     {
@@ -63,7 +63,7 @@ namespace ClientPublisher
                             {
                                 DisplayMessage = "Updating Qlikview QVW....";
                                 string To = System.IO.Path.Combine(ProjectSettings.AbsoluteProjectPath, ProjectSettings.QVName + ".qvw");
-                                System.IO.File.Copy(F, To);
+                                System.IO.File.Copy(F, To, true);
                                 ProjectSettings.OriginalProjectName = System.IO.Path.GetFileName(F);
                             }
 
@@ -72,7 +72,7 @@ namespace ClientPublisher
                             {
                                 DisplayMessage = "Updating icon.....";
                                 string To = System.IO.Path.Combine(ProjectSettings.AbsoluteProjectPath, ProjectSettings.QVName + System.IO.Path.GetExtension(F));
-                                System.IO.File.Copy(F, To);
+                                System.IO.File.Copy(F, To, true);
                                 ProjectSettings.QVThumbnail = System.IO.Path.GetFileName(To);
                             }
                             //Upating User Manual
@@ -80,7 +80,7 @@ namespace ClientPublisher
                             {
                                 DisplayMessage = "Updating user manual.....";
                                 string To = System.IO.Path.Combine(ProjectSettings.AbsoluteProjectPath, ProjectSettings.QVName + System.IO.Path.GetExtension(F));
-                                System.IO.File.Copy(F, To);
+                                System.IO.File.Copy(F, To, true);
                                 ProjectSettings.UserManual = System.IO.Path.GetFileName(To);
                                 ProjectSettings.OriginalUserManualName = System.IO.Path.GetFileName(F); //save original file for display to user
                             }
@@ -122,10 +122,16 @@ namespace ClientPublisher
                         //remove all reduction related files
                         string ReducedCacheDir = System.IO.Path.Combine(ProjectSettings.AbsoluteProjectPath, "ReducedCachedQVWs");
                         string ReducedUserDir = System.IO.Path.Combine(ProjectSettings.AbsoluteProjectPath, "ReducedUserQVWs");
-                        System.IO.Directory.Delete(ReducedCacheDir, true);
-                        System.IO.Directory.CreateDirectory(ReducedCacheDir);
-                        System.IO.Directory.Delete(ReducedUserDir, true);
-                        System.IO.Directory.CreateDirectory(ReducedUserDir);
+                        if (System.IO.Directory.Exists(ReducedCacheDir))
+                        {
+                            System.IO.Directory.Delete(ReducedCacheDir, true);
+                            System.IO.Directory.CreateDirectory(ReducedCacheDir);
+                        }
+                        if (System.IO.Directory.Exists(ReducedUserDir))
+                        {
+                            System.IO.Directory.Delete(ReducedUserDir, true);
+                            System.IO.Directory.CreateDirectory(ReducedUserDir);
+                        }
                     }
 
                     TaskCompleted = true;
@@ -135,7 +141,7 @@ namespace ClientPublisher
                 catch (Exception ex)
                 {
                     MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "Unspecified Error", ex);
-          
+
                 }
 
                 ///try an restore from checkpoint
@@ -190,7 +196,8 @@ namespace ClientPublisher
                     SU.Account = System.Web.Security.Membership.GetUser().UserName;
                     Global.TaskManager.ScheduleTask(SU);
                     SU.StartTask();
-                    Response.Redirect("SimpleUpdate.aspx?Processing=" + SU.TaskID);
+                    //Response.Redirect("SimpleUpdate.aspx?Processing=" + SU.TaskID);
+                    Response.Redirect("NoReduce.aspx?Processing=" + SU.TaskID);
                 }
                 else
                 {
@@ -206,7 +213,7 @@ namespace ClientPublisher
                             Global.TaskManager.DeleteTask(SU.TaskID);
                             Response.Redirect(SU.NavigateTo);
                         }
-                        else if (SU.TaskCompleted) 
+                        else if (SU.TaskCompleted)
                         {
                             Status.Text = SU.TaskCompletionMessage;
                             Status.Visible = true;
@@ -222,7 +229,7 @@ namespace ClientPublisher
                     else
                     {
                         MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "System error - missing task");
-                        Response.Redirect("errors/missingtask.aspx");
+                        Response.Redirect("html/generalissue.aspx?msg=" + MillimanCommon.Utilities.ConvertStringToHex("Could not find system task.  Please report this issue to a system administrator"));
                         Status.Text = "Could not retrieve processing status.";
                     }
                 }

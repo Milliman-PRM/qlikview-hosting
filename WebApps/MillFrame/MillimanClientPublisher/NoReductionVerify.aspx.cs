@@ -87,7 +87,7 @@ namespace ClientPublisher
 
         protected void ApplyUpdatesNow_Click(object sender, EventArgs e)
         {
-            Response.Redirect("NoReduction.aspx?key=" + Request["key"]);
+            Response.Redirect("NoReduce.aspx?key=" + Request["key"]);
         }
     }
 }
