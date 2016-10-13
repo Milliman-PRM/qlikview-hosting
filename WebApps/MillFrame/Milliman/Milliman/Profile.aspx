@@ -644,17 +644,42 @@
                 badInputData = true;
             }
 
-            //not allowed chars
-            var regexChar = new RegExp(/[`,<>;':"/[\]|{}()=-]/);
-            if (newpasswordValue.match(regexChar)) {
-                showErrorAlert('The character you entered is not valid.');
-                return false;
-            }
+            ////validate bad special
+            ////var regexChar = new RegExp(/[`,<>;':"/[\]|{}()=-]/);
+            ////debugger;
+            ////if (!newpasswordValue.match(regexChar)) {
+            ////    if (badInputData) {
+            ////        badInputData = true;
+            ////    }
+            ////    else {
+            ////        badInputData = false;
+            ////    }
+            ////}
+            //debugger;
+            //if (newpasswordValue.match(/[`,<>;':"/[\]|{}()=-]/)) {
+            //    debugger;
+            //    badInputData = true;
+            //} else {
+            //    badInputData = true;
+            //}
+
+            ////validate any uppercase letter
+            //if (newpasswordValue.match(/[A-Z]/)) {
+            //    $('#capital').removeClass('invalidPassword').addClass('validPassword');
+            //    if (badInputData) {
+            //        badInputData = true;
+            //    }
+            //    else {
+            //        badInputData = false;
+            //    }
+            //} else {
+            //    $('#capital').removeClass('validPassword').addClass('invalidPassword');
+            //    badInputData = true;
+            //}
 
             //validate non-printable chars 
             if (newpasswordValue.match(/[^\u0000-\u007F]/)) {
-                showErrorAlert('You can not have non-printable chars.');
-                return false;
+                badInputData = true;
             }
 
             //the passwrod should not contain 3 or more char from user name
@@ -732,6 +757,27 @@
 
             return arrayMatchfound;
         }
+
+        $('#ConfirmNewPassword').keyup(function () {
+            var inputValue = $(this).val();
+            var re = /[`,<>;':"/[\]|{}()=-]/gi;
+            var isSplChar = re.test(inputValue);
+            if (isSplChar) {
+                //var removeSpecialChar = yourInput.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '');
+                var removeSpecialChar = inputValue.replace(/[`()|:'",.<>\{\}\[\]\\\/]/gi, '');
+                $(this).val(removeSpecialChar);
+            }
+        });
+        $('#NewPassword').keyup(function () {
+            var inputValue = $(this).val();
+            var re = /[`,<>;':"/[\]|{}()=-]/gi;
+            var isSplChar = re.test(inputValue);
+            if (isSplChar) {
+                //var removeSpecialChar = yourInput.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '');
+                var removeSpecialChar = inputValue.replace(/[`()|:'",.<>\{\}\[\]\\\/]/gi, '');
+                $(this).val(removeSpecialChar);
+            }
+        });
 
         var newPasswrdInput = document.getElementById("NewPassword");
         newPasswrdInput.addEventListener("blur", verifyBadPassword, false);
