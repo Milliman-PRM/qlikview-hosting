@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Milliman Health Care Intelligence</title>
+    <title>PRM Analytics</title>
     <link rel="Stylesheet" href="Css/Styles.css" />
         <link href="../Content/Style/bootstrap.css" rel="stylesheet" />
     <link href="../Content/Style/MillframeStyle.css" rel="stylesheet" />
