@@ -284,11 +284,13 @@ namespace MillimanCommon
                 {
                     MillimanCommon.ReduceConfig RC = MillimanCommon.ReduceConfig.Deserialize(ConfigFile);
                     string ReducedName = RC.SelectionSets[0].ReducedQVWName;
-                    if ( ReportToUserMap.ContainsKey(Tokens[0]))
+                    string KeyName = System.IO.Path.GetFileNameWithoutExtension(Tokens[0]);
+                    if ( ReportToUserMap.ContainsKey(KeyName))
                     {
-                        foreach( string UserAccount in ReportToUserMap[Tokens[0]] )
+                        foreach( string UserAccount in ReportToUserMap[KeyName] )
                         {
-                            Reports.AddItemToList(new MillimanCommon.QVWReportBank.ProcessingStatusClass(UserAccount, ReducedName, Tokens[1]));
+                            string DecodedUserAccount = MillimanCommon.Utilities.ConvertHexToString(System.IO.Path.GetFileName(UserAccount));
+                            Reports.AddItemToList(new MillimanCommon.QVWReportBank.ProcessingStatusClass(DecodedUserAccount, ReducedName, Tokens[1]));
                         }
                     }
                 }

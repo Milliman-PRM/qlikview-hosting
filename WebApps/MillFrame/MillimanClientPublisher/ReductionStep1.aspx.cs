@@ -416,12 +416,10 @@ namespace ClientPublisher
                     //Reports.AddItemToList(new MillimanCommon.QVWReportBank.ProcessingStatusClass("Account", "QVWN", "reason"));
                     RepGen.ProcessingStatusProcessor(WorkingDirectory, Settings, Reports, UniqueSels.ReducedReportToAccountMapping());
 
-
+//MOMO
                     //general logs on issues
                     //Reports.AddItemToList(new MillimanCommon.QVWReportBank.AuditClass("message"));
                     RepGen.MasterLogToAudit(WorkingDirectory, Reports);
-
-                    Reports.AddItemToList(new MillimanCommon.QVWReportBank.AuditClass("Yo Van"));
                     
                     return true;
 
