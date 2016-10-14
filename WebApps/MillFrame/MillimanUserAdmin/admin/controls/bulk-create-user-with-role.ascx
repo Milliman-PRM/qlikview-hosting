@@ -328,7 +328,7 @@
 
         // add details to debug result
         document.getElementById('details').innerHTML = window.navigator.userAgent;
-
+        
         /**
          * detect IE
          * returns version of IE or false, if browser is not Internet Explorer
