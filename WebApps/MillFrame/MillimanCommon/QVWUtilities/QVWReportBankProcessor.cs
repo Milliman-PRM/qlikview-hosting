@@ -104,7 +104,7 @@ namespace MillimanCommon
             //find everyone who succeded
             foreach (QVWReportBank.ProcessingStatusClass PS in ReportBank.ProcessingStatusList)
             {
-                if (PS.Reason.ToLower().IndexOf("available") != -1)
+                if (PS.Reason.ToLower().IndexOf("success") != -1)
                 {
                     if (SuccessfulReductionUsers.Contains(PS.UserName) == false)
                         SuccessfulReductionUsers.Add(PS.UserName);

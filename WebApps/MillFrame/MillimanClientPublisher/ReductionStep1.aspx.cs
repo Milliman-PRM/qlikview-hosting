@@ -163,8 +163,7 @@ namespace ClientPublisher
 
                 int TotalAccounts = 0;
                 List<string> MissingRemoteFiles = new List<string>();
-                //copy all criterai files to reduction server working dir
-                int Index = System.Convert.ToInt32( System.Configuration.ConfigurationManager.AppSettings["DebugConfigurationLimit"] );  
+
                 foreach( KeyValuePair<string, ProcessingCode.UniqueSelections.UniqueSelection> KVP in UniqueSels.UniqueSelectionDictionary )
                 {
                     string RemoteConfigurationFile = System.IO.Path.Combine(RemoteReductionDir, KVP.Key + ".config");
@@ -178,11 +177,6 @@ namespace ClientPublisher
                     {
                         TotalAccounts += KVP.Value.Accounts.Count;
                     }
-
-                    //restrict the number config files tos ave time in testing
-                    Index--;
-                    if (Index < 0)
-                        break;
                 }
                 //create reduction server semaphore file
                 string RemoteSemaphore = System.IO.Path.Combine(RemoteReductionDir, "request_complete.txt");
@@ -416,12 +410,10 @@ namespace ClientPublisher
                     //Reports.AddItemToList(new MillimanCommon.QVWReportBank.ProcessingStatusClass("Account", "QVWN", "reason"));
                     RepGen.ProcessingStatusProcessor(WorkingDirectory, Settings, Reports, UniqueSels.ReducedReportToAccountMapping());
 
-
+//MOMO
                     //general logs on issues
                     //Reports.AddItemToList(new MillimanCommon.QVWReportBank.AuditClass("message"));
                     RepGen.MasterLogToAudit(WorkingDirectory, Reports);
-
-                    Reports.AddItemToList(new MillimanCommon.QVWReportBank.AuditClass("Yo Van"));
                     
                     return true;
 
