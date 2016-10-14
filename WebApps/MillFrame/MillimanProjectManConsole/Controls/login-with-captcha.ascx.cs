@@ -61,15 +61,24 @@ public partial class controls_login_with_captcha : System.Web.UI.UserControl
         }
 
         //read value from web.config
-        string ShowHideCaptcha = WebConfigurationManager.AppSettings["ShowHideCaptcha"];
+        string IgnoreCaptchaInput = WebConfigurationManager.AppSettings["IgnoreCaptchaInput"];
         //if it has value then enter that Captcha
-        if (!string.IsNullOrEmpty(ShowHideCaptcha))
+        //if it has value then enter that Captcha        
+        if (!string.IsNullOrEmpty(IgnoreCaptchaInput))
         {
-            divSecCodeInfo.Visible = false;
+            if (IgnoreCaptchaInput.Equals("true", StringComparison.InvariantCultureIgnoreCase))
+            {
+                divSecCodeInfo.Visible = true;                
+            }
+            else if (!IgnoreCaptchaInput.Equals("true", StringComparison.InvariantCultureIgnoreCase))
+            {
+                divSecCodeInfo.Visible = false;
+            }
         }
         else
         {
-            divSecCodeInfo.Visible = true;
+            divSecCodeInfo.Visible = false;
+
         }
     }
 
@@ -127,34 +136,21 @@ public partial class controls_login_with_captcha : System.Web.UI.UserControl
     {
         MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Info, "starting login");
         // find login control in loginview control
-        Login Login1 = GetLogin1();
+        var Login1 = GetLogin1();
 
         // We need to determine if the user is authenticated and set e.Authenticated accordingly
         // Get the values entered by the user
-        string loginUsername = Login1.UserName;
-        string loginPassword = Login1.Password;
+        var loginUsername = Login1.UserName;
+        var loginPassword = Login1.Password;
 
         //read value from web.config
-        string ShowHideCaptcha = WebConfigurationManager.AppSettings["ShowHideCaptcha"];
-        //if it has value then enter that Captcha
-        if (!string.IsNullOrEmpty(ShowHideCaptcha))
+        var IgnoreCaptchaInput = WebConfigurationManager.AppSettings["IgnoreCaptchaInput"];
+        //if it has value then enter that Captcha        
+        if(!string.IsNullOrEmpty(IgnoreCaptchaInput))
         {
-            divSecCodeInfo.Visible = false;
-            // find captcha control in login control
-            WebControlCaptcha.CaptchaControl loginCAPTCHA = (WebControlCaptcha.CaptchaControl)Login1.FindControl("CAPTCHA");
-            MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Info, "starting validation");
-
-            //VWN bypass captcha for now
-            // First, check if CAPTCHA matches up
-            if (!loginCAPTCHA.UserValidated)
+            if (IgnoreCaptchaInput.Equals("true", StringComparison.InvariantCultureIgnoreCase))
             {
-                // CAPTCHA invalid
-                lblFailureText.Text = "Security Code MISSING or INCORRECT!";
-                lblFailureText.Visible = true;
-                e.Authenticated = false;
-            }
-            else
-            {
+                divSecCodeInfo.Visible = true;
                 //sync local cache to remote authentication cache
                 SyncToRemoteServer(loginUsername, loginPassword);
 
@@ -177,10 +173,36 @@ public partial class controls_login_with_captcha : System.Web.UI.UserControl
                     lblFailureText.Visible = true;
                 }
             }
+            else if (!IgnoreCaptchaInput.Equals("true", StringComparison.InvariantCultureIgnoreCase))
+            {
+                ValidateRequiredCaptcha(loginUsername, loginPassword, e, Login1);
+            }
         }
         else
         {
-            divSecCodeInfo.Visible = true;
+            ValidateRequiredCaptcha(loginUsername, loginPassword, e, Login1);
+
+        }
+    }
+
+    public void ValidateRequiredCaptcha(string loginUsername, string loginPassword, AuthenticateEventArgs e, Login logIn)
+    {
+        divSecCodeInfo.Visible = false;
+        // find captcha control in login control
+        var loginCAPTCHA = (WebControlCaptcha.CaptchaControl)logIn.FindControl("CAPTCHA");
+        MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Info, "starting validation");
+
+        //VWN bypass captcha for now
+        // First, check if CAPTCHA matches up
+        if (!loginCAPTCHA.UserValidated)
+        {
+            // CAPTCHA invalid
+            lblFailureText.Text = "Security Code MISSING or INCORRECT!";
+            lblFailureText.Visible = true;
+            e.Authenticated = false;
+        }
+        else
+        {
             //sync local cache to remote authentication cache
             SyncToRemoteServer(loginUsername, loginPassword);
 
@@ -204,7 +226,6 @@ public partial class controls_login_with_captcha : System.Web.UI.UserControl
             }
         }
     }
-
     #endregion
 
     #region check for lockout and approval

@@ -98,16 +98,37 @@
     <Content Include="Content\Script\jquery.min.v2.0.0.js" />
     <Content Include="Content\Script\jquery.min.v2.1.1.js" />
     <Content Include="Content\Script\jquery.v1.7.1.js" />
+    <Content Include="Content\Script\jquery.v1.9.1.js" />
     <Content Include="Content\Script\maskedinput.js" />
     <Content Include="Content\Style\bootstrap-dialog.min.css" />
     <Content Include="Content\Style\bootstrap.css" />
     <Content Include="Content\Style\bootstrap.min.css" />
     <Content Include="Content\Style\MillframeStyle.css" />
     <Content Include="DebugView.aspx" />
+    <Content Include="HTML\CleanupIssue.html" />
+    <Content Include="HTML\FailedSignature.html" />
+    <Content Include="HTML\GeneralIssue.aspx" />
+    <Content Include="HTML\GroupContainsMultipleProjects.html" />
+    <Content Include="HTML\MissingProject.html" />
+    <Content Include="HTML\MultipleGroupsAllocated.html" />
+    <Content Include="HTML\MultipleQVWsInUpload.html" />
+    <Content Include="HTML\NoGroupsAllocated.html" />
+    <Content Include="HTML\NoneClientAdmin.html" />
+    <Content Include="HTML\NoProjectsReady.html" />
+    <Content Include="HTML\NotLoggedIn.html" />
+    <Content Include="HTML\ProjectSaved.html" />
+    <Content Include="HTML\ProjectSavedFailed.html" />
+    <Content Include="HTML\ReductionIssue .html" />
+    <Content Include="HTML\ReductionMoveIssue.html" />
+    <Content Include="HTML\SecureLinkIssue.html" />
+    <Content Include="HTML\SecureLinkUsed.html" />
+    <Content Include="HTML\SystemReportingError.html" />
+    <Content Include="HTML\UnspecifiedIssue.html" />
     <Content Include="Images\Document-icon.png" />
     <Content Include="Images\NortonSecured.png" />
     <Content Include="Images\PointLeftArrow.png" />
     <Content Include="Images\PointRightArrow.png" />
+    <Content Include="Images\PRMLogo_height80.png" />
     <Content Include="Images\PRM_Logo.png" />
     <Content Include="Images\transparent16x16.gif" />
     <Content Include="time.aspx" />
@@ -183,6 +204,13 @@
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="HTML\GeneralIssue.aspx.cs">
+      <DependentUpon>GeneralIssue.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="HTML\GeneralIssue.aspx.designer.cs">
+      <DependentUpon>GeneralIssue.aspx</DependentUpon>
     </Compile>
     <Compile Include="LostPassword.aspx.cs">
       <DependentUpon>LostPassword.aspx</DependentUpon>

@@ -181,6 +181,30 @@
       <DependentUpon>SqlSchema.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Content Include="Content\Images\Add-Blue.png" />
+    <Content Include="Content\Images\ajax-loader-LoadingText.gif" />
+    <Content Include="Content\Images\ajax-loader-round.gif" />
+    <Content Include="Content\Images\ajax-loader-RoundBig.gif" />
+    <Content Include="Content\Images\ajax-loader.gif" />
+    <Content Include="Content\Images\ajaxLoaderBlue50.gif" />
+    <Content Include="Content\Images\Delete.png" />
+    <Content Include="Content\Images\eye-hide.png" />
+    <Content Include="Content\Images\eye-icon.png" />
+    <Content Include="Content\Images\Info-blue.png" />
+    <Content Include="Content\Images\InformationBulb.png" />
+    <Content Include="Content\Script\bootstrap-dialog.min.js" />
+    <Content Include="Content\Script\bootstrap.js" />
+    <Content Include="Content\Script\bootstrap.min.v3.3.7.js" />
+    <Content Include="Content\Script\jquery.min.js" />
+    <Content Include="Content\Script\jquery.min.v2.0.0.js" />
+    <Content Include="Content\Script\jquery.min.v2.1.1.js" />
+    <Content Include="Content\Script\jquery.v1.7.1.js" />
+    <Content Include="Content\Script\jquery.v1.9.1.js" />
+    <Content Include="Content\Script\maskedinput.js" />
+    <Content Include="Content\Style\bootstrap-dialog.min.css" />
+    <Content Include="Content\Style\bootstrap.css" />
+    <Content Include="Content\Style\bootstrap.min.css" />
+    <Content Include="Content\Style\MillframeStyle.css" />
     <Content Include="DownloadPage.aspx" />
     <Content Include="GridPage.aspx" />
     <Content Include="images\database-table-icon.png" />
@@ -190,6 +214,7 @@
     <Content Include="images\MillimanSQLDirectDataAccess.png" />
     <Content Include="images\New_MillimanHeader.png" />
     <Content Include="images\Other-xml-icon.png" />
+    <Content Include="images\PRMLogo_height80.png" />
     <Content Include="images\Roundedblocks.gif" />
     <Content Include="images\watermark.png" />
     <Content Include="Logo.aspx" />
@@ -210,6 +235,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ImageHandler.ashx" />
+    <Content Include="Content\Images\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\Images\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\Images\glyphicons-halflings-regular.woff" />
     <None Include="LocalDeploy.pubxml" />
     <Content Include="packages.config" />
     <None Include="PublishProfiles\PortalSQLUtility.pubxml" />

@@ -4,15 +4,19 @@
     //Javascript Code Block
 </script>
 <style type="text/css">
+    #divContainer {
+        padding: 10px;
+        border: 3px solid #eee;
+    }
     /*view style*/
     .layOut {
-        overflow-y: scroll; 
-        height:175px;
+        overflow-y: scroll;
+        height: 175px;
     }
-    #divContainer{padding:4px;border:3px solid #eee;}
-    .tv{    
-        margin: 0px 0px 0px 38px;
-        padding: 4px;}
+    .tv {
+        margin: 4px;
+        padding: 4px;
+    }
 </style>
 
 <%--tvUserRoles--%>
@@ -20,6 +24,7 @@
     <div class="page-header engravedHeader">
         <h2>Group Selection </h2>
     </div>
+    <div class="space"></div>
     <div class="layOut">
         <asp:TreeView ID="tvUserRoles" runat="server" CssClass="tv"
             NodeStyle-Font-Names="Consolas"

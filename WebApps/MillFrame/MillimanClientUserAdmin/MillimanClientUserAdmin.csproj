@@ -219,6 +219,7 @@
     <Content Include="Content\Script\jquery.min.v2.0.0.js" />
     <Content Include="Content\Script\jquery.min.v2.1.1.js" />
     <Content Include="Content\Script\jquery.v1.7.1.js" />
+    <Content Include="Content\Script\jquery.v1.9.1.js" />
     <Content Include="Content\Script\maskedinput.js" />
     <Content Include="Content\Style\bootstrap-dialog.min.css" />
     <Content Include="Content\Style\bootstrap.css" />
@@ -252,8 +253,8 @@
     <Content Include="Images\remove-key-icon.png" />
     <Content Include="Images\reportlaunch.png" />
     <Content Include="Logs\Report.txt" />
-    <Content Include="multipleprojects.html" />
-    <Content Include="noprojects.html" />
+    <Content Include="HTML\multipleprojects.html" />
+    <Content Include="HTML\noprojects.html" />
     <Content Include="NoReducedVersion.html" />
     <Content Include="SessionTimeout.html" />
     <Content Include="NotLoggedIn.html" />

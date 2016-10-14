@@ -55,16 +55,25 @@ public partial class controls_login_with_captcha : System.Web.UI.UserControl
         }
 
         //read value from web.config
-        string ShowHideCaptcha = WebConfigurationManager.AppSettings["ShowHideCaptcha"];
+        string IgnoreCaptchaInput = WebConfigurationManager.AppSettings["IgnoreCaptchaInput"];
         //if it has value then enter that Captcha
-        if (!string.IsNullOrEmpty(ShowHideCaptcha))
-        {           
-            divSecCodeInfo.Visible = false;
+        //if it has value then enter that Captcha        
+        if (!string.IsNullOrEmpty(IgnoreCaptchaInput))
+        {
+            if (IgnoreCaptchaInput.Equals("true", StringComparison.InvariantCultureIgnoreCase))
+            {
+                divSecCodeInfo.Visible = true;
+            }
+            else if (!IgnoreCaptchaInput.Equals("true", StringComparison.InvariantCultureIgnoreCase))
+            {
+                divSecCodeInfo.Visible = false;
+            }
         }
         else
         {
-            divSecCodeInfo.Visible = true;
-        }        
+            divSecCodeInfo.Visible = false;
+
+        }
     }
 
     #endregion
@@ -82,23 +91,13 @@ public partial class controls_login_with_captcha : System.Web.UI.UserControl
         string loginPassword = Login1.Password;
 
         //read value from web.config
-        string ShowHideCaptcha = WebConfigurationManager.AppSettings["ShowHideCaptcha"];
-        //if it has value then enter that Captcha
-        if (!string.IsNullOrEmpty(ShowHideCaptcha))
+        var IgnoreCaptchaInput = WebConfigurationManager.AppSettings["IgnoreCaptchaInput"];
+        //if it has value then enter that Captcha        
+        if (!string.IsNullOrEmpty(IgnoreCaptchaInput))
         {
-            divSecCodeInfo.Visible = false;
-            // find captcha control in login control
-            WebControlCaptcha.CaptchaControl loginCAPTCHA = (WebControlCaptcha.CaptchaControl)Login1.FindControl("CAPTCHA");
-            // First, check if CAPTCHA matches up
-            if (!loginCAPTCHA.UserValidated)
+            if (IgnoreCaptchaInput.Equals("true", StringComparison.InvariantCultureIgnoreCase))
             {
-                // CAPTCHA invalid
-                lblFailureText.Text = "Security Code MISSING or INCORRECT!";
-                lblFailureText.Visible = true;
-                e.Authenticated = false;
-            }
-            else
-            {
+                divSecCodeInfo.Visible = true;
                 // Next, determine if the user's username/password are valid
                 if (Membership.ValidateUser(loginUsername, loginPassword))
                 {
@@ -117,12 +116,33 @@ public partial class controls_login_with_captcha : System.Web.UI.UserControl
                     lblFailureText.Text = "User Name and/or Password did not match.";
                     lblFailureText.Visible = true;
                 }
-            }            
-
+            }
+            else if (!IgnoreCaptchaInput.Equals("true", StringComparison.InvariantCultureIgnoreCase))
+            {
+                ValidateRequiredCaptcha(loginUsername, loginPassword, e, Login1);
+            }
         }
         else
         {
-            divSecCodeInfo.Visible = true;
+            ValidateRequiredCaptcha(loginUsername, loginPassword, e, Login1);
+        }
+    }
+
+    public void ValidateRequiredCaptcha(string loginUsername, string loginPassword, AuthenticateEventArgs e, Login logIn)
+    {
+        divSecCodeInfo.Visible = false;
+        // find captcha control in login control
+        var loginCAPTCHA = (WebControlCaptcha.CaptchaControl)logIn.FindControl("CAPTCHA");
+        // First, check if CAPTCHA matches up
+        if (!loginCAPTCHA.UserValidated)
+        {
+            // CAPTCHA invalid
+            lblFailureText.Text = "Security Code MISSING or INCORRECT!";
+            lblFailureText.Visible = true;
+            e.Authenticated = false;
+        }
+        else
+        {
             // Next, determine if the user's username/password are valid
             if (Membership.ValidateUser(loginUsername, loginPassword))
             {
@@ -144,9 +164,10 @@ public partial class controls_login_with_captcha : System.Web.UI.UserControl
         }
     }
 
+
     #endregion
 
-    #region check for lockout and approval
+        #region check for lockout and approval
 
     protected void Login1_LoginError(object sender, EventArgs e)
     {
