@@ -5,6 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>User Profile/Password Settings</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link id="lnkBootstrapcss" runat="server" rel="stylesheet" type="text/css" href="~/Content/Style/bootstrap.css" />
     <link id="Link1" runat="server" rel="stylesheet" type="text/css" href="~/Content/Style/MillframeStyle.css" />
     <style type="text/css">
@@ -249,9 +250,9 @@
 
     </form>
 
-    <script src="Content/Script/jquery.v1.7.1.js"></script>
+    <script src="Content/Script/jquery.v1.9.1.js"></script>
     <script src="Content/Script/jquery.min.v2.1.1.js"></script>
-    <script src="Content/Script/bootstrap.min.v3.3.7.js"></script>
+    <script src="Content/Script/bootstrap.js"></script>
     <script src="Content/Script/bootstrap-dialog.min.js"></script>
     <script src="Content/Script/maskedinput.js" type="text/javascript"></script>
     <link href="Content/Style/bootstrap-dialog.min.css" rel="stylesheet" />
@@ -387,7 +388,7 @@
         //if there are values for allwoed character then display it
         var lblAllowedSpecialCharactersInPassword = "<%= System.Configuration.ConfigurationManager.AppSettings["AllowedSpecialCharactersInPassword"].ToString() %>"
         if (lblAllowedSpecialCharactersInPassword.length > 1) {
-            document.getElementById("lblAllowedSpecialCharactersInPassword").innerText = lblAllowedSpecialCharactersInPassword.trim();
+            document.getElementById("lblAllowedSpecialCharactersInPassword").innerText = trim(lblAllowedSpecialCharactersInPassword);
         }
 
         //***************** Allowed Special Characters in Name ******************************//
@@ -411,11 +412,21 @@
 
         //***************** Start User name checks ******************************//
         var UserFirstNameInput = document.getElementById("UserFirstName");
-        UserFirstNameInput.addEventListener("blur", verifyUserNameInput, false);
+        if (UserFirstNameInput.addEventListener) {
+            UserFirstNameInput.addEventListener("blur", verifyUserNameInput, false);
+        }
+        else {
+            UserFirstNameInput.attachEvent("blur", verifyUserNameInput);
+        }
 
         var UserLastInput = document.getElementById("UserLastName");
-        UserLastInput.addEventListener("blur", verifyUserNameInput, false);
-
+        if (UserLastInput.addEventListener) {
+            UserLastInput.addEventListener("blur", verifyUserNameInput, false);
+        }
+        else {
+            UserLastInput.attachEvent("blur", verifyUserNameInput);
+        }
+                
         function verifyUserNameInput(elementFocusEvent) {
             var elementID = elementFocusEvent.target.id;
             var elementValue = elementFocusEvent.target.value;
@@ -445,7 +456,7 @@
             //if there are specail in name then check if they are allowed
             if (elementValue.match(new RegExp($('#hdAllChars').val(), "gi"))) {
                 //allowed special chars from web.config
-                var allowedSplChars = AllowedSpecialCharactersInUserName.trim().split(',');
+                var allowedSplChars = trim(AllowedSpecialCharactersInUserName).split(',');
                 var allPresentCharactersInName = elementValue.match(new RegExp($('#hdAllChars').val(), "gi"));
 
                 var found = [];
@@ -643,40 +654,7 @@
                 $('#special').removeClass('validPassword').addClass('invalidPassword');
                 badInputData = true;
             }
-
-            ////validate bad special
-            ////var regexChar = new RegExp(/[`,<>;':"/[\]|{}()=-]/);
-            ////debugger;
-            ////if (!newpasswordValue.match(regexChar)) {
-            ////    if (badInputData) {
-            ////        badInputData = true;
-            ////    }
-            ////    else {
-            ////        badInputData = false;
-            ////    }
-            ////}
-            //debugger;
-            //if (newpasswordValue.match(/[`,<>;':"/[\]|{}()=-]/)) {
-            //    debugger;
-            //    badInputData = true;
-            //} else {
-            //    badInputData = true;
-            //}
-
-            ////validate any uppercase letter
-            //if (newpasswordValue.match(/[A-Z]/)) {
-            //    $('#capital').removeClass('invalidPassword').addClass('validPassword');
-            //    if (badInputData) {
-            //        badInputData = true;
-            //    }
-            //    else {
-            //        badInputData = false;
-            //    }
-            //} else {
-            //    $('#capital').removeClass('validPassword').addClass('invalidPassword');
-            //    badInputData = true;
-            //}
-
+                      
             //validate non-printable chars 
             if (newpasswordValue.match(/[^\u0000-\u007F]/)) {
                 badInputData = true;
@@ -780,7 +758,12 @@
         });
 
         var newPasswrdInput = document.getElementById("NewPassword");
-        newPasswrdInput.addEventListener("blur", verifyBadPassword, false);
+        if (newPasswrdInput.addEventListener) {
+            newPasswrdInput.addEventListener("blur", verifyBadPassword, false);
+        }
+        else {
+            newPasswrdInput.attachEvent("blur", verifyBadPassword);
+        }
 
         function verifyBadPassword() {
 
@@ -820,7 +803,12 @@
         }
 
         var ConfirmNewPasswordInput = document.getElementById("ConfirmNewPassword");
-        ConfirmNewPasswordInput.addEventListener("blur", validatePasswordMatch, false);
+        if (ConfirmNewPasswordInput.addEventListener) {
+            ConfirmNewPasswordInput.addEventListener("blur", validatePasswordMatch, false);
+        }
+        else {
+            ConfirmNewPasswordInput.attachEvent("blur", validatePasswordMatch);
+        }
 
         //function to check if the two password matches
         var message = document.getElementById('passwordMatchMessage');
@@ -973,6 +961,22 @@
             }
         }
 
+        function ltrim(s) {
+            var l = 0;
+            while (l < s.length && s[l] == ' ')
+            { l++; }
+            return s.substring(l, s.length);
+        }
+
+        function rtrim(s) {
+            var r = s.length - 1;
+            while (r > 0 && s[r] == ' ')
+            { r -= 1; }
+            return s.substring(0, r + 1);
+        }
+        function trim(s) {
+            return rtrim(ltrim(s));
+        }
         //***************** Element Class ******************************// 
 
     </script>

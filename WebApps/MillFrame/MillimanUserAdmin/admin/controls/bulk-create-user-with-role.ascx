@@ -5,87 +5,23 @@
 <%@ Register Src="~/admin/controls/UserRolesSelector.ascx" TagName="userRoleSelector" TagPrefix="urs" %>
 
 <style>
-    .roundShadowContainer {
-        margin-top: 10px;
-    }
-
-    .containerWrap {
-        padding: 4px;
-        width: 75%;
-        background-color: #fdfdfd;
-    }
-
-    .left {
-        float: left;
-        margin: 3px 0 0 6px;
-        text-align: left;
-        padding: 2px;
-    }
-
-    .right {
-        float: right;
-        margin: -5px -23px 0 0;
-        text-align: left;
-    }
-
-    .engravedHeader {
-        font-size: 14px;
-    }
-
-    #divOuter {
-        width: 770px;
-    }
-
-    #divLoginType {
-        height: 31px;
-        width: 400px;
-        margin: 5px 0 1px 10px;
-        padding: 2px 42px 5px 5px;
-        border: 2px dashed #eee;
-        font-weight: 400;
-    }
-
-    #divUserRole {
-        width: 748px;
-    }
-    #divResults {
-        width: 750px;
-    }
-
-    #divUserAddList {
-        width: 750px;
-        margin: 0 auto;
-    }
-
-    .userList {
-        margin: -11px -4px 1px 11px;
-    }
-    .imageButtonClass {
-        height: 15px;
-    }
-
-    .labelweak {
-        margin: 8px 7px -4px;
-    }
-
-    #divUserList {
-        margin: 4px;
-        padding: 4px;
-    }
-    #divSubmit {
-        margin: 4px;
-        padding: 4px;
-    }
-
-    .centerDiv {
-        margin: 0 auto;
-        width: 100px;
-    }
-    #browVersion
-    {
-        width:600px;       
-        border:1px dashed #808080;
-    }
+.roundShadowContainer{margin-top:10px}
+.containerWrap{padding:4px;width:75%;background-color:#fdfdfd}
+.left{float:left;margin:3px 0 0 6px;text-align:left;padding:2px}
+.right{float:right;margin:-5px -23px 0 0;text-align:left}
+.engravedHeader{font-size:14px}
+#divOuter{width:770px}
+#divLoginType{height:31px;width:400px;margin:5px 0 1px 10px;padding:2px 42px 5px 5px;border:2px dashed #eee;font-weight:400}
+#divUserRole{width:748px}
+#divResults{width:750px}
+#divUserAddList{width:750px;margin:0 auto}
+.userList{margin:-11px -4px 1px 11px}
+.imageButtonClass{height:15px}
+.labelweak{margin:8px 7px -4px}
+#divUserList{margin:4px;padding:4px}
+#divSubmit{margin:4px;padding:4px}
+.centerDiv{margin:0 auto;width:100px}
+#browVersion{width:600px;border:1px dashed gray}
 </style>
 
 
@@ -239,17 +175,6 @@
         <div class="space"></div>     
     </div>    
 </div>
-<div class="space"></div>
-<div class="space"></div>
-<div id="browVersion" class="centerDiv">
-    <div style="background: #eee;" class="centerDiv">
-      <h2 id="result" style="font-size: 38px; font-weight: bold; color: #ff0000;">detecting…</h2>
-    </div>
-    <div class="alert alert-warning">
-          <p id="details">n/a</p>
-    </div>  
-    <div class="space"></div>
-</div>
 
 
 <%-- jquery js --%>
@@ -314,64 +239,7 @@
                     }
                 }
             }
-        }
-
-        // Get IE or Edge browser version
-        var version = detectIE();
-        if (version === false) {
-            document.getElementById('result').innerHTML = '<s>IE/Edge</s>';
-        } else if (version >= 12) {
-            document.getElementById('result').innerHTML = 'Edge ' + version;
-        } else {
-            document.getElementById('result').innerHTML = 'IE ' + version;
-        }
-
-        // add details to debug result
-        document.getElementById('details').innerHTML = window.navigator.userAgent;
-        
-        /**
-         * detect IE
-         * returns version of IE or false, if browser is not Internet Explorer
-         */
-        function detectIE() {
-            var ua = window.navigator.userAgent;
-
-            // Test values; Uncomment to check result …
-
-            // IE 10
-            // ua = 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)';
-
-            // IE 11
-            // ua = 'Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko';
-
-            // Edge 12 (Spartan)
-            // ua = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36 Edge/12.0';
-
-            // Edge 13
-            // ua = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2486.0 Safari/537.36 Edge/13.10586';
-
-            var msie = ua.indexOf('MSIE ');
-            if (msie > 0) {
-                // IE 10 or older => return version number
-                return parseInt(ua.substring(msie + 5, ua.indexOf('.', msie)), 10);
-            }
-
-            var trident = ua.indexOf('Trident/');
-            if (trident > 0) {
-                // IE 11 => return version number
-                var rv = ua.indexOf('rv:');
-                return parseInt(ua.substring(rv + 3, ua.indexOf('.', rv)), 10);
-            }
-
-            var edge = ua.indexOf('Edge/');
-            if (edge > 0) {
-                // Edge (IE 12+) => return version number
-                return parseInt(ua.substring(edge + 5, ua.indexOf('.', edge)), 10);
-            }
-
-            // other browser
-            return false;
-        }
+        }     
 
         function OnClientItemClicked(sender, args) {
             var panelbar = $find("<%= RadPanelBar1.ClientID %>");

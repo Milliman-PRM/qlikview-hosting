@@ -16293,3 +16293,12 @@ File name: 'E:\PRM\WIP\ClientPublisher\images\missing.png'
 10/14/2016 10:13:14 AMInfo           Application Start
 10/14/2016 10:13:14 AMInfo           Loaded user repo
 10/14/2016 10:13:14 AMInfo           Loaded super groups
+10/14/2016 11:15:12 AMInfo           Application Start
+10/14/2016 11:15:12 AMInfo           Loaded user repo
+10/14/2016 11:15:12 AMInfo           Loaded super groups
+10/14/2016 11:24:25 AMInfo           Application Start
+10/14/2016 11:24:25 AMInfo           Loaded user repo
+10/14/2016 11:24:25 AMInfo           Loaded super groups
+10/14/2016 11:54:51 AMInfo           Application Start
+10/14/2016 11:54:51 AMInfo           Loaded user repo
+10/14/2016 11:54:51 AMInfo           Loaded super groups
