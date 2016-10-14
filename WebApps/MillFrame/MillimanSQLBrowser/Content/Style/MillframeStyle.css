@@ -50,6 +50,14 @@ td{padding:4px!important}
 .divImportant{cursor:pointer}
 /* radio box*/
 input[type="radio"]{margin: 4px 8px 0px 16px;}
+/*Modal Pop up*/
+.progressBarWindow{background:none repeat scroll 0 0 #fafafb;height:70px;position:absolute;width:373px;z-index:13000;}
+#progressBackgroundFilter{position:fixed;top:0;bottom:0;left:0;right:0;overflow:hidden;padding:0;margin:0;background-color:#b7b5b5;filter:alpha(opacity=50);opacity:.5;z-index:1000}                                                                                                                                                                                                                                                                       
+#divWaitCaption{cursor:pointer;left:37%;position:absolute;top:64%;padding:.5em 2em .5em .75em} 
+.progressBarWindow{border:4px solid #FBFBFB;border-radius:10px 10px 10px 10px;
+                   box-shadow:2px 0 2px #222;padding:10px;-moz-border-radius:5px;-webkit-border-radius:5px 5px 5px 5px;border-radius:5px 5px 5px 5px
+                   ;left:29%;
+}
 /*Error Messages*/
 div#divErrorPageContainer{position:absolute;width:850px;background:none;top:20%;bottom:0;left:0;right:0;margin:0 auto;padding:8px}
 div#divErrorPageContainer #divLogoImage{width:433px;vertical-align:middle;text-align:left}                                                                                                                                  
