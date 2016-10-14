@@ -141,13 +141,17 @@
     <Content Include="HTML\CleanupIssue.html" />
     <Content Include="HTML\NotLoggedIn.html" />
     <Content Include="images\ajax-loader.gif" />
+    <Content Include="images\checkbox.png" />
     <Content Include="images\copy.png" />
     <Content Include="images\decoy-icon-36px.png" />
     <Content Include="images\DefaultProjectImage.gif" />
     <Content Include="images\delete.png" />
+    <Content Include="images\generalstatus.png" />
     <Content Include="images\missing.png" />
     <Content Include="images\OK-icon.png" />
     <Content Include="images\Places-user-identity-icon.png" />
+    <Content Include="images\plus.png" />
+    <Content Include="images\status.png" />
     <Content Include="images\stop-icon.png" />
     <Content Include="images\warning-icon.png" />
     <Content Include="ReductionStep2.aspx" />
@@ -178,6 +182,7 @@
     <Content Include="Content\Images\glyphicons-halflings-regular.eot" />
     <Content Include="Content\Images\glyphicons-halflings-regular.ttf" />
     <Content Include="Content\Images\glyphicons-halflings-regular.woff" />
+    <None Include="Properties\PublishProfiles\Debug_vn.pubxml" />
     <None Include="Properties\PublishProfiles\LocalPublish.pubxml" />
     <None Include="Properties\PublishProfiles\Staging.pubxml" />
     <None Include="Web.Debug.config">
@@ -267,7 +272,9 @@
     <Content Include="Site.css" />
     <Content Include="time.aspx" />
     <Content Include="UserLogin.aspx" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ComplexReporting\NewItems.aspx.cs">
@@ -490,7 +497,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>8453</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:8454/</IISUrl>
+          <IISUrl>http://localhost:8456/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

@@ -20,11 +20,11 @@
             <telerik:RadTabStrip ID="Menu" runat="server" MultiPageID="RadMultiPage1" Skin="MetroTouch" SelectedIndex="0" Align="Left" Font-Size="9px" Font-Italic="True" Width="98%">
                 <Tabs>
                     <telerik:RadTab Text="Summary" ToolTip="Summary of actions/changes for the project."></telerik:RadTab>
-                    <telerik:RadTab Text="Failed Selections Per User" ImageUrl="../images/Places-user-identity-icon.png" ToolTip="Client administrator visible - provides a list of all current selections that cannot be applied to new report."></telerik:RadTab>
-                    <telerik:RadTab Text="New Selectable Items" ImageUrl="../images/Places-user-identity-icon.png" ToolTip="Client administrator visible - provides a list of all new items per new report that have not been associated with any users."></telerik:RadTab>
-                    <telerik:RadTab Text="Reduction Status" ToolTip="Detail breakdown of reduction per user processing."></telerik:RadTab>
-                    <telerik:RadTab Text="General Processing Status" ToolTip="Processing status of all items associated with processing chain."></telerik:RadTab>
-                    <telerik:RadTab Text="Review/Approval" ToolTip="Review an authorize updating of the live site."></telerik:RadTab>
+                    <telerik:RadTab Text="Failed Selections Per User" ImageUrl="images/Places-user-identity-icon.png" ToolTip="List of all current selections that cannot be applied to the new report for the user."></telerik:RadTab>
+                    <telerik:RadTab Text="New Selectable Items" ImageUrl="images/plus.png" ToolTip="List of all new items in the report that have not been associated with any users."></telerik:RadTab>
+                    <telerik:RadTab Text="Reduction Status" ImageUrl="images/status.png" ToolTip="Detail breakdown of reduction per user processing."></telerik:RadTab>
+<%--                    <telerik:RadTab Text="General Processing Status" ImageUrl="images/generalstatus.png" ToolTip="Processing status of all items associated with processing chain." Visible="false"></telerik:RadTab>--%>
+                    <telerik:RadTab Text="Review/Approval" ImageUrl="images/checkbox.png" ToolTip="Review an authorize updating of the live site."></telerik:RadTab>
                 </Tabs>
             </telerik:RadTabStrip>
         </header>
@@ -35,7 +35,7 @@
                     <telerik:RadPageView ID="RadPageView2" runat="server" height="550px" ContentUrl="ComplexReporting/NotSelectable.aspx"></telerik:RadPageView>
                     <telerik:RadPageView ID="RadPageView3" runat="server" height="550px"  ContentUrl="ComplexReporting/NewItems.aspx"></telerik:RadPageView>
                     <telerik:RadPageView ID="RadPageView5" runat="server" height="550px"  ContentUrl="ComplexReporting/ReductionStatus.aspx"></telerik:RadPageView>
-                    <telerik:RadPageView ID="RadPageView6" runat="server" height="550px"  ContentUrl="ComplexReporting/ReductionAudit.aspx"></telerik:RadPageView>
+                   <%-- <telerik:RadPageView ID="RadPageView6" runat="server" height="550px"  ContentUrl="ComplexReporting/ReductionAudit.aspx" Visible="False"></telerik:RadPageView>--%>
                     <telerik:RadPageView ID="RadPageView7" runat="server" height="550px"  ContentUrl="ComplexReporting/ReviewApproval.aspx"></telerik:RadPageView>
                 </telerik:RadMultiPage>
             </div>

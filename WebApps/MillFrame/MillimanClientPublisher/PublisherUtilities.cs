@@ -61,7 +61,7 @@ namespace ClientPublisher
                     zip.Encryption = EncryptionAlgorithm.WinZipAes256;
                     string[] AllFiles = System.IO.Directory.GetFiles(DirToBackup, "*.*", Options);
 
-                    string[] InvalidExtension = new string[] { ".meta", ".shared" };
+                    string[] InvalidExtension = new string[] { ".meta", ".shared", ".zip" };
                     foreach (string S in AllFiles)
                     {
                         string Extension = System.IO.Path.GetExtension(S);

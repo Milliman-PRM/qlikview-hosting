@@ -199,7 +199,7 @@ public partial class Default : System.Web.UI.Page
                 if (FailureReason == FailedBecause.NO_PROJECTS)
                     Response.Redirect("HTML/noprojects.html");
                 else if (FailureReason == FailedBecause.MULTIPLE_PROJECTS)
-                    Response.Redirect("HTML/multipleprojects.html");
+                    Response.Redirect("HTML/GroupContainsMultipleProjects.html");
                 return;  //halt processing
             }
 

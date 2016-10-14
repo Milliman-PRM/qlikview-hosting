@@ -59,11 +59,7 @@
                     <td>&nbsp;</td>
                 </tr>
                 <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>
-                        <p style="font: bold 9px times new roman; color: darkred">*Files related to previous restricted views will be removed.</p>
-                    </td>
+                    <td colspan="3" style="text-align:center"><p style="font: bold 9px times new roman; color: darkred">*Files related to previous restricted views will be removed.</p></td>
                 </tr>
             </table>
         </div>
