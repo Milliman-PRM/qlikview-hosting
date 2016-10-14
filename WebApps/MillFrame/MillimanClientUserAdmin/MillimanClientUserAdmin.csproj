@@ -251,8 +251,8 @@
     <Content Include="Images\remove-key-icon.png" />
     <Content Include="Images\reportlaunch.png" />
     <Content Include="Logs\Report.txt" />
-    <Content Include="multipleprojects.html" />
-    <Content Include="noprojects.html" />
+    <Content Include="HTML\multipleprojects.html" />
+    <Content Include="HTML\noprojects.html" />
     <Content Include="NoReducedVersion.html" />
     <Content Include="SessionTimeout.html" />
     <Content Include="NotLoggedIn.html" />
@@ -371,7 +371,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties UseJQuerySupport="True" UseAjaxifiedTemplates="True" />
+      <UserProperties UseAjaxifiedTemplates="True" UseJQuerySupport="True" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

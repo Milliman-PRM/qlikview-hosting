@@ -5,20 +5,87 @@
 <%@ Register Src="~/admin/controls/UserRolesSelector.ascx" TagName="userRoleSelector" TagPrefix="urs" %>
 
 <style>
-.roundShadowContainer{margin-top:10px}.containerWrap{padding:4px;width:75%;background-color:#fdfdfd}
-.left{float:left;margin:3px 0 0 6px;text-align:left;padding:2px}
-.right{float:right;margin:-5px -23px 0 0;text-align:left}
-.engravedHeader{font-size:14px}#divOuter{width:770px}
-#divLoginType{height:31px;width:400px;margin:5px 0 1px 10px;padding:2px 42px 5px 5px;border:2px dashed #eee;font-weight:400}
-#divUserRole{margin:-1px 0 1px 10px;width:748px}
-#divResults{width:750px}
-#divUserAddList{width:750px;margin:0 auto}
-.userList{margin:-11px -4px 1px 11px}
-.imageButtonClass{height:15px}
-.labelweak{margin:8px 7px -4px}
-#divUserList{margin:4px;padding:4px}
-#divSubmit{margin:4px;padding:4px}
-.centerDiv{margin: 0 auto;width: 100px;}
+    .roundShadowContainer {
+        margin-top: 10px;
+    }
+
+    .containerWrap {
+        padding: 4px;
+        width: 75%;
+        background-color: #fdfdfd;
+    }
+
+    .left {
+        float: left;
+        margin: 3px 0 0 6px;
+        text-align: left;
+        padding: 2px;
+    }
+
+    .right {
+        float: right;
+        margin: -5px -23px 0 0;
+        text-align: left;
+    }
+
+    .engravedHeader {
+        font-size: 14px;
+    }
+
+    #divOuter {
+        width: 770px;
+    }
+
+    #divLoginType {
+        height: 31px;
+        width: 400px;
+        margin: 5px 0 1px 10px;
+        padding: 2px 42px 5px 5px;
+        border: 2px dashed #eee;
+        font-weight: 400;
+    }
+
+    #divUserRole {
+        width: 748px;
+    }
+    #divResults {
+        width: 750px;
+    }
+
+    #divUserAddList {
+        width: 750px;
+        margin: 0 auto;
+    }
+
+    .userList {
+        margin: -11px -4px 1px 11px;
+    }
+    .imageButtonClass {
+        height: 15px;
+    }
+
+    .labelweak {
+        margin: 8px 7px -4px;
+    }
+
+    #divUserList {
+        margin: 4px;
+        padding: 4px;
+    }
+    #divSubmit {
+        margin: 4px;
+        padding: 4px;
+    }
+
+    .centerDiv {
+        margin: 0 auto;
+        width: 100px;
+    }
+    #browVersion
+    {
+        width:600px;       
+        border:1px dashed #808080;
+    }
 </style>
 
 
@@ -125,7 +192,7 @@
 
         <div id="divUserAddList" class="roundShadowContainer">
             <telerik:RadPanelBar ID="RadPanelBar1" runat="server" Width="100%" CollapseDelay="100" ExpandDelay="100" ExpandMode="MultipleExpandedItems"
-                AllowCollapseAllItems="True"  OnClientItemClicked="OnClientItemClicked">
+                AllowCollapseAllItems="True" OnClientItemClicked="OnClientItemClicked">
                 <Items>
                     <telerik:RadPanelItem ID="UserPanel" Value="UserPanel" Text="Add New by CSV List" Expanded="False" runat="server" ImagePosition="Left" ToolTip="Click to expand and paste new user information here" ExpandedImageUrl="~/Images/User-Group-icon.png" DisabledImageUrl="~/Images/User-Group-icon.png" ImageUrl="~/Images/User-Group-icon.png">
                         <ContentTemplate>
@@ -154,7 +221,7 @@
                             </div>
                             <div class="space"></div>
                             <div class="space"></div>
-                            <div id="divSubmit" class="center-block centerDiv" style="margin: 0 auto;width: 100px;">
+                            <div id="divSubmit" class="center-block centerDiv" style="margin: 0 auto; width: 100px;">
                                 <asp:Button ID="Button2" runat="server" Text="Submit List" OnClick="Submit_Click" CssClass="btn btn-primary" />
                             </div>
                         </ContentTemplate>
@@ -169,16 +236,24 @@
             <asp:Button ID="Reset" runat="server" CommandName="Reset" Text="Reset" CssClass="btn btn-primary"
                 OnClick="Reset_Click" />
         </div>
-        <div class="space"></div>
+        <div class="space"></div>     
+    </div>    
+</div>
+<div class="space"></div>
+<div class="space"></div>
+<div id="browVersion" class="centerDiv">
+    <div style="background: #eee;" class="centerDiv">
+      <h2 id="result" style="font-size: 38px; font-weight: bold; color: #ff0000;">detecting…</h2>
     </div>
+    <div class="alert alert-warning">
+          <p id="details">n/a</p>
+    </div>  
+    <div class="space"></div>
 </div>
 
 
 <%-- jquery js --%>
 <uc4:jquery ID="jquery1" runat="server" />
-<script src="../../Content/Script/jquery.v1.7.1.js"></script>
-<script src="../../Content/Script/jquery.min.v2.1.1.js"></script>
-<script src="../../Content/Script/bootstrap.min.v3.3.7.js"></script>
 <telerik:RadScriptBlock ID="radscript3" runat="server">
     <script type="text/javascript">
 
@@ -189,7 +264,6 @@
         }, function () {
             $('#divImportantHint').hide();
         });
-
 
         function hoverdiv(e, divid) {
             var left = e.clientX + "px";
@@ -211,7 +285,7 @@
         function ConfirmAction() {
             return window.confirm("Are you certain you want to create these users?");
         }
-        
+
         //This method is used when deleting the 'last' row in the grid, it cancels the removal of the 
         //last row and clear then values in the row.  Event is attached to deleting row of RadGrid
         function RowDeleting(sender, eventArgs) {
@@ -220,30 +294,83 @@
                 var MasterTable = grid.get_masterTableView();
                 if (MasterTable) {
                     var Rows = MasterTable.get_dataItems();
-                    if (Rows.length == 1) { //only when 1 row
+                    if (Rows.length == 1) { //only when 1 row   
                         //ValidationStatusImage
-                        if (Rows[0]._element.cells[1].childNodes[1].id == "ctl00_ContentPlaceHolder1_create1_RadGrid1_ctl00_ctl04_ValidationStatusImage")
-                        {                          
-                                var eleImage = Rows[0]._element.cells[1].childNodes[1];
-                                eleImage.style.visiblity = 'hidden';
-                                eleImage.style.display = 'none';                            
+                        if (Rows[0]._element.cells[1].childNodes[1].id == "ctl00_ContentPlaceHolder1_create1_RadGrid1_ctl00_ctl04_ValidationStatusImage") {
+                            var eleImage = Rows[0]._element.cells[1].childNodes[1];
+                            eleImage.style.visiblity = 'hidden';
+                            eleImage.style.display = 'none';
                         }
                         //AccountNameText
-                        if (Rows[0]._element.cells[2].childNodes[3].id == "ctl00_ContentPlaceHolder1_create1_RadGrid1_ctl00_ctl04_AccountNameTextBox")
-                        {
+                        if (Rows[0]._element.cells[2].childNodes[3].id == "ctl00_ContentPlaceHolder1_create1_RadGrid1_ctl00_ctl04_AccountNameTextBox") {
                             Rows[0]._element.cells[2].childNodes[3].value = "";
-                           
+
                         }
                         //SendWelcome
-                        if (Rows[0]._element.cells[3].childNodes[1].id == "ctl00_ContentPlaceHolder1_create1_RadGrid1_ctl00_ctl04_SendWelcomeCheckbox")
-                        {
+                        if (Rows[0]._element.cells[3].childNodes[1].id == "ctl00_ContentPlaceHolder1_create1_RadGrid1_ctl00_ctl04_SendWelcomeCheckbox") {
                             Rows[0]._element.cells[3].childNodes[1].checked = false;
                         }
-                                        
                         eventArgs.set_cancel(true);
                     }
                 }
             }
+        }
+
+        // Get IE or Edge browser version
+        var version = detectIE();
+        if (version === false) {
+            document.getElementById('result').innerHTML = '<s>IE/Edge</s>';
+        } else if (version >= 12) {
+            document.getElementById('result').innerHTML = 'Edge ' + version;
+        } else {
+            document.getElementById('result').innerHTML = 'IE ' + version;
+        }
+
+        // add details to debug result
+        document.getElementById('details').innerHTML = window.navigator.userAgent;
+
+        /**
+         * detect IE
+         * returns version of IE or false, if browser is not Internet Explorer
+         */
+        function detectIE() {
+            var ua = window.navigator.userAgent;
+
+            // Test values; Uncomment to check result …
+
+            // IE 10
+            // ua = 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)';
+
+            // IE 11
+            // ua = 'Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko';
+
+            // Edge 12 (Spartan)
+            // ua = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36 Edge/12.0';
+
+            // Edge 13
+            // ua = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2486.0 Safari/537.36 Edge/13.10586';
+
+            var msie = ua.indexOf('MSIE ');
+            if (msie > 0) {
+                // IE 10 or older => return version number
+                return parseInt(ua.substring(msie + 5, ua.indexOf('.', msie)), 10);
+            }
+
+            var trident = ua.indexOf('Trident/');
+            if (trident > 0) {
+                // IE 11 => return version number
+                var rv = ua.indexOf('rv:');
+                return parseInt(ua.substring(rv + 3, ua.indexOf('.', rv)), 10);
+            }
+
+            var edge = ua.indexOf('Edge/');
+            if (edge > 0) {
+                // Edge (IE 12+) => return version number
+                return parseInt(ua.substring(edge + 5, ua.indexOf('.', edge)), 10);
+            }
+
+            // other browser
+            return false;
         }
 
         function OnClientItemClicked(sender, args) {
@@ -252,12 +379,13 @@
             var UserList = '<%=UserList.ClientID %>';
 
             var uList = "[CSV Format]\n";
-                uList += "\n\n[Excel Format]\n";
-                $('#' + UserList).val(uList);
+            uList += "\n\n[Excel Format]\n";
+            $('#' + UserList).val(uList);
 
             var updPanelUserList = '<%=updPanelUserList.ClientID%>';//ctl00_ContentPlaceHolder1_create1_RadPanelBar1_i0_updPanelUserLis
             __doPostBack(updPanelUserList, '');
-          }
+        }
+
     </script>
 </telerik:RadScriptBlock>
 
