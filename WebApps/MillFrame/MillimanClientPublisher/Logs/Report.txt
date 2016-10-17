@@ -16302,3 +16302,81 @@ File name: 'E:\PRM\WIP\ClientPublisher\images\missing.png'
 10/14/2016 11:54:51 AMInfo           Application Start
 10/14/2016 11:54:51 AMInfo           Loaded user repo
 10/14/2016 11:54:51 AMInfo           Loaded super groups
+10/14/2016 1:58:23 PMInfo           Application Start
+10/14/2016 1:58:23 PMInfo           Loaded user repo
+10/14/2016 1:58:23 PMInfo           Loaded super groups
+10/14/2016 2:03:54 PMInfo           Application Start
+10/14/2016 2:03:54 PMInfo           Loaded user repo
+10/14/2016 2:03:54 PMInfo           Loaded super groups
+10/14/2016 2:08:09 PMInfo           Application Start
+10/14/2016 2:08:09 PMInfo           Loaded user repo
+10/14/2016 2:08:09 PMInfo           Loaded super groups
+2:08:29 PM                    Error     \r\nException trace: System.Web.HttpUnhandledException (0x80004005): Exception of type 'System.Web.HttpUnhandledException' was thrown. ---> System.NullReferenceException: Object reference not set to an instance of an object.
+   at ClientPublisher._Default.UpdatePanel_Button_Click(Object sender, EventArgs e) in D:\InstalledApplications\PRM_Staging_AK\SourceCode\SprintOct3ToOct21\WebApps\MillFrame\MillimanClientPublisher\Default.aspx.cs:line 372
+   at System.Web.UI.WebControls.Button.OnClick(EventArgs e)
+   at System.Web.UI.WebControls.Button.RaisePostBackEvent(String eventArgument)
+   at System.Web.UI.WebControls.Button.System.Web.UI.IPostBackEventHandler.RaisePostBackEvent(String eventArgument)
+   at System.Web.UI.Page.RaisePostBackEvent(IPostBackEventHandler sourceControl, String eventArgument)
+   at System.Web.UI.Page.RaisePostBackEvent(NameValueCollection postData)
+   at System.Web.UI.Page.ProcessRequestMain(Boolean includeStagesBeforeAsyncPoint, Boolean includeStagesAfterAsyncPoint)
+   at System.Web.UI.Page.HandleError(Exception e)
+   at System.Web.UI.Page.ProcessRequestMain(Boolean includeStagesBeforeAsyncPoint, Boolean includeStagesAfterAsyncPoint)
+   at System.Web.UI.Page.ProcessRequest(Boolean includeStagesBeforeAsyncPoint, Boolean includeStagesAfterAsyncPoint)
+   at System.Web.UI.Page.ProcessRequest()
+   at System.Web.UI.Page.ProcessRequestWithNoAssert(HttpContext context)
+   at System.Web.UI.Page.ProcessRequest(HttpContext context)
+   at ASP.default_aspx.ProcessRequest(HttpContext context) in c:\Windows\Microsoft.NET\Framework\v4.0.30319\Temporary ASP.NET Files\vs\872e1f9c\5beb937\App_Web_hfe32jrr.3.cs:line 0
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)----------------------------------------2:08:41 PM                    Error     \r\nException trace: System.Web.HttpUnhandledException (0x80004005): Exception of type 'System.Web.HttpUnhandledException' was thrown. ---> System.NullReferenceException: Object reference not set to an instance of an object.
+   at ClientPublisher._Default.UpdatePanel_Button_Click(Object sender, EventArgs e) in D:\InstalledApplications\PRM_Staging_AK\SourceCode\SprintOct3ToOct21\WebApps\MillFrame\MillimanClientPublisher\Default.aspx.cs:line 372
+   at System.Web.UI.WebControls.Button.OnClick(EventArgs e)
+   at System.Web.UI.WebControls.Button.RaisePostBackEvent(String eventArgument)
+   at System.Web.UI.WebControls.Button.System.Web.UI.IPostBackEventHandler.RaisePostBackEvent(String eventArgument)
+   at System.Web.UI.Page.RaisePostBackEvent(IPostBackEventHandler sourceControl, String eventArgument)
+   at System.Web.UI.Page.RaisePostBackEvent(NameValueCollection postData)
+   at System.Web.UI.Page.ProcessRequestMain(Boolean includeStagesBeforeAsyncPoint, Boolean includeStagesAfterAsyncPoint)
+   at System.Web.UI.Page.HandleError(Exception e)
+   at System.Web.UI.Page.ProcessRequestMain(Boolean includeStagesBeforeAsyncPoint, Boolean includeStagesAfterAsyncPoint)
+   at System.Web.UI.Page.ProcessRequest(Boolean includeStagesBeforeAsyncPoint, Boolean includeStagesAfterAsyncPoint)
+   at System.Web.UI.Page.ProcessRequest()
+   at System.Web.UI.Page.ProcessRequestWithNoAssert(HttpContext context)
+   at System.Web.UI.Page.ProcessRequest(HttpContext context)
+   at ASP.default_aspx.ProcessRequest(HttpContext context) in c:\Windows\Microsoft.NET\Framework\v4.0.30319\Temporary ASP.NET Files\vs\872e1f9c\5beb937\App_Web_hfe32jrr.3.cs:line 0
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)----------------------------------------2:08:51 PM                    Error     \r\nException trace: System.Web.HttpUnhandledException (0x80004005): Exception of type 'System.Web.HttpUnhandledException' was thrown. ---> System.NullReferenceException: Object reference not set to an instance of an object.
+   at ClientPublisher._Default.UpdatePanel_Button_Click(Object sender, EventArgs e) in D:\InstalledApplications\PRM_Staging_AK\SourceCode\SprintOct3ToOct21\WebApps\MillFrame\MillimanClientPublisher\Default.aspx.cs:line 372
+   at System.Web.UI.WebControls.Button.OnClick(EventArgs e)
+   at System.Web.UI.WebControls.Button.RaisePostBackEvent(String eventArgument)
+   at System.Web.UI.WebControls.Button.System.Web.UI.IPostBackEventHandler.RaisePostBackEvent(String eventArgument)
+   at System.Web.UI.Page.RaisePostBackEvent(IPostBackEventHandler sourceControl, String eventArgument)
+   at System.Web.UI.Page.RaisePostBackEvent(NameValueCollection postData)
+   at System.Web.UI.Page.ProcessRequestMain(Boolean includeStagesBeforeAsyncPoint, Boolean includeStagesAfterAsyncPoint)
+   at System.Web.UI.Page.HandleError(Exception e)
+   at System.Web.UI.Page.ProcessRequestMain(Boolean includeStagesBeforeAsyncPoint, Boolean includeStagesAfterAsyncPoint)
+   at System.Web.UI.Page.ProcessRequest(Boolean includeStagesBeforeAsyncPoint, Boolean includeStagesAfterAsyncPoint)
+   at System.Web.UI.Page.ProcessRequest()
+   at System.Web.UI.Page.ProcessRequestWithNoAssert(HttpContext context)
+   at System.Web.UI.Page.ProcessRequest(HttpContext context)
+   at ASP.default_aspx.ProcessRequest(HttpContext context) in c:\Windows\Microsoft.NET\Framework\v4.0.30319\Temporary ASP.NET Files\vs\872e1f9c\5beb937\App_Web_hfe32jrr.3.cs:line 0
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)----------------------------------------10/14/2016 2:28:03 PMInfo           Application Start
+10/14/2016 2:28:03 PMInfo           Loaded user repo
+10/14/2016 2:28:03 PMInfo           Loaded super groups
+10/14/2016 2:51:47 PMInfo           Application Start
+10/14/2016 2:51:47 PMInfo           Loaded user repo
+10/14/2016 2:51:47 PMInfo           Loaded super groups
+10/14/2016 3:01:34 PMInfo           Application Start
+10/14/2016 3:01:34 PMInfo           Loaded user repo
+10/14/2016 3:01:34 PMInfo           Loaded super groups
+10/14/2016 3:16:02 PMInfo           Application Start
+10/14/2016 3:16:02 PMInfo           Loaded user repo
+10/14/2016 3:16:02 PMInfo           Loaded super groups
+10/14/2016 3:35:10 PMInfo           Application Start
+10/14/2016 3:35:10 PMInfo           Loaded user repo
+10/14/2016 3:35:10 PMInfo           Loaded super groups
+10/14/2016 3:40:13 PMInfo           Application Start
+10/14/2016 3:40:13 PMInfo           Loaded user repo
+10/14/2016 3:40:13 PMInfo           Loaded super groups
+10/14/2016 3:56:23 PMInfo           Application Start
+10/14/2016 3:56:23 PMInfo           Loaded user repo
+10/14/2016 3:56:23 PMInfo           Loaded super groups

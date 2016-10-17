@@ -202,6 +202,7 @@
     <Content Include="App_Data\RadCaptcha\Y.wav" />
     <Content Include="App_Data\RadCaptcha\Z.wav" />
     <Content Include="Content\Images\Add-Blue.png" />
+    <Content Include="Content\Images\ajax-loader-bar.gif" />
     <Content Include="Content\Images\ajax-loader-LoadingText.gif" />
     <Content Include="Content\Images\ajax-loader-round.gif" />
     <Content Include="Content\Images\ajax-loader-RoundBig.gif" />
@@ -373,7 +374,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties UseJQuerySupport="True" UseAjaxifiedTemplates="True" />
+      <UserProperties UseAjaxifiedTemplates="True" UseJQuerySupport="True" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

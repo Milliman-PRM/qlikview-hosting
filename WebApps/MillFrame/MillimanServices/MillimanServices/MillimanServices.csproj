@@ -82,11 +82,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Administration.asmx" />
+    <Content Include="Content\Images\Add-Blue.png" />
+    <Content Include="Content\Images\ajax-loader-bar.gif" />
     <Content Include="Content\Images\ajax-loader-LoadingText.gif" />
     <Content Include="Content\Images\ajax-loader-round.gif" />
     <Content Include="Content\Images\ajax-loader-RoundBig.gif" />
     <Content Include="Content\Images\ajax-loader.gif" />
     <Content Include="Content\Images\ajaxLoaderBlue50.gif" />
+    <Content Include="Content\Images\Delete.png" />
     <Content Include="Content\Images\eye-hide.png" />
     <Content Include="Content\Images\eye-icon.png" />
     <Content Include="Content\Images\Info-blue.png" />
