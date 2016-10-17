@@ -10,6 +10,7 @@
     <link id="Link3" runat="server" rel="shortcut icon" href="~/favicon.gif" type="image/x-icon" />
     <link id="Link4" runat="server" rel="icon" href="~/favicon.gif" type="image/ico" />
     <%-- stylesheet --%>
+    
     <link href="../../../Content/Style/bootstrap.css" rel="stylesheet" type="text/css" />    
     <link href="../../../Content/Style/MillframeStyle.css" rel="stylesheet" type="text/css" />
     <link href="default.css" rel="stylesheet" type="text/css" />    

@@ -96,6 +96,7 @@
     <Content Include="Content\Images\Delete.png" />
     <Content Include="Content\Images\eye-hide.png" />
     <Content Include="Content\Images\eye-icon.png" />
+    <Content Include="Content\Images\glyphicons-halflings.gif" />
     <Content Include="Content\Images\Info-blue.png" />
     <Content Include="Content\Images\InformationBulb.png" />
     <Content Include="Content\Script\bootstrap-dialog.min.js" />
@@ -108,12 +109,10 @@
     <Content Include="Content\Script\jquery.v1.9.1.js" />
     <Content Include="Content\Script\maskedinput.js" />
     <Content Include="Content\Style\bootstrap-dialog.min.css" />
+    <Content Include="Content\Style\bootstrap-halflings.css" />
     <Content Include="Content\Style\bootstrap.css" />
     <Content Include="Content\Style\bootstrap.min.css" />
     <Content Include="Content\Style\MillframeStyle.css" />
-    <Content Include="Css\DeleteMeLater-bootstrap-dialog.min.css" />
-    <Content Include="Css\DeleteMeLater-bootstrap.css" />
-    <Content Include="Css\DeleteMeLater-bootstrap.min.css" />
     <Content Include="Css\Milliman_small.png" />
     <Content Include="email_templates\resetpassword.htm" />
     <Content Include="email_templates\welcome.htm" />
