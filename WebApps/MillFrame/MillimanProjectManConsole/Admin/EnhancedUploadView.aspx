@@ -92,8 +92,11 @@
 <body style="font-size: 11pt; font-weight: 400; background-image: url( ../images/dialog-bg.png ); background-size: 100% 100%" onload="AutoSize();">
     <form id="form1" runat="server">
         <telerik:RadScriptManager runat="server" ID="RadScriptManager1" />
-
         <div class="containerWrap">
+            <div class="page-header engravedHeader">
+                <h2>Project Upload  <small>General Project Information</small></h2>
+            </div>
+            <div class="space"></div>
             <%--divImportantHint hint--%>
             <div id="divImportant" class="divImportant" style="width: 23px; float: left;">
                 <img id="img2" src="~/Content/Images/Info-blue.png" runat="server" width="18" height="18" alt="Info" />
@@ -109,9 +112,6 @@
                 </div>
             </div>
             <%--divImportantHint hint--%>
-            <div class="page-header engravedHeader">
-                <h2>Project Upload  <small>General Project Information</small></h2>
-            </div>
             <div class="space"></div>
             <div class="left-div">
                 <div id="divGeneralProjectInfo" class="roundShadowContainer">

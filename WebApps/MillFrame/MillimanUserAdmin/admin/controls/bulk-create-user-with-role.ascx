@@ -5,31 +5,99 @@
 <%@ Register Src="~/admin/controls/UserRolesSelector.ascx" TagName="userRoleSelector" TagPrefix="urs" %>
 
 <style>
-.roundShadowContainer{margin-top:10px}
-.containerWrap{padding:4px;width:75%;background-color:#fdfdfd}
-.left{float:left;margin:3px 0 0 6px;text-align:left;padding:2px}
-.right{float:right;margin:-5px -23px 0 0;text-align:left}
-.engravedHeader{font-size:14px}
-#divOuter{width:770px}
-#divLoginType{height:31px;width:400px;margin:5px 0 1px 10px;padding:2px 42px 5px 5px;border:2px dashed #eee;font-weight:400}
-#divUserRole{width:748px}
-#divResults{width:750px}
-#divUserAddList{width:750px;margin:0 auto}
-.userList{margin:-11px -4px 1px 11px}
-.imageButtonClass{height:15px}
-.labelweak{margin:8px 7px -4px}
-#divUserList{margin:4px;padding:4px}
-#divSubmit{margin:4px;padding:4px}
-.centerDiv{margin:0 auto;width:100px}
-#browVersion{width:600px;border:1px dashed gray}
+    .roundShadowContainer {
+        margin-top: 10px;
+    }
+
+    .containerWrap {
+        padding: 4px;
+        width: 75%;
+        background-color: #fdfdfd;
+    }
+
+    .left {
+        float: left;
+        margin: 3px 0 0 6px;
+        text-align: left;
+        padding: 2px;
+    }
+
+    .right {
+        float: right;
+        margin: -5px -23px 0 0;
+        text-align: left;
+    }
+
+    .engravedHeader {
+        font-size: 14px;
+    }
+
+    #divOuter {
+        width: 770px;
+    }
+
+    #divLoginType {
+        height: 31px;
+        width: 400px;
+        margin: 5px 0 1px 10px;
+        padding: 2px 42px 5px 5px;
+        border: 2px dashed #eee;
+        font-weight: 400;
+    }
+
+    #divUserRole {
+        width: 748px;
+    }
+
+    #divResults {
+        width: 750px;
+    }
+
+    #divUserAddList {
+        width: 750px;
+        margin: 0 auto;
+    }
+
+    .userList {
+        margin: -11px -4px 1px 11px;
+    }
+
+    .imageButtonClass {
+        height: 15px;
+    }
+
+    .labelweak {
+        margin: 8px 7px -4px;
+    }
+
+    #divUserList {
+        margin: 4px;
+        padding: 4px;
+    }
+
+    #divSubmit {
+        margin: 4px;
+        padding: 4px;
+    }
+
+    .centerDiv {
+        margin: 0 auto;
+        width: 100px;
+    }
+
+    #browVersion {
+        width: 600px;
+        border: 1px dashed gray;
+    }
 </style>
 
 
 <%-- gridview banner --%>
-<div class="gvBanner">
+<%--<div class="gvBanner">
     <span class="gvBannerUsers">
-        <asp:Image ID="Image1" runat="server" ImageAlign="AbsMiddle" ImageUrl="~/images/decoy-icon-36px.png" /></span> Add Users With Group(s)
-</div>
+        <asp:Image ID="Image1" runat="server" ImageAlign="AbsMiddle" ImageUrl="~/images/decoy-icon-36px.png" /></span> 
+    Add Users With Group(s)
+</div>--%>
 
 <telerik:RadAjaxManager ID="RadAjaxManager2" runat="server">
     <AjaxSettings>
@@ -44,10 +112,12 @@
 <telerik:RadWindowManager EnableShadow="true" ID="RadWindowManager" runat="server">
 </telerik:RadWindowManager>
 
-<div class="containerWrap center-block">
-
+<div class="containerWrap center-block outerWrap">
+    <div class="page-header engravedHeader">
+        <h2>Add Users With Group(s)</h2>
+    </div>
+     <div class="space"></div>
     <div id="divOuter" class="roundShadowContainer">
-
         <div id="divLoginType">
             <div class="left"><span class="engravedHeader">Login Type:</span></div>
             <div class="space"></div>
@@ -172,8 +242,8 @@
             <asp:Button ID="Reset" runat="server" CommandName="Reset" Text="Reset" CssClass="btn btn-primary"
                 OnClick="Reset_Click" />
         </div>
-        <div class="space"></div>     
-    </div>    
+        <div class="space"></div>
+    </div>
 </div>
 
 
@@ -239,7 +309,7 @@
                     }
                 }
             }
-        }     
+        }
 
         function OnClientItemClicked(sender, args) {
             var panelbar = $find("<%= RadPanelBar1.ClientID %>");

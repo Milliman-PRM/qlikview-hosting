@@ -11,13 +11,11 @@ public partial class admin_controls_admin_reports : System.Web.UI.UserControl
     {
         if (!IsPostBack)
         {
-            //Report.LoadXml("<Tree><Node Text='van.nanney@milliman.com'><Node Text='group1'><Node Text='QVW1'></Node></Node><Node Text='group2'><Node Text='QVWX'></Node></Node></Node></Tree>");
-
-
             //init for setup
             ReportType_SelectedIndexChanged(null, null);
         }
         base.OnLoad(e);
+        checkResults(0);
     }
     
     protected void Generate_Click(object sender, EventArgs e)
@@ -88,6 +86,7 @@ public partial class admin_controls_admin_reports : System.Web.UI.UserControl
             RootNode.Nodes.Add(RTN);
         }
         Report.ExpandAllNodes();
+        checkResults(Report.GetAllNodes().Count);
     }
 
     protected void GroupCollection(string GroupName)
@@ -129,6 +128,7 @@ public partial class admin_controls_admin_reports : System.Web.UI.UserControl
             RootNode.Nodes.Add(ReportNode);
         }
         Report.ExpandAllNodes();
+        checkResults(Report.GetAllNodes().Count);
     }
 
     protected void GenerateUserToQVWs(string UserName, bool HideQVWs = false)
@@ -151,7 +151,10 @@ public partial class admin_controls_admin_reports : System.Web.UI.UserControl
         Report.ExpandAllNodes();
         //only show groups
         if (HideQVWs)
+        {
+            checkResults(0);
             return;
+        }
 
         if (QVWItems != null)
         {
@@ -179,6 +182,7 @@ public partial class admin_controls_admin_reports : System.Web.UI.UserControl
             }
         }
         Report.ExpandAllNodes();
+        checkResults(Report.GetAllNodes().Count);
     }
 
     protected string AdjustPathToDocumentRelative(string Path)
@@ -190,11 +194,26 @@ public partial class admin_controls_admin_reports : System.Web.UI.UserControl
         return Path.Substring(DocumentRoot.Length);
     }
 
+    public void checkResults(int? counter)
+    {
+        if (counter.HasValue && counter.Value>0)
+        {
+            divResults.Visible = true;
+            lblTotalRecords.Text = Report.GetAllNodes().Count.ToString();
+            
+        }
+        else
+        {
+            lblTotalRecords.Text = "0";
+            divResults.Visible = false;
+            updPanlRecords.Update();
+        }
+    }
     protected void ReportType_SelectedIndexChanged(object sender, EventArgs e)
     {
         if ((string.Compare(ReportType.SelectedValue, "UserQVWS", true) == 0) || (string.Compare(ReportType.SelectedValue, "UserGroup", true) == 0))
         {
-            SelectionLabel.Text = "Users&nbsp";
+            SelectionLabel.InnerText = "Users: ";
             UserSelections.Items.Clear();
             foreach (MembershipUser MU in Membership.GetAllUsers())
             {
@@ -203,7 +222,7 @@ public partial class admin_controls_admin_reports : System.Web.UI.UserControl
         }
         else if (string.Compare(ReportType.SelectedValue, "Group", true) == 0) 
         {
-            SelectionLabel.Text = "Groups&nbsp";
+            SelectionLabel.InnerText = "Groups: ";
             UserSelections.Items.Clear();
             foreach (string Role in Roles.GetAllRoles())
             {
@@ -212,9 +231,9 @@ public partial class admin_controls_admin_reports : System.Web.UI.UserControl
         }
         else if ((string.Compare(ReportType.SelectedValue, "QVWSUser", true) == 0) || (string.Compare(ReportType.SelectedValue, "QVWSGroup", true) == 0))
         {
-            SelectionLabel.Text = "QVWs&nbsp";
+            SelectionLabel.InnerText = "QVWs: ";
             UserSelections.Items.Clear();
-             MillimanCommon.UserRepo UR = MillimanCommon.UserRepo.GetInstance();
+            MillimanCommon.UserRepo UR = MillimanCommon.UserRepo.GetInstance();
             List<string> QVWs = UR.GetAllQVWs();
             foreach (string QV in QVWs)
             {
