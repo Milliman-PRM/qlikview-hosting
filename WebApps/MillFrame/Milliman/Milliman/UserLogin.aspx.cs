@@ -222,7 +222,7 @@ namespace MillimanDev
                         }
                         else
                         {
-                            lblErrorMessage.Text = string.Format("Your account has been locked out for {0} minutes due to multiple failed login attempts. Please try agiaing later.",
+                            lblErrorMessage.Text = string.Format("Your account has been locked out for {0} minutes due to multiple failed login attempts. Please try again later.",
                                                                             autoUnlockDuration);
                             return;
                         }
