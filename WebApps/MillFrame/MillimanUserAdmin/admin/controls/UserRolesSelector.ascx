@@ -13,9 +13,11 @@
         overflow-y: scroll;
         height: 175px;
     }
+
     .tv {
         margin: 4px;
         padding: 4px;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     }
 </style>
 
@@ -28,7 +30,7 @@
     <div class="layOut">
         <asp:TreeView ID="tvUserRoles" runat="server" CssClass="tv"
             NodeStyle-Font-Names="Consolas"
-            NodeStyle-Font-Size="12px"
+            NodeStyle-Font-Size="14px"
             ShowExpandCollapse="true"
             OnSelectedNodeChanged="OnSelectedNodeChanged"
             OnTreeNodeCheckChanged="OnTreeNodeCheckChanged">
