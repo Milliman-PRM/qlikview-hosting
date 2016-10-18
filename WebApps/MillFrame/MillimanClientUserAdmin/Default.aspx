@@ -193,7 +193,7 @@
                                                         <asp:CheckBox ID="AutomaticInclusion" runat="server" Text="Automatic Inclusion" AutoPostBack="true" OnCheckedChanged="AutomaticInclusion_CheckedChanged" ToolTip="New items will be automatically selected if all items at same level were checked in previous version." />
                                                     </asp:TableCell>
                                                     <asp:TableCell Style="text-align: right; font: normal 12px Segoe UI">
-                                                        <asp:CheckBox ID="ShowCheckedOnly" runat="server" Text="Only show checked items." AutoPostBack="true" OnCheckedChanged="ShowCheckedOnly_CheckedChanged" ToolTip="Only show the checkbox items that are current 'checked'." />
+                                                        <asp:CheckBox ID="ShowCheckedOnly" runat="server" Text="Only show checked items." AutoPostBack="true" OnCheckedChanged="ShowCheckedOnly_CheckedChanged" ToolTip="Only show the checkbox items that are currently 'checked'." />
                                                     </asp:TableCell>
                                                 </asp:TableRow>
                                             </asp:Table>
