@@ -63,7 +63,6 @@
             <asp:SiteMapDataSource ID="SiteMapDataSource1" runat="server" SiteMapProvider="AdminSiteMapProvider" ShowStartingNode="false" />
         </div>
 
-
         <%-- page content placeholder --%>
         <div class="masterContentWrap">
             <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
