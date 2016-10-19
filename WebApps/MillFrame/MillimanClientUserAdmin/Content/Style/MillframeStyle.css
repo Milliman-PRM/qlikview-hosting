@@ -5,7 +5,7 @@
 .labelweak{color:#5f6162;font-size:12px;margin:5px -6px 3px 8px}
 .required:after{content:" *";font-weight:700;color:#c1c1c1;font-size:20px;margin:0;float:right}
 .textbox-focus{border:2px solid #00C;background:#def}
-.roundShadowContainer{background:#fefefe;border:1px solid #c4cddb;padding:0;margin:0 auto;border-top-color:#d3dbde;border-bottom-color:#bfc9dc;box-shadow:0 1px 1px #ccc;border-radius:5px}
+.roundShadowContainer{background:#fefefe;border:1px solid #c4cddb;padding:6px;margin:0 auto;border-top-color:#d3dbde;border-bottom-color:#bfc9dc;box-shadow:0 1px 1px #ccc;border-radius:5px}
 .roundShadowContainer h2{margin:0;padding:10px 0;font-size:18px;text-align:center;background:#ebebec;border-bottom:1px solid #dde0e7;box-shadow:0 -1px 0 #fff inset;border-radius:5px 5px 0 0;text-shadow:1px 1px 0 #fff;font-weight:700}
 .roundShadowContainer h3{margin:0;padding:10px 0;font-size:16px;text-align:center;background:#ebebec;border-bottom:1px solid #dde0e7;box-shadow:0 -1px 0 #fff inset;border-radius:5px 5px 0 0;text-shadow:1px 1px 0 #fff;font-weight:700}
 .roundShadowContainer ul,li{margin:0;padding:0;list-style-type:square}
@@ -41,11 +41,14 @@ td{padding:4px!important}
 #divPasswordHintCriteria{background:#fefefe none repeat scroll 0 0;border:1px solid #ddd;border-radius:5px;box-shadow:0 1px 3px #ccc;display:none;font-size:.8em;height:161px;padding:6px;position:absolute;width:365px;z-index:2000}
 /*Layout*/
 .containerWrap{text-align:center;padding:15px;background-color:#f5f5f5;width:100%}
+.outerWrap{margin-top:10px;}
 .left-div{display:inline-block;max-width:435px;text-align:left;padding:3px;margin:3px;vertical-align:top}
 .right-div{display:inline-block;max-width:435px;text-align:left;padding:3px;margin:3px}
 /* info box*/
 .infoBox{color:#8a6d3b;background-color:#fcf8e3;border-color:#faebcc;margin:0 auto!important}
-.engravedHeader{color:#333;font-family:LeagueGothicRegular;text-shadow:0 1px 0 rgba(255,255,255,255)}
+.engravedHeader{color:#333;font: 18px 'LeagueGothicRegular'; text-shadow: 0px 1px 0px rgba(255,255,255,255);}
+.engravedHeaderChild{color:#333;font: 14px 'LeagueGothicRegular'; text-shadow: 0px 1px 0px rgba(255,255,255,255);}
+.engravedHeader h2{font-size:24px;}
 #divImportantHint{display:none;position:absolute;z-index:2000}
 .divImportant{cursor:pointer}
 /*Modal Pop up*/
@@ -60,3 +63,7 @@ td{padding:4px!important}
 div#divErrorPageContainer{position:absolute;width:850px;background:none;top:20%;bottom:0;left:0;right:0;margin:0 auto;padding:8px}
 div#divErrorPageContainer #divLogoImage{width:433px;vertical-align:middle;text-align:left}                                                                                                                                  
 div#divErrorPageContainer p{padding:10px; letter-spacing:0em;word-spacing: 0em;}
+/* div for ttoal*/
+#divTotalRecs{background:none repeat scroll 0 0 #E0EEEE;border:2px solid #B5CAD0;display:block;float:right;padding:8px;width:200px}
+#divTotalRecs span{color:#444;font-family:Georgia,"Times New Roman",Times,serif;font-size:12px;font-weight:inherit;line-height:1.1em;margin:0 0 11px;padding:1px 0 0;text-shadow:0 1px 1px #FFF;text-transform:capitalize}
+.count{font-size:12px;font-weight:700;background:#FFC none repeat scroll 0 0;border-bottom:1px dashed #888}

@@ -9,14 +9,19 @@
     <link id="lnkBootstrapcss" runat="server" rel="stylesheet" type="text/css" href="~/Content/Style/bootstrap.css" />
     <link id="Link1" runat="server" rel="stylesheet" type="text/css" href="~/Content/Style/MillframeStyle.css" />
     <style type="text/css">
-        html {overflow: scroll;}
+        html {
+            overflow: scroll;
+        }
+
         html, button, input, select, textarea, label {
             font-family: arial,"Times New Roman",Times,serif,sans-serif;
             font-size: 12px;
             color: #222;
         }
 
-        body { margin: 20px;   }
+        body {
+            margin: 20px;
+        }
     </style>
 
     <script src="Content/Script/jquery.v1.7.1.js"></script>
@@ -43,6 +48,10 @@
 <body style="background-color: white; background-image: url(images/watermark.png); background-repeat: repeat;" onload="OnLoad();">
     <form id="form1" runat="server">
         <div class="containerWrap">
+            <div class="page-header engravedHeader">
+                <h2>User Profile  <small>Password Settings</small></h2>
+            </div>
+            <div class="space"></div>
             <%--divImportantHint hint--%>
             <div id="divImportant" class="divImportant" style="width: 23px; float: left;">
                 <img id="img2" src="~/Content/Images/Info-blue.png" runat="server" width="18" height="18" style="margin: 2px 6px 6px 2px;" />
@@ -59,9 +68,6 @@
                 </div>
             </div>
             <%--divImportantHint hint--%>
-            <div class="page-header engravedHeader">
-                <h2>User Profile  <small>Password Settings</small></h2>
-            </div>
             <div class="left-div">
                 <%--window for the user profile info--%>
                 <div id="divUserProfileSettingsContainer" class="roundShadowContainer">
@@ -238,7 +244,7 @@
             <table style="width: 100%; height: 100%; overflow: hidden">
                 <tr>
                     <td valign="middle">
-                       <center> <div>
+                        <center> <div>
                     Copyright © Milliman &nbsp
                                 <asp:Label ID="lblcopyrightYear" runat="server"></asp:Label>
                     <script type="text/javascript">document.getElementById("lblcopyrightYear").innerHTML = new Date().getFullYear();</script>
@@ -426,7 +432,7 @@
         else {
             UserLastInput.attachEvent("blur", verifyUserNameInput);
         }
-                
+
         function verifyUserNameInput(elementFocusEvent) {
             var elementID = elementFocusEvent.target.id;
             var elementValue = elementFocusEvent.target.value;
@@ -654,7 +660,7 @@
                 $('#special').removeClass('validPassword').addClass('invalidPassword');
                 badInputData = true;
             }
-                      
+
             //validate non-printable chars 
             if (newpasswordValue.match(/[^\u0000-\u007F]/)) {
                 badInputData = true;
@@ -941,11 +947,11 @@
         // Add a classname
         function addClass(ele, cls) {
             var clsChecker = new RegExp("\\b" + cls + "\\b");
-            if(clsChecker.test(ele.className)) {
+            if (clsChecker.test(ele.className)) {
                 // ele already has the className, don't need to do anything
                 return;
             }
-            ele.className += (' '+ cls);
+            ele.className += (' ' + cls);
         }
 
         // Remove a classname
