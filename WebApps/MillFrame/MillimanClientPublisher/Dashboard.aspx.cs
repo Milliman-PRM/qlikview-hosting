@@ -53,21 +53,21 @@ namespace ClientPublisher
             {
                 string DashboardID = Request["dashboardid"];
                 if (string.IsNullOrEmpty(DashboardID))
-                    Response.Redirect("DashboardMissingIssue.html");
+                    Response.Redirect("HTML/DashboardMissingIssue.html");
 
                 //map the Covisint string POPULATION or COSTMODEL to a real QV project name
                 string QVProjectName = ConfigurationManager.AppSettings[DashboardID];
                 if (string.IsNullOrEmpty(QVProjectName))
-                    Response.Redirect("DashboardMissingIssue.html");
+                    Response.Redirect("HTML/DashboardMissingIssue.html");
 
                 //look in the repo to find the first qualifed path of the selected project for this user
                 MembershipUser MU = Membership.GetUser();
                 string QVProject = MillimanCommon.UserRepo.GetInstance().FindQualifedQVProject(MU.UserName, QVProjectName, Roles.GetRolesForUser());
                 if (string.IsNullOrEmpty(QVProject))
-                    Response.Redirect("NotAuthorizedIssue.html");
+                    Response.Redirect("HTML/NotAuthorizedIssue.html");
 
                 if (Membership.GetUser().IsApproved == false)
-                    Response.Redirect("NotApprovedIssue.html");
+                    Response.Redirect("HTML/NotApprovedIssue.html");
 
 
                 //will never be in session now
@@ -82,7 +82,7 @@ namespace ClientPublisher
                 //SystemOrigin Origin = Request.QueryString["origin"] == null ? SystemOrigin.Milliman : (SystemOrigin)Enum.Parse(typeof(SystemOrigin), Request.QueryString["origin"]);
                 SystemOrigin Origin = Session["milliman"] != null ? SystemOrigin.Milliman : SystemOrigin.ExternalSSO;
                 if (Launch(Membership.GetUser().UserName, QVSubRoot + QVProject, _ContextSelection, "DashboardMissingIssue.html", Origin))
-                    Response.Redirect("DashboardMissingIssue.html");
+                    Response.Redirect("HTML/DashboardMissingIssue.html");
 
                 dashboard_text.Text = @"You are logged into the Milliman site as '" + Context.User.Identity.Name + "'. ";
                 dashboard_text.Text += @"You will be redirected to dashboard: " + DashboardID;
@@ -92,14 +92,14 @@ namespace ClientPublisher
             {
                 string QVProject = Request["key"];
                 if (string.IsNullOrEmpty(QVProject))
-                    Response.Redirect("DashboardMissingIssue.html");
+                    Response.Redirect("HTML/DashboardMissingIssue.html");
 
                 QVProject = MillimanCommon.Utilities.ConvertHexToString(QVProject);
                 if (ProjectIsValidForUser(QVProject))
                 {
                     SystemOrigin Origin = Session["milliman"] != null ? SystemOrigin.Milliman : SystemOrigin.ExternalSSO;
                     if (Launch(Membership.GetUser().UserName, QVSubRoot + QVProject, "", "DashboardMissingIssue.html", Origin))
-                        Response.Redirect("DashboardMissingIssue.html");
+                        Response.Redirect("HTML/DashboardMissingIssue.html");
 
                     dashboard_text.Text = @"You are logged into the Milliman site as '" + Membership.GetUser().UserName + "'. ";
                     dashboard_text.Text += @"You will be redirected to dashboard: " + QVProject;
@@ -107,7 +107,7 @@ namespace ClientPublisher
                 }
                 else
                 {
-                    Response.Redirect("NotAuthorizedIssue.html");
+                    Response.Redirect("HTML/NotAuthorizedIssue.html");
                 }
             }
         }
