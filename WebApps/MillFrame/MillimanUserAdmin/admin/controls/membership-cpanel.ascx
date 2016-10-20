@@ -8,32 +8,30 @@
     .outer {
         width: 745px;
     }
-
-    .navs {
+    .nav {
         width: 745px;
         padding: 6px;
     }
-
     #divAccoutns {
         padding: 4px 4px 4px 4px;
         width: 690px;
         height: 359px;
     }
-
     .linkItemsContainer {
         padding: 8px 8px 8px 8px;
         margin: 8px;
     }
 </style>
+
 <div class="containerWrap center-block outer outerWrap">
     <div class="page-header engravedHeader">
         <h2>User Administration&nbsp;&nbsp;<small>User Account Setting</small></h2>
     </div>
     <div class="space"></div>
-    <div class="navs">
+    <div class="nav">
         <div id="divAccoutns" class="roundShadowContainer center-block">
-            <ul class="linkItemsContainer">
-                <li>
+            <ul class="nav nav-pills linkItemsContainer">
+                <li class="active">
                     <a href="default.aspx" title="User Account" >
                         <i class="glyphicon glyphicon-home"></i>&nbsp;User Accounts                        
                     </a>

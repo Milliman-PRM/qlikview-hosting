@@ -14,6 +14,11 @@
     #divPassword {
         border: 1px solid #eee;
     }
+    /*bootstra specifc*/
+    td{padding:4px!important}
+    .form-control{height:30px}
+    .table{margin-bottom:5px}
+    .page-header{padding-bottom:10px;margin:5px 0 10px;border-bottom:1px solid #eee}
 </style>
 
 <div id="containerWrap">
@@ -36,11 +41,11 @@
                             <div class="space"></div>
                             <asp:DetailsView AutoGenerateRows="False" DataSourceID="MemberData" ID="UserInfo" runat="server"
                                 OnItemUpdating="UserInfo_ItemUpdating" DefaultMode="Edit"
-                                CssClass="table table-hover table-condensed" GridLines="None" OnItemCreated="UserInfo_ItemCreated">
+                                CssClass="table table-hover" GridLines="None" OnItemCreated="UserInfo_ItemCreated">
                                 <Fields>
                                     <asp:BoundField DataField="UserName" HeaderText="User Name" ReadOnly="True" ControlStyle-CssClass="form-control"></asp:BoundField>
                                     <asp:BoundField DataField="Email" HeaderText="Email">
-                                        <ControlStyle Width="300px" />
+                                        <ControlStyle Width="300px" CssClass="form-control" />
                                     </asp:BoundField>
                                     <asp:TemplateField HeaderText="Security Q&A">
                                         <EditItemTemplate>
