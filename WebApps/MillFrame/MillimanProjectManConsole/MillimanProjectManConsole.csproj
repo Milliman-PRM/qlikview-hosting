@@ -794,6 +794,8 @@
     <Content Include="js\fckeditor\_whatsnew_history.html" />
     <Content Include="js\greybox\AJS.js" />
     <Content Include="js\greybox\AJS_fx.js" />
+    <Content Include="js\greybox\blue_close.png" />
+    <Content Include="js\greybox\blue_X_Close.png" />
     <Content Include="js\greybox\gb_scripts.js" />
     <Content Include="js\greybox\gb_styles.css" />
     <Content Include="js\greybox\g_close.gif" />
@@ -803,7 +805,9 @@
     <Content Include="js\greybox\loader_frame.html" />
     <Content Include="js\greybox\next.gif" />
     <Content Include="js\greybox\prev.gif" />
+    <Content Include="js\greybox\red_close.ico" />
     <Content Include="js\greybox\w_close.gif" />
+    <Content Include="js\greybox\w_close.png" />
     <Content Include="js\greybox\w_close2.gif" />
     <Content Include="js\js\admin-help-sidebar.js" />
     <Content Include="js\js\check_all_checkboxes.js" />

@@ -21,14 +21,21 @@ a:focus{outline: none;}
 .pageBottomPadding{height:85px;}
 
 /* AJAX TABS technorati-theme */
-.aTab1 .ajax__tab_header {background:url(images/aspnet-tabs/tab-line.png) repeat-x bottom;font-size:12px;display:block;}
-.aTab1 .ajax__tab_header .ajax__tab_outer {background:url(images/aspnet-tabs/tab.png) no-repeat left top;border-color:#e9e9e9;color:#222;padding-left:10px;margin-right:3px;}
-.aTab1 .ajax__tab_header .ajax__tab_inner {background:url(images/aspnet-tabs/tab.png) no-repeat right top;border-color:#e9e9e9;color:#666;padding:3px 10px 2px 0px;}
-.aTab1 .ajax__tab_hover .ajax__tab_inner {color:#000000;cursor:pointer;}
-.aTab1 .ajax__tab_active .ajax__tab_outer {background:url(images/aspnet-tabs/tab.png) no-repeat 0pt -40px;border-bottom-color:#ffffff;}
-.aTab1 .ajax__tab_active .ajax__tab_inner {background:url(images/aspnet-tabs/tab.png) no-repeat right -40px;color:#000000;border-color:#e9e9e9}
-.aTab1 .ajax__tab_body {font-size:10px;padding:1px 0px 0px 0px;background-color:#ffffff;border:solid 1px #e9e9e9;border-top-width:0;}
+.aTab1 .ajax__tab_header {background:url(images/aspnet-tabs/tab-line-2.png) repeat-x bottom;font-size:14px;display:block;height:21px!important}
+.aTab1 .ajax__tab_header .ajax__tab_outer {background:url(images/aspnet-tabs/tab-2.png) no-repeat left top;border-color:#4b4d4f;color:#222;padding-left:10px;margin-right:0px;}
+.aTab1 .ajax__tab_header .ajax__tab_inner {background:url(images/aspnet-tabs/tab-2.png) no-repeat right top;border-color:#4b4d4f;color:#999;padding:4px 10px 4px 0px;}
+.aTab1 .ajax__tab_hover .ajax__tab_outer {color:#fff;cursor:pointer;background:url(images/aspnet-tabs/tab-2.png) no-repeat 0pt -40px;}
+.aTab1 .ajax__tab_hover .ajax__tab_inner {color:#fff;cursor:pointer;background:url(images/aspnet-tabs/tab-2.png) no-repeat right -40px;}
+.aTab1 .ajax__tab_active .ajax__tab_outer {background:url(images/aspnet-tabs/tab-2.png) no-repeat 0pt -40px;border-bottom-color:#4b4d4f;}
+.aTab1 .ajax__tab_active .ajax__tab_inner {background:url(images/aspnet-tabs/tab-2.png) no-repeat right -40px;color:#fff;border-color:#4b4d4f}
+.aTab1 .ajax__tab_body {font-size:10px;padding:0px 0px 0px 0px;background-color:#ccc;border:solid 1px #4b4d4f;border-top-width:0;}
+
 .contentTemplate{font-size:11px;padding:20px 10px 20px 10px;}
+
+.aTab1  .ajax__tab_header .ajax__tab_outer .ajax__tab_xp .ajax__tab_tab {height:21px!important;width:152px;padding:4px;margin:0px;}
+/*.aTab1 .ajax__tab_active .ajax__tab_outer .ajax__tab_inner .ajax__tab_tab {height:21px!important;width:152px;padding:4px;margin:0px;}
+.aTab1 .ajax__tab_hover .ajax__tab_outer .ajax__tab_inner .ajax__tab_tab {height:21px!important;width:152px;padding:4px;margin:0px;}*/
+
 
 /* DETAILS VIEW STYLES */
 .dv{width: 100%; border: 0px solid #e9e9e9; background-color: #fff;}

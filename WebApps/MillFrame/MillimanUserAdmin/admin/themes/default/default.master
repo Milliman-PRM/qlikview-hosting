@@ -12,7 +12,7 @@
     <%-- stylesheet --%>
     
     <link href="../../../Content/Style/bootstrap.css" rel="stylesheet" type="text/css" />    
-    <link href="../../../Content/Style/MillframeStyle.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Content/Style/MillframeStyle.css" rel="stylesheet" type="text/css" />    
     <link href="default.css" rel="stylesheet" type="text/css" />    
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>

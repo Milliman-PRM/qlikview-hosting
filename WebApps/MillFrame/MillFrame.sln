@@ -96,6 +96,55 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MillimanClientPublisher", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MillimanQVLicenseCleaner", "..\..\Apps\MillimanQVLicenseCleaner\MillimanQVLicenseCleaner.csproj", "{AF11AB64-51FB-4936-8FCA-70DEA7CD2216}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contents", "Contents", "{1A51548D-F303-4EE5-8E7A-6C5785B4A271}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{8BA73D8D-0ED2-4E2E-B7D1-A91E57E270F7}"
+	ProjectSection(SolutionItems) = preProject
+		Milliman\Milliman\Content\Images\Add-Blue.png = Milliman\Milliman\Content\Images\Add-Blue.png
+		Milliman\Milliman\Content\Images\ajax-loader-bar.gif = Milliman\Milliman\Content\Images\ajax-loader-bar.gif
+		Milliman\Milliman\Content\Images\ajax-loader-LoadingText.gif = Milliman\Milliman\Content\Images\ajax-loader-LoadingText.gif
+		Milliman\Milliman\Content\Images\ajax-loader-round.gif = Milliman\Milliman\Content\Images\ajax-loader-round.gif
+		Milliman\Milliman\Content\Images\ajax-loader-RoundBig.gif = Milliman\Milliman\Content\Images\ajax-loader-RoundBig.gif
+		Milliman\Milliman\Content\Images\ajax-loader.gif = Milliman\Milliman\Content\Images\ajax-loader.gif
+		Milliman\Milliman\Content\Images\ajaxLoaderBlue50.gif = Milliman\Milliman\Content\Images\ajaxLoaderBlue50.gif
+		Milliman\Milliman\Content\Images\Delete.png = Milliman\Milliman\Content\Images\Delete.png
+		Milliman\Milliman\Content\Images\eye-hide.png = Milliman\Milliman\Content\Images\eye-hide.png
+		Milliman\Milliman\Content\Images\eye-icon.png = Milliman\Milliman\Content\Images\eye-icon.png
+		Milliman\Milliman\Content\Images\glyphicons-halflings-regular.eot = Milliman\Milliman\Content\Images\glyphicons-halflings-regular.eot
+		Milliman\Milliman\Content\Images\glyphicons-halflings-regular.ttf = Milliman\Milliman\Content\Images\glyphicons-halflings-regular.ttf
+		Milliman\Milliman\Content\Images\glyphicons-halflings-regular.woff = Milliman\Milliman\Content\Images\glyphicons-halflings-regular.woff
+		Milliman\Milliman\Content\Images\Info-blue.png = Milliman\Milliman\Content\Images\Info-blue.png
+		Milliman\Milliman\Content\Images\InformationBulb.png = Milliman\Milliman\Content\Images\InformationBulb.png
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Script", "Script", "{93066D6A-FACD-4C41-AD04-D9BE06D86DA7}"
+	ProjectSection(SolutionItems) = preProject
+		Milliman\Milliman\Content\Script\bootstrap-dialog.min.js = Milliman\Milliman\Content\Script\bootstrap-dialog.min.js
+		Milliman\Milliman\Content\Script\bootstrap.js = Milliman\Milliman\Content\Script\bootstrap.js
+		Milliman\Milliman\Content\Script\bootstrap.min.v3.3.7.js = Milliman\Milliman\Content\Script\bootstrap.min.v3.3.7.js
+		Milliman\Milliman\Content\Script\jquery.min.js = Milliman\Milliman\Content\Script\jquery.min.js
+		Milliman\Milliman\Content\Script\jquery.min.v2.0.0.js = Milliman\Milliman\Content\Script\jquery.min.v2.0.0.js
+		Milliman\Milliman\Content\Script\jquery.min.v2.1.1.js = Milliman\Milliman\Content\Script\jquery.min.v2.1.1.js
+		Milliman\Milliman\Content\Script\jquery.v1.7.1.js = Milliman\Milliman\Content\Script\jquery.v1.7.1.js
+		Milliman\Milliman\Content\Script\jquery.v1.9.1.js = Milliman\Milliman\Content\Script\jquery.v1.9.1.js
+		Milliman\Milliman\Content\Script\maskedinput.js = Milliman\Milliman\Content\Script\maskedinput.js
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Style", "Style", "{7F3D7BF0-7159-4FE3-91C9-C6074F8D306C}"
+	ProjectSection(SolutionItems) = preProject
+		Milliman\Milliman\Content\Style\bootstrap-dialog.min.css = Milliman\Milliman\Content\Style\bootstrap-dialog.min.css
+		Milliman\Milliman\Content\Style\bootstrap.css = Milliman\Milliman\Content\Style\bootstrap.css
+		Milliman\Milliman\Content\Style\bootstrap.min.css = Milliman\Milliman\Content\Style\bootstrap.min.css
+		Milliman\Milliman\Content\Style\MillframeStyle.css = Milliman\Milliman\Content\Style\MillframeStyle.css
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Fonts", "Fonts", "{01374DA0-3A81-4B35-805B-34C3F0A72746}"
+	ProjectSection(SolutionItems) = preProject
+		Milliman\Milliman\Content\Images\glyphicons-halflings-regular.eot = Milliman\Milliman\Content\Images\glyphicons-halflings-regular.eot
+		Milliman\Milliman\Content\Images\glyphicons-halflings-regular.ttf = Milliman\Milliman\Content\Images\glyphicons-halflings-regular.ttf
+		Milliman\Milliman\Content\Images\glyphicons-halflings-regular.woff = Milliman\Milliman\Content\Images\glyphicons-halflings-regular.woff
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -177,5 +226,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8BA73D8D-0ED2-4E2E-B7D1-A91E57E270F7} = {1A51548D-F303-4EE5-8E7A-6C5785B4A271}
+		{93066D6A-FACD-4C41-AD04-D9BE06D86DA7} = {1A51548D-F303-4EE5-8E7A-6C5785B4A271}
+		{7F3D7BF0-7159-4FE3-91C9-C6074F8D306C} = {1A51548D-F303-4EE5-8E7A-6C5785B4A271}
+		{01374DA0-3A81-4B35-805B-34C3F0A72746} = {1A51548D-F303-4EE5-8E7A-6C5785B4A271}
 	EndGlobalSection
 EndGlobal
