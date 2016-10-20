@@ -44,7 +44,9 @@
         </tr>
         <tr>
         <td style="text-align:center;height:20px;font-size:12px;font-family:segoe ui">
-            Copyright &copy; Milliman 2016
+                    Copyright © Milliman &nbsp
+                                <asp:Label ID="lblcopyrightYear" runat="server"></asp:Label>
+                    <script type="text/javascript">document.getElementById("lblcopyrightYear").innerHTML = new Date().getFullYear();</script>
         </td>
         </tr>
       </table>      

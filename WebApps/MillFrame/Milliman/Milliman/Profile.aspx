@@ -528,7 +528,7 @@
                 //check the password only if CurPassword is entered
                 if (CurPassword != '') {
                     if (newPassword == '') {
-                        var msg = ('The password verification field New Password filed cannot be empty.');
+                        var msg = ('The password verification field New Password field cannot be empty.');
                         $('#NewPassword').addClass('textbox-focus');
                         showErrorAlert(msg);
                         return false;
@@ -542,7 +542,7 @@
                     }
 
                     if (confirmPassword == '') {
-                        var msg = ('The password verification, Confirm New Password filed cannot be empty.');
+                        var msg = ('The password verification, Confirm New Password field cannot be empty.');
                         $('#ConfirmNewPassword').addClass('textbox-focus');
                         showErrorAlert(msg);
                         return false;
@@ -555,7 +555,7 @@
                         return false;
                     }
                     if (newPassword != confirmPassword) {
-                        var msg = ('The password verification, New Password filed and Confirm New Password field do not match!');
+                        var msg = ('The password verification, New Password field and Confirm New Password field do not match!');
                         showErrorAlert(msg);
                         $('#NewPassword').addClass('textbox-focus');
                         $("#NewPassword").select()
