@@ -528,7 +528,7 @@
                 //check the password only if CurPassword is entered
                 if (CurPassword != '') {
                     if (newPassword == '') {
-                        var msg = ('The password verification field New Password filed cannot be empty.');
+                        var msg = ('The password verification field New Password field cannot be empty.');
                         $('#NewPassword').addClass('textbox-focus');
                         showErrorAlert(msg);
                         return false;
