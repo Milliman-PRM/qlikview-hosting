@@ -96,7 +96,6 @@
     <Content Include="Content\Images\Delete.png" />
     <Content Include="Content\Images\eye-hide.png" />
     <Content Include="Content\Images\eye-icon.png" />
-    <Content Include="Content\Images\glyphicons-halflings.gif" />
     <Content Include="Content\Images\Info-blue.png" />
     <Content Include="Content\Images\InformationBulb.png" />
     <Content Include="Content\Script\bootstrap-dialog.min.js" />

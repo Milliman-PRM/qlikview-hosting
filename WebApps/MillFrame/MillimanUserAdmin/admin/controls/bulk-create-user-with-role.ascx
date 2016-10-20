@@ -8,34 +8,28 @@
     .roundShadowContainer {
         margin-top: 10px;
     }
-
     .containerWrap {
         padding: 4px;
         width: 75%;
         background-color: #fdfdfd;
     }
-
     .left {
         float: left;
         margin: 3px 0 0 6px;
         text-align: left;
         padding: 2px;
     }
-
     .right {
         float: right;
         margin: -5px -23px 0 0;
         text-align: left;
     }
-
     .engravedHeader {
         font-size: 14px;
     }
-
     #divOuter {
         width: 770px;
     }
-
     #divLoginType {
         height: 31px;
         width: 400px;
@@ -44,47 +38,37 @@
         border: 2px dashed #eee;
         font-weight: 400;
     }
-
     #divUserRole {
         width: 748px;
     }
-
     #divResults {
         width: 750px;
     }
-
     #divUserAddList {
         width: 750px;
         margin: 0 auto;
     }
-
     .userList {
         margin: -11px -4px 1px 11px;
     }
-
     .imageButtonClass {
         height: 15px;
     }
-
     .labelweak {
         margin: 8px 7px -4px;
     }
-
     #divUserList {
         margin: 4px;
         padding: 4px;
     }
-
     #divSubmit {
         margin: 4px;
         padding: 4px;
     }
-
     .centerDiv {
         margin: 0 auto;
         width: 100px;
     }
-
     #browVersion {
         width: 600px;
         border: 1px dashed gray;

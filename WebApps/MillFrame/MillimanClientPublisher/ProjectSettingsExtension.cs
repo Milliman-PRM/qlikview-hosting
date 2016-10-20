@@ -62,7 +62,7 @@ namespace ClientPublisher
                 if (System.IO.File.Exists(QVWOffline))
                     return "Report is present, but in an offline state - click to make available to users.";
                 else if (System.IO.File.Exists(QVWOnline))
-                    return "Report is available to users - click to take report offline.";
+                    return "Report is not available to users - click to make report available.";
                 else
                     return "Report is not present on server - a new report must be uploaded before state can be changed.";
             }

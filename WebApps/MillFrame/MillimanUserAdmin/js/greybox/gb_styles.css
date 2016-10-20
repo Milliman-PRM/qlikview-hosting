@@ -17,11 +17,11 @@
     z-index: 150;
 }
 
-#GB_window .content {
-    width: auto;
-    margin: 0;
-    padding: 0;
-}
+    #GB_window .content {
+        width: auto;
+        margin: 0;
+        padding: 0;
+    }
 
 #GB_frame {
     border: 0;
@@ -36,10 +36,10 @@
     margin: 0 22px 0 22px;
 }
 
-.GB_Gallery .content {
-    background-color: #fff;
-    border: 3px solid #000;
-}
+    .GB_Gallery .content {
+        background-color: #fff;
+        border: 3px solid #000;
+    }
 
 .GB_header {
     top: 10px;
@@ -51,60 +51,62 @@
     border-top: 1px solid #000;
 }
 
-.GB_header .inner {
-    background-color: #333;
-    font-family: Arial, Verdana, sans-serif;
-    padding: 2px 20px 2px 20px;
-}
+    .GB_header .inner {
+        background-color: #333;
+        font-family: Arial, Verdana, sans-serif;
+        padding: 2px 20px 2px 20px;
+    }
 
-.GB_header table {
-    margin: 0;
-    width: 100%;
-    border-collapse: collapse;
-}
+    .GB_header table {
+        margin: 0;
+        width: 100%;
+        border-collapse: collapse;
+    }
 
-.GB_header .caption {
-    text-align: left;
-    color: #eee;
-    white-space: nowrap;
-    font-size: 20px;
-}
+    .GB_header .caption {
+        text-align: left;
+        color: #eee;
+        white-space: nowrap;
+        font-size: 20px;
+    }
 
-.GB_header .close {
-    text-align: right;
-}
+    .GB_header .close {
+        text-align: right;
+    }
 
-.GB_header .close img {
-    z-index: 500;
+  .GB_header .close img {
+    z-index: 1500;
     cursor: pointer;
+    opacity:1.5!important;
+    padding: 4px; width: 39px!important; height: 36px!important;
 }
 
-.GB_header .middle {
-    white-space: nowrap;
-    text-align: center;
-}
+    .GB_header .middle {
+        white-space: nowrap;
+        text-align: center;
+    }
 
 
 #GB_middle {
     color: #eee;
 }
 
-#GB_middle img {
-    cursor: pointer;
-    vertical-align: middle;
-}
+    #GB_middle img {
+        cursor: pointer;
+        vertical-align: middle;
+    }
 
-#GB_middle .disabled {
-    cursor: default;
-}
+    #GB_middle .disabled {
+        cursor: default;
+    }
 
-#GB_middle .left {
-    padding-right: 10px;
-}
+    #GB_middle .left {
+        padding-right: 10px;
+    }
 
-#GB_middle .right {
-    padding-left: 10px;
-}
+    #GB_middle .right {
+        padding-left: 10px;
+    }
 
 
 .GB_Window .content {
@@ -113,21 +115,37 @@
     border-top: none;
 }
 
-.GB_Window .header {
+/*.GB_Window .header {
     border-bottom: 1px solid #000;
     border-top: 0px solid #000;
     border-left: 1px solid #000;
     border-right: 1px solid #000;
     margin: 0;
-
     height: 22px;
     font-size: 12px;
     padding: 3px 0;
     color: #fff;
+}*/
+.GB_Window .header {
+    border: 1px solid #000;
+    margin: 0;
+    height: 15px;
+    font-size: 14px;
+    padding: 3px 0;
+    background-color:#000;
 }
 
-.GB_Window .caption {
+/*.GB_Window .caption {
     font-size: 12px;
+    text-align: left;
+    font-weight: normal;
+    white-space: nowrap;
+    padding-right: 20px;
+    padding-left: 15px;
+}*/
+.GB_Window .caption {
+    color: #eee;
+    font-size: 14px;
     text-align: left;
     font-weight: normal;
     white-space: nowrap;
@@ -135,15 +153,26 @@
     padding-left: 15px;
 }
 
-.GB_Window .close { text-align: right; }
-.GB_Window .close span { 
-    font-size: 12px;
-    cursor: pointer; 
-}
-.GB_Window .close img {
-    cursor: pointer;
-    padding: 0 3px 0 0;
+.GB_Window .close {
+    text-align: right;
 }
 
-.GB_Window .on { border-bottom: 1px solid #333; }
-.GB_Window .click { border-bottom: 1px solid white; }
+    .GB_Window .close span {
+        font-size: 12px;
+        cursor: pointer;
+    }
+
+  .GB_header .close img {
+    z-index: 1500;
+    cursor: pointer;
+    opacity:1.5!important;
+    padding: 4px; width: 39px!important; height: 36px!important;
+}
+
+.GB_Window .on {
+    border-bottom: 1px solid #333;
+}
+
+.GB_Window .click {
+    border-bottom: 1px solid white;
+}

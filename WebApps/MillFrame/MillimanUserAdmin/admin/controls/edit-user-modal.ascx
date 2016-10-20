@@ -1,99 +1,106 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeFile="edit-user-modal.ascx.cs" Inherits="admin_controls_edit_user_modal" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
-<%@ Register Src="js-include3.ascx" TagName="js" TagPrefix="uc3" %>
 <%@ Register Src="~/js/js/jquery.ascx" TagName="jquery" TagPrefix="uc4" %>
 <%@ Register Src="~/admin/controls/UserRolesSelector.ascx" TagName="userRoleSelector" TagPrefix="urs" %>
 
+<link id="lnkBootstrapcss" runat="server" rel="stylesheet" type="text/css" href="../../Content/Style/bootstrap.css" />
+<link id="Link1" runat="server" rel="stylesheet" type="text/css" href="../../Content/Style/MillframeStyle.css" />
+
 <style type="text/css">
-   .cuwWrap {
-        margin: 0 !important;
+    .layOut {
+        height: 135px !important;
     }
-    .layOut
-    {
-        height: 135px!important;
+
+    #divPassword {
+        border: 1px solid #eee;
     }
 </style>
 
-<div id="mainContainer">
+<div id="containerWrap">
     <%-- ajax update panel start --%>
     <asp:UpdatePanel ID="UpdatePanel1" runat="server">
         <ContentTemplate>
             <%-- ajax tab container start --%>
             <cc1:TabContainer ID="tcntUserInfo" runat="server" ActiveTabIndex="3" Width="100%" Font-Size="10px" CssClass="aTab1">
-                <cc1:TabPanel ID="TabPanel2" runat="server" HeaderText="General User Info" CssClass="softRoundContainerStyle softRoundContainer-editor backgroundColor">
+                <cc1:TabPanel ID="TabPanel2" runat="server" HeaderText="General User Info"
+                    Width="80" Height="40" Font-Size="18px">
                     <ContentTemplate>
-                        <div class="contentTemplate softRoundContainerStyle softRoundContainer-editor backgroundColor">
-                            <div class="softRoundContainerStyle">
-                                <urs:userRoleSelector ID="ctrlUserRoles" runat="server" />
+                        <div class="roundShadowContainer">
+                            <urs:userRoleSelector ID="ctrlUserRoles" runat="server" />
+                        </div>
+                        <div class="space"></div>
+                        <div class="roundShadowContainer">
+                            <div class="page-header engravedHeader">
+                                <h2>User Info</h2>
                             </div>
-                            <br />
-                            <div id="divUserDetails" class="softRoundContainerStyle softRoundContainer-editor backgroundColor">
-                                <div class="formSectionTitle2">
-                                    <span class="engravedHeader">USER INFO</span>
-                                </div>
-                                <asp:DetailsView AutoGenerateRows="False" DataSourceID="MemberData" ID="UserInfo" runat="server"
-                                    OnItemUpdating="UserInfo_ItemUpdating" DefaultMode="Edit" CssClass="dv" GridLines="None" OnItemCreated="UserInfo_ItemCreated">
-                                    <Fields>
-                                        <asp:BoundField DataField="UserName" HeaderText="User Name" ReadOnly="True"></asp:BoundField>
-                                        <asp:BoundField DataField="Email" HeaderText="Email">
-                                            <ControlStyle Width="245px" />
-                                        </asp:BoundField>
-                                        <asp:TemplateField HeaderText="Security Q&A">
-                                            <EditItemTemplate>
-                                                <asp:TextBox ID="TextBox1" runat="server" Text='<%# Bind("PasswordQuestion") + ":" + Bind("Comment")  %>' TextMode="MultiLine" Height="100px" Width="245px" ReadOnly="True"></asp:TextBox>
-                                            </EditItemTemplate>
-                                            <InsertItemTemplate>
-                                                <asp:TextBox ID="TextBox1" runat="server" Text='<%# Bind("PasswordQuestion") + ":" + Bind("Comment") %>' ReadOnly="True"></asp:TextBox>
-                                            </InsertItemTemplate>
-                                            <ItemTemplate>
-                                                <asp:Label ID="Label1" runat="server" Text='<%# Bind("PasswordQuestion") + ":" + Bind("Comment")  %>'></asp:Label>
-                                            </ItemTemplate>
-                                        </asp:TemplateField>
-                                        <asp:TemplateField HeaderText="Client User Administrator">
-                                            <ItemTemplate>
-                                                <asp:CheckBox runat="server" ID="IsClientAdministrator" />
-                                            </ItemTemplate>
-                                        </asp:TemplateField>
-                                        <asp:TemplateField HeaderText="Client Publishing Administrator">
-                                            <ItemTemplate>
-                                                <asp:CheckBox runat="server" ID="IsPublishingAdministrator" />
-                                            </ItemTemplate>
-                                        </asp:TemplateField>
-                                        <asp:CheckBoxField DataField="IsApproved" HeaderText="Active User"></asp:CheckBoxField>
-                                        <asp:CheckBoxField DataField="IsLockedOut" HeaderText="Is Locked Out" ReadOnly="True"></asp:CheckBoxField>
-                                        <asp:CheckBoxField DataField="IsOnline" HeaderText="Is Online" ReadOnly="True"></asp:CheckBoxField>
-                                        <asp:BoundField DataField="CreationDate" HeaderText="Creation Date" ReadOnly="True"></asp:BoundField>
-                                        <asp:BoundField DataField="LastActivityDate" HeaderText="Last Activity Date" ReadOnly="True"></asp:BoundField>
-                                        <asp:BoundField DataField="LastLoginDate" HeaderText="Last Login Date" ReadOnly="True"></asp:BoundField>
-                                        <asp:BoundField DataField="LastLockoutDate" HeaderText="Last Lockout Date" ReadOnly="True"></asp:BoundField>
-                                        <asp:BoundField DataField="LastPasswordChangedDate" HeaderText="Last Password Changed Date" ReadOnly="True"></asp:BoundField>
-                                        <asp:TemplateField ShowHeader="False">
-                                            <EditItemTemplate>
-                                                <div class="clearBoth2">
-                                                </div>
-                                                <asp:Button ID="Button1" CssClass="inputButton" runat="server" CausesValidation="True" CommandName="Update" Text="Save" OnClientClick="return confirm('This will UPDATE the User Info. Click OK to continue.')" />
-                                                <asp:Button ID="Button2" CssClass="inputButton" runat="server" CausesValidation="False" CommandName="Cancel" Text="Cancel" />
-                                                <asp:Button ID="Button4" CssClass="inputButton" runat="server" Text="Unlock" OnClick="UnlockUser" OnClientClick="return confirm('Click OK to unlock this user.')" />
-                                                <asp:Button ID="Button5" CssClass="inputButton" runat="server" Text="Delete" OnClick="DeleteUser" OnClientClick="return confirm('Are you sure? This will delete all information related to this user including the user profile.')" />
-                                            </EditItemTemplate>
-                                            <ItemTemplate>
-                                                <div class="clearBoth2">
-                                                </div>
-                                                <asp:Button ID="Button1" CssClass="inputButton" runat="server" CausesValidation="False" CommandName="Edit" Text="Edit User Info" />
-                                            </ItemTemplate>
-                                            <ControlStyle Font-Size="11px" />
-                                        </asp:TemplateField>
-                                    </Fields>
-                                    <RowStyle CssClass="dvRowStyle" />
-                                    <FieldHeaderStyle CssClass="dvFieldHeader" />
-                                    <HeaderStyle CssClass="dvHeader" />
-                                    <AlternatingRowStyle CssClass="dvAlternateRowStyle" />
-                                </asp:DetailsView>
-                                <div class="messageWrap2">
-                                    <asp:Literal ID="UserUpdateMessage" runat="server"></asp:Literal>
-                                </div>
+                            <div class="space"></div>
+                            <asp:DetailsView AutoGenerateRows="False" DataSourceID="MemberData" ID="UserInfo" runat="server"
+                                OnItemUpdating="UserInfo_ItemUpdating" DefaultMode="Edit"
+                                CssClass="table table-hover table-condensed" GridLines="None" OnItemCreated="UserInfo_ItemCreated">
+                                <Fields>
+                                    <asp:BoundField DataField="UserName" HeaderText="User Name" ReadOnly="True" ControlStyle-CssClass="form-control"></asp:BoundField>
+                                    <asp:BoundField DataField="Email" HeaderText="Email">
+                                        <ControlStyle Width="300px" />
+                                    </asp:BoundField>
+                                    <asp:TemplateField HeaderText="Security Q&A">
+                                        <EditItemTemplate>
+                                            <asp:TextBox ID="TextBox1" CssClass="form-control" runat="server" Text='<%# Bind("PasswordQuestion") + ":" + Bind("Comment")  %>' TextMode="MultiLine" Height="100px" Width="245px" ReadOnly="True"></asp:TextBox>
+                                        </EditItemTemplate>
+                                        <InsertItemTemplate>
+                                            <asp:TextBox ID="TextBox1" CssClass="form-control" runat="server" Text='<%# Bind("PasswordQuestion") + ":" + Bind("Comment") %>' ReadOnly="True"></asp:TextBox>
+                                        </InsertItemTemplate>
+                                        <ItemTemplate>
+                                            <asp:Label ID="Label1" runat="server" Text='<%# Bind("PasswordQuestion") + ":" + Bind("Comment")  %>'></asp:Label>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Client User Administrator" ControlStyle-Width="300px">
+                                        <ItemTemplate>
+                                            <asp:CheckBox runat="server" ID="IsClientAdministrator" />
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Client Publishing Administrator">
+                                        <ItemTemplate>
+                                            <asp:CheckBox runat="server" ID="IsPublishingAdministrator" />
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Active User">
+                                        <ItemTemplate>
+                                            <asp:CheckBox ID="IsApproved" runat="server" Checked='<%# Bind("IsApproved") %>'
+                                                Enabled="false"></asp:CheckBox>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Is Locked Out">
+                                        <ItemTemplate>
+                                            <asp:CheckBox ID="IsLockedOut" runat="server" Checked='<%# Bind("IsLockedOut") %>' Enabled="false"></asp:CheckBox>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Is Online">
+                                        <ItemTemplate>
+                                            <asp:CheckBox ID="IsOnline" runat="server" Checked='<%# Bind("IsOnline") %>' Enabled="false"></asp:CheckBox>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:BoundField DataField="CreationDate" HeaderText="Creation Date" ReadOnly="True" ControlStyle-CssClass="form-control"></asp:BoundField>
+                                    <asp:BoundField DataField="LastActivityDate" HeaderText="Last Activity Date" ReadOnly="True" ControlStyle-CssClass="form-control"></asp:BoundField>
+                                    <asp:BoundField DataField="LastLoginDate" HeaderText="Last Login Date" ReadOnly="True" ControlStyle-CssClass="form-control"></asp:BoundField>
+                                    <asp:BoundField DataField="LastLockoutDate" HeaderText="Last Lockout Date" ReadOnly="True" ControlStyle-CssClass="form-control"></asp:BoundField>
+                                    <asp:BoundField DataField="LastPasswordChangedDate" HeaderText="Last Password Changed Date" ReadOnly="True" ControlStyle-CssClass="form-control"></asp:BoundField>
+                                    <asp:TemplateField ShowHeader="False">
+                                        <EditItemTemplate>
+                                            <asp:Button ID="Button1" CssClass="btn btn-primary" runat="server" CausesValidation="True" CommandName="Update" Text="Save" OnClientClick="return confirm('This will UPDATE the User Info. Click OK to continue.')" />
+                                            <asp:Button ID="Button2" CssClass="btn btn-primary" runat="server" CausesValidation="False" CommandName="Cancel" Text="Cancel" />
+                                            <asp:Button ID="Button4" CssClass="btn btn-primary" runat="server" Text="Unlock" OnClick="UnlockUser" OnClientClick="return confirm('Click OK to unlock this user.')" />
+                                            <asp:Button ID="Button5" CssClass="btn btn-primary" runat="server" Text="Delete" OnClick="DeleteUser" OnClientClick="return confirm('Are you sure? This will delete all information related to this user including the user profile.')" />
+                                        </EditItemTemplate>
+                                        <ItemTemplate>
+                                            <asp:Button ID="Button1" CssClass="btn btn-primary" runat="server" CausesValidation="False" CommandName="Edit" Text="Edit User Info" />
+                                        </ItemTemplate>
+                                        <ControlStyle Font-Size="11px" />
+                                    </asp:TemplateField>
+                                </Fields>
+                            </asp:DetailsView>
+                            <div class="messageWrap2">
+                                <asp:Literal ID="UserUpdateMessage" runat="server"></asp:Literal>
                             </div>
-
                             <br />
                             <asp:ObjectDataSource ID="MemberData" runat="server" DataObjectTypeName="System.Web.Security.MembershipUser" SelectMethod="GetUser" UpdateMethod="UpdateUser" TypeName="System.Web.Security.Membership">
                                 <SelectParameters>
@@ -320,8 +327,8 @@
                             <div class="formSectionEnd">
                             </div>
                             <div class="formButton">
-                                <asp:Button ID="btnUpdateProfile" CssClass="inputButton" runat="server" Text="Update Profile" ValidationGroup="EditProfile" OnClick="btnUpdateProfile_Click" />
-                                <asp:Button ID="btnDeleteProfile" CssClass="inputButton" runat="server" OnClick="btnDeleteProfile_Click" OnClientClick="return confirm('Are Your Sure?')" Text="Delete Profile" />
+                                <asp:Button ID="btnUpdateProfile" CssClass="btn btn-primary" runat="server" Text="Update Profile" ValidationGroup="EditProfile" OnClick="btnUpdateProfile_Click" />
+                                <asp:Button ID="btnDeleteProfile" CssClass="btn btn-primary" runat="server" OnClick="btnDeleteProfile_Click" OnClientClick="return confirm('Are Your Sure?')" Text="Delete Profile" />
                                 &nbsp;
                                 <asp:Label ID="lblProfileMessage" runat="server" />
                             </div>
@@ -329,71 +336,109 @@
                     </ContentTemplate>
                 </cc1:TabPanel>
                 <%--reset password tab--%>
-                <cc1:TabPanel ID="TabPanel4" runat="server" HeaderText="Change Password" CssClass="softRoundContainerStyle softRoundContainer-editor backgroundColor">
+                <cc1:TabPanel ID="TabPanel4" runat="server" HeaderText="Change Password"
+                    Width="80" Height="40" Font-Size="18px" CssClass="aTab1">
                     <HeaderTemplate>
                         Reset Password
                     </HeaderTemplate>
                     <ContentTemplate>
-                        <div class="contentTemplate softRoundContainerStyle softRoundContainer-editor backgroundColor">
-                            <div class="formSectionTitle2">
-                                <span class="headers">RESET PASSWORD</span>
+                        <div id="divPassword" class="roundShadowContainer">
+                            <div class="page-header engravedHeader">
+                                <h2>Reset Password</h2>
                             </div>
-                            <div class="formLabelsText">
-                                <asp:TextBox ID="OldPasswordTextbox" runat="server" TextMode="Password" Width="140px" Visible="False"></asp:TextBox>
-<%--                                <asp:RequiredFieldValidator ID="OldPasswordRequiredValidator" runat="server" ControlToValidate="OldPasswordTextbox" Display="Dynamic" ErrorMessage="Required" ValidationGroup="changepassword"></asp:RequiredFieldValidator>--%>
-                                <span class="currentPW">
-                                    <asp:TextBox Style="background-color: transparent; width: 300px" ID="lblCurrentPassword" runat="server" EnableViewState="False" ReadOnly="True"></asp:TextBox>
-                                </span>
-
-                                <br />
-                                <br />
-                                <div>
-                                    <asp:Button ID="ChangePasswordButtonSecureLink" CssClass="inputButton" runat="server" OnClick="ChangePasswordSecureLink_OnClick" Text="Reset Password&nbsp;(Secure Link Email)" ToolTip="Send the user a secure link password for password reset.  Do no use the Secure Link functionality with 'Manual' password reset." Width="300px" />
+                            <div class="roundShadowContainer" style="visibility: visible">
+                                <table class="table table-hover">
+                                    <tbody>
+                                        <tr>
+                                            <td style="visibility: hidden;">
+                                                <asp:TextBox ID="OldPasswordTextbox" CssClass="form-control" runat="server" TextMode="Password" Width="140px" Visible="False"></asp:TextBox>
+                                            </td>
+                                            <td>
+                                                <div class="space"></div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label for="PasswordTextbox" class="labelweak">Current Password:</label></td>
+                                            <td>
+                                                <asp:Label ID="lblCurrentPassword" runat="server" EnableViewState="False" ReadOnly="True" Width="300px" CssClass="form-control"></asp:Label>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <asp:Button ID="ChangePasswordButtonSecureLink" CssClass="btn btn-primary" runat="server" OnClick="ChangePasswordSecureLink_OnClick" Text="Reset Password&nbsp;(Secure Link Email)" ToolTip="Send the user a secure link password for password reset.  Do no use the Secure Link functionality with 'Manual' password reset."
+                                                    Width="300px" /></td>
+                                            <td>
+                                                <div class="space"></div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label for="PasswordTextbox" class="labelweak">New Password:</label></td>
+                                            <td>
+                                                <asp:TextBox ID="PasswordTextbox" runat="server" TextMode="Password" Width="300px" CssClass="form-control"></asp:TextBox>
+                                                <asp:RequiredFieldValidator ID="PasswordRequiredValidator" runat="server" ControlToValidate="PasswordTextbox" Display="Dynamic" ErrorMessage="Required" ValidationGroup="changepassword"></asp:RequiredFieldValidator>
+                                                <div class="space"></div>
+                                                <asp:Label ID="Suggested" runat="server" EnableViewState="False" Enabled="False" Width="300px" CssClass="form-control"></asp:Label>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label for="PasswordConfirmTextbox" class="labelweak">Confirm New Password:</label></td>
+                                            <td>
+                                                <asp:TextBox ID="PasswordConfirmTextbox" runat="server" TextMode="Password" Width="300px" CssClass="form-control"></asp:TextBox>
+                                                <div class="space"></div>
+                                                <asp:RequiredFieldValidator ID="PasswordConfirmRequiredValidator" runat="server" ControlToValidate="PasswordConfirmTextbox" Display="Dynamic" ErrorMessage="Required" ValidationGroup="changepassword"></asp:RequiredFieldValidator>
+                                                <asp:CompareValidator ID="PasswordConfirmCompareValidator" runat="server" ControlToCompare="PasswordTextBox" ControlToValidate="PasswordConfirmTextbox" Display="Dynamic" ErrorMessage="NEW password must match CONFIRM password." ValidationGroup="changepassword"></asp:CompareValidator>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <asp:Button ID="ChangePasswordButton" CssClass="btn btn-primary" runat="server" OnClick="ChangePassword_OnClick" Text="Manual Password Reset" ValidationGroup="changepassword" Width="300px" ToolTip="Manual password reset will not send an email to the user, this functionality should be used when the user is not recieving a secure link email." />
+                                            </td>
+                                            <td>
+                                                <div class="space"></div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="space"></div>
+                            <div class="roundShadowContainer" style="visibility: hidden">
+                                <div class="page-header engravedHeader">
+                                    <h2>Change Password Q & A</h2>
                                 </div>
-                                <br />
-                            </div>
-                            <div class="formLabelsText" style="visibility: visible">
-                                New Password:<br />
-                                <asp:TextBox ID="PasswordTextbox" runat="server" TextMode="Password" Width="140px"></asp:TextBox>
-                                <asp:RequiredFieldValidator ID="PasswordRequiredValidator" runat="server" ControlToValidate="PasswordTextbox" Display="Dynamic" ErrorMessage="Required" ValidationGroup="changepassword"></asp:RequiredFieldValidator>
-                                <span class="currentPW" style="background-color: transparent;">
-                                    <asp:Label ID="Suggested" Style="background-color: transparent;" runat="server" EnableViewState="False" Enabled="False" BackColor="transparent"></asp:Label>
-                                </span>
-
-                            </div>
-                            <div class="formLabelsText" style="visibility: visible">
-                                Confirm New Password:<br />
-                                <asp:TextBox ID="PasswordConfirmTextbox" runat="server" TextMode="Password" Width="140px"></asp:TextBox>
-                                <asp:RequiredFieldValidator ID="PasswordConfirmRequiredValidator" runat="server" ControlToValidate="PasswordConfirmTextbox" Display="Dynamic" ErrorMessage="Required" ValidationGroup="changepassword"></asp:RequiredFieldValidator>
-                                <asp:CompareValidator ID="PasswordConfirmCompareValidator" runat="server" ControlToCompare="PasswordTextBox" ControlToValidate="PasswordConfirmTextbox" Display="Dynamic" ErrorMessage="NEW password must match CONFIRM password." ValidationGroup="changepassword"></asp:CompareValidator>
-                            </div>
-                            <div>
-                                <asp:Button ID="ChangePasswordButton" CssClass="inputButton" runat="server" OnClick="ChangePassword_OnClick" Text="Manual Password Reset" ValidationGroup="changepassword" Width="300px" ToolTip="Manual password reset will not send an email to the user, this functionality should be used when the user is not recieving a secure link email." />
-                            </div>
-                            <div class="formSectionEnd"></div>
-                            <div class="formSectionTitle2" style="visibility: hidden">
-                                CHANGE PASSWORD Q AND A
-                            </div>
-                            <div class="formLabelsText" style="visibility: hidden">
-                                Password:<br />
-                                <asp:TextBox ID="qaCurrentPassword" runat="server" TextMode="Password" Width="140px"></asp:TextBox>
-                                <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="qaCurrentPassword" ErrorMessage="Required" ValidationGroup="changePasswordQA"></asp:RequiredFieldValidator>
-                            </div>
-                            <div class="formLabelsText" style="visibility: hidden">
-                                New Password Security Question:<br />
-                                <asp:TextBox ID="qaNewQuestion" runat="server" MaxLength="256" Width="140px"></asp:TextBox>
-                                <asp:RequiredFieldValidator ID="QuestionRequiredValidator" runat="server" ControlToValidate="qaNewQuestion" ErrorMessage="Required" ValidationGroup="changePasswordQA"></asp:RequiredFieldValidator>
-                            </div>
-                            <div class="formLabelsText" style="visibility: hidden">
-                                New Passsword Security Answer:<br />
-                                <asp:TextBox ID="qaNewAnswer" runat="server" MaxLength="128" Width="140px"></asp:TextBox>
-                                <asp:RequiredFieldValidator ID="AnswerRequiredValidator" runat="server" ControlToValidate="qaNewAnswer" ErrorMessage="Required" ValidationGroup="changePasswordQA"></asp:RequiredFieldValidator>
-                            </div>
-                            <div style="visibility: hidden">
-                                <asp:Button ID="ChangePasswordQuestionButton" CssClass="inputButton" runat="server" OnClick="ChangePasswordQuestion_OnClick" Text="Change Q. and A." ValidationGroup="changePasswordQA" />
+                                <table class="table table-hover">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <label for="PasswordTextbox" class="labelweak">Password:</label></td>
+                                            <td>
+                                                <asp:TextBox ID="qaCurrentPassword" runat="server" TextMode="Password" Width="300px" CssClass="form-control"></asp:TextBox>
+                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="qaCurrentPassword" ErrorMessage="Required" ValidationGroup="changePasswordQA"></asp:RequiredFieldValidator>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label for="PasswordConfirmTextbox" class="labelweak">New Password Security Question:</label></td>
+                                            <td>
+                                                <asp:TextBox ID="qaNewQuestion" runat="server" MaxLength="256" Width="300px" CssClass="form-control"></asp:TextBox>
+                                                <asp:RequiredFieldValidator ID="QuestionRequiredValidator" runat="server" ControlToValidate="qaNewQuestion" ErrorMessage="Required" ValidationGroup="changePasswordQA"></asp:RequiredFieldValidator>
+                                            </td>
+                                            <tr>
+                                                <td>
+                                                    <label for="PasswordConfirmTextbox" class="labelweak">New Passsword Security Answer:</label></td>
+                                                <td>
+                                                    <asp:TextBox ID="qaNewAnswer" runat="server" MaxLength="128" Width="300px" CssClass="form-control"></asp:TextBox>
+                                                    <asp:RequiredFieldValidator ID="AnswerRequiredValidator" runat="server" ControlToValidate="qaNewAnswer" ErrorMessage="Required" ValidationGroup="changePasswordQA"></asp:RequiredFieldValidator>
+                                                </td>
+                                            </tr>
+                                    </tbody>
+                                </table>
+                                <asp:Button ID="ChangePasswordQuestionButton" CssClass="btn btn-primary" runat="server" OnClick="ChangePasswordQuestion_OnClick" Text="Change Q. and A." ValidationGroup="changePasswordQA" />
                             </div>
                             <div>
-                                <asp:Label ID="Msg" runat="server" ForeColor="Maroon"></asp:Label>
+                                <asp:Label ID="Msg" runat="server" ForeColor="Maroon" Font-Bold="true" Font-Size="14px"></asp:Label>
                             </div>
                         </div>
                     </ContentTemplate>
@@ -403,6 +448,7 @@
             <%-- ajax update panel end --%>
         </ContentTemplate>
     </asp:UpdatePanel>
+
 </div>
 
 <%-- jquery js --%>

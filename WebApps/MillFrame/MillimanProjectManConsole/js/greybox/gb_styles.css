@@ -74,9 +74,11 @@
     text-align: right;
 }
 
-.GB_header .close img {
-    z-index: 500;
+  .GB_header .close img {
+    z-index: 1500;
     cursor: pointer;
+    width:35px;
+    height:38px;
 }
 
 .GB_header .middle {
@@ -113,36 +115,48 @@
     border-top: none;
 }
 
-.GB_Window .header {
+/*.GB_Window .header {
     border-bottom: 1px solid #000;
     border-top: 0px solid #000;
     border-left: 1px solid #000;
     border-right: 1px solid #000;
     margin: 0;
-
     height: 22px;
     font-size: 12px;
     padding: 3px 0;
     color: #fff;
+}*/
+/*.GB_Window .header{border-bottom: 1px solid #000;border-top: 0px solid #000;border-left: 1px solid #000;border-right: 1px solid #000;margin: 0;height: 22px;font-size: 12px;padding: 3px 0;color: #fff;}*/
+.GB_Window .header {
+    border: 1px solid #000;
+    margin: 0;
+    height: 15px;
+    font-size: 14px;
+    padding: 3px 0;
+    background-color:#000;
 }
-
-.GB_Window .caption {
+/*.GB_Window .caption {
     font-size: 12px;
     text-align: left;
     font-weight: normal;
     white-space: nowrap;
     padding-right: 20px;
     padding-left: 15px;
-}
+
+}*/
+.GB_Window .caption{color: #eee;font-size: 14px;text-align: left;font-weight: normal;white-space: nowrap;
+                    padding-right: 20px;padding-left: 15px;}
 
 .GB_Window .close { text-align: right; }
 .GB_Window .close span { 
     font-size: 12px;
     cursor: pointer; 
 }
-.GB_Window .close img {
+  .GB_header .close img {
+    z-index: 1500;
     cursor: pointer;
-    padding: 0 3px 0 0;
+    width:35px;
+    height:38px;
 }
 
 .GB_Window .on { border-bottom: 1px solid #333; }
