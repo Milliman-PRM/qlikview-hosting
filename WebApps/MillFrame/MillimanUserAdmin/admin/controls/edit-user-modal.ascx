@@ -3,8 +3,8 @@
 <%@ Register Src="~/js/js/jquery.ascx" TagName="jquery" TagPrefix="uc4" %>
 <%@ Register Src="~/admin/controls/UserRolesSelector.ascx" TagName="userRoleSelector" TagPrefix="urs" %>
 
-<link id="lnkBootstrapcss" runat="server" rel="stylesheet" type="text/css" href="../../Content/Style/bootstrap.css" />
-<link id="Link1" runat="server" rel="stylesheet" type="text/css" href="../../Content/Style/MillframeStyle.css" />
+<link id="lnkBootstrapcss" runat="server" rel="stylesheet" type="text/css" href="../Content/Style/bootstrap.css" />
+<link id="Link1" runat="server" rel="stylesheet" type="text/css"  href="../Content/Style/MillframeStyle.css" />
 
 <style type="text/css">
     .layOut {
