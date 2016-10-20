@@ -32,7 +32,7 @@
         </asp:TemplateField>
         <asp:TemplateField HeaderText="USER NAME" SortExpression="UserName">
             <ItemTemplate>
-                <span class="gvShortcut"><a href='edit_user_modal.aspx?username=<%# Eval("UserName") %>' rel="gb_page_center[750, 840]" title="Edit User Details">
+                <span class="gvShortcut"><a href='edit_user_modal.aspx?username=<%# Eval("UserName") %>' rel="gb_page_center[750, 905]" title="Edit User Details">
                     <%# Eval("UserName") %></a></span>
             </ItemTemplate>
         </asp:TemplateField>

@@ -4,7 +4,7 @@
 <%@ Register Src="~/admin/controls/UserRolesSelector.ascx" TagName="userRoleSelector" TagPrefix="urs" %>
 
 <link id="lnkBootstrapcss" runat="server" rel="stylesheet" type="text/css" href="../Content/Style/bootstrap.css" />
-<link id="Link1" runat="server" rel="stylesheet" type="text/css"  href="../Content/Style/MillframeStyle.css" />
+<link id="Link1" runat="server" rel="stylesheet" type="text/css" href="../Content/Style/MillframeStyle.css" />
 
 <style type="text/css">
     .layOut {
@@ -15,10 +15,23 @@
         border: 1px solid #eee;
     }
     /*bootstra specifc*/
-    td{padding:4px!important}
-    .form-control{height:30px}
-    .table{margin-bottom:5px}
-    .page-header{padding-bottom:10px;margin:5px 0 10px;border-bottom:1px solid #eee}
+    td {
+        padding: 4px !important;
+    }
+
+    .form-control {
+        height: 30px;
+    }
+
+    .table {
+        margin-bottom: 5px;
+    }
+
+    .page-header {
+        padding-bottom: 10px;
+        margin: 5px 0 10px;
+        border-bottom: 1px solid #eee;
+    }
 </style>
 
 <div id="containerWrap">
@@ -27,8 +40,7 @@
         <ContentTemplate>
             <%-- ajax tab container start --%>
             <cc1:TabContainer ID="tcntUserInfo" runat="server" ActiveTabIndex="3" Width="100%" Font-Size="10px" CssClass="aTab1">
-                <cc1:TabPanel ID="TabPanel2" runat="server" HeaderText="General User Info"
-                    Width="80" Height="40" Font-Size="18px">
+                <cc1:TabPanel ID="TabPanel2" runat="server" HeaderText="General User Info">
                     <ContentTemplate>
                         <div class="roundShadowContainer">
                             <urs:userRoleSelector ID="ctrlUserRoles" runat="server" />
@@ -341,8 +353,7 @@
                     </ContentTemplate>
                 </cc1:TabPanel>
                 <%--reset password tab--%>
-                <cc1:TabPanel ID="TabPanel4" runat="server" HeaderText="Change Password"
-                    Width="80" Height="40" Font-Size="18px" CssClass="aTab1">
+                <cc1:TabPanel ID="TabPanel4" runat="server" HeaderText="Change Password" Font-Size="18px" CssClass="aTab1">
                     <HeaderTemplate>
                         Reset Password
                     </HeaderTemplate>
@@ -352,63 +363,61 @@
                                 <h2>Reset Password</h2>
                             </div>
                             <div class="roundShadowContainer" style="visibility: visible">
-                                <table class="table table-hover">
-                                    <tbody>
-                                        <tr>
-                                            <td style="visibility: hidden;">
-                                                <asp:TextBox ID="OldPasswordTextbox" CssClass="form-control" runat="server" TextMode="Password" Width="140px" Visible="False"></asp:TextBox>
-                                            </td>
-                                            <td>
-                                                <div class="space"></div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <label for="PasswordTextbox" class="labelweak">Current Password:</label></td>
-                                            <td>
-                                                <asp:Label ID="lblCurrentPassword" runat="server" EnableViewState="False" ReadOnly="True" Width="300px" CssClass="form-control"></asp:Label>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <asp:Button ID="ChangePasswordButtonSecureLink" CssClass="btn btn-primary" runat="server" OnClick="ChangePasswordSecureLink_OnClick" Text="Reset Password&nbsp;(Secure Link Email)" ToolTip="Send the user a secure link password for password reset.  Do no use the Secure Link functionality with 'Manual' password reset."
-                                                    Width="300px" /></td>
-                                            <td>
-                                                <div class="space"></div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <label for="PasswordTextbox" class="labelweak">New Password:</label></td>
-                                            <td>
-                                                <asp:TextBox ID="PasswordTextbox" runat="server" TextMode="Password" Width="300px" CssClass="form-control"></asp:TextBox>
-                                                <asp:RequiredFieldValidator ID="PasswordRequiredValidator" runat="server" ControlToValidate="PasswordTextbox" Display="Dynamic" ErrorMessage="Required" ValidationGroup="changepassword"></asp:RequiredFieldValidator>
-                                                <div class="space"></div>
-                                                <asp:Label ID="Suggested" runat="server" EnableViewState="False" Enabled="False" Width="300px" CssClass="form-control"></asp:Label>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <label for="PasswordConfirmTextbox" class="labelweak">Confirm New Password:</label></td>
-                                            <td>
-                                                <asp:TextBox ID="PasswordConfirmTextbox" runat="server" TextMode="Password" Width="300px" CssClass="form-control"></asp:TextBox>
-                                                <div class="space"></div>
-                                                <asp:RequiredFieldValidator ID="PasswordConfirmRequiredValidator" runat="server" ControlToValidate="PasswordConfirmTextbox" Display="Dynamic" ErrorMessage="Required" ValidationGroup="changepassword"></asp:RequiredFieldValidator>
-                                                <asp:CompareValidator ID="PasswordConfirmCompareValidator" runat="server" ControlToCompare="PasswordTextBox" ControlToValidate="PasswordConfirmTextbox" Display="Dynamic" ErrorMessage="NEW password must match CONFIRM password." ValidationGroup="changepassword"></asp:CompareValidator>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <asp:Button ID="ChangePasswordButton" CssClass="btn btn-primary" runat="server" OnClick="ChangePassword_OnClick" Text="Manual Password Reset" ValidationGroup="changepassword" Width="300px" ToolTip="Manual password reset will not send an email to the user, this functionality should be used when the user is not recieving a secure link email." />
-                                            </td>
-                                            <td>
-                                                <div class="space"></div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <div class="row">&nbsp;</div>
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <asp:TextBox ID="OldPasswordTextbox" CssClass="form-control" runat="server" TextMode="Password" Width="140px" Visible="False"></asp:TextBox>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <label for="PasswordTextbox" class="labelweak">Current Password:</label>
+                                        <br />
+                                        <asp:Label ID="lblCurrentPassword" runat="server" EnableViewState="False" ReadOnly="True" CssClass="form-control" Width="300px"></asp:Label>
+                                    </div>
+                                </div>
+                                <div class="row">&nbsp;</div>
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <asp:Button ID="ChangePasswordButtonSecureLink" CssClass="btn btn-primary" runat="server" OnClick="ChangePasswordSecureLink_OnClick" Text="Reset Password&nbsp;(Secure Link Email)" ToolTip="Send the user a secure link password for password reset.  Do no use the Secure Link functionality with 'Manual' password reset."
+                                            Width="300px" />
+                                    </div>
+                                </div>
                             </div>
-                            <div class="space"></div>
+                            <div class="row">&nbsp;</div>
+                            <div class="roundShadowContainer" style="visibility: visible; height: 270px;">
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <label for="PasswordTextbox" class="labelweak">New Password:</label>
+                                        <br />
+                                        <asp:TextBox ID="PasswordTextbox" runat="server" TextMode="Password" Width="300px" CssClass="form-control"></asp:TextBox>
+                                        <asp:RequiredFieldValidator ID="PasswordRequiredValidator" runat="server" ControlToValidate="PasswordTextbox" Display="Dynamic" ErrorMessage="Required" ValidationGroup="changepassword"></asp:RequiredFieldValidator>
+                                    </div>
+                                    <div class="row">&nbsp;</div>
+                                    <div class="col-sm-4">
+                                        <asp:Label ID="Suggested" runat="server" EnableViewState="False" Enabled="False" Width="300px" CssClass="form-control"></asp:Label>
+                                    </div>
+                                </div>
+                                <div class="row">&nbsp;</div>
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <label for="PasswordConfirmTextbox" class="labelweak">Confirm New Password:</label>
+                                        <br />
+                                        <asp:TextBox ID="PasswordConfirmTextbox" runat="server" TextMode="Password" Width="300px" CssClass="form-control"></asp:TextBox>
+                                        <asp:RequiredFieldValidator ID="PasswordConfirmRequiredValidator" runat="server" ControlToValidate="PasswordConfirmTextbox" Display="Dynamic" ErrorMessage="Required" ValidationGroup="changepassword"></asp:RequiredFieldValidator>
+                                        <br />
+                                        <asp:CompareValidator ID="PasswordConfirmCompareValidator" runat="server" ControlToCompare="PasswordTextBox" ControlToValidate="PasswordConfirmTextbox" Display="Dynamic" ErrorMessage="NEW password must match CONFIRM password." ValidationGroup="changepassword"></asp:CompareValidator>
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <asp:Button ID="ChangePasswordButton" CssClass="btn btn-primary" runat="server" OnClick="ChangePassword_OnClick" Text="Manual Password Reset" ValidationGroup="changepassword" Width="300px" ToolTip="Manual password reset will not send an email to the user, this functionality should be used when the user is not recieving a secure link email." />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">&nbsp;</div>
+                            <div>
+                                <asp:Label ID="Msg" runat="server" ForeColor="Maroon" Font-Bold="true" Font-Size="14px"></asp:Label>
+                            </div>
                             <div class="roundShadowContainer" style="visibility: hidden">
                                 <div class="page-header engravedHeader">
                                     <h2>Change Password Q & A</h2>
@@ -441,9 +450,6 @@
                                     </tbody>
                                 </table>
                                 <asp:Button ID="ChangePasswordQuestionButton" CssClass="btn btn-primary" runat="server" OnClick="ChangePasswordQuestion_OnClick" Text="Change Q. and A." ValidationGroup="changePasswordQA" />
-                            </div>
-                            <div>
-                                <asp:Label ID="Msg" runat="server" ForeColor="Maroon" Font-Bold="true" Font-Size="14px"></asp:Label>
                             </div>
                         </div>
                     </ContentTemplate>
