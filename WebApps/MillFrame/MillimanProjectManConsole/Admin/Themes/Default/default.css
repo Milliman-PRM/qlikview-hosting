@@ -270,7 +270,7 @@ ul.AspNet-Menu li:hover ul, ul.AspNet-Menu li li:hover ul, ul.AspNet-Menu li li 
 .aTab1 .ajax__tab_hover .ajax__tab_inner {color:#fff;cursor:pointer;background:url(images/aspnet-tabs/tab-2.png) no-repeat right -40px;}
 .aTab1 .ajax__tab_active .ajax__tab_outer {background:url(images/aspnet-tabs/tab-2.png) no-repeat 0pt -40px;border-bottom-color:#4b4d4f;}
 .aTab1 .ajax__tab_active .ajax__tab_inner {background:url(images/aspnet-tabs/tab-2.png) no-repeat right -40px;color:#fff;border-color:#4b4d4f}
-.aTab1 .ajax__tab_body {font-size:10px;padding:0px 0px 0px 0px;background-color:#ccc;border:solid 1px #4b4d4f;border-top-width:0;}
+.aTab1 .ajax__tab_body {font-size:11px;padding:0px 0px 0px 0px;background-color:#ccc;border:solid 1px #4b4d4f;border-top-width:0;}
 .contentTemplate{font-size:11px;padding:20px 10px 20px 10px;color:#000;background-image:url(images/aspnet-tabs/bg.jpg); background-repeat: repeat-x;}
 
 .aTab1  .ajax__tab_header .ajax__tab_outer .ajax__tab_xp .ajax__tab_tab {height:21px!important;width:152px;padding:4px;margin:0px;}
@@ -303,13 +303,12 @@ ul.AspNet-Menu li:hover ul, ul.AspNet-Menu li li:hover ul, ul.AspNet-Menu li li 
 .GB_header table{margin: 0;width: 100%;border-collapse: collapse;}
 .GB_header .caption{text-align: left;color: #eee;white-space: nowrap;font-size: 20px;}
 .GB_header .close {text-align: right;}
-  .GB_header .close img {
+.GB_header .close img {
     z-index: 1500;
     cursor: pointer;
     opacity:1.5!important;
     padding: 4px; width: 39px!important; height: 36px!important;
 }
-
 .GB_header .middle{white-space: nowrap;text-align: center;}
 #GB_middle{color: #eee;}
 #GB_middle img{cursor: pointer;vertical-align: middle;}
@@ -324,10 +323,8 @@ ul.AspNet-Menu li:hover ul, ul.AspNet-Menu li li:hover ul, ul.AspNet-Menu li li 
     font-size: 14px;
     padding: 3px 0;
     background-color:#000;
-}.GB_Window .caption{color: #eee;font-size: 14px;text-align: left;font-weight: normal;white-space: nowrap;
-                    padding-right: 20px;padding-left: 15px;}
+}.GB_Window .caption{color: #eee;font-size: 14px;text-align: left;font-weight: normal;white-space: nowrap;padding-right: 20px;padding-left: 15px;}
 .GB_Window .close{text-align: right; }
 .GB_Window .close span{font-size: 12px;cursor: pointer;}
-
 .GB_Window .on{border-bottom: 1px solid #333;}
 .GB_Window .click{border-bottom: 1px solid white;}

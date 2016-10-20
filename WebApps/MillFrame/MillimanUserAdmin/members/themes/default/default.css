@@ -28,7 +28,7 @@ a:focus{outline: none;}
 .aTab1 .ajax__tab_hover .ajax__tab_inner {color:#fff;cursor:pointer;background:url(images/aspnet-tabs/tab-2.png) no-repeat right -40px;}
 .aTab1 .ajax__tab_active .ajax__tab_outer {background:url(images/aspnet-tabs/tab-2.png) no-repeat 0pt -40px;border-bottom-color:#4b4d4f;}
 .aTab1 .ajax__tab_active .ajax__tab_inner {background:url(images/aspnet-tabs/tab-2.png) no-repeat right -40px;color:#fff;border-color:#4b4d4f}
-.aTab1 .ajax__tab_body {font-size:10px;padding:0px 0px 0px 0px;background-color:#ccc;border:solid 1px #4b4d4f;border-top-width:0;}
+.aTab1 .ajax__tab_body {font-size:11px;padding:0px 0px 0px 0px;background-color:#ccc;border:solid 1px #4b4d4f;border-top-width:0;}
 
 .contentTemplate{font-size:11px;padding:20px 10px 20px 10px;}
 
