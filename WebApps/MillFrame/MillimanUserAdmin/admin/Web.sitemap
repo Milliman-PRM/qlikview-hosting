@@ -18,16 +18,16 @@
 
         <siteMapNode url="~/Admin/default.aspx" title="User Accounts">
           <siteMapNode url="~/Admin/users-a-z.aspx" title="Users A-Z"/>
-          <siteMapNode url="~/Admin/bulk-add-user.aspx" title="Add New Users"/>
+          <siteMapNode url="~/Admin/bulk-add-user.aspx" title="Add New"/>
           <siteMapNode url="~/Admin/users-by-role.aspx" title="By Group"/>
           <siteMapNode url="~/Admin/dashboard.aspx" title="Dashboard"/>
-          <siteMapNode url="~/Admin/email-broadcast.aspx" title="E-mail Broadcast"/>
-          <siteMapNode url="~/Admin/locked-users.aspx" title="Locked Out"/>
+          <siteMapNode url="~/Admin/email-broadcast.aspx" title="E-mail"/>
+          <siteMapNode url="~/Admin/locked-users.aspx" title="Locked"/>
           <siteMapNode url="~/Admin/online-users.aspx" title="Logged In"/>
           <siteMapNode url="~/Admin/access-reports.aspx" title="Reports"/>
           <siteMapNode url="~/Admin/roles.aspx" title="Groups"/>
-          <siteMapNode url="~/Admin/access-rules.aspx" title="Access Rules"/>
-          <siteMapNode url="~/Admin/search-user.aspx" title="Search Users"/>
+          <siteMapNode url="~/Admin/access-rules.aspx" title="Rules"/>
+          <siteMapNode url="~/Admin/search-user.aspx" title="Search"/>
           <siteMapNode url="~/Admin/unapproved-users.aspx" title="Suspended"/>
           <siteMapNode url="~/Admin/supergroups.aspx" title="Super Groups"/>
         </siteMapNode>
