@@ -2,7 +2,7 @@
 
 <%@ Register Src="controls/email-broadcast.ascx" TagName="email" TagPrefix="uc1" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
-        <style type="text/css">
+    <style type="text/css">
         #GB_window .header .close {
             opacity: 1.5 !important;
             padding: 4px;
@@ -27,5 +27,5 @@
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
-  <uc1:email ID="email1" runat="server" />
+    <uc1:email ID="email1" runat="server" />
 </asp:Content>
