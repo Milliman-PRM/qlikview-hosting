@@ -111,7 +111,7 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                 dbService.Dispose();
                 ExceptionLogger.LogError(ex, "Exception Raised in Method ProcessLogs. Record Counter:"
                         + counter +
-                        " -- Record Data[ UserAccessDatetime:" + logEntity.UserAccessDatetime + ", Document:" + logEntity.Document + ", SessionStartTime:" + logEntity.SessionStartTime + +", SessionDuration:" + logEntity.SessionDuration + " ]"
+                        " -- Record Data[ UserAccessDatetime:" + logEntity.UserAccessDatetime + ", Document:" + logEntity.Document + ", SessionStartTime:" + logEntity.SessionStartTime + ", SessionDuration:" + logEntity.SessionDuration + " ]"
                         , "Session log Controller Exception");
             }
             return blnSucessful;
