@@ -24,9 +24,9 @@ namespace FileProcessor
         /// <param name="args"></param>
         public void ProcessLogFileData(string args)
         {
+            var processingFile = "";
             try
             {
-
                 if (args.Length > 0)
                 {
                     var filter = "Audit_INDY-PRM";
@@ -43,6 +43,7 @@ namespace FileProcessor
                         if (args.IndexOf("productionlogs", StringComparison.Ordinal) > -1)
                         {
                             var filename = Path.GetFileName(args);
+                            processingFile = filename;
                             ProcessLogFileMove(efilePath, sourceDirectory, destinationInDirectory, filename);
                         }
                         else
@@ -62,7 +63,7 @@ namespace FileProcessor
             }
             catch (Exception ex)
             {
-                 ExceptionLogger.LogError(ex, "Exception Raised in ProcessLogFileData.", "ProcessQVAuditLogs Exceptions");
+                 ExceptionLogger.LogError(ex, "Exception Raised in ProcessLogFileData. Processing file: " + processingFile, "ProcessQVAuditLogs Exceptions");
             }
         }
 
