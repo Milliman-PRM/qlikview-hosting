@@ -26,10 +26,10 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
         public bool ProcessLogs(List<ProxySessionLog> listProxyLogs)
         {            
             var blnSucessful = false;
-
+            var counter = 0;
+            var logEntity = new SessionLog();
             try
-            {
-                var logEntity = new SessionLog();
+            {               
                 foreach (var entry in listProxyLogs)
                 {                    
                     logEntity.UserAccessDatetime = string.IsNullOrEmpty(entry.UserAccessDatetime) ? (DateTime?)null : DateTime.Parse(entry.UserAccessDatetime);
@@ -95,6 +95,8 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
                     }
 
                     #endregion
+
+                    counter++;
                     //initiate service
                     dbService = new MillimanService();
                     //5. Insert record in the table   
@@ -107,7 +109,10 @@ namespace SystemReporting.Controller.BusinessLogic.Controller
             catch (Exception ex)
             {
                 dbService.Dispose();
-                ExceptionLogger.LogError(ex, "Exception Raised in Method ProcessLogs.", "Session log Controller Exception");
+                ExceptionLogger.LogError(ex, "Exception Raised in Method ProcessLogs. Record Counter:"
+                        + counter +
+                        " -- Record Data[ UserAccessDatetime:" + logEntity.UserAccessDatetime + ", Document:" + logEntity.Document + ", SessionStartTime:" + logEntity.SessionStartTime + ", SessionDuration:" + logEntity.SessionDuration + " ]"
+                        , "Session log Controller Exception");
             }
             return blnSucessful;
         }
