@@ -118,7 +118,7 @@ namespace ReportingCommon
 
             try
             {
-                string BrowserVersion = "Unknown";
+                string BrowserVersion = "";
 
                 if (UserAgent.ToUpper().Contains("MSIE"))
                 {
@@ -167,17 +167,20 @@ namespace ReportingCommon
                     }
                     BrowserType = "Safari " + BrowserVersion;
                 }
-                else if (UserAgent.ToUpper().Contains("ANDROID") && !UserAgent.ToUpper().Contains("CHROME"))
+                else if (UserAgent.ToUpper().Contains("ANDROID") && !UserAgent.ToUpper().Contains("CHROME")   )
                 {
-                    int BrowserIndex = Array.IndexOf(tokens, tokens.First(a => a.StartsWith("Version")));
-
-                    string[] AndroidTokens = tokens[BrowserIndex].Split('/');
-                    if(AndroidTokens.Length == 2 &&
-                        !string.IsNullOrWhiteSpace(AndroidTokens[1]) &&
-                        Char.IsDigit(AndroidTokens[1][0]))
+                    if (UserAgent.Contains("Version"))
                     {
-                        BrowserVersion = AndroidTokens[1];
-                    }
+                        int BrowserIndex = Array.IndexOf(tokens, tokens.First(a => a.StartsWith("Version")));
+
+                        string[] AndroidTokens = tokens[BrowserIndex].Split('/');
+                        if (AndroidTokens.Length == 2 &&
+                            !string.IsNullOrWhiteSpace(AndroidTokens[1]) &&
+                            Char.IsDigit(AndroidTokens[1][0]))
+                        {
+                            BrowserVersion = AndroidTokens[1];
+                        }
+                    }                    
 
                     BrowserType = "Android " + BrowserVersion;
                 }
