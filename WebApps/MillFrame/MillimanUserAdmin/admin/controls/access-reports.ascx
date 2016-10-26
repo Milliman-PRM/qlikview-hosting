@@ -87,7 +87,7 @@
     <div class="row">
         <asp:UpdatePanel ID="updPanlRecords" runat="server" ChildrenAsTriggers="false" UpdateMode="Conditional">
             <ContentTemplate>
-                <div id="divTotalRecs">
+                <div id="divTotalRecs" style="width:200px">
                     <span>Total Records Found:</span> <b>
                         <asp:Label ID="lblTotalRecords" runat="server" CssClass="count"></asp:Label></b>
                 </div>

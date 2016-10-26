@@ -163,12 +163,12 @@
                                         <fieldset class="fieldSetWithBorder">
                                             <legend>Password Criteria</legend>
                                             <div id="divcriteria" style="margin: -15px 0 0 1px;">
-                                                <ul>
-                                                    <li id="capital" class="invalidPassword">At least <strong>one capital letter</strong></li>
-                                                    <li id="lowercase" class="invalidPassword">At least <strong>one lowercase letter</strong></li>
-                                                    <li id="number" class="invalidPassword">At least <strong>one number</strong></li>
-                                                    <li id="special" class="invalidPassword">Must contain a <strong>special character</strong></li>
-                                                    <li id="length" class="invalidPassword">Be at least <strong>8 characters</strong></li>
+                                                <ul class="orderedListTypePasswordCriteria">
+                                                    <li id="capital" class="invalidPassword orderedListTypePasswordCriteria">At least <strong>one capital letter</strong></li>
+                                                    <li id="lowercase" class="invalidPassword orderedListTypePasswordCriteria">At least <strong>one lowercase letter</strong></li>
+                                                    <li id="number" class="invalidPassword orderedListTypePasswordCriteria">At least <strong>one number</strong></li>
+                                                    <li id="special" class="invalidPassword orderedListTypePasswordCriteria">Must contain a <strong>special character</strong></li>
+                                                    <li id="length" class="invalidPassword orderedListTypePasswordCriteria">Be at least <strong>8 characters</strong></li>
                                                 </ul>
                                             </div>
                                         </fieldset>

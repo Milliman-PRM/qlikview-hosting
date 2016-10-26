@@ -69,19 +69,8 @@
         margin: 0 auto;
         width: 100px;
     }
-    #browVersion {
-        width: 600px;
-        border: 1px dashed gray;
-    }
 </style>
 
-
-<%-- gridview banner --%>
-<%--<div class="gvBanner">
-    <span class="gvBannerUsers">
-        <asp:Image ID="Image1" runat="server" ImageAlign="AbsMiddle" ImageUrl="~/images/decoy-icon-36px.png" /></span> 
-    Add Users With Group(s)
-</div>--%>
 
 <telerik:RadAjaxManager ID="RadAjaxManager2" runat="server">
     <AjaxSettings>
@@ -98,7 +87,7 @@
 
 <div class="containerWrap center-block outerWrap">
     <div class="page-header engravedHeader">
-        <h2>Add Users With Group(s)</h2>
+        <h2>Add Users with Group(s)</h2>
     </div>
      <div class="space"></div>
     <div id="divOuter" class="roundShadowContainer">

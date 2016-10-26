@@ -10,7 +10,6 @@
 .roundShadowContainer h3{margin:0;padding:10px 0;font-size:16px;text-align:center;background:#ebebec;border-bottom:1px solid #dde0e7;box-shadow:0 -1px 0 #fff inset;border-radius:5px 5px 0 0;text-shadow:1px 1px 0 #fff;font-weight:700}
 /*.roundShadowContainer ul,li{margin:0;padding:0;list-style-type:none}*/
 .roundShadowContainer input{border:1px solid #d5d9da;border-radius:5px;box-shadow:0 0 5px #e8e9eb inset;outline:0}
-.roundShadowContainer{width:435px}
 .fieldSetWithBorder{border:2px dashed #eee;margin:2px 2px 3px 3px;overflow:hidden;padding:2px;width:217px}
 .fieldSetWithBorder legend{font-size:14px;line-height:inherit}
 .first-of-type{margin:4px 3px 4px -2px}
@@ -20,7 +19,8 @@
 #divPasswordCriteriaContainer{font-size:.8em;display:none;padding:6px;position:absolute;width:236px;z-index:2000}
 #divPasswordCriteriaContainer:before{content:"\25B2";position:absolute;top:-10px;left:45%;font-size:14px;line-height:12px;color:#ddd;display:block}
 #divPasswordCriteriaContainer h1,h2,h3,h4{margin:0 0 10px;padding:0;font-weight:400}
-#divPasswordCriteriaContainer ul,li{list-style-type:circle;margin:4px 3px 4px 4px;padding:2px 1px 3px 9px;width:203px}
+/*#divPasswordCriteriaContainer ul,li{list-style-type:circle;margin:4px 3px 4px 4px;padding:2px 1px 3px 9px;width:203px}*/
+.orderedListTypePasswordCriteria{list-style-type:circle;margin:4px 3px 4px 4px;padding:2px 1px 3px 9px;width:203px}
 .invalidPassword,.validPassword{padding-left:6px;line-height:12px}
 .invalidPassword{color:#ec3f41}
 .validPassword{color:#3a7d34}
@@ -44,13 +44,24 @@ td{padding:4px!important}
 .outerWrap{margin-top:10px;}
 .left-div{display:inline-block;max-width:435px;text-align:left;padding:3px;margin:3px;vertical-align:top}
 .right-div{display:inline-block;max-width:435px;text-align:left;padding:3px;margin:3px}
+.left{float: left;margin: 5px; text-align: left;}
+.right{float:right;margin:5px;text-align: left;}
+/*This code generates a gray button that will be highlighted when user hover over it:Example used in Parts Management(transportation)*/
+.buttonGray{background:#EEE none repeat scroll 0 0;border:1px solid #DDD;color:#373737;cursor:pointer;font-weight:700;outline-color:-moz-use-text-color;outline-style:none;outline-width:medium;text-decoration:none;text-shadow:0 1px 1px #FFF;width:100px;height:25px;font-size:12px;-moz-background-clip:border;-moz-background-inline-policy:continuous;-moz-background-origin:padding;-moz-border-radius-bottomleft:2px;-moz-border-radius-bottomright:2px;-moz-border-radius-topleft:2px;-moz-border-radius-topright:2px}
+.buttonGray:hover{border:solid 1px #CCC;background:#CCC none repeat scroll 0 0}
+/* Text Box  */     
+.standardTextBox{-moz-box-shadow:5px 5px 5px #ccc;-webkit-box-shadow:5px 5px 5px #ccc;-moz-border-radius:3px;-webkit-border-radius:3px;border:1px solid #CCC;border-radius:3px 3px 3px 3px;box-shadow:1px 1px 1px 1px #CCC;padding:3px;text-align:left;background-color:#F0F8FF;color:gray}
+/*Firefox, Safari/Chrome, Opera and IE9 users should see a grey fading shadow under this box.*/
+.standardTextBox:active{background:#eee;-moz-box-shadow:inset 0 0 2px #5F5F5F;-webkit-box-shadow:inset 0 0 2px #5F5F5F;box-shadow:inset 0 0 2px #5F5F5F}
+.standardTextBox:hover{border:solid 1px #999;-moz-box-shadow:0 0 10px #999;-webkit-box-shadow:0 0 10px #999;box-shadow:0 0 2px #999}                                                                                                        
+.standardTextBox:focus{outline:none;border:solid 1px #73A6FF;background:#EFF5FF;color:#000}
 /* info box*/
 .infoBox{color:#8a6d3b;background-color:#fcf8e3;border-color:#faebcc;margin:0 auto!important}
 .engravedHeader{color:#333;font: 18px 'LeagueGothicRegular'; text-shadow: 0px 1px 0px rgba(255,255,255,255);}
 .engravedHeaderChild{color:#333;font: 14px 'LeagueGothicRegular'; text-shadow: 0px 1px 0px rgba(255,255,255,255);}
 .engravedHeader h2{font-size:24px;}
-#divImportantHint{display:none;position:absolute;z-index:2000}
-.divImportant{cursor:pointer}
+#divImportantHint{display:none;position:absolute;z-index:2000;}
+.divImportant{cursor:pointer;}
 /* radio box*/
 input[type="radio"]{margin: 4px 8px 0px 16px;}
 /*Modal Pop up*/
@@ -66,17 +77,29 @@ div#divErrorPageContainer{position:absolute;width:850px;background:none;top:20%;
 div#divErrorPageContainer #divLogoImage{width:433px;vertical-align:middle;text-align:left}                                                                                                                                  
 div#divErrorPageContainer p{padding:10px; letter-spacing:0em;word-spacing: 0em;}
 /* div for ttoal*/
-#divTotalRecs{background:none repeat scroll 0 0 #E0EEEE;border:2px solid #B5CAD0;display:block;float:right;padding:8px;width:200px}
+#divTotalRecs{background:none repeat scroll 0 0 #E0EEEE;border:2px solid #B5CAD0;display:block;float:right;padding:8px;}
 #divTotalRecs span{color:#444;font-family:Georgia,"Times New Roman",Times,serif;font-size:12px;font-weight:inherit;line-height:1.1em;margin:0 0 11px;padding:1px 0 0;text-shadow:0 1px 1px #FFF;text-transform:capitalize}
 .count{font-size:12px;font-weight:700;background:#FFC none repeat scroll 0 0;border-bottom:1px dashed #888}
 /* link items container */
 .linkItemsContainer{list-style:none;margin:5px 0;padding:0;width:100%;float:left}
 .linkItemsContainer li{box-shadow:0 1px 1px #ccc;border-radius:2px;}
 .linkItemsContainer li{float:left;margin:5px 10px 5px 0}
-.linkItemsContainer a{padding:15px;text-decoration:none;font-family:Sans-Serif;float:left;width:95px;height:65px;font-size:90%}
-.linkItemsContainer a{color:#333;background:rgba(0,0,0,0.1);text-decoration:none;outline:none;padding:0 2px}
-.linkItemsContainer a:hover{color:rgba(0,0,255,1)}
-.linkItemsContainer a:hover:after{content:' →'}
-.linkItemsContainer a{padding:16px 6px 4px 4px;margin:2px}
+.linkItemsContainer li a{padding:15px;text-decoration:none;font-family:Sans-Serif;float:left;width:150px;height:65px;font-size:90%}
+.linkItemsContainer li a{color:#333;background:rgba(0,0,0,0.1);text-decoration:none;outline:none;padding:0 2px}
+.linkItemsContainer li a{padding:16px 6px 4px 4px;margin:2px}
 /*a:hover {color: #377FA6;}*/
-.linkItemsContainer a{ font-size:13px}
+.linkItemsContainer li a{ font-size:13px}
+.linkItemsContainer li a:hover{color:rgba(0,0,255,1)}
+.linkItemsContainer li a:hover {border-bottom: 0px;color: rgba(0,0,255,1);}
+.linkItemsContainer li a:after {
+        content: "";
+        height: 100%;
+        left: 0;
+        top: 0;
+        width: 0px;
+        position: absolute;
+        transition: all 0.3s ease 0s;
+        -webkit-transition: all 0.3s ease 0s;
+        z-index: -1;
+    }
+.linkItemsContainer li a:hover:after{content:' →';}

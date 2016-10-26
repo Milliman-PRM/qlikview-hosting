@@ -33,6 +33,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -41,6 +42,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ComponentPro.Saml">
@@ -299,9 +301,45 @@
     <Content Include="Css\DeleteMeLater-glyphicons-halflings-regular.woff" />
     <Content Include="Javascript\jquery.min.v2.1.1.js" />
     <Content Include="Javascript\jquery.min.v2.0.0.js" />
-    <Content Include="Content\Images\glyphicons-halflings-regular.woff" />
-    <Content Include="Content\Images\glyphicons-halflings-regular.eot" />
-    <Content Include="Content\Images\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\Fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\Fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\Fonts\glyphicons-halflings-regular.ttf" />
+    <None Include="..\..\appsettings_AK.config">
+      <Link>Configs\appsettings_AK.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\appsettings_Prod.config">
+      <Link>Configs\appsettings_Prod.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\appsettings_SK.config">
+      <Link>Configs\appsettings_SK.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\appsettings_Stag.config">
+      <Link>Configs\appsettings_Stag.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\appsettings_VN.config">
+      <Link>Configs\appsettings_VN.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\connectionStrings_AK.config">
+      <Link>Configs\connectionStrings_AK.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\connectionStrings_SK.config">
+      <Link>Configs\connectionStrings_SK.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\connectionStrings_Stag.config">
+      <Link>Configs\connectionStrings_Stag.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\connectionStrings_VN.config">
+      <Link>Configs\connectionStrings_VN.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Properties\PublishProfiles\milliman-sk.pubxml" />
     <None Include="Properties\PublishProfiles\MillimanDebug.pubxml" />
     <Content Include="SSOConfigure\HCIntel.cer" />

@@ -96,6 +96,25 @@ namespace MillimanClientUserAdmin
         {
             if (string.Compare(e.CommandName, "add", true) == 0)
             {
+                List<UserInfo> UIList = ValidateUserRequests();
+                bool AllGood = true;
+                var errorMsg = string.Empty;
+                foreach (UserInfo UIC in UIList)
+                {
+                    if (string.IsNullOrEmpty(UIC.ErrorMsg) == false)
+                    {
+                        errorMsg = errorMsg + UIC.ErrorMsg;
+                        AllGood = false;
+                    }
+                }
+                if (AllGood == false)
+                {
+                    RadGrid1.DataSource = UIList;
+                    RadGrid1.Rebind();
+                    MillimanCommon.Alert.Show(errorMsg + " To create users all errors must be corrected in the user list.  Check list items tagged with a red icon.");
+                    return;
+                }
+
                 MillimanCommon.MillimanGroupMap.MillimanGroups MG = MillimanCommon.MillimanGroupMap.GetInstance().MillimanGroupDictionary[Session["groupid"].ToString()];
                 string[] Users = System.Web.Security.Roles.GetUsersInRole(Session["groupid"].ToString());
                 List<UserInfo> UL = ParseEmails(GridToList(RadGrid1));
@@ -130,6 +149,10 @@ namespace MillimanClientUserAdmin
         }
         // Page.ClientScript.RegisterClientScriptBlock(GetType(), "CloseScript", "CloseDialog()", true);
 
+        protected void Reset_Click(object sender, EventArgs e)
+        {
+            InitilizeScreen();
+        }
         private void InitilizeScreen()
         {            
             //add an empty row

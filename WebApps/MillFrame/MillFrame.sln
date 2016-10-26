@@ -110,9 +110,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{8BA73D
 		Milliman\Milliman\Content\Images\Delete.png = Milliman\Milliman\Content\Images\Delete.png
 		Milliman\Milliman\Content\Images\eye-hide.png = Milliman\Milliman\Content\Images\eye-hide.png
 		Milliman\Milliman\Content\Images\eye-icon.png = Milliman\Milliman\Content\Images\eye-icon.png
-		Milliman\Milliman\Content\Images\glyphicons-halflings-regular.eot = Milliman\Milliman\Content\Images\glyphicons-halflings-regular.eot
-		Milliman\Milliman\Content\Images\glyphicons-halflings-regular.ttf = Milliman\Milliman\Content\Images\glyphicons-halflings-regular.ttf
-		Milliman\Milliman\Content\Images\glyphicons-halflings-regular.woff = Milliman\Milliman\Content\Images\glyphicons-halflings-regular.woff
 		Milliman\Milliman\Content\Images\Info-blue.png = Milliman\Milliman\Content\Images\Info-blue.png
 		Milliman\Milliman\Content\Images\InformationBulb.png = Milliman\Milliman\Content\Images\InformationBulb.png
 	EndProjectSection
@@ -144,6 +141,21 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Fonts", "Fonts", "{01374DA0
 		Milliman\Milliman\Content\Images\glyphicons-halflings-regular.ttf = Milliman\Milliman\Content\Images\glyphicons-halflings-regular.ttf
 		Milliman\Milliman\Content\Images\glyphicons-halflings-regular.woff = Milliman\Milliman\Content\Images\glyphicons-halflings-regular.woff
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configs", "Configs", "{003A8340-D761-4800-8DA8-63F1BA64280A}"
+	ProjectSection(SolutionItems) = preProject
+		appsettings_AK.config = appsettings_AK.config
+		appsettings_Prod.config = appsettings_Prod.config
+		appsettings_SK.config = appsettings_SK.config
+		appsettings_Stag.config = appsettings_Stag.config
+		appsettings_VN.config = appsettings_VN.config
+		connectionStrings_AK.config = connectionStrings_AK.config
+		connectionStrings_SK.config = connectionStrings_SK.config
+		connectionStrings_Stag.config = connectionStrings_Stag.config
+		connectionStrings_VN.config = connectionStrings_VN.config
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Icons", "Icons", "{08EF70E7-8659-4B66-A0E0-47C667E2C63B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -232,5 +244,6 @@ Global
 		{93066D6A-FACD-4C41-AD04-D9BE06D86DA7} = {1A51548D-F303-4EE5-8E7A-6C5785B4A271}
 		{7F3D7BF0-7159-4FE3-91C9-C6074F8D306C} = {1A51548D-F303-4EE5-8E7A-6C5785B4A271}
 		{01374DA0-3A81-4B35-805B-34C3F0A72746} = {1A51548D-F303-4EE5-8E7A-6C5785B4A271}
+		{08EF70E7-8659-4B66-A0E0-47C667E2C63B} = {8BA73D8D-0ED2-4E2E-B7D1-A91E57E270F7}
 	EndGlobalSection
 EndGlobal

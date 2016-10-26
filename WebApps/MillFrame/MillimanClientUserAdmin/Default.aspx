@@ -86,7 +86,6 @@
                                         <Selecting AllowRowSelect="false" />
                                         <Scrolling AllowScroll="True" UseStaticHeaders="True" />
                                         <ClientEvents OnRowClick="RowClick" />
-
                                     </ClientSettings>
                                     <MasterTableView AllowAutomaticDeletes="True" CommandItemDisplay="Top" CommandItemStyle-BorderColor="Black" CommandItemStyle-BorderStyle="Solid" CommandItemStyle-BorderWidth="1px" CommandItemStyle-Height="25px" CommandItemStyle-VerticalAlign="Middle" CommandItemStyle-Wrap="False" EditMode="Batch" NoMasterRecordsText="No users have been added to the PRM system for display." TableLayout="Fixed">
                                         <CommandItemStyle BorderColor="Black" BorderStyle="Solid" BorderWidth="1px" Height="25px" VerticalAlign="Middle" Wrap="False" />
@@ -96,9 +95,6 @@
                                                     <asp:Image ID="Image1" runat="server" alt="" ImageUrl="~/Images/AddUser.png" Style="border: 0px; vertical-align: middle;" />
                                                     Add User
                                                 </asp:LinkButton>
-                                                &#160;&#160; <%--                                               <asp:LinkButton ID="Edit" runat="server" CommandName="Edit" Visible='<%# UserGrid.EditIndexes.Count == 0 %>' ToolTip="Edit selected users access rights."><asp:Image ID="Image2" runat="server"  style="border:0px;vertical-align:middle;" alt=""  ImageUrl="~/Images/Edit.png"/>Edit</asp:LinkButton>&nbsp;&nbsp;--%>
-                                                <%--                                                    <asp:LinkButton ID="Notes" runat="server" CommandName="Notes" ToolTip="Edit notes associated with seleted user." Visible="<%# UserGrid.EditIndexes.Count == 0 %>"><asp:Image ID="Image4" runat="server" alt="" ImageUrl="~/Images/Notes.png" style="border:0px;vertical-align:middle;" />
-                                                    Notes</asp:LinkButton>--%>
                                                     &#160;&#160;
                                                     <asp:LinkButton ID="Email" runat="server" CommandName="Email" ToolTip="Email selected user." Visible="<%# UserGrid.EditIndexes.Count == 0 %>" OnClientClick="SendEmail(); return false;">
                                                         <asp:Image ID="Image5" runat="server" alt="" ImageUrl="~/Images/Email.png" Style="border: 0px; vertical-align: middle;" />
@@ -131,8 +127,6 @@
                                                 </asp:LinkButton>
                                                 &#160;&#160;
                                             </div>
-                                            <%--                                               <asp:LinkButton Width="100px" ID="Validate" runat="server" CommandName="Validate" Visible='<%# RadGrid1.EditIndexes.Count == 0 %>'><asp:Image ID="Image2" runat="server"  style="border:0px;vertical-align:middle;" alt="" ImageUrl="~/Images/process-icon.png"/>Validate</asp:LinkButton>&nbsp;&nbsp;--%><%--               <asp:LinkButton ID="Create" runat="server" CommandName="Create" Visible='<%# RadGrid1.EditIndexes.Count == 0 %>' OnClientClick="return ConfirmAction();"><asp:Image runat="server"  style="border:0px;vertical-align:middle;" alt=""  ImageUrl="~/Images/process-accept-icon.png"/>Create Users</asp:LinkButton>&nbsp;&nbsp;--%>
-                                            <%--                                               <asp:LinkButton ID="Clear"  runat="server" CommandName="Clear" Visible='<%# RadGrid1.EditIndexes.Count == 0 %>'><asp:Image ID="Image3" runat="server" style="border:0px;vertical-align:middle;" alt="" ImageUrl="~/Images/Actions-edit-delete-icon16x16.png"/>Clear List</asp:LinkButton>&nbsp;&nbsp;--%>
                                         </CommandItemTemplate>
                                         <Columns>
                                             <telerik:GridTemplateColumn DataField="SuperUser" HeaderStyle-Width="25px" HeaderText="" ReadOnly="True" UniqueName="SuperUserText">
@@ -142,39 +136,24 @@
                                                 <HeaderStyle Width="25px"></HeaderStyle>
                                             </telerik:GridTemplateColumn>
                                             <telerik:GridButtonColumn HeaderStyle-Width="35px" ButtonType="ImageButton" ImageUrl="~/Images/reportlaunch.png" CommandName="LaunchQVW" UniqueName="LaunchQVW"></telerik:GridButtonColumn>
-                                            <%--                                                <telerik:GridTemplateColumn DataField="ReportLaunch" HeaderStyle-Width="35px" HeaderText="" ReadOnly="True" UniqueName="ReportLaunchText">
-                                                    <ItemTemplate>                          
-                                                        <asp:imageButton ID="ReportLaunchButton"  runat="server" AutoPostBack="false" ToolTip='Launch report associated with this user.' Width="26px" Height="26px" ImageUrl="~/Images/reportlaunch.png"   ></asp:imageButton>
-                                                    </ItemTemplate>
-                                                    <HeaderStyle Width="35px"></HeaderStyle>                                
-                                                </telerik:GridTemplateColumn>--%>
                                             <telerik:GridTemplateColumn DataField="Account_Name" HeaderStyle-Width="100%" HeaderText="Email Address" ReadOnly="True" UniqueName="AccountNameText">
                                                 <ItemTemplate>
                                                     <asp:Label ID="AccountNameTextBox" runat="server" AutoPostBack="false" Text='<%#Eval("AccountName") %>' ToolTip='<%#Eval("Tooltip") %>' Width="100%"></asp:Label>
                                                 </ItemTemplate>
-                                                <HeaderStyle Width="100%"></HeaderStyle>
+                                                <HeaderStyle Width="100%" HorizontalAlign="Center"></HeaderStyle>
                                             </telerik:GridTemplateColumn>
-
                                             <telerik:GridTemplateColumn DataField="Notes" HeaderStyle-Width="250px" HeaderText="Notes" UniqueName="NotesText">
                                                 <ItemTemplate>
                                                     <asp:TextBox ID="NotesTextBox" runat="server" OnTextChanged="NotesTextBox_TextChanged" AutoPostBack="true" Text='<%#Eval("Notes") %>' Width="100%" TextMode="MultiLine" Rows="3" BorderStyle="Solid" BackColor="Transparent" BorderColor="#E1E1E1" BorderWidth="1px"></asp:TextBox>
                                                 </ItemTemplate>
-
-                                                <HeaderStyle Width="250px"></HeaderStyle>
-
+                                                <HeaderStyle Width="100%" HorizontalAlign="Center"></HeaderStyle>
                                             </telerik:GridTemplateColumn>
-
                                             <telerik:GridTemplateColumn DataField="Status" HeaderStyle-Width="100px" HeaderText="Account Status" UniqueName="StatusText">
                                                 <ItemTemplate>
                                                     <asp:Label ID="StatusTextBox" runat="server" AutoPostBack="false" Text='<%#Eval("Status") %>' ToolTip='<%#Eval("Tooltip") %>' Width="100%"></asp:Label>
                                                 </ItemTemplate>
-
-                                                <HeaderStyle Width="100px"></HeaderStyle>
-
+                                                <HeaderStyle Width="100%" HorizontalAlign="Center"></HeaderStyle>
                                             </telerik:GridTemplateColumn>
-
-
-
                                         </Columns>
                                     </MasterTableView>
                                     <HeaderStyle Height="20px" VerticalAlign="Middle" />
@@ -438,7 +417,7 @@
 
         function OpenAddUser() {
             var wnd = window.radopen("AddUser.aspx", "Add User(s)");
-            wnd.setSize(900, 550);
+            wnd.setSize(935, 700);
             wnd.set_modal(true);
             wnd.moveTo(0, 0);
             //wnd.Center();
