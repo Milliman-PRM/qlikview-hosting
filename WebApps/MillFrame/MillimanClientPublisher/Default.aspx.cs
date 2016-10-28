@@ -5,6 +5,9 @@ using System.Text;
 using System.Web;
 using System.Web.Security;
 using System.Collections.Generic;
+using System.Web.UI.WebControls;
+using Telerik.Web.UI;
+using System.Web.UI;
 
 namespace ClientPublisher
 {
@@ -31,7 +34,7 @@ namespace ClientPublisher
                 Session["supergroup"] = PublishToSupergroup;
                 CacheCleaner(7); // cleanup the cache
 
-                LoadProjects(PublishToSupergroup);
+                LoadProjects(PublishToSupergroup);                
             }
 
             //always check if I'm not authenticated, I should not be here
@@ -39,6 +42,8 @@ namespace ClientPublisher
             {
                 Response.Redirect("HTML/NotLoggedIn.html");
             }
+
+            ToggleButtonToolTip();
         }
 
         /// <summary>
@@ -296,8 +301,22 @@ namespace ClientPublisher
             RadProjectList.DataBind();
             //place in session so I don't have to look up all the info again
             Session["Projects"] = Projects;
+        }
 
+        protected void ToggleButtonToolTip()
+        {            
+            UpdatePanel UpdatePanel1 = (UpdatePanel)Page.FindControl("UpdatePanel1");
+            RadListView RadProjectList = (RadListView)UpdatePanel1.FindControl("RadProjectList");
+            RadButton rbToggleAvailability = (RadButton)RadProjectList.Items[0].FindControl("ToggleAvailability");
 
+            if (rbToggleAvailability.Text== "Take Online")
+            {
+                rbToggleAvailability.ToolTip = "Report is present, but in an offline state - click to make it available to users.";
+            }
+            else if (rbToggleAvailability.Text == "Take Offline")
+            {
+                rbToggleAvailability.ToolTip = "Report is not available to users - click to make report available.";
+            }            
         }
 
         protected void btnLogout_Click(object sender, EventArgs e)
@@ -385,17 +404,21 @@ namespace ClientPublisher
                 {
                     string QVWOnline = System.IO.Path.Combine(Projects[Index].AbsoluteProjectPath, Projects[Index].QVName + ".qvw");
                     string QVWOffline = System.IO.Path.Combine(Projects[Index].AbsoluteProjectPath, Projects[Index].QVName + ".offline");
+
                     if (System.IO.File.Exists(QVWOffline))
                     {
                         System.IO.File.Delete(QVWOffline);  //get rid of offline file, we want ot go online
-                        RB.Text = ProjectSettingsExtension.IsAvailable;
+                        RB.Text = ProjectSettingsExtension.IsAvailable;                        
                     }
                     else
                     {
                         System.IO.File.WriteAllText(QVWOffline, System.DateTime.Now.ToString());  //create an offline file, can be empt
                         RB.Text = ProjectSettingsExtension.IsOffline;
+                        
                     }
-                }
+
+               }
+                ToggleButtonToolTip();
             }
         }
     }

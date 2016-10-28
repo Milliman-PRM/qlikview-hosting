@@ -50,6 +50,11 @@
         .RadWindow .rwPopupButton {
             margin-left: 100px !important;
         }
+        /*//remove expandable image*/
+        .rpExpandHandle
+        {
+            background-image:none!important;
+        }
     </style>
 </head>
 <body onresize="FullSize('MainTable');" style="background-image: url(Imates/watermark.png); overflow: hidden">

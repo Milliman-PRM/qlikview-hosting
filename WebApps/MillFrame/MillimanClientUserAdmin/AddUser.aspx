@@ -83,7 +83,20 @@
             margin: 4px;
             padding: 4px;
         }
-
+        /*//remove expandable image*/
+        .rpExpandHandle
+        {
+            background-image:none!important;
+        }
+        /*//remove thead gird lines*/
+        .RadGrid_Office2010Silver .rgHeader, .RadGrid_Office2010Silver th.rgResizeCol, .RadGrid_Office2010Silver .rgHeaderWrapper
+        {
+            border:none;
+        }
+        .RadGrid_Office2010Silver .rgRow > td, .RadGrid_Office2010Silver .rgAltRow > td, .RadGrid_Office2010Silver .rgEditRow > td, .RadGrid_Office2010Silver .rgFooter > td
+        {
+             border:none;
+        }
     </style>
 </head>
 <body onresize="FullSize('MainTable');" style="overflow: hidden;">

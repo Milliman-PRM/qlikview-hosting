@@ -86,7 +86,7 @@ public partial class admin_controls_admin_reports : System.Web.UI.UserControl
             RootNode.Nodes.Add(RTN);
         }
         Report.ExpandAllNodes();
-        checkResults(Report.GetAllNodes().Count);
+        checkResults(UserList.Count);
     }
 
     protected void GroupCollection(string GroupName)
@@ -99,6 +99,7 @@ public partial class admin_controls_admin_reports : System.Web.UI.UserControl
         Report.Nodes.Add(RootNode);
 
         List<string> QVWs = new List<string>();
+        var counter = 0;
         foreach (MembershipUser MU in Membership.GetAllUsers())
         {
             //check to see if user is in Role
@@ -110,6 +111,7 @@ public partial class admin_controls_admin_reports : System.Web.UI.UserControl
                     RadTreeNode UserNode = new RadTreeNode(MU.UserName);
                     UserNode.ImageUrl = "~/images/user-identity-icon_16.png";
                     RootNode.Nodes.Add(UserNode);
+                    counter++;
                     foreach (System.Dynamic.ExpandoObject EO in QVWItems)
                     {
                         dynamic EOD = EO;
@@ -128,7 +130,7 @@ public partial class admin_controls_admin_reports : System.Web.UI.UserControl
             RootNode.Nodes.Add(ReportNode);
         }
         Report.ExpandAllNodes();
-        checkResults(Report.GetAllNodes().Count);
+        checkResults(counter);
     }
 
     protected void GenerateUserToQVWs(string UserName, bool HideQVWs = false)
@@ -141,20 +143,21 @@ public partial class admin_controls_admin_reports : System.Web.UI.UserControl
         RadTreeNode RootNode = new RadTreeNode(UserName);
         RootNode.ImageUrl = "~/images/user-identity-icon_16.png";
         Report.Nodes.Add(RootNode);
+        var counter = 0;
         //add the groups to the root
         foreach (string RoleName in Roles.GetRolesForUser(UserName))
         {
             RadTreeNode RTN = new RadTreeNode(RoleName);
             RTN.ImageUrl = "~/images/Buzz-Box-icon.png";
             RootNode.Nodes.Add(RTN);
+            counter++;
         }
         Report.ExpandAllNodes();
+        checkResults(counter);
+
         //only show groups
         if (HideQVWs)
-        {
-            checkResults(0);
             return;
-        }
 
         if (QVWItems != null)
         {
@@ -182,7 +185,7 @@ public partial class admin_controls_admin_reports : System.Web.UI.UserControl
             }
         }
         Report.ExpandAllNodes();
-        checkResults(Report.GetAllNodes().Count);
+        checkResults(QVWItems.Count);
     }
 
     protected string AdjustPathToDocumentRelative(string Path)
@@ -199,8 +202,7 @@ public partial class admin_controls_admin_reports : System.Web.UI.UserControl
         if (counter.HasValue && counter.Value>0)
         {
             divResults.Visible = true;
-            lblTotalRecords.Text = Report.GetAllNodes().Count.ToString();
-            
+            lblTotalRecords.Text = counter.ToString();            
         }
         else
         {

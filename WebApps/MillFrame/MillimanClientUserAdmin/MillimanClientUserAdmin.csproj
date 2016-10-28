@@ -363,6 +363,7 @@
     <Content Include="Content\Fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\Fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Content\Fonts\glyphicons-halflings-regular.woff" />
+    <None Include="Properties\PublishProfiles\MilimanClientUserAdmin_AK.pubxml" />
     <None Include="Properties\PublishProfiles\ReleaseCandidateProfile.pubxml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
@@ -380,9 +381,6 @@
       <Project>{e02b1c1d-33e8-4565-934d-13e6d7c36869}</Project>
       <Name>MillimanReportReduction</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Properties\licenses.licx" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

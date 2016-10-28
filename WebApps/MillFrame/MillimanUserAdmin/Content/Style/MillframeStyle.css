@@ -26,7 +26,6 @@
 #divPasswordCriteriaContainer:before{content:"\25B2";position:absolute;top:-10px;left:45%;font-size:14px;line-height:12px;color:#ddd;display:block}
 #divPasswordCriteriaContainer h1,h2,h3,h4{margin:0 0 10px;padding:0;font-weight:400}
 /*#divPasswordCriteriaContainer ul,li{list-style-type:circle;margin:4px 3px 4px 4px;padding:2px 1px 3px 9px;width:203px}*/
-.orderedListTypePasswordCriteria{list-style-type:circle;margin:4px 3px 4px 4px;padding:2px 1px 3px 9px;width:203px}
 .invalidPassword,.validPassword{padding-left:6px;line-height:12px}
 .invalidPassword{color:#ec3f41}
 .validPassword{color:#3a7d34}

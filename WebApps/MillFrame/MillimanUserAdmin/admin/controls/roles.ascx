@@ -2,14 +2,15 @@
 <%@ Register Src="js-include1.ascx" TagName="js" TagPrefix="uc1" %>
 <%@ Register Src="js-include3.ascx" TagName="js" TagPrefix="uc3" %>
 <%@ Register Src="~/js/js/jquery.ascx" TagName="jquery" TagPrefix="uc4" %>
-<%@ Register src="search-box.ascx" tagname="search" tagprefix="uc2" %>
-<%@ Register src="a-z-menu.ascx" tagname="a" tagprefix="uc5" %>
+<%@ Register Src="search-box.ascx" TagName="search" TagPrefix="uc2" %>
+<%@ Register Src="a-z-menu.ascx" TagName="a" TagPrefix="uc5" %>
+
 
 <%-- gridview banner --%>
 <div class="gvBanner">
     <span class="gvBannerUsers">
         <asp:Image ID="Image1" runat="server" ImageAlign="AbsMiddle" ImageUrl="~/images/decoy-icon-36px.png" />
-        </span> Groups:
+    </span>Groups:
     <%-- create new Role form elements --%>
     <asp:TextBox runat="server" ID="NewRole" MaxLength="50" Width="135px" ToolTip="Type the name of a new group you want to create."></asp:TextBox>
     <asp:Button ID="Button2" runat="server" OnClick="AddRole" Text="Add Group" ToolTip="Click to create new group." />
@@ -19,7 +20,8 @@
 <%-- a-z navigation --%>
 <uc5:a ID="a1" runat="server" />
 <%-- gridview to display membership users --%>
-<asp:GridView ID="UserRoles" runat="server" AutoGenerateColumns="False" OnRowDataBound="UserRoles_RowDataBound" CssClass="gv">
+<asp:GridView ID="UserRoles" runat="server" AutoGenerateColumns="False"
+    OnRowDataBound="UserRoles_RowDataBound" CssClass="gv">
     <Columns>
         <asp:TemplateField>
             <HeaderStyle CssClass="gvHeader" Width="1px" />
@@ -33,7 +35,7 @@
         </asp:TemplateField>
         <asp:TemplateField HeaderText="Del">
             <HeaderTemplate>
-                <input id="chkAll" onclick="SelectAllCheckboxes('chkRows',this.checked);" runat="server" type="checkbox" title="Check all checkboxes" />
+                <input id="chkAll" onclick="SelectAllCheckboxes('chkRows', this.checked);" runat="server" type="checkbox" title="Check all checkboxes" />
             </HeaderTemplate>
             <ItemTemplate>
                 <asp:CheckBox ID="chkRows" runat="server" ToolTip="Select for deletion" />
@@ -48,15 +50,19 @@
                 <asp:Label ID="RoleName" runat="server" Text='<%# Eval("Role Name") %>'></asp:Label>
             </ItemTemplate>
         </asp:TemplateField>
-       <asp:TemplateField>
+        <asp:TemplateField>
             <HeaderTemplate>
                 FRIENDLY NAME
             </HeaderTemplate>
             <ItemTemplate>
-                <asp:TextBox ID="FriendlyName" runat="server" Text='<%# Eval("Friendly Name") %>' Width="95%"></asp:TextBox>
+                <asp:TextBox ID="FriendlyName" runat="server" Text='<%# Eval("Friendly Name") %>' Width="95%"  ValidationGroup="check"></asp:TextBox>
+                <%--user can not enter @ or ' or " or % or # or dot or ^--%>
+                <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server"
+                    ControlToValidate="FriendlyName" ErrorMessage="Invalid Character." SetFocusOnError="True" 
+                    ValidationExpression="^'&quote[@%#.]+$"  ValidationGroup="check"></asp:RegularExpressionValidator>
             </ItemTemplate>
         </asp:TemplateField>
-       <asp:TemplateField>
+        <asp:TemplateField>
             <HeaderTemplate>
                 EXTERNAL NAME
             </HeaderTemplate>
@@ -72,12 +78,12 @@
                 <center> <asp:TextBox ID="txtGroupCategory" runat="server" Text='<%# Eval("Group Category") %>' Width="95%"></asp:TextBox></center>
             </ItemTemplate>
         </asp:TemplateField>
-       <asp:TemplateField>
+        <asp:TemplateField>
             <HeaderTemplate>
-               MAX USER LIMIT
+                MAX USER LIMIT
             </HeaderTemplate>
             <ItemTemplate>
-               <center> <asp:TextBox ID="UserLimit" runat="server" Text='<%# Eval("Maximum Number Users") %>' Width="50px"></asp:TextBox></center>
+                <center> <asp:TextBox ID="UserLimit" runat="server" Text='<%# Eval("Maximum Number Users") %>' Width="50px"></asp:TextBox></center>
             </ItemTemplate>
         </asp:TemplateField>
         <asp:TemplateField>
@@ -106,10 +112,10 @@
     <EditRowStyle CssClass="gvEdit" />
 </asp:GridView>
 <%-- delete checked users button --%>
-<div class="buttonCSS" style="width:400px">
+<div class="buttonCSS" style="width: 400px">
     <asp:LinkButton ID="btnDeleteSelected" runat="server" OnClick="btnDeleteSelected_Click" OnClientClick="return confirm('DELETE selected ROLE(S)?');" ToolTip="DELETE selected ROLES.">Delete Selected</asp:LinkButton>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <asp:LinkButton ID="ApplyChanges" runat="server"  ToolTip="Click to apply changes to roles" OnClick="ApplyChanges_Click">Apply Changes</asp:LinkButton>
+    <asp:LinkButton ID="ApplyChanges" runat="server" ToolTip="Click to apply changes to roles" OnClick="ApplyChanges_Click">Apply Changes</asp:LinkButton>
 </div>
 <%-- message label --%>
 <div class="messageWrap">
@@ -120,3 +126,12 @@
 <uc4:jquery ID="jquery1" runat="server" />
 <%-- check all checkboxes javascript --%>
 <uc1:js ID="js1" runat="server" />
+
+<style>
+
+</style>
+
+<script type="text/javascript">
+
+
+</script>

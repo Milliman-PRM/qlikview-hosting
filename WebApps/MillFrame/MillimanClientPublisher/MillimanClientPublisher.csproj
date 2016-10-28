@@ -227,6 +227,7 @@
     <Content Include="Content\Fonts\glyphicons-halflings-regular.woff" />
     <None Include="Properties\PublishProfiles\Debug_vn.pubxml" />
     <None Include="Properties\PublishProfiles\LocalPublish.pubxml" />
+    <None Include="Properties\PublishProfiles\MillimanClientPublisher_AK.pubxml" />
     <None Include="Properties\PublishProfiles\Staging.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

@@ -109,10 +109,10 @@
     <Content Include="Content\Script\jquery.v1.7.1.js" />
     <Content Include="Content\Script\jquery.v1.9.1.js" />
     <Content Include="Content\Script\maskedinput.js" />
-    <Content Include="Content\Style\bootstrap-dialog.min.css" />
-    <Content Include="Content\Style\bootstrap.css" />
-    <Content Include="Content\Style\bootstrap.min.css" />
-    <Content Include="Content\Style\MillframeStyle.css" />
+    <Content Include="Content\Style\bootstrap-dialog.min0.css" />
+    <Content Include="Content\Style\bootstrap0.css" />
+    <Content Include="Content\Style\bootstrap.min0.css" />
+    <Content Include="Content\Style\MillframeStyle0.css" />
     <Content Include="Css\Milliman_small.png" />
     <Content Include="email_templates\resetpassword.htm" />
     <Content Include="email_templates\welcome.htm" />
@@ -345,6 +345,7 @@
     <Content Include="SSOConfigure\HCIntel.cer" />
     <None Include="Properties\PublishProfiles\MillimanProduction.pubxml" />
     <Content Include="Reflector.ashx" />
+    <None Include="Properties\PublishProfiles\Milliman_AK.pubxml" />
     <None Include="Properties\PublishProfiles\Staging.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

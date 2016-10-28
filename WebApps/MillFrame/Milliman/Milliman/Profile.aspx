@@ -528,7 +528,7 @@
                 //check the password only if CurPassword is entered
                 if (CurPassword != '') {
                     if (newPassword == '') {
-                        var msg = ('The password verification field New Password field cannot be empty.');
+                        var msg = ('The password verification, New Password field cannot be empty.');
                         $('#NewPassword').addClass('textbox-focus');
                         showErrorAlert(msg);
                         return false;
@@ -744,8 +744,9 @@
 
         $('#ConfirmNewPassword').keyup(function () {
             var inputValue = $(this).val();
-            var re = /[`,<>;':"/[\]|{}()=-]/gi;
-            var isSplChar = re.test(inputValue);
+            //create regex
+            var regex = /[`,<>;':"/[\]|{}()=-]/gi;
+            var isSplChar = regex.test(inputValue);
             if (isSplChar) {
                 //var removeSpecialChar = yourInput.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '');
                 var removeSpecialChar = inputValue.replace(/[`()|:'",.<>\{\}\[\]\\\/]/gi, '');
@@ -754,8 +755,9 @@
         });
         $('#NewPassword').keyup(function () {
             var inputValue = $(this).val();
-            var re = /[`,<>;':"/[\]|{}()=-]/gi;
-            var isSplChar = re.test(inputValue);
+            //create regex
+            var regex = /[`,<>;':"/[\]|{}()=-]/gi;
+            var isSplChar = regex.test(inputValue);
             if (isSplChar) {
                 //var removeSpecialChar = yourInput.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '');
                 var removeSpecialChar = inputValue.replace(/[`()|:'",.<>\{\}\[\]\\\/]/gi, '');
@@ -956,11 +958,6 @@
 
         // Remove a classname
         function removeElementClass(ele, cls) {
-            //var clsChecker = new RegExp("\\b" + cls + "\\b");
-            //if(clsChecker.test(ele.className)) {
-            //    // ele does have the className, remove them all (in case repeated)
-            //    ele.className.split(clsChecker).join('');
-            //}
             if (hasClass(ele, cls)) {
                 var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
                 ele.className = ele.className.replace(reg, ' ');
