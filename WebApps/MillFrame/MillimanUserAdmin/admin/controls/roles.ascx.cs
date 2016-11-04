@@ -78,7 +78,7 @@ public partial class admin_controls_roles : System.Web.UI.UserControl
         {
             Msg.ForeColor = System.Drawing.Color.Black;
             Roles.CreateRole(NewRole.Text);
-            Msg.Text = "The new role was added.";
+            Msg.Text = "New role added successfully";
             Msg.Visible = true;
             createRoleSuccess = true;
         }

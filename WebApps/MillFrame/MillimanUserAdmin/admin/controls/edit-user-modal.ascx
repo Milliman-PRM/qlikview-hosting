@@ -371,7 +371,7 @@
                                     <div class="col-sm-8">
                                         <label for="PasswordTextbox" class="labelweak">Current Password:</label>
                                         <br />
-                                        <asp:Label ID="lblCurrentPassword" runat="server" EnableViewState="False" ReadOnly="True" CssClass="form-control" Width="300px"></asp:Label>
+                                        <asp:Label ID="lblCurrentPassword" runat="server" EnableViewState="False" ReadOnly="True" CssClass="form-control"></asp:Label>
                                     </div>
                                 </div>
                                 <div class="row">&nbsp;</div>

@@ -75,7 +75,6 @@
     }
 </style>
 
-
 <%-- gridview banner --%>
 <%--<div class="gvBanner">
     <span class="gvBannerUsers">
@@ -102,7 +101,7 @@
     </div>
      <div class="space"></div>
     <div id="divOuter" class="roundShadowContainer">
-        <div id="divLoginType">
+        <div id="divLoginType" runat="server" visible="false">
             <div class="left"><span class="engravedHeader">Login Type:</span></div>
             <div class="space"></div>
             <div class="right">
@@ -112,7 +111,6 @@
                         <asp:RadioButtonList ID="UserType" runat="server" AutoPostBack="True"
                             OnSelectedIndexChanged="UserType_SelectedIndexChanged" RepeatDirection="Horizontal" CssClass="radioButtonlabel">
                             <asp:ListItem Selected="true">Milliman Login</asp:ListItem>
-                            <asp:ListItem>External SSO Login</asp:ListItem>
                         </asp:RadioButtonList>
                     </ContentTemplate>
                 </asp:UpdatePanel>
@@ -155,6 +153,7 @@
                             <ItemTemplate>
                                 <label id="lblAccountNameTextBox" for="AccountNameTextBox" class="labelweak required"></label>
                                 <asp:TextBox ID="AccountNameTextBox" runat="server" AutoPostBack="false" Text='<%#Eval("Account_Name") %>' Width="90%" Height="27px" CssClass="required standardTextBox"></asp:TextBox>
+                                <asp:RequiredFieldValidator runat="server" Display="Dynamic" ControlToValidate="AccountNameTextBox" ErrorMessage="Account name is required" ForeColor="Red" />
                             </ItemTemplate>
                             <HeaderStyle Width="100%"></HeaderStyle>
                         </telerik:GridTemplateColumn>
