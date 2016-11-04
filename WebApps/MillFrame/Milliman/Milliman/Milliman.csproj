@@ -33,6 +33,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -41,6 +42,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ComponentPro.Saml">
@@ -107,10 +109,10 @@
     <Content Include="Content\Script\jquery.v1.7.1.js" />
     <Content Include="Content\Script\jquery.v1.9.1.js" />
     <Content Include="Content\Script\maskedinput.js" />
-    <Content Include="Content\Style\bootstrap-dialog.min.css" />
-    <Content Include="Content\Style\bootstrap.css" />
-    <Content Include="Content\Style\bootstrap.min.css" />
-    <Content Include="Content\Style\MillframeStyle.css" />
+    <Content Include="Content\Style\bootstrap-dialog.min0.css" />
+    <Content Include="Content\Style\bootstrap0.css" />
+    <Content Include="Content\Style\bootstrap.min0.css" />
+    <Content Include="Content\Style\MillframeStyle0.css" />
     <Content Include="Css\Milliman_small.png" />
     <Content Include="email_templates\resetpassword.htm" />
     <Content Include="email_templates\welcome.htm" />
@@ -299,14 +301,54 @@
     <Content Include="Css\DeleteMeLater-glyphicons-halflings-regular.woff" />
     <Content Include="Javascript\jquery.min.v2.1.1.js" />
     <Content Include="Javascript\jquery.min.v2.0.0.js" />
-    <Content Include="Content\Images\glyphicons-halflings-regular.woff" />
-    <Content Include="Content\Images\glyphicons-halflings-regular.eot" />
-    <Content Include="Content\Images\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\Fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\Fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\Fonts\glyphicons-halflings-regular.ttf" />
+    <None Include="..\..\appsettings_AK.config">
+      <Link>Configs\appsettings_AK.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="..\..\appsettings_SK.config">
+      <Link>Configs\appsettings_SK.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\appsettings_VN.config">
+      <Link>Configs\appsettings_VN.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\connectionStrings_AK.config">
+      <Link>Configs\connectionStrings_AK.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="..\..\connectionStrings_SK.config">
+      <Link>Configs\connectionStrings_SK.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\connectionStrings_VN.config">
+      <Link>Configs\connectionStrings_VN.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Configs\appsettings_PreStag.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Configs\appsettings_Stag.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Configs\connectionStrings_PreStag.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Configs\connectionStrings_Stag.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Properties\PublishProfiles\milliman-sk.pubxml" />
     <None Include="Properties\PublishProfiles\MillimanDebug.pubxml" />
     <Content Include="SSOConfigure\HCIntel.cer" />
     <None Include="Properties\PublishProfiles\MillimanProduction.pubxml" />
     <Content Include="Reflector.ashx" />
+    <None Include="Properties\PublishProfiles\Milliman_AK.pubxml" />
+    <None Include="Properties\PublishProfiles\Milliman_PreStaging.pubxml" />
     <None Include="Properties\PublishProfiles\Staging.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

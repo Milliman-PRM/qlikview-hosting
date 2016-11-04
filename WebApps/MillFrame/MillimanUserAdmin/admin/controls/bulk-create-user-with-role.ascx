@@ -8,28 +8,34 @@
     .roundShadowContainer {
         margin-top: 10px;
     }
+
     .containerWrap {
         padding: 4px;
         width: 75%;
         background-color: #fdfdfd;
     }
+
     .left {
         float: left;
         margin: 3px 0 0 6px;
         text-align: left;
         padding: 2px;
     }
+
     .right {
         float: right;
         margin: -5px -23px 0 0;
         text-align: left;
     }
+
     .engravedHeader {
         font-size: 14px;
     }
+
     #divOuter {
         width: 770px;
     }
+
     #divLoginType {
         height: 31px;
         width: 400px;
@@ -38,42 +44,56 @@
         border: 2px dashed #eee;
         font-weight: 400;
     }
+
     #divUserRole {
         width: 748px;
     }
+
     #divResults {
         width: 750px;
     }
+
     #divUserAddList {
         width: 750px;
         margin: 0 auto;
     }
+
     .userList {
         margin: -11px -4px 1px 11px;
     }
+
     .imageButtonClass {
         height: 15px;
     }
+
     .labelweak {
         margin: 8px 7px -4px;
     }
+
     #divUserList {
         margin: 4px;
         padding: 4px;
     }
+
     #divSubmit {
         margin: 4px;
         padding: 4px;
     }
+
     .centerDiv {
         margin: 0 auto;
         width: 100px;
     }
-    #browVersion {
-        width: 600px;
-        border: 1px dashed gray;
+    .RadGrid_Office2010Silver .rgHeader, .RadGrid_Office2010Silver th.rgResizeCol, .RadGrid_Office2010Silver .rgHeaderWrapper
+    {
+        border:none;
+    }
+    .RadGrid_Office2010Silver .rgRow > td, .RadGrid_Office2010Silver .rgAltRow > td, .RadGrid_Office2010Silver .rgEditRow > td, .RadGrid_Office2010Silver .rgFooter > td
+    {
+         border:none;
     }
 </style>
+
 
 <%-- gridview banner --%>
 <%--<div class="gvBanner">
@@ -97,9 +117,9 @@
 
 <div class="containerWrap center-block outerWrap">
     <div class="page-header engravedHeader">
-        <h2>Add Users With Group(s)</h2>
+        <h2>Add Users with Group(s)</h2>
     </div>
-     <div class="space"></div>
+    <div class="space"></div>
     <div id="divOuter" class="roundShadowContainer">
         <div id="divLoginType" runat="server" visible="false">
             <div class="left"><span class="engravedHeader">Login Type:</span></div>
@@ -130,10 +150,10 @@
 
         <div id="divResults" class="roundShadowContainer">
             <telerik:RadGrid runat="server" ID="RadGrid1" AllowSorting="True" AutoGenerateColumns="False" CellSpacing="5" GridLines="None"
-                OnItemCommand="RadGrid1_ItemCommand"
+                OnItemCommand="RadGrid1_ItemCommand" CssClass="MyRadGrid"
                 AllowAutomaticDeletes="True" ViewStateMode="Enabled" MasterTableView-AllowAutomaticDeletes="True" ClientIDMode="AutoID"
                 ClientSettings-ClientEvents-OnRowDeleting="RowDeleting">
-                <MasterTableView EditMode="Batch" CommandItemDisplay="Top" TableLayout="Fixed">
+                <MasterTableView EditMode="Batch" CommandItemDisplay="Top" TableLayout="Fixed" >
                     <CommandItemTemplate>
                     </CommandItemTemplate>
                     <Columns>

@@ -5,6 +5,7 @@
 <%@ Register Src="search-box.ascx" TagName="search" TagPrefix="uc2" %>
 <%@ Register Src="a-z-menu.ascx" TagName="a" TagPrefix="uc5" %>
 
+
 <%-- gridview banner --%>
 <div class="gvBanner">
     <span class="gvBannerUsers">
@@ -23,7 +24,8 @@
 <%-- a-z navigation --%>
 <uc5:a ID="a1" runat="server" />
 <%-- gridview to display membership users --%>
-<asp:GridView ID="UserRoles" runat="server" AutoGenerateColumns="False" OnRowDataBound="UserRoles_RowDataBound" CssClass="gv">
+<asp:GridView ID="UserRoles" runat="server" AutoGenerateColumns="False"
+    OnRowDataBound="UserRoles_RowDataBound" CssClass="gv">
     <Columns>
         <asp:TemplateField>
             <HeaderStyle CssClass="gvHeader" Width="1px" />
@@ -57,7 +59,11 @@
                 FRIENDLY NAME
             </HeaderTemplate>
             <ItemTemplate>
-                <asp:TextBox ID="FriendlyName" runat="server" Text='<%# Eval("Friendly Name") %>' Width="95%"></asp:TextBox>
+                <asp:TextBox ID="FriendlyName" runat="server" Text='<%# Eval("Friendly Name") %>' Width="95%"  ValidationGroup="check"></asp:TextBox>
+                <%--user can not enter @ or ' or " or % or # or dot or ^--%>
+                <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server"
+                    ControlToValidate="FriendlyName" ErrorMessage="Invalid Character." SetFocusOnError="True" 
+                    ValidationExpression="^'&quote[@%#.]+$"  ValidationGroup="check"></asp:RegularExpressionValidator>
             </ItemTemplate>
         </asp:TemplateField>
         <asp:TemplateField>
@@ -119,3 +125,12 @@
 <uc4:jquery ID="jquery1" runat="server" />
 <%-- check all checkboxes javascript --%>
 <uc1:js ID="js1" runat="server" />
+
+<style>
+
+</style>
+
+<script type="text/javascript">
+
+
+</script>

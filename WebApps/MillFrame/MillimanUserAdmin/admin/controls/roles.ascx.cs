@@ -170,7 +170,6 @@ public partial class admin_controls_roles : System.Web.UI.UserControl
     }
 
     #endregion
-
     protected void ApplyChanges_Click(object sender, EventArgs e)
     {
         var MGM = MillimanCommon.MillimanGroupMap.GetInstance();

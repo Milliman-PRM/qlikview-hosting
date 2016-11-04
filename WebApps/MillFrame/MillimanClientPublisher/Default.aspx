@@ -6,7 +6,7 @@
 
 <html xmlns="https://www.w3.org/1999/xhtml">
 <head id="Head1" runat="server">
-    <title>Milliman - PRM</title>
+    <title>Milliman - PRM Project Listing</title>
     <meta http-equiv="refresh" content="1080" />
     <%--refresh page in 18 mins, session timeout is 15 mins--%>
 
@@ -93,10 +93,10 @@
                                             <legend>
                                                 <p style="font-weight: 700">Project: <%#Eval("ProjectName")%> </p>
                                             </legend>
-                                            <table cellpadding="0" cellspacing="0" width="95%" style="background-color: white;">
+                                            <table id="table1" cellpadding="0" cellspacing="0" width="95%" style="background-color: white;">
                                                 <tr>
                                                     <td style="width: 75%;">
-                                                        <table cellpadding="6" cellspacing="0">
+                                                        <table id="table2" cellpadding="6" cellspacing="0">
                                                             <tr>
                                                                 <td style="width: 25%;">Tool Tip:
                                                                 </td>
@@ -146,7 +146,7 @@
                                                         </table>
                                                     </td>
                                                     <td>
-                                                        <table>
+                                                        <table id="table3">
                                                             <tr>
                                                                 <td>
                                                                     <telerik:RadButton
@@ -183,7 +183,7 @@
                                             <legend>
                                                 <p style="font-weight: 700">Project: <%#Eval("ProjectName")%> </p>
                                             </legend>
-                                            <table cellpadding="0" cellspacing="0" width="95%" style="background-color: #efeeee;">
+                                            <table id="tableA" cellpadding="0" cellspacing="0" width="95%" style="background-color: #efeeee;">
                                                 <tr>
                                                     <td style="width: 75%;">
                                                         <table cellpadding="6" cellspacing="0">
@@ -225,10 +225,10 @@
                                                         </table>
                                                     </td>
                                                     <td>
-                                                        <table style="width: 150px">
+                                                        <table id="tableB" style="width: 150px">
                                                             <tr>
                                                                 <td>
-                                                                    <img src="<%# Eval("QVIconReflector")%>" atl="Project Icon"></img>
+                                                                    <img src="<%# Eval("QVIconReflector")%>" alt="Project Icon"></img>
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -237,7 +237,7 @@
                                                         </table>
                                                     </td>
                                                     <td>
-                                                        <table>
+                                                        <table id="tableC">
                                                             <tr>
                                                                 <td>
                                                                     <telerik:RadButton runat="server" Text="Edit Project"

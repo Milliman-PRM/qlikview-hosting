@@ -154,7 +154,7 @@ public partial class EnhancedUploadView : System.Web.UI.Page
             System.IO.File.Copy(PresentationThumbnailFile, ImageCopytoProject);
             PresentationThumbnailFile = ImageCopytoProject;
         }
-        PresentationThumbnailFile = RenameFile(PresentationThumbnailFile, ProjectName.Text, true);
+        PresentationThumbnailFile = RenameFile(PresentationThumbnailFile, ProjectName.Text.Trim(), true);
         if (string.IsNullOrEmpty(PresentationThumbnailFile) == false)
         {
             //convert name to full path
@@ -197,7 +197,7 @@ public partial class EnhancedUploadView : System.Web.UI.Page
         GetUserSelections(ref _Settings);
 
         //if they rename via the ui - rename the project file
-        string SaveConfigurationTo = Path.Combine(DocumentRoot, QVPath, ProjectName.Text);
+        string SaveConfigurationTo = Path.Combine(DocumentRoot, QVPath, ProjectName.Text.Trim());
         if (string.IsNullOrEmpty(_Settings.LoadedFrom) == false)
         {
             if (string.Compare(SaveConfigurationTo, _Settings.LoadedFrom, true) != 0)
@@ -263,16 +263,16 @@ public partial class EnhancedUploadView : System.Web.UI.Page
     //this will update all the item in the UI,  based on project settings
     private void SetUserSelections(MillimanCommon.ProjectSettings Settings, string Path)
     {
-        ProjectName.Text = Settings.ProjectName;
-        QVWName.Text = Settings.QVName;
-        Description.Text = Settings.QVDescription;
-        Notes.Text = Settings.Notes;
-        Tooltip.Text = Settings.QVTooltip;
+        ProjectName.Text = Settings.ProjectName.Trim(); 
+        QVWName.Text = Settings.QVName.Trim();
+        Description.Text = Settings.QVDescription.Trim();
+        Notes.Text = Settings.Notes.Trim();
+        Tooltip.Text = Settings.QVTooltip.Trim();
         //PresentationThumbnailLabel.Text = Settings.QVThumbnail;
         string DocumentRoot = ConfigurationManager.AppSettings["QVDocumentRoot"];
         //show new one if present
-        string NewImagePath = System.IO.Path.Combine(DocumentRoot, Path, Settings.QVThumbnail + "_new");
-        string OldImagePath = System.IO.Path.Combine(DocumentRoot, Path, Settings.QVThumbnail);
+        string NewImagePath = System.IO.Path.Combine(DocumentRoot.Trim(), Path.Trim(), Settings.QVThumbnail.Trim() + "_new");
+        string OldImagePath = System.IO.Path.Combine(DocumentRoot.Trim(), Path.Trim(), Settings.QVThumbnail.Trim());
         if (System.IO.File.Exists(NewImagePath))
         {
             PreviewImage.ImageUrl = "imagereflector.aspx?key=" + MillimanCommon.Utilities.ConvertStringToHex(NewImagePath);
@@ -284,8 +284,8 @@ public partial class EnhancedUploadView : System.Web.UI.Page
         }
 
 
-        string NewManualPath = System.IO.Path.Combine(DocumentRoot, Path, Settings.UserManual + "_new");
-        string OldManualPath = System.IO.Path.Combine(DocumentRoot, Path, Settings.UserManual);
+        string NewManualPath = System.IO.Path.Combine(DocumentRoot.Trim(), Path.Trim(), Settings.UserManual.Trim() + "_new");
+        string OldManualPath = System.IO.Path.Combine(DocumentRoot.Trim(), Path.Trim(), Settings.UserManual.Trim());
 
         UserManualLabel.Text = Settings.UserManual;
         string UserManualURL = string.Empty;
@@ -323,13 +323,13 @@ public partial class EnhancedUploadView : System.Web.UI.Page
     }
     private void GetUserSelections(ref MillimanCommon.ProjectSettings Settings)
     {
-        Settings.ProjectName = ProjectName.Text;
-        Settings.QVName = QVWName.Text;
-        Settings.QVDescription = Description.Text;
-        Settings.Notes = Notes.Text;
-        Settings.UserManual = UserManualLabel.Text;
+        Settings.ProjectName = ProjectName.Text.Trim();
+        Settings.QVName = QVWName.Text.Trim();
+        Settings.QVDescription = Description.Text.Trim();
+        Settings.Notes = Notes.Text.Trim();
+        Settings.UserManual = UserManualLabel.Text.Trim();
         Settings.Groups = "";
-        Settings.QVTooltip = Tooltip.Text;
+        Settings.QVTooltip = Tooltip.Text.Trim();
         foreach (ListItem LI in SelectedGroups.Items)
         {
             if (LI.Selected)
@@ -417,7 +417,7 @@ public partial class EnhancedUploadView : System.Web.UI.Page
     //always the same for now
     protected void ProjectName_TextChanged(object sender, EventArgs e)
     {
-        QVWName.Text = ProjectName.Text;
+        QVWName.Text = ProjectName.Text.Trim();
     }
 
     protected void Delete_Click(object sender, EventArgs e)

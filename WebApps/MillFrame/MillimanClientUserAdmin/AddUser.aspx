@@ -1,16 +1,18 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="AddUser.aspx.cs" Inherits="MillimanClientUserAdmin.AddUser" Async="true" %>
 
 
-<html xmlns="http://www.w3.org/1999/xhtml">    
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title></title>
-    <%--<link id="lnkBootstrapcss" runat="server" rel="stylesheet" type="text/css" href="~/Content/Style/bootstrap.css" />
-    <link id="Link1" runat="server" rel="stylesheet" type="text/css" href="~/Content/Style/MillframeStyle.css" />--%>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link href="Content/Style/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="Content/Style/MillframeStyle.css" rel="stylesheet" type="text/css" />
     <style type="text/css">
         .LockOff {
             display: none;
             visibility: hidden;
         }
+
         .LockOn {
             display: block;
             visibility: visible;
@@ -29,10 +31,77 @@
             font-family: 'Segoe UI';
             overflow: hidden;
         }
+
+        .roundShadowContainer {
+            margin-top: 10px;
+            margin-left: 0;
+            margin-bottom: 0;
+            margin-right: 0;
+        }
+
+        .containerWrap {
+            padding: 4px;
+            width: 75%;
+            background-color: #fdfdfd;
+        }
+
+        .left {
+            float: left;
+            margin: 3px 0 0 6px;
+            text-align: left;
+            padding: 2px;
+        }
+
+        .right {
+            float: right;
+            margin: -5px -23px 0 0;
+            text-align: left;
+        }
+
+        .engravedHeader {
+            font-size: 14px;
+        }
+
+        #divUserRole {
+            width: 748px;
+        }
+
+        divRadPableBar {
+            width: 100%;
+        }
+
+        #divResults {
+            width: 100%;
+        }
+
+
+        .imageButtonClass {
+            height: 15px;
+        }
+
+        #divSubmit {
+            margin: 4px;
+            padding: 4px;
+        }
+        /*//remove expandable image*/
+        .rpExpandHandle
+        {
+            background-image:none!important;
+        }
+        /*//remove thead gird lines*/
+        .RadGrid_Office2010Silver .rgHeader, .RadGrid_Office2010Silver th.rgResizeCol, .RadGrid_Office2010Silver .rgHeaderWrapper
+        {
+            border:none;
+        }
+        .RadGrid_Office2010Silver .rgRow > td, .RadGrid_Office2010Silver .rgAltRow > td, .RadGrid_Office2010Silver .rgEditRow > td, .RadGrid_Office2010Silver .rgFooter > td
+        {
+             border:none;
+        }
     </style>
 </head>
 <body onresize="FullSize('MainTable');" style="overflow: hidden;">
     <form id="form1" runat="server">
+
         <telerik:RadScriptManager ID="RadScriptManager1" runat="server">
             <Scripts>
                 <asp:ScriptReference Assembly="Telerik.Web.UI" Name="Telerik.Web.UI.Common.Core.js" />
@@ -43,18 +112,19 @@
         <script type="text/javascript">
             //Put your JavaScript code here.
         </script>
-        <telerik:RadAjaxManager ID="RadAjaxManager1" runat="server">
-        </telerik:RadAjaxManager>
-        <table id="MainTable" style="position: absolute; top: 10px; left: 10px; width: 100px; height: 100px; visibility: hidden">
-            <tr style="height: 20px;">
-                <td>
-                    <center> <asp:Label ID="License" runat="server" Text=""></asp:Label></center>
-                </td>
-            </tr>
-            <tr style="height: 50%">
-                <td>
+        <telerik:RadAjaxManager ID="RadAjaxManager1" runat="server"></telerik:RadAjaxManager>
 
-                    <telerik:RadPanelBar runat="server" ID="RadPanelBar1" Height="100%" Width="100%" ExpandMode="FullExpandedItem">
+        <div class="containerWrap outerWrap">
+
+            <div id="MainTable">
+
+                <div id="divRadPableBar" class="roundShadowContainer">
+                    <div id="divTotalRecs">
+                        <span>License Info:</span> <b>
+                            <asp:Label ID="License" runat="server" Text=""></asp:Label></b>
+                    </div>
+                    <div class="row">&nbsp;</div>
+                    <telerik:RadPanelBar runat="server" ID="RadPanelBar1" Height="55%" Width="100%" ExpandMode="FullExpandedItem">
                         <Items>
                             <telerik:RadPanelItem runat="server" Expanded="True" Text="Data Restriction Selections" Value="panItemAccessTree">
                                 <Items>
@@ -80,77 +150,81 @@
                             </telerik:RadPanelItem>
                         </Items>
                     </telerik:RadPanelBar>
-
-                </td>
-            </tr>
-            <tr style="">
-                <td>
+                </div>
+                <div class="space"></div>
+                <div id="divResults" class="roundShadowContainer">
                     <telerik:RadGrid runat="server" ID="RadGrid1" AllowSorting="True" AutoGenerateColumns="False" CellSpacing="5" GridLines="None"
                         OnItemCommand="RadGrid1_ItemCommand" AllowAutomaticDeletes="True" ViewStateMode="Enabled" MasterTableView-AllowAutomaticDeletes="True"
                         ClientIDMode="AutoID" ClientSettings-ClientEvents-OnRowDeleting="RowDeleting">
                         <MasterTableView EditMode="Batch" CommandItemDisplay="Top" TableLayout="Fixed">
                             <CommandItemTemplate>
-                                <asp:LinkButton ID="Add" runat="server" CommandName="Add" Visible="true" ToolTip="Click to enter email addresses as comma, semi-colon, space or newline delimited.">
-                                    <asp:Image ID="Image1" runat="server" Style="border: 0px; vertical-align: middle;" alt="" ImageUrl="~/Images/Office-Girl-icon.png" />Add New
-                                </asp:LinkButton>&nbsp;&nbsp;
-                               <asp:LinkButton Width="100px" ID="Validate" runat="server" CommandName="Validate" Visible='<%# RadGrid1.EditIndexes.Count == 0 %>'>
-                                   <asp:Image ID="Image2" runat="server" Style="border: 0px; vertical-align: middle;" alt="" ImageUrl="~/Images/process-icon.png" />Validate
-                               </asp:LinkButton>&nbsp;&nbsp;               
-                               <asp:LinkButton ID="Clear" runat="server" CommandName="Clear" Visible='<%# RadGrid1.EditIndexes.Count == 0 %>'>
-                                   <asp:Image ID="Image3" runat="server" Style="border: 0px; vertical-align: middle;" alt="" ImageUrl="~/Images/close_24.png" />Reset
-                               </asp:LinkButton>&nbsp;&nbsp;
                             </CommandItemTemplate>
                             <Columns>
-                                <telerik:GridTemplateColumn DataField="ValidationImage" UniqueName="ValidationImageStatus" HeaderStyle-Width="25px">
+                                <telerik:GridButtonColumn Text="Add new row" CommandName="Add" ButtonType="ImageButton"
+                                    UniqueName="Add"
+                                    ButtonCssClass="imageButtonClass" HeaderTooltip="Add new row"
+                                    ImageUrl="~/Content/Images/Add-Blue.png" HeaderStyle-Width="25px" Resizable="false">
+                                    <HeaderStyle Width="25px" />
+                                    <ItemStyle Width="25px" />
+                                </telerik:GridButtonColumn>
+                                <telerik:GridTemplateColumn DataField="ValidationImage" UniqueName="ValidationImageStatus" HeaderStyle-Width="20px">
                                     <ItemTemplate>
                                         <asp:Image ID="ValidationStatusImage" runat="server" ImageUrl='<%#Eval("ValidationImage") %>' ToolTip='<%#Eval("ErrorMsg") %>' />
                                     </ItemTemplate>
                                 </telerik:GridTemplateColumn>
-                                <telerik:GridTemplateColumn DataField="Account_Name" HeaderText="Account Name" UniqueName="AccountNameText" HeaderStyle-Width="97%">
+                                <telerik:GridTemplateColumn DataField="Account_Name" HeaderText="Account Name" UniqueName="AccountNameText" HeaderStyle-Width="100%">
                                     <ItemTemplate>
-                                         <asp:TextBox Style="overflow: hidden" ID="AccountNameTextBox" runat="server" AutoPostBack="false" Text='<%#Eval("Account_Name") %>' Width="90%" TextMode="MultiLine" Rows="1" CssClass="required"></asp:TextBox>
+                                        <label id="lblAccountNameTextBox" for="AccountNameTextBox" class="labelweak required"></label>&nbsp;
+                                        <asp:TextBox ID="AccountNameTextBox" runat="server" AutoPostBack="false" Text='<%#Eval("Account_Name") %>' Width="90%" Height="27px" CssClass="standardTextBox"></asp:TextBox>
                                     </ItemTemplate>
-                                    <HeaderStyle Width="97%"></HeaderStyle>
+                                    <HeaderStyle Width="100%"></HeaderStyle>
                                 </telerik:GridTemplateColumn>
                                 <telerik:GridTemplateColumn DataField="SendWelcomeEmail" HeaderText="Send Welcome" UniqueName="SendWelcome" HeaderStyle-Width="100px" ItemStyle-HorizontalAlign="Center">
                                     <ItemTemplate>
                                         <asp:CheckBox ID="SendWelcomeCheckbox" runat="server" AutoPostBack="false" ViewStateMode="Enabled" Checked='<%#Eval("SendWelcomeEmail") %>' />
                                     </ItemTemplate>
                                 </telerik:GridTemplateColumn>
-
                                 <telerik:GridTemplateColumn DataField="DataAccess_Required" HeaderText="<center>Database Access</center>" UniqueName="DataAccessRequiredText">
                                     <ItemTemplate>
                                         <center><asp:CheckBox ID="DataAccessRequiredTextBox" AutoPostBack="false" runat="server" Checked='<%#Eval("DataAccess_Required") %>'/></center>
                                     </ItemTemplate>
                                 </telerik:GridTemplateColumn>
-
-                                <telerik:GridButtonColumn Text="Delete" CommandName="Delete" ButtonType="ImageButton" ConfirmText="Delete this user from the list?" ConfirmDialogType="Classic">
-                                    <HeaderStyle Width="32px" />
+                                <telerik:GridButtonColumn Text="Delete entry" CommandName="Delete" ButtonType="ImageButton"
+                                    ImageUrl="~/Content/Images/Delete.png" ButtonCssClass="imageButtonClass" HeaderTooltip="Delete entry"
+                                    ConfirmText="Delete this user from the list?" ConfirmDialogType="Classic">
+                                    <HeaderStyle Width="25px" />
+                                    <ItemStyle Width="25px" />
                                 </telerik:GridButtonColumn>
+                                <%--<telerik:GridButtonColumn Text="Delete" CommandName="Delete" ButtonType="ImageButton" ConfirmText="Delete this user from the list?" ConfirmDialogType="Classic">
+                                    <HeaderStyle Width="32px" />
+                                </telerik:GridButtonColumn>--%>
                             </Columns>
-
                         </MasterTableView>
                     </telerik:RadGrid>
-                </td>
-            </tr>
-            <tr style="color: #FF9900; height: 20px; font-size: 14px; font-style: italic">
-                <%--            <td><center>Paste multiple emails as comma, semi-colon, space or newline delimited and click 'Add List Entry' to create multiple accounts.</center></td>--%>
-                <td>
-                    <center>To create multiple new accounts with the above Data Restriction Selections, enter email addresses as comma, semi-colon, space or newline delimited, then click 'Add List Entry' button.</center>
-                </td>
-            </tr>
-            <tr style="height: 30px">
-                <td>
-                    <center><asp:Button ID="CreateUsers" runat="server" Text="Save" Width="200px" OnClientClick="return StartProcessing();" OnClick="CreateUsers_Click"/></center>
-                </td>
-            </tr>
-        </table>
+                </div>
+                <div class="space"></div>
+                <div class="space"></div>
+                <div id="divCreate">
+                    <asp:Button ID="CreateUsers" runat="server" Text="Save" OnClientClick="return StartProcessing();" OnClick="CreateUsers_Click" CssClass="btn btn-primary" />
+                    <asp:Button ID="Clear" runat="server" CommandName="Clear" Text="Reset" CssClass="btn btn-primary" Visible='<%# RadGrid1.EditIndexes.Count == 0 %>'
+                        OnClick="Reset_Click" />
+                </div>
+                <div class="space"></div>
+                <div class="alert alert-warning infoBox text-justify">
+                    <p>To create multiple new accounts with the above Data Restriction Selections, enter email addresses as comma, semi-colon, space or newline delimited, then click 'Add List Entry' button.</p>
+                </div>
+            </div>
 
-        <div id="LockPane" class="LockOff" style="overflow: hidden">
-            <iframe frameborder="0" seamless="seamless" style="border: none; overflow: hidden;" width="50" height="50" src="Images/frameanimation.aspx" name="imgbox" id="imgbox"></iframe>
-            <br />
-            <br />
-            Account modifications in progress.....
+            <div id="LockPane" class="LockOff" style="overflow: hidden">
+                <div id="progressBackgroundFilter"></div>
+                <div id="progressBarWindow" class="progressBarWindow center-block" style="top:26px">
+                    <asp:Image ID="loaderImage" runat="server" ImageUrl="~/Content/Images/ajax-loader-bar.gif" Width="248px" Height="30px" />
+                    <div class="space"></div>
+                    <span class="engravedHeader">Please Wait....</span>
+                    <div class="space"></div>
+                </div>
+            </div>
+
         </div>
 
         <script type="text/javascript">
@@ -241,15 +315,28 @@
             //This method is used when deleting the 'last' row in the grid, it cancels the removal of the 
             //last row and clear then values in the row.  Event is attached to deleting row of RadGrid
             function RowDeleting(sender, eventArgs) {
+                debugger;
                 var grid = $find('<%=RadGrid1.ClientID %>');
                 if (grid) {
                     var MasterTable = grid.get_masterTableView();
                     if (MasterTable) {
                         var Rows = MasterTable.get_dataItems();
-                        if (Rows.length == 1) { //only when 1 row
-                            //clear the values
-                            Rows[0].get_cell("AccountNameText").childNodes[1].value = "";
-                            Rows[0].get_cell("SendWelcome").childNodes[1].checked = false;
+                        if (Rows.length == 1) { //only when 1 row   
+                            //ValidationStatusImage
+                            if (Rows[0]._element.cells[1].childNodes[1].id == "RadGrid1_ctl00_ctl04_ValidationStatusImage") {
+                                var eleImage = Rows[0]._element.cells[1].childNodes[1];
+                                eleImage.style.visiblity = 'hidden';
+                                eleImage.style.display = 'none';
+                            }
+                            //AccountNameText
+                            if (Rows[0]._element.cells[2].childNodes[3].id == "RadGrid1_ctl00_ctl04_AccountNameTextBox") {
+                                Rows[0]._element.cells[2].childNodes[3].value = "";
+
+                            }
+                            //SendWelcome
+                            if (Rows[0]._element.cells[3].childNodes[1].id == "RadGrid1_ctl00_ctl04_SendWelcomeCheckbox") {
+                                Rows[0]._element.cells[3].childNodes[1].checked = false;
+                            }
                             eventArgs.set_cancel(true);
                         }
                     }
