@@ -48,7 +48,6 @@
         }
     </style>
 
-    <%--  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>--%>
     <script type="text/javascript" src="javascript/jquery.min.js"></script>
     <script src="javascript/WaterMark.min.js" type="text/javascript"></script>
 
@@ -65,7 +64,6 @@
     </script>
 </head>
 <body style="background-color: white; background-image: url(images/watermark.png); background-repeat: repeat">
-
 
     <form id="myform" runat="server">
         <div class="logincontent">
@@ -138,6 +136,7 @@
             <asp:HiddenField runat="server" ID="Step" Value="0" />
             <asp:HiddenField runat="server" ID="UserName" Value="0" />
             <asp:HiddenField runat="server" ID="UserTrys" Value="0" />
+        </div>
     </form>
 </body>
 </html>

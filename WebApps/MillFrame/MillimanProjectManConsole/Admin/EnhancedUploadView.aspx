@@ -1,11 +1,13 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" Inherits="EnhancedUploadView" CodeBehind="EnhancedUploadView.aspx.cs" %>
 
 <%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <link id="lnkBS" runat="server" rel="stylesheet" type="text/css" href="../Content/Style/bootstrap.css" />
-    <link id="lnkBSD" runat="server" rel="stylesheet" type="text/css" href="../Content/Style/bootstrap-dialog.min.css" />
+    <link id="lnkBS" runat="server" rel="stylesheet" type="text/css" href="~/Content/Style/bootstrap.css" />
+    <link id="lnkBSD" runat="server" rel="stylesheet" type="text/css" href="~/Content/Style/bootstrap-dialog.min.css" />
     <link id="Link1" runat="server" rel="stylesheet" type="text/css" href="~/Content/Style/MillframeStyle.css" />
     <style type="text/css">
         html {
@@ -42,16 +44,7 @@
         #divGroupAssignment {
             width: 534px;
         }
-
-        .roundShadowContainer ul, li {
-            list-style-type: none;
-        }
     </style>
-
-    <script src="../Content/Script/jquery.v1.7.1.js" type="text/javascript"></script>
-    <script src="../Content/Script/jquery.min.v2.1.1.js" type="text/javascript"></script>
-    <script src="../Content/Script/bootstrap.min.v3.3.7.js" type="text/javascript"></script>
-    <script src="../Content/Script/bootstrap-dialog.min.js" type="text/javascript"></script>
 
     <script language="javascript" type="text/javascript">
         function getRadWindow() {
@@ -100,7 +93,6 @@
             <%--divImportantHint hint--%>
             <div id="divImportant" class="divImportant" style="width: 23px; float: left;">
                 <img id="img2" src="~/Content/Images/Info-blue.png" runat="server" width="18" height="18" alt="Info" />
-                <i class="glyphicons glyphicons-info-sign"></i>
                 <div id="divImportantHint">
                     <div class="alert alert-warning infoBox text-justify">
                         <strong>Important!</strong>
@@ -112,15 +104,12 @@
                 </div>
             </div>
             <%--divImportantHint hint--%>
-            <div class="space"></div>
-            <div class="left-div">
-                <div id="divGeneralProjectInfo" class="roundShadowContainer">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <h3>General Project Information</h3>
-                        </div>
-                    </div>
-                    <div class="row">&nbsp;</div>
+            <div id="divGeneralProjectInfo" class="roundShadowContainer">
+                <div class="page-header engravedHeader">
+                    <h3>General Project Information</h3>
+                </div>
+                <div class="row">&nbsp;</div>
+                <div id="divContainer" class="text-justify">
                     <div class="row">
                         <div class="col-sm-4">
                             <label for="ProjectName" class="labelweak">Project Name:</label>
@@ -171,8 +160,7 @@
                             <label for="Tooltip" class="labelweak">Project Tooltip:</label>
                         </div>
                         <div class="col-sm-8">
-                            <asp:TextBox Height="97px" ID="Tooltip" runat="server" Width="86%"
-                                TextMode="SingleLine"
+                            <asp:TextBox ID="Tooltip" runat="server" Width="86%"
                                 ToolTip="Tooltip that will be displayed on mouse-over of the launch icon - visible to client users"
                                 class="form-control" />
                         </div>
@@ -201,32 +189,28 @@
                     </div>
                 </div>
             </div>
-            <div class="space"></div>
-            <div class="right-div">
-                <div id="divGroupAssignment" class="roundShadowContainer">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <h3>Group Assignment/Modification</h3>
-                        </div>
-                    </div>
-                    <div class="row">&nbsp;</div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="text-left">
-                                <label for="NewGroup" class="labelweak">New Group:</label>
-                                <asp:TextBox runat="server" ID="NewGroupName" Width="45%"></asp:TextBox>
-                                <asp:Button runat="server" ID="Button1" Text="Create Group" ToolTip="Create a group on the production server."
-                                    OnClick="CreateGroup_Click" CssClass="btn btn-secondary btn-sm" />
-                                <asp:Button runat="server" ID="Button2" Text="Delete Group" ToolTip="Delete the 'checked' groups on the production server"
-                                    OnClick="Delete_Click" CssClass="btn btn-secondary btn-sm" />
+            <div class="row">&nbsp;</div>
+            <div id="divGroupAssignment" class="roundShadowContainer">
+                <div class="page-header engravedHeader">
+                    <h3>Group Assignment/Modification</h3>
+                </div>
+                <div class="row">&nbsp;</div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="text-left">
+                            <label for="NewGroup" class="labelweak">New Group:</label>
+                            <asp:TextBox runat="server" ID="NewGroupName" Width="40%" CssClass="form-control"></asp:TextBox>
+                            <asp:Button runat="server" ID="Button1" Text="Create Group" ToolTip="Create a group on the production server."
+                                OnClick="CreateGroup_Click" CssClass="btn btn-secondary btn-sm" />
+                            <asp:Button runat="server" ID="Button2" Text="Delete Group" ToolTip="Delete the 'checked' groups on the production server"
+                                OnClick="Delete_Click" CssClass="btn btn-secondary btn-sm" />
 
-                            </div>
-                            <div class="row">&nbsp;</div>
-                            <div style="height: 400px; min-height: 50px; overflow-y: auto; margin: 0 auto; background: #eceaea;">
-                                <asp:CheckBoxList runat="server" ID="SelectedGroups"
-                                    RepeatColumns="1" onclick="SetTooltip()">
-                                </asp:CheckBoxList>
-                            </div>
+                        </div>
+                        <div class="row">&nbsp;</div>
+                        <div style="height: 400px; min-height: 50px; overflow-y: auto; margin: 0 auto; background: #eceaea;">
+                            <asp:CheckBoxList runat="server" ID="SelectedGroups"
+                                RepeatColumns="1" onclick="SetTooltip()">
+                            </asp:CheckBoxList>
                         </div>
                     </div>
                 </div>
@@ -253,6 +237,13 @@
         </div>
 
     </form>
+
+
+    <script src="../Content/Script/jquery.v1.9.1.js" type="text/javascript"></script>
+    <script src="../Content/Script/jquery.min.v2.1.1.js" type="text/javascript"></script>
+    <script src="../Content/Script/bootstrap.min.v3.3.7.js" type="text/javascript"></script>
+    <script src="../Content/Script/bootstrap-dialog.min.js" type="text/javascript"></script>
+
     <script type="text/javascript">
         jQuery(function () {
             jQuery('#tabs a:last').tab('show')
@@ -265,6 +256,12 @@
             $('#divImportantHint').show();
         }, function () {
             $('#divImportantHint').hide();
+        });
+
+        $('.divImportant').mousemove(function (e) {
+            $("#divImportantHint")
+                .css('top', e.pageY + moveDown)
+                .css('left', e.pageX + moveLeft);
         });
 
         //disable all the button in the form while uploading
@@ -336,9 +333,8 @@
         function checkInvalidChars(controlValue) {
             //not allowed chars
             if (controlValue != "") {
-                //var regexInvalid = new RegExp(/[><#]/g);
-                var regexInvalid = new RegExp(/[\x00-\x1F\x7F-\x9F]/u);//find control characters in utf-8 string
-                if (controlValue.match(regexInvalid)) {
+                var patternEscapeChars = /[\x00-\x1f\x7f-\xff]/gi;
+                if (patternEscapeChars.test(controlValue)) {
                     badDataError();
                     return false;
                 }

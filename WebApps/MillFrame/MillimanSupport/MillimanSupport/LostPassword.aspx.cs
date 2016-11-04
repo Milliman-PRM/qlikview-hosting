@@ -9,7 +9,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Configuration;
 
-namespace MillimanDev2
+namespace MillimanSupport
 {
     public partial class LostPassword : System.Web.UI.Page
     {

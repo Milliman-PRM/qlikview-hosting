@@ -8,7 +8,7 @@ using System.Web.Configuration;
 using System.Web.Security;
 using System.Web.Profile;
 
-namespace MillimanDev2
+namespace MillimanSupport
 {
     public partial class Profile : System.Web.UI.Page
     {
