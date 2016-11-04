@@ -56,7 +56,7 @@
       <script type="text/javascript" src="javascript/jquery.min.js"></script>
 <script src="javascript/WaterMark.min.js" type="text/javascript"></script>
 
-<script type="text/javascript">
+<%--<script type="text/javascript">
     $(function () {
         $("[id*=txtUserName], [id*=txtPassword], [id*=txtDetails]").WaterMark();
         //To change the color of Watermark
@@ -66,7 +66,7 @@
         });
     });
 
-	</script>
+	</script>--%>
 </head>
 <body style="background-color:white;background-image:url(images/watermark.png);background-repeat:repeat">
    

@@ -101,7 +101,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <label for="Phone" class="labelweak required">Phone:&nbsp;</label>
+                                    <label for="Phone" class="labelweak">Phone:&nbsp;</label>
                                 </td>
                                 <td>
                                     <input id="Phone" name="Phone" type="text" runat="server" class="form-control phone" placeholder="(000)000-0000"
@@ -156,7 +156,7 @@
                                     <label for="NewPassword" class="labelweak required">New Password:&nbsp;</label></td>
                                 <td>
                                     <input id="NewPassword" name="NewPassword" type="password" runat="server" class="NewPassword form-control"
-                                        style="width: 185px;" tabindex="5" onclick="this.select();" />
+                                        style="width: 185px;" tabindex="5" onclick="this.select();" maxlength="38" />
                                     <img src="Content/Images/eye-icon.png" class="showPassword"
                                         id="imageShowPassword" onclick="changeImage(this)" width="18" height="18" />
                                     <div id="divPasswordCriteriaContainer" class="passwordCriteria roundShadowContainer">
@@ -180,7 +180,7 @@
                                     <label for="ConfirmNewPassword" class="labelweak required">Confirm New Password:&nbsp;</label></td>
                                 <td>
                                     <input id="ConfirmNewPassword" name="ConfirmNewPassword" type="password" runat="server" class="form-control"
-                                        style="width: 185px;" tabindex="6" onclick="this.select();" />
+                                        style="width: 185px;" tabindex="6" onclick="this.select();" maxlength="38" />
 
                                     <span id="passwordMatchMessage" class="passwordMatchMessage"></span>
                                 </td>
@@ -499,13 +499,6 @@
         //***************** Validate Data ******************************//
         function Validate() {
             try {
-                var Phone = $('#Phone').val();
-                if (Phone == '') {
-                    $('#Phone').addClass('textbox-focus');
-                    showErrorAlert('The Phone field is required.');
-                    return false;
-                }
-
                 var UserFirstNameInput = document.getElementById("UserFirstName");
                 var UserLastInput = document.getElementById("UserLastName");
                 //check if the names are goo
@@ -834,6 +827,10 @@
                 message.innerHTML = "Passwords Do Not Match!"
                 $('#passwordMatchMessage').addClass('badMatch');
                 return false;
+            }
+
+            if (newPassword === confirmPassword) {
+                message.innerHTML = ""
             }
         }
 
