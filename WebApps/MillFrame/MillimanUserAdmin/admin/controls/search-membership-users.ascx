@@ -2,13 +2,13 @@
 <%@ Register Src="js-include2.ascx" TagName="js" TagPrefix="uc1" %>
 <%@ Register Src="js-include3.ascx" TagName="js" TagPrefix="uc3" %>
 <%@ Register Src="~/js/js/jquery.ascx" TagName="jquery" TagPrefix="uc4" %>
-<%@ Register src="a-z-menu.ascx" tagname="a" tagprefix="uc2" %>
-<%@ Register src="search-box.ascx" tagname="search" tagprefix="uc5" %>
+<%@ Register Src="a-z-menu.ascx" TagName="a" TagPrefix="uc2" %>
+<%@ Register Src="search-box.ascx" TagName="search" TagPrefix="uc5" %>
 <%-- gridview banner --%>
 <div class="gvBanner">
     <span class="gvBannerUsers">
         <asp:Image ID="Image1" runat="server" ImageAlign="AbsMiddle" ImageUrl="~/images/decoy-icon-36px.png" />
-    </span> Membership Search: 
+    </span>Membership Search: 
     <uc5:search ID="search1" runat="server" />
 </div>
 <%-- a-z repeater control --%>
@@ -23,7 +23,7 @@
         <asp:BoundField DataField="RowNumber" HeaderText="#" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="20px" />
         <asp:TemplateField HeaderText="DEL">
             <HeaderTemplate>
-                <input id="chkAll" onclick="SelectAllCheckboxes('chkRows',this.checked);" runat="server" type="checkbox" title="Check all checkboxes" />
+                <input id="chkAll" onclick="SelectAllCheckboxes('chkRows', this.checked);" runat="server" type="checkbox" title="Check all checkboxes" />
             </HeaderTemplate>
             <ItemTemplate>
                 <asp:CheckBox ID="chkRows" runat="server" ToolTip="Select for deletion" />
@@ -46,7 +46,11 @@
             </ItemTemplate>
         </asp:TemplateField>
         <asp:BoundField DataField="createdate" HeaderText="ACCOUNT START" SortExpression="createdate" />
-        <asp:BoundField DataField="lastlogindate" HeaderText="LAST LOGIN DATE" SortExpression="lastlogindate" />
+        <asp:TemplateField HeaderText="LAST LOGIN DATE" SortExpression="lastlogindate">
+            <ItemTemplate>
+                <asp:Label ID="lblLastLogin" runat="server" Text='<%# (Eval("lastlogindate", "{0:d}")=="1/1/1753" ? "" : Eval("lastlogindate", "{0:MM/dd/yyyy hh:mm tt}")) %>'></asp:Label>
+            </ItemTemplate>
+        </asp:TemplateField>
         <asp:CheckBoxField DataField="IsApproved" HeaderText="Active?" SortExpression="IsApproved">
             <ItemStyle HorizontalAlign="Center" />
         </asp:CheckBoxField>
@@ -86,7 +90,7 @@
     <SelectParameters>
         <asp:QueryStringParameter Name="UserName" QueryStringField="UserName" DefaultValue="@txbEmail" />
         <asp:QueryStringParameter Name="Email" QueryStringField="Email" DefaultValue="@txbUserName" />
-        
+
     </SelectParameters>
 </asp:ObjectDataSource>
 <%-- panel hide items if gridview empty --%>

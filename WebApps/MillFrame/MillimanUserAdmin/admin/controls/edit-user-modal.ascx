@@ -97,10 +97,38 @@
                                         </ItemTemplate>
                                     </asp:TemplateField>
                                     <asp:BoundField DataField="CreationDate" HeaderText="Creation Date" ReadOnly="True" ControlStyle-CssClass="form-control"></asp:BoundField>
-                                    <asp:BoundField DataField="LastActivityDate" HeaderText="Last Activity Date" ReadOnly="True" ControlStyle-CssClass="form-control"></asp:BoundField>
+
+<%--                                    <asp:BoundField DataField="LastActivityDate" HeaderText="Last Activity Date" ReadOnly="True" ControlStyle-CssClass="form-control"></asp:BoundField>
                                     <asp:BoundField DataField="LastLoginDate" HeaderText="Last Login Date" ReadOnly="True" ControlStyle-CssClass="form-control"></asp:BoundField>
                                     <asp:BoundField DataField="LastLockoutDate" HeaderText="Last Lockout Date" ReadOnly="True" ControlStyle-CssClass="form-control"></asp:BoundField>
-                                    <asp:BoundField DataField="LastPasswordChangedDate" HeaderText="Last Password Changed Date" ReadOnly="True" ControlStyle-CssClass="form-control"></asp:BoundField>
+                                    <asp:BoundField DataField="LastPasswordChangedDate" HeaderText="Last Password Changed Date" ReadOnly="True" ControlStyle-CssClass="form-control"></asp:BoundField>--%>
+
+
+                                    <asp:TemplateField HeaderText="Last Activity Date">
+                                        <ItemTemplate>
+                                            <%--<asp:Label ID="lblLastActivityDate" runat="server" Text='<%# (Eval("LastLoginDate", "{0:d}")=="1/1/1753" ? "Never" : Eval("LastActivityDate")) %>' ControlStyle-CssClass="form-control" ReadOnly="True"></asp:Label>--%>
+                                           <asp:Label ID="lblLastActivityDate" runat="server" Checked='<%# Eval("LastActivityDate") %>' Enabled="false" ControlStyle-CssClass="form-control" ReadOnly="True"></asp:Label>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Last Login Date">
+                                        <ItemTemplate>
+                             <%--               <asp:Label ID="lblLastLoginDate" runat="server" Text='<%# (Eval("LastLoginDate", "{0:d}")=="1/1/1753" ? "Never" : Eval("LastLoginDate")) %>' ControlStyle-CssClass="form-control" ReadOnly="True"></asp:Label>--%>
+                                             <asp:Label ID="lblLastLoginDate" runat="server" Checked='<%# Eval("LastLoginDate") %>' Enabled="false" ControlStyle-CssClass="form-control" ReadOnly="True"></asp:Label>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Last Lockout Date">
+                                        <ItemTemplate>
+                                           <%-- <asp:Label ID="lblLastLockoutDate" runat="server" Text='<%# (Eval("LastLoginDate", "{0:d}")=="1/1/1753" ? "Never" : Eval("LastLockoutDate")) %>' ControlStyle-CssClass="form-control" ReadOnly="True"></asp:Label>--%>
+                                             <asp:Label ID="lblLastLockoutDate" runat="server" Checked='<%# Eval("LastLockoutDate") %>' Enabled="false" ControlStyle-CssClass="form-control" ReadOnly="True"></asp:Label>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Last Password Changed Date">
+                                        <ItemTemplate>
+                                            <%--<asp:Label ID="lblLastPasswordChangedDate" runat="server" Text='<%# (Eval("LastLoginDate", "{0:d}")=="1/1/1753" ? "Never" : Eval("LastPasswordChangedDate")) %>' ControlStyle-CssClass="form-control" ReadOnly="True"></asp:Label>--%>
+                                             <asp:Label ID="lblLastPasswordChangedDate" runat="server" Checked='<%# Eval("LastPasswordChangedDate") %>' Enabled="false" ControlStyle-CssClass="form-control" ReadOnly="True"></asp:Label>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+
                                     <asp:TemplateField ShowHeader="False">
                                         <EditItemTemplate>
                                             <asp:Button ID="Button1" CssClass="btn btn-primary" runat="server" CausesValidation="True" CommandName="Update" Text="Save" OnClientClick="return confirm('This will UPDATE the User Info. Click OK to continue.')" />
@@ -371,7 +399,7 @@
                                     <div class="col-sm-8">
                                         <label for="PasswordTextbox" class="labelweak">Current Password:</label>
                                         <br />
-                                        <asp:Label ID="lblCurrentPassword" runat="server" EnableViewState="False" ReadOnly="True" CssClass="form-control" ></asp:Label>
+                                        <asp:Label ID="lblCurrentPassword" runat="server" EnableViewState="False" ReadOnly="True" CssClass="form-control"></asp:Label>
                                     </div>
                                 </div>
                                 <div class="row">&nbsp;</div>

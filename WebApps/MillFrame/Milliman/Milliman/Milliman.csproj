@@ -307,6 +307,7 @@
     <None Include="..\..\appsettings_AK.config">
       <Link>Configs\appsettings_AK.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
     <None Include="..\..\appsettings_Prod.config">
       <Link>Configs\appsettings_Prod.config</Link>
@@ -390,7 +391,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>2183</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:2236/</IISUrl>
+          <IISUrl>http://localhost:2238/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

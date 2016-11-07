@@ -1405,7 +1405,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>1935</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:1048/</IISUrl>
+          <IISUrl>http://localhost:1049/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
