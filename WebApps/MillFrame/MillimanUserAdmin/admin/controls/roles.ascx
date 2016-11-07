@@ -16,6 +16,10 @@
     <asp:Button ID="Button2" runat="server" OnClick="AddRole" Text="Add Group" ToolTip="Click to create new group." />
     <%-- search box --%>
     <uc2:search ID="search1" runat="server" />
+    <%-- message label --%>
+    <div class="messageWrap">
+        <asp:HyperLink ID="Msg" runat="server" Style="color: red" Visible="False">[Msg]</asp:HyperLink>
+    </div>
 </div>
 <%-- a-z navigation --%>
 <uc5:a ID="a1" runat="server" />
@@ -117,11 +121,6 @@
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <asp:LinkButton ID="ApplyChanges" runat="server" ToolTip="Click to apply changes to roles" OnClick="ApplyChanges_Click">Apply Changes</asp:LinkButton>
 </div>
-<%-- message label --%>
-<div class="messageWrap">
-    <asp:HyperLink ID="Msg" runat="server" Visible="False">[Msg]</asp:HyperLink>
-</div>
-
 <%-- jquery js --%>
 <uc4:jquery ID="jquery1" runat="server" />
 <%-- check all checkboxes javascript --%>

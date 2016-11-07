@@ -134,7 +134,6 @@ public partial class bulk_admin_controls_create_user_with_role : System.Web.UI.U
         {
             MillimanCommon.Alert.Show("No user information has been entered");
         }
-
     }
 
     protected void UserType_SelectedIndexChanged(object sender, EventArgs e)
