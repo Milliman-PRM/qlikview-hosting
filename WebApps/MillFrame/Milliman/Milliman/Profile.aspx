@@ -683,6 +683,7 @@
 
                 var result = matchWordsinStringArray(partsOfThreeLettersUsernameArray, partsOfThreeLettersPasswordArray);
                 if (result != null) {
+                    //using (i) to Perform case-insensitive matching.
                     var elementValue = newPasswordVal.match(new RegExp(result.passwordElement, "i"));
                     //showErrorAlert('The password you entered cannot contain substring <b>' + elementValue[0] + '</b>, since <b>' + elementValue[0] + '</b> is a substring in your account name.  The password cannot contain 3 or more contiguous characters from the account name.');
                     messagePasswordUserNameChars = 'The password you entered cannot contain substring <b>' + elementValue[0] + '</b>, since <b>' + elementValue[0] + '</b> is a substring in your account name.  The password cannot contain 3 or more contiguous characters from the account name.';
