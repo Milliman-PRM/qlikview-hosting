@@ -5,7 +5,6 @@
 <%@ Register Src="search-box.ascx" TagName="search" TagPrefix="uc2" %>
 <%@ Register Src="a-z-menu.ascx" TagName="a" TagPrefix="uc5" %>
 
-
 <%-- gridview banner --%>
 <div class="gvBanner">
     <span class="gvBannerUsers">
@@ -23,9 +22,9 @@
 </div>
 <%-- a-z navigation --%>
 <uc5:a ID="a1" runat="server" />
-<%-- gridview to display membership users --%>
 <asp:GridView ID="UserRoles" runat="server" AutoGenerateColumns="False"
-    OnRowDataBound="UserRoles_RowDataBound" CssClass="gv">
+    OnRowDataBound="UserRoles_RowDataBound"
+    CssClass="gv">
     <Columns>
         <asp:TemplateField>
             <HeaderStyle CssClass="gvHeader" Width="1px" />
@@ -53,18 +52,19 @@
             <ItemTemplate>
                 <asp:Label ID="RoleName" runat="server" Text='<%# Eval("Role Name") %>'></asp:Label>
             </ItemTemplate>
+            <HeaderStyle Width="100px" />
+            <ItemStyle HorizontalAlign="Left" Width="300px" />
         </asp:TemplateField>
         <asp:TemplateField>
             <HeaderTemplate>
                 FRIENDLY NAME
             </HeaderTemplate>
             <ItemTemplate>
-                <asp:TextBox ID="FriendlyName" runat="server" Text='<%# Eval("Friendly Name") %>' Width="95%"  ValidationGroup="check"></asp:TextBox>
-                <%--user can not enter @ or ' or " or % or # or dot or ^--%>
-                <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server"
-                    ControlToValidate="FriendlyName" ErrorMessage="Invalid Character." SetFocusOnError="True" 
-                    ValidationExpression="^'&quote[@%#.]+$"  ValidationGroup="check"></asp:RegularExpressionValidator>
+                <asp:TextBox ID="FriendlyName" runat="server" Text='<%# Eval("Friendly Name") %>' Width="95%"
+                    ValidationGroup="check" CssClass="friendlyName"></asp:TextBox>
             </ItemTemplate>
+            <HeaderStyle Width="100px" />
+            <ItemStyle HorizontalAlign="Left" Width="300px" />
         </asp:TemplateField>
         <asp:TemplateField>
             <HeaderTemplate>
@@ -73,6 +73,8 @@
             <ItemTemplate>
                 <asp:Label ID="ExternalName" runat="server" Text='<%# Eval("External Name") %>'></asp:Label>
             </ItemTemplate>
+            <HeaderStyle Width="100px" />
+            <ItemStyle HorizontalAlign="Left" Width="200px" />
         </asp:TemplateField>
         <asp:TemplateField>
             <HeaderTemplate>
@@ -81,6 +83,8 @@
             <ItemTemplate>
                 <center> <asp:TextBox ID="txtGroupCategory" runat="server" Text='<%# Eval("Group Category") %>' Width="95%"></asp:TextBox></center>
             </ItemTemplate>
+            <HeaderStyle Width="100px" />
+            <ItemStyle HorizontalAlign="Left" Width="300px" />
         </asp:TemplateField>
         <asp:TemplateField>
             <HeaderTemplate>
@@ -89,15 +93,18 @@
             <ItemTemplate>
                 <center> <asp:TextBox ID="UserLimit" runat="server" Text='<%# Eval("Maximum Number Users") %>' Width="50px"></asp:TextBox></center>
             </ItemTemplate>
+            <HeaderStyle Width="100px" />
+            <ItemStyle HorizontalAlign="Center" Width="50px" />
         </asp:TemplateField>
         <asp:TemplateField>
             <HeaderTemplate>
                 USER COUNT
             </HeaderTemplate>
             <ItemTemplate>
-                <asp:Label ID="UserCount" runat="server" Text='<%# Eval("User Count") %>'></asp:Label>
+                <asp:Label ID="UserCount" runat="server" Text='<%# Eval("User Count") %>' Width="25%"></asp:Label>
             </ItemTemplate>
-            <ItemStyle HorizontalAlign="Center" />
+            <HeaderStyle Width="100px" />
+            <ItemStyle HorizontalAlign="Center" Width="25px" />
         </asp:TemplateField>
         <asp:TemplateField>
             <HeaderTemplate>
@@ -106,7 +113,8 @@
             <ItemTemplate>
                 <asp:LinkButton ID="Button1" runat="server" CommandArgument='<%# Eval("Role Name") %>' CommandName="DeleteRole" OnClientClick="return confirm('Are you sure?')" OnCommand="DeleteRole" Text="Delete" ToolTip="Click to delete this role." />
             </ItemTemplate>
-            <ItemStyle HorizontalAlign="Center" />
+            <HeaderStyle Width="100px" />
+            <ItemStyle HorizontalAlign="Center" Width="25px" />
         </asp:TemplateField>
     </Columns>
     <RowStyle CssClass="gvRowStyle" />
@@ -115,22 +123,114 @@
     <HeaderStyle CssClass="gvHeader" />
     <EditRowStyle CssClass="gvEdit" />
 </asp:GridView>
-<%-- delete checked users button --%>
-<div class="buttonCSS" style="width: 400px">
-    <asp:LinkButton ID="btnDeleteSelected" runat="server" OnClick="btnDeleteSelected_Click" OnClientClick="return confirm('DELETE selected ROLE(S)?');" ToolTip="DELETE selected ROLES.">Delete Selected</asp:LinkButton>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <asp:LinkButton ID="ApplyChanges" runat="server" ToolTip="Click to apply changes to roles" OnClick="ApplyChanges_Click">Apply Changes</asp:LinkButton>
+<div class="space"></div>
+<div class="row">
+    <div class="col-md-12" style="float: none; width: 415px;">
+        <div class="col-md-9">
+            <asp:Button ID="ApplyChanges" runat="server" ToolTip="Click to apply changes to roles" Text="Save"
+                OnClick="ApplyChanges_Click" CssClass="btn btn-primary" OnClientClick="if (!Validate()) {return false;}"></asp:Button>
+            <asp:Button ID="btnDeleteSelected" runat="server" OnClick="btnDeleteSelected_Click"
+                OnClientClick="return confirm('DELETE selected ROLE(S)?');" Text="Delete"
+                ToolTip="DELETE selected ROLES." CssClass="btn btn-primary"></asp:Button>
+            <asp:Label ID="lblBadChars" runat="server"></asp:Label>
+        </div>
+    </div>
 </div>
 <%-- jquery js --%>
 <uc4:jquery ID="jquery1" runat="server" />
 <%-- check all checkboxes javascript --%>
 <uc1:js ID="js1" runat="server" />
 
-<style>
-
-</style>
-
+<script src="../../Content/Script/jquery.v1.9.1.js"></script>
+<script src="../../Content/Script/bootstrap.js"></script>
+<script src="../../Content/Script/bootstrap-dialog.min.js"></script>
+<link href="../../Content/Style/bootstrap-dialog.min.css" rel="stylesheet" />
 <script type="text/javascript">
 
+    var lblBadChars = "<%= ConfigurationManager.AppSettings["BadCharactersInFriendlyName"].ToString() %>";
+    var badChars = lblBadChars.replace(/,/g, "");
+
+    //this function executes when edit individual cell
+    $(".friendlyName").blur(function () {
+        var rowNum = $(this).closest('tr').find("td:eq(1)").text();
+        var $controlValue = $(this).val();
+        CheckValidData($controlValue);
+    });
+
+    //$('input.friendlyName').keyup(function () {
+    //    console.log("1");
+    //    var $controlValue = $(this).val();
+    //    CheckValidData($controlValue);
+    //});
+
+    //this is fired when click save
+    function Validate() {
+        try {
+            var friendlyNameArray = [];
+            //get all the friendly names from all text boxes and add to array
+            $('.friendlyName').each(function (i, obj) {
+                friendlyNameArray.push(obj.value);
+            });
+
+            //creaete one big word by removing all commas
+            var oneWordArrayString = friendlyNameArray.join().replace(/,/g, "");
+            CheckValidData(oneWordArrayString);
+        }
+        catch (err) {
+            return false;
+            var txt = 'Error=>' + err.description;
+            showDangerAlert(txt);
+        }
+    }
+
+    function CheckValidData(oneWordArrayString) {
+        //seperate the bad chars into array for speed
+        var badCharArray = [];
+        for (i = 0; i < oneWordArrayString.length; i++) {
+            if (badChars.indexOf(oneWordArrayString[i]) > -1) {
+                badCharArray.push(oneWordArrayString[i]);
+            }
+        }
+
+        //check the 
+        if (badCharArray.length > 0) {
+            disableLinkButton();
+            var msg = 'Friendly name can not contain invalid character(s) like <b>' + badCharArray.join(',') + '</b>';
+            showErrorAlert(msg);
+            return false;
+        }
+        else {
+            enableLinkButton();
+        }
+
+        return true;
+    }
+
+    //***************** Alert Messages ******************************// 
+    function showErrorAlert(alertMessage) {
+        BootstrapDialog.show({
+            title: 'Data Entry Issue',
+            message: alertMessage,
+            type: BootstrapDialog.TYPE_WARNING, // <-- Default value is BootstrapDialog.TYPE_PRIMARY
+            closable: true, // <-- Default value is false
+            draggable: true, // <-- Default value is false
+            buttons: [{
+                label: 'OK',
+                hotkey: 13, // Keycode of keyup event of key 'A' is 65.
+                cssClass: 'btn-warning',
+                action: function (dialog) {
+                    dialog.close();
+                }
+            }],
+        });
+    }
+
+    function enableLinkButton() {
+        document.getElementById('<%= ApplyChanges.ClientID %>').disabled = false;
+    }
+
+    function disableLinkButton() {
+        document.getElementById('<%= ApplyChanges.ClientID %>').disabled = true;
+    }
 
 </script>

@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Configuration;
 using System.Data;
 using System.Web.Security;
+using System.Web.UI;
 using System.Web.UI.WebControls;
 
 public partial class admin_controls_roles : System.Web.UI.UserControl
@@ -165,6 +167,12 @@ public partial class admin_controls_roles : System.Web.UI.UserControl
                 cb.Enabled = false;
                 cb.ToolTip = @"Administrator group cannot be deleted";
             }
+            ////Get your textbox
+            //TextBox tbFriendlyName = (TextBox)e.Row.FindControl("FriendlyName");
+            //if (tbFriendlyName.Text.Length>0)
+            //{
+            //    tbFriendlyName.Attributes.Add("onblur", "CheckValidData('" + tbFriendlyName.Text + "','" + tbFriendlyName.ClientID + "');");
+            //}
         }
         //-----------------------------------------------------------------------------
     }

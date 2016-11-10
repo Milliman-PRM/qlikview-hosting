@@ -344,24 +344,6 @@ public partial class admin_controls_edit_user_modal : System.Web.UI.UserControl
 
     #endregion
 
-    //#region Add New Role
-
-    //public void AddRole(object sender, EventArgs e)
-    //{
-    //    // create new roles
-    //    try
-    //    {
-    //        Roles.CreateRole(NewRole.Text);
-    //        ConfirmationMessage.InnerText = "The new role was added.";
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        ConfirmationMessage.InnerText = ex.Message;
-    //    }
-    //}
-
-    //#endregion
-
     #region Change Password Button Click
 
     public void ChangePasswordSecureLink_OnClick(object sender, EventArgs args)
@@ -518,6 +500,40 @@ public partial class admin_controls_edit_user_modal : System.Web.UI.UserControl
                 CB.Checked = System.Convert.ToBoolean(V);
             }
         }
+        
+        if (!string.IsNullOrEmpty(Request.QueryString["username"]))
+        {
+            // check if username exists in the query string
+            var user = Membership.GetUser(Request.QueryString["username"]);
+            Label lblLastActivityDate = UserInfo.Controls[0].FindControl("lblLastActivityDate") as Label;
+            Label lblLastLoginDate = UserInfo.Controls[0].FindControl("lblLastLoginDate") as Label;
+            Label lblLastLockoutDate = UserInfo.Controls[0].FindControl("lblLastLockoutDate") as Label;
+            Label lblLastPasswordChangedDate = UserInfo.Controls[0].FindControl("lblLastPasswordChangedDate") as Label;
+
+            if (user.LastLoginDate == (DateTime)System.Data.SqlTypes.SqlDateTime.MinValue)
+            {
+                lblLastActivityDate.Text = string.Empty;
+                lblLastLoginDate.Text = string.Empty;
+                lblLastLockoutDate.Text = string.Empty;
+                lblLastPasswordChangedDate.Text = string.Empty;
+            }
+            else
+            {
+                lblLastActivityDate.Text = (user.LastActivityDate).ToString("MM/dd/yyyy hh:mm:ss tt");
+                lblLastLoginDate.Text = (user.LastLoginDate).ToString("MM/dd/yyyy hh:mm:ss tt");
+                lblLastPasswordChangedDate.Text = (user.LastPasswordChangedDate).ToString("MM/dd/yyyy hh:mm:ss tt");
+
+                var stringDate = "12/31/1753";
+                if (user.LastLockoutDate.ToShortDateString() == DateTime.Parse(stringDate).ToShortDateString())
+                {
+                    lblLastLockoutDate.Text = string.Empty;
+                }
+                else
+                    lblLastLockoutDate.Text = (user.LastLockoutDate).ToString("MM/dd/yyyy hh:mm:ss tt");
+
+            }              
+
+        }
     }
 
     private CheckBox GetIsUserAdminCheckBox()
@@ -529,4 +545,5 @@ public partial class admin_controls_edit_user_modal : System.Web.UI.UserControl
     {
         return UserInfo.Controls[0].FindControl("IsPublishingAdministrator") as CheckBox;
     }
+
 }

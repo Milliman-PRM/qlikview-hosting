@@ -228,15 +228,14 @@ public partial class bulk_admin_controls_create_user_with_role : System.Web.UI.U
             foreach (UserInfo UI in UIList)
             {
                 string Password = Guid.NewGuid().ToString();
-                MembershipUser MU = Membership.CreateUser(UI.Account_Name, Password, UI.Account_Name);
+
+                MembershipUser MU = null;
+                MU = Membership.CreateUser(UI.Account_Name, Password, UI.Account_Name);
 
                 //create a csv list to pass back
                 CSVResults += UI.Account_Name;
 
-                CSVResults += "\n";
-
-                MU.LastActivityDate = DateTime.MinValue;
-                MU.LastLoginDate = DateTime.MinValue;
+                CSVResults += "\n";               
 
                 if (MU != null)
                 {
@@ -260,6 +259,9 @@ public partial class bulk_admin_controls_create_user_with_role : System.Web.UI.U
                             string ResetFile = System.IO.Path.Combine(ConfigurationManager.AppSettings["ResetUserInfoRoot"], MU.ProviderUserKey + ".rst");
                             System.IO.File.WriteAllText(ResetFile, MU.UserName + " added " + DateTime.Now.ToShortDateString());
                         }
+                        MU.LastActivityDate = (DateTime)System.Data.SqlTypes.SqlDateTime.MinValue;
+                        MU.LastLoginDate = (DateTime)System.Data.SqlTypes.SqlDateTime.MinValue;
+                        Membership.UpdateUser(MU);
                     }
                     catch (Exception)
                     {
