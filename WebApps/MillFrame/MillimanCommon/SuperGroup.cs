@@ -51,6 +51,16 @@ namespace MillimanCommon
             }
 
             /// <summary>
+            /// used by client admin to change from , to semicolon delimited emails
+            /// </summary>
+            private bool _CommaDelimitedEmail;
+            public bool CommaDelimitedEmail
+            {
+                get { return _CommaDelimitedEmail; }
+                set { _CommaDelimitedEmail = value; }
+            }
+
+            /// <summary>
             /// controled in admin panel used by client admin to show temp password textboxes instead of securelink
             /// </summary>
             private bool _AllowTempPasswordEntry;

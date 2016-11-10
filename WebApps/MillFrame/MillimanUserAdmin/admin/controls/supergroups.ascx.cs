@@ -30,6 +30,7 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
     {
         Description.Enabled = IsActive;
         UseCommaDelimited.Enabled = IsActive;
+        chkUseSemiColonDelimited.Enabled = IsActive;
         SmartLinkOn.Enabled = IsActive;
         RemoveGroup.Enabled = IsActive;
         AddToSuperGroup.Enabled = IsActive;
@@ -82,7 +83,8 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
             GroupsInSuper.DataSource = (SelectedSGC.GroupNames == null ? new List<string>() : SelectedSGC.GroupNames);
             GroupsInSuper.DataBind();
 
-            UseCommaDelimited.Checked = SelectedSGC.SemiColonDelimitedEmail;
+            UseCommaDelimited.Checked = SelectedSGC.CommaDelimitedEmail;
+            chkUseSemiColonDelimited.Checked = SelectedSGC.SemiColonDelimitedEmail;
             SmartLinkOn.Checked = !SelectedSGC.AllowTempPasswordEntry;
 
             AddGroups(SelectedSGC.GroupNames);
@@ -228,6 +230,7 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
         SGC.ContainerDescription = Description.Text;
         SGC.AllowTempPasswordEntry = !SmartLinkOn.Checked;
         SGC.SemiColonDelimitedEmail = !UseCommaDelimited.Checked;
+        SGC.SemiColonDelimitedEmail = !chkUseSemiColonDelimited.Checked;
         SGC.AdminUserAccounts = ListItemsToStringList(ClientAdminUsers);
         SGC.PublisherUserAccounts = ListItemsToStringList(PublishingUsers);
         SGC.GroupNames = ListItemsToStringList(GroupsInSuper);
@@ -276,6 +279,7 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
             Description.Text = "";
             SmartLinkOn.Checked = true;
             UseCommaDelimited.Checked = false;
+            chkUseSemiColonDelimited.Checked = false;
             GroupsInSuper.Items.Clear();
             ClientAdminUsers.Items.Clear();
             PublishingUsers.Items.Clear();
