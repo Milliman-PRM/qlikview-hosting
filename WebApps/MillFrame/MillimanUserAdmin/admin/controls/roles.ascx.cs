@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Text.RegularExpressions;
 using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -39,17 +41,17 @@ public partial class admin_controls_roles : System.Web.UI.UserControl
             MillimanCommon.MillimanGroupMap.MillimanGroups MG = null;
             if (MGM.MillimanGroupDictionary.ContainsKey(roleName))
                 MG = MGM.MillimanGroupDictionary[roleName];
-            
+
             string FriendlyName = (MG == null) ? string.Empty : MG.FriendlyGroupName;
             string ExternalName = (MG == null) ? string.Empty : MG.ExernalGroupName;
             int MaxUsers = (MG == null) ? 0 : MG.MaximumnUsers;
 
             string GroupCategory = string.Empty;
-            if (MG!=null)
+            if (MG != null)
             {
                 if (!string.IsNullOrEmpty(MG.GroupCategory))
                 {
-                    GroupCategory= MG.GroupCategory.ToUpper().Trim();
+                    GroupCategory = MG.GroupCategory.ToUpper().Trim();
                 }
             }
 
@@ -180,6 +182,16 @@ public partial class admin_controls_roles : System.Web.UI.UserControl
     #endregion
     protected void ApplyChanges_Click(object sender, EventArgs e)
     {
+
+        var badData = Validate();
+        if (!string.IsNullOrEmpty(badData))
+        {
+            var msg = "Friendly name can not contain invalid character(s) like " + badData ;
+            //ScriptManager.RegisterStartupScript(this, this.GetType(), "showErrorAlert", "showErrorAlert(" + msg + ");", true);
+            MillimanCommon.Alert.Show(msg);
+            return;
+        }
+
         var MGM = MillimanCommon.MillimanGroupMap.GetInstance();
         foreach (GridViewRow GVR in UserRoles.Rows)
         {
@@ -205,5 +217,34 @@ public partial class admin_controls_roles : System.Web.UI.UserControl
             }
             MGM.Save();
         }
+    }
+    private string Validate()
+    {
+        var bBadData = false;
+        var lblBadChars = ConfigurationManager.AppSettings["BadCharactersInFriendlyName"].ToString();
+        var badChars = lblBadChars.Replace(",", "");
+        var friendlyNameList = new List<string>();
+        foreach (GridViewRow GVR in UserRoles.Rows)
+        {
+            var FriendlyName = GVR.FindControl("FriendlyName") as TextBox;
+            friendlyNameList.Add(FriendlyName.Text);
+        }
+
+        var oneWordString = string.Join(",", friendlyNameList.ToArray()).Replace(",", "");
+        var badChar = new List<string>();
+        for (var i = 0; i < oneWordString.Length; i++)
+        {
+            if (badChars.IndexOf(oneWordString[i].ToString(), StringComparison.CurrentCultureIgnoreCase) != -1)
+            {
+                badChar.Add(oneWordString[i].ToString());
+            }
+        }
+
+        //var RgxUrl = new Regex(lblBadChars);
+        //bBadData = RgxUrl.IsMatch(FriendlyName.Text);
+        //if (bBadData)
+        //    break;
+
+        return string.Join(",", badChar.ToArray());
     }
 }

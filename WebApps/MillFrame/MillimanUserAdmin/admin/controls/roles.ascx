@@ -128,11 +128,10 @@
     <div class="col-md-12" style="float: none; width: 415px;">
         <div class="col-md-9">
             <asp:Button ID="ApplyChanges" runat="server" ToolTip="Click to apply changes to roles" Text="Save"
-                OnClick="ApplyChanges_Click" CssClass="btn btn-primary" OnClientClick="if (!Validate()) {return false;}"></asp:Button>
+                OnClick="ApplyChanges_Click" CssClass="btn btn-primary"></asp:Button>
             <asp:Button ID="btnDeleteSelected" runat="server" OnClick="btnDeleteSelected_Click"
                 OnClientClick="return confirm('DELETE selected ROLE(S)?');" Text="Delete"
                 ToolTip="DELETE selected ROLES." CssClass="btn btn-primary"></asp:Button>
-            <asp:Label ID="lblBadChars" runat="server"></asp:Label>
         </div>
     </div>
 </div>
@@ -141,10 +140,13 @@
 <%-- check all checkboxes javascript --%>
 <uc1:js ID="js1" runat="server" />
 
-<script src="../../Content/Script/jquery.v1.9.1.js"></script>
-<script src="../../Content/Script/bootstrap.js"></script>
-<script src="../../Content/Script/bootstrap-dialog.min.js"></script>
-<link href="../../Content/Style/bootstrap-dialog.min.css" rel="stylesheet" />
+<script src="../Content/Script/jquery.v1.9.1.js"></script>
+<script src="../Content/Script/bootstrap.js"></script>
+<script src="../Content/Script/bootstrap-dialog.min.js"></script>
+<link href="../Content/Style/bootstrap-dialog.min.css" rel="stylesheet" />
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript"></script>
+
 <script type="text/javascript">
 
     var lblBadChars = "<%= ConfigurationManager.AppSettings["BadCharactersInFriendlyName"].ToString() %>";
@@ -157,31 +159,26 @@
         CheckValidData($controlValue);
     });
 
-    //$('input.friendlyName').keyup(function () {
-    //    console.log("1");
-    //    var $controlValue = $(this).val();
-    //    CheckValidData($controlValue);
-    //});
 
     //this is fired when click save
-    function Validate() {
-        try {
-            var friendlyNameArray = [];
-            //get all the friendly names from all text boxes and add to array
-            $('.friendlyName').each(function (i, obj) {
-                friendlyNameArray.push(obj.value);
-            });
+    //function Validate() {
+    //    try {
+    //        var friendlyNameArray = [];
+    //        //get all the friendly names from all text boxes and add to array
+    //        $('.friendlyName').each(function (i, obj) {
+    //            friendlyNameArray.push(obj.value);
+    //        });
 
-            //creaete one big word by removing all commas
-            var oneWordArrayString = friendlyNameArray.join().replace(/,/g, "");
-            CheckValidData(oneWordArrayString);
-        }
-        catch (err) {
-            return false;
-            var txt = 'Error=>' + err.description;
-            showDangerAlert(txt);
-        }
-    }
+    //        //creaete one big word by removing all commas
+    //        var oneWordArrayString = friendlyNameArray.join().replace(/,/g, "");
+    //        CheckValidData(oneWordArrayString);
+    //    }
+    //    catch (err) {
+    //        return false;
+    //        var txt = 'Error=>' + err.description;
+    //        showDangerAlert(txt);
+    //    }
+    //}
 
     function CheckValidData(oneWordArrayString) {
         //seperate the bad chars into array for speed
