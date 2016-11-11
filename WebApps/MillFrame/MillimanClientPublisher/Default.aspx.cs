@@ -315,7 +315,7 @@ namespace ClientPublisher
             }
             else if (rbToggleAvailability.Text == "Take Offline")
             {
-                rbToggleAvailability.ToolTip = "Report is not available to users - click to make report available.";
+                rbToggleAvailability.ToolTip = "Report is available to users - click to make report unavailable.";
             }            
         }
 
