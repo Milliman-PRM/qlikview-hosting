@@ -996,4 +996,23 @@ Error Number:4060,State:1,Class:11
    at MillimanCommon.UserRepo.StartFileWatcher(String RepoFilePath) in C:\Users\afsheen.khan\PRMDevelopment\SprintOct24ToNov11\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 245
    at MillimanCommon.UserRepo.Load() in C:\Users\afsheen.khan\PRMDevelopment\SprintOct24ToNov11\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 337
    at MillimanCommon.UserRepo.GetInstance() in C:\Users\afsheen.khan\PRMDevelopment\SprintOct24ToNov11\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 30
-   at MillimanDev.Global.Application_Start(Object sender, EventArgs e) in C:\Users\afsheen.khan\PRMDevelopment\SprintOct24ToNov11\WebApps\MillFrame\Milliman\Milliman\Global.asax.cs:line 77----------------------------------------
+   at MillimanDev.Global.Application_Start(Object sender, EventArgs e) in C:\Users\afsheen.khan\PRMDevelopment\SprintOct24ToNov11\WebApps\MillFrame\Milliman\Milliman\Global.asax.cs:line 77----------------------------------------11/11/2016 4:33:31 PMInfo           Application Start
+4:33:31 PM                    Error     \r\nException trace: System.ArgumentException: The directory name D:\InstalledApplications\PRM_Staging_AK\Rules is invalid.
+   at System.IO.FileSystemWatcher..ctor(String path, String filter)
+   at MillimanCommon.UserRepo.StartFileWatcher(String RepoFilePath) in C:\Users\afsheen.khan\PRMDevelopment\Issue1630\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 245
+   at MillimanCommon.UserRepo.Load() in C:\Users\afsheen.khan\PRMDevelopment\Issue1630\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 337
+   at MillimanCommon.UserRepo.GetInstance() in C:\Users\afsheen.khan\PRMDevelopment\Issue1630\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 30
+   at MillimanDev.Global.Application_Start(Object sender, EventArgs e) in C:\Users\afsheen.khan\PRMDevelopment\Issue1630\WebApps\MillFrame\Milliman\Milliman\Global.asax.cs:line 77----------------------------------------11/11/2016 4:34:25 PMInfo           Application Start
+4:34:25 PM                    Error     \r\nException trace: System.ArgumentException: The directory name D:\InstalledApplications\PRM_Staging_AK\Rules is invalid.
+   at System.IO.FileSystemWatcher..ctor(String path, String filter)
+   at MillimanCommon.UserRepo.StartFileWatcher(String RepoFilePath) in C:\Users\afsheen.khan\PRMDevelopment\Issue1630\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 245
+   at MillimanCommon.UserRepo.Load() in C:\Users\afsheen.khan\PRMDevelopment\Issue1630\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 337
+   at MillimanCommon.UserRepo.GetInstance() in C:\Users\afsheen.khan\PRMDevelopment\Issue1630\WebApps\MillFrame\MillimanCommon\UserRepo.cs:line 30
+   at MillimanDev.Global.Application_Start(Object sender, EventArgs e) in C:\Users\afsheen.khan\PRMDevelopment\Issue1630\WebApps\MillFrame\Milliman\Milliman\Global.asax.cs:line 77----------------------------------------11/11/2016 4:34:49 PMInfo           Application Start
+11/11/2016 5:02:19 PMInfo           Application Start
+11/11/2016 5:03:56 PMInfo           Application Start
+11/11/2016 5:04:19 PMInfo           Application Start
+11/11/2016 5:08:01 PMInfo           Application Start
+11/11/2016 5:08:39 PMInfo           Application Start
+11/11/2016 5:09:59 PMInfo           Application Start
+11/11/2016 5:11:20 PMInfo           Application Start
