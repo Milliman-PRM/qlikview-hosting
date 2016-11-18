@@ -167,7 +167,8 @@
                                                                     <telerik:RadButton ID="ToggleAvailability"
                                                                         runat="server" OnClick="ToggleAvailability_Click"
                                                                         OnClientClicking="VerifyStateChange" Text='<%# Eval("Availability")%>'
-                                                                        ToolTip='<%# Eval("AvailabilityTooltip")%>' RenderMode="Lightweight" Width="60px" Height="60px" />
+                                                                        ToolTip='<%# Eval("AvailabilityTooltip")%>' RenderMode="Lightweight" Width="60px" Height="60px" 
+                                                                        OnClientMouseOver="SetToolTip"/>
                                                                 </td>
                                                             </tr>
                                                         </table>
@@ -262,7 +263,8 @@
                                                                         OnClick="ToggleAvailability_Click"
                                                                         OnClientClicking="VerifyStateChange"
                                                                         Text='<%# Eval("Availability")%>' ToolTip='<%# Eval("AvailabilityTooltip")%>'
-                                                                        RenderMode="Lightweight" Width="60px" Height="60px" />
+                                                                        RenderMode="Lightweight" Width="60px" Height="60px" 
+                                                                        OnClientMouseOver="SetToolTip"/>
                                                                 </td>
                                                             </tr>
                                                         </table>
@@ -314,6 +316,20 @@
             }
             else if (ButtonLabel == "TAKE ONLINE") {
                 args.set_cancel(!confirm("Selecting this option will make the report AVAILABLE to users. Continue?"));
+            }
+        }
+
+        function SetToolTip(button, args) {
+            var ButtonLabel = button.get_text().toUpperCase();
+            var elementID = button._element.id;
+            if (ButtonLabel == "OFFLINE") {
+                $find(button._element.id).set_toolTip('Report is not present on server - a new report must be uploaded before state can be changed.');
+            }
+            else if (ButtonLabel == "TAKE OFFLINE") {
+                $find(button._element.id).set_toolTip('Report is available to users - click to make report unavailable.');
+            }
+            else if (ButtonLabel == "TAKE ONLINE") {
+                $find(button._element.id).set_toolTip('Report is present, but in an offline state - click to make it available to users.');
             }
         }
 

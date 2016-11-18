@@ -5,9 +5,6 @@ using System.Text;
 using System.Web;
 using System.Web.Security;
 using System.Collections.Generic;
-using System.Web.UI.WebControls;
-using Telerik.Web.UI;
-using System.Web.UI;
 
 namespace ClientPublisher
 {
@@ -34,7 +31,7 @@ namespace ClientPublisher
                 Session["supergroup"] = PublishToSupergroup;
                 CacheCleaner(7); // cleanup the cache
 
-                LoadProjects(PublishToSupergroup);                
+                LoadProjects(PublishToSupergroup);
             }
 
             //always check if I'm not authenticated, I should not be here
@@ -42,8 +39,6 @@ namespace ClientPublisher
             {
                 Response.Redirect("HTML/NotLoggedIn.html");
             }
-
-            ToggleButtonToolTip();
         }
 
         /// <summary>
@@ -119,7 +114,7 @@ namespace ClientPublisher
         /// <summary>
         /// Remove all cached credentials older than the specified date
         /// </summary>
-        private void CacheCleaner(int ClearOlderThanXDays )
+        private void CacheCleaner(int ClearOlderThanXDays)
         {
             string CacheDir = WebConfigurationManager.AppSettings["HCIntelCache"];
             string[] AllFiles = System.IO.Directory.GetFiles(CacheDir, "*");
@@ -170,18 +165,18 @@ namespace ClientPublisher
         {
             try
             {
-                string ResetFile = System.IO.Path.Combine( WebConfigurationManager.AppSettings["ResetUserInfoRoot"], UserID + ".rst" );
+                string ResetFile = System.IO.Path.Combine(WebConfigurationManager.AppSettings["ResetUserInfoRoot"], UserID + ".rst");
                 return System.IO.File.Exists(ResetFile);
             }
             catch (Exception)
             {
 
             }
-  
+
             return false;
         }
 
-        private string CreateCacheEntry(string ConnectionStringFriendlyName, string ConnectionString )
+        private string CreateCacheEntry(string ConnectionStringFriendlyName, string ConnectionString)
         {
             string CacheDir = WebConfigurationManager.AppSettings["HCIntelCache"];  //should be full path in web.config
             string CacheFileName = Guid.NewGuid().ToString().Replace('-', '_');
@@ -255,40 +250,40 @@ namespace ClientPublisher
                 }
 
             }
-          
+
 
             int ProjectIndex = 0;
             IList<ProjectSettingsExtension> Projects = new List<ProjectSettingsExtension>();
             foreach (string Group in FoundSuperGroup.GroupNames)
             {
-               List<string> GroupProjects = MillimanCommon.UserRepo.GetInstance().FindAllProjectsForRole(Group);
+                List<string> GroupProjects = MillimanCommon.UserRepo.GetInstance().FindAllProjectsForRole(Group);
                 if (GroupProjects != null)
-               {
-                   if (GroupProjects.Count > 1)
-                   {
-                       Response.Redirect("HTML/GroupContainsMultipleProjects.html");
-                       return;
-                   }
-                   if (GroupProjects.Count == 1)
-                   {
-                       ProjectSettingsExtension ThisProject = ProjectSettingsExtension.LoadProjectExtension(GroupProjects[0]);
-                       try
-                       {
-                           if (ThisProject != null)
-                           {
-                               ThisProject.ProjectIndex = ProjectIndex;
-                               ProjectIndex++;
-                               Projects.Add(ThisProject);
-                           }
+                {
+                    if (GroupProjects.Count > 1)
+                    {
+                        Response.Redirect("HTML/GroupContainsMultipleProjects.html");
+                        return;
+                    }
+                    if (GroupProjects.Count == 1)
+                    {
+                        ProjectSettingsExtension ThisProject = ProjectSettingsExtension.LoadProjectExtension(GroupProjects[0]);
+                        try
+                        {
+                            if (ThisProject != null)
+                            {
+                                ThisProject.ProjectIndex = ProjectIndex;
+                                ProjectIndex++;
+                                Projects.Add(ThisProject);
+                            }
 
-                       }
-                       catch (Exception)
-                       {
+                        }
+                        catch (Exception)
+                        {
 
-                           throw;
-                       }
-                   }
-               }
+                            throw;
+                        }
+                    }
+                }
             }
 
             if (Projects.Count == 0)
@@ -301,27 +296,13 @@ namespace ClientPublisher
             RadProjectList.DataBind();
             //place in session so I don't have to look up all the info again
             Session["Projects"] = Projects;
-        }
 
-        protected void ToggleButtonToolTip()
-        {            
-            UpdatePanel UpdatePanel1 = (UpdatePanel)Page.FindControl("UpdatePanel1");
-            RadListView RadProjectList = (RadListView)UpdatePanel1.FindControl("RadProjectList");
-            RadButton rbToggleAvailability = (RadButton)RadProjectList.Items[0].FindControl("ToggleAvailability");
 
-            if (rbToggleAvailability.Text== "Take Online")
-            {
-                rbToggleAvailability.ToolTip = "Report is present, but in an offline state - click to make it available to users.";
-            }
-            else if (rbToggleAvailability.Text == "Take Offline")
-            {
-                rbToggleAvailability.ToolTip = "Report is available to users - click to make report unavailable.";
-            }            
         }
 
         protected void btnLogout_Click(object sender, EventArgs e)
         {
-        
+
         }
 
         protected void RadMenu1_ItemClick(object sender, Telerik.Web.UI.RadMenuEventArgs e)
@@ -359,7 +340,7 @@ namespace ClientPublisher
             widnow1.ID = "Window_" + Index.ToString();
             widnow1.VisibleOnPageLoad = true; // Set this property to True for showing window from code    
             windowManager.Windows.Add(widnow1);
-            this.test.Controls.Add(widnow1);    
+            this.test.Controls.Add(widnow1);
 
         }
 
@@ -373,7 +354,7 @@ namespace ClientPublisher
             if (Session["Projects"] != null)
             {
                 IList<ProjectSettingsExtension> Projects = Session["Projects"] as List<ProjectSettingsExtension>;
-                if ( Index < Projects.Count )
+                if (Index < Projects.Count)
                 {
                     string QVWVirtualPath = System.IO.Path.Combine(Projects[Index].VirtualDirectory, Projects[Index].QVName + ".qvw");
                     string URL = "dashboard.aspx?key=" + MillimanCommon.Utilities.ConvertStringToHex(QVWVirtualPath);
@@ -404,21 +385,17 @@ namespace ClientPublisher
                 {
                     string QVWOnline = System.IO.Path.Combine(Projects[Index].AbsoluteProjectPath, Projects[Index].QVName + ".qvw");
                     string QVWOffline = System.IO.Path.Combine(Projects[Index].AbsoluteProjectPath, Projects[Index].QVName + ".offline");
-
                     if (System.IO.File.Exists(QVWOffline))
                     {
                         System.IO.File.Delete(QVWOffline);  //get rid of offline file, we want ot go online
-                        RB.Text = ProjectSettingsExtension.IsAvailable;                        
+                        RB.Text = ProjectSettingsExtension.IsAvailable;
                     }
                     else
                     {
                         System.IO.File.WriteAllText(QVWOffline, System.DateTime.Now.ToString());  //create an offline file, can be empt
                         RB.Text = ProjectSettingsExtension.IsOffline;
-                        
                     }
-
-               }
-                ToggleButtonToolTip();
+                }
             }
         }
     }
