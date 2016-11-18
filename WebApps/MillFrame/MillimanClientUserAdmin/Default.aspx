@@ -80,6 +80,9 @@
                 <td>
                     <center><asp:Label runat="server" ID="UserMessage" Font-Names="segoe ui" Font-Size="12px"></asp:Label></center>
                 </td>
+                <td>
+                    <center><asp:Label runat="server" ID="lblEmailDelimiter" Font-Names="segoe ui" Font-Size="12px"></asp:Label></center>
+                </td>
             </tr>
             <tr>
                 <td colspan="2" style="">
@@ -246,6 +249,8 @@
     </form>
     <script type="text/javascript">
 
+        var EmailDelimiter = document.getElementById("lblEmailDelimiter").innerText;
+
         function CloseAndRefresh(Msg) {
             alert(Msg);
             window.location.reload();
@@ -299,7 +304,7 @@
         }
 
         function SendEmail() {
-            var grid = $find("<%= UserGrid.ClientID %>");
+            var grid = $find("<%= UserGrid.ClientID %>");            
             var Selected = grid.MasterTableView.get_selectedItems();
             if (Selected.length == 0)
                 return false;  //nothing selected to do
@@ -308,16 +313,27 @@
                 var row = Selected[i];
 
                 var cellID = grid.MasterTableView.getCellByColumnUniqueName(row, "AccountNameText");
-
-
                 //window.location.href = "mailto:" + cellID.innerText;
                 if (AllEmails != "")
-                    AllEmails += "," + ParseEmail(cellID.innerHTML);
+                    if (EmailDelimiter != "") {
+                        AllEmails += EmailDelimiter;
+                    }
+                    else
+                    {
+                        alert("System can not send an email because there is no email delimiter set for group.")
+                        return;
+                    }
                 else
                     AllEmails = ParseEmail(cellID.innerHTML);
             }
 
             window.location.href = "mailto:" + AllEmails;
+        }
+
+
+        function getValue() {
+            var retVal = prompt("Enter your name : ", "your name here");
+            document.write("You have entered : " + retVal);
         }
 
         function SendEmailAll() {
@@ -331,7 +347,14 @@
                 var cellID = grid.MasterTableView.getCellByColumnUniqueName(row, "AccountNameText");
                 //alert(cellID.innerText);
                 if (AllEmails != "")
-                    AllEmails += ",";
+                    if (EmailDelimiter != "") {
+                        AllEmails += EmailDelimiter;
+                    }
+                    else 
+                    {
+                        alert("System can not send an email because there is no email delimiter set for group.")
+                        return;          
+                    }                   
                 AllEmails += ParseEmail(cellID.innerHTML);
             }
             window.location.href = "mailto:" + AllEmails

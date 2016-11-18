@@ -229,8 +229,8 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
         SGC.ContainerName = SuperGroups.SelectedValue;
         SGC.ContainerDescription = Description.Text;
         SGC.AllowTempPasswordEntry = !SmartLinkOn.Checked;
-        SGC.SemiColonDelimitedEmail = !UseCommaDelimited.Checked;
-        SGC.SemiColonDelimitedEmail = !chkUseSemiColonDelimited.Checked;
+        SGC.CommaDelimitedEmail = !UseCommaDelimited.Checked;
+        SGC.SemiColonDelimitedEmail= !chkUseSemiColonDelimited.Checked;
         SGC.AdminUserAccounts = ListItemsToStringList(ClientAdminUsers);
         SGC.PublisherUserAccounts = ListItemsToStringList(PublishingUsers);
         SGC.GroupNames = ListItemsToStringList(GroupsInSuper);

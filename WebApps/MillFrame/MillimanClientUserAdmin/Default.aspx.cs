@@ -292,8 +292,27 @@ public partial class Default : System.Web.UI.Page
         {
             Response.Redirect("HTML/NotLoggedIn.html");
         }
+
+        GetEmailDelimiter();
+
     }
 
+    private void GetEmailDelimiter()
+    {
+        //find which super group the group is member of
+        //then use that specific super group delimeter
+        MillimanCommon.MillimanGroupMap.MillimanGroups MG = MillimanCommon.MillimanGroupMap.GetInstance().MillimanGroupDictionary[Session["groupid"].ToString()];
+        MillimanCommon.SuperGroup SG = MillimanCommon.SuperGroup.GetInstance();
+        MillimanCommon.SuperGroup.SuperGroupContainer SuperGroupContainer = SG.GetSuperGroups(Session["groupid"].ToString());
+        if (SuperGroupContainer.SemiColonDelimitedEmail == true)
+        {
+            lblEmailDelimiter.Text = ";";
+        }
+        else if (SuperGroupContainer.CommaDelimitedEmail == true)
+        {
+            lblEmailDelimiter.Text = ",";
+        }
+    }
 
     private string CheckForLogin()
     {

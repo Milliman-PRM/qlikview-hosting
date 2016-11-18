@@ -106,10 +106,11 @@ namespace MillimanCommon
             {
             }
 
-            public SuperGroupContainer(string Name, string Description, List<string> AdminAccounts, List<string> PublishingAccounts, List<string> Groups, bool SemiColonForEmails = false)
+            public SuperGroupContainer(string Name, string Description, List<string> AdminAccounts, List<string> PublishingAccounts, List<string> Groups, bool CommaDelimitedEmail = false,bool SemiColonForEmails = false)
             {
                 _ContainerName = Name;
                 _ContainerDescription = Description;
+                _CommaDelimitedEmail = CommaDelimitedEmail;
                 _SemiColonDelimitedEmail = SemiColonForEmails;
                 _AdminUserAccounts = AdminAccounts;
                 _PublisherUserAccounts = PublishingAccounts;
@@ -122,6 +123,24 @@ namespace MillimanCommon
         {
             get { return _SuperGroupContainers; }
             set { _SuperGroupContainers = value; }
+        }
+
+        /// <summary>
+        /// Find all the super group entries the user has access to
+        /// </summary>
+        /// <param name="ClientAdminName"></param>
+        /// <returns></returns>
+        public SuperGroupContainer GetSuperGroups(string groupName)
+        {
+            SuperGroupContainer Supers = new SuperGroupContainer();
+            if (SuperGroupContainers == null)
+            {
+                Report.Log(Report.ReportType.Error, "Super group file is missing - '" + SuperGroupFilePath + @"'");
+                return Supers;
+            }
+
+            var supers = SuperGroupContainers.Where(a => a.GroupNames.Contains(groupName)).First();            
+            return supers;
         }
 
         /// <summary>
