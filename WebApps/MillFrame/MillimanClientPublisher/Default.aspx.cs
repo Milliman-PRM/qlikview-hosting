@@ -377,7 +377,7 @@ namespace ClientPublisher
 
             Telerik.Web.UI.RadButton RB = sender as Telerik.Web.UI.RadButton;
             Telerik.Web.UI.RadListViewDataItem item = RB.Parent as Telerik.Web.UI.RadListViewDataItem;
-            int Index = item.DataItemIndex;
+            int Index = item.DataItemIndex;//which one item I click on in the grid
             if (Session["Projects"] != null)
             {
                 IList<ProjectSettingsExtension> Projects = Session["Projects"] as List<ProjectSettingsExtension>;
@@ -385,15 +385,23 @@ namespace ClientPublisher
                 {
                     string QVWOnline = System.IO.Path.Combine(Projects[Index].AbsoluteProjectPath, Projects[Index].QVName + ".qvw");
                     string QVWOffline = System.IO.Path.Combine(Projects[Index].AbsoluteProjectPath, Projects[Index].QVName + ".offline");
+
+                    ProjectSettingsExtension pj = new ProjectSettingsExtension();
                     if (System.IO.File.Exists(QVWOffline))
                     {
                         System.IO.File.Delete(QVWOffline);  //get rid of offline file, we want ot go online
-                        RB.Text = ProjectSettingsExtension.IsAvailable;
+                        RB.Text = ProjectSettingsExtension.IsAvailable;                        
+                        pj.AbsoluteProjectPath = Projects[Index].AbsoluteProjectPath;
+                        pj.QVName = Projects[Index].QVName;
+                        RB.ToolTip = pj.AvailabilityTooltip;// "Report is available to users - click to make report unavailable.";                      
                     }
                     else
                     {
                         System.IO.File.WriteAllText(QVWOffline, System.DateTime.Now.ToString());  //create an offline file, can be empt
                         RB.Text = ProjectSettingsExtension.IsOffline;
+                        pj.AbsoluteProjectPath = Projects[Index].AbsoluteProjectPath;
+                        pj.QVName = Projects[Index].QVName;
+                        RB.ToolTip = pj.AvailabilityTooltip;//"Report is present, but in an offline state - click to make it available to users.";
                     }
                 }
             }
