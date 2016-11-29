@@ -26,9 +26,8 @@
 
     <asp:Label Style="position: absolute; top: 45px; left: 333px; height: 19px; width: 150px" ID="SelectedSuperGroup0" runat="server" Text="Description"></asp:Label>
 
-    <asp:CheckBox ID="SmartLinkOn" runat="server" Style="z-index: 1; left: 345px; top: 132px; position: absolute" Text="Use Smart Link for new accounts" />
-    <asp:CheckBox ID="UseCommaDelimited" runat="server" Style="z-index: 1; left: 345px; top: 152px; position: absolute" Text="Use comma as multiple email delimiter" />
-    <asp:CheckBox ID="chkUseSemiColonDelimited" runat="server" Style="z-index: 1; left: 345px; top: 172px; position: absolute" Text="Use semi colon as multiple email delimiter" />
+    <asp:CheckBox ID="UseCommaDelimited" runat="server" style="z-index: 1; left: 345px; top: 172px; position: absolute" Text="Use comma or semi colon as email delimeter"  ToolTip="Check the box to use comma as multiple email delimiter and UnCheck the box to use semi colon as multiple email delimiter " />
+    <asp:CheckBox ID="SmartLinkOn" runat="server" style="z-index: 1; left: 345px; top: 146px; position: absolute" Text="Use Smart Link for new accounts" />
 
     <asp:Label Style="position: absolute; top: 200px; left: 327px; height: 19px; width: 150px" ID="SuperConsistsOf" runat="server" Text="Super group consists of"></asp:Label>
     <asp:ListBox ID="GroupsInSuper" runat="server" Style="z-index: 1; left: 322px; top: 218px; position: absolute; height: 105px; width: 285px" AutoPostBack="True" OnPreRender="Sorted_PreRender"></asp:ListBox>
@@ -67,14 +66,3 @@
 <uc4:jquery ID="jquery1" runat="server" />
 <uc1:js ID="js1" runat="server" />
 <uc2:js ID="js2" runat="server" />
-
-<script src="../Content/Script/jquery.v1.7.1.js" type="text/javascript"></script>
-<script>
-
-    $('#<%= UseCommaDelimited.ClientID %>').click(function (e) {
-        if (this.checked) $('#<%= chkUseSemiColonDelimited.ClientID %>').removeAttr('checked');
-    });
-    $('#<%= chkUseSemiColonDelimited.ClientID %>').click(function (e) {
-        if (this.checked) $('#<%= UseCommaDelimited.ClientID %>').removeAttr('checked');
-    });
-</script>

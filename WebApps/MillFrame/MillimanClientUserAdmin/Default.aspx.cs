@@ -301,17 +301,23 @@ public partial class Default : System.Web.UI.Page
     {
         //find which super group the group is member of
         //then use that specific super group delimeter
-        MillimanCommon.MillimanGroupMap.MillimanGroups MG = MillimanCommon.MillimanGroupMap.GetInstance().MillimanGroupDictionary[Session["groupid"].ToString()];
         MillimanCommon.SuperGroup SG = MillimanCommon.SuperGroup.GetInstance();
-        MillimanCommon.SuperGroup.SuperGroupContainer SuperGroupContainer = SG.GetSuperGroups(Session["groupid"].ToString());
-        if (SuperGroupContainer.SemiColonDelimitedEmail == true)
+        if (SG!=null)
         {
-            lblEmailDelimiter.Text = ";";
-        }
-        else if (SuperGroupContainer.CommaDelimitedEmail == true)
-        {
-            lblEmailDelimiter.Text = ",";
-        }
+            MillimanCommon.SuperGroup.SuperGroupContainer SuperGroupContainer = SG.GetSuperGroups(Session["groupid"].ToString());
+            if (SuperGroupContainer!=null)
+            {
+                if (SuperGroupContainer.SemiColonDelimitedEmail == true)
+                {
+                    hfEmailDelimiter.Value = ";";
+                }
+                else if (SuperGroupContainer.CommaDelimitedEmail == true)
+                {
+                    hfEmailDelimiter.Value = ",";
+                }
+            }                
+        }            
+        
     }
 
     private string CheckForLogin()

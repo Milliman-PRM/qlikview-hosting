@@ -136,11 +136,13 @@ namespace MillimanCommon
             if (SuperGroupContainers == null)
             {
                 Report.Log(Report.ReportType.Error, "Super group file is missing - '" + SuperGroupFilePath + @"'");
-                return Supers;
+                return null;
             }
-
-            var supers = SuperGroupContainers.Where(a => a.GroupNames.Contains(groupName)).First();            
-            return supers;
+            var supers = SuperGroupContainers.Where(a => a.GroupNames.Contains(groupName)).First();
+            if (supers == null)
+                return null;
+            else
+                return supers;
         }
 
         /// <summary>
