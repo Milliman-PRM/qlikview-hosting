@@ -15,7 +15,8 @@ namespace ClientPublisher
         /// </summary>
         public string QVIconReflector
         {
-            get {
+            get
+            {
                 string Key = MillimanCommon.Utilities.ConvertStringToHex(System.IO.Path.Combine(AbsoluteProjectPath, QVThumbnail));
                 return "reflector.ashx?key=" + Key;
             }
@@ -62,7 +63,7 @@ namespace ClientPublisher
                 if (System.IO.File.Exists(QVWOffline))
                     return "Report is present, but in an offline state - click to make available to users.";
                 else if (System.IO.File.Exists(QVWOnline))
-                    return "Report is not available to users - click to make report available.";
+                    return "Report is available to users - click to take report offline.";
                 else
                     return "Report is not present on server - a new report must be uploaded before state can be changed.";
             }
@@ -88,10 +89,10 @@ namespace ClientPublisher
             {
                 System.Diagnostics.Debug.WriteLine(pi.ToString());
                 object Val = pi.GetValue(PS, null);
-                if ( pi.GetSetMethod() != null)
+                if (pi.GetSetMethod() != null)
                     pi.SetValue(PSE, Val, null);
             }
-            
+
             return PSE;
         }
     }
