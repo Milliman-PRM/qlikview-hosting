@@ -26,7 +26,7 @@
 
     <asp:Label Style="position: absolute; top: 45px; left: 333px; height: 19px; width: 150px" ID="SelectedSuperGroup0" runat="server" Text="Description"></asp:Label>
 
-    <asp:CheckBox ID="UseCommaDelimited" runat="server" style="z-index: 1; left: 345px; top: 172px; position: absolute" Text="Use comma or semi colon as email delimeter"  ToolTip="Check the box to use comma as multiple email delimiter and UnCheck the box to use semi colon as multiple email delimiter " />
+    <asp:CheckBox ID="UseCommaDelimited" runat="server" style="z-index: 1; left: 345px; top: 172px; position: absolute" Text="Use comma as multiple email delimiter"  ToolTip="Check the box to use comma as multiple email delimiter and UnCheck the box to use semi colon as multiple email delimiter " />
     <asp:CheckBox ID="SmartLinkOn" runat="server" style="z-index: 1; left: 345px; top: 146px; position: absolute" Text="Use Smart Link for new accounts" />
 
     <asp:Label Style="position: absolute; top: 200px; left: 327px; height: 19px; width: 150px" ID="SuperConsistsOf" runat="server" Text="Super group consists of"></asp:Label>
