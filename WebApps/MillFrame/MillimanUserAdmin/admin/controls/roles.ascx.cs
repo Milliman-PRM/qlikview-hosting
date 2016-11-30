@@ -220,9 +220,11 @@ public partial class admin_controls_roles : System.Web.UI.UserControl
     }
     private string Validate()
     {
-        var bBadData = false;
-        var lblBadChars = ConfigurationManager.AppSettings["BadCharactersInFriendlyName"].ToString();
-        var badChars = lblBadChars.Replace(",", "");
+        var BadCharactersInFriendlyName = ConfigurationManager.AppSettings["BadCharactersInFriendlyName"].ToString();
+        var BadCharactersInFriendlyNameDoubleQuote = ConfigurationManager.AppSettings["BadCharactersInFriendlyNameDoubleQuote"].ToString();
+
+        //remove comma from the characters than at the end add double quotes
+        var badChars = (BadCharactersInFriendlyName.Replace(",", ""))+(BadCharactersInFriendlyNameDoubleQuote);
         var friendlyNameList = new List<string>();
         foreach (GridViewRow GVR in UserRoles.Rows)
         {
@@ -231,20 +233,15 @@ public partial class admin_controls_roles : System.Web.UI.UserControl
         }
 
         var oneWordString = string.Join(",", friendlyNameList.ToArray()).Replace(",", "");
-        var badChar = new List<string>();
+        var badCharList = new List<string>();
         for (var i = 0; i < oneWordString.Length; i++)
         {
             if (badChars.IndexOf(oneWordString[i].ToString(), StringComparison.CurrentCultureIgnoreCase) != -1)
             {
-                badChar.Add(oneWordString[i].ToString());
+                badCharList.Add(oneWordString[i].ToString());
             }
-        }
+       }
 
-        //var RgxUrl = new Regex(lblBadChars);
-        //bBadData = RgxUrl.IsMatch(FriendlyName.Text);
-        //if (bBadData)
-        //    break;
-
-        return string.Join(",", badChar.ToArray());
+        return string.Join(",", badCharList.ToArray());
     }
 }

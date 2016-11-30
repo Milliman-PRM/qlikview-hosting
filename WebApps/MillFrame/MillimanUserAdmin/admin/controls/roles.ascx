@@ -145,13 +145,12 @@
 <script src="../Content/Script/bootstrap-dialog.min.js"></script>
 <link href="../Content/Style/bootstrap-dialog.min.css" rel="stylesheet" />
 
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript"></script>
-
 <script type="text/javascript">
 
-    var lblBadChars = "<%= ConfigurationManager.AppSettings["BadCharactersInFriendlyName"].ToString() %>";
-    var badChars = lblBadChars.replace(/,/g, "");
-
+    var BadCharactersInFriendlyName = "<%= ConfigurationManager.AppSettings["BadCharactersInFriendlyName"].ToString() %>";
+    var BadCharactersInFriendlyNameDoubleQuote = "\<%= ConfigurationManager.AppSettings["BadCharactersInFriendlyNameDoubleQuote"].ToString() %>";// this will show like "\""
+    var badChars = BadCharactersInFriendlyName.replace(/,/g, "").concat(BadCharactersInFriendlyNameDoubleQuote);//add double quote to the end
+    
     //this function executes when edit individual cell
     $(".friendlyName").blur(function () {
         var rowNum = $(this).closest('tr').find("td:eq(1)").text();
@@ -159,28 +158,7 @@
         CheckValidData($controlValue);
     });
 
-
-    //this is fired when click save
-    //function Validate() {
-    //    try {
-    //        var friendlyNameArray = [];
-    //        //get all the friendly names from all text boxes and add to array
-    //        $('.friendlyName').each(function (i, obj) {
-    //            friendlyNameArray.push(obj.value);
-    //        });
-
-    //        //creaete one big word by removing all commas
-    //        var oneWordArrayString = friendlyNameArray.join().replace(/,/g, "");
-    //        CheckValidData(oneWordArrayString);
-    //    }
-    //    catch (err) {
-    //        return false;
-    //        var txt = 'Error=>' + err.description;
-    //        showDangerAlert(txt);
-    //    }
-    //}
-
-    function CheckValidData(oneWordArrayString) {
+   function CheckValidData(oneWordArrayString) {
         //seperate the bad chars into array for speed
         var badCharArray = [];
         for (i = 0; i < oneWordArrayString.length; i++) {
