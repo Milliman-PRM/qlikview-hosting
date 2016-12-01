@@ -82,7 +82,14 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
             GroupsInSuper.DataSource = (SelectedSGC.GroupNames == null ? new List<string>() : SelectedSGC.GroupNames);
             GroupsInSuper.DataBind();
 
-            UseCommaDelimited.Checked = SelectedSGC.SemiColonDelimitedEmail;
+            if (SelectedSGC.CommaDelimitedEmail)
+            {
+                UseCommaDelimited.Checked = SelectedSGC.CommaDelimitedEmail;
+            }
+            else if (SelectedSGC.SemiColonDelimitedEmail)
+            {
+                UseCommaDelimited.Checked = false; //semicolon will be used
+            }
             SmartLinkOn.Checked = !SelectedSGC.AllowTempPasswordEntry;
 
             AddGroups(SelectedSGC.GroupNames);
@@ -227,7 +234,18 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
         SGC.ContainerName = SuperGroups.SelectedValue;
         SGC.ContainerDescription = Description.Text;
         SGC.AllowTempPasswordEntry = !SmartLinkOn.Checked;
-        SGC.SemiColonDelimitedEmail = !UseCommaDelimited.Checked;
+
+        if (UseCommaDelimited.Checked)
+        {
+            SGC.CommaDelimitedEmail = true;
+            SGC.SemiColonDelimitedEmail = false;
+        }
+        else if (!UseCommaDelimited.Checked)
+        {
+            SGC.CommaDelimitedEmail = false;
+            SGC.SemiColonDelimitedEmail = true;
+        }
+
         SGC.AdminUserAccounts = ListItemsToStringList(ClientAdminUsers);
         SGC.PublisherUserAccounts = ListItemsToStringList(PublishingUsers);
         SGC.GroupNames = ListItemsToStringList(GroupsInSuper);
@@ -275,7 +293,8 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
             NewSuperGroupName.Text = "";
             Description.Text = "";
             SmartLinkOn.Checked = true;
-            UseCommaDelimited.Checked = false;
+            //TODO Q. for defult entry do we check or uncheck (comma or semi colon?)
+            UseCommaDelimited.Checked = false; 
             GroupsInSuper.Items.Clear();
             ClientAdminUsers.Items.Clear();
             PublishingUsers.Items.Clear();

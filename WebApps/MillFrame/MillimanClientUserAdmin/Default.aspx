@@ -51,9 +51,8 @@
             margin-left: 100px !important;
         }
         /*//remove expandable image*/
-        .rpExpandHandle
-        {
-            background-image:none!important;
+        .rpExpandHandle {
+            background-image: none !important;
         }
     </style>
 </head>
@@ -72,8 +71,13 @@
         </script>
         <telerik:RadAjaxManager ID="RadAjaxManager1" runat="server">
         </telerik:RadAjaxManager>
+
+        
         <table id="MainTable" name="MainTable" style="position: absolute; top: 10px; left: 10px; width: 100px; height: 100px; visibility: hidden">
             <tr style="height: 25px">
+                <td>
+                    <asp:HiddenField runat="server" ID="hfEmailDelimiter" ></asp:HiddenField>
+                </td>
                 <td>
                     <center><asp:Label runat="server" ID="LicenseMessage" Font-Names="segoe ui" Font-Size="12px"></asp:Label></center>
                 </td>
@@ -100,36 +104,36 @@
                                                     <asp:Image ID="Image1" runat="server" alt="" ImageUrl="~/Images/AddUser.png" Style="border: 0px; vertical-align: middle;" />
                                                     Add User
                                                 </asp:LinkButton>
-                                                    &#160;&#160;
+                                                &#160;&#160;
                                                     <asp:LinkButton ID="Email" runat="server" CommandName="Email" ToolTip="Email selected user." Visible="<%# UserGrid.EditIndexes.Count == 0 %>" OnClientClick="SendEmail(); return false;">
                                                         <asp:Image ID="Image5" runat="server" alt="" ImageUrl="~/Images/Email.png" Style="border: 0px; vertical-align: middle;" />
                                                         Email
-                                                </asp:LinkButton>
+                                                    </asp:LinkButton>
                                                 &#160;&#160;
                                                     <asp:LinkButton ID="EmailAll" runat="server" CommandName="EmailAllUsers" ToolTip="Email all users." Visible="<%#UserGrid.EditIndexes.Count == 0 %>" OnClientClick="SendEmailAll(); return false;">
                                                         <asp:Image ID="Image9" runat="server" alt="" ImageUrl="~/Images/EmailAll.png" Style="border: 0px; vertical-align: middle;" />
                                                         Email All
-                                                </asp:LinkButton>
+                                                    </asp:LinkButton>
                                                 &#160;&#160;
                                                     <asp:LinkButton ID="Report" runat="server" CommandName="Report" ToolTip="Generate a report showing access rights and user logins." Visible="<%# UserGrid.EditIndexes.Count == 0 %>" OnClientClick="Navigate(); return false;">
                                                         <asp:Image ID="Image10" runat="server" alt="" ImageUrl="~/Images/Report.png" Style="border: 0px; vertical-align: middle;" />
                                                         Report
-                                                </asp:LinkButton>
+                                                    </asp:LinkButton>
                                                 &#160;&#160;
                                                     <asp:LinkButton ID="Reset" runat="server" CommandName="Reset" ToolTip="Reset selected users password." Visible="<%# UserGrid.EditIndexes.Count == 0 %>" OnClientClick="return ResetPassword();">
                                                         <asp:Image ID="Image6" runat="server" alt="" ImageUrl="~/Images/Reset.png" Style="border: 0px; vertical-align: middle;" />
                                                         Reset Password
-                                                </asp:LinkButton>
+                                                    </asp:LinkButton>
                                                 &#160;&#160;
                                                     <asp:LinkButton ID="Suspend" runat="server" CommandName="Suspend" ToolTip="Suspend( or Un-suspend) the selected user." Visible="<%# UserGrid.EditIndexes.Count == 0 %>" OnClientClick="return SuspendUser();">
                                                         <asp:Image ID="Image8" runat="server" alt="" ImageUrl="~/Images/Suspend.png" Style="border: 0px; vertical-align: middle;" />
                                                         (Un)Suspend
-                                                </asp:LinkButton>
+                                                    </asp:LinkButton>
                                                 &#160;&#160;
                                                     <asp:LinkButton ID="Delete" runat="server" CommandName="Delete" ToolTip="Delete the selected user." Visible="<%#UserGrid.EditIndexes.Count == 0 %>" OnClientClick="return DeleteUser();">
                                                         <asp:Image ID="Image7" runat="server" alt="" ImageUrl="~/Images/Delete.png" Style="border: 0px; vertical-align: middle;" />
                                                         Delete
-                                                </asp:LinkButton>
+                                                    </asp:LinkButton>
                                                 &#160;&#160;
                                             </div>
                                         </CommandItemTemplate>
@@ -245,6 +249,9 @@
 
     </form>
     <script type="text/javascript">
+                
+        //var EmailDelimiter = document.getElementById("hfEmailDelimiter").value;
+        //alert(EmailDelimiter);
 
         function CloseAndRefresh(Msg) {
             alert(Msg);
@@ -308,11 +315,16 @@
                 var row = Selected[i];
 
                 var cellID = grid.MasterTableView.getCellByColumnUniqueName(row, "AccountNameText");
-
-
+                
                 //window.location.href = "mailto:" + cellID.innerText;
                 if (AllEmails != "")
-                    AllEmails += "," + ParseEmail(cellID.innerHTML);
+                    if (document.getElementById("hfEmailDelimiter").value != "") {
+                        AllEmails += document.getElementById("hfEmailDelimiter").value;
+                    }
+                    else {
+                        alert("System can not send an email because there is no email delimiter set for group.")
+                        return;
+                    }
                 else
                     AllEmails = ParseEmail(cellID.innerHTML);
             }
@@ -329,9 +341,16 @@
             for (var i = 0; i < Selected.length; i++) {
                 var row = Selected[i];
                 var cellID = grid.MasterTableView.getCellByColumnUniqueName(row, "AccountNameText");
+
                 //alert(cellID.innerText);
                 if (AllEmails != "")
-                    AllEmails += ",";
+                    if (document.getElementById("hfEmailDelimiter").value!= "") {
+                        AllEmails += document.getElementById("hfEmailDelimiter").value;
+                    }
+                    else {
+                        alert("System can not send an email because there is no email delimiter set for group.")
+                        return;
+                    }
                 AllEmails += ParseEmail(cellID.innerHTML);
             }
             window.location.href = "mailto:" + AllEmails
@@ -432,23 +451,23 @@
         ///needed to select row if use click in text box
         function Select(index) {
             var grid = $find("<%= UserGrid.ClientID %>");
-           //grid.MasterTableView.get_dataItems()[index].set_selected(true);
+            //grid.MasterTableView.get_dataItems()[index].set_selected(true);
 
-       }
+        }
 
-       function RowClick(sender, eventArgs) {
-           var gridItem = sender.get_masterTableView().get_dataItems()[eventArgs.get_itemIndexHierarchical()];
-           var ApplyMe = document.getElementById("ApplyChangesButton");
-           if (ApplyMe.disabled == false) {
-               if (confirm("You have made changes to access rights and/or document downloads. Selecting a different user will result in losing these settings.\n\n Do you wish to continue?")) {
-                   if (!gridItem.get_isInEditMode()) {
-                       __doPostBack("<%= UserGrid.UniqueID %>", "RowClick;" + eventArgs.get_itemIndexHierarchical());
-                    }
-                }
-            }
-            else {
-                if (!gridItem.get_isInEditMode()) {
-                    __doPostBack("<%= UserGrid.UniqueID %>", "RowClick;" + eventArgs.get_itemIndexHierarchical());
+        function RowClick(sender, eventArgs) {
+            var gridItem = sender.get_masterTableView().get_dataItems()[eventArgs.get_itemIndexHierarchical()];
+            var ApplyMe = document.getElementById("ApplyChangesButton");
+            if (ApplyMe.disabled == false) {
+                if (confirm("You have made changes to access rights and/or document downloads. Selecting a different user will result in losing these settings.\n\n Do you wish to continue?")) {
+                    if (!gridItem.get_isInEditMode()) {
+                        __doPostBack("<%= UserGrid.UniqueID %>", "RowClick;" + eventArgs.get_itemIndexHierarchical());
+                   }
+               }
+           }
+           else {
+               if (!gridItem.get_isInEditMode()) {
+                   __doPostBack("<%= UserGrid.UniqueID %>", "RowClick;" + eventArgs.get_itemIndexHierarchical());
                 }
             }
         }
