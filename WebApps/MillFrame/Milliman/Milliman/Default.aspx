@@ -140,12 +140,12 @@
             </center>
         </div>
 
-        <telerik:RadWindowManager EnableShadow="true" Behaviors="Resize, Close, Reload" ID="RadWindowManager"
+        <telerik:RadWindowManager EnableShadow="true" Behaviors="Resize, Close" ID="RadWindowManager"
             DestroyOnClose="true" Opacity="100" runat="server" Width="450" Height="400"
             VisibleStatusbar="False" Style="z-index: 20000;">
             <Windows>
                 <telerik:RadWindow ID="RadWindow1" runat="server" Animation="Fade" AutoSize="True"
-                    Behaviors="Close, Reload" Modal="True"
+                    Behaviors="Close" Modal="True"
                     Height="605px" Width="1022px" InitialBehaviors="Close"
                     Title="User Profile/Password Settings" VisibleStatusbar="False" VisibleTitlebar="False" />
             </Windows>
