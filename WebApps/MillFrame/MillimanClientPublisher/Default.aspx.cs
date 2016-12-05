@@ -384,19 +384,19 @@ namespace ClientPublisher
                 if (Index < Projects.Count)
                 {
                     string QVWOnline = System.IO.Path.Combine(Projects[Index].AbsoluteProjectPath, Projects[Index].QVName + ".qvw");
-                    string QVWOffline = System.IO.Path.Combine(Projects[Index].AbsoluteProjectPath, Projects[Index].QVName + ".offline");
-                    
-                    RB.ToolTip = Projects[Index].AvailabilityTooltip;
+                    string QVWOffline = System.IO.Path.Combine(Projects[Index].AbsoluteProjectPath, Projects[Index].QVName + ProjectSettingsExtension.OfflineExtension);
+                    //toggle the extension back and forth between QVW and OFFLINE
                     if (System.IO.File.Exists(QVWOffline))
-                    {
-                        System.IO.File.Delete(QVWOffline);  //get rid of offline file, we want ot go online
-                        RB.Text = ProjectSettingsExtension.IsAvailable;                                         
+                    {   
+                        System.IO.File.Move(QVWOffline, QVWOnline);                       
                     }
                     else
                     {
-                        System.IO.File.WriteAllText(QVWOffline, System.DateTime.Now.ToString());  //create an offline file, can be empt
-                        RB.Text = ProjectSettingsExtension.IsOffline;
+                        System.IO.File.Move(QVWOnline, QVWOffline);
                     }
+                    //this should be done after the processing
+                    RB.Text = Projects[Index].Availability;
+                    RB.ToolTip = Projects[Index].AvailabilityTooltip;
                 }
             }
         }

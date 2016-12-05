@@ -32,8 +32,10 @@ namespace ClientPublisher
             }
         }
 
-        //If the QVW is present in the directory, and should not be shown, there is a QVW.OFFLINE file that will
-        //be in the directory along with the QVW - this indicates not to show it
+        //to take a QVW offline, we change it's extension from QVW to OFFLINE,  thus there are 3 possible states
+        //A QVW is present, so we are online and want to take offline
+        //A OFFLINE file is present(really QVW extension renamed) an we want to take ONline
+        //no QVW or OFFLine file exists, thus we are just OFFLINE waiting for a QVW to be uploaded(group is not displayed in publisher for this condition)
         static public string NotAvailable = "Offline";
         static public string IsAvailable = "Take Offline";  //set text on button to take it offline, since it is available
         static public string IsOffline = "Take Online";     //QVW is there, but in an offline state
@@ -45,7 +47,7 @@ namespace ClientPublisher
             {
                 string QVW = System.IO.Path.Combine(AbsoluteProjectPath, QVName + ".qvw");
                 string QVWOfflineFile = System.IO.Path.Combine(AbsoluteProjectPath, QVName + OfflineExtension);
-                if (System.IO.File.Exists(QVW) == false) //no QVW available
+                if ((System.IO.File.Exists(QVW) == false) && (System.IO.File.Exists(QVWOfflineFile) == false)) //no QVW available
                     return NotAvailable;
                 else if (System.IO.File.Exists(QVWOfflineFile)) //offline file is available, so dont show QVW to end users
                     return IsOffline;
@@ -57,12 +59,9 @@ namespace ClientPublisher
         {
             get
             {
-
-                string QVWOnline = System.IO.Path.Combine(AbsoluteProjectPath, QVName + ".qvw");
-                string QVWOffline = System.IO.Path.Combine(AbsoluteProjectPath, QVName + OfflineExtension);
-                if (System.IO.File.Exists(QVWOffline))
+                if (string.Compare(Availability,IsOffline,true) == 0 )
                     return "Report is present, but in an offline state - click to make available to users.";
-                else if (System.IO.File.Exists(QVWOnline))
+                else if (string.Compare(Availability, IsAvailable, true) == 0)
                     return "Report is available to users - click to take report offline.";
                 else
                     return "Report is not present on server - a new report must be uploaded before state can be changed.";
