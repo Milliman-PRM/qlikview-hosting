@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
-using System.Text.RegularExpressions;
 using System.Web.Security;
-using System.Web.UI;
 using System.Web.UI.WebControls;
 
 public partial class admin_controls_roles : System.Web.UI.UserControl
@@ -78,6 +76,11 @@ public partial class admin_controls_roles : System.Web.UI.UserControl
     // create new role
     public void AddRole(object sender, EventArgs e)
     {
+        if(String.IsNullOrEmpty(NewRole.Text))
+        {
+            return;
+        }
+
         try
         {
             Msg.ForeColor = System.Drawing.Color.Black;
