@@ -19,11 +19,6 @@ public partial class admin_controls_roles : System.Web.UI.UserControl
 
     private void Page_PreRender()
     {
-        //string TestRole = "12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890";
-        //if (Roles.RoleExists(TestRole) == false)
-        //    Roles.CreateRole(TestRole);
-
-
         // Create a DataTable and define its columns
         DataTable RoleList = new DataTable();
         RoleList.Columns.Add("Role Name");
@@ -189,9 +184,6 @@ public partial class admin_controls_roles : System.Web.UI.UserControl
     #endregion
     protected void ApplyChanges_Click(object sender, EventArgs e)
     {
-        string tempStr = NewRole.Text;
-        //string s = "0273WOH01_Medicaid_Intelliware";
-
         var badData = Validate();
         if (!string.IsNullOrEmpty(badData))
         {
