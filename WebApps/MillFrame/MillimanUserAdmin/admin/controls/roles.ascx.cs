@@ -82,9 +82,16 @@ public partial class admin_controls_roles : System.Web.UI.UserControl
         {
             Msg.ForeColor = System.Drawing.Color.Black;
             Roles.CreateRole(NewRole.Text);
+
+            //var MGM = MillimanCommon.MillimanGroupMap.GetInstance();
+            //MGM.MillimanGroupDictionary.Add()
+
+
             Msg.Text = "New role added successfully";
             Msg.Visible = true;
             createRoleSuccess = true;
+
+            ApplyChanges_Click(null, EventArgs.Empty);
         }
         catch (Exception ex)
         {
@@ -182,6 +189,8 @@ public partial class admin_controls_roles : System.Web.UI.UserControl
     #endregion
     protected void ApplyChanges_Click(object sender, EventArgs e)
     {
+        string tempStr = NewRole.Text;
+        //string s = "0273WOH01_Medicaid_Intelliware";
 
         var badData = Validate();
         if (!string.IsNullOrEmpty(badData))
