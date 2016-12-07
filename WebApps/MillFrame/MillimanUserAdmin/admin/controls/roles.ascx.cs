@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
-using System.Text.RegularExpressions;
 using System.Web.Security;
-using System.Web.UI;
 using System.Web.UI.WebControls;
 
 public partial class admin_controls_roles : System.Web.UI.UserControl
@@ -77,15 +75,10 @@ public partial class admin_controls_roles : System.Web.UI.UserControl
         {
             Msg.ForeColor = System.Drawing.Color.Black;
             Roles.CreateRole(NewRole.Text);
-
-            //var MGM = MillimanCommon.MillimanGroupMap.GetInstance();
-            //MGM.MillimanGroupDictionary.Add()
-
-
             Msg.Text = "New role added successfully";
             Msg.Visible = true;
             createRoleSuccess = true;
-
+            Page_PreRender();
             ApplyChanges_Click(null, EventArgs.Empty);
         }
         catch (Exception ex)
@@ -182,6 +175,7 @@ public partial class admin_controls_roles : System.Web.UI.UserControl
     }
 
     #endregion
+
     protected void ApplyChanges_Click(object sender, EventArgs e)
     {
         var badData = Validate();
