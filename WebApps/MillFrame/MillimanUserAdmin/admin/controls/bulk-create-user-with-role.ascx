@@ -84,13 +84,21 @@
         margin: 0 auto;
         width: 100px;
     }
-    .RadGrid_Office2010Silver .rgHeader, .RadGrid_Office2010Silver th.rgResizeCol, .RadGrid_Office2010Silver .rgHeaderWrapper
-    {
-        border:none;
+
+    .RadGrid_Office2010Silver .rgHeader, .RadGrid_Office2010Silver th.rgResizeCol, .RadGrid_Office2010Silver .rgHeaderWrapper {
+        border: none;
     }
-    .RadGrid_Office2010Silver .rgRow > td, .RadGrid_Office2010Silver .rgAltRow > td, .RadGrid_Office2010Silver .rgEditRow > td, .RadGrid_Office2010Silver .rgFooter > td
-    {
-         border:none;
+
+    .RadGrid_Office2010Silver .rgRow > td, .RadGrid_Office2010Silver .rgAltRow > td, .RadGrid_Office2010Silver .rgEditRow > td, .RadGrid_Office2010Silver .rgFooter > td {
+        border: none;
+    }
+
+    .msg {
+        display: none;
+    }
+
+    .error {
+        color: red;
     }
 </style>
 
@@ -153,7 +161,7 @@
                 OnItemCommand="RadGrid1_ItemCommand" CssClass="MyRadGrid"
                 AllowAutomaticDeletes="True" ViewStateMode="Enabled" MasterTableView-AllowAutomaticDeletes="True" ClientIDMode="AutoID"
                 ClientSettings-ClientEvents-OnRowDeleting="RowDeleting">
-                <MasterTableView EditMode="Batch" CommandItemDisplay="Top" TableLayout="Fixed" >
+                <MasterTableView EditMode="Batch" CommandItemDisplay="Top" TableLayout="Fixed">
                     <CommandItemTemplate>
                     </CommandItemTemplate>
                     <Columns>
@@ -172,8 +180,9 @@
                         <telerik:GridTemplateColumn DataField="Account_Name" HeaderText="Account Name" UniqueName="AccountNameText" HeaderStyle-Width="100%">
                             <ItemTemplate>
                                 <label id="lblAccountNameTextBox" for="AccountNameTextBox" class="labelweak required"></label>
-                                <asp:TextBox ID="AccountNameTextBox" runat="server" AutoPostBack="false" Text='<%#Eval("Account_Name") %>' Width="90%" Height="27px" CssClass="required standardTextBox"></asp:TextBox>
-                                <asp:RequiredFieldValidator runat="server" Display="Dynamic" ControlToValidate="AccountNameTextBox" ErrorMessage="Account name is required" ForeColor="Red" />
+                                <asp:TextBox ID="AccountNameTextBox" runat="server" AutoPostBack="false" Text='<%#Eval("Account_Name") %>' Width="90%" Height="27px" CssClass="accountNameTextBox required standardTextBox"></asp:TextBox>
+                                <%--<asp:RequiredFieldValidator runat="server" Display="Dynamic" ControlToValidate="AccountNameTextBox" ErrorMessage="Account name is required" ForeColor="Red" />--%>
+                                <span class="msg error">Invalid email address</span>
                             </ItemTemplate>
                             <HeaderStyle Width="100%"></HeaderStyle>
                         </telerik:GridTemplateColumn>
@@ -252,6 +261,10 @@
 
 <%-- jquery js --%>
 <uc4:jquery ID="jquery1" runat="server" />
+
+<script src="../../Content/Script/jquery.v1.9.1.js"></script>
+<script src="../../Content/Script/jquery.min.v2.1.1.js"></script>
+
 <telerik:RadScriptBlock ID="radscript3" runat="server">
     <script type="text/javascript">
 
@@ -326,6 +339,193 @@
             var updPanelUserList = '<%=updPanelUserList.ClientID%>';//ctl00_ContentPlaceHolder1_create1_RadPanelBar1_i0_updPanelUserLis
             __doPostBack(updPanelUserList, '');
         }
+
+        //***************** All Special Characters ******************************//
+        //if there are values for allwoed character then display it
+        var AllSpecialChars = "<%= ConfigurationManager.AppSettings["AllSpecialChars"].ToString() %>";
+        //if there are values for allwoed character then display it
+        var AllowedCharsInLocalStringUserName = "<%= ConfigurationManager.AppSettings["AllowedCharsLocalPartUserName"].ToString() %>";
+        //if there are values for allwoed character then display it
+        var AllowedCharsServerStringUserName = "<%= ConfigurationManager.AppSettings["AllowedCharsServerPartUserName"].ToString() %>";
+
+
+        //this function executes when edit individual cell
+        $(".accountNameTextBox").blur(function () {
+            var $controlValue = $(this).val();
+            //create regex
+            if ($controlValue.length == 0) {
+                enableLinkButton();
+                $('.msg').hide();
+                $('.success').show();
+            }
+            else {
+                CheckUserNameInput($controlValue);
+            }
+        });
+
+        $(".accountNameTextBox").keyup(function () {
+            debugger;
+            var $controlValue = $(this).val();
+            //create regex
+            if ($controlValue.length==0)
+            {
+                enableLinkButton();
+                $('.msg').hide();
+                $('.success').show();
+            }
+            else
+            {
+                CheckUserNameInput($controlValue);
+            }
+        });
+
+        //funciton to check the avalibility of special allowed chars, string and numbers
+        function verifyUserNameInput(elementFocusEvent) {
+            var elementValue = elementFocusEvent.value;
+
+            if (elementValue.length > 0)
+                CheckUserNameInput(elementValue);
+
+            return true;
+        }
+        
+        function CheckUserNameInput(elementValue) {
+            var badData = false;
+            
+            //get the occurance of @ - if there is no @ then ignore
+            if (elementValue.indexOf('@') > -1) {
+                //do nothing, this condition is true
+            }
+            else {
+                disableLinkButton();
+                $('.msg').hide();
+                $('.error').show();
+                return false;
+            }
+
+            //check how many '@' exist
+            var countofAtSign = (elementValue.match(/@/g) || []).length;
+            if (countofAtSign > 1) {
+                $('.msg').hide();
+                $('.error').show();
+                disableLinkButton();
+                return false;
+            }
+
+            //first part of email before @ 
+            var localString = elementValue.split('@')[0];
+
+            //there is empty string before @
+            if (localString.length === 0) {
+                $('.msg').hide();
+                $('.error').show();
+                disableLinkButton();
+                return false;
+            }
+
+            //second part of email
+            var serverString = elementValue.split('@')[1];
+
+            //serverString must have few chars
+            if (serverString.length === 0) {
+                $('.msg').hide();
+                $('.error').show();
+                disableLinkButton();
+                return false;
+            }
+
+            //chcek for number
+            var bHasNumbers = checkInputForNumbers(elementValue);
+            //check for alphabets
+            var bHasAlphabets = checkInputForAlphabets(elementValue);
+            //check to see at least one character exist or one number is in string. either 1 number or 1 alphabet must exist
+            if (!bHasNumbers && !bHasAlphabets) {
+                $('.msg').hide();
+                $('.error').show();
+                disableLinkButton();
+                return false;
+            }
+
+            //check to see if there are any specail chars in string then check if those special chars are allowed
+            if (elementValue.match(new RegExp(AllSpecialChars, "gi"))) //  new RegExp(AllSpecialChars)=== /[~!@#$%^&*;?+_.`<,>':/[\]|{}()=-]/
+            {
+                var regex = /[~!@#$%^&*;?+_.`<,>':/[\]|{}()=-]/gi;
+                //****************** Local String Check **********************************/
+                var isSplChar = regex.test(localString);
+                var badFound = [];
+                if (isSplChar) {
+                    var allPresentCharactersInName = localString.match(regex);
+                    badFound = checkAllowedChars(allPresentCharactersInName, AllowedCharsInLocalStringUserName);
+                    //find all special characters that matches with the web.config file key in local part of the string
+                    if (badFound.length > 0) {
+                        badData = true;
+                    }
+                }
+                //****************** Server String Check **********************************/
+                isSplChar = regex.test(serverString);
+                if (isSplChar) {
+                    allPresentCharactersInName = serverString.match(regex);
+                    badFound = checkAllowedChars(allPresentCharactersInName, AllowedCharsServerStringUserName);
+                    //find all special characters that matches with the web.config file key in local part of the string
+                    if (badFound.length > 0) {
+                        badData = true;
+                    }
+
+                }
+
+
+                if (badData) {
+                    $('.msg').hide();
+                    $('.error').show();
+                    disableLinkButton();
+                    return false;
+                }
+                else {
+                    enableLinkButton();
+                    $('.msg').hide();
+                    $('.success').show();
+                }
+
+                return true;
+            }
+
+        }
+
+        var checkAllowedChars = function (charsInString, specialChars) {
+            var matchfound = [];
+            var nomatchfound = [];
+            for (i = 0; i < charsInString.length; i++) {
+                if (typeof charsInString[i] != 'undefined') {
+                    if (specialChars.indexOf(charsInString[i]) !== -1) {
+                        matchfound.push(charsInString[i]);
+                    }
+                    else {
+                        nomatchfound.push(charsInString[i]);
+                        return nomatchfound;
+                    }
+                }
+            }
+
+            return nomatchfound;
+        }
+
+        function checkInputForNumbers(string) {
+            //the regular expression checks for any number in string, so if there is at least one number then it will be true
+            return /\d/.test(string);
+        }
+
+        function checkInputForAlphabets(string) {
+            //the regular expression checks for any alphabet in string, lower or upper,so if there is at least one number then it will be true
+            return /[a-zA-Z]/.test(string);
+        }
+
+        function enableLinkButton() {
+            document.getElementById('<%= CreateNewUsers.ClientID %>').disabled = false;
+        }
+
+        function disableLinkButton() {
+            document.getElementById('<%= CreateNewUsers.ClientID %>').disabled = true;
+    }
 
     </script>
 </telerik:RadScriptBlock>

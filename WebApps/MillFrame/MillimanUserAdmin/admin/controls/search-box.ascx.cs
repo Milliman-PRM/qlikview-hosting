@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web;
 
 public partial class admin_controls_search_box : System.Web.UI.UserControl
 {
@@ -21,7 +22,8 @@ public partial class admin_controls_search_box : System.Web.UI.UserControl
             string UserName = txbUserName.Text.Trim();
             string Email = txbEmail.Text.Trim();
 
-            Response.Redirect("search-user.aspx" + "?UserName=" + UserName + "&Email=" + Email);
+            //HttpUtility.HtmlDecode: Converts a string that has been HTML-encoded for HTTP transmission into a decoded string.
+            Response.Redirect("search-user.aspx" + "?UserName=" + UserName + "&Email=" + HttpUtility.HtmlDecode(Email));
         }
         else
         {

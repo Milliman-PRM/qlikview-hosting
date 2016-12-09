@@ -235,7 +235,7 @@ public partial class bulk_admin_controls_create_user_with_role : System.Web.UI.U
                 //create a csv list to pass back
                 CSVResults += UI.Account_Name;
 
-                CSVResults += "\n";               
+                CSVResults += "\n";
 
                 if (MU != null)
                 {
@@ -347,14 +347,14 @@ public partial class bulk_admin_controls_create_user_with_role : System.Web.UI.U
             }
             else if (string.IsNullOrEmpty(UI.Account_Name) == false)
             {
-                foreach (char C in UI.Account_Name)
-                {
-                    if (AccountValidChars.Contains(C.ToString()) == false)
-                    {
-                        UI.ErrorMsg = "Account names may only contains alpha-numeric characters and the special characters '_-@.'";
-                        break;
-                    }
-                }
+                //foreach (char C in UI.Account_Name)
+                //{
+                //    if (AccountValidChars.Contains(C.ToString()) == false)
+                //    {
+                //        UI.ErrorMsg = "Account names may only contains alpha-numeric characters and the special characters '_-@.'";
+                //        break;
+                //    }
+                //}
                 if (Membership.FindUsersByName(UI.Account_Name).Count != 0)
                 {
                     UI.ErrorMsg = "A user with this account name already exists - duplicates may not be added.";
@@ -363,20 +363,21 @@ public partial class bulk_admin_controls_create_user_with_role : System.Web.UI.U
 
             if (string.IsNullOrEmpty(UI.Account_Name) == false)
             {
-                if (UI.Account_Name.Contains(".") == false)
-                {
-                    UI.ErrorMsg = "Email address does not contain a '.' character.";
-                }
-                if (UI.Account_Name.Contains("@") == false)
-                {
-                    UI.ErrorMsg = "Email address does not contain a '@' character.";
-                }
-                bool isEmail = System.Text.RegularExpressions.Regex.IsMatch(UI.Account_Name.ToLower(), @"\A(?:[a-z0-9!#$%&amp;'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&amp;'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z");
-                if (isEmail == false)
-                {
-                    UI.ErrorMsg = "Email address format does not match standards protocal RFC 2822 format - please report to system administrator";
-                }
-                else if (Membership.FindUsersByEmail(UI.Account_Name).Count != 0)
+                //if (UI.Account_Name.Contains(".") == false)
+                //{
+                //    UI.ErrorMsg = "Email address does not contain a '.' character.";
+                //}
+                //if (UI.Account_Name.Contains("@") == false)
+                //{
+                //    UI.ErrorMsg = "Email address does not contain a '@' character.";
+                //}
+                //bool isEmail = System.Text.RegularExpressions.Regex.IsMatch(UI.Account_Name.ToLower(), @"\A(?:[a-z0-9!#$%&amp;'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&amp;'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z");
+                //if (isEmail == false)
+                //{
+                //    UI.ErrorMsg = "Email address format does not match standards protocal RFC 2822 format - please report to system administrator";
+                //}
+                //else 
+                if (Membership.FindUsersByEmail(UI.Account_Name).Count != 0)
                 {
                     UI.ErrorMsg = "A user with this address already exists - duplicates may not be added.";
                 }
