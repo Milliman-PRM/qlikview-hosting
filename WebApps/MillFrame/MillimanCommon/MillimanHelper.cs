@@ -58,7 +58,7 @@ namespace MillimanCommon
             //there is empty string before @
             if (localString.Length == 0)
             {
-                errorMsg = "There must be at least few chars before @ sign.";
+                errorMsg = "No characters before @ sign.";
                 errorsList.Add(errorMsg);
             }
 
@@ -68,7 +68,7 @@ namespace MillimanCommon
             //serverString must have few chars
             if (serverString.Length == 0)
             {
-                errorMsg = "There must be at least few chars after @ sign.";
+                errorMsg = "No characters after @ sign.";
                 errorsList.Add(errorMsg);
             }
 
@@ -79,7 +79,7 @@ namespace MillimanCommon
             //check to see at least one character exist or one number is in string. either 1 number or 1 alphabet must exist
             if (!HasNumbers && !HasAlphabets)
             {
-                errorMsg = "There must be at least few chars befpre and after @ sign.";
+                errorMsg = "There must be at least few characters before and after @ sign.";
                 errorsList.Add(errorMsg);
             }
 
