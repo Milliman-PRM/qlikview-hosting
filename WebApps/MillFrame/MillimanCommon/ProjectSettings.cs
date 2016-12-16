@@ -327,17 +327,51 @@ namespace MillimanCommon
             set { _AutomaticInclusion = value; }
         }
 
+        //Issue 1842 - all fields should be given a default value
         public ProjectSettings()
         {
+            //provide good defaults for all items
+            _ProjectName = string.Empty;
+            _OriginalProjectName = string.Empty;
+            _SupportsReduction = false;
+            _QVName = string.Empty;
+            _ServerQVPath = string.Empty;
+            _UserManual = string.Empty;
+            _OriginalUserManualName = string.Empty;
+            _Groups = string.Empty;
+            _QVProject = string.Empty;
+            _QVProjectHash = string.Empty;
+            _QVResources = string.Empty;
+            _QVThumbnail = string.Empty;
+            _QVThumbnailHash = string.Empty;
+            _QVDescription = string.Empty;
+            _Notes = string.Empty;
+            _CovisintFieldName = string.Empty;
+            _MillimanControlName = string.Empty;
+            _FriendlyDBName = string.Empty;
+            _DBConnectionString = string.Empty;
+            _LoadedFrom = string.Empty;
+            _UID = string.Empty;
+            _UploadedToProduction = string.Empty;
+            _UploadedToProductionDate = string.Empty;
+            _ProjectCreatedBy = string.Empty;
+            _ProjectCreatedDate = string.Empty;
+            _LastProjectRun = string.Empty;
+            _LastProjectRunDate = string.Empty;
+            _LastEditedBy = string.Empty;
+            _LastEditedDate = string.Empty;
+            _QVDataSource = string.Empty;
+            _QVTooltip = string.Empty;
+
             _AutomaticInclusion = false;  //setting backing store to false by default
 
             _ProjectCreatedDate = DateTime.Now.ToString();
-            if ( System.Web.Security.Membership.GetUser() != null ) //need to check when deserializing, will throw error
+            if (System.Web.Security.Membership.GetUser() != null) //need to check when deserializing, will throw error
                 _ProjectCreatedBy = System.Web.Security.Membership.GetUser().UserName;
-           _UID = "hcprj" + Guid.NewGuid().ToString("N");
+            _UID = "hcprj" + Guid.NewGuid().ToString("N");
         }
 
-    
+
         static public ProjectSettings Load(string PathFilename)
         {
             if (System.IO.File.Exists(PathFilename) == false)
