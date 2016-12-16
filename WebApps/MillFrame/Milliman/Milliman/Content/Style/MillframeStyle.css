@@ -56,7 +56,7 @@ td{padding:4px!important}
 .standardTextBox:hover{border:solid 1px #999;-moz-box-shadow:0 0 10px #999;-webkit-box-shadow:0 0 10px #999;box-shadow:0 0 2px #999}                                                                                                        
 .standardTextBox:focus{outline:none;border:solid 1px #73A6FF;background:#EFF5FF;color:#000}
 /* info box*/
-.infoBox{color:#8a6d3b;background-color:#fcf8e3;border-color:#faebcc;margin:0 auto!important}
+.infoBox{color:#8a6d3b;background-color:#fcf8e3;border-color:#faebcc;}
 .engravedHeader{color:#333;font: 18px 'LeagueGothicRegular'; text-shadow: 0px 1px 0px rgba(255,255,255,255);}
 .engravedHeaderChild{color:#333;font: 14px 'LeagueGothicRegular'; text-shadow: 0px 1px 0px rgba(255,255,255,255);}
 .engravedHeader h2{font-size:24px;}
@@ -103,3 +103,4 @@ div#divErrorPageContainer p{padding:10px; letter-spacing:0em;word-spacing: 0em;}
         z-index: -1;
     }
 .linkItemsContainer li a:hover:after{content:' →';}
+

@@ -4,23 +4,21 @@
 <%@ Register Src="~/js/js/jquery.ascx" TagName="jquery" TagPrefix="uc2" %>
 <%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
 
-<contenttemplate>
-    <div  style="width:100%;height:100%;margin:5px" >
-
-    <div style="width:100%;height:100%;border:solid 1px lightgray" id="RadFileExplorerContainer">
-        <telerik:RadFileExplorer  ID="RadFileExplorer1"  runat="server" EnableCopy="true"  OnClientItemSelected="OnClientItemSelected" 
+<div style="width: 100%; height: 100%; margin: 5px">
+    <div style="width: 100%; height: 100%; border: solid 1px lightgray" id="RadFileExplorerContainer">
+        <telerik:RadFileExplorer ID="RadFileExplorer1" runat="server" EnableCopy="true" OnClientItemSelected="OnClientItemSelected"
             Configuration-AllowFileExtensionRename="False" Configuration-AllowMultipleSelection="False" Width="100px"
-             OnClientLoad="OnClientLoad" ViewStateMode="Enabled" Height="100px" BorderStyle="Solid" BorderWidth="1" BorderColor="LightGray" />
-        <asp:HiddenField ID="hidden" runat="server" /> <%--needed to push selected node in grid back to codebehind--%>
-    </div>  
-
-        <telerik:RadWindow ID="UploadWindow" runat="server" Animation="Fade" AutoSize="False" Behaviors="Close, Move, Reload" Modal="True"  
-            InitialBehaviors="Close" VisibleStatusbar="False" OnClientClose="OnClientclose"  ShowContentDuringLoad="False" DestroyOnClose="False" />
-        <asp:UpdatePanel ID="UpdatePanel1" runat="server">  </asp:UpdatePanel>
+            OnClientLoad="OnClientLoad" ViewStateMode="Enabled" Height="100px" BorderStyle="Solid" BorderWidth="1" BorderColor="LightGray" />
+        <asp:HiddenField ID="hidden" runat="server" />
+        <%--needed to push selected node in grid back to codebehind--%>
     </div>
 
-</contenttemplate>
-<script language="javascript" type="text/javascript">
+    <telerik:RadWindow ID="UploadWindow" runat="server" Animation="Fade" AutoSize="False" Behaviors="Close, Move, Reload" Modal="True"
+        InitialBehaviors="Close" VisibleStatusbar="False" OnClientClose="OnClientclose" ShowContentDuringLoad="False" DestroyOnClose="False" />
+    <asp:UpdatePanel ID="UpdatePanel1" runat="server"></asp:UpdatePanel>
+</div>
+
+<script lang="javascript" type="text/javascript">
 
     var LastSelectedFilePath;
     function OnClientItemSelected(sender, args) {
@@ -41,35 +39,35 @@
 
     function Closer() {
         var oExplorer = $find("<%=RadFileExplorer1.ClientID%>");
-         if (oExplorer)
-             oExplorer.refresh();
+        if (oExplorer)
+            oExplorer.refresh();
 
-     }
+    }
 
-     function OnClientclose(sender, eventArgs) {
-         sender.hide();
-         Closer(); //call to refresh
-     }
+    function OnClientclose(sender, eventArgs) {
+        sender.hide();
+        Closer(); //call to refresh
+    }
 
-     //resize voodoo
-     var resized = false;
-     /* * Resize the RadFileExplorer */
-     function ResizeExplorer() {
-         if (resized == false) {
-             resized = true;
-             var ClientHeight = 0;
-             var ClientWidth = 0;
-             var h = document.getElementById('RadFileExplorerContainer');
-             if (h) {
-                 var footer = document.getElementById('footer');
-                 var footerHeight = footer ? footer.clientHeight : 25;
-                 // ClientWidth = h.clientWidth;
-                 // ClientHeight = h.clientHeight;
-                 ClientWidth = h.offsetWidth - 5;
-                 ClientHeight = h.offsetHeight - footerHeight;
-             }
+    //resize voodoo
+    var resized = false;
+    /* * Resize the RadFileExplorer */
+    function ResizeExplorer() {
+        if (resized == false) {
+            resized = true;
+            var ClientHeight = 0;
+            var ClientWidth = 0;
+            var h = document.getElementById('RadFileExplorerContainer');
+            if (h) {
+                var footer = document.getElementById('footer');
+                var footerHeight = footer ? footer.clientHeight : 25;
+                // ClientWidth = h.clientWidth;
+                // ClientHeight = h.clientHeight;
+                ClientWidth = h.offsetWidth - 5;
+                ClientHeight = h.offsetHeight - footerHeight;
+            }
 
-             var explorer = $find("<%=RadFileExplorer1.ClientID%>");
+            var explorer = $find("<%=RadFileExplorer1.ClientID%>");
              if (explorer && h) {
                  var div = explorer.get_element();
                  //resize explorer container div 
@@ -117,7 +115,7 @@
                      MyUploadWindow.Title = "Edit Project Settings";
                      MyUploadWindow.setUrl('EnhancedUploadView.aspx?QVPath=' + LastSelectedFilePath.toLowerCase().replace("qvdocuments/", ""));
 
-                     MyUploadWindow.setSize(650, 540);
+                     MyUploadWindow.setSize(693, 720);
                      MyUploadWindow.show();
                  }
              }
@@ -240,14 +238,14 @@ function toolbarClicked(toolbar, args) {
     var buttonValue = args.get_item().get_value();
     if (buttonValue == "Import") {
         var MyUploadWindow = $find("<%=UploadWindow.ClientID%>");
-             if (MyUploadWindow) {
-                 MyUploadWindow.Title = "Create Project from QVW Import";
-                 MyUploadWindow.setUrl('QVWImport.aspx');
-                 MyUploadWindow.setSize(650, 540);
-                 MyUploadWindow.show();
-             }
-         }
-     }
+        if (MyUploadWindow) {
+            MyUploadWindow.Title = "Create Project from QVW Import";
+            MyUploadWindow.setUrl('QVWImport.aspx');
+            MyUploadWindow.setSize(650, 540);
+            MyUploadWindow.show();
+        }
+    }
+}
 
 </script>
 <%-- jquery js --%>
