@@ -89,10 +89,8 @@
     <Compile Include="QVWUtilities\QVWUtilities.cs" />
     <Compile Include="QVWUtilities\ReduceConfig.cs" />
     <Compile Include="QVWUtilities\ReducedQVWUtilities.cs" />
-    <Compile Include="RegexUtility.cs" />
     <Compile Include="Report.cs" />
     <Compile Include="SecureLink.cs" />
-    <Compile Include="StringProcessingUtility.cs" />
     <Compile Include="SuperGroup.cs" />
     <Compile Include="TreeUtilities\DropTableProcessor.cs" />
     <Compile Include="TreeUtilities\TreeBuilder.cs" />
