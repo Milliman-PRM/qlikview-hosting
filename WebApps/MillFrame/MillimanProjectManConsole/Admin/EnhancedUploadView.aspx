@@ -1,5 +1,4 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" Inherits="EnhancedUploadView" CodeBehind="EnhancedUploadView.aspx.cs" %>
-
 <%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -10,41 +9,14 @@
     <link id="lnkBSD" runat="server" rel="stylesheet" type="text/css" href="~/Content/Style/bootstrap-dialog.min.css" />
     <link id="Link1" runat="server" rel="stylesheet" type="text/css" href="~/Content/Style/MillframeStyle.css" />
     <style type="text/css">
-        html {
-            overflow: scroll;
-        }
-
-        html, button, input, select, textarea, label {
-            font-family: arial,"Times New Roman",Times,serif,sans-serif;
-            font-size: 12px;
-            color: #222;
-        }
-
-        body {
-            margin: 20px;
-        }
-
-        .containerWrap {
-            width: 81%;
-            margin: 0 auto;
-        }
-
-        .left-div {
-            max-width: 800px;
-        }
-
-        .right-div {
-            max-width: 800px;
-        }
-
-        #divGeneralProjectInfo {
-            width: 534px;
-        }
-
-        #divGroupAssignment {
-            width: 534px;
-        }
-    </style>
+        html{overflow:scroll}
+        html,button,input,select,textarea,label{font-family:arial,"Times New Roman",Times,serif,sans-serif;font-size:12px;color:#222}
+        body{margin:20px}
+        .left-div{max-width:800px}
+        .right-div{max-width:800px}
+        #divGeneralProjectInfo{width:534px}
+        #divGroupAssignment{width:534px}
+   </style>
 
     <script language="javascript" type="text/javascript">
         function getRadWindow() {
@@ -79,7 +51,7 @@
         }
 
     </script>
-    <title>Project Upload</title>
+    <title>General Project Information</title>
 
 </head>
 <body style="font-size: 11pt; font-weight: 400; background-image: url( ../images/dialog-bg.png ); background-size: 100% 100%" onload="AutoSize();">
@@ -87,23 +59,9 @@
         <telerik:RadScriptManager runat="server" ID="RadScriptManager1" />
         <div class="containerWrap">
             <div class="page-header engravedHeader">
-                <h2>Project Upload  <small>General Project Information</small></h2>
+                <h2>General Project Information</h2>
             </div>
             <div class="space"></div>
-            <%--divImportantHint hint--%>
-            <div id="divImportant" class="divImportant" style="width: 23px; float: left;">
-                <img id="img2" src="~/Content/Images/Info-blue.png" runat="server" width="18" height="18" alt="Info" />
-                <div id="divImportantHint">
-                    <div class="alert alert-warning infoBox text-justify">
-                        <strong>Important!</strong>
-                        <br />
-                        If you copy and paste data from Excel, Word, Notepad, or other program there might be hidden cotrol characters in text like Backspace, Tab or New Line Feed. 
-                    <br />
-                        Please make sure your text does not include any control characters.        
-                    </div>
-                </div>
-            </div>
-            <%--divImportantHint hint--%>
             <div id="divGeneralProjectInfo" class="roundShadowContainer">
                 <div class="page-header engravedHeader">
                     <h3>General Project Information</h3>
@@ -128,14 +86,27 @@
                         <div class="col-sm-8">
                             <asp:TextBox ID="QVWName" runat="server" Width="86%"
                                 ToolTip="Name of this project - will be visible to client user as title"
-                                OnTextChanged="ProjectName_TextChanged" class="form-control"></asp:TextBox>
+                                OnTextChanged="ProjectName_TextChanged" class="form-control" ></asp:TextBox>
                         </div>
                     </div>
                     <div class="row">&nbsp;</div>
                     <div class="row">
-                        <div class="col-sm-4">
-                            <label for="Description" class="labelweak">Project Description:</label>
-                        </div>
+                        <div class="col-sm-4">                                               
+                            <%--divImportantHint hint--%>
+                            <div id="divImportant" class="divImportant">
+                                <label for="Description" class="labelweak">Project Description:</label>&nbsp;&nbsp;<img id="img2" src="~/Content/Images/Info-blue.png" runat="server" width="18" height="16" alt="Info" />   
+                                <div id="divImportantHint" style="width:500px;">                                    
+                                    <div class="alert alert-warning infoBox text-justify">
+                                        <strong>Important!</strong>
+                                        <br />
+                                        If you copy and paste data from Excel, Word, Notepad, or other program there might be hidden cotrol characters in text like Backspace, Tab or New Line Feed. 
+                                        <br />
+                                        Please make sure your text does not include any control characters.        
+                                    </div>
+                                </div>
+                            </div>
+                            <%--divImportantHint hint--%>
+                       </div>
                         <div class="col-sm-8">
                             <asp:TextBox Height="97px" ID="Description" runat="server" Width="86%"
                                 TextMode="MultiLine"
@@ -168,11 +139,12 @@
                     <div class="row">&nbsp;</div>
                     <div class="row">
                         <div class="col-md-4">
-                            <label for="PreviewImage" class="labelweak">Project Thumbnail(128x128)(*.jpg,*.gif, *.png):</label>
+                            <label for="PreviewImage" class="labelweak">Project Thumbnail<span class="text-info">&nbsp;(128x128)(*.jpg,*.gif, *.png)</span>:</label>
                         </div>
-                        <div class="col-md-8">
-                            <asp:Image ID="PreviewImage" runat="server" Width="105px" Height="105px" />
-                            <br />
+                        <div class="col-md-4">
+                            <asp:Image ID="PreviewImage" runat="server" Width="105px" Height="105px"/>
+                        </div>
+                        <div class="col-md-6">
                             <telerik:RadAsyncUpload runat="server" ID="PresentationThumbnail" Style="width: 95%"
                                 AllowedFileExtensions="png,gif,jpg,jpeg" MaxFileSize="1000000000" MaxFileInputsCount="1">
                             </telerik:RadAsyncUpload>
@@ -199,7 +171,8 @@
                     <div class="col-md-12">
                         <div class="text-left">
                             <label for="NewGroup" class="labelweak">New Group:</label>
-                            <asp:TextBox runat="server" ID="NewGroupName" Width="40%" CssClass="form-control"></asp:TextBox>
+                            <asp:TextBox runat="server" ID="NewGroupName" Width="100%" CssClass="form-control"></asp:TextBox>
+                            <div class="space"></div>
                             <asp:Button runat="server" ID="Button1" Text="Create Group" ToolTip="Create a group on the production server."
                                 OnClick="CreateGroup_Click" CssClass="btn btn-secondary btn-sm" />
                             <asp:Button runat="server" ID="Button2" Text="Delete Group" ToolTip="Delete the 'checked' groups on the production server"
@@ -207,7 +180,7 @@
 
                         </div>
                         <div class="row">&nbsp;</div>
-                        <div style="height: 400px; min-height: 50px; overflow-y: auto; margin: 0 auto; background: #eceaea;">
+                        <div style="height: 400px; min-height: 50px; overflow-y: auto; margin: 0 auto; background: #eceaea; text-align: justify;">
                             <asp:CheckBoxList runat="server" ID="SelectedGroups"
                                 RepeatColumns="1" onclick="SetTooltip()">
                             </asp:CheckBoxList>
@@ -250,18 +223,10 @@
         })
 
         //***************** display the importatn hint next to the image ******************************//
-        var moveLeft = 10;
-        var moveDown = 20;
         $('.divImportant').hover(function (e) {
             $('#divImportantHint').show();
         }, function () {
             $('#divImportantHint').hide();
-        });
-
-        $('.divImportant').mousemove(function (e) {
-            $("#divImportantHint")
-                .css('top', e.pageY + moveDown)
-                .css('left', e.pageX + moveLeft);
         });
 
         //disable all the button in the form while uploading
