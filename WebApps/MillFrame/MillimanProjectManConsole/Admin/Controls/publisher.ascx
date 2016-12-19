@@ -8,10 +8,9 @@
     <div style="width: 100%; height: 100%; border: solid 1px lightgray" id="RadFileExplorerContainer">
         <telerik:RadFileExplorer ID="RadFileExplorer1" runat="server" EnableCopy="true" OnClientItemSelected="OnClientItemSelected"
             Configuration-AllowFileExtensionRename="False" Configuration-AllowMultipleSelection="False" Width="100px"
-            OnClientLoad="OnClientLoad" ViewStateMode="Enabled" Height="100px" BorderStyle="Solid" BorderWidth="1" BorderColor="LightGray" />
-        <asp:HiddenField ID="hidden" runat="server" />
-        <%--needed to push selected node in grid back to codebehind--%>
-    </div>
+             OnClientLoad="OnClientLoad" ViewStateMode="Enabled" Height="100px" BorderStyle="Solid" BorderWidth="1" BorderColor="LightGray" EnableOpenFile="False" EnableCreateNewFolder="True" />
+        <asp:HiddenField ID="hidden" runat="server" /> <%--needed to push selected node in grid back to codebehind--%>
+    </div>  
 
     <telerik:RadWindow ID="UploadWindow" runat="server" Animation="Fade" AutoSize="False" Behaviors="Close, Move, Reload" Modal="True"
         InitialBehaviors="Close" VisibleStatusbar="False" OnClientClose="OnClientclose" ShowContentDuringLoad="False" DestroyOnClose="False" />
