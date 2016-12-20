@@ -91,7 +91,6 @@ public partial class EnhancedUploadView : System.Web.UI.Page
             }
             VirtualDir = QVPath;
             Groups = _Settings.Groups;
- 
         }
         //otherwise check to see if we are importing
         else if (Request["loc"] != null)
@@ -283,11 +282,14 @@ public partial class EnhancedUploadView : System.Web.UI.Page
             PreviewImage.ImageUrl = "imagereflector.aspx?key=" + MillimanCommon.Utilities.ConvertStringToHex(OldImagePath);
         }
 
-
         string NewManualPath = System.IO.Path.Combine(DocumentRoot.Trim(), Path.Trim(), Settings.UserManual.Trim() + "_new");
         string OldManualPath = System.IO.Path.Combine(DocumentRoot.Trim(), Path.Trim(), Settings.UserManual.Trim());
 
-        UserManualLabel.Text = Settings.UserManual;
+        UserManualLabel.Text = Settings.UserManual.Substring(
+            Settings.UserManual.IndexOf("_") + 1,
+            Settings.UserManual.Length - Settings.UserManual.IndexOf("_") - 1
+            );
+
         string UserManualURL = string.Empty;
         if ( System.IO.File.Exists( NewManualPath ) )
             UserManualURL = "documentreflector.aspx?key=" + MillimanCommon.Utilities.ConvertStringToHex( NewManualPath );
