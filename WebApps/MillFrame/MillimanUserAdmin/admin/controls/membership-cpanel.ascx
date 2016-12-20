@@ -21,7 +21,7 @@
 
 <div class="containerWrap center-block outer outerWrap">
     <div class="page-header engravedHeader">
-        <h2>User Administration&nbsp;&nbsp;<small>User Account Setting</small></h2>
+        <h2>User Administration&nbsp;&nbsp;<small>User Account Settings</small></h2>
     </div>
     <div class="space"></div>
     <div class="nav">
