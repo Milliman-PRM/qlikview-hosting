@@ -193,17 +193,58 @@ namespace MillimanCommon
             return false;
         }
 
+        /// <summary>
+        /// Added for Issue 1569 - remove the selections file and redirector for user that have no selections made
+        /// </summary>
+        /// <param name="CurrentProjectSettings">Valid project settings file</param>
+        /// <param name="Accounts">A list of all user accounts to remove slections</param>
+        private void RemoveSelectionsForUsers(MillimanCommon.ProjectSettings CurrentProjectSettings, List<string> Accounts)
+        {
+            //strings used to log nice error messages on failure
+            string ErrorMsgRoot = "Failed to delete user selections file for project '" + CurrentProjectSettings.OriginalProjectName + "' ";
+            string CurrentErrorMsg = ErrorMsgRoot;
+            try
+            {
+                if (Accounts != null)
+                {
+                    foreach (string AccountName in Accounts)
+                    {
+                        CurrentErrorMsg = ErrorMsgRoot + " account '" + AccountName + "'";
+                        string UserDir = MillimanCommon.ReducedQVWUtilities.GetUserDir(CurrentProjectSettings.AbsoluteProjectPath, AccountName);
+                        //clear all files from dir - quick way is delete directory and re-create it
+                        if (System.IO.Directory.Exists(UserDir))
+                        {
+                            System.IO.Directory.Delete(UserDir, true);
+                            System.IO.Directory.CreateDirectory(UserDir);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MillimanCommon.Report.Log(Report.ReportType.Error, CurrentErrorMsg);
+            }
+        }
+
         public bool SaveSettings( MillimanCommon.ProjectSettings PS,  RadTreeView AccessTree, RadTreeView DownloadsTree, List<string> Accounts, out bool RequiresReduction)
         {
             RequiresReduction = true;
 
             try
             {
-               
+
                 string MasterQVW = System.IO.Path.Combine(PS.LoadedFromPath, PS.QVName + ".qvw");
 
                 Dictionary<string, List<string>> AccessSaveSelections = null;
                 List<string> SelectedItems = GetAccessSelectionsForFileSave(AccessTree, out AccessSaveSelections);
+
+                if ((SelectedItems == null) || (SelectedItems.Count() == 0))
+                {  //Per Issue 1569 we no longer require selections, but want to delete any existing selections file
+
+                    RemoveSelectionsForUsers(PS, Accounts);
+                    return true;
+                }
+                    
 
                 //issue reduction on selectedItems - HERE 
                 
