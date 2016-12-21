@@ -92,14 +92,6 @@
     .RadGrid_Office2010Silver .rgRow > td, .RadGrid_Office2010Silver .rgAltRow > td, .RadGrid_Office2010Silver .rgEditRow > td, .RadGrid_Office2010Silver .rgFooter > td {
         border: none;
     }
-
-    .msg {
-        display: none;
-    }
-
-    .error {
-        color: red;
-    }
 </style>
 
 
@@ -181,9 +173,6 @@
                             <ItemTemplate>
                                 <label id="lblAccountNameTextBox" for="AccountNameTextBox" class="labelweak required"></label>
                                 <asp:TextBox ID="AccountNameTextBox" runat="server" AutoPostBack="false" Text='<%#Eval("Account_Name") %>' Width="90%" Height="27px" CssClass="accountNameTextBox required standardTextBox"></asp:TextBox>
-                                <%--<asp:RequiredFieldValidator runat="server" Display="Dynamic" ControlToValidate="AccountNameTextBox" ErrorMessage="Account name is required" ForeColor="Red" />--%>
-                                <span class="msg error">Invalid email address</span>
-                                
                             </ItemTemplate>
                             <HeaderStyle Width="100%"></HeaderStyle>
                         </telerik:GridTemplateColumn>
@@ -262,10 +251,6 @@
 
 <%-- jquery js --%>
 <uc4:jquery ID="jquery1" runat="server" />
-
-<script src="../../Content/Script/jquery.v1.9.1.js"></script>
-<script src="../../Content/Script/jquery.min.v2.1.1.js"></script>
-
 <telerik:RadScriptBlock ID="radscript3" runat="server">
     <script type="text/javascript">
 
