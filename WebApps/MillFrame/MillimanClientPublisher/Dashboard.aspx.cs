@@ -129,18 +129,17 @@ namespace ClientPublisher
                     MillimanCommon.UserAccessList ACL = new MillimanCommon.UserAccessList(Membership.GetUser().UserName, UserRoles, false);
                     foreach (MillimanCommon.UserAccessList.UserAccess Access in ACL.ACL)
                     {
-                        if (Access.ReducedVersionNotAvailable)
-                        {
-                            //QVRootrelative and QVW are both relative to qv document root
-                            if (string.Compare(Access.QVRootRelativeProjectPath, QVW, true) == 0)
-                                return true;
-                        }
-                        else
-                        {
-                            //reducedQVW is full path,  while project is relatvie to QV root
-                            if (Access.ReducedQVW.ToLower().Contains(QVW.ToLower()) == true)
-                                return true;
-                        }
+                        //Issue 1650 since we are a client publisher - we should show the master report, or even a reduced version, since
+                        //we already have rights to PUBLISH, by default seeing everything is OK, so don't bother with checking a reduced version exists
+
+                        //QVRootrelative and QVW are both relative to qv document root
+                        if (string.Compare(Access.QVRootRelativeProjectPath, QVW, true) == 0)
+                            return true;
+
+                        //reducedQVW is full path,  while project is relatvie to QV root
+                        if (Access.ReducedQVW.ToLower().Contains(QVW.ToLower()) == true)
+                            return true;
+
                     }
                 }
             }
