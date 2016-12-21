@@ -16,6 +16,10 @@ namespace MillimanReportReduction
 
         public bool ProcessUsers(string GroupID, List<string> CreatedUsers, List<MillimanCommon.TreeToFileUtilities.ReductionSelections> SelectionsPerQVW, bool AllNodesSelected)
         {
+            //per Issue1569 we may be called with no selections to be made,  thus we do not reduce any items
+            if ((SelectionsPerQVW == null) || (SelectionsPerQVW.Count() == 0))
+                return true;
+
             bool ReturnValue = false;
             bool MustAuthorize = false;
             //VWN if no users created or no selections is this an error

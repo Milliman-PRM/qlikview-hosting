@@ -231,14 +231,15 @@
 
             function StartProcessing() {
 
-                var AccessTree = $find("AccessTree");
-                if (AccessTree) {
-                    //we do not allow a user to be added if access rights are not selected
-                    if (AccessTree.get_checkedNodes().length == 0) {
-                        alert("Selecting the user access rights from the 'Data Restrictions Selections' tree is required to add user accounts.");
-                        return false;
-                    }
-                }
+                //Issue1569 - we no longer require a selection in the tree
+                //var AccessTree = $find("AccessTree");
+                //if (AccessTree) {
+                //    //we do not allow a user to be added if access rights are not selected
+                //    if (AccessTree.get_checkedNodes().length == 0) {
+                //        alert("Selecting the user access rights from the 'Data Restrictions Selections' tree is required to add user accounts.");
+                //        return false;
+                //    }
+                //}
                 LockScreen("");
                 return true;
             }
