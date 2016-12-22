@@ -135,6 +135,8 @@
                                                         Delete
                                                     </asp:LinkButton>
                                                 &#160;&#160;
+                                                <asp:HyperLink runat="server" target="_blank" NavigateUrl="UserGuide/PRM Client User Administration User Guide Release 4.1.0.html" ToolTip="View user adminstration user guide"><img src="Images/Report.png" />User Guide</asp:HyperLink>
+                                                &#160;&#160;
                                             </div>
                                         </CommandItemTemplate>
                                         <Columns>
