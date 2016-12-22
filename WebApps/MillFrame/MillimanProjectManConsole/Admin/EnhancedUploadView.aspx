@@ -153,10 +153,10 @@
                     <div class="row">&nbsp;</div>
                     <div class="row">
                         <div class="col-md-4">
-                            <label for="UserManualLabel" class="labelweak">User Manual:</label>
+                            <label for="UserManualLabel" class="labelweak">User Guide:</label>
                         </div>
                         <div class="col-md-8">
-                            <asp:HyperLink runat="server" ID="UserManualLabel" ToolTip="User manual associated with this QVW - click to launch"></asp:HyperLink>
+                            <asp:HyperLink runat="server" ID="UserManualLabel" ToolTip="User guide associated with this QVW - click to launch"></asp:HyperLink>
                         </div>
                     </div>
                 </div>
