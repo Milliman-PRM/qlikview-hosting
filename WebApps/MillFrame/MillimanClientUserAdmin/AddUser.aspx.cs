@@ -295,7 +295,16 @@ namespace MillimanClientUserAdmin
         }
 
         protected void CreateUsers_Click(object sender, EventArgs e)
-        {
+        {           
+            //parse the username 
+            List<UserInfo> UL = ParseEmails(GridToList(RadGrid1));
+            if (UL == null)
+                UL = new List<UserInfo>();
+            //rebind the gird
+            RadGrid1.DataSource = UL;
+            RadGrid1.DataBind();
+
+            //validate
             List<UserInfo> UI = ValidateUserRequests();
             foreach (UserInfo User in UI)
             {
