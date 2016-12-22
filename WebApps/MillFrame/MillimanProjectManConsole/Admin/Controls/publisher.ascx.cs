@@ -27,9 +27,9 @@ public partial class admin_controls_access_rules : System.Web.UI.UserControl
 
         RadFileExplorer1.Grid.ClientSettings.Resizing.AllowColumnResize = true;
 
-        RadToolBarButton ToolbarSep = new RadToolBarButton();
-        ToolbarSep.IsSeparator = true;
-        RadFileExplorer1.ToolBar.Items.Add(ToolbarSep);
+        RadToolBarButton ToolbarSep1 = new RadToolBarButton();
+        ToolbarSep1.IsSeparator = true;
+        RadFileExplorer1.ToolBar.Items.Add(ToolbarSep1);
 
         RadToolBarButton Import = new RadToolBarButton("");
         
@@ -38,6 +38,19 @@ public partial class admin_controls_access_rules : System.Web.UI.UserControl
         Import.ImageUrl = "../../images/qlikview16x16.png";
         Import.ImagePosition = ToolBarImagePosition.Left;
         RadFileExplorer1.ToolBar.Items.Add(Import);
+
+        RadToolBarButton ToolbarSep2 = new RadToolBarButton();
+        ToolbarSep2.IsSeparator = true;
+        RadFileExplorer1.ToolBar.Items.Add(ToolbarSep2);
+
+        RadToolBarButton UserGuide = new RadToolBarButton("");
+        UserGuide.Value = "User Guide";
+        UserGuide.ToolTip = "View the project management console user guide";
+        UserGuide.ImageUrl = "../../images/publish.png";
+        UserGuide.NavigateUrl = "../../UserGuide/PRM Project Management Console (PMC) User Guide Release 4.1.0.html";
+        UserGuide.Target = "_blank";
+        UserGuide.ImagePosition = ToolBarImagePosition.Left;
+        RadFileExplorer1.ToolBar.Items.Add(UserGuide);
 
         Telerik.Web.UI.RadMenuItem Sep = new RadMenuItem();
         Sep.IsSeparator = true;
