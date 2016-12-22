@@ -84,13 +84,13 @@
         margin: 0 auto;
         width: 100px;
     }
-    .RadGrid_Office2010Silver .rgHeader, .RadGrid_Office2010Silver th.rgResizeCol, .RadGrid_Office2010Silver .rgHeaderWrapper
-    {
-        border:none;
+
+    .RadGrid_Office2010Silver .rgHeader, .RadGrid_Office2010Silver th.rgResizeCol, .RadGrid_Office2010Silver .rgHeaderWrapper {
+        border: none;
     }
-    .RadGrid_Office2010Silver .rgRow > td, .RadGrid_Office2010Silver .rgAltRow > td, .RadGrid_Office2010Silver .rgEditRow > td, .RadGrid_Office2010Silver .rgFooter > td
-    {
-         border:none;
+
+    .RadGrid_Office2010Silver .rgRow > td, .RadGrid_Office2010Silver .rgAltRow > td, .RadGrid_Office2010Silver .rgEditRow > td, .RadGrid_Office2010Silver .rgFooter > td {
+        border: none;
     }
 </style>
 
@@ -153,7 +153,7 @@
                 OnItemCommand="RadGrid1_ItemCommand" CssClass="MyRadGrid"
                 AllowAutomaticDeletes="True" ViewStateMode="Enabled" MasterTableView-AllowAutomaticDeletes="True" ClientIDMode="AutoID"
                 ClientSettings-ClientEvents-OnRowDeleting="RowDeleting">
-                <MasterTableView EditMode="Batch" CommandItemDisplay="Top" TableLayout="Fixed" >
+                <MasterTableView EditMode="Batch" CommandItemDisplay="Top" TableLayout="Fixed">
                     <CommandItemTemplate>
                     </CommandItemTemplate>
                     <Columns>
@@ -172,8 +172,7 @@
                         <telerik:GridTemplateColumn DataField="Account_Name" HeaderText="Account Name" UniqueName="AccountNameText" HeaderStyle-Width="100%">
                             <ItemTemplate>
                                 <label id="lblAccountNameTextBox" for="AccountNameTextBox" class="labelweak required"></label>
-                                <asp:TextBox ID="AccountNameTextBox" runat="server" AutoPostBack="false" Text='<%#Eval("Account_Name") %>' Width="90%" Height="27px" CssClass="required standardTextBox"></asp:TextBox>
-                                <asp:RequiredFieldValidator runat="server" Display="Dynamic" ControlToValidate="AccountNameTextBox" ErrorMessage="Account name is required" ForeColor="Red" />
+                                <asp:TextBox ID="AccountNameTextBox" runat="server" AutoPostBack="false" Text='<%#Eval("Account_Name") %>' Width="90%" Height="27px" CssClass="accountNameTextBox required standardTextBox"></asp:TextBox>
                             </ItemTemplate>
                             <HeaderStyle Width="100%"></HeaderStyle>
                         </telerik:GridTemplateColumn>
@@ -332,7 +331,7 @@
             var updPanelUserList = '<%=updPanelUserList.ClientID%>';//ctl00_ContentPlaceHolder1_create1_RadPanelBar1_i0_updPanelUserLis
             __doPostBack(updPanelUserList, '');
         }
-
+        
     </script>
 </telerik:RadScriptBlock>
 
