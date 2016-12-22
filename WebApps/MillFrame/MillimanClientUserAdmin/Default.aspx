@@ -72,12 +72,12 @@
         <telerik:RadAjaxManager ID="RadAjaxManager1" runat="server">
         </telerik:RadAjaxManager>
 
-        
+        <%--this hidden field must be moved outside the table, otherwise the table does not resize correcty to fill the browser window--%>
+        <asp:HiddenField runat="server" ID="hfEmailDelimiter" ></asp:HiddenField>
+
         <table id="MainTable" name="MainTable" style="position: absolute; top: 10px; left: 10px; width: 100px; height: 100px; visibility: hidden">
             <tr style="height: 25px">
-                <td>
-                    <asp:HiddenField runat="server" ID="hfEmailDelimiter" ></asp:HiddenField>
-                </td>
+
                 <td>
                     <center><asp:Label runat="server" ID="LicenseMessage" Font-Names="segoe ui" Font-Size="12px"></asp:Label></center>
                 </td>
@@ -134,6 +134,8 @@
                                                         <asp:Image ID="Image7" runat="server" alt="" ImageUrl="~/Images/Delete.png" Style="border: 0px; vertical-align: middle;" />
                                                         Delete
                                                     </asp:LinkButton>
+                                                &#160;&#160;
+                                                <asp:HyperLink runat="server" target="_blank" NavigateUrl="UserGuide/PRM Client User Administration User Guide Release 4.1.0.html" ToolTip="View user adminstration user guide"><img src="Images/Report.png" />User Guide</asp:HyperLink>
                                                 &#160;&#160;
                                             </div>
                                         </CommandItemTemplate>
@@ -259,14 +261,15 @@
         }
 
         function StartProcessing() {
-            var AccessTree = $find("AccessTree");
-            if (AccessTree) {
-                //we do not allow a user to be added if access rights are not selected
-                if (AccessTree.get_checkedNodes().length == 0) {
-                    alert("Selecting the user access rights from the 'Data Restriction Selections' tree is required to modify user accounts.");
-                    return false;
-                }
-            }
+            //Issue1569 - we no longer require a selection in the tree
+            //var AccessTree = $find("AccessTree");
+            //if (AccessTree) {
+            //    //we do not allow a user to be added if access rights are not selected
+            //    if (AccessTree.get_checkedNodes().length == 0) {
+            //        alert("Selecting the user access rights from the 'Data Restriction Selections' tree is required to modify user accounts.");
+            //        return false;
+            //    }
+            //}
             LockScreen("");
         }
 

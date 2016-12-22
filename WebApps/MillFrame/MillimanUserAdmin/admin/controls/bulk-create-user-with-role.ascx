@@ -241,8 +241,14 @@
         <div id="divCreate" class="center-block">
             <asp:Button ID="CreateNewUsers" runat="server" CommandName="CreateNewUsers" Text="Save" CssClass="btn btn-primary"
                 OnClick="CreateNewUsers_Click" />
-            <asp:Button ID="Reset" runat="server" CommandName="Reset" Text="Reset" CssClass="btn btn-primary"
-                OnClick="Reset_Click" />
+            <asp:Button
+                ID="Reset"
+                runat="server"
+                CommandName="Reset"
+                Text="Reset"
+                CssClass="btn btn-primary"
+                OnClick="Reset_Click"
+                CausesValidation = "false" />
         </div>
         <div class="space"></div>
     </div>

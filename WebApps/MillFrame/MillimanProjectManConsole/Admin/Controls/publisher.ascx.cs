@@ -27,9 +27,9 @@ public partial class admin_controls_access_rules : System.Web.UI.UserControl
 
         RadFileExplorer1.Grid.ClientSettings.Resizing.AllowColumnResize = true;
 
-        RadToolBarButton ToolbarSep = new RadToolBarButton();
-        ToolbarSep.IsSeparator = true;
-        RadFileExplorer1.ToolBar.Items.Add(ToolbarSep);
+        RadToolBarButton ToolbarSep1 = new RadToolBarButton();
+        ToolbarSep1.IsSeparator = true;
+        RadFileExplorer1.ToolBar.Items.Add(ToolbarSep1);
 
         RadToolBarButton Import = new RadToolBarButton("");
         
@@ -39,6 +39,19 @@ public partial class admin_controls_access_rules : System.Web.UI.UserControl
         Import.ImagePosition = ToolBarImagePosition.Left;
         RadFileExplorer1.ToolBar.Items.Add(Import);
 
+        RadToolBarButton ToolbarSep2 = new RadToolBarButton();
+        ToolbarSep2.IsSeparator = true;
+        RadFileExplorer1.ToolBar.Items.Add(ToolbarSep2);
+
+        RadToolBarButton UserGuide = new RadToolBarButton("");
+        UserGuide.Value = "User Guide";
+        UserGuide.ToolTip = "View the project management console user guide";
+        UserGuide.ImageUrl = "../../images/publish.png";
+        UserGuide.NavigateUrl = "../../UserGuide/PRM Project Management Console (PMC) User Guide Release 4.1.0.html";
+        UserGuide.Target = "_blank";
+        UserGuide.ImagePosition = ToolBarImagePosition.Left;
+        RadFileExplorer1.ToolBar.Items.Add(UserGuide);
+
         Telerik.Web.UI.RadMenuItem Sep = new RadMenuItem();
         Sep.IsSeparator = true;
         RadFileExplorer1.TreeView.ContextMenus[0].Items.Add(Sep);
@@ -46,18 +59,17 @@ public partial class admin_controls_access_rules : System.Web.UI.UserControl
         RadFileExplorer1.TreeView.ContextMenus[0].Items[0].ImageUrl = "../../images/delete.png";
         RadFileExplorer1.TreeView.ContextMenus[0].Items[1].ImageUrl = "../../images/rename.png";
         RadFileExplorer1.TreeView.ContextMenus[0].Items[2].ImageUrl = "../../images/new.gif";
-        RadFileExplorer1.TreeView.ContextMenus[0].Items[3].ImageUrl = "../../images/copy.png";
+        RadFileExplorer1.TreeView.ContextMenus[0].Items[3].ImageUrl = "../../images/copy.png";    
         RadFileExplorer1.TreeView.ContextMenus[0].Items[4].ImageUrl = "../../images/paste.png";
-
 
         RadFileExplorer1.GridContextMenu.Items[0].ImageUrl = "../../images/open.gif";
         RadFileExplorer1.GridContextMenu.Items[1].ImageUrl = "../../images/delete.png";
         RadFileExplorer1.GridContextMenu.Items[2].ImageUrl = "../../images/rename.png";
         RadFileExplorer1.GridContextMenu.Items[3].ImageUrl = "../../images/new.gif";
         RadFileExplorer1.GridContextMenu.Items[3].Enabled = false;  //turn this one off for now
-        RadFileExplorer1.GridContextMenu.Items[4].ImageUrl = "../../images/copy.png";
+        RadFileExplorer1.GridContextMenu.Items[4].ImageUrl = "../../images/copy.png";   
         RadFileExplorer1.GridContextMenu.Items[5].ImageUrl = "../../images/paste.png";
-
+        
         //never reload all
         //Telerik.Web.UI.RadMenuItem RMI = new Telerik.Web.UI.RadMenuItem("Reload All");
         //RMI.Value = "Reload";
@@ -110,6 +122,7 @@ public partial class admin_controls_access_rules : System.Web.UI.UserControl
         Telerik.Web.UI.RadMenuItem RMI2a = new Telerik.Web.UI.RadMenuItem("Modify Project From Signature");
         RMI2a.Value = "Modify Project From Signature";
         RMI2a.ImageUrl = "../../images/magnify.png";
+        RMI2a.Visible = false; //Story1827 - hide item
         RadFileExplorer1.GridContextMenu.Items.Add(RMI2a);
 
         Telerik.Web.UI.RadMenuItem RMI2b = new Telerik.Web.UI.RadMenuItem("Push to Production");
@@ -130,7 +143,7 @@ public partial class admin_controls_access_rules : System.Web.UI.UserControl
         //AddColumnToGrid("Thumbnail", "Thumbnail", 120);
         AddColumnToGrid("<center>Designated Group</center>", "Group", 150);
         AddColumnToGrid("Description", "Description",300);
-        AddColumnToGrid("Covisint Field", "CovisintField",150);
+        AddColumnToGrid("Covisint Field", "CovisintField",150, false); //Story1827 - hide item
         AddColumnToGrid("Milliman Field", "MillimanField",150);
         AddColumnToGrid("Database", "FriendlyDBName", 150);
         RadFileExplorer1.Grid.Columns[0].HeaderStyle.Width = new Unit(250);
@@ -139,10 +152,32 @@ public partial class admin_controls_access_rules : System.Web.UI.UserControl
         RadFileExplorer1.ItemCommand += RadFileExplorer1_ItemCommand;
         RadFileExplorer1.Grid.Width = System.Web.UI.WebControls.Unit.Percentage(100.0);
 
-        
+        HideUnNeededControls();
     }
 
-    void AddColumnToGrid(string HeaderText, string UniqueID, int Width)
+    private void HideUnNeededControls()
+    {   //this is the implementation of Story 1827,  hiding un-needed control
+        //almost all changes are here,  RMI2a control above is hidden "Modify Project From Signature" button (done in place to keep from FINDING again)
+        //changes were made in the RadMenu attributes in aspx page to hide some of the default items globally
+
+        RadFileExplorer1.ToolBar.Items[2].Visible = false;//Story1827 - hide item OPEN
+        RadFileExplorer1.ToolBar.Items[6].Visible = false;//Story1827 - hide item LISTVIEW
+        RadFileExplorer1.ToolBar.Items[7].Visible = false;//Story1827 - hide item ICONVIEW
+
+        RadFileExplorer1.TreeView.ContextMenus[0].Items[1].Visible = false;  //Story1827 - hide item
+        RadFileExplorer1.TreeView.ContextMenus[0].Items[3].Visible = false; //Story1827 - hide item
+        RadFileExplorer1.TreeView.ContextMenus[0].Items[4].Visible = false; //Story1827 - hide item
+        RadFileExplorer1.GridContextMenu.Items[0].Visible = false;//Story1827 - hide item
+        RadFileExplorer1.GridContextMenu.Items[2].Visible = false;//Story1827 - hide item
+        RadFileExplorer1.GridContextMenu.Items[3].Visible = false;//Story1827 - hide item
+        RadFileExplorer1.GridContextMenu.Items[4].Visible = false;//Story1827 - hide item
+        RadFileExplorer1.GridContextMenu.Items[5].Visible = false;//Story1827 - hide item
+
+        RadFileExplorer1.GridContextMenu.Items.RemoveAt(3); //yikes, that is not hiding - yes tis true, however NEW (#3) is telerik default button, thus it cannot be hidden, only removed
+
+    }
+
+    void AddColumnToGrid(string HeaderText, string UniqueID, int Width, bool IsVisible = true)
     {
         GridTemplateColumn GTC = new GridTemplateColumn();
         
@@ -152,6 +187,7 @@ public partial class admin_controls_access_rules : System.Web.UI.UserControl
         GTC.DataField = GTC.HeaderText;
         GTC.Resizable = true;
         GTC.HeaderStyle.Width = new Unit(Width);
+        GTC.Visible = IsVisible;  //Story1827 - added to hide column for covisent
         //GTC.HeaderStyle.Width = System.Web.UI.WebControls.Unit.Percentage(12.5);
         RadFileExplorer1.Grid.Columns.Add(GTC);
     }

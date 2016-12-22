@@ -394,7 +394,13 @@
                                 <div class="row">&nbsp;</div>
                                 <div class="row">
                                     <div class="col-sm-4">
-                                        <asp:Button ID="ChangePasswordButtonSecureLink" CssClass="btn btn-primary" runat="server" OnClick="ChangePasswordSecureLink_OnClick" Text="Reset Password&nbsp;(Secure Link Email)" ToolTip="Send the user a secure link password for password reset.  Do no use the Secure Link functionality with 'Manual' password reset."
+                                        <asp:Button
+                                            ID="ChangePasswordButtonSecureLink"
+                                            CssClass="btn btn-primary"
+                                            runat="server"
+                                            OnClick="ChangePasswordSecureLink_OnClick"
+                                            Text="Reset Password&nbsp;(Secure Link Email)"
+                                            ToolTip="Send the user a secure link for password reset.  Do not use the Secure Link functionality with 'Manual' password reset."
                                             Width="300px" />
                                     </div>
                                 </div>

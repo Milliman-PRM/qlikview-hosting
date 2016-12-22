@@ -91,7 +91,7 @@ namespace MillimanDev
                 string ContainerName = MyItems[0].ContainerName; //get container name
                 if (string.IsNullOrEmpty(ContainerName) == false) //if not null or empty pass to menu creator
                 {
-                    string MenuItem = CreateMenuItem("Publish Content", "Publish new report content", ContainerName, true);
+                    string MenuItem = CreateMenuItem("Publish Content", "Publish content for " + MyItems[0].ContainerName + "", ContainerName, true);
                     return XML.Replace(ReplacementTag, MenuItem);
                 }
                 else
@@ -110,7 +110,7 @@ namespace MillimanDev
                     SubMenus += SubMenu;
                 }
                 MainEntry = MainEntry.Replace("_ITEMS_", SubMenus);
-                MainEntry = MainEntry.Replace("_TOOLTIP_", "Administer users and control access rights.");
+                MainEntry = MainEntry.Replace("_TOOLTIP_", "Publish/update reports.");
                 return XML.Replace(ReplacementTag, MainEntry);
             }
         }

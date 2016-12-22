@@ -57,15 +57,6 @@ public partial class EnhancedUploadView {
     protected global::Telerik.Web.UI.RadScriptManager RadScriptManager1;
     
     /// <summary>
-    /// img2 control.
-    /// </summary>
-    /// <remarks>
-    /// Auto-generated field.
-    /// To modify move field declaration from designer file to code-behind file.
-    /// </remarks>
-    protected global::System.Web.UI.HtmlControls.HtmlImage img2;
-    
-    /// <summary>
     /// ProjectName control.
     /// </summary>
     /// <remarks>
@@ -82,6 +73,15 @@ public partial class EnhancedUploadView {
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.TextBox QVWName;
+    
+    /// <summary>
+    /// img2 control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.HtmlControls.HtmlImage img2;
     
     /// <summary>
     /// Description control.
