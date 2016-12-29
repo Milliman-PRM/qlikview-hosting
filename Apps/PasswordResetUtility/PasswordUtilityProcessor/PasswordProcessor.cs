@@ -6,7 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Web.Profile;
 using System.Web.Security;
-using SystemReporting.Utilities.ExceptionHandling;
 
 /// <summary>
 /// In order to use the Membership API we need to reference System.configuration &  System.Web.ApplicationServices
@@ -16,216 +15,107 @@ namespace PasswordUtilityProcessor
 {
     public class PasswordProcessor
     {
-        public static void ExecutePasswordResetUtility(string args)
+        //incremented for each user requested for password reset this iteration
+        public static int NewPasswordResetsThisIteration = 0;
+        public static int TotalPasswordResets = 0;
+
+        /// <summary>
+        /// Main entry point for checking user accounts for password reset, all configuration items come from a config
+        /// file,  error conditions are propagated back to user via exceptions
+        /// </summary>
+        public static void ExecutePasswordResetUtility()
         {
-            try
+ 
+            //first just call to get configuration items, if there is an item with invalid configuration this will throw an exception and halt any processing
+            //each routine will check the types and values, so no point in looking at return values here
+            GetRSTFolderPath();
+            GetDirectoryCleanUp();
+            GetRSTFileGenerateCounter();
+            GetPasswordExpirationDurationCounter();
+
+            //if we got to here, all the inputs are valid so process
+            Process();
+
+            //go ahead and call directory cleanup - it will not do anything if configuration item DirectoryCleanUp is set to FALSE
+            DirectoryCleanUp();
+   
+        }
+
+        /// <summary>
+        ///process the users to see if there password should be expired, the max number of password resets that may be done is controlled via
+        ///the RSTFileCounter config item - if the number of RST files is already greater than this ceiling this processing will do nothing.
+        ///To process all users set the RSTFileCounter to a large number ie 1000000
+        /// </summary>
+        public static void Process()
+        {
+            //get all users
+            MembershipUserCollection usersCollection = Membership.GetAllUsers();
+
+            //if the no user found
+            if (usersCollection == null || usersCollection.Count == 0)
             {
-                Process();
-                if (!string.IsNullOrEmpty(GetDirectoryCleanUp()))
-                {
-                    if (String.Equals(GetDirectoryCleanUp(), "True", StringComparison.OrdinalIgnoreCase) == true)
-                        DirectoryCleanUp();
-                }
+                throw new Exception("Failed to access database instance to obtain user list.");
             }
-            catch (Exception ex)
+            //create a list of user provide IDs that are already reset from files in password reset folder
+            List<string> UsersAlreadyReset = System.IO.Directory.GetFiles(GetRSTFolderPath(), "*.RST").Where(s => s.EndsWith(".rst")).Select(s => System.IO.Path.GetFileNameWithoutExtension(s).Trim()).ToList();
+            TotalPasswordResets = UsersAlreadyReset.Count();
+            if (GetRSTFileGenerateCounter() <= UsersAlreadyReset.Count())
+                return;  //we are done, already reached limit of number of users to reset
+
+            foreach( MembershipUser MU in usersCollection )
             {
-                ExceptionLogger.LogError(ex, "Exception Raised in Method ExecutePasswordResetUtility. Failed processing file " + args.ToArray(), "PasswordProcessor Exceptions");
+                if (CheckPasswordExpired(MU) && (UsersAlreadyReset.Contains(MU.ProviderUserKey.ToString(),StringComparer.OrdinalIgnoreCase) == false))
+                {
+                    NewPasswordResetsThisIteration++;  //increment for each user requested this iteration
+                    TotalPasswordResets++;
+                    WritePasswordResetFile(MU);
+                    UsersAlreadyReset.Add(MU.ProviderUserKey.ToString());
+                    if (UsersAlreadyReset.Count() >= GetRSTFileGenerateCounter())
+                        return; //we are done
+                }
             }
         }
 
         /// <summary>
-        /// Process user based on the App.config file settings
-        /// If the app.config file has the handler, it will process that function.
+        /// Check to see if the user has changed thier password within the required time
         /// </summary>
-        /// <param name="args"></param>
-        private static void Process()
-        {
-            if (String.Equals(GetAllUserProcessing(), "True", StringComparison.OrdinalIgnoreCase) == true)
-            {
-                ProcessAllUsers();
-            }
-            else if (!string.IsNullOrEmpty(GetSingleUserProcessing()))
-            {
-                ProcessUser(Membership.GetUser(GetSingleUserProcessing()));
-            }
-        }
-
-        /// <summary>
-        /// Method to process all users
-        /// </summary>
-        public static void ProcessAllUsers()
-        {
-            try
-            {
-                //get all users
-                var usersCollection = Membership.GetAllUsers();
-
-                //if the no user found
-                if (usersCollection == null || usersCollection.Count == 0)
-                {
-                    //log error and send email
-                    ExceptionLogger.LogError(null, "Exception Raised in Method ProcessAllUsers. ProcessAllUsers || System could not load all users. Check if the database server is down.", "PasswordProcessor Exceptions");
-                    return;
-                }
-
-                //if file counter has value then genrate exact number of files. If the file counter is null, then generate All files for users
-                if (!string.IsNullOrEmpty(GetFileGenerateCounter()))
-                {
-                    // 1. get FileGenerateCounter value from configs
-                    int fileGenerateCounterFromConfig;
-                    //make sure we have numeric value
-                    var isFileGenerateCounterNumeric = int.TryParse(GetFileGenerateCounter(), out fileGenerateCounterFromConfig);
-
-                    if (isFileGenerateCounterNumeric)
-                    {
-                        int totalFilesToGenerateCounter = 0;
-
-                        // 2. find out count of files in the directory, if there are any files then we need to subtract that from the fileGenerateCounter
-                        var existingFilesInDir = GetAllFileNamesFromDirectory(GetFolderPath());
-
-                        // ******Check if the file in dir is more than or equal to the FileGenerateCounter. if files in directory are less then generate files ********//
-                        if (existingFilesInDir.Count < fileGenerateCounterFromConfig)
-                        {
-                            // 4. How many files we need to generate => *Subtract the existing files that exist in the directory and generate the "difference"
-                            totalFilesToGenerateCounter = (fileGenerateCounterFromConfig - existingFilesInDir.Count);
-
-                            // *****Check to remove users that has files in Dir *******//
-                            //5. generate list of user ProviderUserKey only [generate a list of ProviderUserKey]
-                            var listUsersProviderKey = Membership.GetAllUsers().OfType<MembershipUser>().Select(s => s.ProviderUserKey.ToString().ToUpper()).ToList();
-
-                            //6. generate list of users ProviderUserKey form existing files in directory and remove the .rst extention
-                            var existingFilesInDirWithoutExt = existingFilesInDir.Where(s => s.EndsWith(".rst")).Select(s => s.Replace(".rst", "").Trim()).ToList();
-
-                            if (listUsersProviderKey.Count > 0)
-                            {
-                                //7. From the user provider key, remove the existing files provider key
-                                var usersTobeProcessed = listUsersProviderKey.Except(existingFilesInDirWithoutExt).ToList();
-
-                                //8. Convert back to Membership class 
-                                var finalUserList = new List<MembershipUser>();
-                                foreach (var membershipUser in usersTobeProcessed)
-                                {
-                                    finalUserList.Add(Membership.GetUser(new Guid(membershipUser)));
-                                }
-
-                                // 11. From the above user list [finalUserList], process users count equal to the filesCounter .. 
-                                #region Example
-                                // Example: Assume the fileGenerateCounter is 10 and we have existingFilesInDir equal to 4 (means there are 4 files in dir)
-                                // - we need to fist figure out how many total files we need to generate [filesToGenerateCounter = 10-4=6]
-                                // - we get list of exisitng files without extention [existingFilesInDirWithoutExt]
-                                // - We need to exclude the existing files [6] from user list to get a clean user list [usersTobeProcessed=listUsersProviderKey-existingFilesInDirWithoutExt]
-                                // - convert usersTobeProcessed provider key to MembershipUser
-                                // - get the users to be processed from finalUserList for exact count as filesToGenerateCounter
-                                #endregion
-                                if (finalUserList.Count > 0)
-                                {
-                                    if (finalUserList.Count > 0)
-                                    {
-                                        foreach (var user in finalUserList)
-                                        {
-                                            var isPasswordExpired = CheckPasswordExpired(user);
-                                            if (isPasswordExpired)
-                                            {
-                                                //subtract as we process user
-                                                totalFilesToGenerateCounter = totalFilesToGenerateCounter - 1;
-                                                ProcessUser(user);
-                                            }
-                                            //when the file counter reaches 0 then exit app
-                                            if (totalFilesToGenerateCounter == 0)
-                                                return;
-
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                }
-                else
-                {
-                    //All files
-                    foreach (MembershipUser user in usersCollection)
-                    {
-                        ProcessUser(user);
-                    }
-                }
-
-            }
-            catch (Exception ex)
-            {
-                ExceptionLogger.LogError(ex, "Exception Raised in Method ProcessAllUsers.", "PasswordProcessor Exceptions");
-            }
-        }
-
-        /// <summary>
-        /// Method to process specific user
-        /// </summary>
-        /// <param name="args"></param>
-        /// <param name="param">todo: describe param parameter on ProcessUser</param>
-        public static void ProcessUser(MembershipUser paramUser)
-        {
-            try
-            {
-                //get user unique provider Key
-                var providerUserKey = paramUser.ProviderUserKey;
-                //check if providerUserKey exist
-                if (providerUserKey == null)
-                {
-                    //log error
-                    ExceptionLogger.LogError(null, "Exception Raised in Method ProcessUser. || Invalid user. System could not find the providerUserKey | " + providerUserKey + " | in database. Check the 'UserId' in [aspnet_Users] for the userName " + paramUser.UserName + ".", "PasswordProcessor Exceptions");
-                    return;
-                }
-                WritePasswordResetFile(paramUser);
-            }
-            catch (Exception ex)
-            {
-                ExceptionLogger.LogError(ex, "Exception Raised in Method ProcessUser. ", "PasswordProcessor Exceptions");
-            }
-        }
-
+        /// <param name="paramUser"></param>
+        /// <returns></returns>
         public static bool CheckPasswordExpired(MembershipUser paramUser)
         {
             var isPasswordExpired = false;
             //paswwrod exipration duration
-            var passwordExpiresInDays = 0;
+            var passwordExpiresInDays = GetPasswordExpirationDurationCounter();
 
-            if (!string.IsNullOrEmpty(GetPasswordExpirationDurationCounter()))
+            //Timespan gets the difference in days between Today and the last time the user changed his password(LastPasswordChangedDate) 
+            //TimeSpan ts = DateTime.Today - paramUser.LastPasswordChangedDate;
+            var totalDaysPasswordChanged = (DateTime.Today - paramUser.LastPasswordChangedDate).TotalDays;
+            //Check if the TimeSpan.TotalDays is greater than the PasswordExpiresInDays setting we got from the app.config file. If true the user must change his password and we log the entry for that user 
+            if (totalDaysPasswordChanged > passwordExpiresInDays)
             {
-                if (int.TryParse(GetPasswordExpirationDurationCounter(), out passwordExpiresInDays))
-                {
-                    //Timespan gets the difference in days between Today and the last time the user changed his password(LastPasswordChangedDate) 
-                    //TimeSpan ts = DateTime.Today - paramUser.LastPasswordChangedDate;
-                    var totalDaysPasswordChanged = (DateTime.Today - paramUser.LastPasswordChangedDate).TotalDays;
-                    //Check if the TimeSpan.TotalDays is greater than the PasswordExpiresInDays setting we got from the app.config file. If true the user must change his password and we log the entry for that user 
-                    if (totalDaysPasswordChanged > passwordExpiresInDays)
-                    {
-                        isPasswordExpired = true;
-                    }
-                }
+                isPasswordExpired = true;
             }
 
             return isPasswordExpired;
         }
         #region File Function
 
+        /// <summary>
+        /// Write the RST file for the user - named using the membership provider ID
+        /// </summary>
+        /// <param name="paramUser"></param>
         private static void WritePasswordResetFile(MembershipUser paramUser)
         {
-            //get the log directory
-            if (!string.IsNullOrEmpty(GetFolderPath()))
+            //write file
+            var userPasswordResetFileAndDirectory = Path.Combine(GetRSTFolderPath(), paramUser.ProviderUserKey.ToString().ToUpper() + ".rst");
+
+            //if file does not exist then create
+            if (!File.Exists(userPasswordResetFileAndDirectory))
             {
-                //write file
-                var userPasswordResetFileAndDirectory = Path.Combine(GetFolderPath(), paramUser.ProviderUserKey.ToString().ToUpper() + ".rst");
-
-                //if file does not exist then create
-                if (!File.Exists(userPasswordResetFileAndDirectory))
-                {
-                    //create the file name
-                    var message = (DateTime.Now + " || " + "User Needs to Reset Password. User Name: " + paramUser.UserName);
-                    File.WriteAllText(userPasswordResetFileAndDirectory, message);
-                }
+                //create the file name
+                var message = (DateTime.Now + " || " + "User Needs to Reset Password. User Name: " + paramUser.UserName);
+                File.WriteAllText(userPasswordResetFileAndDirectory, message);
             }
-
         }
 
         /// <summary>
@@ -234,49 +124,48 @@ namespace PasswordUtilityProcessor
         /// </summary>
         private static void DirectoryCleanUp()
         {
-            if (!string.IsNullOrEmpty(GetFolderPath()))
+            if (GetDirectoryCleanUp() == false)
+                return; //we are not supposed to run so return
+
+            var listUsers = new List<string>();
+            //get all users
+            if (Membership.GetAllUsers() != null || Membership.GetAllUsers().Count > 0)
             {
+                //generate list of user by getting the ProviderUserKey only
+                listUsers = Membership.GetAllUsers().OfType<MembershipUser>().Select(s => s.ProviderUserKey.ToString().ToUpper()).ToList();
+            }
 
-                var listUsers = new List<string>();
-                //get all users
-                if (Membership.GetAllUsers() != null || Membership.GetAllUsers().Count > 0)
+            // get existing files list in dir
+            var existingFilesInDir = GetAllRSTFileNamesFromDirectory(GetRSTFolderPath());
+            if (existingFilesInDir != null && existingFilesInDir.Count > 0)
+            {
+                //Now create a new list and remove the .rst extention
+                var fielsInDirWithOutExt = existingFilesInDir.Where(s => s.EndsWith(".rst")).Select(s => s.Replace(".rst", "").Trim()).ToList();
+
+                if (fielsInDirWithOutExt.Count > 0)
                 {
-                    //generate list of user by getting the ProviderUserKey only
-                    listUsers = Membership.GetAllUsers().OfType<MembershipUser>().Select(s => s.ProviderUserKey.ToString().ToUpper()).ToList();
-                }
-
-                // get existing files list in dir
-                var existingFilesInDir = GetAllFileNamesFromDirectory(GetFolderPath());
-                if (existingFilesInDir != null && existingFilesInDir.Count > 0)
-                {
-                    //Now create a new list and remove the .rst extention
-                    var fielsInDirWithOutExt = existingFilesInDir.Where(s => s.EndsWith(".rst")).Select(s => s.Replace(".rst", "").Trim()).ToList();
-
-                    if (fielsInDirWithOutExt.Count > 0)
+                    // get files to be deleted by comparing files with list of users and remove the file that does not have a matching user!
+                    var fileTobeDeleted = fielsInDirWithOutExt.Except(listUsers).ToList();
+                    if (fileTobeDeleted.Count > 0)
                     {
-                        // get files to be deleted by comparing files with list of users and remove the file that does not have a matching user!
-                        var fileTobeDeleted = fielsInDirWithOutExt.Except(listUsers).ToList();
-                        if (fileTobeDeleted.Count > 0)
+                        //loop through each file and delete
+                        foreach (var file in fileTobeDeleted)
                         {
-                            //loop through each file and delete
-                            foreach (var file in fileTobeDeleted)
-                            {
-                                File.Delete(Path.Combine(GetFolderPath(), file + ".rst"));
-                            }
+                            File.Delete(Path.Combine(GetRSTFolderPath(), file + ".rst"));
                         }
                     }
                 }
-
             }
+
         }
 
         /// <summary>
-        /// Returns list of files
+        /// Returns list of all RST files
         /// </summary>
         /// <param name="dir"></param>
         /// <param name="filter"></param>
         /// <returns></returns>
-        public static List<string> GetAllFileNamesFromDirectory(string dir)
+        public static List<string> GetAllRSTFileNamesFromDirectory(string dir)
         {
             var files = new List<string>();
             var isEmpty = !System.IO.Directory.EnumerateFiles(dir).Any();
@@ -291,103 +180,75 @@ namespace PasswordUtilityProcessor
             return files;
         }
 
-        private static string GetFolderPath()
+        /// <summary>
+        /// Get the folder that contains the RST files
+        /// </summary>
+        /// <returns></returns>
+        private static string GetRSTFolderPath()
         {
             // For Example - D:\Projects\SomeProject\SomeFolder
-            return (ConfigurationManager.AppSettings != null &&
-                    ConfigurationManager.AppSettings["UserProfileDirectory"] != null) ?
-                    ConfigurationManager.AppSettings["UserProfileDirectory"].ToString() :
-                    string.Empty;
+            string Value =  (ConfigurationManager.AppSettings != null && ConfigurationManager.AppSettings["UserProfileDirectory"] != null) ? ConfigurationManager.AppSettings["UserProfileDirectory"].ToString() : string.Empty;
+            if (string.IsNullOrEmpty(Value) || string.IsNullOrWhiteSpace(Value))
+                throw new Exception("Verify the configuration item 'UserProfileDirectory' is present and has a value that represents an existing directory.");
+            if ( System.IO.Directory.Exists(Value) == false )
+                throw new Exception("The configuration item 'UserProfileDirectory' is pointing to a NON-EXISTANT directory, please correct.");
+            return Value;
         }
 
-        private static string GetDirectoryCleanUp()
+        /// <summary>
+        /// Returns a value to determine if we should do cleanup - meaning RST files that exist for user not in database are deleted from disk
+        /// </summary>
+        /// <returns></returns>
+        private static bool GetDirectoryCleanUp()
         {
-            // For Example - D:\Projects\SomeProject\SomeFolder
-            return (ConfigurationManager.AppSettings != null &&
-                    ConfigurationManager.AppSettings["DirectoryCleanUp"] != null) ?
-                    ConfigurationManager.AppSettings["DirectoryCleanUp"].ToString() :
-                    string.Empty;
+            try
+            {
+                string Value = (ConfigurationManager.AppSettings != null && ConfigurationManager.AppSettings["DirectoryCleanUp"] != null) ? ConfigurationManager.AppSettings["DirectoryCleanUp"].ToString() : string.Empty;
+                return System.Convert.ToBoolean(Value);
+            }
+            catch (Exception)
+            {
+                throw new Exception("Verify the configuration item 'DirectoryCleanUp' is present and has a value of true/false");
+            }
         }
 
-        private static string GetSingleUserProcessing()
+        /// <summary>
+        /// Get the max number of RST files allowed in the system for this run
+        /// </summary>
+        /// <returns></returns>
+        private static int GetRSTFileGenerateCounter()
         {
-            return (ConfigurationManager.AppSettings != null &&
-                    ConfigurationManager.AppSettings["ProcessSingleUser"] != null) ?
-                    ConfigurationManager.AppSettings["ProcessSingleUser"].ToString() :
-                    string.Empty;
+            try
+            {
+                string Value = (ConfigurationManager.AppSettings != null && ConfigurationManager.AppSettings["RSTFileCounter"] != null) ? ConfigurationManager.AppSettings["RSTFileCounter"].ToString() : string.Empty;
+                return System.Convert.ToInt32(Value);
+            }
+            catch (Exception)
+            {
+                throw new Exception("Verify the configuration item 'RSTFileCounter' is present and has a numeric value 0 or greater");
+            }
         }
 
-        private static string GetAllUserProcessing()
+        /// <summary>
+        /// Get the expiration date in days of how long a user's password is GOOD for, if password change date is older than this, they must change it
+        /// </summary>
+        /// <returns></returns>
+        private static int GetPasswordExpirationDurationCounter()
         {
-            return (ConfigurationManager.AppSettings != null &&
-                    ConfigurationManager.AppSettings["ProcessAllUsers"] != null) ?
-                    ConfigurationManager.AppSettings["ProcessAllUsers"].ToString() :
-                    string.Empty;
-        }
-
-        private static string GetFileGenerateCounter()
-        {
-            return (ConfigurationManager.AppSettings != null &&
-                    ConfigurationManager.AppSettings["FileGenerateCounter"] != null) ?
-                    ConfigurationManager.AppSettings["FileGenerateCounter"].ToString() :
-                    string.Empty;
-        }
-
-        private static string GetPasswordExpirationDurationCounter()
-        {
-            return (ConfigurationManager.AppSettings != null &&
-                    ConfigurationManager.AppSettings["PasswordExpiresInDays"] != null) ?
-                    ConfigurationManager.AppSettings["PasswordExpiresInDays"].ToString() :
-                    string.Empty;
+            try
+            {
+                string Value = (ConfigurationManager.AppSettings != null && ConfigurationManager.AppSettings["PasswordExpiresInDays"] != null) ? ConfigurationManager.AppSettings["PasswordExpiresInDays"].ToString() : string.Empty;
+                return System.Convert.ToInt32(Value);
+            }
+            catch (Exception)
+            {
+                throw new Exception("Verify the configuration item 'PasswordExpiresInDays' is present and has a numeric value 0 or greater");
+            }
         }
 
 
         #endregion
 
-        #region Custom
-        /// <summary>
-        /// call this method to get info about the Membership Provider
-        /// </summary>
-        /// <returns></returns>
-        public static SqlMembershipProvider GetMembershipProvider()
-        {
-            var prov = new SqlMembershipProvider();
-            var coll = new NameValueCollection {
-                                                    { "connectionStringName", "PWUdbContextConnectionString" },
-                                                    { "applicationName", "/" }
-                                                };
-            prov.Initialize("dbSqlMemberShipProvider", coll);
-            return prov;
-        }
-
-        /// <summary>
-        /// call this method to get info about the Profile Provider
-        /// </summary>
-        /// <returns></returns>
-        public static SqlProfileProvider GetProfileProvider()
-        {
-            var prov = new SqlProfileProvider();
-            var coll = new NameValueCollection {
-                                                    { "connectionStringName", "PWUdbContextConnectionString" },
-                                                    { "applicationName", "/" }
-                                                };
-            prov.Initialize("AspNetSqlProfileProvider", coll);
-            return prov;
-        }
-        /// <summary>
-        /// call this method to get info about the Role Provider
-        /// </summary>
-        /// <returns></returns>
-        public static SqlRoleProvider GetRoleProvider()
-        {
-            var prov = new SqlRoleProvider();
-            var coll = new NameValueCollection {
-                                                { "connectionStringName", "PWUdbContextConnectionString" },
-                                                { "applicationName", "/" }
-                                                };
-            prov.Initialize("AspNetSqlRoleProvider", coll);
-            return prov;
-        }
-        #endregion
+     
     }
 }
