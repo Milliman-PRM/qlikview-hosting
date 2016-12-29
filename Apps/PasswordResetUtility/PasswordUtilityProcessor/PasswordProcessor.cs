@@ -33,12 +33,11 @@ namespace PasswordUtilityProcessor
             GetRSTFileGenerateCounter();
             GetPasswordExpirationDurationCounter();
 
-            //if we got to here, all the inputs are valid so process
-            Process();
-
             //go ahead and call directory cleanup - it will not do anything if configuration item DirectoryCleanUp is set to FALSE
             DirectoryCleanUp();
-   
+
+            //if we got to here, all the inputs are valid so process
+            Process();
         }
 
         /// <summary>
