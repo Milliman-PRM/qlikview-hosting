@@ -5,8 +5,7 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SystemReporting.Utilities.ExceptionHandling;
-using C = SystemReporting.Utilities.Constants;
+
 
 namespace PasswordResetUtilityApplication
 {
@@ -14,101 +13,45 @@ namespace PasswordResetUtilityApplication
     {
         public static void Main(string[] args)
         {
+            log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+            log4net.Config.XmlConfigurator.Configure();
             try
             {
-                DisplayInfo();
-                //Lets only process//
-                var process = new string[] { "Process" };
-                args = process;
-                if (CheckArgs(args))
-                {
-                    PasswordProcessor.ExecutePasswordResetUtility(args[0]);
-                }
-                if (C.ERROR_LOGGED)
-                {
-                    ExceptionLogger.SendErrorEmail(GetExceptionDirectory(), "Password Reset Utility Application");
-                }
-                Environment.ExitCode = 0;
+                //we dont accept any command line parms - must be configured via web.config
+               PasswordProcessor.ExecutePasswordResetUtility();
+               log.Info(DateTime.Now.ToString("HH:mm:ss tt") + " password reset task completed successfully.");
+               SendEmail(PasswordProcessor.NewPasswordResetsThisIteration.ToString() + " additional users are being requested to reset passwords this iteration for a total of " + PasswordProcessor.TotalPasswordResets.ToString() + " users in a password reset state.");
+               Environment.ExitCode = 0;
             }
             catch (Exception ex)
             {
-                ExceptionLogger.LogError(ex, "Main || Failed processing. || " + args, "Password Reset Utility Application");
+               //create a logger via app.config and dump out the issue to  it
+               log.Error(DateTime.Now.ToString("HH:mm:ss tt") , ex);           
             }
         }
 
-        private static bool CheckArgs(string[] args)
+        /// <summary>
+        /// this should come from a re-use lib not be here.  However until password reset is assimilated into Millframe solution will leave to reduce dependancy
+        /// on large re-use assembly from different solution.
+        /// Do not trap exceptions, allow them to propagate back to caller 
+        /// </summary>
+        /// <param name="Msg">the message to send for status</param>
+        public static void SendEmail( string Msg )
         {
-            var ReturnValue = false;
-            if (args.Length > 0)
-                ReturnValue = true;
+            System.Net.Mail.MailMessage mail = new System.Net.Mail.MailMessage();
+            System.Net.Mail.SmtpClient SmtpServer = new System.Net.Mail.SmtpClient(System.Configuration.ConfigurationManager.AppSettings["SmtpServer"]);
 
-            return ReturnValue;
-        }
+            mail.From = new System.Net.Mail.MailAddress(System.Configuration.ConfigurationManager.AppSettings["EmailFrom"]);
+            mail.To.Add(System.Configuration.ConfigurationManager.AppSettings["EmailTo"]);
+            mail.Subject = System.Configuration.ConfigurationManager.AppSettings["PRM Password Reset Daemon"];
+            mail.Body = Msg;
 
-        // Property:
-        public static bool? _console_present;
-        public static bool console_present
-        {
-            get
-            {
-                if (_console_present == null)
-                {
-                    _console_present = true;
-                    try { var window_height = Console.WindowHeight; }
-                    catch (Exception ex)
-                    { _console_present = false; }
-                }
-                return _console_present.Value;
-            }
-        }
+            SmtpServer.Port = System.Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["SmtpPort"]);
+            SmtpServer.Credentials = null;
+            SmtpServer.EnableSsl = false;
 
-        private static void DisplayInfo()
-        {
-            if (console_present)
-            {
-                Console.BackgroundColor = ConsoleColor.DarkCyan;
-                Console.Clear();
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.Title = "Password Reset Utility";
+            SmtpServer.Send(mail);
 
-                // Get rid of the scroll bars by making the buffer the same size as the window
-                Console.Clear();
-
-                var left = Console.CursorLeft;
-                var top = Console.CursorTop;
-                Console.CursorTop = Console.WindowTop + Console.WindowHeight - 1;
-                Console.SetCursorPosition(left, top);
-
-                Console.Write(DateTime.Now + Environment.NewLine);
-                Console.WriteLine("--------------------------------------------");
-                Console.WriteLine("--------------------------------------------");
-                Console.WriteLine("     Password Reset Utility in Progress     ");
-                Console.WriteLine("--------------------------------------------");
-                Console.WriteLine("--------------------------------------------");
-            }
-        }
-
-        private static void DisplayUsage()
-        {
-            if (console_present)
-            {
-                Console.WriteLine("----------------------------------------");
-                Console.WriteLine("Processing Instruction. Choose following metods... ");
-                Console.WriteLine("Application and userEmail");
-                Console.WriteLine("Application only ");
-                Console.WriteLine(String.Empty);
-                Console.WriteLine("Ex: PasswordResetUtilityApplication.exe  'abs@somthing.com' ");
-                Console.WriteLine("Ex: PasswordResetUtilityApplication.exe");
-                Console.WriteLine("--------------------------------------------------");
-            }
-        }
-        private static string GetExceptionDirectory()
-        {
-            // For Example - D:\Projects\SomeProject\SomeFolder
-            return (ConfigurationManager.AppSettings != null &&
-                    ConfigurationManager.AppSettings["ExceptionFileDirectory"] != null) ?
-                    ConfigurationManager.AppSettings["ExceptionFileDirectory"].ToString() :
-                    string.Empty;
         }
     }
 }
