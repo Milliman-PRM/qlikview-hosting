@@ -52,7 +52,7 @@ public class FileSystem
 		}
 		catch (Exception)
 		{
-			string message = "The operation cannot be compleated";
+			string message = "The operation cannot be completed";
 			return message;
 		}
 
@@ -78,7 +78,7 @@ public class FileSystem
 		}
 		catch (IOException)
 		{
-			string message = "The operation cannot be compleated";
+            string message = "The operation cannot be completed";
 			return message;
 		}
 
@@ -129,7 +129,7 @@ public class FileSystem
 		}
 		catch (IOException)
 		{
-			string message = "The operation cannot be compleated";
+			string message = "The operation cannot be completed";
 			return message;
 		}
 
@@ -155,7 +155,7 @@ public class FileSystem
 		}
 		catch (IOException)
 		{
-			string message = "The operation cannot be compleated";
+			string message = "The operation cannot be completed";
 			return message;
 		}
 
@@ -206,7 +206,7 @@ public class FileSystem
 			}
 			catch (IOException)
 			{
-				string message = "The operation cannot be compleated";
+				string message = "The operation cannot be completed";
 				return message;
 			}
 		}
