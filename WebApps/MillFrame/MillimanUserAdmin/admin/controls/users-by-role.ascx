@@ -2,13 +2,13 @@
 <%@ Register Src="js-include2.ascx" TagName="js" TagPrefix="uc1" %>
 <%@ Register Src="js-include3.ascx" TagName="js" TagPrefix="uc3" %>
 <%@ Register Src="~/js/js/jquery.ascx" TagName="jquery" TagPrefix="uc4" %>
-<%@ Register src="search-box.ascx" tagname="search" tagprefix="uc2" %>
-<%@ Register src="a-z-menu.ascx" tagname="a" tagprefix="uc5" %>
+<%@ Register Src="search-box.ascx" TagName="search" TagPrefix="uc2" %>
+<%@ Register Src="a-z-menu.ascx" TagName="a" TagPrefix="uc5" %>
 <%-- gridview banner --%>
 <div class="gvBanner">
     <span class="gvBannerUsers">
         <asp:Image ID="Image1" runat="server" ImageAlign="AbsMiddle" ImageUrl="~/images/decoy-icon-36px.png" />
-    </span> Users By Group:
+    </span>Users By Group:
     <%-- roles dropdown list --%>
     <asp:DropDownList ID="ddlGridSelectRole" runat="server" AutoPostBack="True" DataSourceID="RolesDataSource" DataTextField="RoleName" DataValueField="RoleName" AppendDataBoundItems="True" ToolTip="Select a Group to display users within that Group.">
         <asp:ListItem Selected="True">-- Select a Group --</asp:ListItem>
@@ -30,7 +30,7 @@
         <asp:BoundField DataField="RowNumber" HeaderText="#" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="20px" />
         <asp:TemplateField HeaderText="DEL">
             <HeaderTemplate>
-                <input id="chkAll" onclick="SelectAllCheckboxes('chkRows',this.checked);" runat="server" type="checkbox" title="Check all checkboxes" />
+                <input id="chkAll" onclick="SelectAllCheckboxes('chkRows', this.checked);" runat="server" type="checkbox" title="Check all checkboxes" />
             </HeaderTemplate>
             <ItemTemplate>
                 <asp:CheckBox ID="chkRows" runat="server" ToolTip="Select for deletion" />
@@ -39,7 +39,7 @@
         </asp:TemplateField>
         <asp:TemplateField HeaderText="USER NAME" SortExpression="UserName">
             <ItemTemplate>
-                <span class="gvShortcut"><a href='edit_user_modal.aspx?username=<%# Eval("UserName") %>' rel="gb_page_center[750, 905]" title="Edit User Details">
+                <span class="gvShortcut"><a href='edit_user_modal.aspx?username=<%# Server.UrlEncode(Eval("UserName").ToString()) %>' rel="gb_page_center[750, 905]" title="Edit User Details">
                     <%# Eval("UserName") %></a></span>
             </ItemTemplate>
         </asp:TemplateField>
@@ -149,29 +149,31 @@
             <asp:ListItem Selected="True">Add To</asp:ListItem>
         </asp:DropDownList>
     </div>
-    <%-- add all users to selected role --%>
-    <div class="ddlWrap">
-        <asp:DropDownList ID="ddlAddAllUsersToRole" runat="server" AutoPostBack="True" DataSourceID="RolesDataSource2" DataTextField="RoleName" DataValueField="RoleName" AppendDataBoundItems="True" EnableViewState="False" Font-Size="11px" OnSelectedIndexChanged="ddlAddAllUsersToRole_SelectedIndexChanged" ToolTip="ADD ALL users to selected GROUP.">
-            <asp:ListItem Selected="True">Add All To</asp:ListItem>
-        </asp:DropDownList>
-    </div>
     <%-- remove users from selected role --%>
     <div class="ddlWrap">
         <asp:DropDownList ID="ddlRemoveUsersFromRole" runat="server" AutoPostBack="True" DataSourceID="RolesDataSource2" DataTextField="RoleName" DataValueField="RoleName" AppendDataBoundItems="True" EnableViewState="False" Font-Size="11px" OnSelectedIndexChanged="ddlRemoveUsersFromRole_SelectedIndexChanged" ToolTip="REMOVE selected users from selected GROUP.">
             <asp:ListItem Selected="True">Remove From</asp:ListItem>
         </asp:DropDownList>
     </div>
-    <%-- remove all users from selected role --%>
-    <div class="ddlWrap">
-        <asp:DropDownList ID="ddlRemoveAllUsersFromRole" runat="server" AutoPostBack="True" DataSourceID="RolesDataSource2" DataTextField="RoleName" DataValueField="RoleName" AppendDataBoundItems="True" EnableViewState="False" Font-Size="11px" OnSelectedIndexChanged="ddlRemoveAllUsersFromRole_SelectedIndexChanged" ToolTip="REMOVE ALL users from selected GROUP.">
-            <asp:ListItem Selected="True">Remove All From</asp:ListItem>
-        </asp:DropDownList>
-    </div>
-    <%-- delete all users from selected role --%>
-    <div class="ddlWrap">
-        <asp:DropDownList ID="ddlDeleteAllUsersFromRole" runat="server" AutoPostBack="True" DataSourceID="RolesDataSource" DataTextField="RoleName" DataValueField="RoleName" AppendDataBoundItems="True" EnableViewState="False" Font-Size="11px" OnSelectedIndexChanged="ddlDeleteAllUsersFromRole_SelectedIndexChanged" ToolTip="DELETE ALL user accounts present in the selected GROUP.">
-            <asp:ListItem Selected="True">Delete All From</asp:ListItem>
-        </asp:DropDownList>
+    <div id="divHide" style="visibility: hidden;">
+        <%-- add all users to selected role --%>
+        <div class="ddlWrap">
+            <asp:DropDownList ID="ddlAddAllUsersToRole" runat="server" AutoPostBack="True" DataSourceID="RolesDataSource2" DataTextField="RoleName" DataValueField="RoleName" AppendDataBoundItems="True" EnableViewState="False" Font-Size="11px" OnSelectedIndexChanged="ddlAddAllUsersToRole_SelectedIndexChanged" ToolTip="ADD ALL users to selected GROUP.">
+                <asp:ListItem Selected="True">Add All To</asp:ListItem>
+            </asp:DropDownList>
+        </div>
+        <%-- remove all users from selected role --%>
+        <div class="ddlWrap">
+            <asp:DropDownList ID="ddlRemoveAllUsersFromRole" runat="server" AutoPostBack="True" DataSourceID="RolesDataSource2" DataTextField="RoleName" DataValueField="RoleName" AppendDataBoundItems="True" EnableViewState="False" Font-Size="11px" OnSelectedIndexChanged="ddlRemoveAllUsersFromRole_SelectedIndexChanged" ToolTip="REMOVE ALL users from selected GROUP.">
+                <asp:ListItem Selected="True">Remove All From</asp:ListItem>
+            </asp:DropDownList>
+        </div>
+        <%-- delete all users from selected role --%>
+        <div class="ddlWrap">
+            <asp:DropDownList ID="ddlDeleteAllUsersFromRole" runat="server" AutoPostBack="True" DataSourceID="RolesDataSource" DataTextField="RoleName" DataValueField="RoleName" AppendDataBoundItems="True" EnableViewState="False" Font-Size="11px" OnSelectedIndexChanged="ddlDeleteAllUsersFromRole_SelectedIndexChanged" ToolTip="DELETE ALL user accounts present in the selected GROUP.">
+                <asp:ListItem Selected="True">Delete All From</asp:ListItem>
+            </asp:DropDownList>
+        </div>
     </div>
     <%-- dropdown list datasource --%>
     <asp:ObjectDataSource ID="RolesDataSource2" runat="server" OldValuesParameterFormatString="original_{0}" SelectMethod="wsat_GetRoles" TypeName="sp_wsatTableAdapters.wsat_RolesTableAdapter"></asp:ObjectDataSource>

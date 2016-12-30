@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MillimanCommon;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -154,7 +155,7 @@ namespace MillimanClientUserAdmin
             InitilizeScreen();
         }
         private void InitilizeScreen()
-        {            
+        {
             //add an empty row
             var uInfoList = new List<UserInfo>();
             uInfoList.Add(new UserInfo("", false, false));
@@ -229,33 +230,14 @@ namespace MillimanClientUserAdmin
                 }
                 else if (string.IsNullOrEmpty(UI.Account_Name_No_Password) == false)
                 {
-                    foreach (char C in UI.Account_Name_No_Password)
+
+                    var isValid = MillimanHelper.ValidateUserNameInput(UI.Account_Name_No_Password);
+                    if (isValid.Count > 0)
                     {
-                        if (AccountValidChars.Contains(C.ToString()) == false)
-                        {
-                            UI.ErrorMsg = "Account names may only contain alpha-numeric characters and the special characters '_-@.'";
-                            break;
-                        }
+                        UI.ErrorMsg = string.Join(",", isValid.ToArray());
+                        break;
                     }
                 }
-
-                if (string.IsNullOrEmpty(UI.Account_Name_No_Password) == false)
-                {
-                    if (UI.Account_Name_No_Password.Contains(".") == false)
-                    {
-                        UI.ErrorMsg = "Email address does not contain a '.' character.";
-                    }
-                    if (UI.Account_Name_No_Password.Contains("@") == false)
-                    {
-                        UI.ErrorMsg = "Email address does not contain a '@' character.";
-                    }
-                    bool isEmail = System.Text.RegularExpressions.Regex.IsMatch(UI.Account_Name_No_Password.ToLower(), @"\A(?:[a-z0-9!#$%&amp;'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&amp;'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z");
-                    if (isEmail == false)
-                    {
-                        UI.ErrorMsg = "Email address format does not match standards protocal RFC 2822 format - please report to system administrator";
-                    }
-                }
-
                 //just call to check, sets error message and icon as needed
                 UI.IsValidPassword();
 
