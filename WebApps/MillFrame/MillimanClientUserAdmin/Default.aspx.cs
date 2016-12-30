@@ -299,24 +299,33 @@ public partial class Default : System.Web.UI.Page
 
     private void GetEmailDelimiter()
     {
-        //find which super group the group is member of
-        //then use that specific super group delimeter
-        MillimanCommon.SuperGroup SG = MillimanCommon.SuperGroup.GetInstance();
-        if (SG!=null)
+        hfEmailDelimiter.Value = ";";  //per Issue1864 default to semicolon is no default is found
+        try
         {
-            MillimanCommon.SuperGroup.SuperGroupContainer SuperGroupContainer = SG.GetSuperGroups(Session["groupid"].ToString());
-            if (SuperGroupContainer!=null)
+            //find which super group the group is member of
+            //then use that specific super group delimeter
+            MillimanCommon.SuperGroup SG = MillimanCommon.SuperGroup.GetInstance();
+            if (SG != null)
             {
-                if (SuperGroupContainer.SemiColonDelimitedEmail == true)
+                MillimanCommon.SuperGroup.SuperGroupContainer SuperGroupContainer = SG.GetSuperGroups(Session["groupid"].ToString());
+                if (SuperGroupContainer != null)
                 {
-                    hfEmailDelimiter.Value = ";";
+                    if (SuperGroupContainer.SemiColonDelimitedEmail == true)
+                    {
+                        hfEmailDelimiter.Value = ";";
+                    }
+                    else if (SuperGroupContainer.CommaDelimitedEmail == true)
+                    {
+                        hfEmailDelimiter.Value = ",";
+                    }
                 }
-                else if (SuperGroupContainer.CommaDelimitedEmail == true)
-                {
-                    hfEmailDelimiter.Value = ",";
-                }
-            }                
-        }            
+            }
+        }
+        catch (Exception)
+        {
+            //since we are adding this as a patch until Millframe 5 is ready, don't log an error for this or we will
+            //be filling up the error logs with something we know is an issue and will be corrected
+        }         
         
     }
 
