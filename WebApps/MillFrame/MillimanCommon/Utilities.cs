@@ -55,11 +55,11 @@ namespace MillimanCommon
             }
             else
             {
-                if ( System.IO.File.Exists( input ) )
+                if (System.IO.File.Exists(input) && input.Length != 0)
                     inputBytes = System.IO.File.ReadAllBytes(input);
+                else
+                    return "";
             }
-            if (inputBytes.Length == 0)
-                return "";
 
             // step 1, calculate MD5 hash from input
             System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create();

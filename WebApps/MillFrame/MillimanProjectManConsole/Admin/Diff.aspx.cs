@@ -68,7 +68,15 @@ namespace MillimanProjectManConsole.Admin
                         if (string.IsNullOrEmpty(ServerPS.UserManual) == false)
                         {
                             string ServerManualDownload = System.IO.Path.Combine( LocalPS.VirtualDirectory, ServerPS.UserManual);
-                            URL = GetServerFile(ServerManualDownload); //MillimanCommon.Utilities.ConvertStringToHex(System.IO.Path.Combine(ServerPS.LoadedFromPath, ServerPS.UserManual));
+                            URL = GetServerFile(ServerManualDownload); //MillimanCommon.Utilities.ConvertStringToHex(System.IO.Path.Combine(ServerPS.LoadedFromPath, ServerPS.UserManual));                      
+
+                            //sk:VSTS item #1862; if url is empty try _new file. Part 1 of 2
+                            if (URL == String.Empty)
+                            {
+                                ServerManualDownload = System.IO.Path.Combine(LocalPS.VirtualDirectory, ServerPS.UserManual + "_new");
+                                URL = GetServerFile(ServerManualDownload); //MillimanCommon.Utilities.ConvertStringToHex(System.IO.Path.Combine(ServerPS.LoadedFromPath, ServerPS.UserManual));
+                            }
+
                             ServerUserManual.Text = ServerPS.UserManual;
                             if (string.IsNullOrEmpty(URL) == false)
                                 ServerManualMD5 = MillimanCommon.Utilities.CalculateMD5Hash(URL, true);
@@ -81,8 +89,6 @@ namespace MillimanProjectManConsole.Admin
                         {
                             ServerGroups.Items.Add(GroupName);
                         }
-
-
                     }
                     else  //Server side is null, never uploaded so set defaults
                     {
@@ -127,8 +133,20 @@ namespace MillimanProjectManConsole.Admin
                             URL = System.IO.Path.Combine(LocalPS.LoadedFromPath, LocalPS.UserManual);
                             LocalUserManual.Text = LocalPS.UserManual;
                             if (string.IsNullOrEmpty(URL) == false)
+                            {
                                 LocalManualMD5 = MillimanCommon.Utilities.CalculateMD5Hash(URL, true);
 
+                                //sk:VSTS item #1862; if Md5 is an empty string try _new file. Part 1 of 2
+                                if (LocalManualMD5 == String.Empty)
+                                {
+                                    URL = System.IO.Path.Combine(LocalPS.LoadedFromPath, LocalPS.UserManual + "_new");
+                                    LocalUserManual.Text = LocalPS.UserManual;
+                                    if (string.IsNullOrEmpty(URL) == false)
+                                    {
+                                        LocalManualMD5 = MillimanCommon.Utilities.CalculateMD5Hash(URL, true);
+                                    }
+                                }
+                            }
                             LocalUserManual.NavigateUrl = "DocumentReflector.asp?key=" + MillimanCommon.Utilities.ConvertStringToHex(URL);
                         }
                         string[] GroupList = LocalPS.Groups.Split(new char[] { '~' }, StringSplitOptions.RemoveEmptyEntries);
