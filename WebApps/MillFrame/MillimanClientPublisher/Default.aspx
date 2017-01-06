@@ -164,7 +164,7 @@
                                                             </tr>
                                                             <tr>
                                                                 <td>
-                                                                    <telerik:RadButton ID="ToggleAvailability" runat="server" SingleClick="true"
+                                                                    <telerik:RadButton ID="ToggleAvailability" runat="server" SingleClick="true" SingleClickText=".."
                                                                         OnClick="ToggleAvailability_Click"
                                                                         OnClientClicking="VerifyStateChange" Text='<%# Eval("Availability")%>'
                                                                         ToolTip='<%# Eval("AvailabilityTooltip")%>' RenderMode="Lightweight" Width="60px" Height="60px" />
@@ -258,7 +258,7 @@
                                                             <tr>
                                                                 <td>
                                                                     <telerik:RadButton
-                                                                        ID="ToggleAvailability" runat="server" SingleClick="true"
+                                                                        ID="ToggleAvailability" runat="server" SingleClick="true" SingleClickText=".."
                                                                         OnClick="ToggleAvailability_Click"
                                                                         OnClientClicking="VerifyStateChange"
                                                                         Text='<%# Eval("Availability")%>' ToolTip='<%# Eval("AvailabilityTooltip")%>'
