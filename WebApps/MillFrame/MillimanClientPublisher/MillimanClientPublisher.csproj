@@ -189,6 +189,7 @@
     <Content Include="..\appsettings_AK.config">
       <Link>Configs\appsettings_AK.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="..\appsettings_SK.config">
       <Link>Configs\appsettings_SK.config</Link>
@@ -524,9 +525,6 @@
       <Project>{e02b1c1d-33e8-4565-934d-13e6d7c36869}</Project>
       <Name>MillimanReportReduction</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Properties\licenses.licx" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

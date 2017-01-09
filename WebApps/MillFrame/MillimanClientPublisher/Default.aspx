@@ -45,6 +45,11 @@
         .RadWindow .rwPopupButton {
             margin-left: 100px !important;
         }
+        .buttonLineHeight {           
+            padding-top: 9px;
+            line-height: 18px !important;
+      }
+
     </style>
 </head>
 <body style="background-color: white; background-image: url(images/watermark.png); background-repeat: repeat">
@@ -155,8 +160,8 @@
                                                                 </td>
                                                             </tr>
                                                             <tr>
-                                                                <td>
-                                                                    <telerik:RadButton ID="RadButton1"
+                                                                <td>                                                                
+                                                                    <telerik:RadButton ID="ViewQVW" CssClass="buttonLineHeight"
                                                                         runat="server" Text="View QVW" OnClick="ViewQVW_Click"
                                                                         ButtonType="LinkButton" NavigateUrl='<%# Eval("QVLauncher") %>'
                                                                         Target="_blank" RenderMode="Lightweight" Width="60px" Height="60px" />
@@ -249,7 +254,7 @@
                                                             <tr>
                                                                 <td>
                                                                     <telerik:RadButton
-                                                                        ID="ViewQVW"
+                                                                        ID="ViewQVW" CssClass="buttonLineHeight"
                                                                         runat="server" Text="View QVW" OnClick="ViewQVW_Click"
                                                                         ButtonType="LinkButton" NavigateUrl='<%# Eval("QVLauncher")%>'
                                                                         RenderMode="Lightweight" Width="60px" Height="60px" />
