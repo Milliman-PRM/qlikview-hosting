@@ -45,7 +45,7 @@
         .RadWindow .rwPopupButton {
             margin-left: 100px !important;
         }
-        .buttonLineHeight {           
+        .buttonViewQvw {           
             padding-top: 9px;
             line-height: 18px !important;
       }
@@ -161,7 +161,7 @@
                                                             </tr>
                                                             <tr>
                                                                 <td>                                                                
-                                                                    <telerik:RadButton ID="ViewQVW" CssClass="buttonLineHeight"
+                                                                    <telerik:RadButton ID="ViewQVW" CssClass="buttonViewQvw"
                                                                         runat="server" Text="View QVW" OnClick="ViewQVW_Click"
                                                                         ButtonType="LinkButton" NavigateUrl='<%# Eval("QVLauncher") %>'
                                                                         Target="_blank" RenderMode="Lightweight" Width="60px" Height="60px" />
@@ -254,7 +254,7 @@
                                                             <tr>
                                                                 <td>
                                                                     <telerik:RadButton
-                                                                        ID="ViewQVW" CssClass="buttonLineHeight"
+                                                                        ID="ViewQVW" CssClass="buttonViewQvw"
                                                                         runat="server" Text="View QVW" OnClick="ViewQVW_Click"
                                                                         ButtonType="LinkButton" NavigateUrl='<%# Eval("QVLauncher")%>'
                                                                         RenderMode="Lightweight" Width="60px" Height="60px" />
