@@ -48,7 +48,6 @@ namespace MillimanReportReduction
             List<LicenseInfo> Info = new List<LicenseInfo>();
             try
             {
-
                 QMSClient Client;
                 string QMS = "http://localhost:4799/QMS/Service";
                 Client = new QMSClient("BasicHttpBinding_IQMS", QMS);
@@ -328,6 +327,61 @@ namespace MillimanReportReduction
             }
         }
 
+
+        public bool RemoveUserDocCAL( string User, string Document )
+        {
+            QMSClient qms = null;
+
+            try
+            {
+                string QMS = "http://localhost:4799/QMS/Service";
+                qms = new QMSClient("BasicHttpBinding_IQMS", QMS);
+                string key = qms.GetTimeLimitedServiceKey();
+                ServiceKeyClientMessageInspector.ServiceKey = key;
+                ServiceInfo[] qvsServices = qms.GetServices(ServiceTypes.QlikViewServer);
+                ServiceInfo qvs = qvsServices[0];
+                DocumentNode[] allDocs = qms.GetUserDocuments(qvs.ID);
+
+                foreach (var doc in allDocs)
+                {
+                    //if (doc.Name.ToUpper() == Document.ToUpper())
+                    if (Document.ToUpper().Contains(doc.Name.ToUpper()))
+                    {
+                        DocumentMetaData Meta = qms.GetDocumentMetaData(doc, DocumentMetaDataScope.Licensing);
+                        List<AssignedNamedCAL> tempRemovedAssignedCALs = new List<AssignedNamedCAL>();
+                        List<AssignedNamedCAL> tempAssignedCALs = new List<AssignedNamedCAL>(Meta.Licensing.AssignedCALs);
+
+                        foreach (var cal in Meta.Licensing.AssignedCALs)
+                        {
+                            if (cal.UserName.ToUpper() == User.ToUpper())
+                            {
+                                tempRemovedAssignedCALs.Add(cal);
+                                tempAssignedCALs.Remove(cal);
+
+                                Meta.Licensing.RemovedAssignedCALs = tempRemovedAssignedCALs.ToArray();
+                                Meta.Licensing.AssignedCALs = tempAssignedCALs.ToArray();
+                                break;
+                            }
+                        }
+                        qms.SaveDocumentMetaData(Meta);
+                        break;
+                    }
+                }
+
+                //shutdown client connection
+                //qmc.Close();
+                //qms = null;
+                return true;
+            }
+            catch (System.Exception ex)
+            {
+                MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "Failed to remove QV licenses", ex);
+                if (qms != null)
+                    qms.Close();
+
+            }
+            return false;
+        }
         /// <summary>
         /// Remove the user's document cal association with 'document'
         /// Note: this method should be used with data acquired via method GetAllCALSOfTypeInUse
@@ -335,64 +389,64 @@ namespace MillimanReportReduction
         /// <param name="User"></param>
         /// <param name="Document"></param>
         /// <returns></returns>
-        public bool RemoveUserDocCAL( string User, string Document )
-        {
-            QMSClient Client = null;
-            try
-            {
-                string QMS = "http://localhost:4799/QMS/Service";
-                Client = new QMSClient("BasicHttpBinding_IQMS", QMS);
-                string key = Client.GetTimeLimitedServiceKey();
-                ServiceKeyClientMessageInspector.ServiceKey = key;
-                ServiceInfo[] MyQVS = Client.GetServices(ServiceTypes.QlikViewServer);
-                Client.ClearQVSCache(QVSCacheObjects.All);
-                //purge doc licenses
-                DocumentNode[] allDocs = Client.GetUserDocuments(MyQVS[0].ID);
-                DocumentMetaData Meta;
-                for (int i = 0; i < allDocs.Length; i++)  //Loop through each document
-                {
-                    //Get the meta data for the current document
-                    Meta = Client.GetDocumentMetaData(allDocs[i], DocumentMetaDataScope.Licensing);
-                    string CurrentDocName = System.IO.Path.Combine(Meta.UserDocument.RelativePath, Meta.UserDocument.Name);
-                    //are we working on the correct document
-                    if (string.Compare(CurrentDocName, Document, true) == 0)
-                    {   //found correct document, now look at users
-                        bool IsDirty = false;
-                        //Extract the current list of Document CALs
-                        List<AssignedNamedCAL> currentCALs = Meta.Licensing.AssignedCALs.ToList();
-                        for (int x = currentCALs.Count - 1; x >= 0; x--)
-                        {
-                            //If the user matches the name then remove it from the list
-                            if ((currentCALs[x].QuarantinedUntil < System.DateTime.Now) && (string.Compare(User, currentCALs[x].UserName, true) == 0))
-                            {
-                                currentCALs.Remove(currentCALs[x]);
-                                IsDirty = true;
-                            }
-                        }
-                        if (IsDirty)
-                        {
-                            //Add the updated CALs list back to the meta data object
-                            Meta.Licensing.AssignedCALs = currentCALs.ToArray();
-                            //dec the cals allocated, otherwise silly QV still hangs on to license
-                            Meta.Licensing.CALsAllocated = currentCALs.Count();
-                            //Save the metadata back to the server
-                            Client.SaveDocumentMetaData(Meta);
-                        }
-                    }
-                }
-                //shutdown client connection
-                Client.Close();
-                Client = null;
-                return true;
-            }
-            catch (System.Exception ex)
-            {
-                MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "Failed to remove QV licenses", ex);
-                if (Client != null)
-                    Client.Close();
-            }
-            return false;
-        }
+        //public bool RemoveUserDocCAL( string User, string Document )
+        //{
+        //    QMSClient Client = null;
+        //    try
+        //    {
+        //        string QMS = "http://localhost:4799/QMS/Service";
+        //        Client = new QMSClient("BasicHttpBinding_IQMS", QMS);
+        //        string key = Client.GetTimeLimitedServiceKey();
+        //        ServiceKeyClientMessageInspector.ServiceKey = key;
+        //        ServiceInfo[] MyQVS = Client.GetServices(ServiceTypes.QlikViewServer);
+        //        Client.ClearQVSCache(QVSCacheObjects.All);
+        //        //purge doc licenses
+        //        DocumentNode[] allDocs = Client.GetUserDocuments(MyQVS[0].ID);
+        //        DocumentMetaData Meta;
+        //        for (int i = 0; i < allDocs.Length; i++)  //Loop through each document
+        //        {
+        //            //Get the meta data for the current document
+        //            Meta = Client.GetDocumentMetaData(allDocs[i], DocumentMetaDataScope.Licensing);
+        //            string CurrentDocName = System.IO.Path.Combine(Meta.UserDocument.RelativePath, Meta.UserDocument.Name);
+        //            //are we working on the correct document
+        //            if (string.Compare(CurrentDocName, Document, true) == 0)
+        //            {   //found correct document, now look at users
+        //                bool IsDirty = false;
+        //                //Extract the current list of Document CALs
+        //                List<AssignedNamedCAL> currentCALs = Meta.Licensing.AssignedCALs.ToList();
+        //                for (int x = currentCALs.Count - 1; x >= 0; x--)
+        //                {
+        //                    //If the user matches the name then remove it from the list
+        //                    if ((currentCALs[x].QuarantinedUntil < System.DateTime.Now) && (string.Compare(User, currentCALs[x].UserName, true) == 0))
+        //                    {
+        //                        currentCALs.Remove(currentCALs[x]);
+        //                        IsDirty = true;
+        //                    }
+        //                }
+        //                if (IsDirty)
+        //                {
+        //                    //Add the updated CALs list back to the meta data object
+        //                    Meta.Licensing.AssignedCALs = currentCALs.ToArray();
+        //                    //dec the cals allocated, otherwise silly QV still hangs on to license
+        //                    Meta.Licensing.CALsAllocated = currentCALs.Count();
+        //                    //Save the metadata back to the server
+        //                    Client.SaveDocumentMetaData(Meta);
+        //                }
+        //            }
+        //        }
+        //        //shutdown client connection
+        //        Client.Close();
+        //        Client = null;
+        //        return true;
+        //    }
+        //    catch (System.Exception ex)
+        //    {
+        //        MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "Failed to remove QV licenses", ex);
+        //        if (Client != null)
+        //            Client.Close();
+        //    }
+        //    return false;
+        //}
 
         /// <summary>
         /// Remove users named CAL associated with thier account
