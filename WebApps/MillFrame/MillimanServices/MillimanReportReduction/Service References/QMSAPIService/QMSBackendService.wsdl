@@ -14,12 +14,84 @@
       </wsp:All>
     </wsp:ExactlyOne>
   </wsp:Policy>
-  <wsdl:import namespace="http://ws.qliktech.com/QMS/11/" location="http://hcintel:4799/QMS/Service?wsdl=wsdl0" />
-  <wsdl:import namespace="http://ws.qliktech.com/ANY/11/" location="http://hcintel:4799/QMS/Service?wsdl=wsdl1" />
+  <wsdl:import namespace="http://ws.qliktech.com/QMS/11/" location="http://indy-prm-2:4799/QMS/Service?wsdl=wsdl0" />
+  <wsdl:import namespace="http://ws.qliktech.com/ANY/11/" location="http://indy-prm-2:4799/QMS/Service?wsdl=wsdl1" />
   <wsdl:types />
   <wsdl:binding name="BasicHttpBinding_IQMS" type="i0:IQMS">
     <wsp:PolicyReference URI="#BasicHttpBinding_IQMS_policy" />
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="RestartQVS">
+      <soap:operation soapAction="http://ws.qliktech.com/QMS/11/IQMS/RestartQVS" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="ExceptionFault">
+        <soap:fault use="literal" name="ExceptionFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="QVSNeedRestart">
+      <soap:operation soapAction="http://ws.qliktech.com/QMS/11/IQMS/QVSNeedRestart" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="ExceptionFault">
+        <soap:fault use="literal" name="ExceptionFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentMetaData">
+      <soap:operation soapAction="http://ws.qliktech.com/QMS/11/IQMS/GetDocumentMetaData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="ExceptionFault">
+        <soap:fault use="literal" name="ExceptionFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="SaveDocumentMetaData">
+      <soap:operation soapAction="http://ws.qliktech.com/QMS/11/IQMS/SaveDocumentMetaData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="ExceptionFault">
+        <soap:fault use="literal" name="ExceptionFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetCALConfiguration">
+      <soap:operation soapAction="http://ws.qliktech.com/QMS/11/IQMS/GetCALConfiguration" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="ExceptionFault">
+        <soap:fault use="literal" name="ExceptionFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="SaveCALConfiguration">
+      <soap:operation soapAction="http://ws.qliktech.com/QMS/11/IQMS/SaveCALConfiguration" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="ExceptionFault">
+        <soap:fault use="literal" name="ExceptionFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
     <wsdl:operation name="GetCALInfoForUser">
       <soap:operation soapAction="http://ws.qliktech.com/QMS/11/IQMS/GetCALInfoForUser" style="document" />
       <wsdl:input>
@@ -202,6 +274,18 @@
     </wsdl:operation>
     <wsdl:operation name="GetQVWSAuthentication">
       <soap:operation soapAction="http://ws.qliktech.com/QMS/11/IQMS/GetQVWSAuthentication" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="ExceptionFault">
+        <soap:fault use="literal" name="ExceptionFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="SelectServer">
+      <soap:operation soapAction="http://ws.qliktech.com/QMS/11/IQMS/SelectServer" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -442,6 +526,18 @@
     </wsdl:operation>
     <wsdl:operation name="GetServices">
       <soap:operation soapAction="http://ws.qliktech.com/QMS/11/IQMS/GetServices" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="ExceptionFault">
+        <soap:fault use="literal" name="ExceptionFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetReloadEngineServices">
+      <soap:operation soapAction="http://ws.qliktech.com/QMS/11/IQMS/GetReloadEngineServices" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -1016,78 +1112,6 @@
         <soap:fault use="literal" name="ExceptionFault" namespace="" />
       </wsdl:fault>
     </wsdl:operation>
-    <wsdl:operation name="RestartQVS">
-      <soap:operation soapAction="http://ws.qliktech.com/QMS/11/IQMS/RestartQVS" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-      <wsdl:fault name="ExceptionFault">
-        <soap:fault use="literal" name="ExceptionFault" namespace="" />
-      </wsdl:fault>
-    </wsdl:operation>
-    <wsdl:operation name="QVSNeedRestart">
-      <soap:operation soapAction="http://ws.qliktech.com/QMS/11/IQMS/QVSNeedRestart" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-      <wsdl:fault name="ExceptionFault">
-        <soap:fault use="literal" name="ExceptionFault" namespace="" />
-      </wsdl:fault>
-    </wsdl:operation>
-    <wsdl:operation name="GetDocumentMetaData">
-      <soap:operation soapAction="http://ws.qliktech.com/QMS/11/IQMS/GetDocumentMetaData" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-      <wsdl:fault name="ExceptionFault">
-        <soap:fault use="literal" name="ExceptionFault" namespace="" />
-      </wsdl:fault>
-    </wsdl:operation>
-    <wsdl:operation name="SaveDocumentMetaData">
-      <soap:operation soapAction="http://ws.qliktech.com/QMS/11/IQMS/SaveDocumentMetaData" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-      <wsdl:fault name="ExceptionFault">
-        <soap:fault use="literal" name="ExceptionFault" namespace="" />
-      </wsdl:fault>
-    </wsdl:operation>
-    <wsdl:operation name="GetCALConfiguration">
-      <soap:operation soapAction="http://ws.qliktech.com/QMS/11/IQMS/GetCALConfiguration" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-      <wsdl:fault name="ExceptionFault">
-        <soap:fault use="literal" name="ExceptionFault" namespace="" />
-      </wsdl:fault>
-    </wsdl:operation>
-    <wsdl:operation name="SaveCALConfiguration">
-      <soap:operation soapAction="http://ws.qliktech.com/QMS/11/IQMS/SaveCALConfiguration" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-      <wsdl:fault name="ExceptionFault">
-        <soap:fault use="literal" name="ExceptionFault" namespace="" />
-      </wsdl:fault>
-    </wsdl:operation>
   </wsdl:binding>
   <wsdl:binding name="BasicHttpBinding_IQTService" type="i1:IQTService">
     <wsp:PolicyReference URI="#BasicHttpBinding_IQTService_policy" />
@@ -1143,10 +1167,10 @@
   </wsdl:binding>
   <wsdl:service name="QMSBackendService">
     <wsdl:port name="BasicHttpBinding_IQMS" binding="tns:BasicHttpBinding_IQMS">
-      <soap:address location="http://hcintel:4799/QMS/Service" />
+      <soap:address location="http://indy-prm-2:4799/QMS/Service" />
     </wsdl:port>
     <wsdl:port name="BasicHttpBinding_IQTService" binding="tns:BasicHttpBinding_IQTService">
-      <soap:address location="http://hcintel:4799/ANY/Service" />
+      <soap:address location="http://indy-prm-2:4799/ANY/Service" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

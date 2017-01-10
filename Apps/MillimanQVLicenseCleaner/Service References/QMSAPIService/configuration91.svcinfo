@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="Xwck7w1Z5Iqje3A81msw/oK+7CE=">
+<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="/AmHWHSbVRX2LliGJ9Hw0cPV7eY=">
   <bindingConfigurations>
     <bindingConfiguration bindingType="basicHttpBinding" name="BasicHttpBinding_IQMS">
       <properties>
@@ -221,10 +221,10 @@
     </bindingConfiguration>
   </bindingConfigurations>
   <endpoints>
-    <endpoint name="BasicHttpBinding_IQMS" contract="QMSAPIService.IQMS" bindingType="basicHttpBinding" address="http://indy-prmdev-01:4799/QMS/Service" bindingConfiguration="BasicHttpBinding_IQMS">
+    <endpoint name="BasicHttpBinding_IQMS" contract="QMSAPIService.IQMS" bindingType="basicHttpBinding" address="http://indy-prm-2:4799/QMS/Service" bindingConfiguration="BasicHttpBinding_IQMS">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>http://indy-prmdev-01:4799/QMS/Service</serializedValue>
+          <serializedValue>http://indy-prm-2:4799/QMS/Service</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
@@ -306,10 +306,10 @@
         </property>
       </properties>
     </endpoint>
-    <endpoint name="BasicHttpBinding_IQTService" contract="QMSAPIService.IQTService" bindingType="basicHttpBinding" address="http://indy-prmdev-01:4799/ANY/Service" bindingConfiguration="BasicHttpBinding_IQTService">
+    <endpoint name="BasicHttpBinding_IQTService" contract="QMSAPIService.IQTService" bindingType="basicHttpBinding" address="http://indy-prm-2:4799/ANY/Service" bindingConfiguration="BasicHttpBinding_IQTService">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>http://indy-prmdev-01:4799/ANY/Service</serializedValue>
+          <serializedValue>http://indy-prm-2:4799/ANY/Service</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />

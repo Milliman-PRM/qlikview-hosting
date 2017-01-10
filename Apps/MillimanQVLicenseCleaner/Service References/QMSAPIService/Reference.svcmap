@@ -21,20 +21,20 @@
     <MetadataSource Address="http://localhost:4799/QMS/Service" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
+    <MetadataFile FileName="Service11.xsd" MetadataType="Schema" ID="d9844672-3421-4701-8ffe-1d2ce075e3ba" SourceId="1" SourceUrl="http://indy-prm-2:4799/QMS/Service?xsd=xsd0" />
     <MetadataFile FileName="QMSBackendService.wsdl" MetadataType="Wsdl" ID="94883312-47e8-464e-af0a-0a31927e62f7" SourceId="1" SourceUrl="http://localhost:4799/QMS/Service" />
-    <MetadataFile FileName="Service.xsd" MetadataType="Schema" ID="2d704768-af45-4691-b9f4-3cfef1ca1386" SourceId="1" SourceUrl="http://indy-prmdev-01:4799/QMS/Service?xsd=xsd2" />
-    <MetadataFile FileName="Service.wsdl" MetadataType="Wsdl" ID="9a3a7cce-cada-43c0-81a3-764e7f112a79" SourceId="1" SourceUrl="http://indy-prmdev-01:4799/QMS/Service?wsdl=wsdl1" />
-    <MetadataFile FileName="Service1.wsdl" MetadataType="Wsdl" ID="cb9d962d-5fd1-4510-9cb2-a7d43388cd52" SourceId="1" SourceUrl="http://indy-prmdev-01:4799/QMS/Service?wsdl=wsdl0" />
-    <MetadataFile FileName="Service1.xsd" MetadataType="Schema" ID="be4e7c13-598a-4b9b-bb34-142267c24a22" SourceId="1" SourceUrl="http://indy-prmdev-01:4799/QMS/Service?xsd=xsd7" />
-    <MetadataFile FileName="Service2.xsd" MetadataType="Schema" ID="ccbd0f51-9e70-4f53-9051-a14bf54d2085" SourceId="1" SourceUrl="http://indy-prmdev-01:4799/QMS/Service?xsd=xsd10" />
-    <MetadataFile FileName="Service3.xsd" MetadataType="Schema" ID="26c00882-0a14-4ae7-8d38-a9af0277ae38" SourceId="1" SourceUrl="http://indy-prmdev-01:4799/QMS/Service?xsd=xsd9" />
-    <MetadataFile FileName="Service4.xsd" MetadataType="Schema" ID="740aade4-e475-4f9f-851d-7ccdfa248a35" SourceId="1" SourceUrl="http://indy-prmdev-01:4799/QMS/Service?xsd=xsd3" />
-    <MetadataFile FileName="Service5.xsd" MetadataType="Schema" ID="73715de0-1d76-4e25-a3f0-7f2ef0bf2a38" SourceId="1" SourceUrl="http://indy-prmdev-01:4799/QMS/Service?xsd=xsd4" />
-    <MetadataFile FileName="Service6.xsd" MetadataType="Schema" ID="ef6abae5-7341-4058-8d6c-338c3caeef63" SourceId="1" SourceUrl="http://indy-prmdev-01:4799/QMS/Service?xsd=xsd1" />
-    <MetadataFile FileName="Service7.xsd" MetadataType="Schema" ID="63d31622-a8b1-4096-9fdf-8b24e0947027" SourceId="1" SourceUrl="http://indy-prmdev-01:4799/QMS/Service?xsd=xsd5" />
-    <MetadataFile FileName="Service8.xsd" MetadataType="Schema" ID="7601ef2d-57bf-47f5-b640-c873da1686f3" SourceId="1" SourceUrl="http://indy-prmdev-01:4799/QMS/Service?xsd=xsd6" />
-    <MetadataFile FileName="Service9.xsd" MetadataType="Schema" ID="767897e5-31d2-4a9c-86df-983425ce1a3d" SourceId="1" SourceUrl="http://indy-prmdev-01:4799/QMS/Service?xsd=xsd0" />
-    <MetadataFile FileName="Service10.xsd" MetadataType="Schema" ID="51c2d8e1-d908-4d89-99ba-291d7d66e6cb" SourceId="1" SourceUrl="http://indy-prmdev-01:4799/QMS/Service?xsd=xsd8" />
+    <MetadataFile FileName="Service111.xsd" MetadataType="Schema" ID="20e67256-a102-4e25-bfc7-c043805b1edc" SourceId="1" SourceUrl="http://indy-prm-2:4799/QMS/Service?xsd=xsd1" />
+    <MetadataFile FileName="Service112.xsd" MetadataType="Schema" ID="ccb6f890-d976-4b93-8152-9601f7428a3e" SourceId="1" SourceUrl="http://indy-prm-2:4799/QMS/Service?xsd=xsd8" />
+    <MetadataFile FileName="Service113.xsd" MetadataType="Schema" ID="ee2d743c-1bbc-4dd1-a443-4f76bdf38587" SourceId="1" SourceUrl="http://indy-prm-2:4799/QMS/Service?xsd=xsd6" />
+    <MetadataFile FileName="Service114.xsd" MetadataType="Schema" ID="6faac35e-130a-41ec-b002-678bb6722727" SourceId="1" SourceUrl="http://indy-prm-2:4799/QMS/Service?xsd=xsd5" />
+    <MetadataFile FileName="Service2.wsdl" MetadataType="Wsdl" ID="fee4eeb7-052c-418e-ba5b-5970978ad85c" SourceId="1" SourceUrl="http://indy-prm-2:4799/QMS/Service?wsdl=wsdl1" />
+    <MetadataFile FileName="Service21.wsdl" MetadataType="Wsdl" ID="b9fefa39-c500-4eee-9fc5-75c2372f4302" SourceId="1" SourceUrl="http://indy-prm-2:4799/QMS/Service?wsdl=wsdl0" />
+    <MetadataFile FileName="Service115.xsd" MetadataType="Schema" ID="617de3f4-b47f-471c-8e46-fd81f24e574d" SourceId="1" SourceUrl="http://indy-prm-2:4799/QMS/Service?xsd=xsd2" />
+    <MetadataFile FileName="Service116.xsd" MetadataType="Schema" ID="423e43e3-a293-4ad9-95e6-5b7755bf5936" SourceId="1" SourceUrl="http://indy-prm-2:4799/QMS/Service?xsd=xsd9" />
+    <MetadataFile FileName="Service117.xsd" MetadataType="Schema" ID="01095914-7e8b-4acf-8e14-cc38db4fb5e0" SourceId="1" SourceUrl="http://indy-prm-2:4799/QMS/Service?xsd=xsd10" />
+    <MetadataFile FileName="Service118.xsd" MetadataType="Schema" ID="06f05fc3-f26e-41d4-8d1b-ae1c2b9c4525" SourceId="1" SourceUrl="http://indy-prm-2:4799/QMS/Service?xsd=xsd7" />
+    <MetadataFile FileName="Service119.xsd" MetadataType="Schema" ID="6af574e3-8164-480f-8226-622e1b34ab84" SourceId="1" SourceUrl="http://indy-prm-2:4799/QMS/Service?xsd=xsd4" />
+    <MetadataFile FileName="Service1110.xsd" MetadataType="Schema" ID="a140b300-ef58-46cd-9a46-6dc3416fdd78" SourceId="1" SourceUrl="http://indy-prm-2:4799/QMS/Service?xsd=xsd3" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
