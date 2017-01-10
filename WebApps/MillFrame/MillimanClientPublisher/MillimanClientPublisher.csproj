@@ -189,6 +189,7 @@
     <Content Include="..\appsettings_AK.config">
       <Link>Configs\appsettings_AK.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="..\appsettings_SK.config">
       <Link>Configs\appsettings_SK.config</Link>
