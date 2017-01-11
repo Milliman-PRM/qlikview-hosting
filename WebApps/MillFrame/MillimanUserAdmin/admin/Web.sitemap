@@ -31,7 +31,7 @@
           <siteMapNode url="~/Admin/unapproved-users.aspx" title="Suspended"/>
           <siteMapNode url="~/Admin/supergroups.aspx" title="Super Groups"/>
         </siteMapNode>
-        <siteMapNode url="~/UserGuide/PRM User Administration Console (UAC) User Guide Release 4.1.0.html"  title="User Guide"   target="_blank" />
+        <siteMapNode url="~/UserGuide/PRM User Administration Console User Guide.html"  title="User Guide"   target="_blank" />
         <siteMapNode url="~/Admin/about.aspx" title="About">
             <siteMapNode url="~/Admin/version.aspx" title="Version"/>
         </siteMapNode>

@@ -84,7 +84,7 @@
                                             <legend>
                                                 <p style="font-weight: 700">PRM Project Listing</p>
                                             </legend>
-                                            <a href="UserGuide/PRM Client Publisher User Guide Release 4.1.0.html" title="Click to view publisher user guide" target="_blank" style="font-weight: bold">View Publisher User Guide</a>
+                                            <a href="UserGuide/PRM Client Publisher Console User Guide.html" title="Click to view publisher user guide" target="_blank" style="font-weight: bold">View Publisher User Guide</a>
                                             <asp:PlaceHolder ID="ProjectContainer" runat="server"></asp:PlaceHolder>
                                         </fieldset>
                                     </LayoutTemplate>

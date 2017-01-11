@@ -67,6 +67,60 @@ namespace ClientPublisher {
         protected global::Telerik.Web.UI.RadListView RadProjectList;
         
         /// <summary>
+        /// ProjectContainer control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder ProjectContainer;
+        
+        /// <summary>
+        /// EditProject control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Telerik.Web.UI.RadButton EditProject;
+        
+        /// <summary>
+        /// RadButton1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Telerik.Web.UI.RadButton RadButton1;
+        
+        /// <summary>
+        /// ToggleAvailability control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Telerik.Web.UI.RadButton ToggleAvailability;
+        
+        /// <summary>
+        /// ViewQVW control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Telerik.Web.UI.RadButton ViewQVW;
+        
+        /// <summary>
+        /// ToggleAvailability control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Telerik.Web.UI.RadButton ToggleAvailability;
+        
+        /// <summary>
         /// lblcopyrightYear control.
         /// </summary>
         /// <remarks>
