@@ -165,8 +165,8 @@ public partial class admin_controls_access_rules : System.Web.UI.UserControl
         RadFileExplorer1.ToolBar.Items[7].Visible = false;//Story1827 - hide item ICONVIEW
 
         RadFileExplorer1.TreeView.ContextMenus[0].Items[1].Visible = false;  //Story1827 - hide item
-        RadFileExplorer1.TreeView.ContextMenus[0].Items[3].Visible = false; //Story1827 - hide item
-        RadFileExplorer1.TreeView.ContextMenus[0].Items[4].Visible = false; //Story1827 - hide item
+        //RadFileExplorer1.TreeView.ContextMenus[0].Items[3].Visible = false; //Story1827 - hide item
+        //RadFileExplorer1.TreeView.ContextMenus[0].Items[4].Visible = false; //Story1827 - hide item
         RadFileExplorer1.GridContextMenu.Items[0].Visible = false;//Story1827 - hide item
         RadFileExplorer1.GridContextMenu.Items[2].Visible = false;//Story1827 - hide item
         RadFileExplorer1.GridContextMenu.Items[3].Visible = false;//Story1827 - hide item
