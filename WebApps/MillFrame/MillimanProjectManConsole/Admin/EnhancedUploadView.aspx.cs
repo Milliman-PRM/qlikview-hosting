@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Configuration;
 using System.IO;
-using System.Web.Configuration;
+using MillimanCommon;
 
 public partial class EnhancedUploadView : System.Web.UI.Page
 {
@@ -56,7 +55,7 @@ public partial class EnhancedUploadView : System.Web.UI.Page
         SelectedGroups.DataSource = GroupList;
         SelectedGroups.DataBind();
         //point image to default image
-        PreviewImage.ImageUrl = "ImageReflector.aspx?key=" + MillimanCommon.Utilities.ConvertStringToHex(Server.MapPath("~/images/DefaultProjectImage.gif"));
+        PreviewImage.ImageUrl = "ImageReflector.aspx?key=" + Utilities.ConvertStringToHex(Server.MapPath("~/images/DefaultProjectImage.gif"));
         return true;
     }
     //load all the user settings
@@ -95,7 +94,7 @@ public partial class EnhancedUploadView : System.Web.UI.Page
         //otherwise check to see if we are importing
         else if (Request["loc"] != null)
         {
-            string FullLocationWithName = MillimanCommon.Utilities.ConvertHexToString(Request["loc"]);
+            string FullLocationWithName = Utilities.ConvertHexToString(Request["loc"]);
             string Group = string.Empty;
             //bool CanEmit = false;
             MillimanCommon.XMLFileSignature XMLFS = new MillimanCommon.XMLFileSignature(FullLocationWithName);
@@ -120,7 +119,7 @@ public partial class EnhancedUploadView : System.Web.UI.Page
             //we are importing, show the default gif, can't save one here don't have the project name
             //yet and gif must match project name
             string DefaultImage = Server.MapPath("~/images/DefaultProjectImage.gif");
-            PreviewImage.ImageUrl = "ImageReflector.aspx?key=" + MillimanCommon.Utilities.ConvertStringToHex(DefaultImage);
+            PreviewImage.ImageUrl = "ImageReflector.aspx?key=" + Utilities.ConvertStringToHex(DefaultImage);
 
          }
 
@@ -163,9 +162,9 @@ public partial class EnhancedUploadView : System.Web.UI.Page
                 //get rid of old file
                 File.Delete(OldImageFile);
             }
-            PreviewImage.ImageUrl = "ImageReflector.aspx?key=" + MillimanCommon.Utilities.ConvertStringToHex(PresentationThumbnailFile);
+            PreviewImage.ImageUrl = "ImageReflector.aspx?key=" + Utilities.ConvertStringToHex(PresentationThumbnailFile);
             _Settings.QVThumbnail = System.IO.Path.GetFileName(PresentationThumbnailFile.Replace("_new","")); //save just name
-            _Settings.QVThumbnailHash = MillimanCommon.Utilities.CalculateMD5Hash(PresentationThumbnailFile, true);
+            _Settings.QVThumbnailHash = Utilities.CalculateMD5Hash(PresentationThumbnailFile, true);
             //since we are updating a default, copy the new image tothe default setting
             if ( System.IO.File.Exists(PresentationThumbnailFile.Replace("_new", "")))
                 System.IO.File.Delete(PresentationThumbnailFile.Replace("_new", ""));
@@ -179,7 +178,7 @@ public partial class EnhancedUploadView : System.Web.UI.Page
                 string DefaultImage = Server.MapPath("~/images/DefaultProjectImage.gif");
 
                 _Settings.QVThumbnail = _Settings.ProjectName + ".gif";
-                _Settings.QVThumbnailHash = MillimanCommon.Utilities.CalculateMD5Hash(DefaultImage, true);
+                _Settings.QVThumbnailHash = Utilities.CalculateMD5Hash(DefaultImage, true);
                 //make one copy the old copy
                 if ( System.IO.File.Exists(System.IO.Path.Combine(_Settings.AbsoluteProjectPath, _Settings.QVThumbnail)))
                     System.IO.File.Delete(System.IO.Path.Combine(_Settings.AbsoluteProjectPath, _Settings.QVThumbnail));
@@ -227,7 +226,7 @@ public partial class EnhancedUploadView : System.Web.UI.Page
         //associate the QVW to the project explicitely
         //if (Request["loc"] != null)
         //{
-        //    string FullPathWithName = MillimanCommon.Utilities.ConvertHexToString(Request["loc"]);
+        //    string FullPathWithName = Utilities.ConvertHexToString(Request["loc"]);
         //    System.IO.File.Move(FullPathWithName, System.IO.Path.Combine(DocumentRoot, VirtualPath, System.IO.Path.GetFileNameWithoutExtension(QVWName.Text) + ".qvw_new"));
         //}
 
@@ -274,27 +273,24 @@ public partial class EnhancedUploadView : System.Web.UI.Page
         string OldImagePath = System.IO.Path.Combine(DocumentRoot.Trim(), Path.Trim(), Settings.QVThumbnail.Trim());
         if (System.IO.File.Exists(NewImagePath))
         {
-            PreviewImage.ImageUrl = "imagereflector.aspx?key=" + MillimanCommon.Utilities.ConvertStringToHex(NewImagePath);
+            PreviewImage.ImageUrl = "imagereflector.aspx?key=" + Utilities.ConvertStringToHex(NewImagePath);
         }
         //otherwise show old one
         else if (System.IO.File.Exists(OldImagePath))
         {
-            PreviewImage.ImageUrl = "imagereflector.aspx?key=" + MillimanCommon.Utilities.ConvertStringToHex(OldImagePath);
+            PreviewImage.ImageUrl = "imagereflector.aspx?key=" + Utilities.ConvertStringToHex(OldImagePath);
         }
 
         string NewManualPath = System.IO.Path.Combine(DocumentRoot.Trim(), Path.Trim(), Settings.UserManual.Trim() + "_new");
         string OldManualPath = System.IO.Path.Combine(DocumentRoot.Trim(), Path.Trim(), Settings.UserManual.Trim());
 
-        UserManualLabel.Text = Settings.UserManual.Substring(
-            Settings.UserManual.IndexOf("_") + 1,
-            Settings.UserManual.Length - Settings.UserManual.IndexOf("_") - 1
-            );
+        UserManualLabel.Text = Utilities.RemoveGUIDFromString(Settings.UserManual);
 
         string UserManualURL = string.Empty;
         if ( System.IO.File.Exists( NewManualPath ) )
-            UserManualURL = "documentreflector.aspx?key=" + MillimanCommon.Utilities.ConvertStringToHex( NewManualPath );
+            UserManualURL = "documentreflector.aspx?key=" + Utilities.ConvertStringToHex( NewManualPath );
         else if (System.IO.File.Exists(OldManualPath))
-            UserManualURL = "documentreflector.aspx?key=" + MillimanCommon.Utilities.ConvertStringToHex(OldManualPath);
+            UserManualURL = "documentreflector.aspx?key=" + Utilities.ConvertStringToHex(OldManualPath);
 
         UserManualLabel.NavigateUrl = UserManualURL;
         UserManualLabel.Target = "_blank";
@@ -439,6 +435,4 @@ public partial class EnhancedUploadView : System.Web.UI.Page
         SelectedGroups.DataSource = MillimanProjectManConsole.Global.GetInstance().GetGroups();
         SelectedGroups.DataBind();
     }
-
-  
 }
