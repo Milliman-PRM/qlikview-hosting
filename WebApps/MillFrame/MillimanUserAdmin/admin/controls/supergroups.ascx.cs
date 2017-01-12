@@ -321,8 +321,7 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
         }
         else
         {
-            Alert.Show("'" + SGName + "' is already in use. Please choose another name.");
-            NewSuperGroupName.Text = "";
+            Msg= "'" + SGName + "' is already in use. Please choose another name.";
         }
 
         Alert.Show(Msg);
