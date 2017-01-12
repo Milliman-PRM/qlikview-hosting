@@ -4,6 +4,7 @@ using System.Data;
 using System.Web.UI.WebControls;
 using System.Web.Security;
 using Telerik.Web.UI;
+using MillimanCommon;
 
 public partial class admin_controls_supergroups : System.Web.UI.UserControl
 {
@@ -90,6 +91,7 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
             {
                 UseCommaDelimited.Checked = false; //semicolon will be used
             }
+
             SmartLinkOn.Checked = !SelectedSGC.AllowTempPasswordEntry;
 
             AddGroups(SelectedSGC.GroupNames);
@@ -271,22 +273,35 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
             NewSuperGroupName.Focus();
             return;
         }
-        MillimanCommon.SuperGroup SG = MillimanCommon.SuperGroup.GetInstance();
-        bool Found = false;
-        foreach (ListItem SuperName in SuperGroups.Items)
+
+        SuperGroup SG = SuperGroup.GetInstance();
+        SuperGroup.SuperGroupContainer SGC = SG.FindSuper(SGName);
+        var Msg = string.Empty;
+        if (SGC == null)
         {
-            if (string.Compare(SuperName.Value, SGName, true) == 0)
-            {
-                Found = true;
+            //************************************//
+            //PREPARE TO SAVE THE NEW SUPER GROUP
+            SGC = new MillimanCommon.SuperGroup.SuperGroupContainer();
+            SG.SuperGroupContainers.Add(SGC);
+            SGC.ContainerName = SGName;
+            SGC.ContainerDescription = "";
+            SGC.AllowTempPasswordEntry = false;
+            SGC.SemiColonDelimitedEmail = false;
+            SGC.CommaDelimitedEmail = false;
+            SGC.AdminUserAccounts = ListItemsToStringList(ClientAdminUsers);
+            SGC.PublisherUserAccounts = ListItemsToStringList(PublishingUsers);
+            SGC.GroupNames = ListItemsToStringList(GroupsInSuper);
+            if (SG.Save() == false) {
+                Msg = "Super groups failed to Save. Please check with a system administrator.";
+                return;
             }
-        }
-        if (Found)
-        {
-            MillimanCommon.Alert.Show("'" + SGName + "' is already in use. Please choose another name.");
-            NewSuperGroupName.Text = "";
-        }
-        else
-        {
+            else
+            {
+                Msg = "Super group '" + SGName + "' added sucessfully.";
+                NewSuperGroupName.Text = "";
+            }
+            //************************************//
+            //add super group to the list items
             SuperGroups.Items.Add(SGName);
             SuperGroups.SelectedIndex = SuperGroups.Items.IndexOf(new ListItem(SGName));
             SelectedSuperGroup.Text = "<center>" + SGName + "</center>";
@@ -294,16 +309,24 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
             Description.Text = "";
             SmartLinkOn.Checked = true;
             //TODO Q. for defult entry do we check or uncheck (comma or semi colon?)
-            UseCommaDelimited.Checked = false; 
+            UseCommaDelimited.Checked = false;
             GroupsInSuper.Items.Clear();
             ClientAdminUsers.Items.Clear();
             PublishingUsers.Items.Clear();
             AllAdmins.Items.Clear();
-            AllPublishers.Items.Clear();
+            AllPublishers.Items.Clear(); 
             AddGroups(new List<string>());
             ActiveInterface(true);
-
+            
         }
+        else
+        {
+            Alert.Show("'" + SGName + "' is already in use. Please choose another name.");
+            NewSuperGroupName.Text = "";
+        }
+
+        Alert.Show(Msg);
+        NewSuperGroupName.Text = "";
     }
     protected void DeleteSuperGroup_Click(object sender, EventArgs e)
     {
