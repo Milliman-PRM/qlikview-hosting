@@ -23,7 +23,7 @@ namespace MillimanCommon
             var emailSplit = inputValue.Split(new char[] { '@' }, StringSplitOptions.RemoveEmptyEntries).ToList();
             if (emailSplit.Count() != 2)
             {
-                errorsList.Add("Valid email addresses must contain two parts seperated by a '@' character.");
+                errorsList.Add("Valid email addresses must contain two parts separated by a '@' character.");
                 return errorsList;
             }
 
