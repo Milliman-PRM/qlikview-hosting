@@ -87,6 +87,8 @@
   <ItemGroup>
     <Content Include="Announcements\Announcements.xml" />
     <Content Include="Announcements\AnnouncementsTemplate.xml" />
+    <Content Include="Announcements\MajorDowntimeWindow.xml" />
+    <Content Include="Announcements\MinimalDowntimeWindow.xml" />
     <Content Include="AssertionService.aspx" />
     <Content Include="Content\Images\Add-Blue.png" />
     <Content Include="Content\Images\ajax-loader-bar.gif" />

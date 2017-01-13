@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Complex name="Root" type="MillimanDev2.Announcements.Announcements, MillimanDev2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+  <Properties>
+    <Collection name="CurrentAnnouncements">
+      <Properties>
+        <Simple name="Capacity" value="4" />
+      </Properties>
+      <Items>
+        <Complex>
+          <Properties>
+            <Simple name="IntendedAudience" value="All" />
+            <Simple name="PublishedOn" value="10/15/2013 11:15:03" />
+            <Simple name="ExpiresOn" value="11/15/2013 11:15:03" />
+            <Simple name="Icon" value="images\Info-blue.png" />
+            <Simple name="Message" value="The PRM server will undergo maintenance - &lt;b&gt;[WINDOWDATETIME]&lt;/b&gt; from 12:01 AM until noon.  During this period, the PRM server may not be available for short spans of time.  &lt;br&gt;&lt;br&gt;If the maintenance date will interfere with required work,  please send an email to PRM support to request rescheduling." />
+          </Properties>
+        </Complex>
+      </Items>
+    </Collection>
+  </Properties>
+</Complex>
