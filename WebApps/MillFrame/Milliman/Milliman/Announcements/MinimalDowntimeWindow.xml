@@ -12,7 +12,7 @@
             <Simple name="PublishedOn" value="10/15/2013 11:15:03" />
             <Simple name="ExpiresOn" value="11/15/2013 11:15:03" />
             <Simple name="Icon" value="images\Info-blue.png" />
-            <Simple name="Message" value="The PRM server will undergo maintenance - &lt;b&gt;[WINDOWDATETIME]&lt;/b&gt; from 12:01 AM until noon.  During this period, the PRM server may not be available for short spans of time.  &lt;br&gt;&lt;br&gt;If the maintenance date will interfere with required work,  please send an email to PRM support to request rescheduling." />
+            <Simple name="Message" value="The PRM server will undergo maintenance - &lt;b&gt;[WINDOWDATETIME]&lt;/b&gt; from 12:01 AM until noon.  During this period, the PRM server may not be available for short spans of time.  &lt;br&gt;&lt;br&gt;If the maintenance date will interfere with required work,  please send an email to &lt;a href=&quot;mailto:prm.support@milliman.com?Subject=Maintenance Window Reschedule&quot; target=&quot;_top&quot;&gt;PRM support&lt;/a&gt; to request rescheduling." />
           </Properties>
         </Complex>
       </Items>
