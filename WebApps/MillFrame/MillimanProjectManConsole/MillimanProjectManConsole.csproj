@@ -918,7 +918,7 @@
     <Content Include="themes\defaults\Images\unlocked.png" />
     <Content Include="Admin\UploadView.aspx" />
     <Content Include="ToDo_Notes.txt" />
-    <Content Include="UserGuide\PRM Project Management Console %28PMC%29 User Guide Release 4.1.0.html" />
+    <Content Include="UserGuide\PRM Project Management Console User Guide.html" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

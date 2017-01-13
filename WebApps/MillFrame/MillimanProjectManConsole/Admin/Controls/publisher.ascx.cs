@@ -47,7 +47,7 @@ public partial class admin_controls_access_rules : System.Web.UI.UserControl
         UserGuide.Value = "User Guide";
         UserGuide.ToolTip = "View the project management console user guide";
         UserGuide.ImageUrl = "../../images/publish.png";
-        UserGuide.NavigateUrl = "../../UserGuide/PRM Project Management Console (PMC) User Guide Release 4.1.0.html";
+        UserGuide.NavigateUrl = "../../UserGuide/PRM Project Management Console User Guide.html";
         UserGuide.Target = "_blank";
         UserGuide.ImagePosition = ToolBarImagePosition.Left;
         RadFileExplorer1.ToolBar.Items.Add(UserGuide);

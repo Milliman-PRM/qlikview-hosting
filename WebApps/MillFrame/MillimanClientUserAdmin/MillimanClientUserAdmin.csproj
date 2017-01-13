@@ -315,7 +315,7 @@
     <Content Include="Report.aspx" />
     <Content Include="UserDownloads.aspx" />
     <Content Include="UserAssignments.aspx" />
-    <Content Include="UserGuide\PRM Client User Administration User Guide Release 4.1.0.html" />
+    <Content Include="UserGuide\PRM Client User Administration Console User Guide.html" />
     <Content Include="UserLogins.aspx" />
     <Content Include="web.config">
       <SubType>Designer</SubType>
@@ -414,7 +414,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties UseAjaxifiedTemplates="True" UseJQuerySupport="True" />
+      <UserProperties UseJQuerySupport="True" UseAjaxifiedTemplates="True" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

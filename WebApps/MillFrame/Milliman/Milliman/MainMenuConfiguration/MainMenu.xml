@@ -5,7 +5,7 @@
     <Item Text='Profile' Href='javascript:OpenProfile();' Width='100px' LeftLogo="images/administrator-icon.png" />
     <Item Text='Help' Width='100px'>
       <Group Flow='Vertical'>
-        <Item Text='User Guide' Width='200px' Href="UserGuide/PRM Web Portal User Guide Release 4.1.0.html" Target='_blank'/>
+        <Item Text='User Guide' Width='200px' Href="UserGuide/PRM Web Portal User Guide.html" Target='_blank'/>
         <Item Text='Support' Width='200px' Href="mailto:prm.support@milliman.com?Subject='Support%20Request'" Target='_blank'/>
         <Item Text='About Milliman' Width='200px' Href='http://www.milliman.com' Target='_blank'  />
       </Group>
