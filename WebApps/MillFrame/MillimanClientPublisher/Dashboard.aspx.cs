@@ -127,19 +127,28 @@ namespace ClientPublisher
                 if (UserRoles != null)
                 {
                     MillimanCommon.UserAccessList ACL = new MillimanCommon.UserAccessList(Membership.GetUser().UserName, UserRoles, false);
-                    foreach (MillimanCommon.UserAccessList.UserAccess Access in ACL.ACL)
+                    if (ACL!=null)
                     {
-                        //Issue 1650 since we are a client publisher - we should show the master report, or even a reduced version, since
-                        //we already have rights to PUBLISH, by default seeing everything is OK, so don't bother with checking a reduced version exists
-
-                        //QVRootrelative and QVW are both relative to qv document root
-                        if (string.Compare(Access.QVRootRelativeProjectPath, QVW, true) == 0)
-                            return true;
-
-                        //reducedQVW is full path,  while project is relatvie to QV root
-                        if (Access.ReducedQVW.ToLower().Contains(QVW.ToLower()) == true)
-                            return true;
-
+                        foreach (MillimanCommon.UserAccessList.UserAccess Access in ACL.ACL)
+                        {
+                            //Issue 1650 since we are a client publisher - we should show the master report, or even a reduced version, since
+                            //we already have rights to PUBLISH, by default seeing everything is OK, so don't bother with checking a reduced version exists
+                            if (Access!=null)
+                            {
+                                if (!string.IsNullOrEmpty(Access.QVRootRelativeProjectPath))
+                                {
+                                    //QVRootrelative and QVW are both relative to qv document root
+                                    if (string.Compare(Access.QVRootRelativeProjectPath, QVW, true) == 0)
+                                        return true;
+                                }
+                                if (!string.IsNullOrEmpty(Access.ReducedQVW))
+                                {
+                                    //reducedQVW is full path,  while project is relatvie to QV root
+                                    if (Access.ReducedQVW.ToLower().Contains(QVW.ToLower()) == true)
+                                        return true;
+                                }                                
+                            }    
+                        }
                     }
                 }
             }
