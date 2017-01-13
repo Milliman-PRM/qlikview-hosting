@@ -8,7 +8,7 @@ pandoc "PRM Client Publisher Console User Guide.docx" -o "..\MillimanClientPubli
 pandoc "PRM Client User Administration Console User Guide.docx" -o "..\MillimanClientUserAdmin\UserGuide\PRM Client User Administration Console User Guide.html" --self-contained
 pandoc "PRM User Administration Console User Guide.docx" -o "..\MillimanUserAdmin\UserGuide\PRM User Administration Console User Guide.html" --self-contained
 pandoc "PRM Web Portal User Guide.docx" -o "..\Milliman\Milliman\UserGuide\PRM Web Portal User Guide.html" --self-contained
-REM pandoc "PRM Project Management Console User Guide Release.docx" -o "..\MillimanMillimanProjectManConsole\UserGuide\PRM Project Management Console User Guide Release.html" --self-contained
+pandoc "PRM Project Management Console User Guide.docx" -o "..\MillimanMillimanProjectManConsole\UserGuide\PRM Project Management Console User Guide.html" --self-contained
 echo "Created HTML user guides sucessfully and wrote to respective directories...."
 )
 
