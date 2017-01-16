@@ -45,6 +45,11 @@
         .RadWindow .rwPopupButton {
             margin-left: 100px !important;
         }
+        .buttonViewQvw {           
+            padding-top: 9px;
+            line-height: 18px !important;
+      }
+
     </style>
 </head>
 <body style="background-color: white; background-image: url(images/watermark.png); background-repeat: repeat">
@@ -69,8 +74,7 @@
             </div>
 
             <div id="Div1" style="display: block; overflow: auto; position: absolute; top: 130px; bottom: 25px; left: 5px; right: 5px; border: 1px solid white; background-color: transparent">
-                <center>
-
+                <center>                   
                     <%--                    update panel is need to update main windows without causing refresh of open DIV windows--%>
                     <asp:UpdatePanel runat="server" ID="UpdatePanel1">
                         <Triggers>
@@ -85,6 +89,7 @@
                                             <legend>
                                                 <p style="font-weight: 700">PRM Project Listing</p>
                                             </legend>
+                                            <a href="UserGuide/PRM Client Publisher Console User Guide.html" title="Click to view publisher user guide" target="_blank" style="font-weight: bold">View Publisher User Guide</a>
                                             <asp:PlaceHolder ID="ProjectContainer" runat="server"></asp:PlaceHolder>
                                         </fieldset>
                                     </LayoutTemplate>
@@ -155,8 +160,8 @@
                                                                 </td>
                                                             </tr>
                                                             <tr>
-                                                                <td>
-                                                                    <telerik:RadButton ID="RadButton1"
+                                                                <td>                                                                
+                                                                    <telerik:RadButton ID="ViewQVW" CssClass="buttonViewQvw"
                                                                         runat="server" Text="View QVW" OnClick="ViewQVW_Click"
                                                                         ButtonType="LinkButton" NavigateUrl='<%# Eval("QVLauncher") %>'
                                                                         Target="_blank" RenderMode="Lightweight" Width="60px" Height="60px" />
@@ -164,8 +169,8 @@
                                                             </tr>
                                                             <tr>
                                                                 <td>
-                                                                    <telerik:RadButton ID="ToggleAvailability"
-                                                                        runat="server" OnClick="ToggleAvailability_Click"
+                                                                    <telerik:RadButton ID="ToggleAvailability" runat="server" SingleClick="true" SingleClickText=".."
+                                                                        OnClick="ToggleAvailability_Click"
                                                                         OnClientClicking="VerifyStateChange" Text='<%# Eval("Availability")%>'
                                                                         ToolTip='<%# Eval("AvailabilityTooltip")%>' RenderMode="Lightweight" Width="60px" Height="60px" />
                                                                 </td>
@@ -249,7 +254,7 @@
                                                             <tr>
                                                                 <td>
                                                                     <telerik:RadButton
-                                                                        ID="ViewQVW"
+                                                                        ID="ViewQVW" CssClass="buttonViewQvw"
                                                                         runat="server" Text="View QVW" OnClick="ViewQVW_Click"
                                                                         ButtonType="LinkButton" NavigateUrl='<%# Eval("QVLauncher")%>'
                                                                         RenderMode="Lightweight" Width="60px" Height="60px" />
@@ -258,7 +263,7 @@
                                                             <tr>
                                                                 <td>
                                                                     <telerik:RadButton
-                                                                        ID="ToggleAvailability" runat="server"
+                                                                        ID="ToggleAvailability" runat="server" SingleClick="true" SingleClickText=".."
                                                                         OnClick="ToggleAvailability_Click"
                                                                         OnClientClicking="VerifyStateChange"
                                                                         Text='<%# Eval("Availability")%>' ToolTip='<%# Eval("AvailabilityTooltip")%>'

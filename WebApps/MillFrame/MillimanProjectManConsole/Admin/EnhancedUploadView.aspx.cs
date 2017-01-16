@@ -14,9 +14,6 @@ public partial class EnhancedUploadView : System.Web.UI.Page
     {
         if (IsPostBack == false)
         {
-            //always disable groups
-            //SelectedGroups.Enabled = false;
-
             LoadPresets();
             string VirtualDir = string.Empty;
             string Groups = string.Empty;
@@ -27,6 +24,10 @@ public partial class EnhancedUploadView : System.Web.UI.Page
                  //once a project is created it cannot be renamed
                  ProjectName.Enabled = false;
              }
+             if (!string.IsNullOrEmpty(_Settings.QVName))
+            {
+                QVWName.Enabled = false;
+            }
             //if the user saved successfully, this will show a success message to the user
             //other we don't show anything - will only display the message 1 time
             if (Request["status"] != null)
@@ -35,7 +36,7 @@ public partial class EnhancedUploadView : System.Web.UI.Page
                 {
                     MillimanCommon.Alert.Show( Session[Request["status"]].ToString() );
                     Session[Request["status"]] = null;
-                }
+                }   
             }
         }
     }

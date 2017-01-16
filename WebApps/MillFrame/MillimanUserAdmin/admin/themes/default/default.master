@@ -77,7 +77,7 @@
                     <tr>
                         <td valign="middle">
                             <center>
-                                <asp:HyperLink ID="LnkAbout" runat="server" NavigateUrl="http://www.milliman.com" ToolTip="Milliman HCIntel User Administration">Copyright &copy Milliman </asp:HyperLink><asp:Literal ID="dateYear" runat="server"></asp:Literal></center>
+                                <asp:Label ID="LnkAbout" runat="server">Copyright &copy Milliman </asp:Label><asp:Literal ID="dateYear" runat="server"></asp:Literal></center>
                         </td>
                     </tr>
                 </table>

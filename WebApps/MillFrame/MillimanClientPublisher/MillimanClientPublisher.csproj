@@ -189,6 +189,7 @@
     <Content Include="..\appsettings_AK.config">
       <Link>Configs\appsettings_AK.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="..\appsettings_SK.config">
       <Link>Configs\appsettings_SK.config</Link>
@@ -316,6 +317,7 @@
     <Content Include="SimpleUpdateVerify.aspx" />
     <Content Include="Site.css" />
     <Content Include="time.aspx" />
+    <Content Include="UserGuide\PRM Client Publisher Console User Guide.html" />
     <Content Include="UserLogin.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

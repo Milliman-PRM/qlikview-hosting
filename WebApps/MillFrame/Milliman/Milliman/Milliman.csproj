@@ -197,6 +197,7 @@
     <Content Include="Site.css" />
     <Content Include="templates\email.html" />
     <Content Include="ToDo_Notes.txt" />
+    <Content Include="UserGuide\PRM Web Portal User Guide.html" />
     <Content Include="UserLogin.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

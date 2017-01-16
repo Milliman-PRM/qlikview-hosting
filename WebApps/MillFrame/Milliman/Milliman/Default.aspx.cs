@@ -91,7 +91,7 @@ namespace MillimanDev
                 string ContainerName = MyItems[0].ContainerName; //get container name
                 if (string.IsNullOrEmpty(ContainerName) == false) //if not null or empty pass to menu creator
                 {
-                    string MenuItem = CreateMenuItem("Publish Content", "Publish new report content", ContainerName, true);
+                    string MenuItem = CreateMenuItem("Publish Content", "Publish content for " + MyItems[0].ContainerName + "", ContainerName, true);
                     return XML.Replace(ReplacementTag, MenuItem);
                 }
                 else
@@ -110,7 +110,7 @@ namespace MillimanDev
                     SubMenus += SubMenu;
                 }
                 MainEntry = MainEntry.Replace("_ITEMS_", SubMenus);
-                MainEntry = MainEntry.Replace("_TOOLTIP_", "Administer users and control access rights.");
+                MainEntry = MainEntry.Replace("_TOOLTIP_", "Publish/update reports.");
                 return XML.Replace(ReplacementTag, MainEntry);
             }
         }
@@ -215,6 +215,7 @@ namespace MillimanDev
                     }
                 }
                 string FriendlyGroupName = "????";
+
                 if (MyRoles.Count == 1)
                 {
                     FriendlyGroupName = MGM.MillimanGroupDictionary[MyRoles[0]].FriendlyGroupName;
@@ -226,23 +227,43 @@ namespace MillimanDev
                 }
                 else if (MyRoles.Count > 1)
                 {
+                    //create a new set
+                    List<string> newRole = new List<string>();
                     string SubMenus = string.Empty;
+                    string SubMenu = string.Empty;
                     foreach (string Role in MyRoles)
                     {
                         if (MGM.MillimanGroupDictionary.ContainsKey(Role) == true)
-                        {  //if we do not have a friendly name dont show a menu item
-                            FriendlyGroupName = MGM.MillimanGroupDictionary[Role].FriendlyGroupName;
-                            if (string.IsNullOrEmpty(FriendlyGroupName) == false)
-                            {
-                                string SubMenu = CreateMenuItem("Administer users for " + FriendlyGroupName, "", Role);
-                                if (MGM.MillimanGroupDictionary[Role].MaximumnUsers > 0)
-                                    SubMenus += SubMenu;
+                        {  
+                            //if we do not have a friendly name dont show a menu item                            
+                            if (string.IsNullOrEmpty(MGM.MillimanGroupDictionary[Role].FriendlyGroupName) == false && MGM.MillimanGroupDictionary[Role].MaximumnUsers > 0)
+                            {                               
+                                FriendlyGroupName = MGM.MillimanGroupDictionary[Role].FriendlyGroupName;
+                                //add the new role to new set
+                                newRole.Add(MGM.MillimanGroupDictionary[Role].ToString());
+                                SubMenu = CreateMenuItem("Administer users for " + FriendlyGroupName, "", Role);                                
+                                //create sub menu
+                                SubMenus += SubMenu;
+
                             }
                         }
                     }
-                    MainEntry = MainEntry.Replace("_ITEMS_", SubMenus);
-                    MainEntry = MainEntry.Replace("_TOOLTIP_", "Administer users and control access rights.");
-                    return XML.Replace(ReplacementTag, MainEntry);
+
+                    //if there is only one role with FN and Max#
+                    if (newRole.Count == 1)
+                    {
+                        //create new sub menu
+                        SubMenu = CreateMenuItem("User Administration", "Administer users for " + FriendlyGroupName, newRole[0]);
+                        //don't show if no users are allowed
+                        return XML.Replace(ReplacementTag, SubMenu);
+                    }
+                    else
+                    {
+                        MainEntry = MainEntry.Replace("_ITEMS_", SubMenus);
+                        MainEntry = MainEntry.Replace("_TOOLTIP_", "Administer users and control access rights.");
+                        return XML.Replace(ReplacementTag, MainEntry);
+                    }
+
                 }
                 else //am client admin but not in a group - get rid of menu option
                 {

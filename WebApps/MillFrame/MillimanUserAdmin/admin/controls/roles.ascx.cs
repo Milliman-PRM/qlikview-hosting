@@ -17,11 +17,6 @@ public partial class admin_controls_roles : System.Web.UI.UserControl
 
     private void Page_PreRender()
     {
-        //string TestRole = "12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890";
-        //if (Roles.RoleExists(TestRole) == false)
-        //    Roles.CreateRole(TestRole);
-
-
         // Create a DataTable and define its columns
         DataTable RoleList = new DataTable();
         RoleList.Columns.Add("Role Name");
@@ -88,6 +83,8 @@ public partial class admin_controls_roles : System.Web.UI.UserControl
             Msg.Text = "New role added successfully";
             Msg.Visible = true;
             createRoleSuccess = true;
+            Page_PreRender();
+            ApplyChanges_Click(null, EventArgs.Empty);
         }
         catch (Exception ex)
         {
@@ -183,9 +180,9 @@ public partial class admin_controls_roles : System.Web.UI.UserControl
     }
 
     #endregion
+
     protected void ApplyChanges_Click(object sender, EventArgs e)
     {
-
         var badData = Validate();
         if (!string.IsNullOrEmpty(badData))
         {
