@@ -6,7 +6,7 @@
   <Mappings>
     <Mapping>
       <PhysicalPath>
-        <![CDATA[D:\prmsystem\QVDocuments]]>
+        <![CDATA[D:\InstalledApplications\PRM_Staging_SK\PMC_Directories\QVDocuments]]>
       </PhysicalPath>
       <VirtualPath><![CDATA[QVDocuments]]></VirtualPath>
     </Mapping>
