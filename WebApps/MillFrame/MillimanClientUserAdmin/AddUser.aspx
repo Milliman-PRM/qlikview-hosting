@@ -212,7 +212,7 @@
                 <div class="space"></div>
                 <div class="alert alert-warning infoBox text-justify">
                     <p>
-                        Multiple accounts can be created by entering comma, semi-colon, space or newline delimited emails.  You can also assign password to users by enclosing them in square brackets right after the user name. (eg. someuser@email.com[UserP@ssword1], anotheruser@email.com)
+                        Multiple accounts can be created by entering comma, semi-colon, space or newline delimited emails.  You can also assign a password to a user by enclosing it in square brackets immediately after the user name. (eg. someuser@email.com[UserP@ssword1], anotheruser@email.com)
                     </p>
                 </div>
             </div>
