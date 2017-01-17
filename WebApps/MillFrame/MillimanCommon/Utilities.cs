@@ -133,5 +133,13 @@ namespace MillimanCommon
                 }
             }
         }
+
+        public static string RemoveGUIDFromString(string s)
+        {
+            return s.Substring(
+            s.IndexOf("_") + 1,
+            s.Length - s.IndexOf("_") - 1
+            );
+        }
     }
 }

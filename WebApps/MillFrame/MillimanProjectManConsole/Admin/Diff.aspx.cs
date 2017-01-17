@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.UI;
 using System.Web.UI.WebControls;
+using MillimanCommon;
 
 namespace MillimanProjectManConsole.Admin
 {
@@ -54,11 +53,11 @@ namespace MillimanProjectManConsole.Admin
 
                         string ServerThumb = System.IO.Path.Combine(LocalPS.VirtualDirectory, ServerPS.QVThumbnail);
 
-                        string URL = GetServerFile(ServerThumb);  //MillimanCommon.Utilities.ConvertStringToHex(System.IO.Path.Combine(ServerPS.LoadedFromPath, ServerPS.QVThumbnail));
+                        string URL = GetServerFile(ServerThumb);  //Utilities.ConvertStringToHex(System.IO.Path.Combine(ServerPS.LoadedFromPath, ServerPS.QVThumbnail));
                         if (string.IsNullOrEmpty(URL) == false)
-                            ServerThumbnailMD5 = MillimanCommon.Utilities.CalculateMD5Hash(URL, true);
+                            ServerThumbnailMD5 = Utilities.CalculateMD5Hash(URL, true);
 
-                        ServerThumbnail.ImageUrl = "ImageReflector.aspx?key=" + MillimanCommon.Utilities.ConvertStringToHex( URL );
+                        ServerThumbnail.ImageUrl = "ImageReflector.aspx?key=" + Utilities.ConvertStringToHex( URL );
                         if (System.IO.File.Exists(System.IO.Path.Combine(URL)) == false)
                         {
                             ThumbnailStatus.ImageUrl = "~/images/notequal.png";
@@ -68,20 +67,20 @@ namespace MillimanProjectManConsole.Admin
                         if (string.IsNullOrEmpty(ServerPS.UserManual) == false)
                         {
                             string ServerManualDownload = System.IO.Path.Combine( LocalPS.VirtualDirectory, ServerPS.UserManual);
-                            URL = GetServerFile(ServerManualDownload); //MillimanCommon.Utilities.ConvertStringToHex(System.IO.Path.Combine(ServerPS.LoadedFromPath, ServerPS.UserManual));                      
+                            URL = GetServerFile(ServerManualDownload); //Utilities.ConvertStringToHex(System.IO.Path.Combine(ServerPS.LoadedFromPath, ServerPS.UserManual));
 
                             //sk:VSTS item #1862; if url is empty try _new file. Part 1 of 2
                             if (URL == String.Empty)
                             {
                                 ServerManualDownload = System.IO.Path.Combine(LocalPS.VirtualDirectory, ServerPS.UserManual + "_new");
-                                URL = GetServerFile(ServerManualDownload); //MillimanCommon.Utilities.ConvertStringToHex(System.IO.Path.Combine(ServerPS.LoadedFromPath, ServerPS.UserManual));
+                                URL = GetServerFile(ServerManualDownload); //Utilities.ConvertStringToHex(System.IO.Path.Combine(ServerPS.LoadedFromPath, ServerPS.UserManual));
                             }
 
                             ServerUserManual.Text = ServerPS.UserManual;
                             if (string.IsNullOrEmpty(URL) == false)
-                                ServerManualMD5 = MillimanCommon.Utilities.CalculateMD5Hash(URL, true);
+                                ServerManualMD5 = Utilities.CalculateMD5Hash(URL, true);
 
-                            ServerUserManual.NavigateUrl = "DocumentReflector.asp?key=" + MillimanCommon.Utilities.ConvertStringToHex(URL);
+                            ServerUserManual.NavigateUrl = "DocumentReflector.asp?key=" + Utilities.ConvertStringToHex(URL);
                         }
 
                         string[] GroupList = LocalPS.Groups.Split(new char[] { '~' }, StringSplitOptions.RemoveEmptyEntries);
@@ -117,9 +116,9 @@ namespace MillimanProjectManConsole.Admin
                         LocalServerUpdatedBy.Text = string.IsNullOrEmpty(LocalPS.UploadedToProduction) == true ? "Never" : LocalPS.UploadedToProduction;
                         LocalServerUpdatedOn.Text = string.IsNullOrEmpty(LocalPS.UploadedToProductionDate) == true ? "NA" : LocalPS.UploadedToProductionDate;
 
-                        string URL = MillimanCommon.Utilities.ConvertStringToHex(System.IO.Path.Combine(LocalPS.LoadedFromPath, LocalPS.QVThumbnail));
+                        string URL = Utilities.ConvertStringToHex(System.IO.Path.Combine(LocalPS.LoadedFromPath, LocalPS.QVThumbnail));
                         if (string.IsNullOrEmpty(URL) == false)
-                            LocalThumbnailMD5 = MillimanCommon.Utilities.CalculateMD5Hash(System.IO.Path.Combine(LocalPS.LoadedFromPath, LocalPS.QVThumbnail), true);
+                            LocalThumbnailMD5 = Utilities.CalculateMD5Hash(System.IO.Path.Combine(LocalPS.LoadedFromPath, LocalPS.QVThumbnail), true);
 
                         LocalThumbnail.ImageUrl = "ImageReflector.aspx?key=" + URL;
                         if (System.IO.File.Exists(System.IO.Path.Combine(LocalPS.LoadedFromPath, LocalPS.QVThumbnail)) == false)
@@ -134,29 +133,35 @@ namespace MillimanProjectManConsole.Admin
                             LocalUserManual.Text = LocalPS.UserManual;
                             if (string.IsNullOrEmpty(URL) == false)
                             {
-                                LocalManualMD5 = MillimanCommon.Utilities.CalculateMD5Hash(URL, true);
+                                LocalManualMD5 = Utilities.CalculateMD5Hash(URL, true);
 
-                                //sk:VSTS item #1862; if Md5 is an empty string try _new file. Part 1 of 2
+                                //sk:VSTS item #1862; if Md5 is an empty string try _new file. Part 2 of 2
                                 if (LocalManualMD5 == String.Empty)
                                 {
                                     URL = System.IO.Path.Combine(LocalPS.LoadedFromPath, LocalPS.UserManual + "_new");
                                     LocalUserManual.Text = LocalPS.UserManual;
                                     if (string.IsNullOrEmpty(URL) == false)
                                     {
-                                        LocalManualMD5 = MillimanCommon.Utilities.CalculateMD5Hash(URL, true);
+                                        LocalManualMD5 = Utilities.CalculateMD5Hash(URL, true);
                                     }
                                 }
                             }
-                            LocalUserManual.NavigateUrl = "DocumentReflector.asp?key=" + MillimanCommon.Utilities.ConvertStringToHex(URL);
+                            LocalUserManual.NavigateUrl = "DocumentReflector.asp?key=" + Utilities.ConvertStringToHex(URL);
+
+                            /*
+                             * VSTS #288: After all checks are done, remove the GUID from user manual name so that
+                             * it is displayed without the GUID
+                            */
+                            LocalUserManual.Text = Utilities.RemoveGUIDFromString(LocalPS.UserManual);
+                            ServerUserManual.Text = Utilities.RemoveGUIDFromString(ServerPS.UserManual);
                         }
+
                         string[] GroupList = LocalPS.Groups.Split(new char[] { '~' }, StringSplitOptions.RemoveEmptyEntries);
                         foreach (string GroupName in GroupList)
                         {
                             LocalGroups.Items.Add(GroupName);
                         }
-
                     }
-
                     
                     //we loaded all the defaults,  so attempt to diff stuff
                     if (string.Compare(LocalProjectName.Text, ServerProjectName.Text, true) != 0)
@@ -249,7 +254,7 @@ namespace MillimanProjectManConsole.Admin
                     if ((string.IsNullOrEmpty(LocalQVWFile.Text) == false) && (string.IsNullOrEmpty(ServerQVWFile.Text) == false))
                     {
                         string LocalQVW = LocalPS.LoadedFrom.Replace(LocalPS.ProjectName + ".hciprj", LocalPS.QVName + ".qvw");
-                        string LMD5 = MillimanCommon.Utilities.CalculateMD5Hash(LocalQVW, true);
+                        string LMD5 = Utilities.CalculateMD5Hash(LocalQVW, true);
                         //use local virtual dir below, since it's populated from a mirror on production
                         string ServerQVW = System.IO.Path.Combine( LocalPS.VirtualDirectory, LocalPS.QVName + ".qvw");
                         string SMD5 = Global.GetInstance().GetHash( ServerQVW );
@@ -395,8 +400,8 @@ namespace MillimanProjectManConsole.Admin
         private bool DiffFiles(string Path1, string Path2)
         {
 
-            string MD51 = MillimanCommon.Utilities.CalculateMD5Hash(Path1, true);
-            string MD52 = MillimanCommon.Utilities.CalculateMD5Hash(Path2, true);
+            string MD51 = Utilities.CalculateMD5Hash(Path1, true);
+            string MD52 = Utilities.CalculateMD5Hash(Path2, true);
 
             return (string.Compare(MD51, MD52, true) == 0);
         }
