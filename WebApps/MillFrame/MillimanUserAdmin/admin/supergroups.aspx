@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Supergroups" Language="C#" MasterPageFile="~/admin/themes/default/default.master" AutoEventWireup="true" CodeFile="supergroups.aspx.cs" Inherits="admin_supergroups" %>
+﻿<%@ Page Title="Super Groups" Language="C#" MasterPageFile="~/admin/themes/default/default.master" AutoEventWireup="true" CodeFile="supergroups.aspx.cs" Inherits="admin_supergroups" %>
 
 <%@ Register Src="controls/supergroups.ascx" TagName="access" TagPrefix="uc1" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
