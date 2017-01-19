@@ -190,8 +190,10 @@
                         OnClick="Reset_Click" />
                 </div>
                 <div class="space"></div>
-                <div style="width:833px;" class="alert alert-warning infoBox text-justify">
-                    <p>To create multiple new accounts with the above Data Restriction Selections, enter email addresses as comma, semi-colon, space or newline delimited, then click 'Add List Entry' button.</p>
+                <div class="alert alert-warning infoBox text-justify">
+                    <p>
+                        Multiple accounts can be created by entering comma, semi-colon, space or newline delimited emails.  You can also assign a password to a user by enclosing it in square brackets immediately after the user name. (eg. someuser@email.com[UserP@ssword1], anotheruser@email.com)
+                    </p>
                 </div>
             </div>
 

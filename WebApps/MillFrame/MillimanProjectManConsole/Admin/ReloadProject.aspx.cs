@@ -277,6 +277,7 @@ namespace MillimanProjectManConsole
                     UploadedFile file = UserManual.UploadedFiles[0];
                     byte[] fileData = new byte[file.InputStream.Length];
                     file.InputStream.Read(fileData, 0, (int)file.InputStream.Length);
+
                     if (string.IsNullOrEmpty(PS.UserManual) == false)
                      //need to get rid of old if exists
                     {
@@ -287,7 +288,7 @@ namespace MillimanProjectManConsole
                         if ( System.IO.File.Exists(NewQualifiedUserManual ) )
                             System.IO.File.Delete(NewQualifiedUserManual);
                     }
-                    PS.UserManual = file.FileName;
+                    PS.UserManual = System.Guid.NewGuid().ToString("N") + "_" + file.FileName;
                     PS.Save();
                     System.IO.FileStream fs = System.IO.File.Create(GetTempFile(PS.UserManual), 1000000);
                     System.IO.BinaryWriter BW = new System.IO.BinaryWriter(fs);
