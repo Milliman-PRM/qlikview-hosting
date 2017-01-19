@@ -12,7 +12,6 @@
             display: none;
             visibility: hidden;
         }
-
         .LockOn {
             display: block;
             visibility: visible;
@@ -31,49 +30,23 @@
             font-family: 'Segoe UI';
             overflow: hidden;
         }
-
         .roundShadowContainer {
             margin-top: 10px;
             margin-left: 0;
             margin-bottom: 0;
             margin-right: 0;
         }
-
-        .containerWrap {
-            padding: 4px;
-            width: 75%;
-            background-color: #fdfdfd;
-        }
-
-        .left {
-            float: left;
-            margin: 3px 0 0 6px;
-            text-align: left;
-            padding: 2px;
-        }
-
-        .right {
-            float: right;
-            margin: -5px -23px 0 0;
-            text-align: left;
-        }
-
         .engravedHeader {
             font-size: 14px;
         }
 
-        #divUserRole {
-            width: 748px;
-        }
-
-        divRadPableBar {
-            width: 100%;
+        #divRadPableBar {
+            width: 98%;
         }
 
         #divResults {
-            width: 100%;
+            width: 98%;
         }
-
 
         .imageButtonClass {
             height: 15px;
@@ -84,22 +57,28 @@
             padding: 4px;
         }
         /*//remove expandable image*/
-        .rpExpandHandle
-        {
-            background-image:none!important;
+        .rpExpandHandle {
+            background-image: none !important;
         }
         /*//remove thead gird lines*/
-        .RadGrid_Office2010Silver .rgHeader, .RadGrid_Office2010Silver th.rgResizeCol, .RadGrid_Office2010Silver .rgHeaderWrapper
-        {
-            border:none;
+        .RadGrid_Office2010Silver .rgHeader, .RadGrid_Office2010Silver th.rgResizeCol, .RadGrid_Office2010Silver .rgHeaderWrapper {
+            border: none;
         }
-        .RadGrid_Office2010Silver .rgRow > td, .RadGrid_Office2010Silver .rgAltRow > td, .RadGrid_Office2010Silver .rgEditRow > td, .RadGrid_Office2010Silver .rgFooter > td
-        {
-             border:none;
+
+        .RadGrid_Office2010Silver .rgRow > td, .RadGrid_Office2010Silver .rgAltRow > td, .RadGrid_Office2010Silver .rgEditRow > td, .RadGrid_Office2010Silver .rgFooter > td {
+            border: none;
         }
+
+        .windowScroll {
+            overflow: auto;
+            overflow-y: scroll; 
+            overflow-x: hidden; 
+        }
+        .top-buffer { margin-top:45px; }
     </style>
 </head>
-<body onresize="FullSize('MainTable');" style="overflow: hidden;">
+<body onresize="FullSize('MainTable');" class="windowScroll">
+
     <form id="form1" runat="server">
 
         <telerik:RadScriptManager ID="RadScriptManager1" runat="server">
@@ -123,7 +102,7 @@
                         <span>License Info:</span> <b>
                             <asp:Label ID="License" runat="server" Text=""></asp:Label></b>
                     </div>
-                    <div class="row">&nbsp;</div>
+                    <div class="row top-buffer">&nbsp;</div>
                     <telerik:RadPanelBar runat="server" ID="RadPanelBar1" Height="55%" Width="100%" ExpandMode="FullExpandedItem">
                         <Items>
                             <telerik:RadPanelItem runat="server" Expanded="True" Text="Data Restriction Selections" Value="panItemAccessTree">
@@ -174,7 +153,8 @@
                                 </telerik:GridTemplateColumn>
                                 <telerik:GridTemplateColumn DataField="Account_Name" HeaderText="Account Name" UniqueName="AccountNameText" HeaderStyle-Width="100%">
                                     <ItemTemplate>
-                                        <label id="lblAccountNameTextBox" for="AccountNameTextBox" class="labelweak required"></label>&nbsp;
+                                        <label id="lblAccountNameTextBox" for="AccountNameTextBox" class="labelweak required"></label>
+                                        &nbsp;
                                         <asp:TextBox ID="AccountNameTextBox" runat="server" AutoPostBack="false" Text='<%#Eval("Account_Name") %>' Width="90%" Height="27px" CssClass="standardTextBox"></asp:TextBox>
                                     </ItemTemplate>
                                     <HeaderStyle Width="100%"></HeaderStyle>
@@ -219,7 +199,7 @@
 
             <div id="LockPane" class="LockOff" style="overflow: hidden">
                 <div id="progressBackgroundFilter"></div>
-                <div id="progressBarWindow" class="progressBarWindow center-block" style="top:26px">
+                <div id="progressBarWindow" class="progressBarWindow center-block" style="top: 26px;">
                     <asp:Image ID="loaderImage" runat="server" ImageUrl="~/Content/Images/ajax-loader-bar.gif" Width="248px" Height="30px" />
                     <div class="space"></div>
                     <span class="engravedHeader">Please Wait....</span>
@@ -318,7 +298,6 @@
             //This method is used when deleting the 'last' row in the grid, it cancels the removal of the 
             //last row and clear then values in the row.  Event is attached to deleting row of RadGrid
             function RowDeleting(sender, eventArgs) {
-                debugger;
                 var grid = $find('<%=RadGrid1.ClientID %>');
                 if (grid) {
                     var MasterTable = grid.get_masterTableView();
@@ -347,6 +326,7 @@
             }
         </script>
     </form>
+
 
     <script type="text/javascript">
         FullSize("MainTable");
