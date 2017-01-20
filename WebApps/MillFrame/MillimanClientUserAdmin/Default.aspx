@@ -238,7 +238,7 @@
 
         <telerik:RadWindowManager EnableShadow="true" Behaviors="Resize, Close, Maximize, Move, Reload" ID="RadWindowManager" DestroyOnClose="true" Opacity="100" runat="server" Width="450" Height="400" VisibleStatusbar="False" Style="z-index: 20000;">
             <Windows>
-                <telerik:RadWindow ID="RadWindow1" runat="server" Animation="Fade" AutoSize="True" Behaviors="Resize, Close, Move, Reload, Maximize" Modal="True" Height="800px" Width="600px" InitialBehaviors="Close" Title="Add User(s)" VisibleStatusbar="False" VisibleTitlebar="False" />
+                <telerik:RadWindow ID="RadWindow1" runat="server" Animation="Fade" AutoSize="True" Behaviors="Resize, Close, Move, Reload, Maximize" Modal="True" Height="900px" Width="650px" InitialBehaviors="Close" Title="Add User(s)" VisibleStatusbar="False" VisibleTitlebar="False" />
             </Windows>
         </telerik:RadWindowManager>
 
