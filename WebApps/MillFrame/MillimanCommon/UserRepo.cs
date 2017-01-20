@@ -310,7 +310,8 @@ namespace MillimanCommon
                 for (int Index = QV.Value.Count - 1; Index >= 0; Index--)
                 {
                     string QualafiedQVW = System.IO.Path.Combine(QVRoot, QV.Value[Index].QualifiedPathName);
-                    if (System.IO.File.Exists(QualafiedQVW) == false)
+                    string OfflineQualafiedQVW = QualafiedQVW.ToLower().Replace(".qvw", ".offline");
+                    if ((System.IO.File.Exists(QualafiedQVW) == false) && (System.IO.File.Exists(OfflineQualafiedQVW) == false))
                     {
                         QV.Value.RemoveAt(Index);
                         UserMapModfied = true;
