@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Dynamic;
 using System.Configuration;
+using System.IO;
 
 namespace MillimanCommon
 {
@@ -28,7 +29,7 @@ namespace MillimanCommon
                 set { _ProjectSettings = value; }
             }
 
-           
+
             //this access list is specific for this qualified project
             private string _ProjectPath;
 
@@ -45,7 +46,7 @@ namespace MillimanCommon
                     string RepoFilePath = ConfigurationManager.AppSettings["QVDocumentRoot"];
                     if (string.IsNullOrEmpty(RepoFilePath) == false)
                     {
-                        return _ProjectPath.Substring(RepoFilePath.Length+1); //remote the root to make relative
+                        return _ProjectPath.Substring(RepoFilePath.Length + 1); //remote the root to make relative
                     }
                     return _ProjectPath;
                 }
@@ -75,17 +76,17 @@ namespace MillimanCommon
 
                     if (string.IsNullOrEmpty(_ReducedQVW) == false)
                     {
-                        if ( _ReducedQVW.Contains(':') == true ) //absolute path, make it relative to QV root
+                        if (_ReducedQVW.Contains(':') == true) //absolute path, make it relative to QV root
                             return _ReducedQVW.Substring(RepoFilePath.Length + 1);
                         return _ReducedQVW;  //already relative
                     }
-    
+
                     return string.Empty;  //error, could not find QVW
                 }
             }
-            public UserAccess( string QVFile, UserRepo.QVEntity _QV, string ReducedQVFile )
+            public UserAccess(string QVFile, UserRepo.QVEntity _QV, string ReducedQVFile)
             {
-                _ProjectPath = QVFile.ToLower();;
+                _ProjectPath = QVFile.ToLower(); ;
                 _QVEntity = _QV;
                 _ReducedVersionNotAvailable = false;
                 ReducedQVW = ReducedQVFile;
@@ -94,6 +95,17 @@ namespace MillimanCommon
                     _ProjectSettings = ProjectSettings.Load(Settings);
                 else
                     Report.Log(Report.ReportType.Error, "Missing QVW file descriptor - " + Settings);
+
+                //assume the project settings did not load since there was no .qvw but a .offline file exist, then load the settings for that .offline file 
+                if (_ProjectSettings == null)
+                {
+                    if (File.Exists(QVFile.Replace(".qvw", ".OFFLINE")))
+                    {
+                        if (File.Exists(_ProjectPath.Replace(".OFFLINE", ".hciprj")))
+                            _ProjectSettings = ProjectSettings.Load(_ProjectPath.Replace(".OFFLINE", ".hciprj"));
+                    }
+                }
+
             }
 
             /// <summary>
@@ -111,6 +123,16 @@ namespace MillimanCommon
                     _ProjectSettings = ProjectSettings.Load(Settings);
                 else
                     Report.Log(Report.ReportType.Error, "Missing QVW file descriptor - " + Settings);
+
+                //assume the project settings did not load since there was no .qvw but a .offline file exist, then load the settings for that .offline file 
+                if (_ProjectSettings == null)
+                {
+                    if (File.Exists(QVFile.Replace(".qvw", ".OFFLINE")))
+                    {
+                        if (File.Exists(_ProjectPath.Replace(".OFFLINE", ".hciprj")))
+                            _ProjectSettings = ProjectSettings.Load(_ProjectPath.Replace(".OFFLINE", ".hciprj"));
+                    }
+                }
             }
         }
 
@@ -123,9 +145,9 @@ namespace MillimanCommon
             set { _ACL = value; }
         }
 
-        public UserAccessList(string UserName, string[] UserRoles, bool IsClientAdmin )
+        public UserAccessList(string UserName, string[] UserRoles, bool IsClientAdmin)
         {
-            ResolveACL(UserName, UserRoles, IsClientAdmin );
+            ResolveACL(UserName, UserRoles, IsClientAdmin);
         }
 
         /// <summary>
@@ -133,7 +155,7 @@ namespace MillimanCommon
         /// have 1 entry for each QVW file accessable
         /// </summary>
         /// <param name="UserName"></param>
-        private void ResolveACL(string UserName, string[] UserRoles, bool IsClientAdmin )
+        private void ResolveACL(string UserName, string[] UserRoles, bool IsClientAdmin)
         {
             UserRepo UR = UserRepo.GetInstance();
             List<ExpandoObject> QVFiles = UR.FindAllQVProjectsForUser(UserName, UserRoles, !IsClientAdmin);
@@ -150,7 +172,7 @@ namespace MillimanCommon
                 string QVWRole = EO.Role;
                 if (StrictGroups.IndexOf(QVWRole.ToLower()) == -1)  //NOT strict rules
                 {
-                    if ( string.IsNullOrEmpty( EO.ReducedQVFilename ) == false )
+                    if (string.IsNullOrEmpty(EO.ReducedQVFilename) == false)
                         _ACL.Add(new UserAccess(EO.QVFilename, EO.QVEntity, EO.ReducedQVFilename)); //show reduced version
                     else
                         _ACL.Add(new UserAccess(EO.QVFilename, EO.QVEntity, EO.QVFilename));      //show master version

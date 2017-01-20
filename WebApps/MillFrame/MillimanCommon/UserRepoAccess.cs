@@ -10,6 +10,7 @@ namespace MillimanCommon
 {
     public partial class UserRepo
     {
+        public string offlineExtention = ".OFFLINE";
 
         /// <summary>
         /// called by assertion page, pinged by covisint,  they will provide the name of the report
@@ -26,7 +27,7 @@ namespace MillimanCommon
         /// <param name="UserName">Covisint Enterprise ID</param>
         /// <param name="QVProjectName">Always a project name - comes from Covisint application</param>
         /// <returns></returns>
-        public string FindQualifedQVProject(string UserName, string QVProjectName, string[] Roles )
+        public string FindQualifedQVProject(string UserName, string QVProjectName, string[] Roles)
         {
             List<ExpandoObject> AllProjects = FindAllQVProjectsForUser(UserName, Roles);
             if (AllProjects != null)
@@ -34,7 +35,7 @@ namespace MillimanCommon
                 foreach (dynamic EO in AllProjects)
                 {
                     string UserProject = EO.QVFilename;
-                    
+
                     string ProjectFile = Path.GetFileNameWithoutExtension(UserProject) + @".hciprj";
                     if (string.Compare(QVProjectName, ProjectFile, true) == 0)
                         return EO.ReducedQVFilename;
@@ -62,6 +63,16 @@ namespace MillimanCommon
                     {
                         Projects.Add(PathFile);
                     }
+                    //if there is an .offline file but no .qvw then add that file to project 
+                    if (File.Exists(PathFile.Replace(".qvw", offlineExtention)))
+                    {
+                        string offlineFile = System.IO.Path.Combine(QVRoot, Q.QualifiedPathName.Replace(".qvw", offlineExtention));
+                        if (File.Exists(offlineFile))
+                        {
+                            Projects.Add(offlineFile);
+                        }
+                    }
+
                 }
             }
             return Projects;
@@ -70,20 +81,34 @@ namespace MillimanCommon
         public List<string> FindAllProjectsForRole(string Role)
         {
             List<string> All = FindAllQVProjectsForRole(Role);
-            //this works because of the 1 to 1 mapping between QVWs and projects, just change the extension
-            return All.Select(x => x.Replace(@".qvw", @".hciprj")).ToList();
+
+            //if the list has items with .qvw or .OFFLINE
+            var finalList = All.Select(obj =>
+            {
+                //if the object contains .qvw
+                obj.Contains(@".qvw");
+                return obj.Replace(@".qvw", @".hciprj");
+            })
+                                        .ToList()
+                                        .Select(obj =>
+                                        {
+                                            //if the object contains .offline
+                                            obj.Contains(offlineExtention);
+                                            return obj.Replace(offlineExtention, @".hciprj");
+                                        }).ToList();
+            return finalList;
         }
 
         /// <summary>
         /// Get all the QV projects for this user,  file extensions must be QVW
-        
+
         /// </summary>
         /// <param name="UserName"></param>
         /// <param name="UserRoles">User roles are now stored in the database</param>
         /// <returns>A list of expand objects with attributes: QVEntity QVFilename</returns>
-        public List< ExpandoObject > FindAllQVProjectsForUser(string UserName, string[] UserRoles = null, bool GetReducedVersions = true )
+        public List<ExpandoObject> FindAllQVProjectsForUser(string UserName, string[] UserRoles = null, bool GetReducedVersions = true)
         {
-            
+
             string QVRoot = ConfigurationManager.AppSettings["QVDocumentRoot"];
             List<ExpandoObject> QVs = new List<ExpandoObject>();
 
@@ -107,6 +132,20 @@ namespace MillimanCommon
                                 EO.ReducedQVFilename = string.Empty;
                                 QVs.Add(EO);
                             }
+                            //if the file is offline, load that file properties
+                            if (PathFile.Contains(offlineExtention))
+                            {
+                                string PathFileOffline = PathFile.Replace(".qvw", offlineExtention);
+                                if (File.Exists(PathFileOffline))
+                                {
+                                    dynamic EO = new ExpandoObject();
+                                    EO.QVEntity = Q;
+                                    EO.QVFilename = PathFileOffline;
+                                    EO.Role = Role;
+                                    EO.ReducedQVFilename = string.Empty;
+                                    QVs.Add(EO);
+                                }
+                            }
                         }
                     }
                 }
@@ -124,10 +163,10 @@ namespace MillimanCommon
                         EO.Role = "[Direct]";
                         EO.QVFilename = System.IO.Path.Combine(QVRoot, QVE.QualifiedPathName);
                         EO.ReducedQVFilename = string.Empty;
-                        if ( File.Exists(EO.QVFilename) )
+                        if (File.Exists(EO.QVFilename))
                             QVs.Add(EO);
                     }
-                        //this was removed due to possible security issues - VWN
+                    //this was removed due to possible security issues - VWN
                     //else if (QVE.IsDirectory == true)
                     //{  //we should get rid of this, will cause security issues
                     //      string[] DirItems = Directory.GetFiles(QVE.QualifiedPathName, "*.qvw", SearchOption.AllDirectories);
@@ -144,17 +183,17 @@ namespace MillimanCommon
                     //}
                     else if (QVE.IsRole == true)
                     {  //don't think we use this
-                           List<QVEntity> RoleItems = RoleMap[QVE.QualifiedPathName];
-                           foreach (QVEntity Q in RoleItems)
-                           {
-                               dynamic EO = new ExpandoObject();
-                               EO.QVEntity = QVE;
-                               EO.Role = "[FileRole]";
-                               EO.QVFilename = System.IO.Path.Combine(QVRoot, QVE.QualifiedPathName);
-                               EO.ReducedQVFilename = string.Empty;
-                               if (File.Exists(EO.QVFilename)) 
-                                   QVs.Add(EO);
-                           }
+                        List<QVEntity> RoleItems = RoleMap[QVE.QualifiedPathName];
+                        foreach (QVEntity Q in RoleItems)
+                        {
+                            dynamic EO = new ExpandoObject();
+                            EO.QVEntity = QVE;
+                            EO.Role = "[FileRole]";
+                            EO.QVFilename = System.IO.Path.Combine(QVRoot, QVE.QualifiedPathName);
+                            EO.ReducedQVFilename = string.Empty;
+                            if (File.Exists(EO.QVFilename))
+                                QVs.Add(EO);
+                        }
                     }
                 }
             }
@@ -164,7 +203,7 @@ namespace MillimanCommon
                 //now loop over QVWs and check for reduced version, if not available then remove entry
                 for (int Index = QVs.Count - 1; Index >= 0; Index--)
                 {
-                    dynamic EOI = QVs[Index]; 
+                    dynamic EOI = QVs[Index];
                     EOI.ReducedQVFilename = ReducedQVWUtilities.ReducedQVWRedirected(EOI.QVFilename, UserName); //returns empty if not exist
                 }
             }
@@ -220,7 +259,7 @@ namespace MillimanCommon
                     }
                 }
             }
-            catch (Exception ex )
+            catch (Exception ex)
             {
                 MillimanCommon.Report.Log(Report.ReportType.Error, "Unspecified", ex);
                 throw;
