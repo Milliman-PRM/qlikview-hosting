@@ -3,6 +3,6 @@
     <br />
 
     <div style="margin: 15px auto auto auto;">
-    PRM User Administration v4.0
+    PRM User Administration v4.1.0
     </div>
 </div>
