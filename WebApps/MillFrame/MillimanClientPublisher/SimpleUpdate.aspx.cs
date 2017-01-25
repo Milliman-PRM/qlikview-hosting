@@ -78,7 +78,7 @@ namespace ClientPublisher
                             //Upating User Manual
                             else if (DocumentExtensions.Contains(System.IO.Path.GetExtension(F).ToLower()))
                             {
-                                DisplayMessage = "Updating user manual.....";
+                                DisplayMessage = "Updating user guide.....";
                                 string To = System.IO.Path.Combine(ProjectSettings.AbsoluteProjectPath, ProjectSettings.QVName + System.IO.Path.GetExtension(F));
                                 System.IO.File.Copy(F, To);
                                 ProjectSettings.UserManual = System.IO.Path.GetFileName(To);
