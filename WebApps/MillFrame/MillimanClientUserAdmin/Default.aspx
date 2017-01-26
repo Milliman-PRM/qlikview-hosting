@@ -444,6 +444,7 @@
 
             var wnd = window.radopen("AddUser.aspx", "Add User(s)", x / 2, y / 1.2);
             wnd.set_modal(true);
+            wnd.moveTo(0, 0);
 
             return false;
         }
