@@ -207,6 +207,16 @@
             </div>
 
         </div>
+        <script>
+            if (window.clipboardData) {
+                $('#RadGrid1_ctl00_ctl04_AccountNameTextBox').bind('paste', function (e) {
+                    var clipped = window.clipboardData.getData('Text');
+                    clipped = clipped.replace(/(\r\n|\n|\r)/gm, " "); //replace newlines with spaces
+                    $(this).val(clipped);
+                    return false; //cancel the pasting event
+                });
+            }
+        </script>
 
         <script type="text/javascript">
 
