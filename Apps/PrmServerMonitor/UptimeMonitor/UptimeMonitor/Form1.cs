@@ -16,7 +16,7 @@ namespace UptimeMonitor
     public partial class Form1 : Form
     {
         UptimeTest Library = null;
-        int TimerIntervalSeconds = 5;  // default can be overridden with appsetting named "TimerIntervalSeconds"
+        int TimerIntervalSeconds = 5 * 60;  // default can be overridden with appsetting named "TimerIntervalSeconds"
         string FormTextBase = "PRM Uptime Monitor";
 
         /// <summary>
@@ -27,6 +27,7 @@ namespace UptimeMonitor
             InitializeComponent();
 
             this.TextBoxLogPath.DoubleClick += new System.EventHandler(this.PromptForLogPath);
+            this.FormClosing += new FormClosingEventHandler(this.Form1_FormClosing);
         }
 
         /// <summary>
@@ -46,6 +47,14 @@ namespace UptimeMonitor
             this.Text = FormTextBase + " - Time Interval " + TimerIntervalSeconds + " Seconds";
 
             Library = new UptimeTest(TimerIntervalSeconds);
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (ButtonStop.Enabled == true)
+            {
+                ButtonStop_Click(null, null);
+            }
         }
 
         /// <summary>

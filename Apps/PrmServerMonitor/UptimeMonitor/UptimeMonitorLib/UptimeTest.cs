@@ -95,7 +95,7 @@ namespace UptimeMonitorLib
                     }
                 }
 
-                LogWriter.WriteLine(LogText);
+                Trace.WriteLine(LogText);
             }
         }
 
