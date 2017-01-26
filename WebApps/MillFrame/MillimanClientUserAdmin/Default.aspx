@@ -438,10 +438,12 @@
         }
 
         function OpenAddUser() {
-            var wnd = window.radopen("AddUser.aspx", "Add User(s)");
-            wnd.setSize(935, 700);
+            var zone = document.getElementById('zone'),
+                x = zone.clientWidth,
+                y = zone.clientHeight;
+
+            var wnd = window.radopen("AddUser.aspx", "Add User(s)", x / 2, y / 1.2);
             wnd.set_modal(true);
-            wnd.moveTo(0, 0);
 
             return false;
         }
@@ -466,40 +468,40 @@
             else {
                 if (!gridItem.get_isInEditMode()) {
                     __doPostBack("<%= UserGrid.UniqueID %>", "RowClick;" + eventArgs.get_itemIndexHierarchical());
-               }
+                }
+            }
+        }
+        function RowDoubleClick(sender, eventArgs) {
+            var gridItem = sender.get_masterTableView().get_dataItems()[eventArgs.get_itemIndexHierarchical()];
+            if (!gridItem.get_isInEditMode()) {
+                __doPostBack("<%= UserGrid.UniqueID %>", "RowDoubleClick;" + eventArgs.get_itemIndexHierarchical());
            }
        }
-       function RowDoubleClick(sender, eventArgs) {
-           var gridItem = sender.get_masterTableView().get_dataItems()[eventArgs.get_itemIndexHierarchical()];
-           if (!gridItem.get_isInEditMode()) {
-               __doPostBack("<%= UserGrid.UniqueID %>", "RowDoubleClick;" + eventArgs.get_itemIndexHierarchical());
-            }
-        }
-        function FullSize(element) {
-            var height = 0;
-            var width = 0;
-            var body = window.document.body;
-            if (window.innerHeight) {
-                height = window.innerHeight;
-                width = window.innerWidth;
-            } else if (body.parentElement.clientHeight) {
-                height = body.parentElement.clientHeight;
-                width = body.parentElement.clientWidth;
-            } else if (body && body.clientHeight) {
-                height = body.clientHeight;
-                width = body.clientWidth;
-            }
-            //margines
-            height = height - 15;
-            width = width - 15;
+       function FullSize(element) {
+           var height = 0;
+           var width = 0;
+           var body = window.document.body;
+           if (window.innerHeight) {
+               height = window.innerHeight;
+               width = window.innerWidth;
+           } else if (body.parentElement.clientHeight) {
+               height = body.parentElement.clientHeight;
+               width = body.parentElement.clientWidth;
+           } else if (body && body.clientHeight) {
+               height = body.clientHeight;
+               width = body.clientWidth;
+           }
+           //margines
+           height = height - 15;
+           width = width - 15;
 
-            document.getElementById(element).style.height = height + "px";
-            document.getElementById(element).style.width = width + "px";
-            document.getElementById(element).style.visibility = "visible";
-        }
+           document.getElementById(element).style.height = height + "px";
+           document.getElementById(element).style.width = width + "px";
+           document.getElementById(element).style.visibility = "visible";
+       }
 
 
-        FullSize("MainTable");
+       FullSize("MainTable");
     </script>
 </body>
 </html>
