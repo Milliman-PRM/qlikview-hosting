@@ -58,7 +58,7 @@ namespace ClientPublisher
                     //Upating User Manual
                     else if (DocumentExtensions.Contains(System.IO.Path.GetExtension(F).ToLower()))
                     {
-                        NewItems.Items.Add("New User Manual");
+                        NewItems.Items.Add("New User Guide");
                     }
                     //Updating Tool Tip
                     else if (System.IO.Path.GetFileName(F).ToLower() == "tooltip.dat")

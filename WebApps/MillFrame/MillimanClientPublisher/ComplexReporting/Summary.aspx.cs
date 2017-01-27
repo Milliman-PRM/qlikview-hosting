@@ -93,12 +93,12 @@ namespace ClientPublisher
                         if (string.IsNullOrEmpty(UserManual.Text))
                         {
                             UserManualStatus.ImageUrl = "~/images/warning-icon.png";
-                            UserManualStatus.ToolTip = "No user manual was specified - a users manual is not required.";
+                            UserManualStatus.ToolTip = "No user guide was specified - a users guide is not required.";
                         }
                         else if (System.IO.File.Exists(System.IO.Path.Combine(LocalPS.LoadedFromPath, LocalPS.UserManual)) == false)
                         {
                             UserManualStatus.ImageUrl = "~/images/stop-icon.png";
-                            UserManualStatus.ToolTip = "The user manual file is missing, please reload the user manual.";                   
+                            UserManualStatus.ToolTip = "The user guide file is missing, please reload the user guide.";                   
                         }
                         //if (Groups.Items.Count == 0)
                         //{
