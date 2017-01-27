@@ -49,12 +49,12 @@
             // 
             this.TextBoxLogPath.Location = new System.Drawing.Point(12, 29);
             this.TextBoxLogPath.Name = "TextBoxLogPath";
-            this.TextBoxLogPath.Size = new System.Drawing.Size(384, 20);
+            this.TextBoxLogPath.Size = new System.Drawing.Size(452, 20);
             this.TextBoxLogPath.TabIndex = 1;
             // 
             // ButtonStop
             // 
-            this.ButtonStop.Location = new System.Drawing.Point(321, 55);
+            this.ButtonStop.Location = new System.Drawing.Point(389, 55);
             this.ButtonStop.Name = "ButtonStop";
             this.ButtonStop.Size = new System.Drawing.Size(75, 23);
             this.ButtonStop.TabIndex = 2;
@@ -75,7 +75,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(408, 90);
+            this.ClientSize = new System.Drawing.Size(476, 90);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.ButtonStop);
             this.Controls.Add(this.TextBoxLogPath);
