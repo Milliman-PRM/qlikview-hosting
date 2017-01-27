@@ -95,7 +95,7 @@ namespace UptimeMonitor
         private void PromptForLogPath(object sender, EventArgs e)
         {
             DialogResult Res = FolderBrowserDialog1.ShowDialog(this);
-            if (Directory.Exists(FolderBrowserDialog1.SelectedPath))
+            if (Res == DialogResult.OK && Directory.Exists(FolderBrowserDialog1.SelectedPath))
             {
                 TextBoxLogPath.Text = FolderBrowserDialog1.SelectedPath;
             }

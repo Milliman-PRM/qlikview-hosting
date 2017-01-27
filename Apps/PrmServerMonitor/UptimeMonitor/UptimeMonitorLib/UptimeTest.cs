@@ -19,6 +19,10 @@ namespace UptimeMonitorLib
         TextWriterTraceListener LogWriter;
         HttpClient Client;
 
+        /// <summary>
+        /// Constructor, initializes invariant parameters
+        /// </summary>
+        /// <param name="TimerIntervalSeconds"></param>
         public UptimeTest(int TimerIntervalSeconds)
         {
             Trace.AutoFlush = true;
@@ -32,32 +36,53 @@ namespace UptimeMonitorLib
             TestStartTimer.AutoReset = true;
         }
 
+        /// <summary>
+        /// Enables the timer that initiates periodic calls to the PRM server and begins logging
+        /// </summary>
+        /// <param name="LogFolder"></param>
         public void Start(string LogFolder)
         {
-            string LogFileName = "UptimeMonitorLog_" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + ".txt";
-
             ResetTrace();
+
+            string LogFileName = "UptimeMonitorLog_" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + ".txt";
             LogWriter = new TextWriterTraceListener(Path.Combine(LogFolder, LogFileName));
+
             Trace.Listeners.Add(LogWriter);
 
             TestStartTimer.Start();
         }
 
+        /// <summary>
+        /// Terminates logging and stops monitoring
+        /// </summary>
         public void Stop()
         {
             TestStartTimer.Stop();
 
-            LogWriter.Flush();
-            LogWriter.Close();
             ResetTrace();
             LogWriter = null;
         }
 
+        /// <summary>
+        /// Resets the Trace.Listeners collection to contain one console listener and no other listeners
+        /// </summary>
         private void ResetTrace()
         {
+            foreach (TraceListener Listener in Trace.Listeners)
+            {
+                Listener.Flush();
+                Listener.Close();
+            }
+
             Trace.Listeners.Clear();
             Trace.Listeners.Add(new ConsoleTraceListener());
         }
+
+        /// <summary>
+        /// Executes one test of the PRM server.  Intended as a timer event handler
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="e"></param>
         private void PerformUptimeTest(Object source, ElapsedEventArgs e)
         {
             //LogWriter.WriteLine("The Elapsed event was raised at " + e.SignalTime.ToString("HH:mm:ss.fff"));
