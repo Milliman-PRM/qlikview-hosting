@@ -41,7 +41,7 @@ public class UserInfo
         set { _ValidationImage = value; }
     }
 
-    private bool _SendWelcomeEmail = true;
+    private bool _SendWelcomeEmail = false;
 
     public bool SendWelcomeEmail
     {

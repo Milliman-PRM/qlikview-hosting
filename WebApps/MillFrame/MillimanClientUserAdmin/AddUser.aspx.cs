@@ -259,7 +259,7 @@ namespace MillimanClientUserAdmin
                     ParsedItems = true;
                     foreach (string Token in Tokens)
                     {
-                        NewUI.Add(new UserInfo(Token.Trim(), true, false));
+                        NewUI.Add(new UserInfo(Token.Trim(), false, false));
                     }
                 }
                 else
@@ -269,7 +269,7 @@ namespace MillimanClientUserAdmin
             }
 
             if (ParsedItems == false)  //we didn't find any multi line entries, so they clicked to add a new entry, so add one
-                NewUI.Add(new UserInfo("", true, false));
+                NewUI.Add(new UserInfo("", false, false));
             return NewUI;
         }
 
