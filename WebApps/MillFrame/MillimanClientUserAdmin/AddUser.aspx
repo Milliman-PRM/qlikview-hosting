@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link href="Content/Style/bootstrap.css" rel="stylesheet" type="text/css" />
     <link href="Content/Style/MillframeStyle.css" rel="stylesheet" type="text/css" />
-  <style type="text/css">
+    <style type="text/css">
         .LockOff {
             display: none;
             visibility: hidden;
@@ -42,6 +42,7 @@
         .containerWrap {
             padding: 4px;
         }
+
         .engravedHeader {
             font-size: 14px;
         }
@@ -55,28 +56,30 @@
             padding: 4px;
         }
         /*//remove expandable image*/
-        .rpExpandHandle
-        {
-            background-image:none!important;
+        .rpExpandHandle {
+            background-image: none !important;
         }
         /*//remove thead gird lines*/
-        .RadGrid_Office2010Silver .rgHeader, .RadGrid_Office2010Silver th.rgResizeCol, .RadGrid_Office2010Silver .rgHeaderWrapper
-        {
-            border:none;
+        .RadGrid_Office2010Silver .rgHeader, .RadGrid_Office2010Silver th.rgResizeCol, .RadGrid_Office2010Silver .rgHeaderWrapper {
+            border: none;
         }
-        .RadGrid_Office2010Silver .rgRow > td, .RadGrid_Office2010Silver .rgAltRow > td, .RadGrid_Office2010Silver .rgEditRow > td, .RadGrid_Office2010Silver .rgFooter > td
-        {
-             border:none;
+
+        .RadGrid_Office2010Silver .rgRow > td, .RadGrid_Office2010Silver .rgAltRow > td, .RadGrid_Office2010Silver .rgEditRow > td, .RadGrid_Office2010Silver .rgFooter > td {
+            border: none;
         }
-         .top-buffer { margin-top:40px; }
-         .windowScroll {
+
+        .top-buffer {
+            margin-top: 40px;
+        }
+
+        .windowScroll {
             overflow: auto;
-            overflow-y: scroll; 
-            overflow-x: hidden; 
+            overflow-y: scroll;
+            overflow-x: hidden;
         }
     </style>
 </head>
-<body onresize="FullSize('MainTable');" class="windowScroll" >
+<body onresize="FullSize('MainTable');" class="windowScroll">
 
     <form id="form1" runat="server">
 
@@ -205,9 +208,17 @@
                     <div class="space"></div>
                 </div>
             </div>
-
         </div>
-
+        <script>
+            if (window.clipboardData) {
+                $('#RadGrid1_ctl00_ctl04_AccountNameTextBox').bind('paste', function (e) {
+                    var clipped = window.clipboardData.getData('Text');
+                    clipped = clipped.replace(/(\r\n|\n|\r)/gm, " "); //replace newlines with spaces
+                    $(this).val(clipped);
+                    return false; //cancel the pasting event
+                });
+            }
+        </script>
         <script type="text/javascript">
 
             function StartProcessing() {
@@ -325,8 +336,6 @@
             }
         </script>
     </form>
-
-
     <script type="text/javascript">
         FullSize("MainTable");
     </script>
