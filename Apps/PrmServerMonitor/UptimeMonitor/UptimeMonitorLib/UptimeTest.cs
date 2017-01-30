@@ -107,7 +107,7 @@ namespace UptimeMonitorLib
                         case "Status":
                             //byte[] DecodedStatus = System.Convert.FromBase64String(b.InnerText);
                             string x = new CopyOfMillimanCommon().AutoDecrypt(b.InnerText);
-                            LogText = LogText + x;
+                            LogText = LogText + " HTTP status " + (int)Response.StatusCode + ":" + Response.StatusCode + " - " + x;
                             //LogText = LogText + System.Text.Encoding.UTF8.GetString(x);
                             break;
 

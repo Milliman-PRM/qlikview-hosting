@@ -46,6 +46,8 @@ namespace UptimeMonitor
 
             this.Text = FormTextBase + " - Time Interval " + TimerIntervalSeconds + " Seconds";
 
+            TextBoxLogPath.Text = Directory.GetCurrentDirectory(); ;
+
             Library = new UptimeTest(TimerIntervalSeconds);
         }
 
