@@ -59,9 +59,25 @@ namespace ConfigComparisonGui
                 dataGridView3.DataSource = Result.ComparisonResults;
                 dataGridView3.DataMember = "KeysInPath2Only";
 
+                dataGridView4.DataSource = Result.ComparisonResults;
+                dataGridView4.DataMember = "ConnectionStrings";
+
+                foreach (DataGridViewRow Row in dataGridView4.Rows)
+                {
+                    Row.DefaultCellStyle.BackColor = Color.LightPink;//to color the row
+                    if (Row.Cells["Path 1 Value"].Value.ToString() != Row.Cells["Path 2 Value"].Value.ToString())
+                    {
+                        Row.DefaultCellStyle.BackColor = Color.LightPink;//to color the row
+                    }
+                    else
+                    {
+                        Row.DefaultCellStyle.BackColor = Color.LightGreen;
+                    }
+                }
+
                 foreach (DataGridViewRow Row in dataGridView1.Rows)
                 {
-                    if (Row.Cells["Path1 Value"].Value.ToString() != Row.Cells["Path2 Value"].Value.ToString())
+                    if (Row.Cells["Path 1 Value"].Value.ToString() != Row.Cells["Path 2 Value"].Value.ToString())
                     {
                         Row.DefaultCellStyle.BackColor = Color.LightPink;//to color the row
                     }

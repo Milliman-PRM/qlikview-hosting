@@ -43,6 +43,8 @@
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.TabPagePath2Only = new System.Windows.Forms.TabPage();
             this.dataGridView3 = new System.Windows.Forms.DataGridView();
+            this.TabPageConnectionStrings = new System.Windows.Forms.TabPage();
+            this.dataGridView4 = new System.Windows.Forms.DataGridView();
             this.tabControl1.SuspendLayout();
             this.TabPageBoth.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -50,6 +52,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.TabPagePath2Only.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).BeginInit();
+            this.TabPageConnectionStrings.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView4)).BeginInit();
             this.SuspendLayout();
             // 
             // TextBoxPath1
@@ -124,6 +128,7 @@
             this.tabControl1.Controls.Add(this.TabPageBoth);
             this.tabControl1.Controls.Add(this.TabPagePath1Only);
             this.tabControl1.Controls.Add(this.TabPagePath2Only);
+            this.tabControl1.Controls.Add(this.TabPageConnectionStrings);
             this.tabControl1.Location = new System.Drawing.Point(13, 151);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -135,7 +140,6 @@
             this.TabPageBoth.Controls.Add(this.dataGridView1);
             this.TabPageBoth.Location = new System.Drawing.Point(4, 22);
             this.TabPageBoth.Name = "TabPageBoth";
-            this.TabPageBoth.Padding = new System.Windows.Forms.Padding(3);
             this.TabPageBoth.Size = new System.Drawing.Size(751, 373);
             this.TabPageBoth.TabIndex = 0;
             this.TabPageBoth.Text = "Keys In Both Paths";
@@ -145,12 +149,13 @@
             // 
             this.dataGridView1.AllowUserToAddRows = false;
             this.dataGridView1.AllowUserToDeleteRows = false;
+            this.dataGridView1.AllowUserToResizeRows = false;
             this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView1.Location = new System.Drawing.Point(3, 3);
+            this.dataGridView1.Location = new System.Drawing.Point(0, 0);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(745, 367);
+            this.dataGridView1.Size = new System.Drawing.Size(751, 373);
             this.dataGridView1.TabIndex = 0;
             // 
             // TabPagePath1Only
@@ -161,13 +166,14 @@
             this.TabPagePath1Only.Padding = new System.Windows.Forms.Padding(3);
             this.TabPagePath1Only.Size = new System.Drawing.Size(751, 373);
             this.TabPagePath1Only.TabIndex = 1;
-            this.TabPagePath1Only.Text = "Path 1 Only";
+            this.TabPagePath1Only.Text = "Keys In Path 1 Only";
             this.TabPagePath1Only.UseVisualStyleBackColor = true;
             // 
             // dataGridView2
             // 
             this.dataGridView2.AllowUserToAddRows = false;
             this.dataGridView2.AllowUserToDeleteRows = false;
+            this.dataGridView2.AllowUserToResizeRows = false;
             this.dataGridView2.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView2.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -184,13 +190,14 @@
             this.TabPagePath2Only.Name = "TabPagePath2Only";
             this.TabPagePath2Only.Size = new System.Drawing.Size(751, 373);
             this.TabPagePath2Only.TabIndex = 2;
-            this.TabPagePath2Only.Text = "Path 2 Only";
+            this.TabPagePath2Only.Text = "Keys In Path 2 Only";
             this.TabPagePath2Only.UseVisualStyleBackColor = true;
             // 
             // dataGridView3
             // 
             this.dataGridView3.AllowUserToAddRows = false;
             this.dataGridView3.AllowUserToDeleteRows = false;
+            this.dataGridView3.AllowUserToResizeRows = false;
             this.dataGridView3.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView3.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView3.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -199,6 +206,29 @@
             this.dataGridView3.ReadOnly = true;
             this.dataGridView3.Size = new System.Drawing.Size(751, 373);
             this.dataGridView3.TabIndex = 0;
+            // 
+            // TabPageConnectionStrings
+            // 
+            this.TabPageConnectionStrings.Controls.Add(this.dataGridView4);
+            this.TabPageConnectionStrings.Location = new System.Drawing.Point(4, 22);
+            this.TabPageConnectionStrings.Name = "TabPageConnectionStrings";
+            this.TabPageConnectionStrings.Size = new System.Drawing.Size(751, 373);
+            this.TabPageConnectionStrings.TabIndex = 3;
+            this.TabPageConnectionStrings.Text = "Connection Strings";
+            this.TabPageConnectionStrings.UseVisualStyleBackColor = true;
+            // 
+            // dataGridView4
+            // 
+            this.dataGridView4.AllowUserToAddRows = false;
+            this.dataGridView4.AllowUserToDeleteRows = false;
+            this.dataGridView4.AllowUserToResizeRows = false;
+            this.dataGridView4.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridView4.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridView4.Location = new System.Drawing.Point(0, 0);
+            this.dataGridView4.Name = "dataGridView4";
+            this.dataGridView4.Size = new System.Drawing.Size(751, 373);
+            this.dataGridView4.TabIndex = 1;
             // 
             // Form1
             // 
@@ -224,6 +254,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.TabPagePath2Only.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).EndInit();
+            this.TabPageConnectionStrings.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView4)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -246,6 +278,8 @@
         private System.Windows.Forms.TabPage TabPagePath2Only;
         private System.Windows.Forms.DataGridView dataGridView2;
         private System.Windows.Forms.DataGridView dataGridView3;
+        private System.Windows.Forms.TabPage TabPageConnectionStrings;
+        private System.Windows.Forms.DataGridView dataGridView4;
     }
 }
 
