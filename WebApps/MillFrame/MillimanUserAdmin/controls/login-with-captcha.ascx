@@ -1,6 +1,13 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeFile="login-with-captcha.ascx.cs" Inherits="controls_login_with_captcha" %>
 <%@ Register TagPrefix="cc1" Namespace="WebControlCaptcha" Assembly="WebControlCaptcha" %>
 <%-- LOGIN USER CONTROL WITH CAPTCHA --%>
+<script type="text/javascript">
+    //if i'm in a frame or iframe - push me out to top level, keeps me from getting stuck in a dialog window
+    if (top.location != self.location) {
+        top.location = self.location.href;
+    }
+    
+</script>
 <div class="liWrap" style="font-size: 10pt; width: 200px;">
     <a name="login" id="login" style="display: block; height: 0px; width: 0px; border: 0px;"></a>
     <div class="liTitle" style="font-size: 14pt; text-align: center">

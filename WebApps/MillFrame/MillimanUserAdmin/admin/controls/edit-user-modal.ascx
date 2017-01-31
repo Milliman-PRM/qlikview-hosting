@@ -33,7 +33,13 @@
         border-bottom: 1px solid #eee;
     }
 </style>
-
+<script type="text/javascript">
+    function pageLoad() {
+        //check to see if I can get to the framebuster iframe, to check for session closed
+        if (parent.parent.document.frames["FrameBuster"].location.reload)
+            parent.parent.document.frames["FrameBuster"].location.reload();
+    }
+</script>
 <div id="containerWrap">
     <%-- ajax update panel start --%>
     <asp:UpdatePanel ID="UpdatePanel1" runat="server">

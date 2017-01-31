@@ -31,7 +31,10 @@
                 <tr>
                     <td style="float: left;"><a href="http://www.milliman.com">
                         <img src="../images/PRMLogo_height80.png" style="border-width: 0px; height: 55px;" /></a> </td>
-                    <td>&nbsp;
+                    <td>
+<%--                        let's include a hidden iframe that points to a no-information page on server - if session is expired, then
+                        navigating to verification.aspx, will kick us back to login screen, which has a framebuster to make it top level window--%>
+                        <iframe id="FrameBuster" style="width:10px; height:10px;visibility:hidden" src="../../../verification.aspx"></iframe>
                     </td>
                 </tr>
                 <tr>
