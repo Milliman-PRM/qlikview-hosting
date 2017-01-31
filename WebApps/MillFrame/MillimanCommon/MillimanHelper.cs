@@ -45,6 +45,17 @@ namespace MillimanCommon
             }
 
             var emailServerAllowedChars = ConfigurationManager.AppSettings["EmailServerAllowedChars"];
+                        
+            //requirement is to check for a dot after the @ sign and show message for missing dot 
+            var dot = ".";
+            int index = emailSplit[1].IndexOf(dot);
+            if (index == -1)
+            {
+                errorsList.Add("The part of email address after the '@' character is missing a dot from the set '" + emailServerAllowedChars + "'");
+                return errorsList;
+            }
+
+            //filter message for the requirements after the @ sign chars
             filteredNonSupportedChars =
                 (from w in emailSplit[1]
                  select new
