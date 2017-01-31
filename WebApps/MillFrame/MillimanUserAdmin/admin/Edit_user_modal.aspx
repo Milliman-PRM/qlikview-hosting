@@ -6,6 +6,10 @@
 <head runat="server">
   <title>User Details</title>
   <link href="themes/default/default.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript">
+    //page is opening -so ping the framebuster iframe to start countdown
+    parent.parent.document.frames["FrameBuster"].location.reload();
+    </script>
 </head>
 <body class="modalPG">
   <form id="form1" runat="server">
