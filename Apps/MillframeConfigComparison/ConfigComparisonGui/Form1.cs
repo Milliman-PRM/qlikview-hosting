@@ -99,6 +99,7 @@ namespace ConfigComparisonGui
                 {
                     if (Row.Cells[CellName].Value.ToString() == "")
                     {
+                        Row.Cells[CellName].Value = "<null>";
                         Row.Cells[CellName].Style.BackColor = Color.Red;
                     }
                 }
