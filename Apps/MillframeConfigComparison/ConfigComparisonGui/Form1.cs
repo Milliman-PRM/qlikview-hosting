@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -62,34 +63,13 @@ namespace ConfigComparisonGui
                 dataGridView4.DataSource = Result.ComparisonResults;
                 dataGridView4.DataMember = "ConnectionStrings";
 
-                foreach (DataGridViewRow Row in dataGridView4.Rows)
-                {
-                    Row.DefaultCellStyle.BackColor = Color.LightPink;//to color the row
-                    if (Row.Cells["Path 1 Value"].Value.ToString() != Row.Cells["Path 2 Value"].Value.ToString())
-                    {
-                        Row.DefaultCellStyle.BackColor = Color.LightPink;//to color the row
-                    }
-                    else
-                    {
-                        Row.DefaultCellStyle.BackColor = Color.LightGreen;
-                    }
-                }
+                dataGridView1.Columns[0].FillWeight = 20;
+                dataGridView1.Columns[1].FillWeight = 50;
+                dataGridView1.Columns[2].FillWeight = 50;
 
-                foreach (DataGridViewRow Row in dataGridView1.Rows)
-                {
-                    if (Row.Cells["Path 1 Value"].Value.ToString() != Row.Cells["Path 2 Value"].Value.ToString())
-                    {
-                        Row.DefaultCellStyle.BackColor = Color.LightPink;//to color the row
-                    }
-                    else
-                    {
-                        Row.DefaultCellStyle.BackColor = Color.LightGreen;
-                    }
-                }
-
-                dataGridView1.Columns[0].Width = 60;
-                dataGridView1.Columns[1].FillWeight = 40;
-                dataGridView1.Columns[2].FillWeight = 40;
+                dataGridView4.Columns[0].FillWeight = 20;
+                dataGridView4.Columns[1].FillWeight = 50;
+                dataGridView4.Columns[2].FillWeight = 50;
             }
             else
             {
@@ -100,7 +80,33 @@ namespace ConfigComparisonGui
         private void Form1_Load(object sender, EventArgs e)
         {
             ComparisonLib = new ComparisonWorker();
+
+            dataGridView1.RowPostPaint += ComparisonGrid_RowPostPaint;
+            dataGridView4.RowPostPaint += ComparisonGrid_RowPostPaint;
         }
 
+        private void ComparisonGrid_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        {
+            DataGridViewRow Row = ((DataGridView)sender).Rows[e.RowIndex];
+
+            // Any row with non matching values in Path1 and Path 2 should be colored pink
+            if (Row.Cells["Path 1 Value"].Value.ToString() != Row.Cells["Path 2 Value"].Value.ToString())
+            {
+                Row.DefaultCellStyle.BackColor = Color.LightPink;//to color the row
+
+                // Any cell with an empty value from Path 1 or Path 2 should be colored red
+                foreach (string CellName in new string[]{ "Path 1 Value", "Path 2 Value" })
+                {
+                    if (Row.Cells[CellName].Value.ToString() == "")
+                    {
+                        Row.Cells[CellName].Style.BackColor = Color.Red;
+                    }
+                }
+            }
+            else
+            {
+                Row.DefaultCellStyle.BackColor = Color.LightGreen;
+            }
+        }
     }
 }
