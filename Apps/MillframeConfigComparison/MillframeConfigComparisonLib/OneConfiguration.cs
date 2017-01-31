@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace MillframeConfigComparisonLib
 {
-    class OneConfiguration
+    public class OneConfiguration
     {
-        Configuration ThisWebConfig = null;
-        Configuration ThisAppConfig = null;
+        public Configuration ThisWebConfig = null;
+        public Configuration ThisAppConfig = null;
 
         public OneConfiguration(string Path, bool DoWebConfig, bool DoAppConfig=false)
         {
@@ -54,6 +54,13 @@ namespace MillframeConfigComparisonLib
                 foreach (string key in ThisAppConfig.AppSettings.Settings.AllKeys)
                 {
                     Trace.WriteLine(key + " => " + ThisAppConfig.AppSettings.Settings[key].Value);
+                }
+
+                Trace.WriteLine("Connection strings section:");
+                foreach (ConnectionStringSettings Setting in ThisAppConfig.ConnectionStrings.ConnectionStrings)
+                {
+                    // TODO instead of trace outout, use the settings to compare
+                    Trace.WriteLine(Setting.Name + " => " + Setting.ConnectionString);
                 }
             }
 

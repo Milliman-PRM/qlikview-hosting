@@ -22,6 +22,7 @@ namespace ConfigComparisonGui
 
             this.TextBoxPath1.DoubleClick += new System.EventHandler(this.PromptForPath);
             this.TextBoxPath2.DoubleClick += new System.EventHandler(this.PromptForPath);
+            this.Resize += new EventHandler(this.FormResize);
         }
 
         private void PromptForPath(object sender, EventArgs e)
@@ -33,11 +34,30 @@ namespace ConfigComparisonGui
             }
         }
 
+        private void FormResize(object sender, EventArgs e)
+        {
+            Size NewFormSize = ((Control)sender).Size;
+            tabControl1.Size = new Size(NewFormSize.Width - tabControl1.Left - 28, 
+                                        NewFormSize.Height - tabControl1.Top - 50);
+        }
+
         private void ButtonCompare_Click(object sender, EventArgs e)
         {
-            if (Directory.Exists(TextBoxPath1.Text)  && Directory.Exists(TextBoxPath2.Text))
+            if (Directory.Exists(TextBoxPath1.Text) && Directory.Exists(TextBoxPath2.Text))
             {
-                ComparisonLib.Compare(TextBoxPath1.Text, TextBoxPath2.Text, CheckBoxDoWebConfig.Checked, CheckBoxDoAppConfig.Checked);
+                ComparisonResult Result = ComparisonLib.Compare(TextBoxPath1.Text, 
+                                                                TextBoxPath2.Text, 
+                                                                CheckBoxDoWebConfig.Checked, 
+                                                                CheckBoxDoAppConfig.Checked);
+
+                dataGridView1.DataSource = Result.ComparisonResults;
+                dataGridView1.DataMember = "KeysInBothPaths";
+
+                dataGridView2.DataSource = Result.ComparisonResults;
+                dataGridView2.DataMember = "KeysInPath1Only";
+
+                dataGridView3.DataSource = Result.ComparisonResults;
+                dataGridView3.DataMember = "KeysInPath2Only";
             }
             else
             {
@@ -49,5 +69,6 @@ namespace ConfigComparisonGui
         {
             ComparisonLib = new ComparisonWorker();
         }
+
     }
 }
