@@ -58,6 +58,22 @@ namespace ConfigComparisonGui
 
                 dataGridView3.DataSource = Result.ComparisonResults;
                 dataGridView3.DataMember = "KeysInPath2Only";
+
+                foreach (DataGridViewRow Row in dataGridView1.Rows)
+                {
+                    if (Row.Cells["Path1 Value"].Value.ToString() != Row.Cells["Path2 Value"].Value.ToString())
+                    {
+                        Row.DefaultCellStyle.BackColor = Color.LightPink;//to color the row
+                    }
+                    else
+                    {
+                        Row.DefaultCellStyle.BackColor = Color.LightGreen;
+                    }
+                }
+
+                dataGridView1.Columns[0].Width = 60;
+                dataGridView1.Columns[1].FillWeight = 40;
+                dataGridView1.Columns[2].FillWeight = 40;
             }
             else
             {
