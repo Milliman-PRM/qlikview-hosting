@@ -24,14 +24,18 @@ namespace ConfigComparisonGui
             this.TextBoxPath1.DoubleClick += new System.EventHandler(this.PromptForPath);
             this.TextBoxPath2.DoubleClick += new System.EventHandler(this.PromptForPath);
             this.Resize += new EventHandler(this.FormResize);
+
+            OpenFileDialog1.Filter = "Configuration Files (*.config)|*.config|All Files (*.*)|*.*";
+            OpenFileDialog1.FilterIndex = 1;
+            OpenFileDialog1.RestoreDirectory = true;
         }
 
         private void PromptForPath(object sender, EventArgs e)
         {
-            DialogResult Res = FolderBrowserDialog1.ShowDialog(this);
-            if (Directory.Exists(FolderBrowserDialog1.SelectedPath))
+            DialogResult Res = OpenFileDialog1.ShowDialog(this);
+            if (File.Exists(OpenFileDialog1.FileName))
             {
-                ((TextBox)sender).Text = FolderBrowserDialog1.SelectedPath;
+                ((TextBox)sender).Text = OpenFileDialog1.FileName;
             }
         }
 
@@ -44,12 +48,10 @@ namespace ConfigComparisonGui
 
         private void ButtonCompare_Click(object sender, EventArgs e)
         {
-            if (Directory.Exists(TextBoxPath1.Text) && Directory.Exists(TextBoxPath2.Text))
+            if (File.Exists(TextBoxPath1.Text) && File.Exists(TextBoxPath2.Text))
             {
                 ComparisonResult Result = ComparisonLib.Compare(TextBoxPath1.Text, 
-                                                                TextBoxPath2.Text, 
-                                                                CheckBoxDoWebConfig.Checked, 
-                                                                CheckBoxDoAppConfig.Checked);
+                                                                TextBoxPath2.Text);
 
                 dataGridView1.DataSource = Result.ComparisonResults;
                 dataGridView1.DataMember = "KeysInBothPaths";
@@ -66,6 +68,12 @@ namespace ConfigComparisonGui
                 dataGridView1.Columns[0].FillWeight = 20;
                 dataGridView1.Columns[1].FillWeight = 50;
                 dataGridView1.Columns[2].FillWeight = 50;
+
+                dataGridView2.Columns[0].FillWeight = 20;
+                dataGridView2.Columns[1].FillWeight = 50;
+
+                dataGridView3.Columns[0].FillWeight = 20;
+                dataGridView3.Columns[1].FillWeight = 50;
 
                 dataGridView4.Columns[0].FillWeight = 20;
                 dataGridView4.Columns[1].FillWeight = 50;

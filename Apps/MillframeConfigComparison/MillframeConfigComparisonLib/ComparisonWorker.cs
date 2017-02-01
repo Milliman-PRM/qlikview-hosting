@@ -8,9 +8,9 @@ namespace MillframeConfigComparisonLib
 {
     public class ComparisonWorker
     {
-        public ComparisonResult Compare(string Path1, string Path2, bool DoWebConfig, bool DoAppConfig)
+        public ComparisonResult Compare(string Path1, string Path2)
         {
-            ComparisonResult Result = new ComparisonResult(Path1, Path2, DoWebConfig, DoAppConfig);
+            ComparisonResult Result = new ComparisonResult(Path1, Path2);
 
             return Result;
         }

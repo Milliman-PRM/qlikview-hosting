@@ -33,9 +33,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.ButtonCompare = new System.Windows.Forms.Button();
-            this.FolderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.CheckBoxDoWebConfig = new System.Windows.Forms.CheckBox();
-            this.CheckBoxDoAppConfig = new System.Windows.Forms.CheckBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.TabPageBoth = new System.Windows.Forms.TabPage();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
@@ -45,6 +42,7 @@
             this.dataGridView3 = new System.Windows.Forms.DataGridView();
             this.TabPageConnectionStrings = new System.Windows.Forms.TabPage();
             this.dataGridView4 = new System.Windows.Forms.DataGridView();
+            this.OpenFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.tabControl1.SuspendLayout();
             this.TabPageBoth.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -60,15 +58,15 @@
             // 
             this.TextBoxPath1.Location = new System.Drawing.Point(12, 29);
             this.TextBoxPath1.Name = "TextBoxPath1";
-            this.TextBoxPath1.Size = new System.Drawing.Size(372, 20);
+            this.TextBoxPath1.Size = new System.Drawing.Size(443, 20);
             this.TextBoxPath1.TabIndex = 1;
             this.TextBoxPath1.Text = "Double Click To Browse";
             // 
             // TextBoxPath2
             // 
-            this.TextBoxPath2.Location = new System.Drawing.Point(400, 29);
+            this.TextBoxPath2.Location = new System.Drawing.Point(488, 29);
             this.TextBoxPath2.Name = "TextBoxPath2";
-            this.TextBoxPath2.Size = new System.Drawing.Size(372, 20);
+            this.TextBoxPath2.Size = new System.Drawing.Size(443, 20);
             this.TextBoxPath2.TabIndex = 2;
             this.TextBoxPath2.Text = "Double Click To Browse";
             // 
@@ -77,22 +75,22 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(13, 13);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(38, 13);
+            this.label1.Size = new System.Drawing.Size(78, 13);
             this.label1.TabIndex = 2;
-            this.label1.Text = "Path 1";
+            this.label1.Text = "Configuration 1";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(397, 13);
+            this.label2.Location = new System.Drawing.Point(485, 13);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(38, 13);
+            this.label2.Size = new System.Drawing.Size(78, 13);
             this.label2.TabIndex = 3;
-            this.label2.Text = "Path 2";
+            this.label2.Text = "Configuration 2";
             // 
             // ButtonCompare
             // 
-            this.ButtonCompare.Location = new System.Drawing.Point(348, 95);
+            this.ButtonCompare.Location = new System.Drawing.Point(431, 75);
             this.ButtonCompare.Name = "ButtonCompare";
             this.ButtonCompare.Size = new System.Drawing.Size(87, 40);
             this.ButtonCompare.TabIndex = 0;
@@ -100,39 +98,16 @@
             this.ButtonCompare.UseVisualStyleBackColor = true;
             this.ButtonCompare.Click += new System.EventHandler(this.ButtonCompare_Click);
             // 
-            // CheckBoxDoWebConfig
-            // 
-            this.CheckBoxDoWebConfig.AutoSize = true;
-            this.CheckBoxDoWebConfig.Checked = true;
-            this.CheckBoxDoWebConfig.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.CheckBoxDoWebConfig.Location = new System.Drawing.Point(12, 72);
-            this.CheckBoxDoWebConfig.Name = "CheckBoxDoWebConfig";
-            this.CheckBoxDoWebConfig.Size = new System.Drawing.Size(126, 17);
-            this.CheckBoxDoWebConfig.TabIndex = 5;
-            this.CheckBoxDoWebConfig.Text = "Evaluate Web.config";
-            this.CheckBoxDoWebConfig.UseVisualStyleBackColor = true;
-            // 
-            // CheckBoxDoAppConfig
-            // 
-            this.CheckBoxDoAppConfig.AutoSize = true;
-            this.CheckBoxDoAppConfig.Enabled = false;
-            this.CheckBoxDoAppConfig.Location = new System.Drawing.Point(12, 95);
-            this.CheckBoxDoAppConfig.Name = "CheckBoxDoAppConfig";
-            this.CheckBoxDoAppConfig.Size = new System.Drawing.Size(122, 17);
-            this.CheckBoxDoAppConfig.TabIndex = 6;
-            this.CheckBoxDoAppConfig.Text = "Evaluate App.config";
-            this.CheckBoxDoAppConfig.UseVisualStyleBackColor = true;
-            // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.TabPageBoth);
             this.tabControl1.Controls.Add(this.TabPagePath1Only);
             this.tabControl1.Controls.Add(this.TabPagePath2Only);
             this.tabControl1.Controls.Add(this.TabPageConnectionStrings);
-            this.tabControl1.Location = new System.Drawing.Point(13, 151);
+            this.tabControl1.Location = new System.Drawing.Point(13, 121);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(759, 399);
+            this.tabControl1.Size = new System.Drawing.Size(920, 429);
             this.tabControl1.TabIndex = 7;
             // 
             // TabPageBoth
@@ -140,7 +115,7 @@
             this.TabPageBoth.Controls.Add(this.dataGridView1);
             this.TabPageBoth.Location = new System.Drawing.Point(4, 22);
             this.TabPageBoth.Name = "TabPageBoth";
-            this.TabPageBoth.Size = new System.Drawing.Size(751, 373);
+            this.TabPageBoth.Size = new System.Drawing.Size(912, 403);
             this.TabPageBoth.TabIndex = 0;
             this.TabPageBoth.Text = "Keys In Both Paths";
             this.TabPageBoth.UseVisualStyleBackColor = true;
@@ -155,7 +130,7 @@
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView1.Location = new System.Drawing.Point(0, 0);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(751, 373);
+            this.dataGridView1.Size = new System.Drawing.Size(912, 403);
             this.dataGridView1.TabIndex = 0;
             // 
             // TabPagePath1Only
@@ -234,10 +209,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(784, 562);
+            this.ClientSize = new System.Drawing.Size(945, 562);
             this.Controls.Add(this.tabControl1);
-            this.Controls.Add(this.CheckBoxDoAppConfig);
-            this.Controls.Add(this.CheckBoxDoWebConfig);
             this.Controls.Add(this.ButtonCompare);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -268,9 +241,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button ButtonCompare;
-        private System.Windows.Forms.FolderBrowserDialog FolderBrowserDialog1;
-        private System.Windows.Forms.CheckBox CheckBoxDoWebConfig;
-        private System.Windows.Forms.CheckBox CheckBoxDoAppConfig;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage TabPageBoth;
         private System.Windows.Forms.DataGridView dataGridView1;
@@ -280,6 +250,7 @@
         private System.Windows.Forms.DataGridView dataGridView3;
         private System.Windows.Forms.TabPage TabPageConnectionStrings;
         private System.Windows.Forms.DataGridView dataGridView4;
+        private System.Windows.Forms.OpenFileDialog OpenFileDialog1;
     }
 }
 
