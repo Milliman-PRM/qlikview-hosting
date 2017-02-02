@@ -145,14 +145,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configs", "Configs", "{003A8340-D761-4800-8DA8-63F1BA64280A}"
 	ProjectSection(SolutionItems) = preProject
 		appsettings_AK.config = appsettings_AK.config
-		appsettings_PreStag.config = appsettings_PreStag.config
 		appsettings_SK.config = appsettings_SK.config
-		appsettings_Stag.config = appsettings_Stag.config
 		appsettings_VN.config = appsettings_VN.config
 		connectionStrings_AK.config = connectionStrings_AK.config
-		connectionStrings_PreStag.config = connectionStrings_PreStag.config
 		connectionStrings_SK.config = connectionStrings_SK.config
-		connectionStrings_Stag.config = connectionStrings_Stag.config
 		connectionStrings_VN.config = connectionStrings_VN.config
 	EndProjectSection
 EndProject
