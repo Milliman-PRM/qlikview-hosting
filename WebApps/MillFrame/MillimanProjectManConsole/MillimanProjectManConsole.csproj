@@ -900,6 +900,7 @@
     <Content Include="Service References\MPMCServices\MillimanProjectManConsole.MPMCServices.ArrayOfString.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
+    <None Include="Properties\PublishProfiles\PMC_PreStaging.pubxml" />
     <None Include="Service References\MPMCServices\MPMCServices.disco" />
     <None Include="Service References\MPMCServices\configuration91.svcinfo" />
     <None Include="Service References\MPMCServices\configuration.svcinfo" />
@@ -1282,7 +1283,6 @@
     <Content Include="js\fckeditor\fckutils.cfm" />
     <Content Include="js\fckeditor\_samples\adobeair\package.bat" />
     <Content Include="js\fckeditor\_samples\adobeair\run.bat" />
-    <Content Include="js\fckeditor\_samples\adobeair\sample01_cert.pfx" />
     <Content Include="js\fckeditor\_samples\afp\fck.afpa" />
     <Content Include="js\fckeditor\_samples\afp\fck.afpa.code" />
     <Content Include="js\fckeditor\_samples\afp\sample01.afp" />
