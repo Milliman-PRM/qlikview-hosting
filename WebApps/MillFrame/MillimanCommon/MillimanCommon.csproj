@@ -129,7 +129,10 @@ copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanUserAdmin\b
 copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanValidationGC\bin\debug
 copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanValidationGC\bin\release
 copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\ReportingCommon\bin\debug
-copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\ReportingCommon\bin\release</PreBuildEvent>
+copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\ReportingCommon\bin\release
+cd $(SolutionDir)\UserGuidesMasterVersions
+$(SolutionDir)\UserGuidesMasterVersions\UpdateApplicationUserGuides.bat
+</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
