@@ -32,7 +32,6 @@ namespace MillimanCommon
                 ProcessedDir = QVWorPRJQualifiedPath.ToLower().Replace(".qvw","_Data");
 
            // ProcessedDir = ProcessedDir.Replace(' ', '_');
-
             return ProcessedDir;
         }
 
@@ -48,11 +47,18 @@ namespace MillimanCommon
         }
         static public DownloadDescriptions Load(string FileAndPath)
         {
-            var serializer = new SharpSerializer(false);
-            if (System.IO.File.Exists(FileAndPath))
+            try
             {
-                DownloadDescriptions DD = serializer.Deserialize(FileAndPath) as DownloadDescriptions;
-                return DD;
+                var serializer = new SharpSerializer(false);
+                if (System.IO.File.Exists(FileAndPath))
+                {
+                    DownloadDescriptions DD = serializer.Deserialize(FileAndPath) as DownloadDescriptions;
+                    return DD;
+                }
+            }
+            catch (Exception ex)
+            {
+                Report.Log(Report.ReportType.Error, "DownloadDescriptions:GetDescriptionFilename|----Sharp serializer failed----");
             }
             return null;
         }
@@ -67,7 +73,7 @@ namespace MillimanCommon
             }
             catch (Exception ex)
             {
-                MillimanCommon.Report.Log(Report.ReportType.Error, "Failed to save file", ex);
+                MillimanCommon.Report.Log(Report.ReportType.Error, "DownloadDescriptions:Save|----Failed to save file----", ex);
             }
             return false;
         }

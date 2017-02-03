@@ -234,6 +234,7 @@ namespace MillimanCommon
             StopFileWatcher();  //we are a producer,  stop watching since we always write things
             var serializer = new SharpSerializer(false);
             serializer.Serialize(this, RepoFilePath);
+            StartFileWatcher(RepoFilePath);
             return true;
         }
 
@@ -245,8 +246,8 @@ namespace MillimanCommon
                 FileWatcher = new System.IO.FileSystemWatcher(System.IO.Path.GetDirectoryName(RepoFilePath), System.IO.Path.GetFileName(RepoFilePath));
                 FileWatcher.NotifyFilter = System.IO.NotifyFilters.LastWrite;
                 FileWatcher.Changed += FileWatcher_Changed;
-                FileWatcher.EnableRaisingEvents = true;
             }
+            FileWatcher.EnableRaisingEvents = true;
         }
 
         public static void FileWatcher_Changed(object sender, System.IO.FileSystemEventArgs e)
