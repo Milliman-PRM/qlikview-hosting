@@ -339,12 +339,14 @@
     <None Include="Configs\appsettings_Stag.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Content Include="Configs\appsettings_Stakeholder.config" />
     <None Include="Configs\connectionStrings_PreStag.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Configs\connectionStrings_Stag.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Content Include="Configs\connectionStrings_Stakeholder.config" />
     <None Include="Properties\PublishProfiles\milliman-sk.pubxml" />
     <None Include="Properties\PublishProfiles\MillimanDebug.pubxml" />
     <Content Include="SSOConfigure\HCIntel.cer" />

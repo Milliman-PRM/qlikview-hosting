@@ -358,12 +358,14 @@
     <None Include="Configs\appsettings_Stag.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Content Include="Configs\appsettings_Stakeholder.config" />
     <None Include="Configs\connectionStrings_PreStag.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Configs\connectionStrings_Stag.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Content Include="Configs\connectionStrings_Stakeholder.config" />
     <None Include="Properties\PublishProfiles\MilimanClientUserAdmin_AK.pubxml" />
     <None Include="Properties\PublishProfiles\MillimanClientUserAdmin_PreStaging.pubxml" />
     <None Include="Properties\PublishProfiles\ReleaseCandidateProfile.pubxml" />
@@ -414,7 +416,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties UseJQuerySupport="True" UseAjaxifiedTemplates="True" />
+      <UserProperties UseAjaxifiedTemplates="True" UseJQuerySupport="True" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
