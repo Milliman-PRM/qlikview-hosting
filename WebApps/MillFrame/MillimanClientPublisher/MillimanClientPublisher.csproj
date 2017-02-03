@@ -220,12 +220,14 @@
     <None Include="Configs\appsettings_Stag.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Content Include="Configs\appsettings_Stakeholder.config" />
     <None Include="Configs\connectionStrings_PreStag.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Configs\connectionStrings_Stag.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Content Include="Configs\connectionStrings_Stakeholder.config" />
     <None Include="Properties\PublishProfiles\Debug_vn.pubxml" />
     <None Include="Properties\PublishProfiles\LocalPublish.pubxml" />
     <None Include="Properties\PublishProfiles\MillimanClientPublisher_AK.pubxml" />
