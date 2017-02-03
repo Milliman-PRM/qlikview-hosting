@@ -74,6 +74,7 @@ namespace MillimanCommon
             if (string.IsNullOrEmpty(RepoFilePath))
                 RepoFilePath = ConfigurationManager.AppSettings["MillimanGroupMap"];
             serializer.Serialize(this, RepoFilePath);
+            StartFileWatcher(RepoFilePath);
             return true;
         }
 
@@ -89,8 +90,8 @@ namespace MillimanCommon
                 FileWatcher = new System.IO.FileSystemWatcher(System.IO.Path.GetDirectoryName(RepoFilePath), System.IO.Path.GetFileName(RepoFilePath));
                 FileWatcher.NotifyFilter = System.IO.NotifyFilters.LastWrite;
                 FileWatcher.Changed += FileWatcher_Changed;
-                FileWatcher.EnableRaisingEvents = true;
             }
+            FileWatcher.EnableRaisingEvents = true;
         }
 
         /// <summary>
