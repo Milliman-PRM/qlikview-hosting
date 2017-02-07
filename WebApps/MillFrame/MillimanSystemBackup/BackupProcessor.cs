@@ -23,10 +23,9 @@ namespace SystemBackup
             get
             {
                 if (string.IsNullOrEmpty(_TempDir))
-                {
-                    _TempDir = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "ZipBackup");
-                    if (System.IO.Directory.Exists(_TempDir) == false)
-                        System.IO.Directory.CreateDirectory(_TempDir);
+                {                     
+                    _TempDir = ConfigurationManager.AppSettings["TemporaryBackupCache"];
+                    System.IO.Directory.CreateDirectory(_TempDir);
                 }
                 return _TempDir;
             }
