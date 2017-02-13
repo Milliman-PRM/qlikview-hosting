@@ -12,7 +12,7 @@ namespace CLSMedicareReimbursement
 
         protected void Application_Start(object sender, EventArgs e)
         {
-            //log4net.Config.XmlConfigurator.Configure();
+
         }
 
         protected void Session_Start(object sender, EventArgs e)
@@ -38,9 +38,7 @@ namespace CLSMedicareReimbursement
                 Session.Clear();  //just in case there is a session, clear it, otherwisse this will fail
             }
             catch (Exception)
-            {
-
-            }
+            { }
             Server.Transfer("default.aspx");  //force back to main page, probably session timeout
         }
 

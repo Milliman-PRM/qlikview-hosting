@@ -1,5 +1,4 @@
-﻿using ConfigIt;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -20,11 +19,11 @@ namespace CLSConfigurationProductionDaemon
             string OperatorEmail = string.Empty;
             if ( CLSServices.NewSchemaIsReady(out SchemaName, out OperatorEmail))
             {
-                string WebConfig  = EnvironmentSettings.Elements["ProductionSiteWebConfig"].Value;
-                string SMTPServer = EnvironmentSettings.Elements["SMTPServer"].Value;
-                string SMTPPort   = EnvironmentSettings.Elements["SMTPPort"].Value;
-                string FromEmail  = EnvironmentSettings.Elements["FromEmail"].Value;
-                string Subject    = EnvironmentSettings.Elements["Subject"].Value;
+                string WebConfig  = System.Configuration.ConfigurationManager.AppSettings["ProductionSiteWebConfig"];
+                string SMTPServer = System.Configuration.ConfigurationManager.AppSettings["SMTPServer"];
+                string SMTPPort   = System.Configuration.ConfigurationManager.AppSettings["SMTPPort"];
+                string FromEmail  = System.Configuration.ConfigurationManager.AppSettings["FromEmail"];
+                string Subject    = System.Configuration.ConfigurationManager.AppSettings["Subject"];
 
                 string StatusMsg = "Could not locate production system web.config file to reset database connection for new dataset.";
                 if ( System.IO.File.Exists(WebConfig))

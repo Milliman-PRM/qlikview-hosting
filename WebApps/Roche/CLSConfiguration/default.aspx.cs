@@ -1,5 +1,4 @@
-﻿using ConfigIt;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -31,14 +30,13 @@ namespace CLSConfiguration
                 AllSchemas.DataValueField = "schema_name";
                 AllSchemas.DataBind();
 
-                //string TestStagingURL = System.Configuration.ConfigurationManager.AppSettings["StagingURL"];
-                string TestStagingURL = EnvironmentSettings.Elements["StagingURL"].Value;
+                string TestStagingURL = System.Configuration.ConfigurationManager.AppSettings["StagingURL"];
                 if (string.IsNullOrEmpty(TestStagingURL) == false)
                 {
                     string textHTML = "window.open('" + TestStagingURL + "', '_blank'); ";
                     this.TestStaging.Attributes.Add("OnClick", textHTML);
                 }
-                string TestProductionURL = EnvironmentSettings.Elements["ProductionURL"].Value;
+                string TestProductionURL = System.Configuration.ConfigurationManager.AppSettings["ProductionURL"];
                 if (string.IsNullOrEmpty(TestProductionURL) == false)
                 {
                     string textHTML = "window.open('" + TestProductionURL + "', '_blank'); ";
@@ -61,7 +59,7 @@ namespace CLSConfiguration
 
         private void UpdateStagingWebConfig()
         {
-            string WebConfig = EnvironmentSettings.Elements["LabSystemsHandbookWebConfig"].Value;
+            string WebConfig = System.Configuration.ConfigurationManager.AppSettings["LabSystemsHandbookWebConfig"];
             if ( (System.IO.File.Exists(WebConfig)== true) && (AllSchemas.SelectedIndex != -1) )
             {
                 string SelectedSchema = AllSchemas.SelectedItem.Text;
@@ -111,7 +109,7 @@ namespace CLSConfiguration
         private string FindSchemaNameInWebConfig()
         {
             string SchemaName = string.Empty;
-            string WebConfig = EnvironmentSettings.Elements["LabSystemsHandbookWebConfig"].Value;
+            string WebConfig = System.Configuration.ConfigurationManager.AppSettings["LabSystemsHandbookWebConfig"];
             if (System.IO.File.Exists(WebConfig) == true)
             {
                 string WebConfigContents = System.IO.File.ReadAllText(WebConfig);

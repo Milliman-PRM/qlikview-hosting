@@ -8,8 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using ConfigIt;
-
 namespace CLSConfiguration.Properties {
     
     
@@ -30,11 +28,8 @@ namespace CLSConfiguration.Properties {
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
         [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:2678/CLSConfigurationServices.asmx")]
         public string CLSConfiguration_CLSConfigurationServices_CLSConfigurationServices {
-            get
-            {
-                //getting url from the settings
-                var webserviceUrl = EnvironmentSettings.Elements["CLSConfiguration_CLSConfigurationServices_CLSConfigurationServices"].Value;
-                return ((string)(webserviceUrl));
+            get {
+                return ((string)(this["CLSConfiguration_CLSConfigurationServices_CLSConfigurationServices"]));
             }
         }
     }

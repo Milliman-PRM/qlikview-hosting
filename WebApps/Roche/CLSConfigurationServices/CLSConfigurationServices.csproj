@@ -118,6 +118,7 @@
     <Content Include="CLSConfigurationServices.asmx" />
     <Content Include="scripts\ai.0.15.0-build58334.js" />
     <Content Include="scripts\ai.0.15.0-build58334.min.js" />
+    <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CLSConfigurationServices.asmx.cs">
@@ -129,27 +130,17 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-    <Content Include="..\ConnectionStrings.config">
-      <Link>ConnectionStrings.config</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\Web.config">
-      <Link>Web.config</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <SubType>Designer</SubType>
-    </Content>
-    <None Include="Properties\PublishProfiles\CLSConfigurationServicesConfigs.pubxml" />
-    <None Include="Web.Debug.config" />
-    <None Include="Web.Release.config" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CLSConfigurationCommon\CLSConfigurationCommon.csproj">
       <Project>{569bd6af-c743-458e-8df7-75e6b95b81ca}</Project>
       <Name>CLSConfigurationCommon</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ConfigIt\ConfigIt.csproj">
-      <Project>{c682960b-d596-4002-9af3-f3cc2ad2454c}</Project>
-      <Name>ConfigIt</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
