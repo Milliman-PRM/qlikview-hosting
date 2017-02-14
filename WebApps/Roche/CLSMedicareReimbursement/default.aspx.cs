@@ -533,25 +533,15 @@ namespace CLSMedicareReimbursement
         private void PopulateFooterList(BusinessLogicManager BLM)
         {
             //to remove special character "Â" from footnote
-            var footNotes = new List<Footnote>();
-            var newFootNote = new Footnote();
-            foreach (var item in BLM.FootNotes)
-            {
-                if (item.Footnote1.Contains(@"Â"))
-                {
-                    newFootNote.Id = item.Id;
-                    newFootNote.Footnote1 = item.Footnote1.Replace(@"Â", string.Empty);
-                }
-                else
-                {
-                    newFootNote.Id = item.Id;
-                    newFootNote.Footnote1 = item.Footnote1;
-                }
-                footNotes.Add(newFootNote);
-                newFootNote = new Footnote();
-            }
-
-            FooterList.DataSource = footNotes;
+            var footNotes = BLM.FootNotes.ToList();
+            //in the list remove the special characters
+            var newFootNote = (from f in footNotes
+                            select new Footnote
+                            {
+                                Footnote1 = f.Footnote1.Replace(@"Â", ""),
+                                Id = f.Id
+                            }).OrderBy(o=>o.Id).ToList();
+            FooterList.DataSource = newFootNote;
             FooterList.DataTextField = "Footnote1";
             FooterList.DataValueField = "Id";
             FooterList.DataBind();

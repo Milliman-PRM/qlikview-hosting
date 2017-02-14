@@ -1,5 +1,4 @@
-﻿using ConfigIt;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -231,8 +230,7 @@ namespace CLSBusinessLogic
         {
             //User Id=van.nanney;Host=indy-pgsql02;Database=Roche_Medicare_Reimbursement_Develop;Integrated Security=True;Initial Schema=rmrrdb_20160304
             Schema = string.Empty;
-            //string ConnString = System.Configuration.ConfigurationManager.ConnectionStrings["CLSdbDataContextConnectionString"].ConnectionString;
-            string ConnString = EnvironmentSettings.ConnectionStrings["CLSdbDataContextConnectionString"].ConnectionString;
+            string ConnString = System.Configuration.ConfigurationManager.ConnectionStrings["CLSdbDataContextConnectionString"].ConnectionString;
             string SchemaKey = "initial schema";
             if ( ConnString.ToLower().Contains(SchemaKey))
             {
