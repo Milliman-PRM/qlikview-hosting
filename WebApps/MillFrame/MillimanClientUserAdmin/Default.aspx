@@ -298,10 +298,10 @@
         }
 
         //Find the emails in the spanned text
-        function ParseEmail(innerHTML) {
-            return innerHTML.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi);
+        //function ParseEmail(innerHTML) {
+        //    return innerHTML.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi);
 
-        }
+        //}
 
         function SendEmail() {
             var grid = $find("<%= UserGrid.ClientID %>");
@@ -324,7 +324,7 @@
                         return;
                     }
                 else
-                    AllEmails = ParseEmail(cellID.innerHTML);
+                    AllEmails = cellID.innerText;
             }
 
             window.location.href = "mailto:" + AllEmails;
@@ -349,7 +349,7 @@
                         alert("System can not send an email because there is no email delimiter set for group.")
                         return;
                     }
-                AllEmails += ParseEmail(cellID.innerHTML);
+                AllEmails += cellID.innerText
             }
             window.location.href = "mailto:" + AllEmails
         }
@@ -370,7 +370,7 @@
                 //alert(cellID.innerText);
                 if (AllEmails != "")
                     AllEmails += "\n";
-                AllEmails += ParseEmail(cellID.innerHTML);
+                AllEmails += cellID.innerText
             }
 
             AllEmails = "Are you sure you want to reset the passwords for:\n\n" + AllEmails;
@@ -391,13 +391,13 @@
                 if (statusCellID.innerText == "Suspended") {
                     if (SuspendedEmails != "")
                         SuspendedEmails += "\n";
-                    SuspendedEmails += IndentString + ParseEmail(cellID.innerHTML);
+                    SuspendedEmails += IndentString + cellID.innerText
                 }
                 else {
                     //alert(cellID.innerText);
                     if (ActiveEmails != "")
                         ActiveEmails += "\n";
-                    ActiveEmails += IndentString + ParseEmail(cellID.innerHTML);
+                    ActiveEmails += IndentString + cellID.innerText
                 }
             }
 
@@ -430,7 +430,7 @@
                 //alert(cellID.innerText);
                 if (AllEmails != "")
                     AllEmails += "\n";
-                AllEmails += ParseEmail(cellID.innerHTML);
+                AllEmails += cellID.innerText
             }
 
             AllEmails = "Are you sure you want to delete users:\n\n" + AllEmails;
