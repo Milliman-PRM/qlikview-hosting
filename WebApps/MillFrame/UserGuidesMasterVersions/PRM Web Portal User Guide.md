@@ -18,23 +18,25 @@ For additional information, please contact our technical support team by email:�
 
 ___
 
-**Introduction**
+
+##Introduction
 
 Milliman PRM Analytics is a predictive analytics solution that can be used to identify potentially avoidable healthcare costs in populations under financial risk.
 
 This user guide is designed to give users an understanding of the PRM Web Portal.
 
-**Technical Support**
 
-If you are having any technical difficulty with the product, please contact our technical support team by email: [*prm.support@milliman.com*]
+##Technical Support
+
+If you are having any technical difficulty with the product, please contact our technical support team by email: <prm.support@milliman.com>
 
 *Note: For the purpose of this user guide, all data has been de-identified to protect patient’s personal health information (PHI) in accordance with the Health Insurance Portability and Accountability Act of 1996 (HIPAA).*
 
-PRM Web Portal
---------------
 
-Overview
---------
+##PRM Web Portal
+
+
+###Overview
 
 The PRM Web Portal is an application that allows the client users to view the reports for the group(s) they are associated with. The application also allows the Client User Administrators to launch Client User Administration Console application, and the Client Publishers to launch Client Publisher Console application.
 
@@ -44,8 +46,8 @@ In compliance with HIPAA, the PRM web portal will automatically log out the user
 
 Password complexity rules are governed by HIPAA regulations and apply to user password creation for new accounts and password resets.
 
-Web Portal Users
-----------------
+
+###Web Portal Users
 
 There are 3 kinds of user permissions of the PRM Web Portal:
 
@@ -57,24 +59,18 @@ There are 3 kinds of user permissions of the PRM Web Portal:
 
 A user’s access to various features described in this guide will depend on the user’s permissions
 
-Client User
------------
+
+###Client User
 
 -   Login to the Web Portal \[password must be a minimum of 8 characters; one uppercase letter, a number and a special character\].
-    -------------------------------------------------------------------------------------------------------------------------------
 
-![](Images/PRM_Web_Portal_User_Guide/image1.png ""){width="6.5in" height="4.036111111111111in"}\
----
+![](Images/PRM_Web_Portal_User_Guide/image1.png ""){width=100% height=auto}\
 
 -   After logging in you see the **Web Portal console**.
 
-    ![](Images/PRM_Web_Portal_User_Guide/image2.png ""){width="6.5in" height="5.09375in"}\
-
-<!-- -->
+![](Images/PRM_Web_Portal_User_Guide/image2.png ""){width=100% height=auto}\
 
 -   Clicking on **Products** will reveal a list of reports available to licensed users.
-
-<!-- -->
 
 -   Clicking on the individual report icon will launch that report.
 
@@ -82,15 +78,17 @@ Client User
 
 -   In the event that a user receives the “**Report Not Available**” icon for a report, they should send a support request to **PRM Support** by email: <prm.support@milliman.com> to inquire why they cannot see the report.
 
-![](Images/PRM_Web_Portal_User_Guide/image3.png ""){width="1.791917104111986in" height="1.177247375328084in"}\
+![](Images/PRM_Web_Portal_User_Guide/image3.png ""){width=20% height=auto}\
 
 -   Clicking on the **Profile** tab allows a user to view their account profile information, including name, email address, phone number and password recovery settings including security questions.
 
 -   You may also use the profile to change your password.
 
-    ![](Images/PRM_Web_Portal_User_Guide/image4.png ""){width="6.5in" height="3.832638888888889in"}\
+![](Images/PRM_Web_Portal_User_Guide/image4.png ""){width=100% height=auto}\
 
--   Moving your mouse over the “Help” menu item will display three additional items in the dropdown. ![](Images/PRM_Web_Portal_User_Guide/image5.png ""){width="6.5in" height="2.667361111111111in"}\
+-   Moving your mouse over the “Help” menu item will display three additional items in the dropdown.
+
+![](Images/PRM_Web_Portal_User_Guide/image5.png ""){width=100% height=auto}\
 
 -   The first item “User Guide” displays the document you are reading.
 
@@ -98,41 +96,41 @@ Client User
 
 -   The “About Milliman” item will navigate to the Milliman home page.
 
-![](Images/PRM_Web_Portal_User_Guide/image6.png ""){width="6.5in" height="4.93586176727909in"}\
+![](Images/PRM_Web_Portal_User_Guide/image6.png ""){width=100% height=auto}\
 
 -   Clicking on the **User Administration** menu item will navigate the user to the Client User Administration Console - if user is authorized to administer only one group otherwise if the user is authorized to administer multiple groups then clicking on the **User Administration** menu item gives the user a scroll down list of groups the user has permission to administer.
 
-![](Images/PRM_Web_Portal_User_Guide/image7.png ""){width="6.549645669291339in" height="3.936084864391951in"}\
+![](Images/PRM_Web_Portal_User_Guide/image7.png ""){width=100% height=auto}\
 
 -   Clicking on the **Publish Content** tab will navigate the user to the Client Publisher Console if the user is authorized to publish contents for only one group otherwise if the user is authorized to publish contents for multiple groups then clicking on **Publish Content** tab gives the user a scroll down list of groups the user has permission to publish content for.
 
-    ![](Images/PRM_Web_Portal_User_Guide/image10.png ""){width="6.535461504811899in" height="2.2622747156605425in"}\
+![](Images/PRM_Web_Portal_User_Guide/image10.png ""){width=100% height=auto}\
 
 -   Finally, **Logout** allows the user to log out of the PRM Web Portal Console, and return to the initial login screen which contains links to the **Milliman** web site. **Terms of Use**, **Privacy Policy**, and **Copyright** disclaimers.
 
-Using the Lost Password Feature
--------------------------------
 
-> ![](Images/PRM_Web_Portal_User_Guide/image11.png ""){width="6.49621719160105in" height="2.7604166666666665in"}\
+###Using the Lost Password Feature
+
+![](Images/PRM_Web_Portal_User_Guide/image11.png ""){width=100% height=auto}\
 
 -   Should a user fail to log in as the result of forgetting their password, they click on the **Lost Password** link.
 
-![](Images/PRM_Web_Portal_User_Guide/image12.png ""){width="6.5in" height="1.2069444444444444in"}\
+![](Images/PRM_Web_Portal_User_Guide/image12.png ""){width=100% height=auto}\
 
 -   The user is prompted to enter their email. Then click **Next**.
 
-![](Images/PRM_Web_Portal_User_Guide/image13.png ""){width="6.5in" height="0.6763888888888889in"}\
+![](Images/PRM_Web_Portal_User_Guide/image13.png ""){width=100% height=auto}\
 
 -   The user will then be prompted to answer the security question. (Selected by user when profile screen was completed).
 
-![](Images/PRM_Web_Portal_User_Guide/image14.png ""){width="6.5in" height="0.5729166666666666in"}\
+![](Images/PRM_Web_Portal_User_Guide/image14.png ""){width=100% height=auto}\
 
 -   If the security questions is correctly answered - the user is sent an email and a link that prompts the user to change their password and check **Profile** information as well as completing the **Password Recovery** settings, including a **Security Question**.
 
-![](Images/PRM_Web_Portal_User_Guide/image15.png ""){width="6.5in" height="3.911111111111111in"}\
+![](Images/PRM_Web_Portal_User_Guide/image15.png ""){width=100% height=auto}\
 
 -   After filling out all fields, hit the **Save** button.
 
-![](Images/PRM_Web_Portal_User_Guide/image16.png ""){width="6.5in" height="3.863888888888889in"}\
+![](Images/PRM_Web_Portal_User_Guide/image16.png ""){width=100% height=auto}\
 
 The User may then Log in to the Web Portal.
