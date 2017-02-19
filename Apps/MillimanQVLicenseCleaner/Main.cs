@@ -58,7 +58,7 @@ namespace MillimanQVLicenseCleaner
             {
                 TimeSpan TS = DateTime.Now - LI.LastAccessed;
                 bool IsDelateCandidate = false;
-                if ( ( TS.Days > MaxAgeInDays ) && (RemovalCount < MaxToRemove) )
+                if ( ( TS.Days > MaxAgeInDays ) && (RemovalCount < MaxToRemove) && (TS.Days < 10000) ) //?10000 - some license are marked but no date, we need to ignore these
                 {
                     RemovalCount++;
                     IsDelateCandidate = true;
