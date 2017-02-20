@@ -24,7 +24,7 @@
                 return confirm('By clicking \'OK\' you are acknowledging you have reviewed the results of processing your report and the information is correct to publish to a client.\n\nClicking \'OK\' will publish your report to the users.');
             }
             else {
-                alert('The report cannot be published until reviewed and the \'Approval\' checkbox clicked at bottom of review approval tab.');
+                alert('The report cannot be published until reviewed and the \'Approval\' checkbox clicked at bottom of \'Review/Approval\' tab.');
                 return false;
             }
         }
