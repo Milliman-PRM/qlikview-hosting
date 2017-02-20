@@ -25,7 +25,7 @@ Milliman PRM Analytics is a predictive analytics solution that is used to identi
 
 This user guide is designed to give users an understanding of the latest features of the PRM Project Management Console (PMC) and step by step instructions for using this application.
 
-**In order to access the PRM Project Management Console, administrative rights must be granted for your account on the PRM production server. Independent of the server hosting the PMC, credentials and roles (for administrators only) is synchronized between the server hosting the PMC and the PRM production server.**
+**In order to access the PRM Project Management Console, administrative rights must be granted for your account on the PRM production server. Independent of the server hosting the PMC, credentials and roles (for administrators only) are synchronized between the server hosting the PMC and the PRM production server.**
 
 
 ##Technical Support
@@ -50,15 +50,15 @@ The PMC is designated and tested to be used via Firefox due to its limited audie
 
 ###Definitions
 
-**Group –** an arbitrary container used to associate users to reports (QVWs).
+**Group**: an arbitrary container used to associate users to reports (QVWs).
 
-**QVW- A Qlikview report document.**
+**QVW**: A Qlikview report document.
 
-**Signature –** extra attributes attached to a report (QVW) that identifies a specific group the report may be associated with via the Project Management Console.
+**Signature**: extra attributes attached to a report (QVW) that identifies a specific group the report may be associated with via the Project Management Console.
 
-**Analytics Pipeline** – Onboarding, translation/transformation, and processing code used to calculate value-added data and bind data onto a Report (QVW) that is signed for a specific Group.
+**Analytics Pipeline**: Onboarding, translation/transformation, and processing code used to calculate value-added data and bind data onto a Report (QVW) that is signed for a specific Group.
 
-**Project** – a collection of items associated with a report (QVW) that provides extra information such as
+**Project**: a collection of items associated with a report (QVW) that provides extra information such as
 
 -   Report Name ( displayed to user )
 
@@ -245,7 +245,7 @@ The menu item will display a list of the last date/time this project was publish
 
 ### Context Item – Edit Project Settings
 
-This menu item allows setting of basic project attributes, many of which are visible on the web portal for launching the report. For legacy support, this interfaces does support create/deleting groups manually and manual association of a project to a group. This functionality can result in inappropriate behavior, thus is important to understand the details of how a project, QVW and group should be related before modifying.
+This menu item allows setting of basic project attributes, many of which are visible on the web portal for launching the report. For legacy support, this interface does support creating/deleting groups manually and manual association of a project to a group. This functionality can result in inappropriate behavior, thus it is important to understand the details of how a project, QVW, and group should be related before modifying.
 
 ![](Images/PRM_Project_Management_Console_User_Guide/image10.png ""){width=100% height=auto}\
 
@@ -254,7 +254,7 @@ This menu item allows setting of basic project attributes, many of which are vis
 
 2.  QVW Name – this name of the QVW once associated to the project will be changed to this value. This value is read-only and should always match the name of the project.
 
-3.  Project Description – This description will be available/visible on the web portal page describing the content and/or analysis capabablities of the report(QVW).
+3.  Project Description – This description will be available/visible on the web portal page describing the content and/or analysis capabilities of the report(QVW).
 
 4.  Project Notes – any notes required associated with this project – this information is NOT displayed on the web portal and is private to the project.
 
@@ -262,11 +262,11 @@ This menu item allows setting of basic project attributes, many of which are vis
 
 6.  Project Thumbnail – this icon will be used as the launch icon for the report(QVW). Support of animated GIFs and transparent GIF/PNGs is available.
 
-7.  User Guide: This control will allow an **optional** user guide to be uploaded and associated with the project. The user guide must be a self-contained entity, HTML with inlined images, PDF, Word or image file. A download link will be associated with the launch icon in the web portal to download/view the user guide.
+7.  User Guide - This control will allow an **optional** user guide to be uploaded and associated with the project. The user guide must be a self-contained entity, HTML with inlined images, PDF, Word or image file. A download link will be associated with the launch icon in the web portal to download/view the user guide.
 
-8.  Group Creation/Group Deletion – to support legacy operations, the interface will allow groups to be created and deleted on-the-fly. Once a group is created or delete, this action takes place immediately on both the PMC hosting server and production. Use this functaionality carefully as it is possible to remove active groups that represent reports end-users are currently using.
+8.  Group Creation/Group Deletion – to support legacy operations, the interface will allow groups to be created and deleted on-the-fly. Once a group is created or delete, this action takes place immediately on both the PMC hosting server and production. Use this functionality carefully as it is possible to remove active groups that represent reports end-users are currently using.
 
-9.  Group association – to support leagacy operations, the interface will allow an alternate group to be selected for association of the project. However changing groups for an existing report, will most likely result in not being able to update the report content due to signature/group conflicts. It is recommend the default values provided when the interface is launched should not be changed, unless you are certain as the ramifications of attempting the change.
+9.  Group association – to support legacy operations, the interface will allow an alternate group to be selected for association of the project. However changing groups for an existing report, will most likely result in not being able to update the report content due to signature/group conflicts. It is recommend the default values provided when the interface is launched should not be changed, unless you are certain as the ramifications of attempting the change.
 
 10.  Save – persists the project to disk. Changes made by this update are confined to the PMC host machine only. No changes are made to the project on production until the project is published.
 
@@ -289,7 +289,7 @@ This menu item allows a new QVW to be associated with the project and based on p
 
 ### Context Item – Push to Production
 
-This menu item is used when a project has been updated, but for whatever reason was not published to the production server. Sometimes this is the result continued review of the report before publishing, there is a timeline for when reports are pushed and the date/time has not arrived, or minor changes to the project (like description) have been made. In the event this menu item is clicked and no changes have been made to upload, you will receive the message
+This menu item is used when a project has been updated, but for some reason was not published to the production server. Sometimes this is the result of continued review of the report before publishing, there is a timeline for when reports are pushed and the date/time has not arrived, or minor changes to the project (like description) have been made. In the event this menu item is clicked and no changes have been made to upload, you will receive the message:
 
 ![](Images/PRM_Project_Management_Console_User_Guide/image12.png ""){width=70% height=auto}\
 
@@ -349,9 +349,9 @@ The “Failed Selections per User” tab, provides a view of each user’s accou
 
 The “New Selectable Items” tab, provides a list of all the values found in the new data set that were not available in the old data set. Thus no users will have these values as selections for their account (yet).
 
-Reduction status tab provides two lists, one list contains all the users that had reports successfully reduced, the other list are users that failed to have a report reduced, and thus do not have a QVW to view via the web portal.
+The "Reduction status" tab provides two lists.  One list contains all the users that had reports successfully reduced, and the other list contains users that failed to have a report reduced, and thus do not have a QVW to view via the web portal.
 
-The general processing tab provides basic trace information on system activity as reduction process is executing (logs).
+The "general processing" tab provides basic trace information on system activity as reduction process is executing (logs).
 
 ![](Images/PRM_Project_Management_Console_User_Guide/image14.png ""){width=100% height=auto}\
 
