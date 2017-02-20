@@ -62,49 +62,64 @@ A user’s access to various features described in this guide will depend on the
 
 ###Client User
 
+
 -   Login to the Web Portal \[password must be a minimum of 8 characters; one uppercase letter, a number and a special character\].
 
 ![](Images/PRM_Web_Portal_User_Guide/image1.png ""){width=100% height=auto}\
+
 
 -   After logging in you see the **Web Portal console**.
 
 ![](Images/PRM_Web_Portal_User_Guide/image2.png ""){width=100% height=auto}\
 
+
 -   Clicking on **Products** will reveal a list of reports available to licensed users.
+
 
 -   Clicking on the individual report icon will launch that report.
 
+
 -   Clicking on the “**View User Guide**” link will display the user guide associated with the report. Not all reports have an associated user guide.
+
 
 -   In the event that a user receives the “**Report Not Available**” icon for a report, they should send a support request to **PRM Support** by email: <prm.support@milliman.com> to inquire why they cannot see the report.
 
 ![](Images/PRM_Web_Portal_User_Guide/image3.png ""){width=20% height=auto}\
 
+
 -   Clicking on the **Profile** tab allows a user to view their account profile information, including name, email address, phone number and password recovery settings including security questions.
+
 
 -   You may also use the profile to change your password.
 
 ![](Images/PRM_Web_Portal_User_Guide/image4.png ""){width=100% height=auto}\
 
+
 -   Moving your mouse over the “Help” menu item will display three additional items in the dropdown.
 
 ![](Images/PRM_Web_Portal_User_Guide/image5.png ""){width=100% height=auto}\
 
+
 -   The first item “User Guide” displays the document you are reading.
 
+
 -   Clicking on the “Support” link will launch your default email client to send an email to the PRM Support Team - at <prm.support@milliman.com>
+
 
 -   The “About Milliman” item will navigate to the Milliman home page.
 
 ![](Images/PRM_Web_Portal_User_Guide/image6.png ""){width=100% height=auto}\
 
+
 -   Clicking on the **User Administration** menu item will navigate the user to the Client User Administration Console - if user is authorized to administer only one group otherwise if the user is authorized to administer multiple groups then clicking on the **User Administration** menu item gives the user a scroll down list of groups the user has permission to administer.
 
 ![](Images/PRM_Web_Portal_User_Guide/image7.png ""){width=100% height=auto}\
 
+
 -   Clicking on the **Publish Content** tab will navigate the user to the Client Publisher Console if the user is authorized to publish contents for only one group otherwise if the user is authorized to publish contents for multiple groups then clicking on **Publish Content** tab gives the user a scroll down list of groups the user has permission to publish content for.
 
 ![](Images/PRM_Web_Portal_User_Guide/image10.png ""){width=100% height=auto}\
+
 
 -   Finally, **Logout** allows the user to log out of the PRM Web Portal Console, and return to the initial login screen which contains links to the **Milliman** web site. **Terms of Use**, **Privacy Policy**, and **Copyright** disclaimers.
 
@@ -113,21 +128,26 @@ A user’s access to various features described in this guide will depend on the
 
 ![](Images/PRM_Web_Portal_User_Guide/image11.png ""){width=100% height=auto}\
 
+
 -   Should a user fail to log in as the result of forgetting their password, they click on the **Lost Password** link.
 
 ![](Images/PRM_Web_Portal_User_Guide/image12.png ""){width=100% height=auto}\
+
 
 -   The user is prompted to enter their email. Then click **Next**.
 
 ![](Images/PRM_Web_Portal_User_Guide/image13.png ""){width=100% height=auto}\
 
+
 -   The user will then be prompted to answer the security question. (Selected by user when profile screen was completed).
 
 ![](Images/PRM_Web_Portal_User_Guide/image14.png ""){width=100% height=auto}\
 
+
 -   If the security questions is correctly answered - the user is sent an email and a link that prompts the user to change their password and check **Profile** information as well as completing the **Password Recovery** settings, including a **Security Question**.
 
 ![](Images/PRM_Web_Portal_User_Guide/image15.png ""){width=100% height=auto}\
+
 
 -   After filling out all fields, hit the **Save** button.
 
