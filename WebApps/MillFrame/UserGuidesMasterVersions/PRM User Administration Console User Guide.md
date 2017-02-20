@@ -296,7 +296,7 @@ Clicking on a rule access folder take the administrator to sub-folders within th
 
 Search is another page used to find Membership by User Name or Email Address.
 
-It has the same fields as [Locked] .
+It has the same fields as [Locked].
 
 ![](Images/PRM_User_Administration_Console_User_Guide/image26.png ""){width=100% height=auto}\
 
