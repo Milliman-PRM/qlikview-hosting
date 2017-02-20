@@ -851,49 +851,53 @@
     <Content Include="Content\Images\glyphicons-halflings-regular.eot" />
     <Content Include="Content\Images\glyphicons-halflings-regular.ttf" />
     <Content Include="Content\Images\glyphicons-halflings-regular.woff" />
-    <Content Include="..\appsettings_AK.config">
-      <Link>Configs\appsettings_AK.config</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\appsettings_SK.config">
-      <Link>Configs\appsettings_SK.config</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\appsettings_Stag.config">
-      <Link>Configs\appsettings_Stag.config</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\appsettings_VN.config">
-      <Link>Configs\appsettings_VN.config</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\connectionStrings_AK.config">
+    <None Include="..\connectionStrings_AK.config">
       <Link>Configs\connectionStrings_AK.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\connectionStrings_SK.config">
-      <Link>Configs\connectionStrings_SK.config</Link>
+    </None>
+    <None Include="..\connectionStrings_PreStag.config">
+      <Link>Configs\connectionStrings_PreStag.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\connectionStrings_Stag.config">
+    </None>
+    <None Include="..\connectionStrings_Stag.config">
       <Link>Configs\connectionStrings_Stag.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\connectionStrings_VN.config">
+    </None>
+    <None Include="..\connectionStrings_TP.config">
+      <Link>Configs\connectionStrings_TP.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\connectionStrings_VN.config">
       <Link>Configs\connectionStrings_VN.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </None>
     <Content Include="Content\Fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\Fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Content\Fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="Configs\appsettings_PreStag.config">
+    <None Include="..\appsettings_AK_PMC.config">
+      <Link>Configs\appsettings_AK_PMC.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Configs\connectionStrings_PreStag.config">
+    </None>
+    <None Include="..\appsettings_TP_PMC.config">
+      <Link>Configs\appsettings_TP_PMC.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Configs\appsettings_Stakeholder.config" />
-    <Content Include="Configs\connectionStrings_Stakeholder.config" />
+    </None>
+    <None Include="..\appsettings_Stag_PMC.config">
+      <Link>Configs\appsettings_Stag_PMC.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\appsettings_PreStag_PMC.config">
+      <Link>Configs\appsettings_PreStag_PMC.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\appsettings_Stakeholder_PMC.config">
+      <Link>Configs\appsettings_Stakeholder_PMC.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\appsettings_VN_PMC.config">
+      <Link>Configs\appsettings_VN_PMC.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Properties\PublishProfiles\Debug.pubxml" />
     <Content Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

@@ -10,11 +10,11 @@
     <style type="text/css">
         .CenterMeHorVer {
             width: 600px;
-            height: 150px;
+            height: 160px;
             position: absolute;
             left: 50%;
             top: 50%;
-            margin: -75px 0 0 -300px;
+            margin: -80px 0 0 -300px;
             background-color: white;
             font-size: 14px;
             border: 1px solid black;
@@ -29,7 +29,7 @@
 <body>
     <form id="form1" runat="server">
         <asp:ScriptManager runat="server" ID="ScriptManager1"></asp:ScriptManager>
-        <div class="roundShadowContainer">
+        <div class="CenterMeHorVer">
             <br />
             <table style="width: 600px">
                 <tr>

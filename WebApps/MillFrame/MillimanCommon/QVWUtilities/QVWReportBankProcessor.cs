@@ -25,7 +25,7 @@ namespace MillimanCommon
                 List<string> TotalReductionUsers = new List<string>();
                 foreach (QVWReportBank.ProcessingStatusClass PSC in ReportBank.ProcessingStatusList)
                 {
-                    if (PSC.Reason.ToLower().IndexOf("available") != -1)
+                    if ((PSC.Reason.ToLower().IndexOf("available") != -1) || (PSC.Reason.ToLower().IndexOf("success") != -1))
                     {
                         if (SuccessfulReductionUsers.Contains(PSC.UserName) == false)
                         {
