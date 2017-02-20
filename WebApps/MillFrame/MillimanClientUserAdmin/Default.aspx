@@ -1,6 +1,5 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="Default" %>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>Milliman - PRM Client Adminstration</title>
@@ -13,47 +12,17 @@
     <meta http-equiv="pragma" content="no-cache" />
     <telerik:RadStyleSheetManager ID="RadStyleSheetManager1" runat="server" />
     <style type="text/css">
-        .LockOff {
-            display: none;
-            visibility: hidden;
-        }
-
-        .LockOn {
-            display: block;
-            visibility: visible;
-            position: absolute;
-            z-index: 999;
-            top: 0px;
-            left: 0px;
-            width: 110%;
-            height: 110%;
-            background-color: #ccc;
-            text-align: center;
-            padding-top: 20%;
-            filter: alpha(opacity=95);
-            opacity: 0.95;
-            font: 500 12px italic;
-            font-family: 'Segoe UI';
-            overflow: hidden;
-        }
-
+        .LockOff{display:none;visibility:hidden}
+        .LockOn{display:block;visibility:visible;position:absolute;z-index:999;top:0;left:0;width:110%;height:110%;background-color:#ccc;text-align:center;padding-top:20%;filter:alpha(opacity=95);opacity:.95;font:500 12px italic;font-family:'Segoe UI';overflow:hidden}
         /*restyle the radwindow alert box to make it not look bad*/
         .RadWindow .rwWindowContent .radalert {
             background-image: none !important; /* removes the excalamtion mark icon */
             padding-left: 0px !important;
         }
-
-        .RadWindow .rwDialogText {
-            margin-left: 10px !important;
-        }
-
-        .RadWindow .rwPopupButton {
-            margin-left: 100px !important;
-        }
+        .RadWindow .rwDialogText {margin-left: 10px !important;}
+        .RadWindow .rwPopupButton {margin-left: 100px !important;}
         /*//remove expandable image*/
-        .rpExpandHandle {
-            background-image: none !important;
-        }
+        .rpExpandHandle {background-image: none !important;}
     </style>
 </head>
 <body onresize="FullSize('MainTable');" style="background-image: url(Imates/watermark.png); overflow: hidden">
