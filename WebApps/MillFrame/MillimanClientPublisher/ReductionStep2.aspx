@@ -11,6 +11,24 @@
         div.RadTabStrip .rtsLevel .rtsTxt { padding: 0; }
     </style>
 
+    <script type="text/javascript">
+        var HasBeenApproved = false;
+        function Approved( State )
+        {
+            HasBeenApproved = State;
+        }
+
+        function CheckReviewStatus()
+        {
+            if (HasBeenApproved) {
+                return confirm('By clicking \'OK\' you are acknowledging you have reviewed the results of processing your report and the information is correct to publish to a client.\n\nClicking \'OK\' will publish your report to the users.');
+            }
+            else {
+                alert('The report cannot be published until reviewed and the \'Approval\' checkbox clicked at bottom of review approval tab.');
+                return false;
+            }
+        }
+    </script>
 </head>
 <body style="overflow:hidden;" onload="Ready();">
     <form id="form1" runat="server" style="width:100%;height:100%">
@@ -42,7 +60,7 @@
         </section>
 
         <footer style="text-align:center;height:30px">
-            <asp:Button ID="Publish" runat="server" Text="Publish to Production" OnClick="Publish_Click" OnClientClick="return confirm('By clicking \'OK\' you are acknowledging you have reviewed the results of processing your report and the information is correct to publish to a client.\n\nClicking \'OK\' will publish your report to the users.'); " Enabled="False" />
+            <asp:Button ID="Publish" runat="server"  Text="Publish To Production"  OnClientClick="return CheckReviewStatus();" OnClick="Publish_Click"  />
         </footer>
     </form>
     <script type="text/javascript">
