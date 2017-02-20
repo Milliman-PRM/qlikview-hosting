@@ -78,6 +78,7 @@ An **Edit Project Settings** box opens where both **Client Visible Project Setti
 
 
 The **Client Visible Project Settings** represents items visible via the web portal by users, these items consist of
+
   * The Report QVW
   * A User Manual
   * Tool Tip to help the user understand more details
@@ -85,6 +86,7 @@ The **Client Visible Project Settings** represents items visible via the web por
 
 
 **Project Settings** represents items that drive system behavior; these items are not directly viewable via the web portal by users.
+
   * Restricted Views
   * Auto Inclusion
 
