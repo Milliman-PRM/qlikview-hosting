@@ -22,16 +22,15 @@ namespace ClientPublisher.ComplexReporting
 
                     MillimanCommon.ProjectSettings LocalPS = MillimanCommon.ProjectSettings.Load(Session["ProjectPath"].ToString());
 
-                    MillimanCommon.QVWReportBankProcessor RBP = new MillimanCommon.QVWReportBankProcessor(Session["ProjectPath"].ToString());
-                    Dictionary<string, List<MillimanCommon.QVWReportBank.NotSelectableClass>> UnselectableItems = RBP.NotSelectableByUser();
-                    if (UnselectableItems.Count > 0)
+                    ReportingCommon RC = new ReportingCommon();
+                    string WorkingPath = System.IO.Path.GetDirectoryName(Session["ProjectPath"].ToString());
+                    Dictionary<string, List<string>> MissingValueMap = RC.GetMissingValues(WorkingPath);
+                    if ( (MissingValueMap != null) && (MissingValueMap.Count() > 0))
                     {
-                        foreach (KeyValuePair<string, List<MillimanCommon.QVWReportBank.NotSelectableClass>> Unselectable in UnselectableItems)
+                        foreach( KeyValuePair<string,List<string>> KVP in MissingValueMap)
                         {
-                            List<string> Values = new List<string>();
-                            foreach (MillimanCommon.QVWReportBank.NotSelectableClass NI in Unselectable.Value)
-                                Values.Add( "'" + NI.ConceptFieldName + "' <b>missing value</b> '" + NI.FieldName + "'");
-                            MillimanCommon.UI.DynamicTable.CreateTable( "User " + Unselectable.Key + " un-selectable values", Values, PlaceHolder1);
+                            if ( KVP.Value.Count() > 0 )
+                               MillimanCommon.UI.DynamicTable.CreateTable("User " + KVP.Key + " un-selectable values(MISSING)", KVP.Value, PlaceHolder1);
                         }
                     }
                     else
