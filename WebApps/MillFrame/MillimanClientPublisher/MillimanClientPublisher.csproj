@@ -364,6 +364,7 @@
     <Compile Include="ComplexReporting\ReductionStatus.aspx.designer.cs">
       <DependentUpon>ReductionStatus.aspx</DependentUpon>
     </Compile>
+    <Compile Include="ComplexReporting\ReportingCommon.cs" />
     <Compile Include="ComplexReporting\ReviewApproval.aspx.cs">
       <DependentUpon>ReviewApproval.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

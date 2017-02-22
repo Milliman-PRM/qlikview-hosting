@@ -549,5 +549,30 @@ namespace MillimanCommon
             }
             return CandidateFiles;
         }
+
+        //tree utility functions
+        public List<string> GetUniqueLeafNodes( MillimanTreeNode Root)
+        {
+            List<string> UniqueValues = new List<string>();
+            WalkTree(Root,ref  UniqueValues);
+            return UniqueValues;
+        }
+
+        private void WalkTree( MillimanTreeNode Current, ref List<string> UniqueValues)
+        {
+            if ((Current.SubNodes == null) || (Current.SubNodes.Count() == 0))
+            {
+                if ((UniqueValues.Contains(Current.DisplayFieldName) == false) && (string.IsNullOrEmpty(Current.DisplayFieldName) == false))
+                    UniqueValues.Add(Current.DisplayFieldName);
+            }
+            else
+            {
+                foreach (KeyValuePair<string, MillimanTreeNode> NewCurrent in Current.SubNodes)
+                {
+                    WalkTree(NewCurrent.Value, ref UniqueValues);
+                }
+            }
+            
+        }
     }
 }
