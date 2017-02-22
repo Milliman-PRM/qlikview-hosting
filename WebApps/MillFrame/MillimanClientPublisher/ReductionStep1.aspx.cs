@@ -72,6 +72,19 @@ namespace ClientPublisher
                     return;
                 }
 
+                //new code added to validate before processing
+                string LegacyDirectory = System.IO.Path.Combine(WorkingDirectory, "Legacy"); //copies old version of project here for processing
+                if (ValidationProcessor(LegacyDirectory, ProjectSettings) == false)
+                {
+                    //validation processor logs an eror, thus no need here
+                    NavigateTo = "HTML/GeneralIssue.aspx?msg=" + MillimanCommon.Utilities.ConvertStringToHex("The project '" + ProjectSettings.ProjectName + "' failed to validate.  Please report this issue to a system administrator for assistance.");
+                    TaskCompletionWithError = true;
+                    TaskCompleted = true;
+                    base.TaskProcessor(parms);
+                    return;
+                }
+                // end validation code
+
                 DisplayMessage = "Generating hierarchy information setup for new QVW....";
                 //issue request for hierarchy from new master QVW ( needed for autoinclusion processor )
                 MillimanCommon.ReduceConfig ReductionConfiguration = Process.NewMasterQVWParameters(WorkingDirectory, ProjectSettings);
@@ -224,6 +237,119 @@ namespace ClientPublisher
                         return;
                     }
                 }
+            }
+
+            private bool ValidationProcessor(string LegacyDirectory, MillimanCommon.ProjectSettings ProjectSettings)
+            {
+                DisplayMessage = "Validating project before processing....";
+
+                try
+                {
+                    string ProjectLevelQVWPath = System.IO.Path.Combine(LegacyDirectory, ProjectSettings.ProjectName + ".qvw");
+                    string ReducedLevelQVWPath = System.IO.Path.Combine(LegacyDirectory, "ReducedCachedQVWs", ProjectSettings.ProjectName + ".qvw");
+
+                    //remove any qvw, shared or metas that are in reduceduserqvws folders - should not be there
+                    string WorkingDirectoryProjectUsers = System.IO.Path.Combine(LegacyDirectory, "reduceduserqvws");
+                    string[] UselessQVWs = System.IO.Directory.GetFiles(WorkingDirectoryProjectUsers, "*.qvw", System.IO.SearchOption.AllDirectories);
+                    foreach (string QVW in UselessQVWs)
+                    {
+                        string MetaFile = QVW + ".meta";
+                        string Shared = QVW + ".shared";
+                        try
+                        {
+                            System.IO.File.Delete(QVW);
+                            System.IO.File.Delete(MetaFile);
+                            System.IO.File.Delete(Shared);
+                        }
+                        catch (Exception ex)
+                        {  //since this is not critical, but cleanup keep from crashing if fails
+                        }
+                    }
+
+                    //read all the redirection files to see if any are redirecting to wrong place
+                    List<string> RedirectingtoMasterInCache = new List<string>();
+                    List<string> RedirectingToMaster = new List<string>();
+                    List<string> RedirectionFiles = new List<string>();
+                    //this section is done to be foward compatable,  [REFERNCE].redirect is old way of doing things,  projectname.redirect is new way
+                    string[] OldStyleRedirectionFiles = System.IO.Directory.GetFiles(WorkingDirectoryProjectUsers, "[REFERENCE].redirect", System.IO.SearchOption.AllDirectories);
+                    string[] NewStyleRedirectionFiles = System.IO.Directory.GetFiles(WorkingDirectoryProjectUsers, ProjectSettings.ProjectName + ".redirect", System.IO.SearchOption.AllDirectories);
+                    RedirectionFiles.AddRange(OldStyleRedirectionFiles.ToList());
+                    RedirectionFiles.AddRange(NewStyleRedirectionFiles.ToList());
+                    //now look at all reduction files to populate lists
+                    foreach (string RedirectionFile in RedirectionFiles)
+                    {
+                        string Contents = System.IO.File.ReadAllText(RedirectionFile).ToLower();
+                        if (Contents.IndexOf("reducedcachedqvws\\" + ProjectSettings.ProjectName.ToLower() + ".qvw") != -1)
+                            RedirectingtoMasterInCache.Add(RedirectionFile);
+                        else if (Contents.IndexOf(ProjectSettings.ProjectName.ToLower() + ".qvw") != -1)
+                            RedirectingToMaster.Add(RedirectionFile);
+                    }
+
+                    string DocumentRoot = System.Configuration.ConfigurationManager.AppSettings["QVDocumentRoot"];
+                    string PathForGroup = System.IO.Path.Combine(ProjectSettings.AbsoluteProjectPath.Substring(DocumentRoot.Length + 1), "ReducedCachedQVWs");
+
+                    //if someone is redirecting to this, rename it and correct redirection files
+                    if (RedirectingtoMasterInCache.Count() > 0)
+                    {
+                        //if a QVW exists in reduced cache with project name rename it, along with bookmarks and metas
+                        string ReducedLevelNEWQVW = string.Empty;
+                        if (System.IO.File.Exists(ReducedLevelQVWPath))
+                        {
+                            
+
+                            //rename it - could have used MOVE
+                            ReducedLevelNEWQVW = Guid.NewGuid().ToString("N") + ".qvw";
+                            string ReducedLevelNEWQVFilePath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(ReducedLevelQVWPath), ReducedLevelNEWQVW);
+                            System.IO.File.Copy(ReducedLevelQVWPath, ReducedLevelNEWQVFilePath);
+                            if (System.IO.File.Exists(ReducedLevelQVWPath + ".meta"))
+                              System.IO.File.Copy(ReducedLevelQVWPath + ".meta", ReducedLevelNEWQVFilePath + ".meta");
+                            if (System.IO.File.Exists(ReducedLevelQVWPath + ".shared"))
+                                System.IO.File.Copy(ReducedLevelQVWPath + ".shared", ReducedLevelNEWQVFilePath + ".shared");
+                            //get rid of old version
+                            System.IO.File.Delete(ReducedLevelQVWPath);
+                            System.IO.File.Delete(ReducedLevelQVWPath + ".meta");
+                            System.IO.File.Delete(ReducedLevelQVWPath + ".shared");
+                            //now update paths of each reduction file to point to it
+                            foreach (string RedirectFile in RedirectingtoMasterInCache)
+                            {
+                                string Contents = System.IO.Path.Combine(PathForGroup, ReducedLevelNEWQVW);
+                                System.IO.File.WriteAllText(RedirectFile, Contents);
+                            }
+                        }
+                    }
+                    else //otherwise, get rid of it - just a cause of concern
+                    {
+                        System.IO.File.Delete(ReducedLevelQVWPath);
+                        System.IO.File.Delete(ReducedLevelQVWPath + ".meta");
+                        System.IO.File.Delete(ReducedLevelQVWPath + ".shared");
+                    }
+
+
+                    //now,  copy the master qvw into cache as reduced, required to keep all the copies seprate when lumped into reduction folder
+                    if (RedirectingToMaster.Count() > 0)
+                    {
+                        string MasterQVW_ID = Guid.NewGuid().ToString("N") + ".qvw";
+                        string MasterQVWInCache = System.IO.Path.Combine(LegacyDirectory, "ReducedCachedQVWs", MasterQVW_ID);
+                        System.IO.File.Copy(ProjectLevelQVWPath, MasterQVWInCache);
+                        if ( System.IO.File.Exists(ProjectLevelQVWPath + ".meta"))
+                          System.IO.File.Copy(ProjectLevelQVWPath + ".meta", MasterQVWInCache + ".meta");
+                        if ( System.IO.File.Exists(ProjectLevelQVWPath + ".shared"))
+                          System.IO.File.Copy(ProjectLevelQVWPath + ".shared", MasterQVWInCache + ".shared");
+
+                        foreach (string RedirectFile in RedirectingToMaster)
+                        {
+                            string Contents = System.IO.Path.Combine(PathForGroup, MasterQVW_ID);
+                            System.IO.File.WriteAllText(RedirectFile, Contents);
+                        }
+                    }
+                    DisplayMessage = "Project validation was successful...";
+                }
+                catch (Exception ex)
+                {
+                    MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "Client publisher project validation error", ex);
+                    return false;
+                }
+                return true;
             }
 
             private bool WaitOnReductionProcessing(string WorkingDirectory, MillimanCommon.ProjectSettings Settings, string RemoteReductionDir, int TotalAccounts, ProcessingCode.UniqueSelections UniqueSels )

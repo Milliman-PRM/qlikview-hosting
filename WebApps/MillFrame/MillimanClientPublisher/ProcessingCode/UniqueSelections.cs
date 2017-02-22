@@ -54,6 +54,7 @@ namespace ClientPublisher.ProcessingCode
             DataModelFile = System.IO.Path.Combine(WorkingDirectory, DataModelFile);
 
             UniqueSelectionDictionary = new Dictionary<string,UniqueSelection>();
+            List<string> UtilizedQVNames = new List<string>();
 
             string[] Selections = System.IO.Directory.GetFiles(WorkingDirectory, CurrentProject.ProjectName + ".selections", System.IO.SearchOption.AllDirectories);
             foreach( string Selection in Selections )
@@ -77,7 +78,27 @@ namespace ClientPublisher.ProcessingCode
                     else
                         ReferenceFileContents = System.IO.File.ReadAllText(ReferenceFileName);  //otherwise use the old way of doing things
 
-                    US.RequestedReducedQVWName = System.IO.Path.GetFileNameWithoutExtension(ReferenceFileContents);  //should be a GUID looking ID
+                    string RequestedQVName = System.IO.Path.GetFileNameWithoutExtension(ReferenceFileContents);
+
+                    if (UtilizedQVNames.Contains(RequestedQVName) == false)
+                    {
+                        US.RequestedReducedQVWName = RequestedQVName; //should be a GUID looking ID
+                        UtilizedQVNames.Add(RequestedQVName);
+                    }
+                    else
+                    {
+                        //hmmm, if we are here, the hash says the selections are different from any other request, yet the requested QV name is already
+                        //in use - we CANNOT use the requested, since could result in PHI leak - so we will create a new one for the report.  This has the
+                        //side effect that a user may loose thier BOOKMARKS - oh, well....would need to copy over the SHARED file
+                        US.RequestedReducedQVWName = Guid.NewGuid().ToString("N");
+                        UtilizedQVNames.Add(US.RequestedReducedQVWName);  //add to list to flag if attempt to re-use
+                        //we need to write back to reference file - be forward compatable
+                        ReferenceFileContents = ReferenceFileContents.Replace(RequestedQVName, US.RequestedReducedQVWName);
+                        if (System.IO.File.Exists(NewReferenceFilename))  //look to see if the new un-ambigious reference name is avaialble, if so use it
+                            System.IO.File.WriteAllText(NewReferenceFilename, ReferenceFileContents); //relative path to a QVW
+                        else
+                            System.IO.File.WriteAllText(ReferenceFileName, ReferenceFileContents);  //otherwise use the old way of doing things
+                    }
                     UniqueSelectionDictionary.Add(Hash, US);
                 }
             }

@@ -80,6 +80,15 @@ namespace ClientPublisher.ProcessingCode
                 List<string> CachedExtensions = new List<string> { "*.shared", "*.meta", "*.cacheindex" };
                 MillimanCommon.Utilities.DirectoryCopy(SourceReducedCachedQVWsDir, DestReducedCachedQVWsDir, true, CachedExtensions);
 
+                //special case - we don't want to copy over all the legacy QVWs - however if there is a master qvw that has been added to the cache
+                //using the project name we do want to move it
+                string LegacyMasterCachedQVW = Path.Combine(CurrentProject.AbsoluteProjectPath,"ReducedCachedQVWs", CurrentProject.QVName + ".qvw");
+                if ( System.IO.File.Exists(LegacyMasterCachedQVW))
+                {
+                    string CopyTo = Path.Combine(WorkingDirectory , "ReducedCachedQVWs", CurrentProject.QVName + ".qvw");
+                    System.IO.File.Copy(LegacyMasterCachedQVW, CopyTo);
+                }
+                //end special case
                 return true;
             }
             catch (Exception ex)
