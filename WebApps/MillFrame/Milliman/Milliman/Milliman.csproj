@@ -111,6 +111,7 @@
     <Content Include="Content\Script\jquery.v1.7.1.js" />
     <Content Include="Content\Script\jquery.v1.9.1.js" />
     <Content Include="Content\Script\maskedinput.js" />
+    <Content Include="Content\Script\RefreshPage.js" />
     <Content Include="Content\Style\bootstrap-dialog.min.css" />
     <Content Include="Content\Style\bootstrap.css" />
     <Content Include="Content\Style\bootstrap.min.css" />
