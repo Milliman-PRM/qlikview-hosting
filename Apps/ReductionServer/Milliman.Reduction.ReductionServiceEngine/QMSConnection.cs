@@ -68,10 +68,15 @@ namespace Milliman.Reduction.ReductionEngine {
         }
 
         private void CreateCommnunication() {
+            //all this should be set via WCF configuration, not programatically
             this._binding = new System.ServiceModel.BasicHttpBinding();
             this._binding.MaxBufferPoolSize = int.MaxValue;
             this._binding.MaxReceivedMessageSize = int.MaxValue;
             this._binding.MaxBufferSize = int.MaxValue;
+            this._binding.CloseTimeout = new System.TimeSpan(12, 0, 0);
+            this._binding.OpenTimeout = new System.TimeSpan(12, 0, 0);
+            this._binding.SendTimeout = new System.TimeSpan(12, 0, 0);
+            this._binding.ReceiveTimeout = new System.TimeSpan(12, 0, 0);
             this._binding.Security.Mode = BasicHttpSecurityMode.TransportCredentialOnly;
             this._binding.Security.Transport.ClientCredentialType = HttpClientCredentialType.Ntlm;
             this._endpointBehavior = new ServiceKeyEndpointBehavior();
