@@ -74,7 +74,7 @@ namespace ClientPublisher.ComplexReporting
             if (UniqueNewLeafs.Count() == 0)
                 return null;  //no differences
 
-            string Template = "< Node Text =\"_TEXT_\" Value=\"_VALUE_\"></Node>";
+            string Template = "<Node Text =\"_TEXT_\" Value=\"_VALUE_\"></Node>";
             string ContainerXML = string.Empty;
             foreach( string LeafText in UniqueNewLeafs)
             {
