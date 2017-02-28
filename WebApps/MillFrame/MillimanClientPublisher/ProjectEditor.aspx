@@ -6,8 +6,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title></title>
-    <script src="jQuery/jquery.min.js" type="text/javascript"></script>
+    <script src="Content/Script/jquery.min.js" type="text/javascript"></script>
     <script src="Content/Script/jquery.min.v2.1.1.js"></script>
+    <%--refresh page java script--%>
+    <script src="Content/Script/RefreshPage.js"></script>
+
     <script src="Content/Script/bootstrap.min.v3.3.7.js"></script>
     <link href="Content/Style/bootstrap.css" rel="stylesheet" />
     <link href="Content/Style/MillframeStyle.css" rel="stylesheet" />
@@ -177,13 +180,13 @@
 
             }
 
+            var refreshPage = '<%=ConfigurationManager.AppSettings["ApplicationRefreshTime"].ToString() %>'
+
         </script>
     </telerik:RadCodeBlock>
 </head>
-<body style="overflow: hidden;" onload="SizeToFit()">
-
+<body style="overflow: hidden;" onload="SizeToFit();RefreshPage(refreshPage);">
     <form id="form1" runat="server">
-
 
         <asp:ScriptManager runat="server" ID="ScriptManager1"></asp:ScriptManager>
         <telerik:RadFormDecorator ID="FormDecorator1" runat="server" DecoratedControls="all" DecorationZoneID="decorationZone" ControlsToSkip="All" Skin="Silk"></telerik:RadFormDecorator>

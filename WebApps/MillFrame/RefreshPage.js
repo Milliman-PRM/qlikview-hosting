@@ -1,9 +1,9 @@
-function RefreshPage(appTimeOut) {
+function RefreshPage(refreshPage) {
     //alert(appTimeOut);
 
     var meta = document.createElement('meta');
     meta.httpEquiv = "refresh";
-    meta.content = appTimeOut * 60;
+    meta.content = refreshPage * 60;
     document.getElementsByTagName('head')[0].appendChild(meta);
     //alert("appTimeOut" + meta.content);
 
