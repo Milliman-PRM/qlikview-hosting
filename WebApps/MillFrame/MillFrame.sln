@@ -125,6 +125,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Script", "Script", "{93066D
 		Milliman\Milliman\Content\Script\jquery.v1.7.1.js = Milliman\Milliman\Content\Script\jquery.v1.7.1.js
 		Milliman\Milliman\Content\Script\jquery.v1.9.1.js = Milliman\Milliman\Content\Script\jquery.v1.9.1.js
 		Milliman\Milliman\Content\Script\maskedinput.js = Milliman\Milliman\Content\Script\maskedinput.js
+		RefreshPage.js = RefreshPage.js
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Style", "Style", "{7F3D7BF0-7159-4FE3-91C9-C6074F8D306C}"
