@@ -4,8 +4,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>Milliman - PRM Client Adminstration</title>
-    <meta http-equiv="refresh" content="1200" />
-    <%--refresh page in 20 mins, session timeout is 15 mins--%>
     <meta http-equiv="cache-control" content="max-age=0" />
     <meta http-equiv="cache-control" content="no-cache" />
     <meta http-equiv="expires" content="0" />
@@ -254,6 +252,24 @@
                 
         //var EmailDelimiter = document.getElementById("hfEmailDelimiter").value;
         //alert(EmailDelimiter);
+
+        //**************************************************************************************************************************************//        
+        //this code block check for the Rad Active winodw on page and if there is none, then refresh page after the time defined in web.config
+        var refreshPageInterval = "<%= ConfigurationManager.AppSettings["ApplicationRefreshTime"].ToString()%>";
+        //convert to milliseconds since the set interval consume milliseconds
+        var totalRefreshInterval = refreshPageInterval * 60 * 1000;
+        //set interval to refresh page auto
+        setInterval(RefreshPage, totalRefreshInterval);
+        function RefreshPage() {
+                //Getting rad window manager
+                var rad_manager = GetRadWindowManager();
+                //Call GetActiveWindow to get the active window
+                var rad_active_window = rad_manager.getActiveWindow();
+                if (rad_active_window == null) {
+                    window.location.reload();
+                }
+        }
+        //-------------------------------------------------------------------------------------------------------------------------------------//
 
         function CloseAndRefresh(Msg) {
             alert(Msg);
