@@ -8,7 +8,6 @@
 
     <%--refresh page java script--%>
     <script src="Content/Script/RefreshPage.js"></script>
-
     <link href="Content/Style/bootstrap.css" rel="stylesheet" type="text/css" />
     <link href="Content/Style/MillframeStyle.css" rel="stylesheet" type="text/css" />
     <style type="text/css">
@@ -83,9 +82,11 @@
         }
     </style>
 
+<telerik:RadCodeBlock ID="RadCodeBlock1" runat="server">
     <script type="text/javascript">
-        var refreshPage = '<%=ConfigurationManager.AppSettings["ApplicationRefreshTime"].ToString() %>'
+        var refreshPage = "<%=ConfigurationManager.AppSettings["ApplicationRefreshTime"].ToString() %>";
     </script>
+</telerik:RadCodeBlock> 
 
 </head>
 <body onresize="FullSize('MainTable');" class="windowScroll" onload="RefreshPage(refreshPage);">
