@@ -75,7 +75,7 @@ namespace PrmServerMonitor
 
             if (SourceDocumentNodes.Count == 0)
             {
-                Trace.WriteLine("No document nodes found in path " + Path.Combine(SourceDocumentFolder.General.Path, RelativePath));
+                Trace.WriteLine("No document nodes found in path " + SourceDocumentFolder.General.Path + Path.DirectorySeparatorChar + RelativePath);
             }
 
             foreach (DocumentNode SourceDocumentNode in SourceDocumentNodes.OrderByDescending(x => x.IsSubFolder).ThenBy(x => x.Name))
