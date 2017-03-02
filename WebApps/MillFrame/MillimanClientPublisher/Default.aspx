@@ -102,10 +102,8 @@
                                                 <tr>
                                                     <td style="width: 75%;">
                                                         <table id="table2" cellpadding="6" cellspacing="0">
-                                                            <tr>
-                                                                <td>
-                                                                    <input type="hidden" name="hidden" id="hidden" value='<%#Eval("ProjectName")%>' class="hiddenFiled" />
-                                                                </td>
+                                                           <tr style="height:1px;font:5px">
+                                                                <td><input type="hidden" name="hidden" id="hidden" value='<%#Eval("ProjectName")%>' class="hiddenFiled" /></td>
                                                             </tr>
                                                             <tr>
                                                                 <td style="width: 25%;">Tool Tip:
@@ -197,10 +195,8 @@
                                                 <tr>
                                                     <td style="width: 75%;">
                                                         <table cellpadding="6" cellspacing="0">
-                                                            <tr>
-                                                                <td>
-                                                                    <input type="hidden" name="hidden" id="hidden" value='<%#Eval("ProjectName")%>' class="clshiddenFiled" />
-                                                                </td>
+                                                           <tr style="height:1px;font:5px">
+                                                                <td><input type="hidden" name="hidden" id="hidden" value='<%#Eval("ProjectName")%>' class="hiddenFiled" /></td>
                                                             </tr>
                                                             <tr>
                                                                 <td style="width: 25%;">Tool Tip:
