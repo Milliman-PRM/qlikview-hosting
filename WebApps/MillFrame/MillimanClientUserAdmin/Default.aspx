@@ -29,7 +29,7 @@
             font-family: 'Segoe UI';
             overflow: hidden;
         }
-
+         
         /*restyle the radwindow alert box to make it not look bad*/
         .RadWindow .rwWindowContent .radalert {
             background-image: none !important; /* removes the excalamtion mark icon */
