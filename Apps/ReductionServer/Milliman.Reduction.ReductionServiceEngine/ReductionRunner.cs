@@ -286,7 +286,7 @@ namespace Milliman.Reduction.ReductionEngine
             using (StreamWriter writer = new StreamWriter(destinationFile))
             {
                 foreach (var key in values.Keys)
-                    writer.WriteLine(values[key]);
+                    writer.WriteLine(values[key].Trim(new char[] { '"' }));
             }
         }
 

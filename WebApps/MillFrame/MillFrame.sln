@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Milliman", "Milliman\Milliman\Milliman.csproj", "{A4E6BA79-3F26-4311-AB03-BCA27072EA18}"
 EndProject
@@ -125,6 +125,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Script", "Script", "{93066D
 		Milliman\Milliman\Content\Script\jquery.v1.7.1.js = Milliman\Milliman\Content\Script\jquery.v1.7.1.js
 		Milliman\Milliman\Content\Script\jquery.v1.9.1.js = Milliman\Milliman\Content\Script\jquery.v1.9.1.js
 		Milliman\Milliman\Content\Script\maskedinput.js = Milliman\Milliman\Content\Script\maskedinput.js
+		RefreshPage.js = RefreshPage.js
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Style", "Style", "{7F3D7BF0-7159-4FE3-91C9-C6074F8D306C}"
@@ -145,14 +146,26 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configs", "Configs", "{003A8340-D761-4800-8DA8-63F1BA64280A}"
 	ProjectSection(SolutionItems) = preProject
 		appsettings_AK.config = appsettings_AK.config
+		appsettings_AK_PMC.config = appsettings_AK_PMC.config
 		appsettings_PreStag.config = appsettings_PreStag.config
-		appsettings_SK.config = appsettings_SK.config
+		appsettings_PreStag_PMC.config = appsettings_PreStag_PMC.config
+		appsettings_PRODUCTION.config = appsettings_PRODUCTION.config
+		appsettings_PRODUCTION_PMC.config = appsettings_PRODUCTION_PMC.config
 		appsettings_Stag.config = appsettings_Stag.config
+		appsettings_Stag_PMC.config = appsettings_Stag_PMC.config
+		appsettings_Stakeholder.config = appsettings_Stakeholder.config
+		appsettings_Stakeholder_PMC.config = appsettings_Stakeholder_PMC.config
+		appsettings_TP.config = appsettings_TP.config
+		appsettings_TP_PMC.config = appsettings_TP_PMC.config
 		appsettings_VN.config = appsettings_VN.config
+		appsettings_VN_PMC.config = appsettings_VN_PMC.config
 		connectionStrings_AK.config = connectionStrings_AK.config
 		connectionStrings_PreStag.config = connectionStrings_PreStag.config
-		connectionStrings_SK.config = connectionStrings_SK.config
+		connectionStrings_PRODUCTION.config = connectionStrings_PRODUCTION.config
+		connectionStrings_PRODUCTION_PMC.config = connectionStrings_PRODUCTION_PMC.config
 		connectionStrings_Stag.config = connectionStrings_Stag.config
+		connectionStrings_Stakeholder.config = connectionStrings_Stakeholder.config
+		connectionStrings_TP.config = connectionStrings_TP.config
 		connectionStrings_VN.config = connectionStrings_VN.config
 	EndProjectSection
 EndProject

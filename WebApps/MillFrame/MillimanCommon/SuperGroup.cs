@@ -106,7 +106,7 @@ namespace MillimanCommon
             {
             }
 
-            public SuperGroupContainer(string Name, string Description, List<string> AdminAccounts, List<string> PublishingAccounts, List<string> Groups, bool CommaDelimitedEmail = false,bool SemiColonForEmails = false)
+            public SuperGroupContainer(string Name, string Description, List<string> AdminAccounts, List<string> PublishingAccounts, List<string> Groups, bool CommaDelimitedEmail = false, bool SemiColonForEmails = false)
             {
                 _ContainerName = Name;
                 _ContainerDescription = Description;
@@ -152,29 +152,36 @@ namespace MillimanCommon
         /// <returns></returns>
         public List<SuperGroupContainer> GetSupersForClientAdmin(string ClientAdminName)
         {
-            //Verify the settings are valid each time a user attempts access, could have
-            //changed via group being removed from user
-            ValidateUserForSuperGroup(ClientAdminName);
-
             List<SuperGroupContainer> Supers = new List<SuperGroupContainer>();
-            if (SuperGroupContainers == null)
+            try
             {
-                Report.Log(Report.ReportType.Error, "Super group file is missing - '" + SuperGroupFilePath + @"'");
-                return Supers;
-            }
-            foreach (SuperGroupContainer SGC in SuperGroupContainers)
-            {
-                if (SGC.AdminUserAccounts != null)
+                //Verify the settings are valid each time a user attempts access, could have
+                //changed via group being removed from user
+                ValidateUserForSuperGroup(ClientAdminName);
+
+                if (SuperGroupContainers == null)
                 {
-                    foreach (string User in SGC.AdminUserAccounts)
+                    Report.Log(Report.ReportType.Error, "Super group file is missing - '" + SuperGroupFilePath + @"'");
+                    return Supers;
+                }
+                foreach (SuperGroupContainer SGC in SuperGroupContainers)
+                {
+                    if (SGC.AdminUserAccounts != null)
                     {
-                        if (string.Compare(User, ClientAdminName, true) == 0)
+                        foreach (string User in SGC.AdminUserAccounts)
                         {
-                            Supers.Add(SGC);
-                            break;
+                            if (string.Compare(User, ClientAdminName, true) == 0)
+                            {
+                                Supers.Add(SGC);
+                                break;
+                            }
                         }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                Report.Log(Report.ReportType.Error, "SuperGroup:GetSupersForClientAdmin|---Failed to get supers for client admin---", ex);
             }
             return Supers;
         }
@@ -186,29 +193,36 @@ namespace MillimanCommon
         /// <returns></returns>
         public List<SuperGroupContainer> GetSupersForPublishingAdmin(string ClientAdminName)
         {
-            //Verify the settings are valid each time a user attempts access, could have
-            //changed via group being removed from user
-            ValidateUserForSuperGroup(ClientAdminName);
-
             List<SuperGroupContainer> Supers = new List<SuperGroupContainer>();
-            if (SuperGroupContainers == null)
+            try
             {
-                Report.Log(Report.ReportType.Error, "Super group file is missing - '" + SuperGroupFilePath + @"'");
-                return Supers;
-            }
-            foreach (SuperGroupContainer SGC in SuperGroupContainers)
-            {
-                if (SGC.PublisherUserAccounts != null)
+                //Verify the settings are valid each time a user attempts access, could have
+                //changed via group being removed from user
+                ValidateUserForSuperGroup(ClientAdminName);
+
+                if (SuperGroupContainers == null)
                 {
-                    foreach (string User in SGC.PublisherUserAccounts)
+                    Report.Log(Report.ReportType.Error, "Super group file is missing - '" + SuperGroupFilePath + @"'");
+                    return Supers;
+                }
+                foreach (SuperGroupContainer SGC in SuperGroupContainers)
+                {
+                    if (SGC.PublisherUserAccounts != null)
                     {
-                        if (string.Compare(User, ClientAdminName, true) == 0)
+                        foreach (string User in SGC.PublisherUserAccounts)
                         {
-                            Supers.Add(SGC);
-                            break;
+                            if (string.Compare(User, ClientAdminName, true) == 0)
+                            {
+                                Supers.Add(SGC);
+                                break;
+                            }
                         }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                Report.Log(Report.ReportType.Error, "SuperGroup:GetSupersForPublishingAdmin|---Failed to get supers for publish admin---", ex);
             }
             return Supers;
         }
@@ -222,32 +236,40 @@ namespace MillimanCommon
         /// <param name="User"></param>
         private void ValidateUserForSuperGroup(string User)
         {
-            //if we have not supers or I am an admin, don't scrub
-            if ((SuperGroupContainers == null) || (System.Web.Security.Roles.IsUserInRole("administrator")))
-                return;  //nothing to do
-
-            bool Modified = false;
-            foreach (SuperGroupContainer Current in SuperGroupContainers)
+            try
             {
-                //only check a super group that has USER as part of items
-                if (Current.PublisherUserAccounts.Contains(User, StringComparer.OrdinalIgnoreCase) || Current.AdminUserAccounts.Contains(User, StringComparer.OrdinalIgnoreCase))
+                //if we have not supers or I am an admin, don't scrub
+                if ((SuperGroupContainers == null) || (System.Web.Security.Roles.IsUserInRole("administrator")))
+                    return;  //nothing to do
+
+                bool Modified = false;
+                foreach (SuperGroupContainer Current in SuperGroupContainers)
                 {
-                    foreach (string GroupName in Current.GroupNames)
+                    //only check a super group that has USER as part of items
+                    if (Current.PublisherUserAccounts.Contains(User, StringComparer.OrdinalIgnoreCase) || Current.AdminUserAccounts.Contains(User, StringComparer.OrdinalIgnoreCase))
                     {
-                        //check to see user is in EVERY role of supergroup
-                        if (System.Web.Security.Roles.IsUserInRole(User, GroupName) == false)
+                        foreach (string GroupName in Current.GroupNames)
                         {
-                            Current.PublisherUserAccounts.Remove(User);
-                            Current.AdminUserAccounts.Remove(User);
-                            Modified = true;
+                            //check to see user is in EVERY role of supergroup
+                            if (System.Web.Security.Roles.IsUserInRole(User, GroupName) == false)
+                            {
+                                Current.PublisherUserAccounts.Remove(User);
+                                Current.AdminUserAccounts.Remove(User);
+                                Modified = true;
+                            }
                         }
                     }
                 }
+                if ((Modified) && (SuperGroupContainers != null))
+                {
+                    //user not in every group - we removed them so re-save
+                    Save();
+                }
+                //Report.Log(Report.ReportType.Info, "SuperGroup:ValidateUserForSuperGroup|----validate and save sucessfull super group----");
             }
-            if ((Modified) && (SuperGroupContainers != null))
+            catch (Exception ex)
             {
-                //user not in every group - we removed them so re-save
-                Save();
+                Report.Log(Report.ReportType.Error, "SuperGroup:ValidateUserForSuperGroup|---Failed to validate and Save super group---", ex);
             }
         }
 
@@ -265,16 +287,24 @@ namespace MillimanCommon
 
         public bool DeleteSuper(string SuperGroupName)
         {
-            if (SuperGroupContainers == null)
-                return false;
-            for (int Index = SuperGroupContainers.Count - 1; Index >= 0; Index--)
+            try
             {
-                if (string.Compare(SuperGroupContainers[Index].ContainerName, SuperGroupName, true) == 0)
+                if (SuperGroupContainers == null)
+                    return false;
+                for (int Index = SuperGroupContainers.Count - 1; Index >= 0; Index--)
                 {
-                    SuperGroupContainers.RemoveAt(Index);
-                    Save();
-                    return true;
+                    if (string.Compare(SuperGroupContainers[Index].ContainerName, SuperGroupName, true) == 0)
+                    {
+                        SuperGroupContainers.RemoveAt(Index);
+                        Save();
+                        //Report.Log(Report.ReportType.Info, "SuperGroup:DeleteSuper|----Delete and save sucessfull super group----");
+                        return true;
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                Report.Log(Report.ReportType.Error, "SuperGroup:DeleteSuper|---Failed to delete super group and save---", ex);
             }
             return false;
         }
@@ -287,19 +317,33 @@ namespace MillimanCommon
         private static object instance_lock = new object();
         public static SuperGroup GetInstance()
         {
-            lock (instance_lock) //lock on gettting instance to protect against threading issues( good enough for now)
+            try
             {
-                if (instance == null)
-                    instance = Load();
-                return instance;
+                lock (instance_lock) //lock on gettting instance to protect against threading issues( good enough for now)
+                {
+                    if (instance == null)
+                        instance = Load();
+                }
             }
+            catch (Exception ex)
+            {
+                Report.Log(Report.ReportType.Error, "SuperGroup:GetInstance|---Failed to get instance---", ex);
+            }
+            return instance;
         }
         public static void KillInstance()
         {
-            lock (instance_lock) //lock on gettting instance to protect against threading issues( good enough for now)
+            try
             {
-                if (instance != null)
-                    instance = null;
+                lock (instance_lock) //lock on gettting instance to protect against threading issues( good enough for now)
+                {
+                    if (instance != null)
+                        instance = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                Report.Log(Report.ReportType.Error, "SuperGroup:KillInstance|---Failed to kill instance---", ex);
             }
         }
         //end singleton
@@ -318,41 +362,65 @@ namespace MillimanCommon
 
         public bool Save()
         {
-            StopFileWatcher();  //we are a producer,  stop watching since we always write things
-            var serializer = new SharpSerializer(false);
-            serializer.Serialize(this, SuperGroupFilePath);
+            try
+            {
+                StopFileWatcher();  //we are a producer,  stop watching since we always write things
+                var serializer = new SharpSerializer(false);
+                serializer.Serialize(this, SuperGroupFilePath);
+                StartFileWatcher(SuperGroupFilePath);
+            }
+            catch (Exception ex)
+            {
+                Report.Log(Report.ReportType.Error, "SuperGroup:Save|---Failed to Save serializer---", ex);
+            }
             return true;
         }
 
         public static void StartFileWatcher(string SuperGroupFilePath)
         {
-            //start watching if not already watching
-            if (FileWatcher == null)
+            try
             {
-                FileWatcher = new System.IO.FileSystemWatcher(System.IO.Path.GetDirectoryName(SuperGroupFilePath), System.IO.Path.GetFileName(SuperGroupFilePath));
-                FileWatcher.NotifyFilter = System.IO.NotifyFilters.LastWrite;
-                FileWatcher.Changed += FileWatcher_Changed;
+                //start watching if not already watching
+                if (FileWatcher == null)
+                {
+                    FileWatcher = new System.IO.FileSystemWatcher(System.IO.Path.GetDirectoryName(SuperGroupFilePath), System.IO.Path.GetFileName(SuperGroupFilePath));
+                    FileWatcher.NotifyFilter = System.IO.NotifyFilters.LastWrite;
+                    FileWatcher.Changed += FileWatcher_Changed;
+                   // Report.Log(Report.ReportType.Info, "SuperGroup:StartFileWatcher|----start watching----");
+                }
                 FileWatcher.EnableRaisingEvents = true;
+            }
+            catch (Exception ex)
+            {
+                Report.Log(Report.ReportType.Error, "SuperGroup:StartFileWatcher|---Failed to launch filewather and raise filewathcer change event---", ex);
             }
         }
 
         public static void FileWatcher_Changed(object sender, System.IO.FileSystemEventArgs e)
         {
-            //wait for at least 30 seconds to load
-            string RepoFilePath = ConfigurationManager.AppSettings["SuperGroupFilePath"];
-            System.IO.FileInfo FI = new System.IO.FileInfo(RepoFilePath);
-            for (int Index = 0; Index < 30; Index++)
+            try
             {
-                if (IsFileLocked(FI) == false)
+                //wait for at least 30 seconds to load
+                string RepoFilePath = ConfigurationManager.AppSettings["SuperGroupFilePath"];
+                System.IO.FileInfo FI = new System.IO.FileInfo(RepoFilePath);
+                for (int Index = 0; Index < 30; Index++)
                 {
-                    break;
+                    if (IsFileLocked(FI) == false)
+                    {
+                        break;
+                    }
+                    System.Threading.Thread.Sleep(1000);
                 }
-                System.Threading.Thread.Sleep(1000);
-            }
 
-            //this will null out the current instance and reload it with new data
-            SuperGroup.KillInstance();
-            SuperGroup.GetInstance(); //this will reload everything
+                //this will null out the current instance and reload it with new data
+                SuperGroup.KillInstance();
+                SuperGroup.GetInstance(); //this will reload everything
+                //Report.Log(Report.ReportType.Info, "SuperGroup:FileWatcher_Changed|----Wiat for 30 sec and null out the current instance and reload the file with new data complete----");
+            }
+            catch (Exception ex)
+            {
+                Report.Log(Report.ReportType.Error, "SuperGroup:FileWatcher_Changed|---Failed to Change the File---", ex);
+            }
         }
 
         public static bool IsFileLocked(System.IO.FileInfo file)
@@ -365,6 +433,7 @@ namespace MillimanCommon
             }
             catch (System.IO.IOException)
             {
+                //Report.Log(Report.ReportType.Error, "SuperGroup:IsFileLocked|----file is unavalible----");
                 //the file is unavailable because it is:
                 //still being written to
                 //or being processed by another thread
@@ -375,7 +444,7 @@ namespace MillimanCommon
             {
                 if (stream != null)
                     stream.Close();
-            }
+            }            
 
             //file is not locked
             return false;
@@ -388,62 +457,35 @@ namespace MillimanCommon
 
         public static SuperGroup Load()
         {
-            //this gets called first
-            string SuperGroupFilePath = ConfigurationManager.AppSettings["SuperGroupFilePath"];
-            StartFileWatcher(SuperGroupFilePath);
-
-            //we need to make sure events are off while we load
-            //apparently sharp deserialize mods the file in some way thus we get
-            //multiple events that prompt loading
-            bool EventsEnabled = FileWatcher.EnableRaisingEvents;
-            FileWatcher.EnableRaisingEvents = false;
             SuperGroup SuperGroupRepo = null;
-
-            var serializer = new SharpSerializer(false);
-            if (System.IO.File.Exists(SuperGroupFilePath))
+            try
             {
-                SuperGroupRepo = serializer.Deserialize(SuperGroupFilePath) as SuperGroup;
-                SuperGroupRepo.SuperGroupFilePath = SuperGroupFilePath;
+                //this gets called first
+                string SuperGroupFilePath = ConfigurationManager.AppSettings["SuperGroupFilePath"];
+                StartFileWatcher(SuperGroupFilePath);
+
+                //we need to make sure events are off while we load
+                //apparently sharp deserialize mods the file in some way thus we get
+                //multiple events that prompt loading
+                bool EventsEnabled = FileWatcher.EnableRaisingEvents;
+                FileWatcher.EnableRaisingEvents = false;
+                
+                var serializer = new SharpSerializer(false);
+                if (System.IO.File.Exists(SuperGroupFilePath))
+                {
+                    SuperGroupRepo = serializer.Deserialize(SuperGroupFilePath) as SuperGroup;
+                    SuperGroupRepo.SuperGroupFilePath = SuperGroupFilePath;
+                }
+                FileWatcher.EnableRaisingEvents = EventsEnabled; //set back to original state             
+                //Report.Log(Report.ReportType.Info, "SuperGroup:Load|----load super group----");
             }
-            FileWatcher.EnableRaisingEvents = EventsEnabled; //set back to original state
-
-            //Uncomment to regenerate file
-            //SuperGroup SG = new SuperGroup();
-            //SuperGroup.SuperGroupContainer SGC1 = new SuperGroupContainer();
-            //SGC1.ContainerName = @"New York Projects";
-            //SGC1.ContainerDescription = @"Projects related to New York office";
-            //SGC1.AllowTempPasswordEntry = true;
-            //SGC1.SemiColonDelimitedEmail = false;
-            //SGC1.AdminUserAccounts = new List<string>() { "van.nanney@milliman.com", "maggie.alston@milliman.com", "pamela.pelizarri@milliman.com", "david.pierce@milliman.com" };
-            //SGC1.PublisherUserAccounts = new List<string>() { "van.nanney@milliman.com", "maggie.alston@milliman.com", "pamela.pelizarri@milliman.com", "david.pierce@milliman.com" };
-            //SGC1.GroupNames = new List<string>() { "0000EXT01_NewYork_BPCI Demo Milliman", "0000EXT01_NewYork_BPCI Demo Premier", "0000EXT01_NewYork_LIVE BPCI - CAM", "0000EXT01_NewYork_LIVE BPCI - Premier", "0000EXT01_NewYork_LIVE BPCI - USPI" };
-            //SG.SuperGroupContainers.Add(SGC1);
-
-            //SuperGroup.SuperGroupContainer SGC2 = new SuperGroupContainer();
-            //SGC2.ContainerName = @"Hartford Projects";
-            //SGC2.ContainerDescription = @"Projects related to Hartford office";
-            //SGC2.GroupNames = new List<string>() { "0000EXT01_Hartford" };
-            //SGC2.AllowTempPasswordEntry = false;
-            //SGC2.SemiColonDelimitedEmail = false;
-            //SG.SuperGroupContainers.Add(SGC2);
-
-            //SuperGroup.SuperGroupContainer SGC3 = new SuperGroupContainer();
-            //SGC3.ContainerName = @"WOAH Projects";
-            //SGC3.ContainerDescription = @"Projects related to WOAH";
-            //SGC3.AllowTempPasswordEntry = false;
-            //SGC3.SemiColonDelimitedEmail = false;
-            //SGC3.AdminUserAccounts = new List<string>() { "van.nanney@milliman.com", "david.pierce@milliman.com", "tmuday@dochshp.com" };
-            //SGC3.GroupNames = new List<string>() { "0273WOH01_Medicaid_PRCA", "0273WOH01_Medicaid_WOAH", "0273WOH01_Medicaid_ALL", "0273WOH01_Medicaid_Demo" };
-            //SG.SuperGroupContainers.Add(SGC3);
-            //SG.SuperGroupFilePath = SuperGroupFilePath;
-            //SG.Save();
-            //end file generation
-
-
+            catch (Exception ex)
+            {
+                Report.Log(Report.ReportType.Error, "SuperGroup:Load|---Failed to load file---", ex);
+            }
             return SuperGroupRepo;
         }
         #endregion
-
 
     }
 }

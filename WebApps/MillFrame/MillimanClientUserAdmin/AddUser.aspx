@@ -1,38 +1,95 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="AddUser.aspx.cs" Inherits="MillimanClientUserAdmin.AddUser" Async="true" %>
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title></title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <%--refresh page java script--%>
+    <script src="Content/Script/RefreshPage.js"></script>
     <link href="Content/Style/bootstrap.css" rel="stylesheet" type="text/css" />
     <link href="Content/Style/MillframeStyle.css" rel="stylesheet" type="text/css" />
-  <style type="text/css">
-        .LockOff{display:none;visibility:hidden}
-        .LockOn{display:block;visibility:visible;position:absolute;z-index:999;top:0;left:0;width:110%;height:110%;background-color:#ccc;text-align:center;padding-top:20%;filter:alpha(opacity=95);opacity:.95;font:500 12px italic;font-family:'Segoe UI';overflow:hidden}
-        .roundShadowContainer{margin:10px 0 0}
-        .containerWrap{padding:4px}
-        .engravedHeader{font-size:14px}
-        .imageButtonClass{height:15px}
+    <style type="text/css">
+        .LockOff {
+            display: none;
+            visibility: hidden;
+        }
+
+        .LockOn {
+            display: block;
+            visibility: visible;
+            position: absolute;
+            z-index: 999;
+            top: 0px;
+            left: 0px;
+            width: 110%;
+            height: 110%;
+            background-color: #ccc;
+            text-align: center;
+            padding-top: 20%;
+            filter: alpha(opacity=95);
+            opacity: 0.95;
+            font: 500 12px italic;
+            font-family: 'Segoe UI';
+            overflow: hidden;
+        }
+
+        .roundShadowContainer {
+            margin-top: 10px;
+            margin-left: 0;
+            margin-bottom: 0;
+            margin-right: 0;
+        }
+
+        .containerWrap {
+            padding: 4px;
+        }
+
+        .engravedHeader {
+            font-size: 14px;
+        }
+
+        .imageButtonClass {
+            height: 15px;
+        }
+
+        #divSubmit {
+            margin: 4px;
+            padding: 4px;
+        }
         /*//remove expandable image*/
-        .rpExpandHandle {background-image:none!important;}
+        .rpExpandHandle {
+            background-image: none !important;
+        }
         /*//remove thead gird lines*/
-        .RadGrid_Office2010Silver .rgHeader, .RadGrid_Office2010Silver th.rgResizeCol, .RadGrid_Office2010Silver .rgHeaderWrapper
-        {
-            border:none;
+        .RadGrid_Office2010Silver .rgHeader, .RadGrid_Office2010Silver th.rgResizeCol, .RadGrid_Office2010Silver .rgHeaderWrapper {
+            border: none;
         }
-        .RadGrid_Office2010Silver .rgRow > td, .RadGrid_Office2010Silver .rgAltRow > td, .RadGrid_Office2010Silver .rgEditRow > td, .RadGrid_Office2010Silver .rgFooter > td
-        {
-             border:none;
+
+        .RadGrid_Office2010Silver .rgRow > td, .RadGrid_Office2010Silver .rgAltRow > td, .RadGrid_Office2010Silver .rgEditRow > td, .RadGrid_Office2010Silver .rgFooter > td {
+            border: none;
         }
-         .top-buffer { margin-top:40px; }
-         .windowScroll {
+
+        .top-buffer {
+            margin-top: 40px;
+        }
+
+        .windowScroll {
             overflow: auto;
-            overflow-y: scroll; 
-            overflow-x: hidden; 
-        }         
+            overflow-y: scroll;
+            overflow-x: hidden;
+        }
     </style>
+
+<telerik:RadCodeBlock ID="RadCodeBlock1" runat="server">
+    <script type="text/javascript">
+        var refreshPage = "<%=ConfigurationManager.AppSettings["ApplicationRefreshTime"].ToString() %>";
+    </script>
+</telerik:RadCodeBlock> 
+
 </head>
-<body onresize="FullSize('MainTable');" class="windowScroll" >
+<body onresize="FullSize('MainTable');" class="windowScroll" onload="RefreshPage(refreshPage);">
 
     <form id="form1" runat="server">
 
@@ -97,42 +154,42 @@
                                 <telerik:GridButtonColumn Text="Add new row" CommandName="Add" ButtonType="ImageButton"
                                     UniqueName="Add"
                                     ButtonCssClass="imageButtonClass" HeaderTooltip="Add new row"
-                                    ImageUrl="~/Content/Images/Add-Blue.png" HeaderStyle-Width="20px" Resizable="false">
-                                    <HeaderStyle Width="20px" />
-                                    <ItemStyle Width="20px" />
+                                    ImageUrl="~/Content/Images/Add-Blue.png" HeaderStyle-Width="25px" Resizable="false">
+                                    <HeaderStyle Width="25px" />
+                                    <ItemStyle Width="25px" />
                                 </telerik:GridButtonColumn>
                                 <telerik:GridTemplateColumn DataField="ValidationImage" UniqueName="ValidationImageStatus" HeaderStyle-Width="20px">
                                     <ItemTemplate>
                                         <asp:Image ID="ValidationStatusImage" runat="server" ImageUrl='<%#Eval("ValidationImage") %>' ToolTip='<%#Eval("ErrorMsg") %>' />
                                     </ItemTemplate>
                                 </telerik:GridTemplateColumn>
-                                <telerik:GridTemplateColumn DataField="Account_Name" HeaderText="Account" UniqueName="AccountNameText" HeaderStyle-Width="97%"  >
+                                <telerik:GridTemplateColumn DataField="Account_Name" HeaderText="Account Name" UniqueName="AccountNameText" HeaderStyle-Width="100%">
                                     <ItemTemplate>
-                                            <label class="weak required"></label><asp:TextBox style="overflow:hidden" ID="AccountNameTextBox" runat="server" 
-                                                AutoPostBack="false" Text='<%#Eval("Account_Name") %>' Width="95%" TextMode="MultiLine" Rows="1"
-                                                CssClass="standardTextBox"></asp:TextBox>
+                                        <label id="lblAccountNameTextBox" for="AccountNameTextBox" class="labelweak required"></label>
+                                        &nbsp;
+                                        <asp:TextBox ID="AccountNameTextBox" runat="server" AutoPostBack="false" Text='<%#Eval("Account_Name") %>' Width="90%" Height="27px" CssClass="standardTextBox"></asp:TextBox>
                                     </ItemTemplate>
-                                    <HeaderStyle Width="97%"></HeaderStyle>
-                            </telerik:GridTemplateColumn>
-                            <telerik:GridTemplateColumn DataField="SendWelcomeEmail" HeaderText="Send Welcome" UniqueName="SendWelcome" HeaderStyle-Width="100px" ItemStyle-HorizontalAlign="Center">
-                                <ItemTemplate>
-                                    <asp:CheckBox ID="SendWelcomeCheckbox" runat="server" AutoPostBack="false" ViewStateMode="Enabled" Checked='<%#Eval("SendWelcomeEmail") %>' />
-                                </ItemTemplate>
-                            </telerik:GridTemplateColumn>
-                            <telerik:GridTemplateColumn DataField="DataAccess_Required" HeaderText="<center>Database Access</center>" UniqueName="DataAccessRequiredText">
-                                <ItemTemplate>
-                                    <center><asp:CheckBox ID="DataAccessRequiredTextBox" AutoPostBack="false" runat="server" Checked='<%#Eval("DataAccess_Required") %>'/></center>
-                                </ItemTemplate>
-                            </telerik:GridTemplateColumn>
-                            <telerik:GridButtonColumn Text="Delete entry" CommandName="Delete" ButtonType="ImageButton"
-                                ImageUrl="~/Content/Images/Delete.png" ButtonCssClass="imageButtonClass" HeaderTooltip="Delete entry"
-                                ConfirmText="Delete this user from the list?" ConfirmDialogType="Classic">
-                                <HeaderStyle Width="25px" />
-                                <ItemStyle Width="25px" />
-                            </telerik:GridButtonColumn>
-                            <%--<telerik:GridButtonColumn Text="Delete" CommandName="Delete" ButtonType="ImageButton" ConfirmText="Delete this user from the list?" ConfirmDialogType="Classic">
-                                <HeaderStyle Width="32px" />
-                            </telerik:GridButtonColumn>--%>
+                                    <HeaderStyle Width="100%"></HeaderStyle>
+                                </telerik:GridTemplateColumn>
+                                <telerik:GridTemplateColumn DataField="SendWelcomeEmail" HeaderText="Send Welcome" UniqueName="SendWelcome" HeaderStyle-Width="100px" ItemStyle-HorizontalAlign="Center">
+                                    <ItemTemplate>
+                                        <asp:CheckBox ID="SendWelcomeCheckbox" runat="server" AutoPostBack="false" ViewStateMode="Enabled" Checked='<%#Eval("SendWelcomeEmail") %>' />
+                                    </ItemTemplate>
+                                </telerik:GridTemplateColumn>
+                                <telerik:GridTemplateColumn DataField="DataAccess_Required" HeaderText="<center>Database Access</center>" UniqueName="DataAccessRequiredText">
+                                    <ItemTemplate>
+                                        <center><asp:CheckBox ID="DataAccessRequiredTextBox" AutoPostBack="false" runat="server" Checked='<%#Eval("DataAccess_Required") %>'/></center>
+                                    </ItemTemplate>
+                                </telerik:GridTemplateColumn>
+                                <telerik:GridButtonColumn Text="Delete entry" CommandName="Delete" ButtonType="ImageButton"
+                                    ImageUrl="~/Content/Images/Delete.png" ButtonCssClass="imageButtonClass" HeaderTooltip="Delete entry"
+                                    ConfirmText="Delete this user from the list?" ConfirmDialogType="Classic">
+                                    <HeaderStyle Width="25px" />
+                                    <ItemStyle Width="25px" />
+                                </telerik:GridButtonColumn>
+                                <%--<telerik:GridButtonColumn Text="Delete" CommandName="Delete" ButtonType="ImageButton" ConfirmText="Delete this user from the list?" ConfirmDialogType="Classic">
+                                    <HeaderStyle Width="32px" />
+                                </telerik:GridButtonColumn>--%>
                             </Columns>
                         </MasterTableView>
                     </telerik:RadGrid>
@@ -161,8 +218,17 @@
                     <div class="space"></div>
                 </div>
             </div>
-
         </div>
+        <script>
+            if (window.clipboardData) {
+                $('#RadGrid1_ctl00_ctl04_AccountNameTextBox').bind('paste', function (e) {
+                    var clipped = window.clipboardData.getData('Text');
+                    clipped = clipped.replace(/(\r\n|\n|\r)/gm, " "); //replace newlines with spaces
+                    $(this).val(clipped);
+                    return false; //cancel the pasting event
+                });
+            }
+        </script>
         <script type="text/javascript">
 
             function StartProcessing() {
@@ -280,8 +346,6 @@
             }
         </script>
     </form>
-
-
     <script type="text/javascript">
         FullSize("MainTable");
     </script>

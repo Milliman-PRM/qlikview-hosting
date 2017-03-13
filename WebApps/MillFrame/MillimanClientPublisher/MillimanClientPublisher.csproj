@@ -138,6 +138,9 @@
     <Content Include="Content\Script\jquery.v1.7.1.js" />
     <Content Include="Content\Script\jquery.v1.9.1.js" />
     <Content Include="Content\Script\maskedinput.js" />
+    <Content Include="Content\Script\RefreshPage.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Style\bootstrap-dialog.min.css" />
     <Content Include="Content\Style\bootstrap.css" />
     <Content Include="Content\Style\bootstrap.min.css" />
@@ -352,6 +355,7 @@
     <Compile Include="ComplexReporting\ReductionStatus.aspx.designer.cs">
       <DependentUpon>ReductionStatus.aspx</DependentUpon>
     </Compile>
+    <Compile Include="ComplexReporting\ReportingCommon.cs" />
     <Compile Include="ComplexReporting\ReviewApproval.aspx.cs">
       <DependentUpon>ReviewApproval.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

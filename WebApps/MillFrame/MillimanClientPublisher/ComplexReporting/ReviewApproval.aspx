@@ -15,10 +15,8 @@
     <script type="text/javascript">
         function ApprovedChecked()
         {
-            var PublishButton = parent.document.getElementById("Publish");
-            if (PublishButton) {
-                PublishButton.disabled = false;
-            }
+            if (parent.Approved)
+                parent.Approved(document.getElementById("Approved").checked); 
         }
      </script>
 </head>

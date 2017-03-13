@@ -45,8 +45,6 @@ namespace MillimanCommon
             }
 
             var emailServerAllowedChars = ConfigurationManager.AppSettings["EmailServerAllowedChars"];
-                        
-           //filter message for the requirements after the @ sign chars
             filteredNonSupportedChars =
                 (from w in emailSplit[1]
                  select new
