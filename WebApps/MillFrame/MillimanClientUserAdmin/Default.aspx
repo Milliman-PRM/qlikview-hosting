@@ -499,32 +499,32 @@
             else {
                 if (!gridItem.get_isInEditMode()) {
                     __doPostBack("<%= UserGrid.UniqueID %>", "RowClick;" + eventArgs.get_itemIndexHierarchical());
-                }
-            }
-        }
-        function RowDoubleClick(sender, eventArgs) {
-            var gridItem = sender.get_masterTableView().get_dataItems()[eventArgs.get_itemIndexHierarchical()];
-            if (!gridItem.get_isInEditMode()) {
-                __doPostBack("<%= UserGrid.UniqueID %>", "RowDoubleClick;" + eventArgs.get_itemIndexHierarchical());
+               }
            }
        }
-       function FullSize(element) {
-           var height = 0;
-           var width = 0;
-           var body = window.document.body;
-           if (window.innerHeight) {
-               height = window.innerHeight;
-               width = window.innerWidth;
-           } else if (body.parentElement.clientHeight) {
-               height = body.parentElement.clientHeight;
-               width = body.parentElement.clientWidth;
-           } else if (body && body.clientHeight) {
-               height = body.clientHeight;
-               width = body.clientWidth;
-           }
-           //margines
-           height = height - 15;
-           width = width - 15;
+       function RowDoubleClick(sender, eventArgs) {
+           var gridItem = sender.get_masterTableView().get_dataItems()[eventArgs.get_itemIndexHierarchical()];
+           if (!gridItem.get_isInEditMode()) {
+               __doPostBack("<%= UserGrid.UniqueID %>", "RowDoubleClick;" + eventArgs.get_itemIndexHierarchical());
+            }
+        }
+        function FullSize(element) {
+            var height = 0;
+            var width = 0;
+            var body = window.document.body;
+            if (window.innerHeight) {
+                height = window.innerHeight;
+                width = window.innerWidth;
+            } else if (body.parentElement.clientHeight) {
+                height = body.parentElement.clientHeight;
+                width = body.parentElement.clientWidth;
+            } else if (body && body.clientHeight) {
+                height = body.clientHeight;
+                width = body.clientWidth;
+            }
+            //margines
+            height = height - 15;
+            width = width - 15;
 
            document.getElementById(element).style.height = height + "px";
            document.getElementById(element).style.width = width + "px";
