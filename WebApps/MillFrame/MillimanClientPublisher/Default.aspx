@@ -42,11 +42,11 @@
         .RadWindow .rwPopupButton {
             margin-left: 100px !important;
         }
-        .buttonViewQvw {           
+
+        .buttonViewQvw {
             padding-top: 9px;
             line-height: 18px !important;
-      }
-
+        }
     </style>
 </head>
 <body style="background-color: white; background-image: url(images/watermark.png); background-repeat: repeat">
@@ -99,6 +99,9 @@
                                                 <tr>
                                                     <td style="width: 75%;">
                                                         <table id="table2" cellpadding="6" cellspacing="0">
+                                                           <tr style="height:1px;font:5px">
+                                                                <td><input type="hidden" name="hidden" id="hidden" value='<%#Eval("ProjectName")%>' class="hiddenFiled" /></td>
+                                                            </tr>
                                                             <tr>
                                                                 <td style="width: 25%;">Tool Tip:
                                                                 </td>
@@ -189,6 +192,9 @@
                                                 <tr>
                                                     <td style="width: 75%;">
                                                         <table cellpadding="6" cellspacing="0">
+                                                           <tr style="height:1px;font:5px">
+                                                                <td><input type="hidden" name="hidden" id="hidden" value='<%#Eval("ProjectName")%>' class="hiddenFiled" /></td>
+                                                            </tr>
                                                             <tr>
                                                                 <td style="width: 25%;">Tool Tip:
                                                                 </td>
@@ -340,16 +346,24 @@
         function OpenProfile() {
 
         }
+
         function Click(button, args) {
             var FoundWinodw = $find("Project " + args._commandArgument);
             if (FoundWinodw) {
                 FoundWinodw.show();
             }
             else {
+
                 var wnd = window.radopen("ProjectEditor.aspx?key=" + args._commandArgument, "Project " + args._commandArgument);
                 wnd.setSize(1008, 630);
                 wnd.Center();
-                wnd.set_title(args._commandArgument);
+
+                //There are multiple tables and there can be more than one report so we need to get index of selected item
+                var index = args._commandArgument;
+                //Then get the value of selected index input box
+                var hiddenFiled = document.getElementsByName("hidden")[index];
+
+                wnd.set_title(hiddenFiled.value);
                 wnd.add_beforeClose(OnBeforeClose);
                 wnd.add_close(OnWindowClose)
             }

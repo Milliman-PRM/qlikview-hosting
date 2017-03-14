@@ -246,7 +246,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <label for="QVWUpdatePanel" class="labelweak">User Manual:</label></td>
+                                    <label for="QVWUpdatePanel" class="labelweak">User Guide:</label></td>
                                 <td>
                                     <%-- have to put an update panel on each element to get unique behavior per post back -blah...--%>
                                     <asp:UpdatePanel runat="server" ID="ManualUpdatePanel">

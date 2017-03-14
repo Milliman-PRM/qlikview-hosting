@@ -328,10 +328,10 @@
         }
 
         //Find the emails in the spanned text
-        function ParseEmail(innerHTML) {
-            return innerHTML.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi);
+        //function ParseEmail(innerHTML) {
+        //    return innerHTML.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi);
 
-        }
+        //}
 
         function SendEmail() {
             var grid = $find("<%= UserGrid.ClientID %>");
@@ -354,7 +354,7 @@
                         return;
                     }
                 else
-                    AllEmails = ParseEmail(cellID.innerHTML);
+                    AllEmails = cellID.innerText;
             }
 
             window.location.href = "mailto:" + AllEmails;
@@ -379,7 +379,7 @@
                         alert("System can not send an email because there is no email delimiter set for group.")
                         return;
                     }
-                AllEmails += ParseEmail(cellID.innerHTML);
+                AllEmails += cellID.innerText
             }
             window.location.href = "mailto:" + AllEmails
         }
@@ -400,7 +400,7 @@
                 //alert(cellID.innerText);
                 if (AllEmails != "")
                     AllEmails += "\n";
-                AllEmails += ParseEmail(cellID.innerHTML);
+                AllEmails += cellID.innerText
             }
 
             AllEmails = "Are you sure you want to reset the passwords for:\n\n" + AllEmails;
@@ -421,13 +421,13 @@
                 if (statusCellID.innerText == "Suspended") {
                     if (SuspendedEmails != "")
                         SuspendedEmails += "\n";
-                    SuspendedEmails += IndentString + ParseEmail(cellID.innerHTML);
+                    SuspendedEmails += IndentString + cellID.innerText
                 }
                 else {
                     //alert(cellID.innerText);
                     if (ActiveEmails != "")
                         ActiveEmails += "\n";
-                    ActiveEmails += IndentString + ParseEmail(cellID.innerHTML);
+                    ActiveEmails += IndentString + cellID.innerText
                 }
             }
 
@@ -460,7 +460,7 @@
                 //alert(cellID.innerText);
                 if (AllEmails != "")
                     AllEmails += "\n";
-                AllEmails += ParseEmail(cellID.innerHTML);
+                AllEmails += cellID.innerText
             }
 
             AllEmails = "Are you sure you want to delete users:\n\n" + AllEmails;
@@ -468,11 +468,14 @@
         }
 
         function OpenAddUser() {
-            var wnd = window.radopen("AddUser.aspx", "Add User(s)");
-            wnd.setSize(935, 700);
+            var zone = document.getElementById('zone'),
+                x = zone.clientWidth,
+                y = zone.clientHeight;
+
+            var wnd = window.radopen("AddUser.aspx", "Add User(s)", x / 2, y / 1.2);
             wnd.set_modal(true);
             wnd.moveTo(0, 0);
-            //wnd.Center();
+
             return false;
         }
 
@@ -523,13 +526,13 @@
             height = height - 15;
             width = width - 15;
 
-            document.getElementById(element).style.height = height + "px";
-            document.getElementById(element).style.width = width + "px";
-            document.getElementById(element).style.visibility = "visible";
-        }
+           document.getElementById(element).style.height = height + "px";
+           document.getElementById(element).style.width = width + "px";
+           document.getElementById(element).style.visibility = "visible";
+       }
 
 
-        FullSize("MainTable");
+       FullSize("MainTable");
     </script>
 </body>
 </html>

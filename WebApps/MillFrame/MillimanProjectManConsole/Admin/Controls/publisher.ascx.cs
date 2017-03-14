@@ -40,7 +40,7 @@ public partial class admin_controls_access_rules : System.Web.UI.UserControl
         RadToolBarButton UserGuide = new RadToolBarButton("");
         UserGuide.Value = "User Guide";
         UserGuide.ToolTip = "View the project management console user guide";
-        UserGuide.ImageUrl = "../../images/publish.png";
+        UserGuide.ImageUrl = "../../images/user-guide.png";
         UserGuide.NavigateUrl = "../../UserGuide/PRM Project Management Console User Guide.html";
         UserGuide.Target = "_blank";
         UserGuide.ImagePosition = ToolBarImagePosition.Left;
