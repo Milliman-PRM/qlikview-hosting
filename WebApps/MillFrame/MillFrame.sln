@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Milliman", "Milliman\Milliman\Milliman.csproj", "{A4E6BA79-3F26-4311-AB03-BCA27072EA18}"
 EndProject
@@ -81,9 +81,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3rdPartyAssemblies", "3rdPa
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MillimanSystemBackup", "MillimanSystemBackup\MillimanSystemBackup.csproj", "{7C5D905F-A4DD-4FF8-BF45-4F43ABE67733}"
-	ProjectSection(ProjectDependencies) = postProject
-		{4CF8C253-1952-4F25-A169-542FEADE27B4} = {4CF8C253-1952-4F25-A169-542FEADE27B4}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MillimanValidationGC", "MillimanValidationGC\MillimanValidationGC.csproj", "{4DA8CD86-581A-4435-97DF-024C4F1F9171}"
 EndProject
