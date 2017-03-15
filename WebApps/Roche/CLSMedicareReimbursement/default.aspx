@@ -201,7 +201,7 @@
                     <asp:DropDownList ID="YearDropdown" Style="float: right;" runat="server" Width="100px" AutoPostBack="True"
                         OnSelectedIndexChanged="YearDropdown_SelectedIndexChanged">
                     </asp:DropDownList>
-                    <h2>Medicare Reimbursment Rates</h2>
+                    <h2>Medicare Reimbursement Rates</h2>
                 </div>
                 <telerik:RadAjaxPanel ID="RadGridPanel" runat="server" OnAjaxRequest="RadGridPanel_AjaxRequest" LoadingPanelID="RadAjaxLoadingPanel1" ClientEvents-OnRequestStart="pnlRequestStarted">
                     <div id="ContainerGrid">
