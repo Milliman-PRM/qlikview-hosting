@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,6 +18,10 @@ namespace SystemBackup
         {
             BackupProcessor BP = new BackupProcessor();
             DateTime Start = DateTime.Now;
+            Trace.AutoFlush = true;
+            TextWriterTraceListener Listener = new TextWriterTraceListener("log_" + Start.ToString("yyyyMMdd-HHmmss") + ".txt");
+            Trace.Listeners.Add(Listener);
+
             if (BP.CreateBackupDir())
             {
                 if (BP.DatabaseBackup())
@@ -42,8 +47,8 @@ namespace SystemBackup
             {
                 BP.SendEmail("Backup FAILED to due to access issue of backup assembly area!", System.Net.Mail.MailPriority.High);
             }
-          
- 
+
+            Trace.Listeners.Remove(Listener);
         }
     }
 }
