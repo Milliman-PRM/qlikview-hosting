@@ -585,7 +585,8 @@ namespace ClientPublisher
                         return;
                     }
                     string WorkingDirectory = PublisherUtilities.GetWorkingDirectory(System.Web.Security.Membership.GetUser().UserName, theProject.ProjectName);
-                 
+
+                    //Story 2124 - Task 2129 - either send control on to report page, re-attach to running task, or create a new task
                     //variables to use in checking to see if should reconnect or task is finished
                     string ReadyFile = "ready_to_publish.txt";
                     string TaskRunningFile = "task_running.txt";
@@ -615,6 +616,7 @@ namespace ClientPublisher
                     //not running and not finished - let's start at new reduction task
                     if (TaskNotFound)
                     {
+                        //we didn't find a running task, so create one and let's get started...
                         SimpleUpdateClass SU = new SimpleUpdateClass();
                         //write out id file, so we can reconnect if needed
                         System.IO.File.WriteAllText(QualifiedTaskRunningFile, SU.TaskID);

@@ -58,6 +58,8 @@ namespace ClientPublisher
         {
             if (!IsPostBack)
             {
+                //Story 2124 - Task 2129 - this code will look for the semaphore files *.txt, and if found will push control off to first
+                //step of reduction processing - logic there will determine and approporate action
                 string ReadyFile = "ready_to_publish.txt";
                 string TaskRunningFile = "task_running.txt";
                 string QualifiedReadyFile = System.IO.Path.Combine(WorkingDirectory, ReadyFile);
@@ -66,6 +68,7 @@ namespace ClientPublisher
                 {
                     Response.Redirect("ReductionStep1.aspx?Key=" + Request["Key"]);
                 }
+                //end Story 2124 mod
 
                 //clear out an residual files that might be there
                 string[] AllFiles = System.IO.Directory.GetFiles(WorkingDirectory);
