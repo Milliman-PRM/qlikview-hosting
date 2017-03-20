@@ -57,10 +57,11 @@ namespace ClientPublisher
                 string ZID = System.Guid.NewGuid().ToString("N");
                 using (ZipFile zip = new ZipFile())
                 {
+                   
                     zip.Password = "M" + ZID;
                     zip.Encryption = EncryptionAlgorithm.WinZipAes256;
                     string[] AllFiles = System.IO.Directory.GetFiles(DirToBackup, "*.*", Options);
-
+                    List<string> FilesAdded = new List<string>();
                     string[] InvalidExtension = new string[] { ".meta", ".shared", ".zip" };
                     foreach (string S in AllFiles)
                     {
@@ -69,7 +70,11 @@ namespace ClientPublisher
                         {
                             if (Extension.ToLower().IndexOf("_tmp") == -1)
                             {
-                                zip.AddFile(S, "");
+                                if (FilesAdded.Contains(System.IO.Path.GetFileName(S).ToLower()) == false)
+                                {
+                                    zip.AddFile(S,"");
+                                    FilesAdded.Add(System.IO.Path.GetFileName(S).ToLower());
+                                }
                             }
                         }
                     }
@@ -77,7 +82,7 @@ namespace ClientPublisher
                 }
                 return ZID;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
             }

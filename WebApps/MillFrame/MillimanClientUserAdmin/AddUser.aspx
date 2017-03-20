@@ -5,6 +5,9 @@
 <head runat="server">
     <title></title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <%--refresh page java script--%>
+    <script src="Content/Script/RefreshPage.js"></script>
     <link href="Content/Style/bootstrap.css" rel="stylesheet" type="text/css" />
     <link href="Content/Style/MillframeStyle.css" rel="stylesheet" type="text/css" />
     <style type="text/css">
@@ -78,8 +81,15 @@
             overflow-x: hidden;
         }
     </style>
+
+<telerik:RadCodeBlock ID="RadCodeBlock1" runat="server">
+    <script type="text/javascript">
+        var refreshPage = "<%=ConfigurationManager.AppSettings["ApplicationRefreshTime"].ToString() %>";
+    </script>
+</telerik:RadCodeBlock> 
+
 </head>
-<body onresize="FullSize('MainTable');" class="windowScroll">
+<body onresize="FullSize('MainTable');" class="windowScroll" onload="RefreshPage(refreshPage);">
 
     <form id="form1" runat="server">
 

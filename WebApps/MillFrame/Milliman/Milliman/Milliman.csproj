@@ -111,6 +111,7 @@
     <Content Include="Content\Script\jquery.v1.7.1.js" />
     <Content Include="Content\Script\jquery.v1.9.1.js" />
     <Content Include="Content\Script\maskedinput.js" />
+    <Content Include="Content\Script\RefreshPage.js" />
     <Content Include="Content\Style\bootstrap-dialog.min.css" />
     <Content Include="Content\Style\bootstrap.css" />
     <Content Include="Content\Style\bootstrap.min.css" />
@@ -312,8 +313,20 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </None>
-    <None Include="..\..\appsettings_SK.config">
-      <Link>Configs\appsettings_SK.config</Link>
+    <None Include="..\..\appsettings_PreStag.config">
+      <Link>Configs\appsettings_PreStag.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\appsettings_Stag.config">
+      <Link>Configs\appsettings_Stag.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\appsettings_Stakeholder.config">
+      <Link>Configs\appsettings_Stakeholder.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\appsettings_TP.config">
+      <Link>Configs\appsettings_TP.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\..\appsettings_VN.config">
@@ -325,28 +338,26 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </None>
-    <None Include="..\..\connectionStrings_SK.config">
-      <Link>Configs\connectionStrings_SK.config</Link>
+    <None Include="..\..\connectionStrings_PreStag.config">
+      <Link>Configs\connectionStrings_PreStag.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\connectionStrings_Stag.config">
+      <Link>Configs\connectionStrings_Stag.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\connectionStrings_Stakeholder.config">
+      <Link>Configs\connectionStrings_Stakeholder.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\connectionStrings_TP.config">
+      <Link>Configs\connectionStrings_TP.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\..\connectionStrings_VN.config">
       <Link>Configs\connectionStrings_VN.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Configs\appsettings_PreStag.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Configs\appsettings_Stag.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <Content Include="Configs\appsettings_Stakeholder.config" />
-    <None Include="Configs\connectionStrings_PreStag.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Configs\connectionStrings_Stag.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <Content Include="Configs\connectionStrings_Stakeholder.config" />
     <None Include="Properties\PublishProfiles\milliman-sk.pubxml" />
     <None Include="Properties\PublishProfiles\MillimanDebug.pubxml" />
     <Content Include="SSOConfigure\HCIntel.cer" />

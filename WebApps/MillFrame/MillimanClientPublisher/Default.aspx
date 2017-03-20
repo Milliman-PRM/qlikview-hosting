@@ -7,9 +7,6 @@
 <html xmlns="https://www.w3.org/1999/xhtml">
 <head id="Head1" runat="server">
     <title>Milliman - PRM Project Listing</title>
-    <meta http-equiv="refresh" content="1080" />
-    <%--refresh page in 18 mins, session timeout is 15 mins--%>
-
     <meta http-equiv="cache-control" content="max-age=0" />
     <meta http-equiv="cache-control" content="no-cache" />
     <meta http-equiv="expires" content="0" />
@@ -45,11 +42,11 @@
         .RadWindow .rwPopupButton {
             margin-left: 100px !important;
         }
-        .buttonViewQvw {           
+
+        .buttonViewQvw {
             padding-top: 9px;
             line-height: 18px !important;
-      }
-
+        }
     </style>
 </head>
 <body style="background-color: white; background-image: url(images/watermark.png); background-repeat: repeat">
@@ -74,7 +71,7 @@
             </div>
 
             <div id="Div1" style="display: block; overflow: auto; position: absolute; top: 130px; bottom: 25px; left: 5px; right: 5px; border: 1px solid white; background-color: transparent">
-                <center>                   
+                <center>
                     <%--                    update panel is need to update main windows without causing refresh of open DIV windows--%>
                     <asp:UpdatePanel runat="server" ID="UpdatePanel1">
                         <Triggers>
@@ -102,6 +99,9 @@
                                                 <tr>
                                                     <td style="width: 75%;">
                                                         <table id="table2" cellpadding="6" cellspacing="0">
+                                                           <tr style="height:1px;font:5px">
+                                                                <td><input type="hidden" name="hidden" id="hidden" value='<%#Eval("ProjectName")%>' class="hiddenFiled" /></td>
+                                                            </tr>
                                                             <tr>
                                                                 <td style="width: 25%;">Tool Tip:
                                                                 </td>
@@ -160,7 +160,7 @@
                                                                 </td>
                                                             </tr>
                                                             <tr>
-                                                                <td>                                                                
+                                                                <td>
                                                                     <telerik:RadButton ID="ViewQVW" CssClass="buttonViewQvw"
                                                                         runat="server" Text="View QVW" OnClick="ViewQVW_Click"
                                                                         ButtonType="LinkButton" NavigateUrl='<%# Eval("QVLauncher") %>'
@@ -192,6 +192,9 @@
                                                 <tr>
                                                     <td style="width: 75%;">
                                                         <table cellpadding="6" cellspacing="0">
+                                                           <tr style="height:1px;font:5px">
+                                                                <td><input type="hidden" name="hidden" id="hidden" value='<%#Eval("ProjectName")%>' class="hiddenFiled" /></td>
+                                                            </tr>
                                                             <tr>
                                                                 <td style="width: 25%;">Tool Tip:
                                                                 </td>
@@ -308,6 +311,24 @@
 
     <script language="javascript" type="text/javascript">
 
+        //**************************************************************************************************************************************//        
+        //this code block check for the Rad Active winodw on page and if there is none, then refresh page after the time defined in web.config
+        var refreshPageInterval = "<%= ConfigurationManager.AppSettings["ApplicationRefreshTime"].ToString()%>";
+        //convert to milliseconds since the set interval consume milliseconds
+        var totalRefreshInterval = refreshPageInterval * 60 * 1000;
+        //set interval to refresh page auto
+        setInterval(RefreshPage, totalRefreshInterval);
+        function RefreshPage() {
+                //Getting rad window manager
+                var rad_manager = GetRadWindowManager();
+                //Call GetActiveWindow to get the active window
+                var rad_active_window = rad_manager.getActiveWindow();
+                if (rad_active_window == null) {
+                    window.location.reload();
+                }
+        }
+       //-------------------------------------------------------------------------------------------------------------------------------------//
+
         function VerifyStateChange(button, args) {
             var ButtonLabel = button.get_text().toUpperCase();
             if (ButtonLabel == "OFFLINE") {
@@ -325,16 +346,24 @@
         function OpenProfile() {
 
         }
+
         function Click(button, args) {
             var FoundWinodw = $find("Project " + args._commandArgument);
             if (FoundWinodw) {
                 FoundWinodw.show();
             }
             else {
+
                 var wnd = window.radopen("ProjectEditor.aspx?key=" + args._commandArgument, "Project " + args._commandArgument);
                 wnd.setSize(1008, 630);
                 wnd.Center();
-                wnd.set_title(args._commandArgument);
+
+                //There are multiple tables and there can be more than one report so we need to get index of selected item
+                var index = args._commandArgument;
+                //Then get the value of selected index input box
+                var hiddenFiled = document.getElementsByName("hidden")[index];
+
+                wnd.set_title(hiddenFiled.value);
                 wnd.add_beforeClose(OnBeforeClose);
                 wnd.add_close(OnWindowClose)
             }

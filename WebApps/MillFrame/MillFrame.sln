@@ -122,6 +122,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Script", "Script", "{93066D
 		Milliman\Milliman\Content\Script\jquery.v1.7.1.js = Milliman\Milliman\Content\Script\jquery.v1.7.1.js
 		Milliman\Milliman\Content\Script\jquery.v1.9.1.js = Milliman\Milliman\Content\Script\jquery.v1.9.1.js
 		Milliman\Milliman\Content\Script\maskedinput.js = Milliman\Milliman\Content\Script\maskedinput.js
+		RefreshPage.js = RefreshPage.js
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Style", "Style", "{7F3D7BF0-7159-4FE3-91C9-C6074F8D306C}"
@@ -142,14 +143,32 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configs", "Configs", "{003A8340-D761-4800-8DA8-63F1BA64280A}"
 	ProjectSection(SolutionItems) = preProject
 		appsettings_AK.config = appsettings_AK.config
-		appsettings_SK.config = appsettings_SK.config
+		appsettings_AK_PMC.config = appsettings_AK_PMC.config
+		appsettings_PreStag.config = appsettings_PreStag.config
+		appsettings_PreStag_PMC.config = appsettings_PreStag_PMC.config
+		appsettings_PRODUCTION.config = appsettings_PRODUCTION.config
+		appsettings_PRODUCTION_PMC.config = appsettings_PRODUCTION_PMC.config
+		appsettings_Stag.config = appsettings_Stag.config
+		appsettings_Stag_PMC.config = appsettings_Stag_PMC.config
+		appsettings_Stakeholder.config = appsettings_Stakeholder.config
+		appsettings_Stakeholder_PMC.config = appsettings_Stakeholder_PMC.config
+		appsettings_TP.config = appsettings_TP.config
+		appsettings_TP_PMC.config = appsettings_TP_PMC.config
 		appsettings_VN.config = appsettings_VN.config
+		appsettings_VN_PMC.config = appsettings_VN_PMC.config
 		connectionStrings_AK.config = connectionStrings_AK.config
-		connectionStrings_SK.config = connectionStrings_SK.config
+		connectionStrings_PreStag.config = connectionStrings_PreStag.config
+		connectionStrings_PRODUCTION.config = connectionStrings_PRODUCTION.config
+		connectionStrings_PRODUCTION_PMC.config = connectionStrings_PRODUCTION_PMC.config
+		connectionStrings_Stag.config = connectionStrings_Stag.config
+		connectionStrings_Stakeholder.config = connectionStrings_Stakeholder.config
+		connectionStrings_TP.config = connectionStrings_TP.config
 		connectionStrings_VN.config = connectionStrings_VN.config
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Icons", "Icons", "{08EF70E7-8659-4B66-A0E0-47C667E2C63B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrmServerMonitor", "..\..\Apps\PrmServerMonitor\PrmServerMonitor\PrmServerMonitor.csproj", "{0683D48D-217F-4DBB-B354-CA2FF887FA9C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -229,6 +248,10 @@ Global
 		{AF11AB64-51FB-4936-8FCA-70DEA7CD2216}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF11AB64-51FB-4936-8FCA-70DEA7CD2216}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF11AB64-51FB-4936-8FCA-70DEA7CD2216}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0683D48D-217F-4DBB-B354-CA2FF887FA9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0683D48D-217F-4DBB-B354-CA2FF887FA9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0683D48D-217F-4DBB-B354-CA2FF887FA9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0683D48D-217F-4DBB-B354-CA2FF887FA9C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

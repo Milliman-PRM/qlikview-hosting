@@ -23,7 +23,7 @@ public partial class admin_controls_search_box : System.Web.UI.UserControl
             string Email = txbEmail.Text.Trim();
 
             //HttpUtility.HtmlDecode: Converts a string that has been HTML-encoded for HTTP transmission into a decoded string.
-            Response.Redirect("search-user.aspx" + "?UserName=" + UserName + "&Email=" + HttpUtility.HtmlDecode(Email));
+            Response.Redirect("search-user.aspx" + "?UserName=" + Server.UrlEncode(UserName) + "&Email=" + HttpUtility.HtmlDecode(Email));
         }
         else
         {

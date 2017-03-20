@@ -288,9 +288,9 @@ public partial class admin_controls_supergroups : System.Web.UI.UserControl
             SGC.AllowTempPasswordEntry = false;
             SGC.SemiColonDelimitedEmail = false;
             SGC.CommaDelimitedEmail = false;
-            SGC.AdminUserAccounts = ListItemsToStringList(ClientAdminUsers);
-            SGC.PublisherUserAccounts = ListItemsToStringList(PublishingUsers);
-            SGC.GroupNames = ListItemsToStringList(GroupsInSuper);
+            SGC.AdminUserAccounts = new List<string>();
+            SGC.PublisherUserAccounts = new List<string>();
+            SGC.GroupNames = new List<string>();
             if (SG.Save() == false) {
                 Msg = "Super groups failed to Save. Please check with a system administrator.";
                 return;

@@ -3,8 +3,9 @@
 .alert{border:1px solid transparent;border-radius:4px!important;margin-bottom:6px!important;padding:4px!important}
 .weak{color:#999;font-size:14px}
 .labelweak{color:#5f6162;font-size:12px;margin:5px -6px 3px 8px}
-.required:after{content:" *";font-weight:700;color:#c1c1c1;font-size:20px;margin:0;float:right}
-.textbox-focus{border:2px solid #00C;background:#def}
+.required:after{content:" *";color:#c1c1c1;}
+ label.required:after {content: " *";}
+ .textbox-focus{border:2px solid #00C;background:#def}
 .roundShadowContainer{background:#fefefe;border:1px solid #c4cddb;padding:6px;margin:0 auto;border-top-color:#d3dbde;border-bottom-color:#bfc9dc;box-shadow:0 1px 1px #ccc;border-radius:5px}
 .roundShadowContainer h2{margin:0;padding:10px 0;font-size:18px;text-align:center;background:#ebebec;border-bottom:1px solid #dde0e7;box-shadow:0 -1px 0 #fff inset;border-radius:5px 5px 0 0;text-shadow:1px 1px 0 #fff;font-weight:700}
 .roundShadowContainer h3{margin:0;padding:10px 0;font-size:16px;text-align:center;background:#ebebec;border-bottom:1px solid #dde0e7;box-shadow:0 -1px 0 #fff inset;border-radius:5px 5px 0 0;text-shadow:1px 1px 0 #fff;font-weight:700}

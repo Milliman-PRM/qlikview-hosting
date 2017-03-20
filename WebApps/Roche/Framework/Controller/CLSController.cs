@@ -212,7 +212,7 @@ namespace Controller
             try
             {
                 var dboList = context.Footnotes.Distinct().ToList();
-                resultList = dboList.GroupBy(x => x.Footnote1).Select(y => y.First()).ToList();
+                resultList = dboList.GroupBy(x => x.Footnote1).Select(y => y.First()).OrderBy(o=>o.Id).ToList();
             }
             catch (Exception ex)
             {

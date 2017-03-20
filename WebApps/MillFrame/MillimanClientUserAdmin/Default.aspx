@@ -1,11 +1,8 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="Default" %>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>Milliman - PRM Client Adminstration</title>
-    <meta http-equiv="refresh" content="1200" />
-    <%--refresh page in 20 mins, session timeout is 15 mins--%>
     <meta http-equiv="cache-control" content="max-age=0" />
     <meta http-equiv="cache-control" content="no-cache" />
     <meta http-equiv="expires" content="0" />
@@ -13,11 +10,7 @@
     <meta http-equiv="pragma" content="no-cache" />
     <telerik:RadStyleSheetManager ID="RadStyleSheetManager1" runat="server" />
     <style type="text/css">
-        .LockOff {
-            display: none;
-            visibility: hidden;
-        }
-
+        .LockOff {display: none;visibility: hidden;}
         .LockOn {
             display: block;
             visibility: visible;
@@ -42,17 +35,17 @@
             background-image: none !important; /* removes the excalamtion mark icon */
             padding-left: 0px !important;
         }
-
-        .RadWindow .rwDialogText {
-            margin-left: 10px !important;
-        }
-
-        .RadWindow .rwPopupButton {
-            margin-left: 100px !important;
-        }
+        .RadWindow .rwDialogText {margin-left: 10px !important;}
+        .RadWindow .rwPopupButton {margin-left: 100px !important;}
         /*//remove expandable image*/
         .rpExpandHandle {
             background-image: none !important;
+        }
+        /*add column border to rows for compatability issues*/
+        .itemStyle {
+            border: 1px solid #e3e3e3;
+            border-style: solid;
+            border-width: 0 0 1px;
         }
     </style>
 </head>
@@ -65,19 +58,14 @@
                 <asp:ScriptReference Assembly="Telerik.Web.UI" Name="Telerik.Web.UI.Common.jQueryInclude.js" />
             </Scripts>
         </telerik:RadScriptManager>
-        <script type="text/javascript">
-	   
-        
-        </script>
         <telerik:RadAjaxManager ID="RadAjaxManager1" runat="server">
         </telerik:RadAjaxManager>
 
         <%--this hidden field must be moved outside the table, otherwise the table does not resize correcty to fill the browser window--%>
-        <asp:HiddenField runat="server" ID="hfEmailDelimiter" ></asp:HiddenField>
+        <asp:HiddenField runat="server" ID="hfEmailDelimiter"></asp:HiddenField>
 
         <table id="MainTable" name="MainTable" style="position: absolute; top: 10px; left: 10px; width: 100px; height: 100px; visibility: hidden">
             <tr style="height: 25px">
-
                 <td>
                     <center><asp:Label runat="server" ID="LicenseMessage" Font-Names="segoe ui" Font-Size="12px"></asp:Label></center>
                 </td>
@@ -90,7 +78,13 @@
                     <div id="SplitterDiv" style="width: 100%; height: 100%;">
                         <telerik:RadSplitter ID="RadSplitter1" runat="server" Height="100%" Width="100%">
                             <telerik:RadPane ID="RadPane1" runat="server" MinWidth="250" Scrolling="None">
-                                <telerik:RadGrid ID="UserGrid" AllowMultiRowSelection="false" runat="server" AllowAutomaticDeletes="False" AllowSorting="True" AutoGenerateColumns="False" CellSpacing="5" GridLines="None" Height="100%" MasterTableView-AllowAutomaticDeletes="False" OnItemCommand="RadGrid1_ItemCommand" Skin="Silk" ViewStateMode="Enabled" Width="100%" OnItemDataBound="UserGrid_ItemDataBound" OnPreRender="UserGrid_PreRender" OnDataBound="UserGrid_DataBound">
+                                <telerik:RadGrid ID="UserGrid" AllowMultiRowSelection="false" runat="server"
+                                    AllowAutomaticDeletes="False" AllowSorting="True" AutoGenerateColumns="False"
+                                    CellSpacing="5"
+                                    GridLines="None" Skin="Silk" Height="100%" Width="100%"
+                                    MasterTableView-AllowAutomaticDeletes="False" OnItemCommand="RadGrid1_ItemCommand"
+                                    ViewStateMode="Enabled"
+                                    OnItemDataBound="UserGrid_ItemDataBound" OnPreRender="UserGrid_PreRender" OnDataBound="UserGrid_DataBound">
                                     <ClientSettings>
                                         <Selecting AllowRowSelect="false" />
                                         <Scrolling AllowScroll="True" UseStaticHeaders="True" />
@@ -135,39 +129,52 @@
                                                         Delete
                                                     </asp:LinkButton>
                                                 &#160;&#160;
-                                                <asp:HyperLink runat="server" target="_blank" NavigateUrl="UserGuide/PRM Client User Administration Console User Guide.html" ToolTip="View user adminstration user guide"><img src="Images/Report.png" />User Guide</asp:HyperLink>
+                                                <asp:HyperLink runat="server" Target="_blank" NavigateUrl="UserGuide/PRM Client User Administration Console User Guide.html" ToolTip="View user adminstration user guide"><img src="Images/Report.png" />User Guide</asp:HyperLink>
                                                 &#160;&#160;
                                             </div>
                                         </CommandItemTemplate>
                                         <Columns>
-                                            <telerik:GridTemplateColumn DataField="SuperUser" HeaderStyle-Width="25px" HeaderText="" ReadOnly="True" UniqueName="SuperUserText">
+                                            <telerik:GridTemplateColumn DataField="SuperUser" HeaderText="" ReadOnly="True" UniqueName="SuperUserText">
                                                 <ItemTemplate>
-                                                    <asp:Image ID="SuperUserImage" runat="server" AutoPostBack="false" ToolTip='Global Administrator' Width="16px" Height="16px" ImageUrl="~/Images/admin.png" Visible='<%#Eval("IsAdmin") %>'></asp:Image>
+                                                    <asp:Image ID="SuperUserImage" runat="server" AutoPostBack="false" ToolTip='Global Administrator' Width="16px"
+                                                        Height="16px" ImageUrl="~/Images/admin.png" Visible='<%#Eval("IsAdmin") %>'></asp:Image>
                                                 </ItemTemplate>
-                                                <HeaderStyle Width="25px"></HeaderStyle>
+                                                <ItemStyle CssClass="itemStyle" Width="50%" HorizontalAlign="Left" />
+                                                <HeaderStyle Width="35px" HorizontalAlign="Center"></HeaderStyle>
                                             </telerik:GridTemplateColumn>
-                                            <telerik:GridButtonColumn HeaderStyle-Width="35px" ButtonType="ImageButton" ImageUrl="~/Images/reportlaunch.png" CommandName="LaunchQVW" UniqueName="LaunchQVW"></telerik:GridButtonColumn>
-                                            <telerik:GridTemplateColumn DataField="Account_Name" HeaderStyle-Width="100%" HeaderText="Email Address" ReadOnly="True" UniqueName="AccountNameText">
+                                            <telerik:GridButtonColumn ButtonType="ImageButton" ImageUrl="~/Images/reportlaunch.png"
+                                                CommandName="LaunchQVW" UniqueName="LaunchQVW">
+                                                <ItemStyle CssClass="itemStyle" Width="50%" HorizontalAlign="Left" />
+                                                <HeaderStyle Width="35px" HorizontalAlign="Center"></HeaderStyle>
+                                            </telerik:GridButtonColumn>
+                                            <telerik:GridTemplateColumn DataField="Account_Name" HeaderText="Email Address" ReadOnly="True" UniqueName="AccountNameText">
                                                 <ItemTemplate>
-                                                    <asp:Label ID="AccountNameTextBox" runat="server" AutoPostBack="false" Text='<%#Eval("AccountName") %>' ToolTip='<%#Eval("Tooltip") %>' Width="100%"></asp:Label>
+                                                    <asp:Label ID="AccountNameTextBox" runat="server" AutoPostBack="false" Text='<%#Eval("AccountName") %>'
+                                                        ToolTip='<%#Eval("Tooltip") %>' Width="100%"></asp:Label>
                                                 </ItemTemplate>
-                                                <HeaderStyle Width="100%" HorizontalAlign="Center"></HeaderStyle>
+                                                <ItemStyle CssClass="itemStyle" Width="50%" HorizontalAlign="Left" />
+                                                <HeaderStyle Width="50%" HorizontalAlign="Center"></HeaderStyle>
                                             </telerik:GridTemplateColumn>
-                                            <telerik:GridTemplateColumn DataField="Notes" HeaderStyle-Width="250px" HeaderText="Notes" UniqueName="NotesText">
+                                            <telerik:GridTemplateColumn DataField="Notes" HeaderText="Notes" UniqueName="NotesText">
                                                 <ItemTemplate>
-                                                    <asp:TextBox ID="NotesTextBox" runat="server" OnTextChanged="NotesTextBox_TextChanged" AutoPostBack="true" Text='<%#Eval("Notes") %>' Width="100%" TextMode="MultiLine" Rows="3" BorderStyle="Solid" BackColor="Transparent" BorderColor="#E1E1E1" BorderWidth="1px"></asp:TextBox>
+                                                    <asp:TextBox ID="NotesTextBox" runat="server" OnTextChanged="NotesTextBox_TextChanged" AutoPostBack="true" Text='<%#Eval("Notes") %>'
+                                                        TextMode="MultiLine" Rows="3" BorderStyle="Solid" BackColor="Transparent" BorderColor="#E1E1E1" BorderWidth="1px"
+                                                        Width="100%"></asp:TextBox>
                                                 </ItemTemplate>
-                                                <HeaderStyle Width="100%" HorizontalAlign="Center"></HeaderStyle>
+                                                <ItemStyle CssClass="itemStyle" Width="30%" HorizontalAlign="Left" />
+                                                <HeaderStyle Width="30%" HorizontalAlign="Center"></HeaderStyle>
                                             </telerik:GridTemplateColumn>
-                                            <telerik:GridTemplateColumn DataField="Status" HeaderStyle-Width="100px" HeaderText="Account Status" UniqueName="StatusText">
+                                            <telerik:GridTemplateColumn DataField="Status" HeaderText="Account Status" UniqueName="StatusText">
                                                 <ItemTemplate>
-                                                    <asp:Label ID="StatusTextBox" runat="server" AutoPostBack="false" Text='<%#Eval("Status") %>' ToolTip='<%#Eval("Tooltip") %>' Width="100%"></asp:Label>
+                                                    <asp:Label ID="StatusTextBox" runat="server" AutoPostBack="false" Text='<%#Eval("Status") %>' ToolTip='<%#Eval("Tooltip") %>'
+                                                        Width="100%"></asp:Label>
                                                 </ItemTemplate>
-                                                <HeaderStyle Width="100%" HorizontalAlign="Center"></HeaderStyle>
+                                                <ItemStyle CssClass="itemStyle" Width="50%" HorizontalAlign="Left" />
+                                                <HeaderStyle Width="30%" HorizontalAlign="Center"></HeaderStyle>
                                             </telerik:GridTemplateColumn>
                                         </Columns>
                                     </MasterTableView>
-                                    <HeaderStyle Height="20px" VerticalAlign="Middle" />
+                                    <HeaderStyle Height="30px" VerticalAlign="Middle" />
                                 </telerik:RadGrid>
                             </telerik:RadPane>
                             <telerik:RadSplitBar ID="RadSplitbar1" runat="server">
@@ -251,9 +258,27 @@
 
     </form>
     <script type="text/javascript">
-                
+
         //var EmailDelimiter = document.getElementById("hfEmailDelimiter").value;
         //alert(EmailDelimiter);
+
+        //**************************************************************************************************************************************//        
+        //this code block check for the Rad Active winodw on page and if there is none, then refresh page after the time defined in web.config
+        var refreshPageInterval = "<%= ConfigurationManager.AppSettings["ApplicationRefreshTime"].ToString()%>";
+        //convert to milliseconds since the set interval consume milliseconds
+        var totalRefreshInterval = refreshPageInterval * 60 * 1000;
+        //set interval to refresh page auto
+        setInterval(RefreshPage, totalRefreshInterval);
+        function RefreshPage() {
+            //Getting rad window manager
+            var rad_manager = GetRadWindowManager();
+            //Call GetActiveWindow to get the active window
+            var rad_active_window = rad_manager.getActiveWindow();
+            if (rad_active_window == null) {
+                window.location.reload();
+            }
+        }
+        //-------------------------------------------------------------------------------------------------------------------------------------//
 
         function CloseAndRefresh(Msg) {
             alert(Msg);
@@ -303,10 +328,10 @@
         }
 
         //Find the emails in the spanned text
-        function ParseEmail(innerHTML) {
-            return innerHTML.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi);
+        //function ParseEmail(innerHTML) {
+        //    return innerHTML.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi);
 
-        }
+        //}
 
         function SendEmail() {
             var grid = $find("<%= UserGrid.ClientID %>");
@@ -318,7 +343,7 @@
                 var row = Selected[i];
 
                 var cellID = grid.MasterTableView.getCellByColumnUniqueName(row, "AccountNameText");
-                
+
                 //window.location.href = "mailto:" + cellID.innerText;
                 if (AllEmails != "")
                     if (document.getElementById("hfEmailDelimiter").value != "") {
@@ -329,7 +354,7 @@
                         return;
                     }
                 else
-                    AllEmails = ParseEmail(cellID.innerHTML);
+                    AllEmails = cellID.innerText;
             }
 
             window.location.href = "mailto:" + AllEmails;
@@ -347,14 +372,14 @@
 
                 //alert(cellID.innerText);
                 if (AllEmails != "")
-                    if (document.getElementById("hfEmailDelimiter").value!= "") {
+                    if (document.getElementById("hfEmailDelimiter").value != "") {
                         AllEmails += document.getElementById("hfEmailDelimiter").value;
                     }
                     else {
                         alert("System can not send an email because there is no email delimiter set for group.")
                         return;
                     }
-                AllEmails += ParseEmail(cellID.innerHTML);
+                AllEmails += cellID.innerText
             }
             window.location.href = "mailto:" + AllEmails
         }
@@ -375,7 +400,7 @@
                 //alert(cellID.innerText);
                 if (AllEmails != "")
                     AllEmails += "\n";
-                AllEmails += ParseEmail(cellID.innerHTML);
+                AllEmails += cellID.innerText
             }
 
             AllEmails = "Are you sure you want to reset the passwords for:\n\n" + AllEmails;
@@ -396,13 +421,13 @@
                 if (statusCellID.innerText == "Suspended") {
                     if (SuspendedEmails != "")
                         SuspendedEmails += "\n";
-                    SuspendedEmails += IndentString + ParseEmail(cellID.innerHTML);
+                    SuspendedEmails += IndentString + cellID.innerText
                 }
                 else {
                     //alert(cellID.innerText);
                     if (ActiveEmails != "")
                         ActiveEmails += "\n";
-                    ActiveEmails += IndentString + ParseEmail(cellID.innerHTML);
+                    ActiveEmails += IndentString + cellID.innerText
                 }
             }
 
@@ -435,7 +460,7 @@
                 //alert(cellID.innerText);
                 if (AllEmails != "")
                     AllEmails += "\n";
-                AllEmails += ParseEmail(cellID.innerHTML);
+                AllEmails += cellID.innerText
             }
 
             AllEmails = "Are you sure you want to delete users:\n\n" + AllEmails;
@@ -443,11 +468,14 @@
         }
 
         function OpenAddUser() {
-            var wnd = window.radopen("AddUser.aspx", "Add User(s)");
-            wnd.setSize(935, 700);
+            var zone = document.getElementById('zone'),
+                x = zone.clientWidth,
+                y = zone.clientHeight;
+
+            var wnd = window.radopen("AddUser.aspx", "Add User(s)", x / 2, y / 1.2);
             wnd.set_modal(true);
             wnd.moveTo(0, 0);
-            //wnd.Center();
+
             return false;
         }
 
@@ -465,19 +493,19 @@
                 if (confirm("You have made changes to access rights and/or document downloads. Selecting a different user will result in losing these settings.\n\n Do you wish to continue?")) {
                     if (!gridItem.get_isInEditMode()) {
                         __doPostBack("<%= UserGrid.UniqueID %>", "RowClick;" + eventArgs.get_itemIndexHierarchical());
-                   }
-               }
-           }
-           else {
-               if (!gridItem.get_isInEditMode()) {
-                   __doPostBack("<%= UserGrid.UniqueID %>", "RowClick;" + eventArgs.get_itemIndexHierarchical());
+                    }
                 }
             }
-        }
-        function RowDoubleClick(sender, eventArgs) {
-            var gridItem = sender.get_masterTableView().get_dataItems()[eventArgs.get_itemIndexHierarchical()];
-            if (!gridItem.get_isInEditMode()) {
-                __doPostBack("<%= UserGrid.UniqueID %>", "RowDoubleClick;" + eventArgs.get_itemIndexHierarchical());
+            else {
+                if (!gridItem.get_isInEditMode()) {
+                    __doPostBack("<%= UserGrid.UniqueID %>", "RowClick;" + eventArgs.get_itemIndexHierarchical());
+               }
+           }
+       }
+       function RowDoubleClick(sender, eventArgs) {
+           var gridItem = sender.get_masterTableView().get_dataItems()[eventArgs.get_itemIndexHierarchical()];
+           if (!gridItem.get_isInEditMode()) {
+               __doPostBack("<%= UserGrid.UniqueID %>", "RowDoubleClick;" + eventArgs.get_itemIndexHierarchical());
             }
         }
         function FullSize(element) {
@@ -498,13 +526,13 @@
             height = height - 15;
             width = width - 15;
 
-            document.getElementById(element).style.height = height + "px";
-            document.getElementById(element).style.width = width + "px";
-            document.getElementById(element).style.visibility = "visible";
-        }
+           document.getElementById(element).style.height = height + "px";
+           document.getElementById(element).style.width = width + "px";
+           document.getElementById(element).style.visibility = "visible";
+       }
 
 
-        FullSize("MainTable");
+       FullSize("MainTable");
     </script>
 </body>
 </html>

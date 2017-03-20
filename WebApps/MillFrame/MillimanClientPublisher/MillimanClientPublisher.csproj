@@ -138,6 +138,7 @@
     <Content Include="Content\Script\jquery.v1.7.1.js" />
     <Content Include="Content\Script\jquery.v1.9.1.js" />
     <Content Include="Content\Script\maskedinput.js" />
+    <Content Include="Content\Script\RefreshPage.js" />
     <Content Include="Content\Style\bootstrap-dialog.min.css" />
     <Content Include="Content\Style\bootstrap.css" />
     <Content Include="Content\Style\bootstrap.min.css" />
@@ -186,48 +187,58 @@
     <Content Include="Content\Images\glyphicons-halflings-regular.eot" />
     <Content Include="Content\Images\glyphicons-halflings-regular.ttf" />
     <Content Include="Content\Images\glyphicons-halflings-regular.woff" />
-    <Content Include="..\appsettings_AK.config">
+    <None Include="..\appsettings_AK.config">
       <Link>Configs\appsettings_AK.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
-    </Content>
-    <Content Include="..\appsettings_SK.config">
-      <Link>Configs\appsettings_SK.config</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\appsettings_VN.config">
+    </None>
+    <None Include="..\appsettings_VN.config">
       <Link>Configs\appsettings_VN.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\connectionStrings_AK.config">
+    </None>
+    <None Include="..\connectionStrings_AK.config">
       <Link>Configs\connectionStrings_AK.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\connectionStrings_SK.config">
-      <Link>Configs\connectionStrings_SK.config</Link>
+    </None>
+    <None Include="..\connectionStrings_TP.config">
+      <Link>Configs\connectionStrings_TP.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\connectionStrings_VN.config">
+    </None>
+    <None Include="..\connectionStrings_VN.config">
       <Link>Configs\connectionStrings_VN.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </None>
     <Content Include="Content\Fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\Fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Content\Fonts\glyphicons-halflings-regular.woff" />
-    <None Include="Configs\appsettings_PreStag.config">
+    <None Include="..\appsettings_PreStag.config">
+      <Link>Configs\appsettings_PreStag.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Configs\appsettings_Stag.config">
+    <None Include="..\appsettings_Stag.config">
+      <Link>Configs\appsettings_Stag.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <Content Include="Configs\appsettings_Stakeholder.config" />
-    <None Include="Configs\connectionStrings_PreStag.config">
+    <None Include="..\appsettings_Stakeholder.config">
+      <Link>Configs\appsettings_Stakeholder.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Configs\connectionStrings_Stag.config">
+    <None Include="..\appsettings_TP.config">
+      <Link>Configs\appsettings_TP.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <Content Include="Configs\connectionStrings_Stakeholder.config" />
+    <None Include="..\connectionStrings_PreStag.config">
+      <Link>Configs\connectionStrings_PreStag.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\connectionStrings_Stag.config">
+      <Link>Configs\connectionStrings_Stag.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\connectionStrings_Stakeholder.config">
+      <Link>Configs\connectionStrings_Stakeholder.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Properties\PublishProfiles\Debug_vn.pubxml" />
     <None Include="Properties\PublishProfiles\LocalPublish.pubxml" />
     <None Include="Properties\PublishProfiles\MillimanClientPublisher_AK.pubxml" />
@@ -354,6 +365,7 @@
     <Compile Include="ComplexReporting\ReductionStatus.aspx.designer.cs">
       <DependentUpon>ReductionStatus.aspx</DependentUpon>
     </Compile>
+    <Compile Include="ComplexReporting\ReportingCommon.cs" />
     <Compile Include="ComplexReporting\ReviewApproval.aspx.cs">
       <DependentUpon>ReviewApproval.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
