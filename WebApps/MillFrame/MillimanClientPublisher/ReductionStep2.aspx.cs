@@ -110,5 +110,26 @@ namespace ClientPublisher
         {
             Response.Redirect("ReductionStep3.aspx?Key=" + Request["Key"]);
         }
+
+        protected void Reset_Click(object sender, EventArgs e)
+        {
+            string WorkingDirectory = string.Empty;
+            string WorkingProject = string.Empty;
+            if (ContainsFilesToPublish(out WorkingDirectory, out WorkingProject) == false)
+            {
+                Response.Redirect("HTML/NoFilesToPublish.html");
+                return;
+            }
+
+            string ReadyFile = "ready_to_publish.txt";
+            string TaskRunningFile = "task_running.txt";
+            string QualifiedReadyFile = System.IO.Path.Combine(WorkingDirectory, ReadyFile);
+            string QualifiedTaskRunningFile = System.IO.Path.Combine(WorkingDirectory, TaskRunningFile);
+
+            System.IO.File.Delete(QualifiedReadyFile);
+            System.IO.File.Delete(QualifiedTaskRunningFile);
+
+            Response.Redirect("ProjectEditor.aspx?Key=" + Request["Key"]);
+        }
     }
 }
