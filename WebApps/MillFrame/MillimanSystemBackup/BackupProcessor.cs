@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -55,30 +56,42 @@ namespace SystemBackup
             string ScriptFile = Path.Combine(TempDir, System.Guid.NewGuid().ToString("N")) + ".sql";
             System.IO.File.WriteAllText(ScriptFile, BackupTemplate);
 
+            Trace.WriteLine("Database backing up initially to file: " + SQLBackup);
             //create the backup process launcher
             string SQLLauncherArgs = @"-S (local)\SQLExpress -i _SCRIPTFILE_";
             SQLLauncherArgs = SQLLauncherArgs.Replace("_SCRIPTFILE_", ScriptFile);
             string CMDSQL = ConfigurationManager.AppSettings["SQLCMD"];
 
-            System.Diagnostics.Process Proc = new System.Diagnostics.Process();
-            Proc.StartInfo.Arguments = SQLLauncherArgs;
-            Proc.StartInfo.CreateNoWindow = true;
-            Proc.StartInfo.FileName = CMDSQL;
-            Proc.StartInfo.UseShellExecute = false;
-            Proc.Start();
-            Proc.WaitForExit(1000 * 60 * 30); //wait max 30 mins
-            int ExitCode = Proc.ExitCode;
-            Proc.Close();
-            System.IO.File.Delete(ScriptFile);  //cleanup, get rid of script file
-           
-            if (System.IO.File.Exists(SQLBackup))
+            try
             {
-               string RootDir = ConfigurationManager.AppSettings["RootDirToBackup"];
-               string BackupDir = System.IO.Path.Combine(ConfigurationManager.AppSettings["RootDirToBackup"], ConfigurationManager.AppSettings["DatabaseBackupDir"]);
-               string DB_Backup_File = System.IO.Path.Combine(BackupDir, ConfigurationManager.AppSettings["DatabaseBackupName"]);
-               System.IO.File.Delete(DB_Backup_File);
-               System.IO.File.Copy(SQLBackup, DB_Backup_File); 
+                System.Diagnostics.Process Proc = new System.Diagnostics.Process();
+                Proc.StartInfo.Arguments = SQLLauncherArgs;
+                Proc.StartInfo.CreateNoWindow = true;
+                Proc.StartInfo.FileName = CMDSQL;
+                Proc.StartInfo.UseShellExecute = false;
+                Proc.Start();
+                Proc.WaitForExit(1000 * 60 * 30); //wait max 30 mins
+                int ExitCode = Proc.ExitCode;
+                Proc.Close();
+                System.IO.File.Delete(ScriptFile);  //cleanup, get rid of script file
+
+                if (System.IO.File.Exists(SQLBackup))
+                {
+                    string RootDir = ConfigurationManager.AppSettings["RootDirToBackup"];
+                    string BackupDir = System.IO.Path.Combine(RootDir, ConfigurationManager.AppSettings["DatabaseBackupDir"]);
+                    Directory.CreateDirectory(BackupDir);
+                    string DB_Backup_File = System.IO.Path.Combine(BackupDir, ConfigurationManager.AppSettings["DatabaseBackupName"]);
+                    System.IO.File.Delete(DB_Backup_File);
+
+                    Trace.WriteLine("Database backup copying to file: " + DB_Backup_File);
+                    System.IO.File.Copy(SQLBackup, DB_Backup_File);
+                }
             }
+            catch (Exception e)
+            {
+                Trace.WriteLine("Exception:\r\n" + e.Message + "\r\n" + e.StackTrace);
+            }
+
             //go ahead and return if file exists, will be included in full backup even if copy failed
             return System.IO.File.Exists(SQLBackup);  //if this does not exist it did not backup
 
@@ -92,12 +105,14 @@ namespace SystemBackup
                 string RootBackupDir = ConfigurationManager.AppSettings["RootDirToBackup"];
                 string ExcludeDirs = ConfigurationManager.AppSettings["ExcludeDirectories"];
                 string CreateBackupInDirectory = ConfigurationManager.AppSettings["CreateBackupInDirectory"];
+                Directory.CreateDirectory(CreateBackupInDirectory);
 
                 List<string> BackupDirs = GetBackupDirs(RootBackupDir, ExcludeDirs);
 
                 foreach (string Dir in BackupDirs)
                 {
                     string ZipDir = System.IO.Path.Combine(BackUpDirectory, System.IO.Path.GetFileName(Dir)) + ".zip";
+                    Trace.WriteLine("System backup of directory " + Dir + " to zip file: " + ZipDir);
                     System.IO.Compression.ZipFile.CreateFromDirectory(Dir, ZipDir);
                 }
 
@@ -105,23 +120,26 @@ namespace SystemBackup
                 string MasterZip = System.IO.Path.Combine(CreateBackupInDirectory, MasterZipName);
                 if (System.IO.File.Exists(MasterZip))
                     System.IO.File.Delete(MasterZip);
+                Trace.WriteLine("Creating master zip file " + MasterZip);
                 System.IO.Compression.ZipFile.CreateFromDirectory(BackUpDirectory, MasterZip, System.IO.Compression.CompressionLevel.NoCompression,false);
 
                 Status = true;
             }
             catch (Exception)
             {
-
+                Trace.WriteLine("Exception caught in BackupProcessor::BackupSystem()");
             }
 
             try
             {   //cleanup
+                Trace.WriteLine("Removing directory " + BackUpDirectory);
                 System.IO.Directory.Delete(BackUpDirectory, true);
             }
             catch (Exception)
             {
-
+                Trace.WriteLine("Exception caught while removing directory" + BackUpDirectory);
             }
+
             return Status;
         }
 
@@ -161,10 +179,13 @@ namespace SystemBackup
                 objeto_mail.Subject = "PRM System Backup Daemon Status";
                 objeto_mail.Body = Msg;
                 objeto_mail.Priority = EmailPriority;
+
+                Trace.WriteLine("Sending email notification to address " + EmailAddress);
                 client.Send(objeto_mail);
             }
             catch (Exception)
             {
+                Trace.WriteLine("Exception caught while sending email notification");
             }
         }
 
@@ -179,6 +200,7 @@ namespace SystemBackup
             {
                 if (DateTime.UtcNow - file.CreationTimeUtc > TimeSpan.FromDays(RetainForDays))
                 {
+                    Trace.WriteLine("Cleaner deleting file " + file.FullName);
                     File.Delete(file.FullName);
                 }
             }
