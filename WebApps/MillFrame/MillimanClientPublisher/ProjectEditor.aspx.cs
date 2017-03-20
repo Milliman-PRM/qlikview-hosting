@@ -58,6 +58,15 @@ namespace ClientPublisher
         {
             if (!IsPostBack)
             {
+                string ReadyFile = "ready_to_publish.txt";
+                string TaskRunningFile = "task_running.txt";
+                string QualifiedReadyFile = System.IO.Path.Combine(WorkingDirectory, ReadyFile);
+                string QualifiedTaskRunningFile = System.IO.Path.Combine(WorkingDirectory, TaskRunningFile);
+                if ( (System.IO.File.Exists(QualifiedReadyFile)) || (System.IO.File.Exists(QualifiedTaskRunningFile)) )
+                {
+                    Response.Redirect("ReductionStep1.aspx?Key=" + Request["Key"]);
+                }
+
                 //clear out an residual files that might be there
                 string[] AllFiles = System.IO.Directory.GetFiles(WorkingDirectory);
                 foreach (string aFile in AllFiles)
