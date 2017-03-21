@@ -7,26 +7,12 @@
 <link id="Link1" runat="server" rel="stylesheet" type="text/css" href="../Content/Style/MillframeStyle.css" />
 
 <style type="text/css">
-    .layOut {
-        height: 135px !important;
-    }
-
-    #divPassword {
-        border: 1px solid #eee;
-    }
+    .layOut {height: 135px !important;}
+    #divPassword {border: 1px solid #eee;}
     /*bootstra specifc*/
-    td {
-        padding: 4px !important;
-    }
-
-    .form-control {
-        height: 30px;
-    }
-
-    .table {
-        margin-bottom: 5px;
-    }
-    .lightgray{color:lightgray}
+    td {padding: 4px !important;}
+    .form-control { height: 30px; }
+    .table {margin-bottom: 5px;}
     .page-header {
         padding-bottom: 10px;
         margin: 5px 0 10px;
