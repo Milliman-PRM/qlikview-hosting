@@ -1,15 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Milliman.Common", "Milliman.Common\Milliman.Common.csproj", "{E8C5D9C8-78D0-4BDF-91B5-E5DF4D9DA3F3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Milliman.Web.Design", "Milliman.Web.Design\Milliman.Web.Design.csproj", "{AA571E5A-6EA1-4F2A-B3A3-3DCAF68BD0A2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Milliman.Windows.Design", "Milliman.Windows.Design\Milliman.Windows.Design.csproj", "{560F8DFF-4A00-48A9-A391-29E4E416904A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Milliman.Reduction.Application", "Milliman.Reduction.Application\Milliman.Reduction.Application.csproj", "{F9403990-79F9-4710-96BD-629EAB2FA132}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Milliman.Reduction.Service", "Milliman.Reduction.Service\Milliman.Reduction.Service.csproj", "{566511D1-159B-48D4-B9C8-0FF4921B3F5B}"
 EndProject
@@ -32,77 +30,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Milliman.Security", "Milliman.Security\Milliman.Security.csproj", "{BFC898B4-3139-4F49-B16C-AACD83BC71A4}"
 EndProject
 Global
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 11
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://prmanalytics.visualstudio.com/defaultcollection
-		SccProjectUniqueName0 = Milliman.Reduction.Scheduler\\Milliman.Reduction.SchedulerEngine.csproj
-		SccProjectTopLevelParentUniqueName0 = Milliman.sln
-		SccProjectName0 = Milliman.Reduction.Scheduler
-		SccAuxPath0 = https://prmanalytics.visualstudio.com/defaultcollection
-		SccLocalPath0 = Milliman.Reduction.Scheduler
-		SccProvider0 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName1 = Milliman.Reduction.SchedulerHost\\Milliman.Reduction.SchedulerHost.csproj
-		SccProjectTopLevelParentUniqueName1 = Milliman.sln
-		SccProjectName1 = Milliman.Reduction.SchedulerHost
-		SccAuxPath1 = https://prmanalytics.visualstudio.com/defaultcollection
-		SccLocalPath1 = Milliman.Reduction.SchedulerHost
-		SccProvider1 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName2 = Milliman.Common\\Milliman.Common.csproj
-		SccProjectTopLevelParentUniqueName2 = Milliman.sln
-		SccProjectName2 = Milliman.Common
-		SccAuxPath2 = https://prmanalytics.visualstudio.com/defaultcollection
-		SccLocalPath2 = Milliman.Common
-		SccProvider2 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName3 = Milliman.Web.Design\\Milliman.Web.Design.csproj
-		SccProjectTopLevelParentUniqueName3 = Milliman.sln
-		SccProjectName3 = Milliman.Web.Design
-		SccAuxPath3 = https://prmanalytics.visualstudio.com/defaultcollection
-		SccLocalPath3 = Milliman.Web.Design
-		SccProvider3 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName4 = Milliman.Windows.Design\\Milliman.Windows.Design.csproj
-		SccProjectTopLevelParentUniqueName4 = Milliman.sln
-		SccProjectName4 = Milliman.Windows.Design
-		SccAuxPath4 = https://prmanalytics.visualstudio.com/defaultcollection
-		SccLocalPath4 = Milliman.Windows.Design
-		SccProvider4 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName5 = Milliman.Reduction.Service\\Milliman.Reduction.Service.csproj
-		SccProjectTopLevelParentUniqueName5 = Milliman.sln
-		SccProjectName5 = Milliman.Reduction.Service
-		SccAuxPath5 = https://prmanalytics.visualstudio.com/defaultcollection
-		SccLocalPath5 = Milliman.Reduction.Service
-		SccProvider5 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName6 = Milliman.Reduction.Application\\Milliman.Reduction.Application.csproj
-		SccProjectTopLevelParentUniqueName6 = Milliman.sln
-		SccProjectName6 = Milliman.Reduction.Application
-		SccAuxPath6 = https://prmanalytics.visualstudio.com/defaultcollection
-		SccLocalPath6 = Milliman.Reduction.Application
-		SccProvider6 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName7 = Milliman.Reduction.ClientApp\\Milliman.Reduction.ClientApp.csproj
-		SccProjectTopLevelParentUniqueName7 = Milliman.sln
-		SccProjectName7 = Milliman.Reduction.ClientApp
-		SccAuxPath7 = https://prmanalytics.visualstudio.com/defaultcollection
-		SccLocalPath7 = Milliman.Reduction.ClientApp
-		SccProvider7 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName8 = Milliman.Reduction.SchedulerSender\\Milliman.Reduction.SchedulerSender.csproj
-		SccProjectTopLevelParentUniqueName8 = Milliman.sln
-		SccProjectName8 = Milliman.Reduction.SchedulerSender
-		SccAuxPath8 = https://prmanalytics.visualstudio.com/defaultcollection
-		SccLocalPath8 = Milliman.Reduction.SchedulerSender
-		SccProvider8 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName9 = Milliman.Reduction.ReductionServiceEngine\\Milliman.Reduction.ReductionEngine.csproj
-		SccProjectTopLevelParentUniqueName9 = Milliman.sln
-		SccProjectName9 = Milliman.Reduction.ReductionServiceEngine
-		SccAuxPath9 = https://prmanalytics.visualstudio.com/defaultcollection
-		SccLocalPath9 = Milliman.Reduction.ReductionServiceEngine
-		SccProvider9 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccProjectUniqueName10 = Milliman.Security\\Milliman.Security.csproj
-		SccProjectTopLevelParentUniqueName10 = Milliman.sln
-		SccProjectName10 = Milliman.Security
-		SccAuxPath10 = https://prmanalytics.visualstudio.com/defaultcollection
-		SccLocalPath10 = Milliman.Security
-		SccProvider10 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -120,10 +47,6 @@ Global
 		{560F8DFF-4A00-48A9-A391-29E4E416904A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{560F8DFF-4A00-48A9-A391-29E4E416904A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{560F8DFF-4A00-48A9-A391-29E4E416904A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F9403990-79F9-4710-96BD-629EAB2FA132}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F9403990-79F9-4710-96BD-629EAB2FA132}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F9403990-79F9-4710-96BD-629EAB2FA132}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F9403990-79F9-4710-96BD-629EAB2FA132}.Release|Any CPU.Build.0 = Release|Any CPU
 		{566511D1-159B-48D4-B9C8-0FF4921B3F5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{566511D1-159B-48D4-B9C8-0FF4921B3F5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{566511D1-159B-48D4-B9C8-0FF4921B3F5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -160,7 +83,6 @@ Global
 		{E8C5D9C8-78D0-4BDF-91B5-E5DF4D9DA3F3} = {4FE72080-2FDD-4857-8B49-02976DE7498B}
 		{AA571E5A-6EA1-4F2A-B3A3-3DCAF68BD0A2} = {4FE72080-2FDD-4857-8B49-02976DE7498B}
 		{560F8DFF-4A00-48A9-A391-29E4E416904A} = {4FE72080-2FDD-4857-8B49-02976DE7498B}
-		{F9403990-79F9-4710-96BD-629EAB2FA132} = {34B4814E-A430-4B07-8731-1B2C56C60DBE}
 		{566511D1-159B-48D4-B9C8-0FF4921B3F5B} = {B572CDB8-B4FB-47C3-80EC-6D701B8E54AF}
 		{D8ACDFE3-C9EE-4D88-BF78-22A396FF51FC} = {4FE72080-2FDD-4857-8B49-02976DE7498B}
 		{D870D6EE-578B-457A-A963-3F26B1BD9C63} = {B572CDB8-B4FB-47C3-80EC-6D701B8E54AF}
