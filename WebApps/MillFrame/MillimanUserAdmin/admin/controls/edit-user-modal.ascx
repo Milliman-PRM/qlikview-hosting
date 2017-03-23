@@ -7,26 +7,12 @@
 <link id="Link1" runat="server" rel="stylesheet" type="text/css" href="../Content/Style/MillframeStyle.css" />
 
 <style type="text/css">
-    .layOut {
-        height: 135px !important;
-    }
-
-    #divPassword {
-        border: 1px solid #eee;
-    }
+    .layOut {height: 135px !important;}
+    #divPassword {border: 1px solid #eee;}
     /*bootstra specifc*/
-    td {
-        padding: 4px !important;
-    }
-
-    .form-control {
-        height: 30px;
-    }
-
-    .table {
-        margin-bottom: 5px;
-    }
-
+    td {padding: 4px !important;}
+    .form-control { height: 30px; }
+    .table {margin-bottom: 5px;}
     .page-header {
         padding-bottom: 10px;
         margin: 5px 0 10px;
@@ -61,9 +47,11 @@
                                 OnItemUpdating="UserInfo_ItemUpdating" DefaultMode="Edit"
                                 CssClass="table table-hover" GridLines="None" OnItemCreated="UserInfo_ItemCreated">
                                 <Fields>
-                                    <asp:BoundField DataField="UserName" HeaderText="User Name" ReadOnly="True" ControlStyle-CssClass="form-control"></asp:BoundField>
-                                    <asp:BoundField DataField="Email" HeaderText="Email">
-                                        <ControlStyle Width="300px" CssClass="form-control" />
+                                    <asp:BoundField DataField="UserName" HeaderText="User Name" ReadOnly="True" >                                         
+                                        <ItemStyle BackColor="#ececec" CssClass="form-control"/>
+                                    </asp:BoundField>
+                                    <asp:BoundField DataField="Email" HeaderText="Email" ReadOnly="True">                                       
+                                        <ItemStyle BackColor="#ececec" CssClass="form-control"/>
                                     </asp:BoundField>
                                     <asp:TemplateField HeaderText="Security Q&A">
                                         <EditItemTemplate>
