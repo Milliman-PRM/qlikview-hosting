@@ -270,6 +270,7 @@
     <Content Include="images\stop-icon.png" />
     <Content Include="images\transparent16x16.gif" />
     <Content Include="images\upload.png" />
+    <Content Include="images\user-guide.png" />
     <Content Include="images\warning-icon.png" />
     <Content Include="images\watermark.png" />
     <Content Include="js\fckeditor\editor\css\behaviors\disablehandles.htc" />
