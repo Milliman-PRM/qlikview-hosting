@@ -585,15 +585,52 @@ namespace ClientPublisher
                         return;
                     }
                     string WorkingDirectory = PublisherUtilities.GetWorkingDirectory(System.Web.Security.Membership.GetUser().UserName, theProject.ProjectName);
-                    SimpleUpdateClass SU = new SimpleUpdateClass();
-                    SU.ReductionIndex = Index.ToString();
-                    SU.ProjectSettings = theProject;
-                    SU.WorkingDirectory = WorkingDirectory;
-                    SU.Account = System.Web.Security.Membership.GetUser().UserName;
-                    SU.ShowAllProgressBars = false;
-                    Global.TaskManager.ScheduleTask(SU);
-                    SU.StartTask();
-                    Response.Redirect("ReductionStep1.aspx?Processing=" + SU.TaskID);
+
+                    //Story 2124 - Task 2129 - either send control on to report page, re-attach to running task, or create a new task
+                    //variables to use in checking to see if should reconnect or task is finished
+                    string ReadyFile = "ready_to_publish.txt";
+                    string TaskRunningFile = "task_running.txt";
+                    string QualifiedReadyFile = System.IO.Path.Combine(WorkingDirectory, ReadyFile);
+                    string QualifiedTaskRunningFile = System.IO.Path.Combine(WorkingDirectory, TaskRunningFile);
+                    bool TaskNotFound = true;
+
+                    //else look to see if task is already running if so restore
+                    if (System.IO.File.Exists(QualifiedTaskRunningFile))
+                    {
+                        string ProcessID = System.IO.File.ReadAllText(QualifiedTaskRunningFile);
+                        SimpleUpdateClass AttachmentTask = Global.TaskManager.FindTask(ProcessID) as SimpleUpdateClass;
+                        if (AttachmentTask != null )
+                        {   //found the task, so connect to it
+                            Response.Redirect("ReductionStep1.aspx?Processing=" + AttachmentTask.TaskID);
+                            return;
+                        }
+                        //didn find task, so delete file - should not be there
+                        System.IO.File.Delete(QualifiedTaskRunningFile);  //not really running
+                    }
+                    //maybe it's done - check to see if finished
+                    if (System.IO.File.Exists(QualifiedReadyFile))
+                    {
+                        Response.Redirect("ReductionStep2.aspx?key=" + Request["Key"]);
+                        return; //stop this pages, processing - time to move on
+                    }
+                    //not running and not finished - let's start at new reduction task
+                    if (TaskNotFound)
+                    {
+                        //we didn't find a running task, so create one and let's get started...
+                        SimpleUpdateClass SU = new SimpleUpdateClass();
+                        //write out id file, so we can reconnect if needed
+                        System.IO.File.WriteAllText(QualifiedTaskRunningFile, SU.TaskID);
+
+                        SU.ReductionIndex = Index.ToString();
+                        SU.ProjectSettings = theProject;
+                        SU.WorkingDirectory = WorkingDirectory;
+                        SU.Account = System.Web.Security.Membership.GetUser().UserName;
+                        //if NO task running thin start a new one
+                        SU.ShowAllProgressBars = false;
+                        Global.TaskManager.ScheduleTask(SU);
+                        SU.StartTask();
+                        Response.Redirect("ReductionStep1.aspx?Processing=" + SU.TaskID);
+                    }
                 }
                 else
                 {

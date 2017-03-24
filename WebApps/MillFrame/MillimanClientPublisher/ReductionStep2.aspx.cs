@@ -110,5 +110,35 @@ namespace ClientPublisher
         {
             Response.Redirect("ReductionStep3.aspx?Key=" + Request["Key"]);
         }
+
+        /// <summary>
+        /// Story 2124 - Task 2135
+        /// The user wants to remove all the processed file and start again
+        /// so delete the ready and/or task running txt files, and push user back to project editor
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected void Reset_Click(object sender, EventArgs e)
+        {
+            //Story 2124 - Task 2135 - handler for the Reset project button
+            //we just want to delete some files (*.txt files)  that will allow us to restart processing
+            string WorkingDirectory = string.Empty;
+            string WorkingProject = string.Empty;
+            if (ContainsFilesToPublish(out WorkingDirectory, out WorkingProject) == false)
+            {
+                Response.Redirect("HTML/NoFilesToPublish.html");
+                return;
+            }
+
+            string ReadyFile = "ready_to_publish.txt";
+            string TaskRunningFile = "task_running.txt";
+            string QualifiedReadyFile = System.IO.Path.Combine(WorkingDirectory, ReadyFile);
+            string QualifiedTaskRunningFile = System.IO.Path.Combine(WorkingDirectory, TaskRunningFile);
+
+            System.IO.File.Delete(QualifiedReadyFile);
+            System.IO.File.Delete(QualifiedTaskRunningFile);
+
+            Response.Redirect("ProjectEditor.aspx?Key=" + Request["Key"]);
+        }
     }
 }

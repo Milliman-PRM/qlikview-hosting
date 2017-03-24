@@ -28,6 +28,10 @@
                 return false;
             }
         }
+
+        function CheckReset() {
+            return confirm('By clicking \'OK\' you are acknowledging the current results should be removed.\n\nClicking \'OK\' will return you to the \'Edit Project\' window.');
+        }
     </script>
 </head>
 <body style="overflow:hidden;" onload="Ready();">
@@ -61,6 +65,8 @@
 
         <footer style="text-align:center;height:30px">
             <asp:Button ID="Publish" runat="server"  Text="Publish To Production"  OnClientClick="return CheckReviewStatus();" OnClick="Publish_Click"  />
+            &nbsp;&nbsp;
+            <asp:Button ID="Reset" runat="server" Text="Restart Project Update" OnClientClick="return CheckReset()" OnClick="Reset_Click" />
         </footer>
     </form>
     <script type="text/javascript">
