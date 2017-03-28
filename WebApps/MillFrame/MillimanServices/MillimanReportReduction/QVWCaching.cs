@@ -87,7 +87,9 @@ namespace MillimanReportReduction
                 Index++;
  
             }
-            System.IO.File.Copy(QualifiedReducedQVWFilename, CachedQVWFilename);
+            //check to see if already there, this is a caching system, so is ok if already there
+            if ( System.IO.File.Exists(CachedQVWFilename) == false)
+                System.IO.File.Copy(QualifiedReducedQVWFilename, CachedQVWFilename);
             System.IO.File.Delete(QualifiedReducedQVWFilename);  //we need to get rid of it, since it reduced in in the user's dir, but it has been copied to cache
 
             System.IO.File.WriteAllText(CandidateFileName, CachedQVWFilename + "|" + SelectionMD5);
