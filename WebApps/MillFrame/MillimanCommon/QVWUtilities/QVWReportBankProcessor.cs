@@ -113,7 +113,8 @@ namespace MillimanCommon
             //if you are not successful, then you failed
             foreach (QVWReportBank.ProcessingStatusClass PS in ReportBank.ProcessingStatusList)
             {
-                if (SuccessfulReductionUsers.Contains(PS.UserName) == false)
+                //   if not in successful list                                    and not already in failed list - add them here
+                if ((SuccessfulReductionUsers.Contains(PS.UserName) == false) && (FailedReductionUsers.Contains(PS.UserName) == false))
                     FailedReductionUsers.Add(PS.UserName);
             }
 
