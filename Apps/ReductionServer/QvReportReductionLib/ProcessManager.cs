@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.IO;
 using System.Diagnostics;
 using System.Collections.Generic;
@@ -7,11 +8,22 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using Milliman.Common;
+using Milliman.Reduction.ReductionEngine;
 
 namespace QvReportReductionLib
 {
     public class ProcessManager
     {
+
+        /// <summary>
+        /// class used to exchange operational parameters to the thread that handles a single reduction task
+        /// </summary>
+        class RuductionTaskThreadArgs
+        {
+            internal string ConfigFileName;
+            internal ReduceConfig TaskConfig;
+        }
+
         private bool _StopSignal;  // wrapped by the thread safe StopSignal property
         private Object ObjectStateLock = null;
         private Thread MainServiceWorkerThread = null;
@@ -81,27 +93,11 @@ namespace QvReportReductionLib
             return !ThreadAlive;
         }
 
-        private void WorkerThreadMain(Object Arg)
-        {
-            ProcessManagerConfiguration ProcessConfig = Arg as ProcessManagerConfiguration;
-
-            Trace.WriteLine("In " + this.GetType().Name + ".WorkerThreadMain()");
-            while (!StopSignal)
-            {
-                foreach (string TaskFolderName in Directory.EnumerateDirectories(ProcessConfig.RootPath)
-                                                           .Where(d => ProcessManager.FolderContainsAReductionRequest(d))
-                                                           .OrderBy(d => Directory.GetLastWriteTime(d))
-                                                           .Take(ProcessConfig.MaxConcurrentTasks - 1))
-                {
-                    {
-                        Trace.WriteLine("Found task in folder " + TaskFolderName);
-                    }
-                }
-
-                Thread.Sleep(2000);
-            }
-        }
-
+        /// <summary>
+        /// Evaluates contents of a folder to detect whether a reduction task is present
+        /// </summary>
+        /// <param name="FolderName"></param>
+        /// <returns></returns>
         public static bool FolderContainsAReductionRequest(string FolderName)
         {
             bool ReturnVal = true;  // start true because of the &= logic below
@@ -110,11 +106,163 @@ namespace QvReportReductionLib
             ReturnVal &= !File.Exists(Path.Combine(FolderName, "processing_complete.txt"));
             ReturnVal &= !File.Exists(Path.Combine(FolderName, "delete_me.txt"));
 
+            // TODO Test for whether the folder or all it's config files are already in the collection of executing tasks
+
             // Other things to look for, should cause false return if found.  
             //  For each job executing by QV server a “*_running.txt” file will be created
             //  For each job completed by QV server a “*_completed.txt” file will be created
 
             return ReturnVal;
+        }
+
+        /// <summary>
+        /// Evaluates contents of a folder to detect whether a reduction task is present
+        /// </summary>
+        /// <param name="FolderName"></param>
+        /// <returns></returns>
+        public static bool FileIsAvailableToStart(string FilePath)
+        {
+            bool ReturnVal = true;  // start true because of the &= logic below
+
+            string FolderName = Path.GetDirectoryName(FilePath);
+            string FileShortName = Path.GetFileNameWithoutExtension(FilePath);
+
+            ReturnVal &= File.Exists(FilePath);
+            ReturnVal &= !File.Exists(Path.Combine(FolderName, FileShortName + "_running.txt"));
+            ReturnVal &= !File.Exists(Path.Combine(FolderName, FileShortName + "_completed.txt"));
+            ReturnVal &= !File.Exists(Path.Combine(FolderName, "delete_me.txt"));
+
+// more
+            return ReturnVal;
+        }
+
+        private void WorkerThreadMain(Object Arg)
+        {
+            ProcessManagerConfiguration ProcessConfig = Arg as ProcessManagerConfiguration;
+
+            Dictionary<string, ReduceConfig> ExecutingTasks = new Dictionary<string, ReduceConfig>();
+            Dictionary<string, Thread> ExecutingThreads = new Dictionary<string, Thread>();
+
+            //Trace.WriteLine("In " + this.GetType().Name + ".WorkerThreadMain()");
+            while (!StopSignal)
+            {
+                // Clean up any completed tasks
+                for (int i = ExecutingTasks.Keys.Count - 1 ; i >= 0 ; i--)  // count down from the high index so Remove() doesn't disturb the collection elements
+                {
+                    string ConfigFileName = ExecutingTasks.Keys.ElementAt(i);
+
+                    //Trace.WriteLine(string.Format("ThreadState {0} for config file {1}", ExecutingThreads[ConfigFileName].ThreadState.ToString(), ConfigFileName));
+                    if (ExecutingThreads[ConfigFileName].ThreadState == System.Threading.ThreadState.Stopped)
+                    {
+                        Trace.WriteLine("Thread state Stopped, removing from management: " + ConfigFileName);
+                        ExecutingTasks.Remove(ConfigFileName);
+                        ExecutingThreads.Remove(ConfigFileName);
+                    }
+                }
+
+                // Trace.WriteLine(string.Format("After cleanup, {0}:{1} threads managed", ExecutingThreads.Count, ExecutingTasks.Count));
+
+                // Identify new tasks to initiate, up to configured limit
+                foreach (string TaskFolderName in Directory.EnumerateDirectories(ProcessConfig.RootPath)
+                                                           .Where(d => ProcessManager.FolderContainsAReductionRequest(d))   // only include valid, ready tasks
+                                                           .OrderBy(d => new DirectoryInfo(d).CreationTime))                // order by oldest first (treat the file system like a queue)
+                {
+                    //Trace.WriteLine("Found task(s) in folder " + TaskFolderName);
+
+                    foreach (string ConfigFileName in Directory.EnumerateFiles(TaskFolderName, "*.config")
+                                                               .Where(f => ProcessManager.FileIsAvailableToStart(f))   // only include files that have not already been started
+                                                               .Take(ProcessConfig.MaxConcurrentTasks - ExecutingTasks.Count))  // Don't exceed the concurrent task count limit
+                    {
+                        Trace.WriteLine("Initiating processing on config file " + ConfigFileName);
+
+                        ReduceConfig TaskCfg = ReduceConfig.Deserialize(ConfigFileName);
+                        Thread Worker = new Thread(InitiateReduction);
+                        Worker.Start(new RuductionTaskThreadArgs { ConfigFileName = ConfigFileName, TaskConfig = TaskCfg });
+
+                        ExecutingTasks.Add(ConfigFileName, TaskCfg);
+                        ExecutingThreads.Add(ConfigFileName, Worker);
+                    }
+
+                    if (ProcessConfig.MaxConcurrentTasks == ExecutingTasks.Count)
+                    {
+                        // don't need to check any more folders right now
+                        break;  
+                    }
+                }
+
+                Thread.Sleep(2000);
+            }
+        }
+
+        /// <summary>
+        /// Performs initial validation of all conditions necessary to run a reduction.
+        /// This function runs in its own thread, concurrently with the threads for other config files
+        /// </summary>
+        /// <param name="ConfigFilePath">The path for the config file that will be processed by the thread</param>
+        /// <param name="TaskConfig">The <paramref name="ReduceConfig">Config</paramref> object deserialized from disk file</param>
+        private void InitiateReduction(object Args)
+        {
+            string ConfigFilePath = (Args as RuductionTaskThreadArgs).ConfigFileName;
+            ReduceConfig TaskConfig = (Args as RuductionTaskThreadArgs).TaskConfig;
+
+            Trace.WriteLine(string.Format("Initializing processing of config file '{0}'", ConfigFilePath));
+            try
+            {
+                string TaskFolder = Path.GetDirectoryName(ConfigFilePath);
+                string QvwPath = Path.Combine(TaskFolder, TaskConfig.MasterQVW);
+                string CfgFileName = Path.GetFileNameWithoutExtension(ConfigFilePath);
+
+                string FlagFileName = Path.Combine(TaskFolder, string.Format("{0}_running.{1}", CfgFileName, "txt"));
+                File.Create(FlagFileName).Close();
+                Trace.WriteLine(string.Format("Created processing flag file '{0}'", FlagFileName));
+
+                if (!File.Exists(QvwPath))
+                {
+                    Trace.WriteLine(string.Format("Config file is pointing to an unavailable QVW file '{0}'. The process will be terminated...", QvwPath));
+                    return;
+                }
+                else
+                {
+                    Trace.WriteLine(string.Format("Found processable QVW file on '{0}'", QvwPath));
+                }
+
+                XMLFileSignature Signature = new XMLFileSignature(QvwPath);
+                bool CanEmit = false;
+                if (!string.IsNullOrEmpty(Signature.ErrorMessage))
+                {
+                    Trace.WriteLine(Signature.ErrorMessage);
+                    return;
+                }
+                else if (! Signature.SignatureDictionary.Keys.Contains("can_emit")
+                      || ! bool.TryParse(Signature.SignatureDictionary["can_emit"], out CanEmit)
+                      || ! CanEmit)
+                {
+                    Trace.WriteLine(string.Format("File '{0}' marked to not be processed. Process will be terminated with success.", TaskConfig.MasterQVW));
+                    return;
+                }
+                else
+                {
+                    Trace.WriteLine(string.Format("File '{0}' is correctly signed and marked to be processed. Shipping to Loop & Reduce on the Publisher Server...", TaskConfig.MasterQVW));
+                    // Connect with QMSAPI, start configuring the reduction process
+                    QMSSettings Settings = new QMSSettings();
+                    Settings.QMSURL = System.Configuration.ConfigurationManager.AppSettings["QMS"];
+                    Settings.UserName = System.Configuration.ConfigurationManager.AppSettings["QMSUser"];
+                    Settings.Password = System.Configuration.ConfigurationManager.AppSettings["QMSPassword"];
+                    Trace.WriteLine(string.Format("QMS Address is: '{0}', and QMS User is '{1}'", Settings.QMSURL, Settings.UserName));
+
+                    ReductionRunner Runner = new ReductionRunner(Settings);
+                    Runner.ConfigFile = TaskConfig;
+                    Runner.QVWOriginalFullFileName = Path.Combine(Path.GetDirectoryName(ConfigFilePath), TaskConfig.MasterQVW);
+                    Runner.Run();
+                    Trace.WriteLine("Process finishing successfully.");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine(string.Format("Unable to finish processing config file '{0}', exception:\r\n{1}\r\n{2}", ConfigFilePath, ex.Message, ex.StackTrace));
+                return;
+            }
         }
     }
 }
