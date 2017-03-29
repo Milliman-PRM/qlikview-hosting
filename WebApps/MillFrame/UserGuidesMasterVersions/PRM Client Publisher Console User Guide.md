@@ -131,7 +131,7 @@ Once you check the “review” **check box**, the “Publish to Production” b
 
 ![](Images/PRM_Client_Publisher_Console_User_Guide/image12.png ""){width=100% height=auto}\
 
-At the bottom of the report is the Publish button. Once “Publish to Production” has been clicked, all report information, user information and reduced reports are uploaded to the production server.
+At the bottom of the report is the Publish button. Once “Publish to Production” has been clicked, all report information, user information and reduced reports are uploaded to the production server. If the results need to be reprocessed, click the "Restart Project Update" button.  This button will reset the processed data and allow you to upload a new report.
 
 ![](Images/PRM_Client_Publisher_Console_User_Guide/image11.png ""){width=100% height=auto}\
 
