@@ -138,8 +138,8 @@ namespace PasswordUtilityProcessor
             var existingFilesInDir = GetAllRSTFileNamesFromDirectory(GetRSTFolderPath());
             if (existingFilesInDir != null && existingFilesInDir.Count > 0)
             {
-                //Now create a new list and remove the .rst extention
-                var fielsInDirWithOutExt = existingFilesInDir.Where(s => s.EndsWith(".rst")).Select(s => s.Replace(".rst", "").Trim()).ToList();
+                //Now create a new list and remove the .RST extention(all caps)
+                var fielsInDirWithOutExt = existingFilesInDir.Where(s => s.EndsWith(".RST")).Select(s => s.Replace(".RST", "").Trim()).ToList();
 
                 if (fielsInDirWithOutExt.Count > 0)
                 {
@@ -174,7 +174,7 @@ namespace PasswordUtilityProcessor
                 files = directory.GetFiles()
                                  .Where(s => s.Extension.EndsWith(".rst"))
                                  .OrderBy(file => file.LastWriteTime)
-                                 .Select(file => file.Name).ToList();
+                                 .Select(file => file.Name.ToUpper()).ToList(); //must make all caps
             }
             return files;
         }
