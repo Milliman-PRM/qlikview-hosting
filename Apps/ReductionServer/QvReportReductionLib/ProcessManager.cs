@@ -24,6 +24,12 @@ namespace QvReportReductionLib
             internal ReduceConfig TaskConfig;
         }
 
+        class RunningReductionTask
+        {
+            internal ReduceConfig TaskConfig;
+            internal Thread Thd;
+        }
+
         private bool _StopSignal;  // wrapped by the thread safe StopSignal property
         private Object ObjectStateLock = null;
         private Thread MainServiceWorkerThread = null;
@@ -140,8 +146,8 @@ namespace QvReportReductionLib
         {
             ProcessManagerConfiguration ProcessConfig = Arg as ProcessManagerConfiguration;
 
-            Dictionary<string, ReduceConfig> ExecutingTasks = new Dictionary<string, ReduceConfig>();
-            Dictionary<string, Thread> ExecutingThreads = new Dictionary<string, Thread>();
+            // These collections are keyed on the config file name
+            Dictionary<string, RunningReductionTask> ExecutingTasks = new Dictionary<string, RunningReductionTask>();
 
             //Trace.WriteLine("In " + this.GetType().Name + ".WorkerThreadMain()");
             while (!StopSignal)
@@ -152,11 +158,10 @@ namespace QvReportReductionLib
                     string ConfigFileName = ExecutingTasks.Keys.ElementAt(i);
 
                     //Trace.WriteLine(string.Format("ThreadState {0} for config file {1}", ExecutingThreads[ConfigFileName].ThreadState.ToString(), ConfigFileName));
-                    if (ExecutingThreads[ConfigFileName].ThreadState == System.Threading.ThreadState.Stopped)
+                    if (ExecutingTasks[ConfigFileName].Thd.ThreadState == System.Threading.ThreadState.Stopped)
                     {
                         Trace.WriteLine("Thread state Stopped, removing from management: " + ConfigFileName);
                         ExecutingTasks.Remove(ConfigFileName);
-                        ExecutingThreads.Remove(ConfigFileName);
                     }
                 }
 
@@ -170,17 +175,20 @@ namespace QvReportReductionLib
                     //Trace.WriteLine("Found task(s) in folder " + TaskFolderName);
 
                     foreach (string ConfigFileName in Directory.EnumerateFiles(TaskFolderName, "*.config")
-                                                               .Where(f => ProcessManager.FileIsAvailableToStart(f))   // only include files that have not already been started
+                                                               .Where(f => ProcessManager.FileIsAvailableToStart(f))   // only include files that are appropriate to start
                                                                .Take(ProcessConfig.MaxConcurrentTasks - ExecutingTasks.Count))  // Don't exceed the concurrent task count limit
                     {
                         Trace.WriteLine("Initiating processing on config file " + ConfigFileName);
 
+                        // deserialize the config to a class instance
                         ReduceConfig TaskCfg = ReduceConfig.Deserialize(ConfigFileName);
+
+                        // start the thread to process the task
                         Thread Worker = new Thread(InitiateReduction);
                         Worker.Start(new RuductionTaskThreadArgs { ConfigFileName = ConfigFileName, TaskConfig = TaskCfg });
 
-                        ExecutingTasks.Add(ConfigFileName, TaskCfg);
-                        ExecutingThreads.Add(ConfigFileName, Worker);
+                        // remember the work being done
+                        ExecutingTasks.Add(ConfigFileName, new RunningReductionTask { TaskConfig = TaskCfg, Thd = Worker });
                     }
 
                     if (ProcessConfig.MaxConcurrentTasks == ExecutingTasks.Count)
@@ -209,24 +217,23 @@ namespace QvReportReductionLib
             try
             {
                 string TaskFolder = Path.GetDirectoryName(ConfigFilePath);
-                string QvwPath = Path.Combine(TaskFolder, TaskConfig.MasterQVW);
-                string CfgFileName = Path.GetFileNameWithoutExtension(ConfigFilePath);
+                string MasterQvwFullPath = Path.Combine(TaskFolder, TaskConfig.MasterQVW);
 
-                string FlagFileName = Path.Combine(TaskFolder, string.Format("{0}_running.{1}", CfgFileName, "txt"));
+                string FlagFileName = Path.Combine(TaskFolder, string.Format("{0}_running.txt", Path.GetFileNameWithoutExtension(ConfigFilePath)));
                 File.Create(FlagFileName).Close();
                 Trace.WriteLine(string.Format("Created processing flag file '{0}'", FlagFileName));
 
-                if (!File.Exists(QvwPath))
+                if (!File.Exists(MasterQvwFullPath))
                 {
-                    Trace.WriteLine(string.Format("Config file is pointing to an unavailable QVW file '{0}'. The process will be terminated...", QvwPath));
+                    Trace.WriteLine(string.Format("Config file is pointing to an unavailable QVW file '{0}'. The process will be terminated...", MasterQvwFullPath));
                     return;
                 }
                 else
                 {
-                    Trace.WriteLine(string.Format("Found processable QVW file on '{0}'", QvwPath));
+                    Trace.WriteLine(string.Format("Found processable QVW file on '{0}'", MasterQvwFullPath));
                 }
 
-                XMLFileSignature Signature = new XMLFileSignature(QvwPath);
+                XMLFileSignature Signature = new XMLFileSignature(MasterQvwFullPath);
                 bool CanEmit = false;
                 if (!string.IsNullOrEmpty(Signature.ErrorMessage))
                 {

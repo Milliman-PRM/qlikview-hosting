@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,8 +7,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.ServiceModel;
 using System.IO;
-using log4net;
 using Milliman.Common;
+
 namespace Milliman.Reduction.ReductionEngine {
 
     /// <summary>
@@ -25,7 +26,6 @@ namespace Milliman.Reduction.ReductionEngine {
         private static bool _stopFlag = false;
         private static Thread _JobProcessor;
         private static readonly object _LockQueue = new object();
-        private static ILog _L = LogManager.GetLogger("MM.ReductSvc");
 
         public ReductionService() {
             // Creates thread that will process jobs and requests
@@ -36,12 +36,12 @@ namespace Milliman.Reduction.ReductionEngine {
         }
         private void InitThread() {
             if(_JobProcessor == null ) {
-                _L.Debug("Initializing job processor thread ...");
+                Trace.WriteLine("Initializing job processor thread ...");
                 _JobProcessor = new Thread(MonitorReductionJobs);
                 _JobProcessor.IsBackground = true;
                 _JobProcessor.Name = "QueueProcessorThread";
                 _JobProcessor.Start();
-                _L.Debug("JobProcessor thread successfully intiated...");
+                Trace.WriteLine("JobProcessor thread successfully intiated...");
             }
         }
 
@@ -54,15 +54,15 @@ namespace Milliman.Reduction.ReductionEngine {
         /// </summary>
         /// <param name="folderPath">The UNC path or Local path where the Config files and QVW meant to be processed resides</param>
         public void EnqueueReductionFolder(string folderPath) {
-            _L.Info("Entering MM.ReductSvc::EnqueueReductionFolder() method");
-            _L.Debug(string.Format("ReductionService::EnqueueReductionFolder() received 'folderPath' as '{0}'", folderPath));
+            Trace.WriteLine("Entering MM.ReductSvc::EnqueueReductionFolder() method");
+            Trace.WriteLine(string.Format("ReductionService::EnqueueReductionFolder() received 'folderPath' as '{0}'", folderPath));
 
             string workingPath;
             if(string.IsNullOrEmpty(workingPath = GetWorkingPath(folderPath)) ) return;
             if( !IsSemaphoresOk(Path.Combine( workingPath,"request_complete.txt" ))) return;
             if( !IsConfigFileOk(workingPath)) return;
 
-            _L.Info("Finished MM.ReductSvc::EnqueueReductionFolder() method");
+            Trace.WriteLine("Finished MM.ReductSvc::EnqueueReductionFolder() method");
         }
 
         /// <summary>
@@ -76,14 +76,14 @@ namespace Milliman.Reduction.ReductionEngine {
                 KeyValuePair<string, ReduceConfig> _current = default(KeyValuePair<string, ReduceConfig>);
 
                 if( _queue.Count == 0 ) {
-                    _L.Info("No files found in the queue. Entering sleep mode...");
+                    Trace.WriteLine("No files found in the queue. Entering sleep mode...");
                     _eventHasJobs.WaitOne();
-                    _L.Info("Somebody woke me up. Let me see what we have in the queue."); 
+                    Trace.WriteLine("Somebody woke me up. Let me see what we have in the queue."); 
                     continue;
                 } else if( _configWorkerPool.Count >= threadCount ) {
-                    _L.Info("Amount of accumulated jobs is bigger than what I can handle. Will return once some work's finished.");
+                    Trace.WriteLine("Amount of accumulated jobs is bigger than what I can handle. Will return once some work's finished.");
                     _eventJobFinished.WaitOne();
-                    _L.Info("Finished some jobs. Checking if there are more waiting for me..");
+                    Trace.WriteLine("Finished some jobs. Checking if there are more waiting for me..");
                     continue;
                 }
 
@@ -92,30 +92,30 @@ namespace Milliman.Reduction.ReductionEngine {
                    if( _queue.Count > 0 ) {
                         _current = _queue.Dequeue();
                         if( string.IsNullOrEmpty(_current.Key) ) continue;
-                        _L.Debug(string.Format("Found the '{0}' config file in the queue.", Path.GetFileName( _current.Key)));
+                        Trace.WriteLine(string.Format("Found the '{0}' config file in the queue.", Path.GetFileName( _current.Key)));
                     }
 
                 // Shoots up a thread for the current config file, and let it do the work for us...
                 if( _configWorkerPool.Keys.Contains(_current.Key) ) {
-                    _L.Warn(string.Format("A duplicate request was received for file '{0}'. It will be ignored as a process is already handling it...", _current.Key));
+                    Trace.WriteLine(string.Format("A duplicate request was received for file '{0}'. It will be ignored as a process is already handling it...", _current.Key));
                     continue;
                 }
-                
-                _L.Debug(string.Format("Creating worker thread for file '{0}'", Path.GetFileName(_current.Key)));
+
+                Trace.WriteLine(string.Format("Creating worker thread for file '{0}'", Path.GetFileName(_current.Key)));
                 Thread workerThread = new Thread(() => {
                     InitiateReduction(_current.Key, _current.Value);
                     FinishProcess(_current.Key);
                     _configWorkerPool.Remove(_current.Key);
-                    _L.Debug(string.Format("Just removed thread for '{0}'. The dictionary now contains {1} threads running.", _current.Key, _configWorkerPool.Count));
+                    Trace.WriteLine(string.Format("Just removed thread for '{0}'. The dictionary now contains {1} threads running.", _current.Key, _configWorkerPool.Count));
                     _eventJobFinished.Set();
                 });
                 workerThread.Name = Path.GetFileNameWithoutExtension(_current.Key);
                 workerThread.IsBackground = true;
                 _configWorkerPool.Add(_current.Key, workerThread);
-                _L.Debug("New thread succefully added to the pool...");
+                Trace.WriteLine("New thread succefully added to the pool...");
                 // We only start after adding to our pool... 
                 _configWorkerPool[_current.Key].Start();
-                _L.Info(String.Format("Thread for config file '{0}' succefully started", Path.GetFileName(_current.Key)));
+                Trace.WriteLine(String.Format("Thread for config file '{0}' succefully started", Path.GetFileName(_current.Key)));
                 Thread.Sleep(500);
             }
             // Serializes working-set so we can pick it back up when service restarts;
@@ -132,48 +132,48 @@ namespace Milliman.Reduction.ReductionEngine {
         /// <param name="configFilePath">The path for the config file that will be processed by the thread</param>
         /// <param name="config">The <paramref name="ReduceConfig">Config</paramref> object deserialized from disk file</param>
         private static void InitiateReduction(string configFilePath, ReduceConfig config) {
-            _L.Info(string.Format( "Initializing processing of config file '{0}'", configFilePath));
+            Trace.WriteLine(string.Format( "Initializing processing of config file '{0}'", configFilePath));
             try {
                 string working_path = Path.GetDirectoryName(configFilePath);
                 string qvw_path = Path.Combine(working_path, config.MasterQVW);
                 string file_name = Path.GetFileNameWithoutExtension(configFilePath), flag_file_name = string.Empty;
-                using( var f = File.Create(flag_file_name = Path.Combine(working_path, string.Format("{0}_running.{1}", file_name, "txt"))) ) ;
-                _L.Debug( string.Format("Created processing flag file '{0}'", file_name));
+                File.Create(flag_file_name = Path.Combine(working_path, string.Format("{0}_running.{1}", file_name, "txt"))).Close();
+                Trace.WriteLine( string.Format("Created processing flag file '{0}'", file_name));
 
                 if(!File.Exists(qvw_path) ) {
-                    _L.Info(string.Format("Config file is pointing to an unavailable QVW file '{0}'. The process will be terminated...", qvw_path));
+                    Trace.WriteLine(string.Format("Config file is pointing to an unavailable QVW file '{0}'. The process will be terminated...", qvw_path));
                     return;
                 } else {
-                    _L.Debug(string.Format("Found processable QVW file on '{0}'", qvw_path));
+                    Trace.WriteLine(string.Format("Found processable QVW file on '{0}'", qvw_path));
                 }
                 XMLFileSignature signature = new XMLFileSignature(qvw_path);
                 bool t = false;
                 if( !string.IsNullOrEmpty(signature.ErrorMessage) ) {
-                    _L.Error(signature.ErrorMessage);
+                    Trace.WriteLine(signature.ErrorMessage);
                     return;
 
                 } else if( !signature.SignatureDictionary.Keys.Contains("can_emit")
                     || !bool.TryParse(signature.SignatureDictionary["can_emit"], out t)
                     || !t ) {
-                    _L.Info(string.Format("File '{0}' marked to not be processed. Process will be terminated with success.", config.MasterQVW));
+                    Trace.WriteLine(string.Format("File '{0}' marked to not be processed. Process will be terminated with success.", config.MasterQVW));
                     return;
                 } else {
-                    _L.Info( string.Format("File '{0}' is correctly signed and marked to be processed. Shipping to Loop & Reduce on the Publisher Server...", config.MasterQVW));
+                    Trace.WriteLine( string.Format("File '{0}' is correctly signed and marked to be processed. Shipping to Loop & Reduce on the Publisher Server...", config.MasterQVW));
                     // Connect with QMSAPI, start configuring the reduction process
                     Milliman.Reduction.ReductionEngine.QMSSettings settings = new ReductionEngine.QMSSettings();
                     settings.QMSURL = System.Configuration.ConfigurationManager.AppSettings["QMS"];
                     settings.UserName = System.Configuration.ConfigurationManager.AppSettings["QMSUser"];
                     settings.Password = System.Configuration.ConfigurationManager.AppSettings["QMSPassword"];
-                    _L.Debug(string.Format("QMS Address is: '{0}', and QMS User is '{1}'", settings.QMSURL,settings.UserName));
+                    Trace.WriteLine(string.Format("QMS Address is: '{0}', and QMS User is '{1}'", settings.QMSURL,settings.UserName));
                     ReductionEngine.ReductionRunner runner = new ReductionEngine.ReductionRunner(settings);
                     runner.ConfigFile = config;
                     runner.QVWOriginalFullFileName = Path.Combine(Path.GetDirectoryName(configFilePath), config.MasterQVW);
                     runner.Run();
-                    _L.Info("Process finishing successfully.");
+                    Trace.WriteLine("Process finishing successfully.");
                 }
                 
             } catch(Exception ex ) {
-                _L.Error(string.Format("Unable to finish processing config file '{0}'", configFilePath), ex);
+                Trace.WriteLine(string.Format("Unable to finish processing config file '{0}' {1}", configFilePath, ex));
                 return;
             }
         }
@@ -185,30 +185,30 @@ namespace Milliman.Reduction.ReductionEngine {
         /// <returns></returns>
         private static bool  IsConfigFileOk(string workingPath) {
             Dictionary<string, ReduceConfig> config_dic = new Dictionary<string, ReduceConfig>();
-            _L.Info(string.Format("Sweeping through folder '{0}'", workingPath));
+            Trace.WriteLine(string.Format("Sweeping through folder '{0}'", workingPath));
             try {
                 foreach(var config_file in Directory.GetFiles(workingPath, "*.config") ) {
                     try {
                         config_dic.Add(config_file, ReduceConfig.Deserialize(config_file));
-                        _L.Info(string.Format("Successfully added configuration file: '{0}'", config_file));
+                        Trace.WriteLine(string.Format("Successfully added configuration file: '{0}'", config_file));
                     }catch(Exception ex2 ) {
                         // If ONE single file fails to load, we cancel the operation for all of them
-                        _L.Warn(string.Format("Unable to process configuration file '{0}'. {1}\r\nAll config files from working path '{2}' will be cancelled...", config_file, ex2.Message, workingPath));
+                        Trace.WriteLine(string.Format("Unable to process configuration file '{0}'. {1}\r\nAll config files from working path '{2}' will be cancelled...", config_file, ex2.Message, workingPath));
                         return false;
                     }
                 }
 
                 // Assumes all config files were read-in ok...
                 if( config_dic.Count == 0 ) {
-                    _L.Info("Found no valid config files on designated path.");
+                    Trace.WriteLine("Found no valid config files on designated path.");
                     FinishProcess(Path.Combine(workingPath, "request_complete.txt"));
                     return false;
                 } else {
-                    _L.Info(string.Format("Adding {0} jobs to queue", config_dic.Count));
+                    Trace.WriteLine(string.Format("Adding {0} jobs to queue", config_dic.Count));
                     AddJobs(config_dic);
                 }
             }catch(Exception ex ) {
-                _L.Error("Error while processing config files", ex);
+                Trace.WriteLine(string.Format("Error while processing config files {0}", ex));
                 return false;   
             }
             return true;
@@ -238,8 +238,10 @@ namespace Milliman.Reduction.ReductionEngine {
                 File.Move(Path.Combine(working_path, string.Format("{0}.txt", flag_file_name)),
                     Path.Combine(working_path, string.Format("{0}_{1}.txt", flag_file_name, DateTime.Now.ToString("yyyyMMdd_hhmmssfff"))));
                 //File.Create(Path.Combine(working_path, string.Format("{0}{1}.{2}", file_name, DateTime.Now.ToString("yyyyMMdd_hhmmssfff"), file_extension), file_extension));
-            }catch(Exception e ) {
-                _L.Error(e);
+            }
+            catch (Exception e )
+            {
+                Trace.WriteLine(e.Message);
             }
         }
 
@@ -250,16 +252,16 @@ namespace Milliman.Reduction.ReductionEngine {
         /// <returns></returns>
         private static bool IsSemaphoresOk(string filePath) {
             try {
-                _L.Debug("Changing source semaphore");
+                Trace.WriteLine("Changing source semaphore");
                 string fileNameChanged = GetFileNameTimeStamp(filePath);
                 if( !File.Exists(filePath) ) return true;
                 System.IO.File.Move(filePath, fileNameChanged);
-                _L.Debug(string.Format("FileName changed from '{0}' to '{1}'", filePath, fileNameChanged));
-                _L.Debug("Skipping semaphore for the running flag. Will create on a per-config basis. Semaphores are ok...");
+                Trace.WriteLine(string.Format("FileName changed from '{0}' to '{1}'", filePath, fileNameChanged));
+                Trace.WriteLine("Skipping semaphore for the running flag. Will create on a per-config basis. Semaphores are ok...");
                 //File.Create(Path.Combine(Path.GetDirectoryName(filePath), "request_running.txt"));
                 //_L.Info("Semaphore management complete.");
             } catch( Exception ex ) {
-                _L.Error("An error occurred while setting up file semaphores...", ex);
+                Trace.WriteLine(string.Format("An error occurred while setting up file semaphores...{0}", ex));
                 return false;
             }
             return true;
@@ -297,21 +299,21 @@ namespace Milliman.Reduction.ReductionEngine {
             string workingPath = string.Empty ;
             try {
                 if( Directory.Exists(arg) ) {
-                    _L.Info(string.Format("Primary argument is already a folder. Defining working path as '{0}'", arg));
+                    Trace.WriteLine(string.Format("Primary argument is already a folder. Defining working path as '{0}'", arg));
                     workingPath = arg;
                 } else {
-                    _L.Debug(string.Format("Attempting to get folder name from primary argument '{0}'", arg));
+                    Trace.WriteLine(string.Format("Attempting to get folder name from primary argument '{0}'", arg));
                     workingPath = Path.GetDirectoryName(arg);
                     if( !Directory.Exists(Path.GetDirectoryName(workingPath)) ) {
-                        _L.Warn("Extracted folder '{0}' from argument but the folder does not exist or is not accessible. Current processing will be terminated");
+                        Trace.WriteLine(string.Format("Extracted folder '{0}' from argument but the folder does not exist or is not accessible. Current processing will be terminated", workingPath));
                         workingPath = string.Empty;
                     } else {
-                        _L.Info(string.Format("Setting working path to '{0}'", workingPath));
+                        Trace.WriteLine(string.Format("Setting working path to '{0}'", workingPath));
                     }
                 }
                 return workingPath;
             } catch(Exception ex ) {
-                _L.Error("An error occurred while trying to process the working path.", ex);
+                Trace.WriteLine(string.Format("An error occurred while trying to process the working path. {0}", ex));
                 return string.Empty;
             }
         }
