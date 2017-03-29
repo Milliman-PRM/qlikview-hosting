@@ -250,9 +250,10 @@ public partial class admin_controls_edit_user_modal : System.Web.UI.UserControl
         // Need to handle the update manually because MembershipUser does not have a
         // parameterless constructor  
 
-        user.Email = (string)e.NewValues[0];
-        user.Comment = (string)e.NewValues[1];
-        user.IsApproved = (bool)e.NewValues[2];
+        //these 3 items are now readonly -thus no need to update here
+       // user.Email = (string)e.NewValues[0];
+       // user.Comment = (string)e.NewValues[0];
+       // user.IsApproved = (bool)e.NewValues[1];
 
         SaveProfile();  //save the profile too
 
