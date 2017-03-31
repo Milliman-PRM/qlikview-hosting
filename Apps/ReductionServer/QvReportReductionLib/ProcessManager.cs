@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+ * CODE OWNERS: Tom Puckett,
+ * OBJECTIVE: Intended as the main library API for use by applications.  
+ * DEVELOPER NOTES: <What future developers need to know.>
+ */
+
+using System;
 using System.Configuration;
 using System.IO;
 using System.Diagnostics;
@@ -112,10 +118,7 @@ namespace QvReportReductionLib
             ReturnVal &= !File.Exists(Path.Combine(FolderName, "processing_complete.txt"));
             ReturnVal &= !File.Exists(Path.Combine(FolderName, "delete_me.txt"));
 
-            // TODO Test for whether the folder or all it's config files are already in the collection of executing tasks
-
             // Other things to look for, should cause false return if found.  
-            //  For each job executing by QV server a “*_running.txt” file will be created
             //  For each job completed by QV server a “*_completed.txt” file will be created
 
             return ReturnVal;
@@ -250,13 +253,14 @@ namespace QvReportReductionLib
                 else
                 {
                     Trace.WriteLine(string.Format("File '{0}' is correctly signed and marked to be processed. Shipping to Loop & Reduce on the Publisher Server...", TaskConfig.MasterQVW));
-                    // Connect with QMSAPI, start configuring the reduction process
+                    // Get QMS connection parameters
                     QMSSettings Settings = new QMSSettings();
                     Settings.QMSURL = System.Configuration.ConfigurationManager.AppSettings["QMS"];
                     Settings.UserName = System.Configuration.ConfigurationManager.AppSettings["QMSUser"];
                     Settings.Password = System.Configuration.ConfigurationManager.AppSettings["QMSPassword"];
                     Trace.WriteLine(string.Format("QMS Address is: '{0}', and QMS User is '{1}'", Settings.QMSURL, Settings.UserName));
 
+                    // Create the Runner and start the processing
                     ReductionRunner Runner = new ReductionRunner(Settings);
                     Runner.ConfigFile = TaskConfig;
                     Runner.QVWOriginalFullFileName = Path.Combine(Path.GetDirectoryName(ConfigFilePath), TaskConfig.MasterQVW);
