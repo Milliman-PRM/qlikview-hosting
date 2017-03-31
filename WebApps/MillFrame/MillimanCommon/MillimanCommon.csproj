@@ -79,6 +79,7 @@
     <Compile Include="InlineImage.cs" />
     <Compile Include="MillimanEmail.cs" />
     <Compile Include="MillimanGroupMap.cs" />
+    <Compile Include="NetworkConnection.cs" />
     <Compile Include="PerformanceInfo.cs" />
     <Compile Include="Predefined.cs" />
     <Compile Include="ProjectSettings.cs" />
