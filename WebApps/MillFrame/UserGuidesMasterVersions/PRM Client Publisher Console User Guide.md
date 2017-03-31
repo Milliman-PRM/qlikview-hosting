@@ -1,4 +1,4 @@
-___
+﻿___
 
 ##**PRM Release MillFrame 4.1.0**
 
@@ -154,12 +154,13 @@ Click on **Take Offline**. A box will let the user know that using this feature 
 ![](Images/PRM_Client_Publisher_Console_User_Guide/image15.png ""){width=100% height=auto}\
 
 
-##Prevention of ePHI Breaches
 
-Periodically when updating report content, there may be scenarios due to complex data changes and/or reduction failures where ePHI data could be accessible to unintended users after updating. To prevent this, the Client Publisher Console requires the reduction report to be reviewed and acknowledged (review checkbox) before it will allow the operator of the application to push data to the production server. It is important to note that ePHI data is not made live to the end user until the “Push to Production” button is clicked.
+##Prevention of Unauthorized Access
 
-This possibility is evaluated after reduction and in the final “Review/Approval” report any data that will be inappropriately accessible to end-users is signified by the red “PHI BREACH” notification for the user’s account. The system will attempt to provide information as to the specifics of the inappropriate data by displaying the data contained in the report that is flagged as should not be shown. For the sample report below user Tom User’s report contains information that was not part of the original selections and should not be displayed to the user.
+Periodically when updating report content, there may be scenarios due to complex data changes and/or reduction failures where sensitive data could be accessible to unintended users after updating. To prevent this, the Client Publisher Console requires the reduction report to be reviewed and acknowledged (review checkbox) before it will allow the operator of the application to push data to the production server. It is important to note that sensitive data is not made live to the end user until the “Push to Production” button is clicked.
+
+This possibility is evaluated after reduction and in the final “Review/Approval” report any data that will be inappropriately accessible to end-users is signified by the red “Previously Not Authorized” notification for the user’s account. The system will attempt to provide information as to the specifics of the inappropriate data by displaying the data contained in the report that is flagged as should not be shown. For the sample report below user Tom User’s report contains information that was not part of the original selections and should not be displayed to the user.
 
 ![](Images/PRM_Client_Publisher_Console_User_Guide/image16.png ""){width=100% height=auto}\
 
-If the review checkbox is checked and the **Publish to Production** button is clicked, this report would be **published to the server**. The user - Tom User would be able to see PHI that he should not see. This would be a **PHI Breach** scenario. However, until the Publish button is pushed, no leakage of PHI content has occurred as a result of this processing.
+If the review checkbox is checked and the **Publish to Production** button is clicked, this report would be **published to the server**. The user - Tom User would be able to see sensitive information that he should not see. However, until the Publish button is pushed, no leakage of sensitive content has occurred as a result of this processing.
