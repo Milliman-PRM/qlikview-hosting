@@ -405,23 +405,30 @@ namespace Milliman.Reduction.ReductionEngine
             }
         }
 
+        /// <summary>
+        /// Creates a folder for the reduction work and copies the original master qvw to that folder
+        /// </summary>
+        /// <param name="sourceFileName">The original qvw file to be reduced</param>
+        /// <param name="destinationFolderName">The Qlikview server's self reported SourceDocuments folder.</param>
+        /// <param name="taskId">A GUID that identifies the selectionset being processed</param>
+        /// <param name="QVWFolderNameGUID"></param>
+        /// <param name="QVWFileNameGUID"></param>
+        /// <returns></returns>
         private enumSummary prepareFileStructureForHierarchy(string sourceFileName, string destinationFolderName, Guid taskId, out string QVWFolderNameGUID, out string QVWFileNameGUID)
         {
             QVWFolderNameGUID = string.Empty;
             QVWFileNameGUID = string.Empty;
             try
             {
+                // Create the output folder as a subfolder of the QMS SourceDocuments folder
                 QVWFolderNameGUID = Path.Combine(destinationFolderName, taskId.ToString("N"));
                 Trace.WriteLine("Attempting to create destination folder");
                 Directory.CreateDirectory(QVWFolderNameGUID);
                 Trace.WriteLine(string.Format("Destination folder '{0}' created successfully...", QVWFolderNameGUID));
 
                 QVWFileNameGUID = Path.Combine(QVWFolderNameGUID, taskId.ToString("N") + ".qvw");
-                Trace.WriteLine("Copying local QVW File into the Qlikview Server...");
-                Trace.WriteLine(string.Format("Source path: '{0}'", sourceFileName));
-                Trace.WriteLine(string.Format("Destination path: '{0}'", this.QVWHierarchyFQFileNameGUID));
+                Trace.WriteLine(string.Format("Copying local QVW File {0} to Qlikview Server file {1}", sourceFileName, QVWFileNameGUID));
                 File.Copy(sourceFileName, QVWFileNameGUID, true);
-                Trace.WriteLine("File successfully copied");
                 return enumSummary.PrepareFolderHierarchy;
             }
             catch (Exception ex)
@@ -433,11 +440,16 @@ namespace Milliman.Reduction.ReductionEngine
 
         }
 
+        /// <summary>
+        /// Create ancellary script and copy it to legacy script file
+        /// </summary>
+        /// <param name="destinationFolder"></param>
+        /// <returns></returns>
         private enumSummary createAncillaryScript(string destinationFolder)
         {
             try
             {
-                Trace.WriteLine("Attempting to create 'ancillary script' on destination folder");
+                Trace.WriteLine("Creating 'ancillary script' on destination folder");
                 string ancillary_full_file_path = Path.Combine(destinationFolder, "ancillary_script.txt");
                 using (FileStream ancillary_stream = File.Create(ancillary_full_file_path))
                 {
@@ -447,20 +459,30 @@ namespace Milliman.Reduction.ReductionEngine
                         ancillary_writer.Flush();
                     }
                 }
+                Trace.WriteLine(string.Format("Ancillary script file created: '{0}'", ancillary_full_file_path));
+
+                Trace.WriteLine("Creating legacy script file");
                 string legacy_full_file_path = Path.Combine(destinationFolder, "care_coordinator_report.txt"); ;
-                Trace.WriteLine("Creating legacy file");
                 File.Copy(ancillary_full_file_path, legacy_full_file_path);
-                Trace.WriteLine(string.Format("Ancillary successfully created on '{0}'", ancillary_full_file_path));
+                Trace.WriteLine(string.Format("Ancillary script file copied to legacy script file: '{0}'", legacy_full_file_path));
+
                 return enumSummary.CreateAncillaryScript;
             }
             catch (Exception ex)
             {
-                LogToUser("Unable to create 'ancillary script' for processing: {0}", ex.Message);
-                Trace.WriteLine(string.Format("Unable to create 'ancillary script'. The process will be terminated... {0}", ex));
+                LogToUser("Unable to create 'ancillary script' (or legacy script) for processing:\r\n{0}", ex.Message);
+                Trace.WriteLine(string.Format("Unable to create 'ancillary script' (or legacy script)\r\n{0}", ex.Message));
                 return 0;
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="qvwDocumentPath">The full path of the reduced qvw that this task is to create</param>
+        /// <param name="qmsFolder"></param>
+        /// <param name="taskInfo"></param>
+        /// <returns></returns>
         private enumSummary createHierarchyTask(string qvwDocumentPath, QMSAPI.DocumentFolder qmsFolder, out QMSAPI.TaskInfo taskInfo)
         {
             taskInfo = null;
@@ -490,6 +512,8 @@ namespace Milliman.Reduction.ReductionEngine
                     Trace.WriteLine(string.Format("Successfully fetched SourceDocument '{0}' from Qlikview Publisher", qvw_file_name));
                 }
                 Trace.WriteLine("Setting up task properties...");
+
+                #region General Tab
                 Trace.WriteLine("Configuring General Tab");
                 QMSAPI.DocumentTask temp_task = QMSWrapper.GetTask();
 
@@ -500,6 +524,7 @@ namespace Milliman.Reduction.ReductionEngine
                 temp_task.General.Enabled = true;
                 temp_task.General.TaskName = "Reduction | Partial Reload | " + qvw_file_name.ToUpper();
                 temp_task.General.TaskDescription = string.Format("Automatically generated by ReductionService on {0}", DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss"));
+                #endregion
 
                 #region Reload Tab
                 Trace.WriteLine("Configuring Reload Tab");
@@ -880,12 +905,12 @@ namespace Milliman.Reduction.ReductionEngine
                 Trace.WriteLine(string.Format("Copying reduced qvw from '{0}' back into the source folder '{1}'", remote_reduced_qvw_fq_file_name, local_reduced_qvw_fq_file_name));
                 this.AddWrapUpAction(remote_reduced_qvw_fq_file_name, local_reduced_qvw_fq_file_name, false);
 
-                this.AddCleanUpAction(new Action(() => {
-                    Trace.WriteLine(string.Format("Deleting task '{0}'", task.ID.ToString("N")));
-                    _qms_client.DeleteTask(task.ID, QMSAPI.TaskType.DocumentTask);
-                    Trace.WriteLine(string.Format("Deleting original file '{0}'", task.General));
-                    Directory.Delete(Path.GetDirectoryName(remote_reduced_qvw_fq_file_name), true);
-                }));
+                //this.AddCleanUpAction(new Action(() => {
+                //    Trace.WriteLine(string.Format("Deleting task '{0}'", task.ID.ToString("N")));
+                //    _qms_client.DeleteTask(task.ID, QMSAPI.TaskType.DocumentTask);
+                //    Trace.WriteLine(string.Format("Deleting original file '{0}'", task.General));
+                //    Directory.Delete(Path.GetDirectoryName(remote_reduced_qvw_fq_file_name), true);
+                //}));
                 LogToUser("Successfully ran reduction task [id: {0}; name: \"{1}\"] for current selection set.", task.ID, task.General.TaskName);
                 return enumSummary.TaskRunReduce;
             }
