@@ -140,8 +140,8 @@ namespace QvReportReductionLib
             ReturnVal &= !File.Exists(Path.Combine(FolderName, FileShortName + "_running.txt"));
             ReturnVal &= !File.Exists(Path.Combine(FolderName, FileShortName + "_completed.txt"));
             ReturnVal &= !File.Exists(Path.Combine(FolderName, "delete_me.txt"));
+            // more?
 
-// more
             return ReturnVal;
         }
 
