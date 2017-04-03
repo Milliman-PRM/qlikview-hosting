@@ -808,6 +808,7 @@ namespace Milliman.Reduction.ReductionEngine
                 int Index = 0;
                 foreach (var selection in selectionCriteria)
                 {
+                    Trace.WriteLine(string.Format("For task {0}, selection key: {1} with value {2}", task_id_string, selection.FieldName, selection.Value)); // TODO delete this
                     task_reduction.Reduce.Static.Reductions[Index] = new QMSAPI.TaskReduction();
                     task_reduction.Reduce.Static.Reductions[Index].Type = QMSAPI.TaskReductionType.ByField;
                     task_reduction.Reduce.Static.Reductions[Index].Field = new QMSAPI.TaskReduction.TaskReductionField();
@@ -922,44 +923,53 @@ namespace Milliman.Reduction.ReductionEngine
             }
         }
 
+        /// <summary>
+        /// Initiates and monitors the running task, and returns when it's over
+        /// </summary>
+        /// <param name="taskId"></param>
         private void RunTaskSynchronously(Guid taskId)
         {
-            // Monitors the running task and returns when it's over
+            
             QMSAPI.TaskStatus status = null;
-            bool is_running = true;
-            int check_if_running = 1;
-            while (is_running)
+            int SecondsCounter = 0;
+            string TaskIdStr = taskId.ToString("N");
+            const int RunTaskIntervalSeconds = 5;
+            const int CheckTaskIntervalSeconds = 2;
+            DateTime ParsedTime;
+
+            // Get the task running.  It generally takes more than 1 attempt.  
+            while (status == null || status.Extended == null || !DateTime.TryParse(status.Extended.StartTime, out ParsedTime))
             {
-                Trace.WriteLine(string.Format("Attempting to run task of id '{0}'", taskId.ToString("N")));
                 _qms_client.RunTask(taskId);
 
-                while (true)
-                {
-                    if (check_if_running > 0) check_if_running++;
-                    status = _qms_client.GetTaskStatus(taskId, QMSAPI.TaskStatusScope.All);
-                    //if( status == null || status.General.Status == QMSAPI.TaskStatusValue.Running )
-                    if (status.General.Status == QMSAPI.TaskStatusValue.Running)
-                    {
-                        if (check_if_running != -1) Trace.WriteLine(string.Format("Task of ID '{0}' is currently running", taskId.ToString("N")));
-                        check_if_running = -1;
-                    }
+                status = _qms_client.GetTaskStatus(taskId, QMSAPI.TaskStatusScope.All);
+                Trace.WriteLine(string.Format("Task ID '{0}' has status {1} after _qms_client.RunTask(), for {2} seconds", TaskIdStr, status.General.Status.ToString(), SecondsCounter));
 
-                    if (string.IsNullOrEmpty(status.Extended.FinishedTime) || status.Extended.FinishedTime == "Never")
-                    {
-                        Trace.WriteLine(string.Format("Task has not finished running yet: {0} seconds", check_if_running));
-                        System.Threading.Thread.Sleep(1000); /* Waiting 1 second to check on the task execution again */
-                    }
-                    else
-                    {
-                        //VWN: added log message
-                        string Msg = string.IsNullOrEmpty(status.Extended.LastLogMessages) ? "" : status.Extended.LastLogMessages;
-                        Trace.WriteLine(string.Format("Task has finished running at {0} (server time). Current status is '{1}' with exit message '{2}'", status.Extended.FinishedTime, status.General.Status.ToString(), Msg));
-                        is_running = false;
-                        break;
-                    }
-                    if (check_if_running % 10 == 0) break;
+                // Status becomes Running also but this value has finite lifetime so the StartTime is a better indication that the task started
+                if (DateTime.TryParse(status.Extended.StartTime, out ParsedTime))
+                {
+                    break;
                 }
+
+                System.Threading.Thread.Sleep(RunTaskIntervalSeconds * 1000);
+                SecondsCounter += RunTaskIntervalSeconds;
             }
+
+            SecondsCounter = 0;
+
+            // loop until task is completed.  Most reliable signal of completion is FinishedTime
+            while (string.IsNullOrEmpty(status.Extended.FinishedTime) || !DateTime.TryParse(status.Extended.FinishedTime, out ParsedTime))
+            {
+                Trace.WriteLine(string.Format("Task ID {0} is running: {1} seconds, status {2}, FinishedTime {3}", TaskIdStr, SecondsCounter, status.General.Status.ToString(), ParsedTime == DateTime.MinValue ? "<none>" : ParsedTime.ToString()));
+
+                System.Threading.Thread.Sleep(CheckTaskIntervalSeconds * 1000);
+                SecondsCounter += CheckTaskIntervalSeconds;
+
+                status = _qms_client.GetTaskStatus(taskId, QMSAPI.TaskStatusScope.All);
+            }
+
+            string Msg = string.IsNullOrEmpty(status.Extended.LastLogMessages) ? "" : status.Extended.LastLogMessages;
+            Trace.WriteLine(string.Format("Task ID {0} finished running at server time {1}. Current status is '{2}' with exit message '{3}'", TaskIdStr, status.Extended.FinishedTime, status.General.Status.ToString(), Msg));
         }
 
         #region Late Execution methods
