@@ -511,12 +511,12 @@ namespace Milliman.Reduction.ReductionEngine
                 {
                     Trace.WriteLine(string.Format("Successfully fetched SourceDocument '{0}' from Qlikview Publisher", qvw_file_name));
                 }
+
+                QMSAPI.DocumentTask temp_task = QMSWrapper.GetTask();
                 Trace.WriteLine("Setting up task properties...");
 
                 #region General Tab
                 Trace.WriteLine("Configuring General Tab");
-                QMSAPI.DocumentTask temp_task = QMSWrapper.GetTask();
-
                 temp_task.ID = this._task_id_hierarchy;
                 temp_task.QDSID = this._qds_guid;
                 temp_task.Document = node;
@@ -888,7 +888,7 @@ namespace Milliman.Reduction.ReductionEngine
         {
             try
             {
-                Trace.WriteLine(string.Format("Attempting to run newly created task '{0}' ...", task.ID));
+                Trace.WriteLine(string.Format("Attempting to run newly created reduction task '{0}' ...", task.ID.ToString("N")));
                 DateTime start_time = DateTime.Now;
                 /*******************************************************************************************/
                 this.RunTaskSynchronously(task.ID);
@@ -942,17 +942,11 @@ namespace Milliman.Reduction.ReductionEngine
             {
                 _qms_client.RunTask(taskId);
 
-                status = _qms_client.GetTaskStatus(taskId, QMSAPI.TaskStatusScope.All);
-                Trace.WriteLine(string.Format("Task ID '{0}' has status {1} after _qms_client.RunTask(), for {2} seconds", TaskIdStr, status.General.Status.ToString(), SecondsCounter));
-
-                // Status becomes Running also but this value has finite lifetime so the StartTime is a better indication that the task started
-                if (DateTime.TryParse(status.Extended.StartTime, out ParsedTime))
-                {
-                    break;
-                }
-
                 System.Threading.Thread.Sleep(RunTaskIntervalSeconds * 1000);
                 SecondsCounter += RunTaskIntervalSeconds;
+
+                status = _qms_client.GetTaskStatus(taskId, QMSAPI.TaskStatusScope.All);
+                Trace.WriteLine(string.Format("Task ID {0} has status {1} after _qms_client.RunTask(), for {2} seconds", TaskIdStr, status.General.Status.ToString(), SecondsCounter));
             }
 
             SecondsCounter = 0;
@@ -960,7 +954,7 @@ namespace Milliman.Reduction.ReductionEngine
             // loop until task is completed.  Most reliable signal of completion is FinishedTime
             while (string.IsNullOrEmpty(status.Extended.FinishedTime) || !DateTime.TryParse(status.Extended.FinishedTime, out ParsedTime))
             {
-                Trace.WriteLine(string.Format("Task ID {0} is running: {1} seconds, status {2}, FinishedTime {3}", TaskIdStr, SecondsCounter, status.General.Status.ToString(), ParsedTime == DateTime.MinValue ? "<none>" : ParsedTime.ToString()));
+                Trace.WriteLine(string.Format("Task ID {0} running {1} seconds, status {2}, FinishedTime {3}", TaskIdStr, SecondsCounter, status.General.Status.ToString(), ParsedTime == DateTime.MinValue ? "<none>" : ParsedTime.ToString()));
 
                 System.Threading.Thread.Sleep(CheckTaskIntervalSeconds * 1000);
                 SecondsCounter += CheckTaskIntervalSeconds;
@@ -969,7 +963,7 @@ namespace Milliman.Reduction.ReductionEngine
             }
 
             string Msg = string.IsNullOrEmpty(status.Extended.LastLogMessages) ? "" : status.Extended.LastLogMessages;
-            Trace.WriteLine(string.Format("Task ID {0} finished running at server time {1}. Current status is '{2}' with exit message '{3}'", TaskIdStr, status.Extended.FinishedTime, status.General.Status.ToString(), Msg));
+            Trace.WriteLine(string.Format("Task ID {0} finished at server time {1}. Current status is '{2}' with exit message '{3}'", TaskIdStr, status.Extended.FinishedTime, status.General.Status.ToString(), Msg));
         }
 
         #region Late Execution methods
