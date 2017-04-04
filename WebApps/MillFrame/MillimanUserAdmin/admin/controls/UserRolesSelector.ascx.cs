@@ -268,6 +268,11 @@ public partial class admin_controls_UserRolesSelector : System.Web.UI.UserContro
             {
                 groupCategoryFromXml = !string.IsNullOrEmpty(groups.GroupCategory) ? groups.GroupCategory.ToUpper() : "NO CATEGORY";
             }
+            else
+            {
+                groupCategoryFromXml = "NO CATEGORY";
+            }
+            
             var groupCategory = groupCategoryFromXml;
 
             string[] roleRow = {
