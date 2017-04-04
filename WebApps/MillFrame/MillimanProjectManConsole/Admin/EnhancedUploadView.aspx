@@ -249,10 +249,10 @@
 
             if (badData) {
                 badDataError();
-                return false;
+                return true;
             }
 
-            return true;
+            return false;
         }
 
         function SetTooltip() {
@@ -301,10 +301,10 @@
                 var patternEscapeChars = /[\x00-\x1f\x7f-\xff]/gi;
                 if (patternEscapeChars.test(controlValue)) {
                     badDataError();
-                    return false;
+                    return true;
                 }
             }
-            return true;
+            return false;
         }
 
         function badDataError() {
