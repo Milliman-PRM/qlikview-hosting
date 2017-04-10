@@ -138,7 +138,7 @@ namespace MillimanDev
             // Add contact person info.
             ContactPerson person = new ContactPerson();
             person.Company = "Support";
-            person.EmailAddresses.Add("van.nanney@milliman.com");
+            person.EmailAddresses.Add("prm.support@milliman.com");
             // Contact information
             descriptor.ContactPeople.Add(person);
             // Sign metadata with service provider key
