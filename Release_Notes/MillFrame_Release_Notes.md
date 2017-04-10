@@ -4,14 +4,22 @@ A non-exhaustive list of what has changed in a more readable form than a commit 
 
 ## v4.1.1
 
-#### Client visible changes (e.g. User Guide)
+#### Client visible changes (e.g. Portal - prm.milliman.com, User guide)
 
   - *None*
 
-#### Client Publisher level changes
+#### Client Admin changes (e.g. Client Publisher, Client Administration Console - prm.milliman.com/PRMAdmin)
 
-  - Added a "Restart Project Update" button to the final screen
+  - Added a "Restart Project Update" button to the final screen of the Client Publisher
 
-#### Lower level changes
+#### PRM Admin changes (e.g. Project Management Console, Signature App, User Admin)
+
+  - *None*
+
+#### Automated Processes changes (e.g. License Cleaner, Report Reduction, System Backup, Server Monitor, Backup Utility)
+
+  - *None*
+
+#### Lower level changes( e.g. Milliman Common, Project Management Console Services, Milliman Services, Databases)
 
   - Allow code to reconnect to running tasks
