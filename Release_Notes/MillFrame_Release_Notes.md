@@ -22,7 +22,7 @@ A non-exhaustive list of what has changed in a more readable form than a commit 
 
 #### Lower level changes( e.g. Milliman Common, Project Management Console Services, Milliman Services, Databases)
 
-  - *None*
+  - Removed hard-coded usernames and email addresses from production-deployed code.
 
 
 
