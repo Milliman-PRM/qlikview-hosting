@@ -39,3 +39,15 @@ Each Millframe component is represented by a project under the broader Millframe
 ### System Reporting components
 
 System reporting components are represented by projects under the SystemReporting solution.
+
+### Roche / Clinical Lab Systems (CLS) Handbook components
+
+|Component|Visual Studio Project|Description|URL/Deployment Location|
+|---------|-------|-----------|---|
+|Business logic|ClSBusinessLogic|?|?|
+|Configuration|CLSConfiguration|?|?|
+|Configuration common|CLSConfigurationCommon|?|?|
+|?|CLSConfigurationProductionDaemon|?|?|
+|?|CLSConfigurationServices|?|?|
+|?|CLSMedicareReimbursement|The actual user interface|Indy-Roche01 E:\InstalledApplications\CLSMedicareReimbursement|
+|?|CLSTest|?|?|
