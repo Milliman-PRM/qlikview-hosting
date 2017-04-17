@@ -47,13 +47,13 @@ System reporting components are represented by projects under the SystemReportin
 ||Framework/Milliman.Entities|Data model classes for various log types|N/A|
 ||Framework/Milliman.Service|?|N/A|
 ||Framework/Milliman.Utilities|Defines various convenience classes for use in other projects in the solution|N/A|
-||FileProcessor|?|?|
-||FileProcessorApplication|?|?|
-||ReportFileGenerator|?|?|
-||ReportFileGeneratorApplication|?|?|
-||ReportingCommon|?|?|
-||ReportingTest|?|?|
-||SystemReportingWinUI|?|?|
+||FileProcessor|Processes the contents of Qlikview and IIS log files|?|
+||FileProcessorApplication|A console application wrapper for FileProcessor|On `Indy-PRM-2`, `D:\PRMReportingSyncDaemon\LogFileProcessor`|
+||ReportFileGenerator|Contains functionality to generate Excel & CSV reports of log file entries. It's unclear whether this has ever been used.|N/A|
+||ReportFileGeneratorApplication|Console wrapper for ReportFileGenerator|N/A|
+||ReportingCommon|?|N/A|
+||ReportingTest|Defines basic test cases for some of the projects in the solution. Very incomplete.|?|
+||SystemReportingWinUI|GUI wrapper for ReportFileGenerator|N/A|
 
 ### Roche / Clinical Lab Systems (CLS) Handbook components
 
