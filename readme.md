@@ -47,8 +47,8 @@ Each Millframe component is represented by a project under the broader Millframe
 |Client Publisher|MillimanClientPublisher|Currently in development. A user-facing utility for publishing reports and updates.|?|
 |Project Management Console (PMC)|MillimanProjectManConsole|Utilized to publish and update QVWs/projects to the production server.|indy-ss01.milliman.com/PRMPMC/|
 |PMC Web Services|MillimanProjectManagementConsoleServices|A SOAP web service utilized by the PMC|prm.milliman.com/prm_projectmanagementservices|
-|Milliman Common|MillimanCommon|Shared code library utilized by various projects.|Need to replace custom build step.  Copy dependency dll during build of depending project.|
-|QV License Cleaner|MillimanQVLicenseCleaner|GUI and Console application to clean up assigned Qlikview licenses. QV Server doesn't do this as we intend. This utility implements what we need| N/A
+|Milliman Common|MillimanCommon|Shared code library utilized by various projects. Need to replace custom build step.  Copy dependency dll during build of depending project.||
+|QV License Cleaner|MillimanQVLicenseCleaner|GUI and Console application to clean up assigned Qlikview licenses. QV Server doesn't do this as we intend. This utility implements what we need| N/A|
 |Report Reduction Library|MillimanReportReduction|Library including functionality used in reducing reports|Not part of the new reduction server|
 |Service App Harness|MillimanServiceAppHarness|A legacy test tool for SAML. *This can be removed.*|N/A|
 |?|MillimanServices|?|?|
@@ -67,7 +67,7 @@ System reporting components are represented by projects under the SystemReportin
 ### Roche / Clinical Lab Systems (CLS) Handbook components
 
 |Component|Visual Studio Project|Description|URL/Deployment Location|
-|---------|-------|-----------|---|
+|---------|-----|-------------|---|
 |Business logic|ClSBusinessLogic|?|?|
 |Configuration|CLSConfiguration|?|?|
 |Configuration common|CLSConfigurationCommon|?|?|
