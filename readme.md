@@ -40,6 +40,21 @@ Each Millframe component is represented by a project under the broader Millframe
 
 System reporting components are represented by projects under the SystemReporting solution.
 
+|Component|Visual Studio Project|Description|URL/Deployment Location|
+|---------|-------|-----------|---|
+||Framework/Milliman.Controller|Defines controller classes for various log file types|N/A|
+||Framework/Milliman.Data|Defines database connectivity|N/A|
+||Framework/Milliman.Entities|Data model classes for various log types|N/A|
+||Framework/Milliman.Service|?|N/A|
+||Framework/Milliman.Utilities|Defines various convenience classes for use in other projects in the solution|N/A|
+||FileProcessor|?|?|
+||FileProcessorApplication|?|?|
+||ReportFileGenerator|?|?|
+||ReportFileGeneratorApplication|?|?|
+||ReportingCommon|?|?|
+||ReportingTest|?|?|
+||SystemReportingWinUI|?|?|
+
 ### Roche / Clinical Lab Systems (CLS) Handbook components
 
 |Component|Visual Studio Project|Description|URL/Deployment Location|
