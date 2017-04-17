@@ -19,7 +19,7 @@ Each Millframe component is represented by a project under the broader Millframe
 |Web Portal|Milliman|The public-facing web application accessed by end users of the PRM solution.|prm.milliman.com|
 |Signature tool|MillimanSignature|A utility to sign QVWs with metadata used in publishing|N/A|
 |Global user admin|MillimanUserAdmin|A user administration portal used to manage users in all groups|prm.milliman.com/admin|
-|Client User Admin|ClientUserAdmin|Client-facing user administration portal for groups to manage their own users| ? |
+|Client User Admin|ClientUserAdmin|Client-facing user administration portal for groups to manage their own users| prm.milliman.com/PRMClientAdmin/ <br><br> *Note: this link will bring user to '403 - Forbidden' page. Must access through prm.milliman.com* |
 |Client Publisher|MillimanClientPublisher|Currently in development. A user-facing utility for publishing reports and updates.|?|
 |Project Management Console (PMC)|MillimanProjectManConsole|Utilized to publish and update QVWs/projects to the production server.|indy-ss01.milliman.com/PRMPMC/|
 |PMC Web Services|MillimanProjectManagement ConsoleServices|A SOAP web service utilized by the PMC|prm.milliman.com/prm_projectmanagementservices|
