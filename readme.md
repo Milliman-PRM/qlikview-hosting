@@ -4,6 +4,15 @@ This repository will hold the majority of the solutions that support the PRM Ana
 
 Actual solution files (and all their entourage) should be stored in subfolders under the appropriate root folder (e.g. `/Apps/CDR` or `/WebApps/MillFrame`).
 
+## Branching Strategy
+
+Due to the mix of solutions in this repository, the branching strategy needs to be somewhat unique.  Please adhere to the following guidelines:
+  * The default branch will be `develop`.
+  * The majority of work will be completed in branches off of `develop` (and utilize the standard pull request workflow that ensures all code in `develop` is always technically reviewed)
+  * When preparing for the release of a given solution, a solution-specific pre-release branch will be created (e.g. `pre-release-millframe-v5.1`).  All hardening work will be done in branches off of this pre-release branch.
+  * Upon release, a corresponding tag will be added to the end of the pre-release branch (e.g. `MillFrame_v5.1.0`), and then the pre-release branch will be merged back into `develop` and deleted.
+  * Hotfixes will branch off of the corresponding solution's latest corresponding tag (e.g. `MillFrame_v5.1.0`).
+
 ## Solutions in this repository
 
 **Millframe** - The main Millframe solution is located at [`/WebApps/Millframe/MillFrame.sln`](https://indy-github.milliman.com/PRM/qlikview-hosting/blob/develop/WebApps/MillFrame/MillFrame.sln). This solution contains multiple projects related to the main web solution publicly hosted at https://prm.milliman.com.
