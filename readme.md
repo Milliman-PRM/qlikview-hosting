@@ -39,7 +39,7 @@ Actual solution files (and all their entourage) should be stored in subfolders u
 Each Millframe component is represented by a project under the broader Millframe solution.
 
 |Component|Visual Studio Project|Description|URL/Deployment Location|
-|---------|-------|-----------|---|
+|---------|-----|-----------|----|
 |Web Portal|Milliman|The public-facing web application accessed by end users of the PRM solution.|prm.milliman.com|
 |Signature tool|MillimanSignature|A utility to view QVW signature information and sign QVWs with metadata used in publishing|N/A|
 |Global user admin|MillimanUserAdmin|A user administration portal used to manage users in all groups|prm.milliman.com/admin|
