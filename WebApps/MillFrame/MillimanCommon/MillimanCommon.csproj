@@ -109,28 +109,72 @@
   <PropertyGroup>
     <PreBuildEvent>mkdir $(SolutionDir)\MillimanUserAdmin\bin
 
+mkdir $(SolutionDir)\\MillimanCommon\bin\debug
 copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanCommon\bin\debug
+
+mkdir $(SolutionDir)\\MillimanCommon\bin\release
 copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanCommon\bin\release
+
+mkdir $(SolutionDir)\\Milliman\Milliman\bin
 copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\Milliman\Milliman\bin
+
+mkdir $(SolutionDir)\\MillimanClientPublisher\bin
 copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanClientPublisher\bin
+
+mkdir $(SolutionDir)\\MillimanClientUserAdmin\bin
 copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanClientUserAdmin\bin
+
+mkdir $(SolutionDir)\\MillimanProjectManagementConsoleServices\bin
 copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanProjectManagementConsoleServices\bin
+
+mkdir $(SolutionDir)\\MillimanProjectManConsole\bin
 copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanProjectManConsole\bin
+
+mkdir $(SolutionDir)\\MillimanReportReduction\bin
 copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanReportReduction\bin
+
+mkdir $(SolutionDir)\\MillimanServiceAppHarness\bin
 copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanServiceAppHarness\bin
+
+mkdir $(SolutionDir)\\MillimanServices\MillimanServices\bin
 copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanServices\MillimanServices\bin
+
+mkdir $(SolutionDir)\\MillimanServiceWEBTestHarness\bin
 copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanServiceWEBTestHarness\bin
+
+mkdir $(SolutionDir)\\MillimanSignature\bin\debug
 copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanSignature\bin\debug
+
+mkdir $(SolutionDir)\\MillimanSignature\bin\release
 copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanSignature\bin\release
+
+mkdir $(SolutionDir)\\MillimanSQLBrowser\bin
 copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanSQLBrowser\bin
+
+mkdir $(SolutionDir)\\MillimanSupport\MillimanSupport\bin
 copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanSupport\MillimanSupport\bin
+
+mkdir $(SolutionDir)\\MillimanSystemBackup\bin\debug
 copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanSystemBackup\bin\debug
+
+mkdir $(SolutionDir)\\MillimanSystemBackup\bin\release
 copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanSystemBackup\bin\release
+
+mkdir $(SolutionDir)\\MillimanUserAdmin\bin
 copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanUserAdmin\bin
+
+mkdir $(SolutionDir)\\MillimanValidationGC\bin\debug
 copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanValidationGC\bin\debug
+
+mkdir $(SolutionDir)\\MillimanValidationGC\bin\release
 copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\MillimanValidationGC\bin\release
+
+mkdir $(SolutionDir)\\ReportingCommon\bin\debug
 copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\ReportingCommon\bin\debug
+
+mkdir $(SolutionDir)\\ReportingCommon\bin\release
 copy $(SolutionDir)\3rdpartyassemblies\*.dll $(SolutionDir)\\ReportingCommon\bin\release
+
 cd $(SolutionDir)\UserGuidesMasterVersions
 $(SolutionDir)\UserGuidesMasterVersions\UpdateApplicationUserGuides.bat
 </PreBuildEvent>
