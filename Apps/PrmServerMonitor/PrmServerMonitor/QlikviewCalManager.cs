@@ -6,10 +6,7 @@
 
 using System;
 using System.Diagnostics;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using PrmServerMonitor.Qms;
 using PrmServerMonitor.ServiceSupport;
 
@@ -17,6 +14,9 @@ namespace PrmServerMonitor
 {
     public class QlikviewCalManager : ServerMonitorProcessingBase
     {
+        /// <summary>
+        /// Used by a caller to identify a specific supported type of CAL statistic
+        /// </summary>
         public enum CalStatisticField
         {
             NamedCalAssigned,
@@ -25,11 +25,20 @@ namespace PrmServerMonitor
             DocumentCalLimit
         }
 
+        /// <summary>
+        /// Dumps a single caller selectable CAL related statistic value to trace log.  Intended mainly for use in non-interactive mode.  
+        /// </summary>
+        /// <param name="FieldToReport"></param>
         public void ReportCalStatistic(CalStatisticField FieldToReport)
         {
             EstablishTraceLog();
 
             CALConfiguration CalConfig = EnumerateAllCals(false);
+            if (CalConfig == null)
+            {
+                Trace.WriteLine("QlikviewCalManager.EnumerateAllCals() returned null");
+                return;
+            }
 
             switch (FieldToReport)
             {
@@ -50,6 +59,11 @@ namespace PrmServerMonitor
             CloseTraceLog();
         }
 
+        /// <summary>
+        /// Obtains the CALConfiguration object representing the server configuration and optionally reports certain statistics to the trace log.  
+        /// </summary>
+        /// <param name="TraceOutput">true if trace log is to be written with CAL statistics</param>
+        /// <returns>null if operation failed</returns>
         public CALConfiguration EnumerateAllCals(bool TraceOutput = false)
         {
             CALConfiguration CalConfig = null;

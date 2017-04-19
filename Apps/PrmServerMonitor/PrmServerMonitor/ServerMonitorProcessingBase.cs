@@ -6,11 +6,7 @@
 
 using System;
 using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace PrmServerMonitor
 {
@@ -18,14 +14,20 @@ namespace PrmServerMonitor
     {
         TextWriterTraceListener TraceFile;
 
+        /// <summary>
+        /// Opens a file based trace log destination named for the calling derived class.  
+        /// </summary>
         public void EstablishTraceLog()
         {
             TraceFile = new TextWriterTraceListener("Trace_" + this.GetType().Name + "_" + DateTime.Now.ToString("yyyyMMdd-HHmmss-ffff") + ".log");
             Trace.AutoFlush = true;
             Trace.Listeners.Add(TraceFile);
-            Thread.Sleep(2);  // try to prevent attempts to create multiple log files with the same date/time.  
+            Thread.Sleep(2);  // Prevent attempts to create multiple log files with the same date/time stamp in the name.  
         }
 
+        /// <summary>
+        /// Closes a previously opened file based trace log destination.  
+        /// </summary>
         public void CloseTraceLog()
         {
             if (TraceFile != null && Trace.Listeners.Contains(TraceFile))

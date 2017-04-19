@@ -4,16 +4,7 @@
  * DEVELOPER NOTES: <What future developers need to know.>
  */
 
-
 using System;
-using System.IO;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace PrmServerMonitor
@@ -48,6 +39,11 @@ namespace PrmServerMonitor
             }
         }
 
+        /// <summary>
+        /// Button handler that initiates the enumeration of assorted current Qlikview CAL statistics
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ButtonCalReport_Click(object sender, EventArgs e)
         {
             QlikviewCalManager Manager = new QlikviewCalManager();

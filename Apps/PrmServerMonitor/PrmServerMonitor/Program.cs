@@ -6,9 +6,7 @@
 
 using System;
 using System.Diagnostics;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace PrmServerMonitor
@@ -41,6 +39,7 @@ namespace PrmServerMonitor
                 Trace.Listeners.Clear();
                 Trace.Listeners.Add(ConsoleListener);
 
+                // Handle each command line argument as appropriate
                 foreach (string Arg in args)
                 {
                     switch (Arg.ToLower())
