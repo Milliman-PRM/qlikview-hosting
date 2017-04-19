@@ -1,4 +1,11 @@
-﻿using System;
+﻿/*
+ * CODE OWNERS: Tom Puckett
+ * OBJECTIVE: Main form used when this application is run as an interactive GUI application
+ * DEVELOPER NOTES: <What future developers need to know.>
+ */
+
+
+using System;
 using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;

@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+ * CODE OWNERS: Tom Puckett, 
+ * OBJECTIVE: A dedicated class for removing orphaned Qlikview server tasks from the local server
+ * DEVELOPER NOTES: Note that this is derived from ServerMonitorProcessingBase, as all future processing classes should be
+ */
+
+using System;
 using System.IO;
 using System.Diagnostics;
 using System.Collections.Generic;

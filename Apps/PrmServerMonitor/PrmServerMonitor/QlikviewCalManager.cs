@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+ * CODE OWNERS: Tom Puckett, 
+ * OBJECTIVE: Dedicated class to process tracking of Qlikview CALs.
+ * DEVELOPER NOTES: Note that this is derived from ServerMonitorProcessingBase, as all future processing classes should be
+ */
+
+using System;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;

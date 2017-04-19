@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+ * CODE OWNERS: Tom Puckett, 
+ * OBJECTIVE: A class containing common functionality for all dedicated task processing classes.  
+ * DEVELOPER NOTES: All dedicated processing classes should be derived from this base to uniformly inherit common functionality
+ */
+
+using System;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;

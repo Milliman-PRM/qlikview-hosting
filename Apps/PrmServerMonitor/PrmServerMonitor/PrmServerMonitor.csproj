@@ -261,7 +261,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="PRM Automated Maintenance.xml">
+    <Content Include="PRM Server Maintenance Task Definition.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
