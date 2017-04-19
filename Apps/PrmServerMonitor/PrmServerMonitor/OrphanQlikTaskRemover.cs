@@ -12,6 +12,23 @@ namespace PrmServerMonitor
 {
     public class OrphanQlikTaskRemover
     {
+        TextWriterTraceListener TraceFile;
+
+        public void EstablishTraceLog()
+        {
+            TraceFile = new TextWriterTraceListener("Trace_OrphanTaskRemoval_" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + ".log");
+            Trace.AutoFlush = true;
+            Trace.Listeners.Add(TraceFile);
+        }
+
+        public void CloseTraceLog()
+        {
+            TraceFile.Flush();
+            Trace.Listeners.Remove(TraceFile);
+            TraceFile.Close();
+            TraceFile = null;
+        }
+
         /// <summary>
         /// Button handler that initiates cleanup of orphaned documents
         /// </summary>
@@ -21,9 +38,7 @@ namespace PrmServerMonitor
         {
             // the project setup for a QMS client application can be found at https://community.qlik.com/docs/DOC-2639
 
-            TextWriterTraceListener TraceFile = new TextWriterTraceListener("Trace_OrphanTaskRemoval_" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + ".log");
-            Trace.AutoFlush = true;
-            Trace.Listeners.Add(TraceFile);
+            EstablishTraceLog();
 
             try
             {
@@ -54,10 +69,7 @@ namespace PrmServerMonitor
             }
             finally
             {
-                TraceFile.Flush();
-                Trace.Listeners.Remove(TraceFile);
-                TraceFile.Close();
-                TraceFile = null;
+                CloseTraceLog();
             }
 
         }

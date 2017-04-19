@@ -41,5 +41,10 @@ namespace PrmServerMonitor
             }
         }
 
+        private void ButtonCalReport_Click(object sender, EventArgs e)
+        {
+            QlikviewCalManager Manager = new QlikviewCalManager();
+            Manager.EnumerateAllCals();
+        }
     }
 }
