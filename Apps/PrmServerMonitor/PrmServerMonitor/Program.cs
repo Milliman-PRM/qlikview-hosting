@@ -49,7 +49,35 @@ namespace PrmServerMonitor
                         case "managecals":
                             {
                                 QlikviewCalManager Worker = new QlikviewCalManager();
-                                Worker.EnumerateAllCals();
+                                Worker.EnumerateAllCals(true);
+                            }
+                            break;
+
+                        case "reportnamedcalassigned":
+                            {
+                                QlikviewCalManager Worker = new QlikviewCalManager();
+                                Worker.ReportCalStatistic(QlikviewCalManager.CalStatisticField.NamedCalAssigned);
+                            }
+                            break;
+
+                        case "reportnamedcallimit":
+                            {
+                                QlikviewCalManager Worker = new QlikviewCalManager();
+                                Worker.ReportCalStatistic(QlikviewCalManager.CalStatisticField.NamedCalLimit);
+                            }
+                            break;
+
+                        case "reportdocumentcalassigned":
+                            {
+                                QlikviewCalManager Worker = new QlikviewCalManager();
+                                Worker.ReportCalStatistic(QlikviewCalManager.CalStatisticField.DocumentCalAssigned);
+                            }
+                            break;
+
+                        case "reportdocumentcallimit":
+                            {
+                                QlikviewCalManager Worker = new QlikviewCalManager();
+                                Worker.ReportCalStatistic(QlikviewCalManager.CalStatisticField.DocumentCalLimit);
                             }
                             break;
 

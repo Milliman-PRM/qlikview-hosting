@@ -9,89 +9,95 @@ using PrmServerMonitor.ServiceSupport;
 
 namespace PrmServerMonitor
 {
-    public class QlikviewCalManager
+    public class QlikviewCalManager : ServerMonitorProcessingBase
     {
-        TextWriterTraceListener TraceFile;
-
-        public void EstablishTraceLog()
+        public enum CalStatisticField
         {
-            TraceFile = new TextWriterTraceListener("Trace_QlikviewCalManager_" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + ".log");
-            Trace.AutoFlush = true;
-            Trace.Listeners.Add(TraceFile);
+            NamedCalAssigned,
+            NamedCalLimit,
+            DocumentCalAssigned,
+            DocumentCalLimit
         }
 
-        public void CloseTraceLog()
+        public void ReportCalStatistic(CalStatisticField FieldToReport)
         {
-            TraceFile.Flush();
-            Trace.Listeners.Remove(TraceFile);
-            TraceFile.Close();
-            TraceFile = null;
-        }
-
-        public bool EnumerateAllCals()
-        {
-            QMSClient Client;
-            bool ReturnValue;
-
             EstablishTraceLog();
+
+            CALConfiguration CalConfig = EnumerateAllCals(false);
+
+            switch (FieldToReport)
+            {
+                case CalStatisticField.DocumentCalAssigned:
+                    Trace.WriteLine(CalConfig.DocumentCALs.Assigned);
+                    break;
+                case CalStatisticField.DocumentCalLimit:
+                    Trace.WriteLine(CalConfig.DocumentCALs.Limit);
+                    break;
+                case CalStatisticField.NamedCalAssigned:
+                    Trace.WriteLine(CalConfig.NamedCALs.Assigned);
+                    break;
+                case CalStatisticField.NamedCalLimit:
+                    Trace.WriteLine(CalConfig.NamedCALs.Limit);
+                    break;
+            }
+
+            CloseTraceLog();
+        }
+
+        public CALConfiguration EnumerateAllCals(bool TraceOutput = false)
+        {
+            CALConfiguration CalConfig = null;
 
             try
             {
                 string QMS = "http://localhost:4799/QMS/Service";
-                Client = new QMSClient("BasicHttpBinding_IQMS", QMS);
+
+                QMSClient Client = new QMSClient("BasicHttpBinding_IQMS", QMS);
                 string key = Client.GetTimeLimitedServiceKey();
                 ServiceKeyClientMessageInspector.ServiceKey = key;
                 ServiceInfo QvsService = Client.GetServices(ServiceTypes.QlikViewServer).First();
 
-                CALConfiguration config = Client.GetCALConfiguration(QvsService.ID, CALConfigurationScope.All);
+                CalConfig = Client.GetCALConfiguration(QvsService.ID, CALConfigurationScope.All);
 
-                if (config != null)
+                if (CalConfig != null && TraceOutput)
                 {
+                    EstablishTraceLog();
+
                     //Document CALs
                     Trace.WriteLine("\r\nDocument CALs");
-                    Trace.WriteLine("# assigned document CALs:" + config.DocumentCALs.Assigned);
-                    Trace.WriteLine("# in license document CALs:" + config.DocumentCALs.InLicense);
-                    Trace.WriteLine("# limit document CALs:" + config.DocumentCALs.Limit);
+                    Trace.WriteLine("# assigned document CALs:" + CalConfig.DocumentCALs.Assigned);
+                    Trace.WriteLine("# in license document CALs:" + CalConfig.DocumentCALs.InLicense);
+                    Trace.WriteLine("# limit document CALs:" + CalConfig.DocumentCALs.Limit);
 
                     //Named CALs
                     Trace.WriteLine("\r\nNamed CALs");
-                    Trace.WriteLine("Identification mode:" + config.NamedCALs.IdentificationMode);
-                    Trace.WriteLine("# assigned named CALs:" + config.NamedCALs.Assigned);
-                    Trace.WriteLine("# in license named CALs:" + config.NamedCALs.InLicense);
-                    Trace.WriteLine("# limit document CALs:" + config.NamedCALs.Limit);
-                    foreach (var assignedCal in config.NamedCALs.AssignedCALs)
+                    Trace.WriteLine("Identification mode:" + CalConfig.NamedCALs.IdentificationMode);
+                    Trace.WriteLine("# assigned named CALs:" + CalConfig.NamedCALs.Assigned);
+                    Trace.WriteLine("# in license named CALs:" + CalConfig.NamedCALs.InLicense);
+                    Trace.WriteLine("# limit document CALs:" + CalConfig.NamedCALs.Limit);
+                    foreach (var assignedCal in CalConfig.NamedCALs.AssignedCALs)
                     {
                         Trace.WriteLine(String.Format("User:{0}\r\nNamed CAL last used:{1}", assignedCal.UserName, assignedCal.LastUsed));
                     }
 
-                    foreach (var leasedCal in config.NamedCALs.LeasedCALs)
+                    foreach (var leasedCal in CalConfig.NamedCALs.LeasedCALs)
                     {
                         Trace.WriteLine(String.Format("User:{0}\r\nLeased CAL last used:{1}", leasedCal.UserName, leasedCal.LastUsed));
                     }
 
                     //Session CALs
                     Trace.WriteLine("\r\nSession CALs");
-                    Trace.WriteLine("# available session CALs:" + config.SessionCALs.Available);
-                    Trace.WriteLine("# in license session CALs:" + config.SessionCALs.InLicense);
-                    Trace.WriteLine("# limit session CALs:" + config.SessionCALs.Limit);
+                    Trace.WriteLine("# available session CALs:" + CalConfig.SessionCALs.Available);
+                    Trace.WriteLine("# in license session CALs:" + CalConfig.SessionCALs.InLicense);
+                    Trace.WriteLine("# limit session CALs:" + CalConfig.SessionCALs.Limit);
 
-                    ReturnValue = true;
-                }
-                else
-                {
-                    ReturnValue = false;
+                    CloseTraceLog();
                 }
             }
-            catch
-            {
-                ReturnValue = false;
-            }
-            finally
-            {
-                CloseTraceLog();
-            }
+            catch  /*(anything)*/
+            { /*Do nothing*/}
 
-            return ReturnValue;
+            return CalConfig;
         }
     }
 }
