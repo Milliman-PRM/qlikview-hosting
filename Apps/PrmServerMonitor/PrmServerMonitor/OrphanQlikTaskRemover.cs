@@ -1,16 +1,20 @@
-﻿using System;
+﻿/*
+ * CODE OWNERS: Tom Puckett, 
+ * OBJECTIVE: A dedicated class for removing orphaned Qlikview server tasks from the local server
+ * DEVELOPER NOTES: Note that this is derived from ServerMonitorProcessingBase, as all future processing classes should be
+ */
+
+using System;
 using System.IO;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using PrmServerMonitor.Qms;
 using PrmServerMonitor.ServiceSupport;
 
 namespace PrmServerMonitor
 {
-    public class OrphanQlikTaskRemover
+    public class OrphanQlikTaskRemover : ServerMonitorProcessingBase
     {
         /// <summary>
         /// Button handler that initiates cleanup of orphaned documents
@@ -21,9 +25,7 @@ namespace PrmServerMonitor
         {
             // the project setup for a QMS client application can be found at https://community.qlik.com/docs/DOC-2639
 
-            TextWriterTraceListener TraceFile = new TextWriterTraceListener("Trace_OrphanTaskRemoval_" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + ".log");
-            Trace.AutoFlush = true;
-            Trace.Listeners.Add(TraceFile);
+            EstablishTraceLog();
 
             try
             {
@@ -54,10 +56,7 @@ namespace PrmServerMonitor
             }
             finally
             {
-                TraceFile.Flush();
-                Trace.Listeners.Remove(TraceFile);
-                TraceFile.Close();
-                TraceFile = null;
+                CloseTraceLog();
             }
 
         }

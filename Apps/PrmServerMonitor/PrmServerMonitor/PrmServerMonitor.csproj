@@ -58,6 +58,8 @@
     <Compile Include="OrphanQlikTaskRemover.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QlikviewCalManager.cs" />
+    <Compile Include="ServerMonitorProcessingBase.cs" />
     <Compile Include="Service References\Qms\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -259,7 +261,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="PRM Automated Maintenance.xml">
+    <Content Include="PRM Server Maintenance Task Definition.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
