@@ -170,6 +170,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Icons", "Icons", "{08EF70E7
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrmServerMonitor", "..\..\Apps\PrmServerMonitor\PrmServerMonitor\PrmServerMonitor.csproj", "{0683D48D-217F-4DBB-B354-CA2FF887FA9C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PRMServerMonitorConsole", "PRMServerMonitorConsole\PRMServerMonitorConsole.csproj", "{A3D3A27C-28AE-41A2-8F93-BD7F2C390EE6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PRMServerMonitorGUI", "PRMServerMonitorGUI\PRMServerMonitorGUI.csproj", "{D134A9E3-083C-4D06-AA89-52A5737EF966}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -252,6 +256,14 @@ Global
 		{0683D48D-217F-4DBB-B354-CA2FF887FA9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0683D48D-217F-4DBB-B354-CA2FF887FA9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0683D48D-217F-4DBB-B354-CA2FF887FA9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3D3A27C-28AE-41A2-8F93-BD7F2C390EE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3D3A27C-28AE-41A2-8F93-BD7F2C390EE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3D3A27C-28AE-41A2-8F93-BD7F2C390EE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3D3A27C-28AE-41A2-8F93-BD7F2C390EE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D134A9E3-083C-4D06-AA89-52A5737EF966}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D134A9E3-083C-4D06-AA89-52A5737EF966}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D134A9E3-083C-4D06-AA89-52A5737EF966}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D134A9E3-083C-4D06-AA89-52A5737EF966}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

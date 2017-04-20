@@ -1,4 +1,4 @@
-﻿namespace PrmServerMonitor
+﻿namespace PRMServerMonitorGUI
 {
     partial class Form1
     {
@@ -28,35 +28,37 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.ButtonRemoveOrphanTasks = new System.Windows.Forms.Button();
             this.ButtonCalReport = new System.Windows.Forms.Button();
+            this.ButtonRemoveOrphanTasks = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            // 
-            // ButtonRemoveOrphanTasks
-            // 
-            this.ButtonRemoveOrphanTasks.Location = new System.Drawing.Point(13, 13);
-            this.ButtonRemoveOrphanTasks.Name = "ButtonRemoveOrphanTasks";
-            this.ButtonRemoveOrphanTasks.Size = new System.Drawing.Size(259, 23);
-            this.ButtonRemoveOrphanTasks.TabIndex = 0;
-            this.ButtonRemoveOrphanTasks.Text = "Remove Orphan Tasks";
-            this.ButtonRemoveOrphanTasks.UseVisualStyleBackColor = true;
-            this.ButtonRemoveOrphanTasks.Click += new System.EventHandler(this.ButtonRemoveOrphanTasks_Click);
             // 
             // ButtonCalReport
             // 
-            this.ButtonCalReport.Location = new System.Drawing.Point(13, 43);
+            this.ButtonCalReport.Location = new System.Drawing.Point(15, 73);
+            this.ButtonCalReport.Margin = new System.Windows.Forms.Padding(6);
             this.ButtonCalReport.Name = "ButtonCalReport";
-            this.ButtonCalReport.Size = new System.Drawing.Size(259, 23);
-            this.ButtonCalReport.TabIndex = 1;
+            this.ButtonCalReport.Size = new System.Drawing.Size(518, 44);
+            this.ButtonCalReport.TabIndex = 3;
             this.ButtonCalReport.Text = "Report CALs";
             this.ButtonCalReport.UseVisualStyleBackColor = true;
             this.ButtonCalReport.Click += new System.EventHandler(this.ButtonCalReport_Click);
             // 
+            // ButtonRemoveOrphanTasks
+            // 
+            this.ButtonRemoveOrphanTasks.Location = new System.Drawing.Point(15, 15);
+            this.ButtonRemoveOrphanTasks.Margin = new System.Windows.Forms.Padding(6);
+            this.ButtonRemoveOrphanTasks.Name = "ButtonRemoveOrphanTasks";
+            this.ButtonRemoveOrphanTasks.Size = new System.Drawing.Size(518, 44);
+            this.ButtonRemoveOrphanTasks.TabIndex = 2;
+            this.ButtonRemoveOrphanTasks.Text = "Remove Orphan Tasks";
+            this.ButtonRemoveOrphanTasks.UseVisualStyleBackColor = true;
+            this.ButtonRemoveOrphanTasks.Click += new System.EventHandler(this.ButtonRemoveOrphanTasks_Click);
+            // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 262);
+            this.ClientSize = new System.Drawing.Size(564, 461);
             this.Controls.Add(this.ButtonCalReport);
             this.Controls.Add(this.ButtonRemoveOrphanTasks);
             this.Name = "Form1";
@@ -67,8 +69,8 @@
 
         #endregion
 
-        private System.Windows.Forms.Button ButtonRemoveOrphanTasks;
         private System.Windows.Forms.Button ButtonCalReport;
+        private System.Windows.Forms.Button ButtonRemoveOrphanTasks;
     }
 }
 
