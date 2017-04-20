@@ -1,15 +1,12 @@
-﻿/*
- * CODE OWNERS: Tom Puckett, 
- * OBJECTIVE: Various PRM system monitoring (and possibly maintenance in the future).
- * DEVELOPER NOTES: This is fundamentally a Windows Forms application but can mimic the operation of a console application as determined below
- */
-
-using System;
-using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using PrmServerMonitor;
 
-namespace PrmServerMonitor
+namespace PRMServerMonitorGUI
 {
     static class Program
     {
