@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Diagnostics;
-using System.Threading.Tasks;
+﻿/*
+ * CODE OWNERS: Tom Puckett, Ben Wyatt
+ * OBJECTIVE: A Win Forms application to drive features implemented in the related class library
+ * DEVELOPER NOTES: 
+ */
+
+using System;
 using System.Windows.Forms;
-using PrmServerMonitor;
 
 namespace PRMServerMonitorGUI
 {

@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+ * CODE OWNERS: Tom Puckett, Ben Wyatt
+ * OBJECTIVE: Form control callbacks.  
+ * DEVELOPER NOTES: Functionality that is common to the GUI and console versions should be implemented in the class library project instead of here
+ */
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;

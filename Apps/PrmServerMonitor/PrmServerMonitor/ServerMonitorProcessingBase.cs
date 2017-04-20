@@ -1,5 +1,5 @@
 ﻿/*
- * CODE OWNERS: Tom Puckett, 
+ * CODE OWNERS: Tom Puckett, Ben Wyatt
  * OBJECTIVE: A class containing common functionality for all dedicated task processing classes.  
  * DEVELOPER NOTES: All dedicated processing classes should be derived from this base to uniformly inherit common functionality
  */

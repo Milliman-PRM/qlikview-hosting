@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿/*
+ * CODE OWNERS: Tom Puckett, Ben Wyatt
+ * OBJECTIVE: A console application to be launched from a system service such as Zabbix agent
+ * DEVELOPER NOTES: Intentions for the console application include no log file and numeric output to a specific request identified through a command line keyword
+ */
+
 using System.Diagnostics;
 using PrmServerMonitor;
 
