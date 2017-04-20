@@ -11,11 +11,6 @@ namespace PRMServerMonitorGUI
 {
     static class Program
     {
-        [System.Runtime.InteropServices.DllImport("kernel32.dll")]
-        private static extern bool AttachConsole(int dwProcessId);
-        [System.Runtime.InteropServices.DllImport("kernel32.dll")]
-        public static extern Boolean FreeConsole();
-
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
