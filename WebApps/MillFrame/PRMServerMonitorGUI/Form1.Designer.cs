@@ -41,6 +41,7 @@
             this.ButtonCalReport.TabIndex = 3;
             this.ButtonCalReport.Text = "Report CALs";
             this.ButtonCalReport.UseVisualStyleBackColor = true;
+            this.ButtonCalReport.Click += new System.EventHandler(this.ButtonCalReport_Click);
             // 
             // ButtonRemoveOrphanTasks
             // 
@@ -51,6 +52,7 @@
             this.ButtonRemoveOrphanTasks.TabIndex = 2;
             this.ButtonRemoveOrphanTasks.Text = "Remove Orphan Tasks";
             this.ButtonRemoveOrphanTasks.UseVisualStyleBackColor = true;
+            this.ButtonRemoveOrphanTasks.Click += new System.EventHandler(this.ButtonRemoveOrphanTasks_Click);
             // 
             // Form1
             // 

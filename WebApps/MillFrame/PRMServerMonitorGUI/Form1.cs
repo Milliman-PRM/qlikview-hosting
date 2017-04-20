@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using PrmServerMonitor;
 
 namespace PRMServerMonitorGUI
 {
@@ -15,6 +16,18 @@ namespace PRMServerMonitorGUI
         public Form1()
         {
             InitializeComponent();
+        }
+
+        private void ButtonRemoveOrphanTasks_Click(object sender, EventArgs e)
+        {
+            OrphanQlikTaskRemover Worker = new OrphanQlikTaskRemover();
+            Worker.RemoveOrphanTasks();
+        }
+
+        private void ButtonCalReport_Click(object sender, EventArgs e)
+        {
+            QlikviewCalManager Worker = new QlikviewCalManager();
+            Worker.EnumerateAllCals(true);
         }
     }
 }
