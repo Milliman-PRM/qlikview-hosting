@@ -79,12 +79,14 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Apps\PrmServerMonitor\PrmServerMonitor\PrmServerMonitor.csproj">
+    <ProjectReference Include="..\PrmServerMonitorLib\PrmServerMonitorLib.csproj">
       <Project>{0683d48d-217f-4dbb-b354-ca2ff887fa9c}</Project>
-      <Name>PrmServerMonitor</Name>
+      <Name>PrmServerMonitorLib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

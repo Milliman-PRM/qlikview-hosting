@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="00cfd5c9-4a1b-46aa-9488-941e4ccc0d76" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:4799/QMS/Service" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="Service.xsd" MetadataType="Schema" ID="10cf08d6-9b09-4ac6-8cb6-0defe1a26e09" SourceId="1" SourceUrl="http://indy-prm-2:4799/QMS/Service?xsd=xsd0" />
+    <MetadataFile FileName="QMSBackendService.wsdl" MetadataType="Wsdl" ID="6ddf2f8e-6127-40a4-9244-8655b0bb6cb5" SourceId="1" SourceUrl="http://localhost:4799/QMS/Service" />
+    <MetadataFile FileName="Service1.xsd" MetadataType="Schema" ID="8bb70ca2-f00d-4f89-8625-edebbb317cf1" SourceId="1" SourceUrl="http://indy-prm-2:4799/QMS/Service?xsd=xsd1" />
+    <MetadataFile FileName="Service2.xsd" MetadataType="Schema" ID="2956b534-c8c7-40d2-b099-3159bf423b62" SourceId="1" SourceUrl="http://indy-prm-2:4799/QMS/Service?xsd=xsd8" />
+    <MetadataFile FileName="Service3.xsd" MetadataType="Schema" ID="c7e35e14-f81c-4b39-95b3-adc71e6889ae" SourceId="1" SourceUrl="http://indy-prm-2:4799/QMS/Service?xsd=xsd6" />
+    <MetadataFile FileName="Service4.xsd" MetadataType="Schema" ID="265159a4-46ec-4eac-902a-69f601af3149" SourceId="1" SourceUrl="http://indy-prm-2:4799/QMS/Service?xsd=xsd5" />
+    <MetadataFile FileName="Service.wsdl" MetadataType="Wsdl" ID="0b14e2f9-10b5-42e4-8529-6dd9174ae401" SourceId="1" SourceUrl="http://indy-prm-2:4799/QMS/Service?wsdl=wsdl1" />
+    <MetadataFile FileName="Service1.wsdl" MetadataType="Wsdl" ID="8c4cf600-c4b2-45c6-be0c-ecef2c88b2c3" SourceId="1" SourceUrl="http://indy-prm-2:4799/QMS/Service?wsdl=wsdl0" />
+    <MetadataFile FileName="Service5.xsd" MetadataType="Schema" ID="841c7a5d-75cc-443e-b604-c97ebb7acbba" SourceId="1" SourceUrl="http://indy-prm-2:4799/QMS/Service?xsd=xsd2" />
+    <MetadataFile FileName="Service6.xsd" MetadataType="Schema" ID="8755ea27-3ad5-4513-bb80-773b20d56ce3" SourceId="1" SourceUrl="http://indy-prm-2:4799/QMS/Service?xsd=xsd9" />
+    <MetadataFile FileName="Service7.xsd" MetadataType="Schema" ID="66505afd-c593-4f11-b838-d0f2c82eb892" SourceId="1" SourceUrl="http://indy-prm-2:4799/QMS/Service?xsd=xsd10" />
+    <MetadataFile FileName="Service8.xsd" MetadataType="Schema" ID="683b3c32-3e57-4035-8205-1a73693bb7bc" SourceId="1" SourceUrl="http://indy-prm-2:4799/QMS/Service?xsd=xsd7" />
+    <MetadataFile FileName="Service9.xsd" MetadataType="Schema" ID="4c4a3465-887c-44dd-a7cd-ddbb940a225b" SourceId="1" SourceUrl="http://indy-prm-2:4799/QMS/Service?xsd=xsd4" />
+    <MetadataFile FileName="Service10.xsd" MetadataType="Schema" ID="44338ca9-4cd1-4af3-93f8-0f453f76f5ad" SourceId="1" SourceUrl="http://indy-prm-2:4799/QMS/Service?xsd=xsd3" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

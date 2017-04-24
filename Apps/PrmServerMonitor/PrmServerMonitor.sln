@@ -4,10 +4,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PRMServerMonitorGUI", "PRMServerMonitorGUI\PRMServerMonitorGUI.csproj", "{D134A9E3-083C-4D06-AA89-52A5737EF966}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0683D48D-217F-4DBB-B354-CA2FF887FA9C} = {0683D48D-217F-4DBB-B354-CA2FF887FA9C}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PRMServerMonitorConsole", "PRMServerMonitorConsole\PRMServerMonitorConsole.csproj", "{A3D3A27C-28AE-41A2-8F93-BD7F2C390EE6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0683D48D-217F-4DBB-B354-CA2FF887FA9C} = {0683D48D-217F-4DBB-B354-CA2FF887FA9C}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrmServerMonitor", "PrmServerMonitor\PrmServerMonitor.csproj", "{0683D48D-217F-4DBB-B354-CA2FF887FA9C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrmServerMonitorLib", "PrmServerMonitorLib\PrmServerMonitorLib.csproj", "{0683D48D-217F-4DBB-B354-CA2FF887FA9C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

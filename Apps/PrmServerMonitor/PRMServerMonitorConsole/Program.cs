@@ -5,7 +5,7 @@
  */
 
 using System.Diagnostics;
-using PrmServerMonitor;
+using PrmServerMonitorLib;
 
 namespace PRMServerMonitorConsole
 {
