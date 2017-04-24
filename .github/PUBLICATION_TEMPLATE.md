@@ -1,8 +1,10 @@
 ## Publication Summary
 
-**Server used:** (e.g. `PRM2` or `indy-ss01`)
+QVW files are to be placed by the client into an approprite folder on server Indy-SS01 under folder `D:\0000EXT01_NetworkShare`
 
-**Network Filesystem Location on the Server:** `D:\0000EXT01_NetworkShare\...`
+**Server to be used for reduction:** 
+ - [ ] `PRM2`
+ - [ ] `indy-ss01`
 
 | Client Info | Value |
 | :---------- | :---- |
@@ -11,19 +13,28 @@
 ## Task Lists
 
 #### Tasks to be completed immediately when opening this issue
-- [ ] Issue title is "Internal Client - Project Code" (e.g. `New York - LIVE BPCI - USPI`)
+- [ ] Issue title is "Internal Client - Project Code"  
+      e.g. `New York` - `LIVE BPCI - USPI`
+- [ ] Filesystem location on the server where the new report is located:**  
+      e.g. `D:\0000EXT01_NetworkShare\...`
 
 #### Tasks to be completed during reduction
-- [ ] Verify that the Report (QVW) has not been signed
-- [ ] Sign the QVW
-- [ ] Verify the presence of the signature on the QVW
+- [ ] Make a backup copy of the report provided by the client
+- [ ] Use the signature tool to verify that the Report (QVW) has not been signed
+- [ ] Inspect the `sign.bat` file and ensure that the qvw file name in the script matches the actual file name
+- [ ] Sign the QVW by running the sign.bat script file
+- [ ] Use the signature tool to verify the presence of the new signature on the QVW
+- [ ] If planning to perform reduction on server PRM2, copy the report to the same named folder on PRM2
 - [ ] Re-populate the Report (QVW) using the PMC
 - [ ] Update Project using the PMC
+- [ ] If this is a demo report, skip ahead to procedure for pushing to production
 
 #### Tasks to be completed during validation 
 *Not necessary to complete the following tasks if this is a Demo*
 - [ ] Validate the Report using the `MillimanQVSelectionValidation` tool
-- [ ] Check the validation messages
+- [ ] Check the validation messages.  
+  - Any items noted as 'missing' are generally acceptable.  
+  - Any items noted as 'PHI Breach' or 'Previously Not Authorized' should be scrutinized.  
 
 | Message | To Do |
 | :------ | :---- |
@@ -37,6 +48,7 @@
 - [ ] Confirm no errors occurred during the push to production 
 
 #### Tasks to be completed when closing this issue
+- [ ] Delete the backup copy of the original report provided by the client
 - [ ] All checks have been performed
 - [ ] Close this issue
 
