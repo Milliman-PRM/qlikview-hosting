@@ -40,4 +40,4 @@
 
 
 #### All additional information should be in separate comments below.  Nothing should be written below this line.
-*For instructions, visit:* https://indy-github.milliman.com/PRM/qlikview-hosting/wiki/Publishing-Updates-to-Existing-Reports-For-Internal-Milliman-Hosting-Clients
+*For instructions on publishing a report (QVW), visit:* https://indy-github.milliman.com/PRM/qlikview-hosting/wiki/Publishing-Updates-to-Existing-Reports-For-Internal-Milliman-Hosting-Clients
