@@ -14,8 +14,8 @@
       e.g. `New York` - `LIVE BPCI - USPI`
 - [ ] Filesystem location on the server where the new report is located:**  
       e.g. `D:\0000EXT01_NetworkShare\...`
-- [ ] Folder as seen on PRM where the project can be found:**  
-      e.g. `0000EXT01 | NewYork | LIVE BPCI - CJR`
+- [ ] Folder as seen on PMC where the project can be found:**  
+      e.g. `0000EXT01` | `NewYork` | `LIVE BPCI - CJR`
 
 #### Tasks to be completed during reduction
 - [ ] Make a backup copy of the report provided by the client
