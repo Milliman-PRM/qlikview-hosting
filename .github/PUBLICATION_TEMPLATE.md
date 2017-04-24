@@ -1,6 +1,6 @@
 ## Publication Summary
 
-**Server used:** (e.g. `PRM2`)
+**Server used:** (e.g. `PRM2` or `indy-ss01`)
 
 **Network Filesystem Location on the Server:** `D:\0000EXT01_NetworkShare\...`
 
