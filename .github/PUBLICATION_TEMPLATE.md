@@ -1,7 +1,8 @@
 ## Publication Summary
 
-**Note the server to be used for reduction:** 
- - [ ] (e.g. `indy-ss01` or `PRM2`)
+- Server to be used for reduction: **(e.g. `indy-ss01` or `PRM2`)**
+- Filesystem location on the server where the new report is located: **(e.g. `D:\0000EXT01_NetworkShare\...`)**
+- Folder path as seen on the PMC where the project can be found: **(e.g. `D:\PRMSystem\QVDocuments\0000EXT01\...`)**
 
 | Client Info | Value |
 | :---------- | :---- |
@@ -10,20 +11,18 @@
 ## Task Lists
 
 #### Tasks to be completed immediately when opening this issue
-- [ ] Issue title is "Internal Client - Project Code"  
-      e.g. `New York` - `LIVE BPCI - USPI`
-- [ ] Filesystem location on the server where the new report is located:**  
-      e.g. `D:\0000EXT01_NetworkShare\...`
-- [ ] Folder as seen on PMC where the project can be found:**  
-      e.g. `0000EXT01` | `NewYork` | `LIVE BPCI - CJR`
+- [ ] Issue title is "Internal Client - Project Code" (e.g. `New York` - `LIVE BPCI - USPI`)
+- [ ] The server used is listed above
+- [ ] The filesystem location on the server is listed above
+- [ ] The folder location as seen on the PMC is listed above
 
 #### Tasks to be completed during reduction
 - [ ] Make a backup copy of the report provided by the client
 - [ ] Use the signature tool to verify that the Report (QVW) has not been signed
-- [ ] Inspect the `sign.bat` file and ensure that the qvw file name in the script matches the actual file name
+- [ ] Inspect the `sign.bat` file and ensure that the QVW file name in the script matches the actual file name
 - [ ] Sign the QVW by running the sign.bat script file
 - [ ] Use the signature tool to verify the presence of the new signature on the QVW
-- [ ] If planning to perform reduction on a server other than where it is, copy the report to the same named folder on the reduction server (e.g. PRM2).  
+- [ ] If planning to perform reduction on a server other than where it is, copy the report to the same named folder on the reduction server (e.g. `PRM2`)  
 - [ ] Re-populate the Report (QVW) using the PMC
 - [ ] Update Project using the PMC
 - [ ] If this is a demo report, skip ahead to procedure for pushing to production
@@ -31,9 +30,7 @@
 #### Tasks to be completed during validation 
 *Not necessary to complete the following tasks if this is a Demo*
 - [ ] Validate the Report using the `MillimanQVSelectionValidation` tool
-- [ ] Check the validation messages.  
-  - Any items noted as 'missing' are generally acceptable.  
-  - Any items noted as 'PHI Breach' or 'Previously Not Authorized' should be scrutinized.  
+- [ ] Check the validation messages (found in the table below)
 
 | Message | To Do |
 | :------ | :---- |
