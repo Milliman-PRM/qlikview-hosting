@@ -358,6 +358,7 @@
       <Link>Configs\connectionStrings_VN.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Properties\PublishProfiles\CI_Staging.pubxml" />
     <None Include="Properties\PublishProfiles\milliman-sk.pubxml" />
     <None Include="Properties\PublishProfiles\MillimanDebug.pubxml" />
     <Content Include="SSOConfigure\HCIntel.cer" />

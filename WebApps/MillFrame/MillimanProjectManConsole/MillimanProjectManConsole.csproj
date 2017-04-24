@@ -899,6 +899,7 @@
       <Link>Configs\appsettings_VN_PMC.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Properties\PublishProfiles\CI_Staging.pubxml" />
     <None Include="Properties\PublishProfiles\Debug.pubxml" />
     <Content Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

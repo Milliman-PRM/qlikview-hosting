@@ -376,6 +376,7 @@
     <None Include="Configs\connectionStrings_PreStag.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Properties\PublishProfiles\CI_Staging.pubxml" />
     <None Include="Properties\PublishProfiles\MilimanClientUserAdmin_AK.pubxml" />
     <None Include="Properties\PublishProfiles\MillimanClientUserAdmin_PreStaging.pubxml" />
     <None Include="Properties\PublishProfiles\ReleaseCandidateProfile.pubxml" />
@@ -426,7 +427,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties UseAjaxifiedTemplates="True" UseJQuerySupport="True" />
+      <UserProperties UseJQuerySupport="True" UseAjaxifiedTemplates="True" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
