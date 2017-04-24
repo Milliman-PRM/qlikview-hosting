@@ -1,10 +1,7 @@
 ## Publication Summary
 
-QVW files are to be placed by the client into an approprite folder on server Indy-SS01 under folder `D:\0000EXT01_NetworkShare`
-
-**Server to be used for reduction:** 
- - [ ] `PRM2`
- - [ ] `indy-ss01`
+**Note the server to be used for reduction:** 
+ - [ ] (e.g. `indy-ss01` or `PRM2`)
 
 | Client Info | Value |
 | :---------- | :---- |
@@ -17,6 +14,8 @@ QVW files are to be placed by the client into an approprite folder on server Ind
       e.g. `New York` - `LIVE BPCI - USPI`
 - [ ] Filesystem location on the server where the new report is located:**  
       e.g. `D:\0000EXT01_NetworkShare\...`
+- [ ] Folder as seen on PRM where the project can be found:**  
+      e.g. `0000EXT01 | NewYork | LIVE BPCI - CJR`
 
 #### Tasks to be completed during reduction
 - [ ] Make a backup copy of the report provided by the client
@@ -24,7 +23,7 @@ QVW files are to be placed by the client into an approprite folder on server Ind
 - [ ] Inspect the `sign.bat` file and ensure that the qvw file name in the script matches the actual file name
 - [ ] Sign the QVW by running the sign.bat script file
 - [ ] Use the signature tool to verify the presence of the new signature on the QVW
-- [ ] If planning to perform reduction on server PRM2, copy the report to the same named folder on PRM2
+- [ ] If planning to perform reduction on a server other than where it is, copy the report to the same named folder on the reduction server (e.g. PRM2).  
 - [ ] Re-populate the Report (QVW) using the PMC
 - [ ] Update Project using the PMC
 - [ ] If this is a demo report, skip ahead to procedure for pushing to production
