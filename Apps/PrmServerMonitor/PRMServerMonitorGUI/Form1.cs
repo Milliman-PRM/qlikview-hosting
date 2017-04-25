@@ -35,5 +35,10 @@ namespace PRMServerMonitorGUI
             QlikviewCalManager Worker = new QlikviewCalManager();
             Worker.EnumerateAllCals(true);
         }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            ComboBoxServer.SelectedIndex = 0;  // initialize
+        }
     }
 }
