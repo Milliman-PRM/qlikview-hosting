@@ -40,5 +40,28 @@ namespace PRMServerMonitorGUI
         {
             ComboBoxServer.SelectedIndex = 0;  // initialize
         }
+
+        private void ButtonDeleteTest_Click(object sender, EventArgs e)
+        {
+            QlikviewCalManager Worker = new QlikviewCalManager();
+            Worker.RemoveOneNamedCal(TextBoxUserName.Text, true);
+        }
+
+        private void ButtonDeleteDocCalTest_Click(object sender, EventArgs e)
+        {
+            QlikviewCalManager Worker = new QlikviewCalManager();
+            Worker.RemoveOneDocumentCal(TextBoxDocUserName.Text, TextBoxUserName.Text, true);
+        }
+
+        private void ButtonEnumerateDocCALs_Click(object sender, EventArgs e)
+        {
+            Cursor StartCursor = this.Cursor;
+            this.Cursor = Cursors.WaitCursor;
+
+            QlikviewCalManager Worker = new QlikviewCalManager();
+            Worker.EnumerateDocumentCals(true);
+
+            this.Cursor = StartCursor;
+        }
     }
 }

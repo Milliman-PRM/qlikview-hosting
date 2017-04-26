@@ -32,12 +32,21 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.TabPageTasks = new System.Windows.Forms.TabPage();
             this.TabPageDocCals = new System.Windows.Forms.TabPage();
+            this.ButtonEnumerateDocCALs = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.TextBoxDocName = new System.Windows.Forms.TextBox();
+            this.TextBoxDocUserName = new System.Windows.Forms.TextBox();
+            this.ButtonDeleteDocCalTest = new System.Windows.Forms.Button();
             this.TabPageUserCals = new System.Windows.Forms.TabPage();
+            this.TextBoxUserName = new System.Windows.Forms.TextBox();
+            this.ButtonDeleteTest = new System.Windows.Forms.Button();
             this.ButtonCalReport = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.ComboBoxServer = new System.Windows.Forms.ComboBox();
             this.tabControl1.SuspendLayout();
             this.TabPageTasks.SuspendLayout();
+            this.TabPageDocCals.SuspendLayout();
             this.TabPageUserCals.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -78,6 +87,12 @@
             // 
             // TabPageDocCals
             // 
+            this.TabPageDocCals.Controls.Add(this.ButtonEnumerateDocCALs);
+            this.TabPageDocCals.Controls.Add(this.label3);
+            this.TabPageDocCals.Controls.Add(this.label2);
+            this.TabPageDocCals.Controls.Add(this.TextBoxDocName);
+            this.TabPageDocCals.Controls.Add(this.TextBoxDocUserName);
+            this.TabPageDocCals.Controls.Add(this.ButtonDeleteDocCalTest);
             this.TabPageDocCals.Location = new System.Drawing.Point(4, 22);
             this.TabPageDocCals.Name = "TabPageDocCals";
             this.TabPageDocCals.Padding = new System.Windows.Forms.Padding(3);
@@ -86,8 +101,62 @@
             this.TabPageDocCals.Text = "Qlikview Document CALs";
             this.TabPageDocCals.UseVisualStyleBackColor = true;
             // 
+            // ButtonEnumerateDocCALs
+            // 
+            this.ButtonEnumerateDocCALs.Location = new System.Drawing.Point(9, 6);
+            this.ButtonEnumerateDocCALs.Name = "ButtonEnumerateDocCALs";
+            this.ButtonEnumerateDocCALs.Size = new System.Drawing.Size(75, 35);
+            this.ButtonEnumerateDocCALs.TabIndex = 5;
+            this.ButtonEnumerateDocCALs.Text = "Enumerate Doc CALs";
+            this.ButtonEnumerateDocCALs.UseVisualStyleBackColor = true;
+            this.ButtonEnumerateDocCALs.Click += new System.EventHandler(this.ButtonEnumerateDocCALs_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(225, 74);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(59, 13);
+            this.label3.TabIndex = 4;
+            this.label3.Text = "Document:";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 74);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(46, 13);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "User ID:";
+            // 
+            // TextBoxDocName
+            // 
+            this.TextBoxDocName.Location = new System.Drawing.Point(290, 71);
+            this.TextBoxDocName.Name = "TextBoxDocName";
+            this.TextBoxDocName.Size = new System.Drawing.Size(288, 20);
+            this.TextBoxDocName.TabIndex = 2;
+            // 
+            // TextBoxDocUserName
+            // 
+            this.TextBoxDocUserName.Location = new System.Drawing.Point(58, 71);
+            this.TextBoxDocUserName.Name = "TextBoxDocUserName";
+            this.TextBoxDocUserName.Size = new System.Drawing.Size(161, 20);
+            this.TextBoxDocUserName.TabIndex = 1;
+            // 
+            // ButtonDeleteDocCalTest
+            // 
+            this.ButtonDeleteDocCalTest.Location = new System.Drawing.Point(6, 97);
+            this.ButtonDeleteDocCalTest.Name = "ButtonDeleteDocCalTest";
+            this.ButtonDeleteDocCalTest.Size = new System.Drawing.Size(75, 39);
+            this.ButtonDeleteDocCalTest.TabIndex = 0;
+            this.ButtonDeleteDocCalTest.Text = "Delete Doc CAL Test";
+            this.ButtonDeleteDocCalTest.UseVisualStyleBackColor = true;
+            this.ButtonDeleteDocCalTest.Click += new System.EventHandler(this.ButtonDeleteDocCalTest_Click);
+            // 
             // TabPageUserCals
             // 
+            this.TabPageUserCals.Controls.Add(this.TextBoxUserName);
+            this.TabPageUserCals.Controls.Add(this.ButtonDeleteTest);
             this.TabPageUserCals.Controls.Add(this.ButtonCalReport);
             this.TabPageUserCals.Location = new System.Drawing.Point(4, 22);
             this.TabPageUserCals.Name = "TabPageUserCals";
@@ -96,6 +165,23 @@
             this.TabPageUserCals.TabIndex = 2;
             this.TabPageUserCals.Text = "Qlikview User CALs";
             this.TabPageUserCals.UseVisualStyleBackColor = true;
+            // 
+            // TextBoxUserName
+            // 
+            this.TextBoxUserName.Location = new System.Drawing.Point(88, 38);
+            this.TextBoxUserName.Name = "TextBoxUserName";
+            this.TextBoxUserName.Size = new System.Drawing.Size(177, 20);
+            this.TextBoxUserName.TabIndex = 6;
+            // 
+            // ButtonDeleteTest
+            // 
+            this.ButtonDeleteTest.Location = new System.Drawing.Point(7, 36);
+            this.ButtonDeleteTest.Name = "ButtonDeleteTest";
+            this.ButtonDeleteTest.Size = new System.Drawing.Size(75, 23);
+            this.ButtonDeleteTest.TabIndex = 5;
+            this.ButtonDeleteTest.Text = "Delete Test";
+            this.ButtonDeleteTest.UseVisualStyleBackColor = true;
+            this.ButtonDeleteTest.Click += new System.EventHandler(this.ButtonDeleteTest_Click);
             // 
             // ButtonCalReport
             // 
@@ -140,7 +226,10 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             this.tabControl1.ResumeLayout(false);
             this.TabPageTasks.ResumeLayout(false);
+            this.TabPageDocCals.ResumeLayout(false);
+            this.TabPageDocCals.PerformLayout();
             this.TabPageUserCals.ResumeLayout(false);
+            this.TabPageUserCals.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -155,6 +244,14 @@
         private System.Windows.Forms.Button ButtonCalReport;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox ComboBoxServer;
+        private System.Windows.Forms.Button ButtonDeleteTest;
+        private System.Windows.Forms.TextBox TextBoxUserName;
+        private System.Windows.Forms.Button ButtonDeleteDocCalTest;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox TextBoxDocName;
+        private System.Windows.Forms.TextBox TextBoxDocUserName;
+        private System.Windows.Forms.Button ButtonEnumerateDocCALs;
     }
 }
 

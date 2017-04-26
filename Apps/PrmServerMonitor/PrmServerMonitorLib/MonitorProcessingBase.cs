@@ -10,14 +10,14 @@ using System.Threading;
 
 namespace PrmServerMonitorLib
 {
-    public class ServerMonitorProcessingBase
+    public class MonitorProcessingBase
     {
         TextWriterTraceListener TraceFile;
 
         /// <summary>
         /// Opens a file based trace log destination named for the calling derived class.  
         /// </summary>
-        public void EstablishTraceLog()
+        public void EstablishTraceLogFile()
         {
             TraceFile = new TextWriterTraceListener("Trace_" + this.GetType().Name + "_" + DateTime.Now.ToString("yyyyMMdd-HHmmss-ffff") + ".log");
             Trace.AutoFlush = true;
@@ -28,7 +28,7 @@ namespace PrmServerMonitorLib
         /// <summary>
         /// Closes a previously opened file based trace log destination.  
         /// </summary>
-        public void CloseTraceLog()
+        public void CloseTraceLogFile()
         {
             if (TraceFile != null && Trace.Listeners.Contains(TraceFile))
             {

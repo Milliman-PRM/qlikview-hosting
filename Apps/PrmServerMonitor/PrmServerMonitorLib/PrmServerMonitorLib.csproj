@@ -55,7 +55,8 @@
     <Compile Include="OrphanQlikTaskRemover.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QlikviewCalManager.cs" />
-    <Compile Include="ServerMonitorProcessingBase.cs" />
+    <Compile Include="MonitorProcessingBase.cs" />
+    <Compile Include="QlikviewProcessingBase.cs" />
     <Compile Include="Service References\Qms\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

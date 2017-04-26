@@ -14,7 +14,7 @@ using PrmServerMonitorLib.ServiceSupport;
 
 namespace PrmServerMonitorLib
 {
-    public class OrphanQlikTaskRemover : ServerMonitorProcessingBase
+    public class OrphanQlikTaskRemover : QlikviewProcessingBase
     {
         /// <summary>
         /// Button handler that initiates cleanup of orphaned documents
@@ -25,16 +25,15 @@ namespace PrmServerMonitorLib
         {
             // the project setup for a QMS client application can be found at https://community.qlik.com/docs/DOC-2639
 
-            EstablishTraceLog();
+            EstablishTraceLogFile();
 
             try
             {
-                QMSClient Client;
-
-                string QMS = "http://localhost:4799/QMS/Service";
-                Client = new QMSClient("BasicHttpBinding_IQMS", QMS);
-                string key = Client.GetTimeLimitedServiceKey();
-                ServiceKeyClientMessageInspector.ServiceKey = key;
+                if (!ConnectClient("BasicHttpBinding_IQMS", @"http://localhost:4799/QMS/Service"))
+                {
+                    Trace.WriteLine("In " + this.GetType().Name + ".RemoveOrphanTasks(): Failed to connect to web service");
+                    return;
+                }
 
                 ServiceInfo[] myServices = Client.GetServices(ServiceTypes.QlikViewDistributionService);
                 foreach (ServiceInfo service in myServices)
@@ -56,7 +55,8 @@ namespace PrmServerMonitorLib
             }
             finally
             {
-                CloseTraceLog();
+                DisconnectClient();
+                CloseTraceLogFile();
             }
 
         }
