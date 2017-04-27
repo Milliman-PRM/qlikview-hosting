@@ -239,7 +239,7 @@
       <Link>Configs\connectionStrings_Stakeholder.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Properties\PublishProfiles\CI_Staging.pubxml" />
+    <None Include="Properties\PublishProfiles\CI_Publish.pubxml" />
     <None Include="Properties\PublishProfiles\Debug_vn.pubxml" />
     <None Include="Properties\PublishProfiles\LocalPublish.pubxml" />
     <None Include="Properties\PublishProfiles\MillimanClientPublisher_AK.pubxml" />

@@ -296,7 +296,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-    <None Include="Properties\PublishProfiles\CI_Staging.pubxml" />
+    <None Include="Properties\PublishProfiles\CI_Publish.pubxml" />
     <None Include="Properties\PublishProfiles\MillimanDebug.pubxml" />
     <None Include="Properties\PublishProfiles\ReleaseCandidateProfile.pubxml" />
     <None Include="Web.Debug.config">
