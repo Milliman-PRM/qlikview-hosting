@@ -210,6 +210,8 @@ namespace PrmServerMonitorLib
                 EstablishTraceLogFile();
             }
 
+            Trace.WriteLine(string.Format("Attempting to remove user {0} from document {1}", UserName, DocumentName));
+
             bool ReturnValue = false;
             try
             {
@@ -224,46 +226,47 @@ namespace PrmServerMonitorLib
 
                 DocumentNode[] AllDocNodes = Client.GetUserDocuments(QvServerInstance.ID);
 
+                int DocTestCounter = 0;
+
                 // Look for the desired DocumentNode
                 foreach (DocumentNode DocNode in AllDocNodes)
                 {
                     if (DocNode.Name == DocumentName)
                     {
-                        Trace.WriteLine("Found DocNode for document " + DocNode.Name);
-
                         // This is the document I want to manage.  Get the meta data.
                         DocumentMetaData Meta = Client.GetDocumentMetaData(DocNode, DocumentMetaDataScope.Licensing);
 
                         //Extract the current list of Document CALs for this document
                         List<AssignedNamedCAL> CurrentCALs = Meta.Licensing.AssignedCALs.ToList();
-
-                        Trace.WriteLine("Document has " + CurrentCALs.Count + " CALS");
+                        List<AssignedNamedCAL> RemovableCALs = new List<AssignedNamedCAL>();
 
                         for (int CalIndex = CurrentCALs.Count-1 ; CalIndex >= 0 ; CalIndex--)
                         {
                             //If the user matches the name then remove it from the list
                             if (CurrentCALs[CalIndex].UserName == UserName)
                             {
-                                Trace.WriteLine("Found user " + CurrentCALs[CalIndex].UserName + " with a document CAL");
-
-                                bool RemoveSuccess = CurrentCALs.Remove(CurrentCALs[CalIndex]);
-
-                                Trace.WriteLine("Removed user " + CurrentCALs[CalIndex].UserName + " with result " + RemoveSuccess.ToString());
+                                RemovableCALs.Add(CurrentCALs[CalIndex]);
+                                CurrentCALs.Remove(CurrentCALs[CalIndex]);
                             }
                         }
 
-                        //Add the updated CALs list back to the meta data object
-                        Meta.Licensing.AssignedCALs = CurrentCALs.ToArray();
-                        //Save the metadata back to the server
-//                        Client.SaveDocumentMetaData(Meta);
-                    }
+                        if (RemovableCALs.Count > 0)
+                        {
+                            // Update the Meta object for this document with Document CAL changes
+                            Meta.Licensing.AssignedCALs = CurrentCALs.ToArray();
+                            Meta.Licensing.RemovedAssignedCALs = RemovableCALs.ToArray();
 
+                            //Save the metadata back to the server
+                            Client.SaveDocumentMetaData(Meta);
+                        }
+                    }
+                    DocTestCounter++;
                 }
 
             }
-            catch /*anything*/
+            catch (System.Exception e)
             {
-                Trace.WriteLine("Failed to delete named user license for account:" + UserName);
+                Trace.WriteLine("Exception in QlikviewCalManager.RemoveOneDocumentCal()!  Failed to delete named user license for account:" + UserName + "\r\n" + e.Message + "\r\n" + e.StackTrace);
             }
             finally
             {
@@ -274,8 +277,19 @@ namespace PrmServerMonitorLib
             return ReturnValue;
         }
 
-        public bool EnumerateDocumentCals(bool TraceFile)
+        public struct DocCalEntry
         {
+            public string DocumentName;
+            public string RelativePath;
+            public string UserName;
+            public DateTime LastUsedDateTime;
+            public bool DeleteFlag;
+        }
+
+        public List<DocCalEntry> EnumerateDocumentCals(bool TraceFile)
+        {
+            List<DocCalEntry> ReturnValue = null;
+
             if (TraceFile)
             {
                 EstablishTraceLogFile();
@@ -288,16 +302,15 @@ namespace PrmServerMonitorLib
                     if (TraceFile)
                     {
                         Trace.WriteLine("In " + this.GetType().Name + ".EnumerateAllCals(): Failed to connect to web service");
+                        CloseTraceLogFile();
+                        return ReturnValue;
                     }
-                    return false;
                 }
 
+                ReturnValue = new List<DocCalEntry>();
+
                 ServiceInfo QvServerInstance = Client.GetServices(ServiceTypes.QlikViewServer).First();
-
                 DocumentNode[] AllDocNodes = Client.GetUserDocuments(QvServerInstance.ID);
-
-                // TODO DeleteMe
-                System.Xml.Serialization.XmlSerializer S = new System.Xml.Serialization.XmlSerializer(typeof(DocumentMetaData));
 
                 // Look for the desired DocumentNode
                 foreach (DocumentNode DocNode in AllDocNodes)
@@ -310,31 +323,28 @@ namespace PrmServerMonitorLib
                     // Get the document meta data.
                     DocumentMetaData Meta = Client.GetDocumentMetaData(DocNode, DocumentMetaDataScope.Licensing);
 
-                    // TODO DeleteMe
-                    using (StreamWriter W = new StreamWriter(DocNode.Name + "_Meta.txt", false))
-                    {
-                        S.Serialize(W, Meta);
-                    }
-
                     //Extract the current list of Document CALs for this document
                     List<AssignedNamedCAL> CurrentCALs = Meta.Licensing.AssignedCALs.ToList();
 
                     for (int CalIndex = CurrentCALs.Count - 1; CalIndex >= 0; CalIndex--)
                     {
+                        ReturnValue.Add(new DocCalEntry { DocumentName = DocNode.Name, RelativePath = DocNode.RelativePath, UserName = CurrentCALs[CalIndex].UserName, LastUsedDateTime = CurrentCALs[CalIndex].LastUsed, DeleteFlag = false });
                         Trace.WriteLine("    Document CAL last used " + CurrentCALs[CalIndex].LastUsed.ToString("yyyy-MM-dd HH:mm:ss") + " found for user " + CurrentCALs[CalIndex].UserName);
                     }
 
                 }
             }
-            catch  /*(anything)*/
-            { /*Do nothing*/}
+            catch 
+            {
+                Trace.WriteLine("Exception caught in QlikviewCalManager.EnumerateDocumentCals()");
+            }
             finally
             {
                 DisconnectClient();
                 CloseTraceLogFile();
             }
 
-            return true;
+            return ReturnValue;
         }
     }
 }
