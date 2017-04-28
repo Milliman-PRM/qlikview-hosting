@@ -36,8 +36,8 @@ namespace PrmServerMonitorLib
             public bool DeleteFlag;
         }
 
-        public QlikviewCalManager(bool LifetimeTraceArg = false) : base(LifetimeTraceArg)
-        {}
+        public QlikviewCalManager(string ServerNameArg = "localhost", bool LifetimeTraceArg = false) : base(ServerNameArg, LifetimeTraceArg)
+        { }
 
         ~QlikviewCalManager()
         {
@@ -89,7 +89,7 @@ namespace PrmServerMonitorLib
 
             try
             {
-                if (!ConnectClient("BasicHttpBinding_IQMS", @"http://localhost:4799/QMS/Service"))
+                if (!ConnectClient("BasicHttpBinding_IQMS", ServerName))
                 {
                     if (TraceOutput)
                     {
@@ -173,7 +173,7 @@ namespace PrmServerMonitorLib
             bool ReturnValue = false;
             try
             {
-                if (!ConnectClient("BasicHttpBinding_IQMS", @"http://localhost:4799/QMS/Service"))
+                if (!ConnectClient("BasicHttpBinding_IQMS", ServerName))
                 {
                     Trace.WriteLine("In " + this.GetType().Name + ".RemoveOneNamedCal(): Failed to connect to web service");
                     return false;
@@ -232,7 +232,7 @@ namespace PrmServerMonitorLib
             bool ReturnValue = false;
             try
             {
-                if (!ConnectClient("BasicHttpBinding_IQMS", @"http://localhost:4799/QMS/Service"))
+                if (!ConnectClient("BasicHttpBinding_IQMS", ServerName))
                 {
                     Trace.WriteLine("In " + this.GetType().Name + ".EnumerateAllCals(): Failed to connect to web service");
                     return false;
@@ -307,11 +307,12 @@ namespace PrmServerMonitorLib
 
             try
             {
-                if (!ConnectClient("BasicHttpBinding_IQMS", @"http://localhost:4799/QMS/Service"))
+                Trace.WriteLine("connecting with servername " + ServerName);
+                if (!ConnectClient("BasicHttpBinding_IQMS", ServerName))
                 {
                     if (TraceFile)
                     {
-                        Trace.WriteLine("In " + this.GetType().Name + ".EnumerateAllCals(): Failed to connect to web service");
+                        Trace.WriteLine("In " + this.GetType().Name + ".EnumerateAllCals(): Failed to connect to web service at URI " + ServerName);
                         CloseTraceLogFile();
                         return ReturnValue;
                     }

@@ -42,20 +42,21 @@
             this.ButtonDeleteSelectedCals = new System.Windows.Forms.Button();
             this.ButtonClearAllDeleteChecks = new System.Windows.Forms.Button();
             this.CheckBoxAllowUndatedCalSelection = new System.Windows.Forms.CheckBox();
-            this.TextBoxDocName = new System.Windows.Forms.TextBox();
             this.ButtonEnumerateDocCALs = new System.Windows.Forms.Button();
-            this.ButtonDeleteDocCalTest = new System.Windows.Forms.Button();
-            this.label3 = new System.Windows.Forms.Label();
-            this.TextBoxDocUserName = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
             this.TabPageUserCals = new System.Windows.Forms.TabPage();
             this.TextBoxUserName = new System.Windows.Forms.TextBox();
             this.ButtonDeleteTest = new System.Windows.Forms.Button();
             this.ButtonCalReport = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.ComboBoxServer = new System.Windows.Forms.ComboBox();
+            this.TabPageDebug = new System.Windows.Forms.TabPage();
             this.TextBoxPath = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.TextBoxDocName = new System.Windows.Forms.TextBox();
+            this.ButtonDeleteDocCalTest = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.TextBoxDocUserName = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.ComboBoxServer = new System.Windows.Forms.ComboBox();
             this.tabControl1.SuspendLayout();
             this.TabPageTasks.SuspendLayout();
             this.TabPageDocCals.SuspendLayout();
@@ -65,6 +66,7 @@
             this.splitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DataGridViewDocCals)).BeginInit();
             this.TabPageUserCals.SuspendLayout();
+            this.TabPageDebug.SuspendLayout();
             this.SuspendLayout();
             // 
             // ButtonRemoveOrphanTasks
@@ -85,6 +87,7 @@
             this.tabControl1.Controls.Add(this.TabPageTasks);
             this.tabControl1.Controls.Add(this.TabPageDocCals);
             this.tabControl1.Controls.Add(this.TabPageUserCals);
+            this.tabControl1.Controls.Add(this.TabPageDebug);
             this.tabControl1.Location = new System.Drawing.Point(12, 37);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -130,19 +133,12 @@
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.TextBoxPath);
-            this.splitContainer1.Panel2.Controls.Add(this.label4);
             this.splitContainer1.Panel2.Controls.Add(this.ButtonDeleteSelectedCals);
             this.splitContainer1.Panel2.Controls.Add(this.ButtonClearAllDeleteChecks);
             this.splitContainer1.Panel2.Controls.Add(this.CheckBoxAllowUndatedCalSelection);
-            this.splitContainer1.Panel2.Controls.Add(this.TextBoxDocName);
             this.splitContainer1.Panel2.Controls.Add(this.ButtonEnumerateDocCALs);
-            this.splitContainer1.Panel2.Controls.Add(this.ButtonDeleteDocCalTest);
-            this.splitContainer1.Panel2.Controls.Add(this.label3);
-            this.splitContainer1.Panel2.Controls.Add(this.TextBoxDocUserName);
-            this.splitContainer1.Panel2.Controls.Add(this.label2);
             this.splitContainer1.Size = new System.Drawing.Size(1034, 523);
-            this.splitContainer1.SplitterDistance = 414;
+            this.splitContainer1.SplitterDistance = 465;
             this.splitContainer1.TabIndex = 6;
             // 
             // DataGridViewDocCals
@@ -169,14 +165,16 @@
             this.ColumnDelete});
             this.DataGridViewDocCals.Location = new System.Drawing.Point(3, 3);
             this.DataGridViewDocCals.Name = "DataGridViewDocCals";
-            this.DataGridViewDocCals.Size = new System.Drawing.Size(1026, 406);
+            this.DataGridViewDocCals.Size = new System.Drawing.Size(1026, 457);
             this.DataGridViewDocCals.TabIndex = 0;
+            this.DataGridViewDocCals.CellMouseUp += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridViewDocCals_CellMouseUp);
+            this.DataGridViewDocCals.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridViewDocCals_CellValueChanged);
             this.DataGridViewDocCals.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.DataGridViewDocCals_RowPostPaint);
             // 
             // ColumnDocument
             // 
             this.ColumnDocument.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ColumnDocument.FillWeight = 70F;
+            this.ColumnDocument.FillWeight = 65F;
             this.ColumnDocument.HeaderText = "Document";
             this.ColumnDocument.Name = "ColumnDocument";
             this.ColumnDocument.ReadOnly = true;
@@ -184,7 +182,7 @@
             // ColumnUserId
             // 
             this.ColumnUserId.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ColumnUserId.FillWeight = 30F;
+            this.ColumnUserId.FillWeight = 35F;
             this.ColumnUserId.HeaderText = "User";
             this.ColumnUserId.Name = "ColumnUserId";
             this.ColumnUserId.ReadOnly = true;
@@ -208,9 +206,9 @@
             // 
             // ButtonDeleteSelectedCals
             // 
-            this.ButtonDeleteSelectedCals.Location = new System.Drawing.Point(115, 55);
+            this.ButtonDeleteSelectedCals.Location = new System.Drawing.Point(404, 3);
             this.ButtonDeleteSelectedCals.Name = "ButtonDeleteSelectedCals";
-            this.ButtonDeleteSelectedCals.Size = new System.Drawing.Size(165, 23);
+            this.ButtonDeleteSelectedCals.Size = new System.Drawing.Size(165, 46);
             this.ButtonDeleteSelectedCals.TabIndex = 8;
             this.ButtonDeleteSelectedCals.Text = "Delete Selected CALs";
             this.ButtonDeleteSelectedCals.UseVisualStyleBackColor = true;
@@ -218,18 +216,18 @@
             // 
             // ButtonClearAllDeleteChecks
             // 
-            this.ButtonClearAllDeleteChecks.Location = new System.Drawing.Point(115, 27);
+            this.ButtonClearAllDeleteChecks.Location = new System.Drawing.Point(929, 3);
             this.ButtonClearAllDeleteChecks.Name = "ButtonClearAllDeleteChecks";
-            this.ButtonClearAllDeleteChecks.Size = new System.Drawing.Size(165, 23);
+            this.ButtonClearAllDeleteChecks.Size = new System.Drawing.Size(100, 23);
             this.ButtonClearAllDeleteChecks.TabIndex = 7;
-            this.ButtonClearAllDeleteChecks.Text = "Uncheck All Delete Selections";
+            this.ButtonClearAllDeleteChecks.Text = "Uncheck All";
             this.ButtonClearAllDeleteChecks.UseVisualStyleBackColor = true;
             this.ButtonClearAllDeleteChecks.Click += new System.EventHandler(this.ButtonClearAllDeleteChecks_Click);
             // 
             // CheckBoxAllowUndatedCalSelection
             // 
             this.CheckBoxAllowUndatedCalSelection.AutoSize = true;
-            this.CheckBoxAllowUndatedCalSelection.Location = new System.Drawing.Point(115, 3);
+            this.CheckBoxAllowUndatedCalSelection.Location = new System.Drawing.Point(864, 32);
             this.CheckBoxAllowUndatedCalSelection.Name = "CheckBoxAllowUndatedCalSelection";
             this.CheckBoxAllowUndatedCalSelection.Size = new System.Drawing.Size(165, 17);
             this.CheckBoxAllowUndatedCalSelection.TabIndex = 6;
@@ -237,57 +235,15 @@
             this.CheckBoxAllowUndatedCalSelection.UseVisualStyleBackColor = true;
             this.CheckBoxAllowUndatedCalSelection.CheckedChanged += new System.EventHandler(this.CheckBoxAllowUndatedCalSelection_CheckedChanged);
             // 
-            // TextBoxDocName
-            // 
-            this.TextBoxDocName.Location = new System.Drawing.Point(613, 55);
-            this.TextBoxDocName.Name = "TextBoxDocName";
-            this.TextBoxDocName.Size = new System.Drawing.Size(416, 20);
-            this.TextBoxDocName.TabIndex = 2;
-            // 
             // ButtonEnumerateDocCALs
             // 
             this.ButtonEnumerateDocCALs.Location = new System.Drawing.Point(3, 3);
             this.ButtonEnumerateDocCALs.Name = "ButtonEnumerateDocCALs";
-            this.ButtonEnumerateDocCALs.Size = new System.Drawing.Size(75, 35);
+            this.ButtonEnumerateDocCALs.Size = new System.Drawing.Size(75, 46);
             this.ButtonEnumerateDocCALs.TabIndex = 5;
             this.ButtonEnumerateDocCALs.Text = "Refresh Table";
             this.ButtonEnumerateDocCALs.UseVisualStyleBackColor = true;
             this.ButtonEnumerateDocCALs.Click += new System.EventHandler(this.ButtonEnumerateDocCALs_Click);
-            // 
-            // ButtonDeleteDocCalTest
-            // 
-            this.ButtonDeleteDocCalTest.Location = new System.Drawing.Point(444, 32);
-            this.ButtonDeleteDocCalTest.Name = "ButtonDeleteDocCalTest";
-            this.ButtonDeleteDocCalTest.Size = new System.Drawing.Size(75, 39);
-            this.ButtonDeleteDocCalTest.TabIndex = 0;
-            this.ButtonDeleteDocCalTest.Text = "Delete Doc CAL Test";
-            this.ButtonDeleteDocCalTest.UseVisualStyleBackColor = true;
-            this.ButtonDeleteDocCalTest.Click += new System.EventHandler(this.ButtonDeleteDocCalTest_Click);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(548, 58);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(59, 13);
-            this.label3.TabIndex = 4;
-            this.label3.Text = "Document:";
-            // 
-            // TextBoxDocUserName
-            // 
-            this.TextBoxDocUserName.Location = new System.Drawing.Point(613, 3);
-            this.TextBoxDocUserName.Name = "TextBoxDocUserName";
-            this.TextBoxDocUserName.Size = new System.Drawing.Size(416, 20);
-            this.TextBoxDocUserName.TabIndex = 1;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(561, 6);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(46, 13);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "User ID:";
             // 
             // TabPageUserCals
             // 
@@ -329,6 +285,79 @@
             this.ButtonCalReport.UseVisualStyleBackColor = true;
             this.ButtonCalReport.Click += new System.EventHandler(this.ButtonCalReport_Click);
             // 
+            // TabPageDebug
+            // 
+            this.TabPageDebug.Controls.Add(this.TextBoxPath);
+            this.TabPageDebug.Controls.Add(this.label4);
+            this.TabPageDebug.Controls.Add(this.TextBoxDocName);
+            this.TabPageDebug.Controls.Add(this.ButtonDeleteDocCalTest);
+            this.TabPageDebug.Controls.Add(this.label3);
+            this.TabPageDebug.Controls.Add(this.TextBoxDocUserName);
+            this.TabPageDebug.Controls.Add(this.label2);
+            this.TabPageDebug.Location = new System.Drawing.Point(4, 22);
+            this.TabPageDebug.Name = "TabPageDebug";
+            this.TabPageDebug.Size = new System.Drawing.Size(1047, 536);
+            this.TabPageDebug.TabIndex = 3;
+            this.TabPageDebug.Text = "TabPageDebug";
+            this.TabPageDebug.UseVisualStyleBackColor = true;
+            // 
+            // TextBoxPath
+            // 
+            this.TextBoxPath.Location = new System.Drawing.Point(172, 29);
+            this.TextBoxPath.Name = "TextBoxPath";
+            this.TextBoxPath.Size = new System.Drawing.Size(416, 20);
+            this.TextBoxPath.TabIndex = 16;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(134, 32);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(32, 13);
+            this.label4.TabIndex = 17;
+            this.label4.Text = "Path:";
+            // 
+            // TextBoxDocName
+            // 
+            this.TextBoxDocName.Location = new System.Drawing.Point(172, 55);
+            this.TextBoxDocName.Name = "TextBoxDocName";
+            this.TextBoxDocName.Size = new System.Drawing.Size(416, 20);
+            this.TextBoxDocName.TabIndex = 13;
+            // 
+            // ButtonDeleteDocCalTest
+            // 
+            this.ButtonDeleteDocCalTest.Location = new System.Drawing.Point(3, 36);
+            this.ButtonDeleteDocCalTest.Name = "ButtonDeleteDocCalTest";
+            this.ButtonDeleteDocCalTest.Size = new System.Drawing.Size(75, 39);
+            this.ButtonDeleteDocCalTest.TabIndex = 11;
+            this.ButtonDeleteDocCalTest.Text = "Delete Doc CAL Test";
+            this.ButtonDeleteDocCalTest.UseVisualStyleBackColor = true;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(107, 58);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(59, 13);
+            this.label3.TabIndex = 15;
+            this.label3.Text = "Document:";
+            // 
+            // TextBoxDocUserName
+            // 
+            this.TextBoxDocUserName.Location = new System.Drawing.Point(172, 3);
+            this.TextBoxDocUserName.Name = "TextBoxDocUserName";
+            this.TextBoxDocUserName.Size = new System.Drawing.Size(416, 20);
+            this.TextBoxDocUserName.TabIndex = 12;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(120, 6);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(46, 13);
+            this.label2.TabIndex = 14;
+            this.label2.Text = "User ID:";
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -347,22 +376,6 @@
             this.ComboBoxServer.Name = "ComboBoxServer";
             this.ComboBoxServer.Size = new System.Drawing.Size(150, 21);
             this.ComboBoxServer.TabIndex = 6;
-            // 
-            // TextBoxPath
-            // 
-            this.TextBoxPath.Location = new System.Drawing.Point(613, 29);
-            this.TextBoxPath.Name = "TextBoxPath";
-            this.TextBoxPath.Size = new System.Drawing.Size(416, 20);
-            this.TextBoxPath.TabIndex = 9;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(575, 32);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(32, 13);
-            this.label4.TabIndex = 10;
-            this.label4.Text = "Path:";
             // 
             // Form1
             // 
@@ -387,6 +400,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.DataGridViewDocCals)).EndInit();
             this.TabPageUserCals.ResumeLayout(false);
             this.TabPageUserCals.PerformLayout();
+            this.TabPageDebug.ResumeLayout(false);
+            this.TabPageDebug.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -403,23 +418,24 @@
         private System.Windows.Forms.ComboBox ComboBoxServer;
         private System.Windows.Forms.Button ButtonDeleteTest;
         private System.Windows.Forms.TextBox TextBoxUserName;
-        private System.Windows.Forms.Button ButtonDeleteDocCalTest;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox TextBoxDocName;
-        private System.Windows.Forms.TextBox TextBoxDocUserName;
         private System.Windows.Forms.Button ButtonEnumerateDocCALs;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.DataGridView DataGridViewDocCals;
+        private System.Windows.Forms.CheckBox CheckBoxAllowUndatedCalSelection;
+        private System.Windows.Forms.Button ButtonClearAllDeleteChecks;
+        private System.Windows.Forms.Button ButtonDeleteSelectedCals;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDocument;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnUserId;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnLastAccessDateTime;
         private System.Windows.Forms.DataGridViewCheckBoxColumn ColumnDelete;
-        private System.Windows.Forms.CheckBox CheckBoxAllowUndatedCalSelection;
-        private System.Windows.Forms.Button ButtonClearAllDeleteChecks;
-        private System.Windows.Forms.Button ButtonDeleteSelectedCals;
+        private System.Windows.Forms.TabPage TabPageDebug;
         private System.Windows.Forms.TextBox TextBoxPath;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox TextBoxDocName;
+        private System.Windows.Forms.Button ButtonDeleteDocCalTest;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox TextBoxDocUserName;
+        private System.Windows.Forms.Label label2;
     }
 }
 

@@ -131,7 +131,7 @@ namespace PRMServerMonitorGUI
             Cursor StartCursor = this.Cursor;
             this.Cursor = Cursors.WaitCursor;
 
-            QlikviewCalManager Worker = new QlikviewCalManager(true);
+            QlikviewCalManager Worker = new QlikviewCalManager(ComboBoxServer.Text, true);
             for (int RowIndex = DataGridViewDocCals.Rows.Count-1; RowIndex >=0; RowIndex--)
             {
                 DataGridViewRow Row = DataGridViewDocCals.Rows[RowIndex];
@@ -158,5 +158,27 @@ namespace PRMServerMonitorGUI
             this.Cursor = StartCursor;
         }
 
+        private void DataGridViewDocCals_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            if (DataGridViewDocCals.Columns[e.ColumnIndex].Name == "ColumnDelete" && e.RowIndex != -1)
+            {
+                if (Convert.ToBoolean(DataGridViewDocCals.Rows[e.RowIndex].Cells[e.ColumnIndex].Value) == true &&
+                    Convert.ToDateTime(DataGridViewDocCals.Rows[e.RowIndex].Cells["ColumnLastAccessDateTime"].Value) == new DateTime() &&
+                    !CheckBoxAllowUndatedCalSelection.Checked)
+                {
+                    DataGridViewDocCals.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = false;
+                    DataGridViewDocCals.Rows[e.RowIndex].Cells[e.ColumnIndex].Selected = false;
+                    DataGridViewDocCals.Rows[e.RowIndex].Cells["ColumnLastAccessDateTime"].Selected = true;
+                }
+            }
+        }
+
+        private void DataGridViewDocCals_CellMouseUp(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (DataGridViewDocCals.Columns[e.ColumnIndex].Name == "ColumnDelete" && e.RowIndex != -1)
+            {
+                DataGridViewDocCals.EndEdit();
+            }
+        }
     }
 }

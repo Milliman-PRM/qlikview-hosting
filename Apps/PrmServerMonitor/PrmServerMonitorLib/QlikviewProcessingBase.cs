@@ -16,10 +16,13 @@ namespace PrmServerMonitorLib
 {
     public class QlikviewProcessingBase : MonitorProcessingBase
     {
+        protected string ServerName = string.Empty;
         protected QMSClient Client = null;
 
-        protected QlikviewProcessingBase(bool LifetimeTraceArg) : base(LifetimeTraceArg)
-        {}
+        protected QlikviewProcessingBase(string ServerNameArg, bool LifetimeTraceArg) : base(LifetimeTraceArg)
+        {
+            ServerName = @"http://" + ServerNameArg + @":4799/QMS/Service";
+        }
 
         /// <summary>
         /// Connects the web service client instance to the service

@@ -16,7 +16,7 @@ namespace PrmServerMonitorLib
 {
     public class OrphanQlikTaskRemover : QlikviewProcessingBase
     {
-        public OrphanQlikTaskRemover(bool LifetimeTraceArg = false) : base(LifetimeTraceArg)
+        public OrphanQlikTaskRemover(string ServerNameArg = "localhost", bool LifetimeTraceArg = false) : base(ServerNameArg, LifetimeTraceArg)
         { }
 
         ~OrphanQlikTaskRemover()
@@ -37,7 +37,7 @@ namespace PrmServerMonitorLib
 
             try
             {
-                if (!ConnectClient("BasicHttpBinding_IQMS", @"http://localhost:4799/QMS/Service"))
+                if (!ConnectClient("BasicHttpBinding_IQMS", ServerName))
                 {
                     Trace.WriteLine("In " + this.GetType().Name + ".RemoveOrphanTasks(): Failed to connect to web service");
                     return;
