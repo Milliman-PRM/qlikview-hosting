@@ -158,6 +158,11 @@ namespace PRMServerMonitorGUI
             this.Cursor = StartCursor;
         }
 
+        /// <summary>
+        /// Callback where validation can be performed.  
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DataGridViewDocCals_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
             if (DataGridViewDocCals.Columns[e.ColumnIndex].Name == "ColumnDelete" && e.RowIndex != -1)
@@ -173,8 +178,15 @@ namespace PRMServerMonitorGUI
             }
         }
 
+        /// <summary>
+        /// Inserts an immediate EndEdit() call for each click of a checkbox in the Checkbox type column
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DataGridViewDocCals_CellMouseUp(object sender, DataGridViewCellMouseEventArgs e)
         {
+            // Background: For all cell types, the runtime doesn't fire the CellValueChanged event until the cell edit is complete e.g. not after each keystroke 
+            // for a text cell.  For a checkbox cell this happens when the cell loses focus, which is too late for interactive validation.  
             if (DataGridViewDocCals.Columns[e.ColumnIndex].Name == "ColumnDelete" && e.RowIndex != -1)
             {
                 DataGridViewDocCals.EndEdit();
