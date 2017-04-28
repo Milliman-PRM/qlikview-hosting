@@ -272,6 +272,7 @@ namespace PrmServerMonitorLib
                             // Update the Meta object for this document with Document CAL changes
                             Meta.Licensing.AssignedCALs = CurrentCALs.ToArray();
                             Meta.Licensing.RemovedAssignedCALs = RemovableCALs.ToArray();
+                            Meta.Licensing.CALsAllocated = CurrentCALs.Count;
 
                             //Save the metadata back to the server
                             Client.SaveDocumentMetaData(Meta);
@@ -337,12 +338,14 @@ namespace PrmServerMonitorLib
                     //Extract the current list of Document CALs for this document
                     List<AssignedNamedCAL> CurrentCALs = Meta.Licensing.AssignedCALs.ToList();
 
+                    Trace.WriteLine(Meta.Licensing.CALsAllocated + " allocated CALs");
+                    //Trace.WriteLine(Meta.Licensing.CALsEmbedded + " embedded CALs");
+
                     for (int CalIndex = CurrentCALs.Count - 1; CalIndex >= 0; CalIndex--)
                     {
                         ReturnValue.Add(new DocCalEntry { DocumentName = DocNode.Name, RelativePath = DocNode.RelativePath, UserName = CurrentCALs[CalIndex].UserName, LastUsedDateTime = CurrentCALs[CalIndex].LastUsed, DeleteFlag = false });
                         Trace.WriteLine("    Document CAL last used " + CurrentCALs[CalIndex].LastUsed.ToString("yyyy-MM-dd HH:mm:ss") + " found for user " + CurrentCALs[CalIndex].UserName);
                     }
-
                 }
             }
             catch 

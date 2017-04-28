@@ -98,6 +98,11 @@ namespace PRMServerMonitorGUI
             e.Graphics.DrawString(rowIdx, this.Font, SystemBrushes.ControlText, headerBounds, CenterFormat);
         }
 
+        /// <summary>
+        /// When the checkbox is unchecked, clears check marks from all rows that contain a default DateTime value
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CheckBoxAllowUndatedCalSelection_CheckedChanged(object sender, EventArgs e)
         {
             CheckBox TypedSender = sender as CheckBox;
@@ -113,6 +118,11 @@ namespace PRMServerMonitorGUI
             }
         }
 
+        /// <summary>
+        /// Clear all checks in the Delete column
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ButtonClearAllDeleteChecks_Click(object sender, EventArgs e)
         {
             CheckAllDeleteCells(false);
@@ -126,6 +136,11 @@ namespace PRMServerMonitorGUI
             }
         }
 
+        /// <summary>
+        /// A button click handler that deletes each document CAL signaled by a checked row in the DataViewGrid
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ButtonDeleteSelectedCals_Click(object sender, EventArgs e)
         {
             Cursor StartCursor = this.Cursor;
