@@ -27,6 +27,23 @@ namespace PrmServerMonitorLib
             DocumentCalLimit
         }
 
+        public struct DocCalEntry
+        {
+            public string DocumentName;
+            public string RelativePath;
+            public string UserName;
+            public DateTime LastUsedDateTime;
+            public bool DeleteFlag;
+        }
+
+        public QlikviewCalManager(bool LifetimeTraceArg = false) : base(LifetimeTraceArg)
+        {}
+
+        ~QlikviewCalManager()
+        {
+            CloseTraceLogFile(true);
+        }
+
         /// <summary>
         /// Dumps a single caller selectable CAL related statistic value to trace log.  Intended mainly for use in non-interactive mode.  
         /// </summary>
@@ -158,7 +175,7 @@ namespace PrmServerMonitorLib
             {
                 if (!ConnectClient("BasicHttpBinding_IQMS", @"http://localhost:4799/QMS/Service"))
                 {
-                    Trace.WriteLine("In " + this.GetType().Name + ".EnumerateAllCals(): Failed to connect to web service");
+                    Trace.WriteLine("In " + this.GetType().Name + ".RemoveOneNamedCal(): Failed to connect to web service");
                     return false;
                 }
 
@@ -203,7 +220,7 @@ namespace PrmServerMonitorLib
             return ReturnValue;
         }
 
-        public bool RemoveOneDocumentCal(string UserName, string DocumentName, bool TraceFile = false)
+        public bool RemoveOneDocumentCal(string UserName, string RelativePath, string DocumentName, bool TraceFile = false)
         {
             if (TraceFile)
             {
@@ -231,7 +248,7 @@ namespace PrmServerMonitorLib
                 // Look for the desired DocumentNode
                 foreach (DocumentNode DocNode in AllDocNodes)
                 {
-                    if (DocNode.Name == DocumentName)
+                    if (DocNode.Name == DocumentName && DocNode.RelativePath == RelativePath)
                     {
                         // This is the document I want to manage.  Get the meta data.
                         DocumentMetaData Meta = Client.GetDocumentMetaData(DocNode, DocumentMetaDataScope.Licensing);
@@ -245,7 +262,7 @@ namespace PrmServerMonitorLib
                             //If the user matches the name then remove it from the list
                             if (CurrentCALs[CalIndex].UserName == UserName)
                             {
-                                RemovableCALs.Add(CurrentCALs[CalIndex]);
+                                RemovableCALs.Add(CurrentCALs[CalIndex]);  // This line has to come before Remove
                                 CurrentCALs.Remove(CurrentCALs[CalIndex]);
                             }
                         }
@@ -258,6 +275,8 @@ namespace PrmServerMonitorLib
 
                             //Save the metadata back to the server
                             Client.SaveDocumentMetaData(Meta);
+
+                            ReturnValue = true;
                         }
                     }
                     DocTestCounter++;
@@ -275,15 +294,6 @@ namespace PrmServerMonitorLib
             }
 
             return ReturnValue;
-        }
-
-        public struct DocCalEntry
-        {
-            public string DocumentName;
-            public string RelativePath;
-            public string UserName;
-            public DateTime LastUsedDateTime;
-            public bool DeleteFlag;
         }
 
         public List<DocCalEntry> EnumerateDocumentCals(bool TraceFile)

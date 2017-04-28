@@ -55,7 +55,7 @@ namespace PRMServerMonitorGUI
             this.Cursor = Cursors.WaitCursor;
 
             QlikviewCalManager Worker = new QlikviewCalManager();
-            Worker.RemoveOneDocumentCal(TextBoxDocUserName.Text, TextBoxDocName.Text, true);
+            Worker.RemoveOneDocumentCal(TextBoxDocUserName.Text, TextBoxPath.Text, TextBoxDocName.Text, true);
 
             this.Cursor = StartCursor;
         }
@@ -128,7 +128,34 @@ namespace PRMServerMonitorGUI
 
         private void ButtonDeleteSelectedCals_Click(object sender, EventArgs e)
         {
+            Cursor StartCursor = this.Cursor;
+            this.Cursor = Cursors.WaitCursor;
 
+            QlikviewCalManager Worker = new QlikviewCalManager(true);
+            for (int RowIndex = DataGridViewDocCals.Rows.Count-1; RowIndex >=0; RowIndex--)
+            {
+                DataGridViewRow Row = DataGridViewDocCals.Rows[RowIndex];
+                if (Convert.ToBoolean(Row.Cells["ColumnDelete"].Value) == true)
+                {
+                    string Folder = Path.GetDirectoryName(Row.Cells["ColumnDocument"].Value.ToString());
+                    string Doc = Path.GetFileName(Row.Cells["ColumnDocument"].Value.ToString());
+                    string User = Row.Cells["ColumnUserId"].Value.ToString();
+
+                    Trace.WriteLine(string.Format("Removing doc cal for doc {0} and user {1}", Path.Combine(Folder, Doc), User));
+                    if (Worker.RemoveOneDocumentCal(User, Folder, Doc, true))
+                    {
+                        DataGridViewDocCals.Rows.RemoveAt(RowIndex);
+                    }
+                }
+            }
+
+            Trace.WriteLine("about to invalidate the grid control");
+
+            // redraw the grid
+            DataGridViewDocCals.Invalidate();
+
+            Worker = null;  // try to encourage Trace file closure (destructor execution)
+            this.Cursor = StartCursor;
         }
 
     }

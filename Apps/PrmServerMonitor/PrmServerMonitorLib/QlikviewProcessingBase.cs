@@ -18,6 +18,9 @@ namespace PrmServerMonitorLib
     {
         protected QMSClient Client = null;
 
+        protected QlikviewProcessingBase(bool LifetimeTraceArg) : base(LifetimeTraceArg)
+        {}
+
         /// <summary>
         /// Connects the web service client instance to the service
         /// </summary>

@@ -16,6 +16,14 @@ namespace PrmServerMonitorLib
 {
     public class OrphanQlikTaskRemover : QlikviewProcessingBase
     {
+        public OrphanQlikTaskRemover(bool LifetimeTraceArg = false) : base(LifetimeTraceArg)
+        { }
+
+        ~OrphanQlikTaskRemover()
+        {
+            CloseTraceLogFile(true);
+        }
+
         /// <summary>
         /// Button handler that initiates cleanup of orphaned documents
         /// </summary>
