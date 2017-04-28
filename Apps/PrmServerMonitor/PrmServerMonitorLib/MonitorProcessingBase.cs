@@ -15,6 +15,10 @@ namespace PrmServerMonitorLib
         TextWriterTraceListener TraceFile;
         bool LifetimeTrace = false;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="LifetimeTraceArg"></param>
         protected MonitorProcessingBase(bool LifetimeTraceArg)
         {
             LifetimeTrace = LifetimeTraceArg;

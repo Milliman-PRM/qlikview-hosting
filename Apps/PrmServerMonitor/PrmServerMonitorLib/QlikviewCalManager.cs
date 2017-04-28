@@ -36,9 +36,17 @@ namespace PrmServerMonitorLib
             public bool DeleteFlag;
         }
 
+        /// <summary>
+        /// Constructor.  Passes optional arguments to the base class
+        /// </summary>
+        /// <param name="ServerNameArg"></param>
+        /// <param name="LifetimeTraceArg"></param>
         public QlikviewCalManager(string ServerNameArg = "localhost", bool LifetimeTraceArg = false) : base(ServerNameArg, LifetimeTraceArg)
         { }
 
+        /// <summary>
+        /// Destructor
+        /// </summary>
         ~QlikviewCalManager()
         {
             CloseTraceLogFile(true);
@@ -220,6 +228,14 @@ namespace PrmServerMonitorLib
             return ReturnValue;
         }
 
+        /// <summary>
+        /// Removes any document CAL assigned to the specified user for the specified document
+        /// </summary>
+        /// <param name="UserName"></param>
+        /// <param name="RelativePath">as it is stored in the Qlikview server document meta data</param>
+        /// <param name="DocumentName">File name of the document</param>
+        /// <param name="TraceFile"></param>
+        /// <returns></returns>
         public bool RemoveOneDocumentCal(string UserName, string RelativePath, string DocumentName, bool TraceFile = false)
         {
             if (TraceFile)
@@ -297,6 +313,11 @@ namespace PrmServerMonitorLib
             return ReturnValue;
         }
 
+        /// <summary>
+        /// Returns a collection of all document cals known to the Qlikview server. 
+        /// </summary>
+        /// <param name="TraceFile"></param>
+        /// <returns></returns>
         public List<DocCalEntry> EnumerateDocumentCals(bool TraceFile)
         {
             List<DocCalEntry> ReturnValue = null;

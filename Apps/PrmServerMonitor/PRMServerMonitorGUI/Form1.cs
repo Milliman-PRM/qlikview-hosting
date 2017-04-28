@@ -1,7 +1,7 @@
 ﻿/*
  * CODE OWNERS: Tom Puckett, Ben Wyatt
  * OBJECTIVE: Form control callbacks.  
- * DEVELOPER NOTES: Functionality that is common to the GUI and console versions should be implemented in the class library project instead of here
+ * DEVELOPER NOTES: Functionality that is common to the GUI and console versions should be implemented in the class library project, not here
  */
 
 using System;
@@ -26,29 +26,54 @@ namespace PRMServerMonitorGUI
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Handler to initiate removal of all orphan Qlikview server tasks
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ButtonRemoveOrphanTasks_Click(object sender, EventArgs e)
         {
             OrphanQlikTaskRemover Worker = new OrphanQlikTaskRemover();
             Worker.RemoveOrphanTasks();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ButtonCalReport_Click(object sender, EventArgs e)
         {
             QlikviewCalManager Worker = new QlikviewCalManager();
             Worker.EnumerateAllCals(true);
         }
 
+        /// <summary>
+        /// Initialization of run time application state
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Form1_Load(object sender, EventArgs e)
         {
             ComboBoxServer.SelectedIndex = 0;  // initialize
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ButtonDeleteTest_Click(object sender, EventArgs e)
         {
             QlikviewCalManager Worker = new QlikviewCalManager();
             Worker.RemoveOneNamedCal(TextBoxUserName.Text, true);
         }
 
+        /// <summary>
+        /// A test handler to observe the doc CAL removal feature
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ButtonDeleteDocCalTest_Click(object sender, EventArgs e)
         {
             Cursor StartCursor = this.Cursor;
@@ -60,6 +85,11 @@ namespace PRMServerMonitorGUI
             this.Cursor = StartCursor;
         }
 
+        /// <summary>
+        /// Clears and fills the DataGridView with current state of document CALs from the server
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ButtonEnumerateDocCALs_Click(object sender, EventArgs e)
         {
             Cursor StartCursor = this.Cursor;
@@ -128,6 +158,10 @@ namespace PRMServerMonitorGUI
             CheckAllDeleteCells(false);
         }
 
+        /// <summary>
+        /// Internal function to set or clear all checkboxes.  
+        /// </summary>
+        /// <param name="DoCheck"></param>
         private void CheckAllDeleteCells(bool DoCheck)
         {
             for (int RowIndex = 0; RowIndex < DataGridViewDocCals.Rows.Count; RowIndex++)

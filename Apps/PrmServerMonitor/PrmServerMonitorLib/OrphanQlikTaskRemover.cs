@@ -14,11 +14,17 @@ using PrmServerMonitorLib.ServiceSupport;
 
 namespace PrmServerMonitorLib
 {
+    /// <summary>
+    /// Constructor, passes arguments to the base class
+    /// </summary>
     public class OrphanQlikTaskRemover : QlikviewProcessingBase
     {
         public OrphanQlikTaskRemover(string ServerNameArg = "localhost", bool LifetimeTraceArg = false) : base(ServerNameArg, LifetimeTraceArg)
         { }
 
+        /// <summary>
+        /// Destructor
+        /// </summary>
         ~OrphanQlikTaskRemover()
         {
             CloseTraceLogFile(true);

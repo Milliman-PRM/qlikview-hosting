@@ -1,7 +1,7 @@
 ﻿/*
  * CODE OWNERS: Tom Puckett, 
- * OBJECTIVE: <What and WHY.>
- * DEVELOPER NOTES: <What future developers need to know.>
+ * OBJECTIVE: An inheritable base class intended to be common to any class that acts as a Qlikview Management Service API client
+ * DEVELOPER NOTES: All QMS client classes should inherit from this class
  */
 
 using System;
@@ -19,6 +19,11 @@ namespace PrmServerMonitorLib
         protected string ServerName = string.Empty;
         protected QMSClient Client = null;
 
+        /// <summary>
+        /// Constructor that accepts arguments that guide mandatory behavior choices
+        /// </summary>
+        /// <param name="ServerNameArg"></param>
+        /// <param name="LifetimeTraceArg"></param>
         protected QlikviewProcessingBase(string ServerNameArg, bool LifetimeTraceArg) : base(LifetimeTraceArg)
         {
             ServerName = @"http://" + ServerNameArg + @":4799/QMS/Service";
