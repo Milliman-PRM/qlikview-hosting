@@ -5,6 +5,7 @@
  */
 
 using System;
+using System.Configuration;
 using System.IO;
 using System.Diagnostics;
 using System.Collections.Generic;
@@ -24,6 +25,13 @@ namespace PRMServerMonitorGUI
         public Form1()
         {
             InitializeComponent();
+
+            if (ConfigurationManager.AppSettings.AllKeys.Contains("MinimumAgeToDelete"))
+            {
+                int MinimumAgeToDelete = Convert.ToInt32(ConfigurationManager.AppSettings["MinimumAgeToDelete"]);
+                MinimumAgeToDelete = Math.Max(MinimumAgeToDelete, 72);
+                NumericUpDownMinAge.Value = MinimumAgeToDelete;
+            }
         }
 
         /// <summary>
@@ -33,7 +41,7 @@ namespace PRMServerMonitorGUI
         /// <param name="e"></param>
         private void ButtonRemoveOrphanTasks_Click(object sender, EventArgs e)
         {
-            OrphanQlikTaskRemover Worker = new OrphanQlikTaskRemover();
+            OrphanQlikTaskRemover Worker = new OrphanQlikTaskRemover(ComboBoxServer.Text);
             Worker.RemoveOrphanTasks();
         }
 
@@ -44,7 +52,7 @@ namespace PRMServerMonitorGUI
         /// <param name="e"></param>
         private void ButtonCalReport_Click(object sender, EventArgs e)
         {
-            QlikviewCalManager Worker = new QlikviewCalManager();
+            QlikviewCalManager Worker = new QlikviewCalManager(ComboBoxServer.Text);
             Worker.EnumerateAllCals(true);
         }
 
@@ -65,7 +73,7 @@ namespace PRMServerMonitorGUI
         /// <param name="e"></param>
         private void ButtonDeleteTest_Click(object sender, EventArgs e)
         {
-            QlikviewCalManager Worker = new QlikviewCalManager();
+            QlikviewCalManager Worker = new QlikviewCalManager(ComboBoxServer.Text);
             Worker.RemoveOneNamedCal(TextBoxUserName.Text, true);
         }
 
@@ -79,7 +87,7 @@ namespace PRMServerMonitorGUI
             Cursor StartCursor = this.Cursor;
             this.Cursor = Cursors.WaitCursor;
 
-            QlikviewCalManager Worker = new QlikviewCalManager();
+            QlikviewCalManager Worker = new QlikviewCalManager(ComboBoxServer.Text);
             Worker.RemoveOneDocumentCal(TextBoxDocUserName.Text, TextBoxPath.Text, TextBoxDocName.Text, true);
 
             this.Cursor = StartCursor;
@@ -95,14 +103,22 @@ namespace PRMServerMonitorGUI
             Cursor StartCursor = this.Cursor;
             this.Cursor = Cursors.WaitCursor;
 
-            QlikviewCalManager Worker = new QlikviewCalManager();
-            List<QlikviewCalManager.DocCalEntry> CalEntries = Worker.EnumerateDocumentCals(true);
+            int SelectLimit;
+            if (!int.TryParse(ConfigurationManager.AppSettings["MaxDocumentCALsToDelete"], out SelectLimit))
+            {
+                SelectLimit = 10;  // only if config value could not be parsed
+            }
+
+            QlikviewCalManager Worker = new QlikviewCalManager(ComboBoxServer.Text);
+            List<DocCalEntry> CalEntries = Worker.EnumerateDocumentCals(true, SelectLimit, CheckBoxAllowUndatedCalSelection.Checked, (int)NumericUpDownMinAge.Value);
 
             DataGridViewDocCals.Rows.Clear();
             foreach (var x in CalEntries.OrderBy(c => c.DocumentName + c.LastUsedDateTime))
             {
-                DataGridViewDocCals.Rows.Add(new object[] { Path.Combine(x.RelativePath, x.DocumentName), x.UserName, x.LastUsedDateTime.ToString("yyyy-MM-dd HH:mm:ss") });
+                DataGridViewDocCals.Rows.Add(new object[] { Path.Combine(x.RelativePath, x.DocumentName), x.UserName, x.LastUsedDateTime.ToString("yyyy-MM-dd HH:mm:ss"), x.DeleteFlag });
             }
+
+            UpdateCheckCountLabel();
 
             this.Cursor = StartCursor;
         }
@@ -224,7 +240,25 @@ namespace PRMServerMonitorGUI
                     DataGridViewDocCals.Rows[e.RowIndex].Cells[e.ColumnIndex].Selected = false;
                     DataGridViewDocCals.Rows[e.RowIndex].Cells["ColumnLastAccessDateTime"].Selected = true;
                 }
+
+                UpdateCheckCountLabel();
             }
+        }
+
+        /// <summary>
+        /// Updates the label control with the appropriate count of checkboxes that are checked in the "ColumnDelete" column
+        /// </summary>
+        private void UpdateCheckCountLabel()
+        {
+            int CheckCounter = 0;
+            foreach (DataGridViewRow Row in DataGridViewDocCals.Rows)
+            {
+                if (Convert.ToBoolean(Row.Cells["ColumnDelete"].Value))
+                {
+                    CheckCounter++;
+                }
+            }
+            LabelCheckedCount.Text = CheckCounter.ToString() + " Rows Checked";
         }
 
         /// <summary>
@@ -241,5 +275,6 @@ namespace PRMServerMonitorGUI
                 DataGridViewDocCals.EndEdit();
             }
         }
+
     }
 }

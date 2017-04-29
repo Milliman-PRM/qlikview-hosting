@@ -5,7 +5,6 @@
  */
 
 using System;
-using System.IO;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -19,21 +18,12 @@ namespace PrmServerMonitorLib
         /// <summary>
         /// Used by a caller to identify a specific supported type of CAL statistic
         /// </summary>
-        public enum CalStatisticField
+        public enum CalStatisticEnum
         {
             NamedCalAssigned,
             NamedCalLimit,
             DocumentCalAssigned,
             DocumentCalLimit
-        }
-
-        public struct DocCalEntry
-        {
-            public string DocumentName;
-            public string RelativePath;
-            public string UserName;
-            public DateTime LastUsedDateTime;
-            public bool DeleteFlag;
         }
 
         /// <summary>
@@ -56,7 +46,7 @@ namespace PrmServerMonitorLib
         /// Dumps a single caller selectable CAL related statistic value to trace log.  Intended mainly for use in non-interactive mode.  
         /// </summary>
         /// <param name="FieldToReport"></param>
-        public void ReportCalStatistic(CalStatisticField FieldToReport)
+        public void ReportCalStatistic(CalStatisticEnum FieldToReport)
         {
             EstablishTraceLogFile();
 
@@ -69,16 +59,16 @@ namespace PrmServerMonitorLib
 
             switch (FieldToReport)
             {
-                case CalStatisticField.DocumentCalAssigned:
+                case CalStatisticEnum.DocumentCalAssigned:
                     Trace.WriteLine(CalConfig.DocumentCALs.Assigned);
                     break;
-                case CalStatisticField.DocumentCalLimit:
+                case CalStatisticEnum.DocumentCalLimit:
                     Trace.WriteLine(CalConfig.DocumentCALs.Limit);
                     break;
-                case CalStatisticField.NamedCalAssigned:
+                case CalStatisticEnum.NamedCalAssigned:
                     Trace.WriteLine(CalConfig.NamedCALs.Assigned);
                     break;
-                case CalStatisticField.NamedCalLimit:
+                case CalStatisticEnum.NamedCalLimit:
                     Trace.WriteLine(CalConfig.NamedCALs.Limit);
                     break;
             }
@@ -317,8 +307,10 @@ namespace PrmServerMonitorLib
         /// Returns a collection of all document cals known to the Qlikview server. 
         /// </summary>
         /// <param name="TraceFile"></param>
+        /// <param name="MaxNumber"></param>
+        /// <param name="AllowSelectionOfUndated"></param>
         /// <returns></returns>
-        public List<DocCalEntry> EnumerateDocumentCals(bool TraceFile)
+        public List<DocCalEntry> EnumerateDocumentCals(bool TraceFile, int MaxNumber, bool AllowSelectionOfUndated, int MinimumAgeHours)
         {
             List<DocCalEntry> ReturnValue = null;
 
@@ -348,26 +340,19 @@ namespace PrmServerMonitorLib
                 // Look for the desired DocumentNode
                 foreach (DocumentNode DocNode in AllDocNodes)
                 {
-                    // TODO Delete
-                    if (DocNode.IsSubFolder) Trace.WriteLine("!!!Subfolder! " + DocNode.Name);
-
-                    Trace.WriteLine("Evaluating document " + Path.Combine(DocNode.RelativePath, DocNode.Name));
-
                     // Get the document meta data.
                     DocumentMetaData Meta = Client.GetDocumentMetaData(DocNode, DocumentMetaDataScope.Licensing);
 
                     //Extract the current list of Document CALs for this document
                     List<AssignedNamedCAL> CurrentCALs = Meta.Licensing.AssignedCALs.ToList();
 
-                    Trace.WriteLine(Meta.Licensing.CALsAllocated + " allocated CALs");
-                    //Trace.WriteLine(Meta.Licensing.CALsEmbedded + " embedded CALs");
-
                     for (int CalIndex = CurrentCALs.Count - 1; CalIndex >= 0; CalIndex--)
                     {
                         ReturnValue.Add(new DocCalEntry { DocumentName = DocNode.Name, RelativePath = DocNode.RelativePath, UserName = CurrentCALs[CalIndex].UserName, LastUsedDateTime = CurrentCALs[CalIndex].LastUsed, DeleteFlag = false });
-                        Trace.WriteLine("    Document CAL last used " + CurrentCALs[CalIndex].LastUsed.ToString("yyyy-MM-dd HH:mm:ss") + " found for user " + CurrentCALs[CalIndex].UserName);
                     }
                 }
+
+                ReturnValue = FlagForDelete(ReturnValue, MaxNumber, AllowSelectionOfUndated, new TimeSpan(MinimumAgeHours, 0, 0));
             }
             catch 
             {
@@ -381,5 +366,45 @@ namespace PrmServerMonitorLib
 
             return ReturnValue;
         }
+
+        /// <summary>
+        /// Adds delete flags to a supplied List<DocCalEntry> with bounding rules supplied by arguments
+        /// </summary>
+        /// <param name="CandidateList"></param>
+        /// <param name="MaxNumber"></param>
+        /// <param name="AllowSelectionOfUndated"></param>
+        /// <returns></returns>
+        private List<DocCalEntry> FlagForDelete(List<DocCalEntry> CandidateList, int MaxNumber, bool AllowSelectionOfUndated, TimeSpan MustBeAtLeastThisOld)
+        {
+            List<DocCalEntry> ReturnList = CandidateList;
+
+            List<DocCalEntry> FlaggedItems = new List<DocCalEntry>();
+            foreach (DocCalEntry Entry in CandidateList.OrderBy(e => e.LastUsedDateTime))
+            {
+                if (FlaggedItems.Count >= MaxNumber)
+                {
+                    break;
+                }
+                if (AllowSelectionOfUndated || Entry.LastUsedDateTime != new DateTime())
+                {
+                    if (DateTime.Now - Entry.LastUsedDateTime > MustBeAtLeastThisOld)
+                    {
+                        FlaggedItems.Add(Entry);
+                    }
+                }
+            }
+
+            foreach (DocCalEntry FlaggableEntry in FlaggedItems)
+            {
+                int Index = ReturnList.IndexOf(FlaggableEntry);
+                DocCalEntry ReplacementEntry = FlaggableEntry;
+                ReplacementEntry.DeleteFlag = true;
+                ReturnList.RemoveAt(Index);
+                ReturnList.Insert(Index, ReplacementEntry);
+            }
+
+            return ReturnList;
+        }
+
     }
 }
