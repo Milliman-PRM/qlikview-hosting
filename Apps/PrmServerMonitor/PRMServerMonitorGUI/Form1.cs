@@ -29,14 +29,14 @@ namespace PRMServerMonitorGUI
             if (ConfigurationManager.AppSettings.AllKeys.Contains("MinimumDocCalAgeHoursToDelete"))
             {
                 int MinimumDocCalAgeHoursToDelete = Convert.ToInt32(ConfigurationManager.AppSettings["MinimumDocCalAgeHoursToDelete"]);
-                MinimumDocCalAgeHoursToDelete = Math.Max(MinimumDocCalAgeHoursToDelete, 72);
+                MinimumDocCalAgeHoursToDelete = Math.Max(MinimumDocCalAgeHoursToDelete, 24);
                 NumericUpDownDocCalMinAge.Minimum = MinimumDocCalAgeHoursToDelete;
             }
 
             if (ConfigurationManager.AppSettings.AllKeys.Contains("MinimumNamedCalAgeHoursToDelete"))
             {
                 int MinimumNamedCalAgeHoursToDelete = Convert.ToInt32(ConfigurationManager.AppSettings["MinimumNamedCalAgeHoursToDelete"]);
-                MinimumNamedCalAgeHoursToDelete = Math.Max(MinimumNamedCalAgeHoursToDelete, 72);
+                MinimumNamedCalAgeHoursToDelete = Math.Max(MinimumNamedCalAgeHoursToDelete, 24);
                 NumericUpDownNamedCalMinAge.Minimum = MinimumNamedCalAgeHoursToDelete;
             }
 
@@ -141,13 +141,13 @@ namespace PRMServerMonitorGUI
             int SelectLimit;
             if (!int.TryParse(ConfigurationManager.AppSettings["MaxNamedCALsToDelete"], out SelectLimit))
             {
-                SelectLimit = 10;  // only if config value could not be parsed
+                SelectLimit = 100;  // only if config value could not be parsed
             }
 
             QlikviewCalManager Worker = new QlikviewCalManager(ComboBoxServer.Text);
             List<NamedCalEntry> CalEntries = Worker.EnumerateNamedCals(SelectLimit, CheckBoxAllowUndatedNamedCalSelection.Checked, (int)NumericUpDownNamedCalMinAge.Value);
 
-            DataGridViewDocCals.Rows.Clear();
+            DataGridViewNamedCals.Rows.Clear();
             foreach (var x in CalEntries.OrderBy(c => c.LastUsedDateTime))
             {
                 DataGridViewNamedCals.Rows.Add(new object[] { x.UserName, x.LastUsedDateTime.ToString("yyyy-MM-dd HH:mm:ss"), x.DeleteFlag });
@@ -227,6 +227,11 @@ namespace PRMServerMonitorGUI
         private void ButtonClearAllDocCalDeleteChecks_Click(object sender, EventArgs e)
         {
             SetCheckBoxes(DataGridViewDocCals, "ColumnDeleteDocCal", false);
+        }
+
+        private void ButtonClearAllNamedCalDeleteChecks_Click(object sender, EventArgs e)
+        {
+            SetCheckBoxes(DataGridViewNamedCals, "ColumnDeleteNamedCal", false);
         }
 
         /// <summary>
@@ -362,9 +367,37 @@ namespace PRMServerMonitorGUI
             }
         }
 
-        private void ButtonClearAllNamedCalDeleteChecks_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Inserts an immediate EndEdit() call for each click of a checkbox in the Checkbox type column
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DataGridViewNamedCals_CellMouseUp(object sender, DataGridViewCellMouseEventArgs e)
         {
-            SetCheckBoxes(DataGridViewNamedCals, "ColumnDeleteNamedCal", false);
+            // Background: For all cell types, the runtime doesn't fire the CellValueChanged event until the cell edit is complete e.g. not after each keystroke 
+            // for a text cell.  For a checkbox cell this happens when the cell loses focus, which is too late for interactive validation.  
+            if (DataGridViewNamedCals.Columns[e.ColumnIndex].Name == "ColumnDeleteNamedCal" && e.RowIndex != -1)
+            {
+                DataGridViewNamedCals.EndEdit();
+            }
         }
+
+        private void DataGridViewNamedCals_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            if (DataGridViewNamedCals.Columns[e.ColumnIndex].Name == "ColumnDeleteNamedCal" && e.RowIndex != -1)
+            {
+                if (Convert.ToBoolean(DataGridViewNamedCals.Rows[e.RowIndex].Cells[e.ColumnIndex].Value) == true &&
+                    Convert.ToDateTime(DataGridViewNamedCals.Rows[e.RowIndex].Cells["ColumnLastNamedCalAccess"].Value) == new DateTime() &&
+                    !CheckBoxAllowUndatedNamedCalSelection.Checked)
+                {
+                    DataGridViewNamedCals.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = false;
+                    DataGridViewNamedCals.Rows[e.RowIndex].Cells[e.ColumnIndex].Selected = false;
+                    DataGridViewNamedCals.Rows[e.RowIndex].Cells["ColumnLastNamedCalAccess"].Selected = true;
+                }
+
+                UpdateCheckCountLabel(DataGridViewNamedCals, "ColumnDeleteNamedCal", LabelNamedCalCheckedCount);
+            }
+        }
+
     }
 }
