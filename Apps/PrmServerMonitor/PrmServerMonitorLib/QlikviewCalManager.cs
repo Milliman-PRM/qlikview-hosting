@@ -352,7 +352,7 @@ namespace PrmServerMonitorLib
                     }
                 }
 
-                ReturnValue = FlagForDelete(ReturnValue, MaxNumber, AllowSelectionOfUndated, new TimeSpan(MinimumAgeHours, 0, 0));
+                ReturnValue = FlagDocCalsForDelete(ReturnValue, MaxNumber, AllowSelectionOfUndated, new TimeSpan(MinimumAgeHours, 0, 0));
             }
             catch 
             {
@@ -374,7 +374,7 @@ namespace PrmServerMonitorLib
         /// <param name="MaxNumber"></param>
         /// <param name="AllowSelectionOfUndated"></param>
         /// <returns></returns>
-        private List<DocCalEntry> FlagForDelete(List<DocCalEntry> CandidateList, int MaxNumber, bool AllowSelectionOfUndated, TimeSpan MustBeAtLeastThisOld)
+        private List<DocCalEntry> FlagDocCalsForDelete(List<DocCalEntry> CandidateList, int MaxNumber, bool AllowSelectionOfUndated, TimeSpan MustBeAtLeastThisOld)
         {
             List<DocCalEntry> ReturnList = CandidateList;
 
@@ -398,6 +398,82 @@ namespace PrmServerMonitorLib
             {
                 int Index = ReturnList.IndexOf(FlaggableEntry);
                 DocCalEntry ReplacementEntry = FlaggableEntry;
+                ReplacementEntry.DeleteFlag = true;
+                ReturnList.RemoveAt(Index);
+                ReturnList.Insert(Index, ReplacementEntry);
+            }
+
+            return ReturnList;
+        }
+
+        public List<NamedCalEntry> EnumerateNamedCals(int SelectLimit, bool AllowUndatedCalSelection, int MinimumAgeHours)
+        {
+            CALConfiguration CalConfig = null;
+            List<NamedCalEntry> ReturnList = new List<NamedCalEntry>();
+
+            try
+            {
+                if (!ConnectClient("BasicHttpBinding_IQMS", ServerName))
+                {
+                    Trace.WriteLine("In " + this.GetType().Name + ".EnumerateAllCals(): Failed to connect to web service");
+                    return null;
+                }
+
+                ServiceInfo QvsService = Client.GetServices(ServiceTypes.QlikViewServer).First();
+                CalConfig = Client.GetCALConfiguration(QvsService.ID, CALConfigurationScope.All);
+
+                if (CalConfig != null)
+                {
+                    foreach (var Cal in CalConfig.NamedCALs.AssignedCALs.OrderBy(c => c.LastUsed))
+                    {
+                        ReturnList.Add(new NamedCalEntry { UserName = Cal.UserName, LastUsedDateTime = Cal.LastUsed });
+                    }
+
+                    // TODO fix the args
+                    ReturnList = FlagNamedCalsForDelete(ReturnList, SelectLimit, AllowUndatedCalSelection, new TimeSpan(MinimumAgeHours, 0, 0));
+                }
+            }
+            catch  /*(anything)*/
+            { /*Do nothing*/}
+            finally
+            {
+                DisconnectClient();
+            }
+
+            return ReturnList;
+        }
+
+        /// <summary>
+        /// Adds delete flags to a supplied List<NamedCalEntry> with bounding rules supplied by arguments
+        /// </summary>
+        /// <param name="CandidateList"></param>
+        /// <param name="MaxNumber"></param>
+        /// <param name="AllowSelectionOfUndated"></param>
+        /// <returns></returns>
+        private List<NamedCalEntry> FlagNamedCalsForDelete(List<NamedCalEntry> CandidateList, int MaxNumber, bool AllowSelectionOfUndated, TimeSpan MustBeAtLeastThisOld)
+        {
+            List<NamedCalEntry> ReturnList = CandidateList;
+
+            List<NamedCalEntry> FlaggedItems = new List<NamedCalEntry>();
+            foreach (NamedCalEntry Entry in CandidateList.OrderBy(e => e.LastUsedDateTime))
+            {
+                if (FlaggedItems.Count >= MaxNumber)
+                {
+                    break;
+                }
+                if (AllowSelectionOfUndated || Entry.LastUsedDateTime != new DateTime())
+                {
+                    if (DateTime.Now - Entry.LastUsedDateTime > MustBeAtLeastThisOld)
+                    {
+                        FlaggedItems.Add(Entry);
+                    }
+                }
+            }
+
+            foreach (NamedCalEntry FlaggableEntry in FlaggedItems)
+            {
+                int Index = ReturnList.IndexOf(FlaggableEntry);
+                NamedCalEntry ReplacementEntry = FlaggableEntry;
                 ReplacementEntry.DeleteFlag = true;
                 ReturnList.RemoveAt(Index);
                 ReturnList.Insert(Index, ReplacementEntry);

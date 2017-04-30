@@ -1,6 +1,6 @@
 ﻿/*
  * CODE OWNERS: Tom Puckett, 
- * OBJECTIVE: A data type that can be used to represent an instance of a Qlikview Document CAL
+ * OBJECTIVE: A data type that can represent an instance of a Qlikview Named User CAL
  * DEVELOPER NOTES: 
  */
 
@@ -9,13 +9,10 @@ using System;
 
 namespace PrmServerMonitorLib
 {
-    public struct DocCalEntry
+    public struct NamedCalEntry
     {
-        public string DocumentName;
-        public string RelativePath;
         public string UserName;
         public DateTime LastUsedDateTime;
         public bool DeleteFlag;
     }
-
 }

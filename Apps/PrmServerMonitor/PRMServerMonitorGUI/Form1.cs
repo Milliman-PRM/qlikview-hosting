@@ -26,12 +26,22 @@ namespace PRMServerMonitorGUI
         {
             InitializeComponent();
 
-            if (ConfigurationManager.AppSettings.AllKeys.Contains("MinimumAgeToDelete"))
+            if (ConfigurationManager.AppSettings.AllKeys.Contains("MinimumDocCalAgeHoursToDelete"))
             {
-                int MinimumAgeToDelete = Convert.ToInt32(ConfigurationManager.AppSettings["MinimumAgeToDelete"]);
-                MinimumAgeToDelete = Math.Max(MinimumAgeToDelete, 72);
-                NumericUpDownMinAge.Value = MinimumAgeToDelete;
+                int MinimumDocCalAgeHoursToDelete = Convert.ToInt32(ConfigurationManager.AppSettings["MinimumDocCalAgeHoursToDelete"]);
+                MinimumDocCalAgeHoursToDelete = Math.Max(MinimumDocCalAgeHoursToDelete, 72);
+                NumericUpDownDocCalMinAge.Minimum = MinimumDocCalAgeHoursToDelete;
             }
+
+            if (ConfigurationManager.AppSettings.AllKeys.Contains("MinimumNamedCalAgeHoursToDelete"))
+            {
+                int MinimumNamedCalAgeHoursToDelete = Convert.ToInt32(ConfigurationManager.AppSettings["MinimumNamedCalAgeHoursToDelete"]);
+                MinimumNamedCalAgeHoursToDelete = Math.Max(MinimumNamedCalAgeHoursToDelete, 72);
+                NumericUpDownNamedCalMinAge.Minimum = MinimumNamedCalAgeHoursToDelete;
+            }
+
+            UpdateCheckCountLabel(DataGridViewNamedCals, "ColumnDeleteNamedCal", LabelNamedCalCheckedCount);
+            UpdateCheckCountLabel(DataGridViewDocCals, "ColumnDeleteDocCal", LabelDocCalCheckedCount);
         }
 
         /// <summary>
@@ -71,7 +81,7 @@ namespace PRMServerMonitorGUI
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ButtonDeleteTest_Click(object sender, EventArgs e)
+        private void ButtonDeleteNamedCalTest_Click(object sender, EventArgs e)
         {
             QlikviewCalManager Worker = new QlikviewCalManager(ComboBoxServer.Text);
             Worker.RemoveOneNamedCal(TextBoxUserName.Text, true);
@@ -98,7 +108,7 @@ namespace PRMServerMonitorGUI
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ButtonEnumerateDocCALs_Click(object sender, EventArgs e)
+        private void ButtonRefreshDocCALs_Click(object sender, EventArgs e)
         {
             Cursor StartCursor = this.Cursor;
             this.Cursor = Cursors.WaitCursor;
@@ -110,7 +120,7 @@ namespace PRMServerMonitorGUI
             }
 
             QlikviewCalManager Worker = new QlikviewCalManager(ComboBoxServer.Text);
-            List<DocCalEntry> CalEntries = Worker.EnumerateDocumentCals(true, SelectLimit, CheckBoxAllowUndatedCalSelection.Checked, (int)NumericUpDownMinAge.Value);
+            List<DocCalEntry> CalEntries = Worker.EnumerateDocumentCals(true, SelectLimit, CheckBoxAllowUndatedDocCalSelection.Checked, (int)NumericUpDownDocCalMinAge.Value);
 
             DataGridViewDocCals.Rows.Clear();
             foreach (var x in CalEntries.OrderBy(c => c.DocumentName + c.LastUsedDateTime))
@@ -118,7 +128,32 @@ namespace PRMServerMonitorGUI
                 DataGridViewDocCals.Rows.Add(new object[] { Path.Combine(x.RelativePath, x.DocumentName), x.UserName, x.LastUsedDateTime.ToString("yyyy-MM-dd HH:mm:ss"), x.DeleteFlag });
             }
 
-            UpdateCheckCountLabel();
+            UpdateCheckCountLabel(DataGridViewDocCals, "ColumnDeleteDocCal", LabelDocCalCheckedCount);
+
+            this.Cursor = StartCursor;
+        }
+
+        private void ButtonRefreshNamedCALs_Click(object sender, EventArgs e)
+        {
+            Cursor StartCursor = this.Cursor;
+            this.Cursor = Cursors.WaitCursor;
+
+            int SelectLimit;
+            if (!int.TryParse(ConfigurationManager.AppSettings["MaxNamedCALsToDelete"], out SelectLimit))
+            {
+                SelectLimit = 10;  // only if config value could not be parsed
+            }
+
+            QlikviewCalManager Worker = new QlikviewCalManager(ComboBoxServer.Text);
+            List<NamedCalEntry> CalEntries = Worker.EnumerateNamedCals(SelectLimit, CheckBoxAllowUndatedNamedCalSelection.Checked, (int)NumericUpDownNamedCalMinAge.Value);
+
+            DataGridViewDocCals.Rows.Clear();
+            foreach (var x in CalEntries.OrderBy(c => c.LastUsedDateTime))
+            {
+                DataGridViewNamedCals.Rows.Add(new object[] { x.UserName, x.LastUsedDateTime.ToString("yyyy-MM-dd HH:mm:ss"), x.DeleteFlag });
+            }
+
+            UpdateCheckCountLabel(DataGridViewNamedCals, "ColumnDeleteNamedCal", LabelNamedCalCheckedCount);
 
             this.Cursor = StartCursor;
         }
@@ -128,7 +163,7 @@ namespace PRMServerMonitorGUI
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void DataGridViewDocCals_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        private void DataGridView_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
             DataGridView Grid = sender as DataGridView;
             string rowIdx = (e.RowIndex + 1).ToString();
@@ -149,7 +184,7 @@ namespace PRMServerMonitorGUI
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void CheckBoxAllowUndatedCalSelection_CheckedChanged(object sender, EventArgs e)
+        private void CheckBoxAllowUndatedDocCalSelection_CheckedChanged(object sender, EventArgs e)
         {
             CheckBox TypedSender = sender as CheckBox;
             if (!TypedSender.Checked)
@@ -158,31 +193,51 @@ namespace PRMServerMonitorGUI
                 {
                     if (DateTime.Parse(DataGridViewDocCals.Rows[RowIndex].Cells["ColumnLastAccessDateTime"].Value.ToString()) == new DateTime())
                     {
-                        DataGridViewDocCals.Rows[RowIndex].Cells["ColumnDelete"].Value = TypedSender.Checked;
+                        DataGridViewDocCals.Rows[RowIndex].Cells["ColumnDeleteDocCal"].Value = TypedSender.Checked;
                     }
                 }
             }
         }
 
         /// <summary>
-        /// Clear all checks in the Delete column
+        /// When the checkbox is unchecked, clears check marks from all rows that contain a default DateTime value
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ButtonClearAllDeleteChecks_Click(object sender, EventArgs e)
+        private void CheckBoxAllowUndatedNamedCalSelection_CheckedChanged(object sender, EventArgs e)
         {
-            CheckAllDeleteCells(false);
+            CheckBox TypedSender = sender as CheckBox;
+            if (!TypedSender.Checked)
+            {
+                for (int RowIndex = 0; RowIndex < DataGridViewNamedCals.Rows.Count; RowIndex++)
+                {
+                    if (DateTime.Parse(DataGridViewNamedCals.Rows[RowIndex].Cells["ColumnLastNamedCalAccess"].Value.ToString()) == new DateTime())
+                    {
+                        DataGridViewNamedCals.Rows[RowIndex].Cells["ColumnDeleteNamedCal"].Value = TypedSender.Checked;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Clear all checks in the Delete column of the sending DataGridView
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ButtonClearAllDocCalDeleteChecks_Click(object sender, EventArgs e)
+        {
+            SetCheckBoxes(DataGridViewDocCals, "ColumnDeleteDocCal", false);
         }
 
         /// <summary>
         /// Internal function to set or clear all checkboxes.  
         /// </summary>
-        /// <param name="DoCheck"></param>
-        private void CheckAllDeleteCells(bool DoCheck)
+        /// <param name="Checked"></param>
+        private void SetCheckBoxes(DataGridView Grid, string ColumnName, bool Checked)
         {
-            for (int RowIndex = 0; RowIndex < DataGridViewDocCals.Rows.Count; RowIndex++)
+            for (int RowIndex = 0; RowIndex < Grid.Rows.Count; RowIndex++)
             {
-                DataGridViewDocCals.Rows[RowIndex].Cells["ColumnDelete"].Value = DoCheck;
+                Grid.Rows[RowIndex].Cells[ColumnName].Value = Checked;
             }
         }
 
@@ -191,7 +246,7 @@ namespace PRMServerMonitorGUI
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ButtonDeleteSelectedCals_Click(object sender, EventArgs e)
+        private void ButtonDeleteSelectedDocCals_Click(object sender, EventArgs e)
         {
             Cursor StartCursor = this.Cursor;
             this.Cursor = Cursors.WaitCursor;
@@ -200,7 +255,7 @@ namespace PRMServerMonitorGUI
             for (int RowIndex = DataGridViewDocCals.Rows.Count-1; RowIndex >=0; RowIndex--)
             {
                 DataGridViewRow Row = DataGridViewDocCals.Rows[RowIndex];
-                if (Convert.ToBoolean(Row.Cells["ColumnDelete"].Value) == true)
+                if (Convert.ToBoolean(Row.Cells["ColumnDeleteDocCal"].Value) == true)
                 {
                     string Folder = Path.GetDirectoryName(Row.Cells["ColumnDocument"].Value.ToString());
                     string Doc = Path.GetFileName(Row.Cells["ColumnDocument"].Value.ToString());
@@ -214,10 +269,41 @@ namespace PRMServerMonitorGUI
                 }
             }
 
-            Trace.WriteLine("about to invalidate the grid control");
-
             // redraw the grid
             DataGridViewDocCals.Invalidate();
+
+            Worker = null;  // try to encourage Trace file closure (destructor execution)
+            this.Cursor = StartCursor;
+        }
+
+        /// <summary>
+        /// A button click handler that deletes each named CAL signaled by a checked row in the DataViewGrid
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ButtonDeleteSelectedNamedCals_Click(object sender, EventArgs e)
+        {
+            Cursor StartCursor = this.Cursor;
+            this.Cursor = Cursors.WaitCursor;
+
+            QlikviewCalManager Worker = new QlikviewCalManager(ComboBoxServer.Text, true);
+            for (int RowIndex = DataGridViewNamedCals.Rows.Count - 1; RowIndex >= 0; RowIndex--)
+            {
+                DataGridViewRow Row = DataGridViewNamedCals.Rows[RowIndex];
+                if (Convert.ToBoolean(Row.Cells["ColumnDeleteNamedCal"].Value) == true)
+                {
+                    string User = Row.Cells["ColumnUserName"].Value.ToString();
+
+                    Trace.WriteLine(string.Format("Removing named cal for user {0}", User));
+                    if (Worker.RemoveOneNamedCal(User, true))
+                    {
+                        DataGridViewNamedCals.Rows.RemoveAt(RowIndex);
+                    }
+                }
+            }
+
+            // redraw the grid
+            DataGridViewNamedCals.Invalidate();
 
             Worker = null;  // try to encourage Trace file closure (destructor execution)
             this.Cursor = StartCursor;
@@ -230,35 +316,35 @@ namespace PRMServerMonitorGUI
         /// <param name="e"></param>
         private void DataGridViewDocCals_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            if (DataGridViewDocCals.Columns[e.ColumnIndex].Name == "ColumnDelete" && e.RowIndex != -1)
+            if (DataGridViewDocCals.Columns[e.ColumnIndex].Name == "ColumnDeleteDocCal" && e.RowIndex != -1)
             {
                 if (Convert.ToBoolean(DataGridViewDocCals.Rows[e.RowIndex].Cells[e.ColumnIndex].Value) == true &&
                     Convert.ToDateTime(DataGridViewDocCals.Rows[e.RowIndex].Cells["ColumnLastAccessDateTime"].Value) == new DateTime() &&
-                    !CheckBoxAllowUndatedCalSelection.Checked)
+                    !CheckBoxAllowUndatedDocCalSelection.Checked)
                 {
                     DataGridViewDocCals.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = false;
                     DataGridViewDocCals.Rows[e.RowIndex].Cells[e.ColumnIndex].Selected = false;
                     DataGridViewDocCals.Rows[e.RowIndex].Cells["ColumnLastAccessDateTime"].Selected = true;
                 }
 
-                UpdateCheckCountLabel();
+                UpdateCheckCountLabel(DataGridViewDocCals, "ColumnDeleteDocCal", LabelDocCalCheckedCount);
             }
         }
 
         /// <summary>
-        /// Updates the label control with the appropriate count of checkboxes that are checked in the "ColumnDelete" column
+        /// Updates the label control with the appropriate count of checkboxes that are checked in the "ColumnDeleteDocCal" column
         /// </summary>
-        private void UpdateCheckCountLabel()
+        private void UpdateCheckCountLabel(DataGridView Grid, string DeleteColumnName, Label LabelToUpdate)
         {
             int CheckCounter = 0;
-            foreach (DataGridViewRow Row in DataGridViewDocCals.Rows)
+            foreach (DataGridViewRow Row in Grid.Rows)
             {
-                if (Convert.ToBoolean(Row.Cells["ColumnDelete"].Value))
+                if (Convert.ToBoolean(Row.Cells[DeleteColumnName].Value))
                 {
                     CheckCounter++;
                 }
             }
-            LabelCheckedCount.Text = CheckCounter.ToString() + " Rows Checked";
+            LabelToUpdate.Text = CheckCounter.ToString() + " Rows Checked";
         }
 
         /// <summary>
@@ -270,11 +356,15 @@ namespace PRMServerMonitorGUI
         {
             // Background: For all cell types, the runtime doesn't fire the CellValueChanged event until the cell edit is complete e.g. not after each keystroke 
             // for a text cell.  For a checkbox cell this happens when the cell loses focus, which is too late for interactive validation.  
-            if (DataGridViewDocCals.Columns[e.ColumnIndex].Name == "ColumnDelete" && e.RowIndex != -1)
+            if (DataGridViewDocCals.Columns[e.ColumnIndex].Name == "ColumnDeleteDocCal" && e.RowIndex != -1)
             {
                 DataGridViewDocCals.EndEdit();
             }
         }
 
+        private void ButtonClearAllNamedCalDeleteChecks_Click(object sender, EventArgs e)
+        {
+            SetCheckBoxes(DataGridViewNamedCals, "ColumnDeleteNamedCal", false);
+        }
     }
 }

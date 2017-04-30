@@ -71,26 +71,26 @@ namespace PRMServerMonitorConsole
                         {
                             int SelectLimit;
                             int MinimumAgeToDelete;
-                            bool AllowDeleteOfUndated;
+                            bool AllowDeleteOfUndatedDocCals;
 
                             #region Read configured values
                             if (!int.TryParse(ConfigurationManager.AppSettings["MaxDocumentCALsToDelete"], out SelectLimit))
                             {
                                 SelectLimit = 10;  // only if config value could not be parsed
                             }
-                            if (!int.TryParse(ConfigurationManager.AppSettings["MinimumAgeToDelete"], out MinimumAgeToDelete))
+                            if (!int.TryParse(ConfigurationManager.AppSettings["MinimumDocCalAgeHoursToDelete"], out MinimumAgeToDelete))
                             {
                                 MinimumAgeToDelete = 72;  // only if config value could not be parsed
                             }
                             MinimumAgeToDelete = Math.Max(MinimumAgeToDelete, 48);  // never go lower than this minumum value
-                            if (!bool.TryParse(ConfigurationManager.AppSettings["AllowDeleteOfUndated"], out AllowDeleteOfUndated))
+                            if (!bool.TryParse(ConfigurationManager.AppSettings["AllowDeleteOfUndatedDocCals"], out AllowDeleteOfUndatedDocCals))
                             {
-                                AllowDeleteOfUndated = false;  // only if config value could not be parsed
+                                AllowDeleteOfUndatedDocCals = false;  // only if config value could not be parsed
                             }
                             #endregion
 
                             QlikviewCalManager Worker = new QlikviewCalManager("localhost");
-                            List<DocCalEntry> AllDocCals = Worker.EnumerateDocumentCals(false, SelectLimit, AllowDeleteOfUndated, MinimumAgeToDelete);
+                            List<DocCalEntry> AllDocCals = Worker.EnumerateDocumentCals(false, SelectLimit, AllowDeleteOfUndatedDocCals, MinimumAgeToDelete);
 
                             foreach (DocCalEntry Entry in AllDocCals)
                             {
