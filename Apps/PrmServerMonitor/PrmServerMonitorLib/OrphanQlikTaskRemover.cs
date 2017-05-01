@@ -35,11 +35,14 @@ namespace PrmServerMonitorLib
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public void RemoveOrphanTasks()
+        public void RemoveOrphanTasks(bool LogToFile)
         {
             // the project setup for a QMS client application can be found at https://community.qlik.com/docs/DOC-2639
 
-            EstablishTraceLogFile();
+            if (LogToFile)
+            {
+                EstablishTraceLogFile();
+            }
 
             try
             {

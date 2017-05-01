@@ -52,7 +52,7 @@ namespace PRMServerMonitorGUI
         private void ButtonRemoveOrphanTasks_Click(object sender, EventArgs e)
         {
             OrphanQlikTaskRemover Worker = new OrphanQlikTaskRemover(ComboBoxServer.Text);
-            Worker.RemoveOrphanTasks();
+            Worker.RemoveOrphanTasks(CheckBoxLogToFile.Checked);
         }
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace PRMServerMonitorGUI
             }
 
             QlikviewCalManager Worker = new QlikviewCalManager(ComboBoxServer.Text);
-            List<DocCalEntry> CalEntries = Worker.EnumerateDocumentCals(true, SelectLimit, CheckBoxAllowUndatedDocCalSelection.Checked, (int)NumericUpDownDocCalMinAge.Value);
+            List<DocCalEntry> CalEntries = Worker.EnumerateDocumentCals(CheckBoxLogToFile.Checked, SelectLimit, CheckBoxAllowUndatedDocCalSelection.Checked, (int)NumericUpDownDocCalMinAge.Value);
 
             DataGridViewDocCals.Rows.Clear();
             foreach (var x in CalEntries.OrderBy(c => c.DocumentName + c.LastUsedDateTime))
@@ -145,7 +145,7 @@ namespace PRMServerMonitorGUI
             }
 
             QlikviewCalManager Worker = new QlikviewCalManager(ComboBoxServer.Text);
-            List<NamedCalEntry> CalEntries = Worker.EnumerateNamedCals(SelectLimit, CheckBoxAllowUndatedNamedCalSelection.Checked, (int)NumericUpDownNamedCalMinAge.Value);
+            List<NamedCalEntry> CalEntries = Worker.EnumerateNamedCals(SelectLimit, CheckBoxAllowUndatedNamedCalSelection.Checked, (int)NumericUpDownNamedCalMinAge.Value, CheckBoxLogToFile.Checked);
 
             DataGridViewNamedCals.Rows.Clear();
             foreach (var x in CalEntries.OrderBy(c => c.LastUsedDateTime))
@@ -323,13 +323,17 @@ namespace PRMServerMonitorGUI
         {
             if (DataGridViewDocCals.Columns[e.ColumnIndex].Name == "ColumnDeleteDocCal" && e.RowIndex != -1)
             {
-                if (Convert.ToBoolean(DataGridViewDocCals.Rows[e.RowIndex].Cells[e.ColumnIndex].Value) == true &&
-                    Convert.ToDateTime(DataGridViewDocCals.Rows[e.RowIndex].Cells["ColumnLastAccessDateTime"].Value) == new DateTime() &&
-                    !CheckBoxAllowUndatedDocCalSelection.Checked)
+                if (Convert.ToBoolean(DataGridViewDocCals.Rows[e.RowIndex].Cells[e.ColumnIndex].Value) == true)
                 {
-                    DataGridViewDocCals.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = false;
-                    DataGridViewDocCals.Rows[e.RowIndex].Cells[e.ColumnIndex].Selected = false;
-                    DataGridViewDocCals.Rows[e.RowIndex].Cells["ColumnLastAccessDateTime"].Selected = true;
+                    bool IsUndated = Convert.ToDateTime(DataGridViewDocCals.Rows[e.RowIndex].Cells["ColumnLastAccessDateTime"].Value) == new DateTime();
+                    bool IsTooRecent = DateTime.Now - Convert.ToDateTime(DataGridViewDocCals.Rows[e.RowIndex].Cells["ColumnLastAccessDateTime"].Value) < new TimeSpan((int)NumericUpDownDocCalMinAge.Value, 0, 0);
+
+                    if (IsTooRecent || (IsUndated && !CheckBoxAllowUndatedDocCalSelection.Checked))
+                    {
+                        DataGridViewDocCals.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = false;
+                        DataGridViewDocCals.Rows[e.RowIndex].Cells[e.ColumnIndex].Selected = false;
+                        DataGridViewDocCals.Rows[e.RowIndex].Cells["ColumnLastAccessDateTime"].Selected = true;
+                    }
                 }
 
                 UpdateCheckCountLabel(DataGridViewDocCals, "ColumnDeleteDocCal", LabelDocCalCheckedCount);
@@ -386,13 +390,17 @@ namespace PRMServerMonitorGUI
         {
             if (DataGridViewNamedCals.Columns[e.ColumnIndex].Name == "ColumnDeleteNamedCal" && e.RowIndex != -1)
             {
-                if (Convert.ToBoolean(DataGridViewNamedCals.Rows[e.RowIndex].Cells[e.ColumnIndex].Value) == true &&
-                    Convert.ToDateTime(DataGridViewNamedCals.Rows[e.RowIndex].Cells["ColumnLastNamedCalAccess"].Value) == new DateTime() &&
-                    !CheckBoxAllowUndatedNamedCalSelection.Checked)
+                if (Convert.ToBoolean(DataGridViewNamedCals.Rows[e.RowIndex].Cells[e.ColumnIndex].Value) == true)
                 {
-                    DataGridViewNamedCals.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = false;
-                    DataGridViewNamedCals.Rows[e.RowIndex].Cells[e.ColumnIndex].Selected = false;
-                    DataGridViewNamedCals.Rows[e.RowIndex].Cells["ColumnLastNamedCalAccess"].Selected = true;
+                    bool IsUndated = Convert.ToDateTime(DataGridViewNamedCals.Rows[e.RowIndex].Cells["ColumnLastNamedCalAccess"].Value) == new DateTime();
+                    bool IsTooRecent = DateTime.Now - Convert.ToDateTime(DataGridViewNamedCals.Rows[e.RowIndex].Cells["ColumnLastNamedCalAccess"].Value) < new TimeSpan((int)NumericUpDownNamedCalMinAge.Value, 0, 0);
+
+                    if (IsTooRecent || (IsUndated && !CheckBoxAllowUndatedNamedCalSelection.Checked))
+                    {
+                        DataGridViewNamedCals.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = false;
+                        DataGridViewNamedCals.Rows[e.RowIndex].Cells[e.ColumnIndex].Selected = false;
+                        DataGridViewNamedCals.Rows[e.RowIndex].Cells["ColumnLastNamedCalAccess"].Selected = true;
+                    }
                 }
 
                 UpdateCheckCountLabel(DataGridViewNamedCals, "ColumnDeleteNamedCal", LabelNamedCalCheckedCount);

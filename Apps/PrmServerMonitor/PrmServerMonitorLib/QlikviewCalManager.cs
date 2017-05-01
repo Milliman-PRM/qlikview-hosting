@@ -46,9 +46,13 @@ namespace PrmServerMonitorLib
         /// Dumps a single caller selectable CAL related statistic value to trace log.  Intended mainly for use in non-interactive mode.  
         /// </summary>
         /// <param name="FieldToReport"></param>
-        public void ReportCalStatistic(CalStatisticEnum FieldToReport)
+        /// <param name="UseTraceFile">Only has an effect if this is instantiated without LifetimeTraceFile argument</param>
+        public void ReportCalStatistic(CalStatisticEnum FieldToReport, bool UseTraceFile)
         {
-            EstablishTraceLogFile();
+            if (UseTraceFile)
+            {
+                EstablishTraceLogFile();
+            }
 
             CALConfiguration CalConfig = EnumerateAllCals(false);
             if (CalConfig == null)
@@ -79,9 +83,9 @@ namespace PrmServerMonitorLib
         /// <summary>
         /// Obtains the CALConfiguration object representing the server configuration and optionally reports certain statistics to the trace log.  
         /// </summary>
-        /// <param name="TraceOutput">true if trace log is to be written with CAL statistics</param>
+        /// <param name="UseTraceFile">Only has an effect if this is instantiated without LifetimeTraceFile argument</param>
         /// <returns>null if operation failed</returns>
-        public CALConfiguration EnumerateAllCals(bool TraceOutput = false)
+        public CALConfiguration EnumerateAllCals(bool UseTraceFile = false)
         {
             CALConfiguration CalConfig = null;
 
@@ -89,7 +93,7 @@ namespace PrmServerMonitorLib
             {
                 if (!ConnectClient("BasicHttpBinding_IQMS", ServerName))
                 {
-                    if (TraceOutput)
+                    if (UseTraceFile)
                     {
                         Trace.WriteLine("In " + this.GetType().Name + ".EnumerateAllCals(): Failed to connect to web service");
                     }
@@ -100,7 +104,7 @@ namespace PrmServerMonitorLib
 
                 CalConfig = Client.GetCALConfiguration(QvsService.ID, CALConfigurationScope.All);
 
-                if (CalConfig != null && TraceOutput)
+                if (CalConfig != null && UseTraceFile)
                 {
                     EstablishTraceLogFile();
 
@@ -150,6 +154,7 @@ namespace PrmServerMonitorLib
             finally
             {
                 DisconnectClient();
+                CloseTraceLogFile();
             }
 
             return CalConfig;
@@ -159,11 +164,11 @@ namespace PrmServerMonitorLib
         /// Removes all named CALs for one user from the Qlikview server if it exists
         /// </summary>
         /// <param name="UserName"></param>
-        /// <param name="TraceFile"></param>
+        /// <param name="UseTraceFile">Only has an effect if this is instantiated without LifetimeTraceFile argument</param>
         /// <returns>Indicates whether >=1 CAL was removed</returns>
-        public bool RemoveOneNamedCal(string UserName, bool TraceFile = false)
+        public bool RemoveOneNamedCal(string UserName, bool UseTraceFile = false)
         {
-            if (TraceFile)
+            if (UseTraceFile)
             {
                 EstablishTraceLogFile();
             }
@@ -224,11 +229,11 @@ namespace PrmServerMonitorLib
         /// <param name="UserName"></param>
         /// <param name="RelativePath">as it is stored in the Qlikview server document meta data</param>
         /// <param name="DocumentName">File name of the document</param>
-        /// <param name="TraceFile"></param>
+        /// <param name="UseTraceFile">Only has an effect if this is instantiated without LifetimeTraceFile argument</param>
         /// <returns></returns>
-        public bool RemoveOneDocumentCal(string UserName, string RelativePath, string DocumentName, bool TraceFile = false)
+        public bool RemoveOneDocumentCal(string UserName, string RelativePath, string DocumentName, bool UseTraceFile = false)
         {
-            if (TraceFile)
+            if (UseTraceFile)
             {
                 EstablishTraceLogFile();
             }
@@ -306,15 +311,16 @@ namespace PrmServerMonitorLib
         /// <summary>
         /// Returns a collection of all document cals known to the Qlikview server. 
         /// </summary>
-        /// <param name="TraceFile"></param>
+        /// <param name="UseTraceFile">Only has an effect if this is instantiated without LifetimeTraceFile argument</param>
         /// <param name="MaxNumber"></param>
         /// <param name="AllowSelectionOfUndated"></param>
+        /// <param name="MinimumAgeHours"></param>
         /// <returns></returns>
-        public List<DocCalEntry> EnumerateDocumentCals(bool TraceFile, int MaxNumber, bool AllowSelectionOfUndated, int MinimumAgeHours)
+        public List<DocCalEntry> EnumerateDocumentCals(bool UseTraceFile, int MaxNumber, bool AllowSelectionOfUndated, int MinimumAgeHours)
         {
             List<DocCalEntry> ReturnValue = null;
 
-            if (TraceFile)
+            if (UseTraceFile)
             {
                 EstablishTraceLogFile();
             }
@@ -324,7 +330,7 @@ namespace PrmServerMonitorLib
                 Trace.WriteLine("connecting with servername " + ServerName);
                 if (!ConnectClient("BasicHttpBinding_IQMS", ServerName))
                 {
-                    if (TraceFile)
+                    if (UseTraceFile)
                     {
                         Trace.WriteLine("In " + this.GetType().Name + ".EnumerateAllCals(): Failed to connect to web service at URI " + ServerName);
                         CloseTraceLogFile();
@@ -373,6 +379,7 @@ namespace PrmServerMonitorLib
         /// <param name="CandidateList"></param>
         /// <param name="MaxNumber"></param>
         /// <param name="AllowSelectionOfUndated"></param>
+        /// <param name="MustBeAtLeastThisOld"></param>
         /// <returns></returns>
         private List<DocCalEntry> FlagDocCalsForDelete(List<DocCalEntry> CandidateList, int MaxNumber, bool AllowSelectionOfUndated, TimeSpan MustBeAtLeastThisOld)
         {
@@ -406,16 +413,30 @@ namespace PrmServerMonitorLib
             return ReturnList;
         }
 
-        public List<NamedCalEntry> EnumerateNamedCals(int SelectLimit, bool AllowUndatedCalSelection, int MinimumAgeHours)
+        /// <summary>
+        /// Returns a list of named CALs known to the Qlikview server
+        /// </summary>
+        /// <param name="SelectLimit"></param>
+        /// <param name="AllowUndatedCalSelection"></param>
+        /// <param name="MinimumAgeHours"></param>
+        /// <param name="UseTraceFile">Only has an effect if this is instantiated without LifetimeTraceFile argument</param>
+        /// <returns></returns>
+        public List<NamedCalEntry> EnumerateNamedCals(int SelectLimit, bool AllowUndatedCalSelection, int MinimumAgeHours, bool UseTraceFile)
         {
             CALConfiguration CalConfig = null;
             List<NamedCalEntry> ReturnList = new List<NamedCalEntry>();
+
+            if (UseTraceFile)
+            {
+                EstablishTraceLogFile();
+            }
 
             try
             {
                 if (!ConnectClient("BasicHttpBinding_IQMS", ServerName))
                 {
                     Trace.WriteLine("In " + this.GetType().Name + ".EnumerateAllCals(): Failed to connect to web service");
+                    CloseTraceLogFile();
                     return null;
                 }
 
@@ -427,9 +448,9 @@ namespace PrmServerMonitorLib
                     foreach (var Cal in CalConfig.NamedCALs.AssignedCALs.OrderBy(c => c.LastUsed))
                     {
                         ReturnList.Add(new NamedCalEntry { UserName = Cal.UserName, LastUsedDateTime = Cal.LastUsed });
+                        Trace.WriteLine("Found NamedCAL for UserName " + Cal.UserName + " last used " + Cal.LastUsed.ToString("yyyy-MM-dd HH:mm:ss"));
                     }
 
-                    // TODO fix the args
                     ReturnList = FlagNamedCalsForDelete(ReturnList, SelectLimit, AllowUndatedCalSelection, new TimeSpan(MinimumAgeHours, 0, 0));
                 }
             }
@@ -438,6 +459,7 @@ namespace PrmServerMonitorLib
             finally
             {
                 DisconnectClient();
+                CloseTraceLogFile();
             }
 
             return ReturnList;
@@ -472,6 +494,7 @@ namespace PrmServerMonitorLib
 
             foreach (NamedCalEntry FlaggableEntry in FlaggedItems)
             {
+                Trace.WriteLine("Flagging entry for delete, user " + FlaggableEntry.UserName + " last used " + FlaggableEntry.LastUsedDateTime.ToString("yyyy-MM-dd HH:mm:ss"));
                 int Index = ReturnList.IndexOf(FlaggableEntry);
                 NamedCalEntry ReplacementEntry = FlaggableEntry;
                 ReplacementEntry.DeleteFlag = true;

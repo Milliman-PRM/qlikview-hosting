@@ -28,7 +28,7 @@ namespace PRMServerMonitorConsole
                     case "orphantaskremoval":
                         {
                             OrphanQlikTaskRemover Worker = new OrphanQlikTaskRemover("localhost");
-                            Worker.RemoveOrphanTasks();
+                            Worker.RemoveOrphanTasks(false);
                         }
                         break;
 
@@ -42,28 +42,28 @@ namespace PRMServerMonitorConsole
                     case "reportnamedcalassigned":
                         {
                             QlikviewCalManager Worker = new QlikviewCalManager("localhost");
-                            Worker.ReportCalStatistic(QlikviewCalManager.CalStatisticEnum.NamedCalAssigned);
+                            Worker.ReportCalStatistic(QlikviewCalManager.CalStatisticEnum.NamedCalAssigned, false);
                         }
                         break;
 
                     case "reportnamedcallimit":
                         {
                             QlikviewCalManager Worker = new QlikviewCalManager("localhost");
-                            Worker.ReportCalStatistic(QlikviewCalManager.CalStatisticEnum.NamedCalLimit);
+                            Worker.ReportCalStatistic(QlikviewCalManager.CalStatisticEnum.NamedCalLimit, false);
                         }
                         break;
 
                     case "reportdocumentcalassigned":
                         {
                             QlikviewCalManager Worker = new QlikviewCalManager("localhost");
-                            Worker.ReportCalStatistic(QlikviewCalManager.CalStatisticEnum.DocumentCalAssigned);
+                            Worker.ReportCalStatistic(QlikviewCalManager.CalStatisticEnum.DocumentCalAssigned, false);
                         }
                         break;
 
                     case "reportdocumentcallimit":
                         {
                             QlikviewCalManager Worker = new QlikviewCalManager("localhost");
-                            Worker.ReportCalStatistic(QlikviewCalManager.CalStatisticEnum.DocumentCalLimit);
+                            Worker.ReportCalStatistic(QlikviewCalManager.CalStatisticEnum.DocumentCalLimit, false);
                         }
                         break;
 

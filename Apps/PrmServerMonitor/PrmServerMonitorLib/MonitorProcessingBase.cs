@@ -34,6 +34,7 @@ namespace PrmServerMonitorLib
                 TraceFile = new TextWriterTraceListener("Trace_" + this.GetType().Name + "_" + DateTime.Now.ToString("yyyyMMdd-HHmmss-ffff") + ".log");
                 Trace.AutoFlush = true;
                 Trace.Listeners.Add(TraceFile);
+                Trace.WriteLine("Trace file opened " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
                 Thread.Sleep(2);  // Prevent attempts to create multiple log files with the same date/time stamp in the name.  
             }
         }
@@ -47,6 +48,7 @@ namespace PrmServerMonitorLib
             {
                 if (TraceFile != null && Trace.Listeners.Contains(TraceFile))
                 {
+                    Trace.WriteLine("Trace file closing " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
                     TraceFile.Flush();
                     Trace.Listeners.Remove(TraceFile);
                     TraceFile.Close();
