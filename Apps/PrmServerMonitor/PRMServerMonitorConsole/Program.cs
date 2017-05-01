@@ -74,19 +74,12 @@ namespace PRMServerMonitorConsole
                             bool AllowDeleteOfUndatedDocCals;
 
                             #region Read configured values
-                            if (!int.TryParse(ConfigurationManager.AppSettings["MaxDocumentCALsToDelete"], out SelectLimit))
-                            {
-                                SelectLimit = 10;  // only if config value could not be parsed
-                            }
-                            if (!int.TryParse(ConfigurationManager.AppSettings["MinimumDocCalAgeHoursToDelete"], out MinimumAgeToDelete))
-                            {
-                                MinimumAgeToDelete = 72;  // only if config value could not be parsed
-                            }
-                            MinimumAgeToDelete = Math.Max(MinimumAgeToDelete, 48);  // never go lower than this minumum value
-                            if (!bool.TryParse(ConfigurationManager.AppSettings["AllowDeleteOfUndatedDocCals"], out AllowDeleteOfUndatedDocCals))
-                            {
-                                AllowDeleteOfUndatedDocCals = false;  // only if config value could not be parsed
-                            }
+                            int.TryParse(ConfigurationManager.AppSettings["MaxDocumentCALsToDelete"], out SelectLimit);  // zero if not configured
+
+                            int.TryParse(ConfigurationManager.AppSettings["MinimumDocCalAgeHoursToDelete"], out MinimumAgeToDelete);  // zero if not configured
+                            MinimumAgeToDelete = Math.Max(MinimumAgeToDelete, 48);  // never go lower than this minimum value
+
+                            bool.TryParse(ConfigurationManager.AppSettings["AllowDeleteOfUndatedDocCals"], out AllowDeleteOfUndatedDocCals);  // false if not configured
                             #endregion
 
                             QlikviewCalManager Worker = new QlikviewCalManager("localhost");
@@ -96,7 +89,7 @@ namespace PRMServerMonitorConsole
                             {
                                 if (Entry.DeleteFlag == true)
                                 {
-#if false
+#if false  // true for testing
                                     Trace.WriteLine("Would remove Cal: " + Entry.UserName + ", " + Entry.RelativePath + ", " + Entry.DocumentName + ", " + Entry.LastUsedDateTime.ToLongDateString() + ", false");
 #else
                                     Worker.RemoveOneDocumentCal(Entry.UserName, Entry.RelativePath, Entry.DocumentName, false);
