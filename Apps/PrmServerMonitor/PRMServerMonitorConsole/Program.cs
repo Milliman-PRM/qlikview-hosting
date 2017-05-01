@@ -99,6 +99,38 @@ namespace PRMServerMonitorConsole
                         }
                         break;
 
+                    case "deleteoldestnamedcals":
+                        {
+                            int MaxNamedCALsToDelete;
+                            int MinimumNamedCalAgeHoursToDelete;
+                            bool AllowDeleteOfUndatedNamedCals;
+
+                            #region Read configured values
+                            int.TryParse(ConfigurationManager.AppSettings["MaxNamedCALsToDelete"], out MaxNamedCALsToDelete);  // zero if not configured
+
+                            int.TryParse(ConfigurationManager.AppSettings["MinimumNamedCalAgeHoursToDelete"], out MinimumNamedCalAgeHoursToDelete);  // zero if not configured
+                            MinimumNamedCalAgeHoursToDelete = Math.Max(MinimumNamedCalAgeHoursToDelete, 48);  // never go lower than this minimum value
+
+                            bool.TryParse(ConfigurationManager.AppSettings["AllowDeleteOfUndatedNamedCals"], out AllowDeleteOfUndatedNamedCals);  // false if not configured
+                            #endregion
+
+                            QlikviewCalManager Worker = new QlikviewCalManager("localhost");
+                            List<NamedCalEntry> AllNamedCals = Worker.EnumerateNamedCals(MaxNamedCALsToDelete, AllowDeleteOfUndatedNamedCals, MinimumNamedCalAgeHoursToDelete, false);
+
+                            foreach (NamedCalEntry Entry in AllNamedCals)
+                            {
+                                if (Entry.DeleteFlag == true)
+                                {
+#if false  // true for testing
+                                    Trace.WriteLine("Would remove Cal: " + Entry.UserName + ", " + Entry.LastUsedDateTime.ToLongDateString() + ", false");
+#else
+                                    Worker.RemoveOneNamedCal(Entry.UserName, false);
+#endif
+                                }
+                            }
+                        }
+                        break;
+
                     // NOTE: Only include cases for finite operations.  No ongoing monitoring activities
                     case "somethingelse":
                         {
