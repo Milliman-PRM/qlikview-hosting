@@ -52,6 +52,9 @@
             this.TabPageNamedUserCals = new System.Windows.Forms.TabPage();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.DataGridViewNamedCals = new System.Windows.Forms.DataGridView();
+            this.ColumnUserName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnLastNamedCalAccess = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnDeleteNamedCal = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.ButtonDeleteSelectedNamedCals = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
@@ -77,9 +80,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.ComboBoxServer = new System.Windows.Forms.ComboBox();
             this.CheckBoxLogToFile = new System.Windows.Forms.CheckBox();
-            this.ColumnUserName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnLastNamedCalAccess = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnDeleteNamedCal = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.tabControl1.SuspendLayout();
             this.TabPageTasks.SuspendLayout();
             this.TabPageDocCals.SuspendLayout();
@@ -132,7 +132,7 @@
             this.TabPageTasks.Location = new System.Drawing.Point(4, 22);
             this.TabPageTasks.Name = "TabPageTasks";
             this.TabPageTasks.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPageTasks.Size = new System.Drawing.Size(698, 536);
+            this.TabPageTasks.Size = new System.Drawing.Size(952, 536);
             this.TabPageTasks.TabIndex = 0;
             this.TabPageTasks.Text = "Qlikview Tasks";
             this.TabPageTasks.UseVisualStyleBackColor = true;
@@ -356,7 +356,7 @@
             this.TabPageNamedUserCals.Location = new System.Drawing.Point(4, 22);
             this.TabPageNamedUserCals.Name = "TabPageNamedUserCals";
             this.TabPageNamedUserCals.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPageNamedUserCals.Size = new System.Drawing.Size(721, 536);
+            this.TabPageNamedUserCals.Size = new System.Drawing.Size(952, 536);
             this.TabPageNamedUserCals.TabIndex = 2;
             this.TabPageNamedUserCals.Text = "Qlikview Named User CALs";
             this.TabPageNamedUserCals.UseVisualStyleBackColor = true;
@@ -387,7 +387,7 @@
             this.splitContainer2.Panel2.Controls.Add(this.ButtonClearAllNamedCalDeleteChecks);
             this.splitContainer2.Panel2.Controls.Add(this.LabelNamedCalCheckedCount);
             this.splitContainer2.Panel2.Controls.Add(this.ButtonRefreshNamedCALs);
-            this.splitContainer2.Size = new System.Drawing.Size(709, 524);
+            this.splitContainer2.Size = new System.Drawing.Size(939, 524);
             this.splitContainer2.SplitterDistance = 465;
             this.splitContainer2.TabIndex = 0;
             // 
@@ -413,16 +413,39 @@
             this.ColumnDeleteNamedCal});
             this.DataGridViewNamedCals.Location = new System.Drawing.Point(3, 3);
             this.DataGridViewNamedCals.Name = "DataGridViewNamedCals";
-            this.DataGridViewNamedCals.Size = new System.Drawing.Size(702, 459);
+            this.DataGridViewNamedCals.Size = new System.Drawing.Size(932, 459);
             this.DataGridViewNamedCals.TabIndex = 0;
             this.DataGridViewNamedCals.CellMouseUp += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridViewNamedCals_CellMouseUp);
             this.DataGridViewNamedCals.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridViewNamedCals_CellValueChanged);
             this.DataGridViewNamedCals.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.DataGridView_RowPostPaint);
             // 
+            // ColumnUserName
+            // 
+            this.ColumnUserName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ColumnUserName.HeaderText = "User ID";
+            this.ColumnUserName.Name = "ColumnUserName";
+            this.ColumnUserName.ReadOnly = true;
+            // 
+            // ColumnLastNamedCalAccess
+            // 
+            this.ColumnLastNamedCalAccess.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.ColumnLastNamedCalAccess.HeaderText = "Last Accessed";
+            this.ColumnLastNamedCalAccess.Name = "ColumnLastNamedCalAccess";
+            this.ColumnLastNamedCalAccess.ReadOnly = true;
+            this.ColumnLastNamedCalAccess.Width = 102;
+            // 
+            // ColumnDeleteNamedCal
+            // 
+            this.ColumnDeleteNamedCal.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.ColumnDeleteNamedCal.HeaderText = "Delete";
+            this.ColumnDeleteNamedCal.Name = "ColumnDeleteNamedCal";
+            this.ColumnDeleteNamedCal.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.ColumnDeleteNamedCal.Width = 63;
+            // 
             // ButtonDeleteSelectedNamedCals
             // 
             this.ButtonDeleteSelectedNamedCals.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.ButtonDeleteSelectedNamedCals.Location = new System.Drawing.Point(241, 3);
+            this.ButtonDeleteSelectedNamedCals.Location = new System.Drawing.Point(356, 3);
             this.ButtonDeleteSelectedNamedCals.Name = "ButtonDeleteSelectedNamedCals";
             this.ButtonDeleteSelectedNamedCals.Size = new System.Drawing.Size(165, 46);
             this.ButtonDeleteSelectedNamedCals.TabIndex = 17;
@@ -489,7 +512,7 @@
             // 
             this.CheckBoxAllowUndatedNamedCalSelection.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.CheckBoxAllowUndatedNamedCalSelection.AutoSize = true;
-            this.CheckBoxAllowUndatedNamedCalSelection.Location = new System.Drawing.Point(476, 34);
+            this.CheckBoxAllowUndatedNamedCalSelection.Location = new System.Drawing.Point(706, 34);
             this.CheckBoxAllowUndatedNamedCalSelection.Name = "CheckBoxAllowUndatedNamedCalSelection";
             this.CheckBoxAllowUndatedNamedCalSelection.Size = new System.Drawing.Size(229, 17);
             this.CheckBoxAllowUndatedNamedCalSelection.TabIndex = 7;
@@ -500,7 +523,7 @@
             // ButtonClearAllNamedCalDeleteChecks
             // 
             this.ButtonClearAllNamedCalDeleteChecks.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.ButtonClearAllNamedCalDeleteChecks.Location = new System.Drawing.Point(630, 3);
+            this.ButtonClearAllNamedCalDeleteChecks.Location = new System.Drawing.Point(860, 3);
             this.ButtonClearAllNamedCalDeleteChecks.Name = "ButtonClearAllNamedCalDeleteChecks";
             this.ButtonClearAllNamedCalDeleteChecks.Size = new System.Drawing.Size(75, 23);
             this.ButtonClearAllNamedCalDeleteChecks.TabIndex = 2;
@@ -511,7 +534,7 @@
             // LabelNamedCalCheckedCount
             // 
             this.LabelNamedCalCheckedCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.LabelNamedCalCheckedCount.Location = new System.Drawing.Point(482, 8);
+            this.LabelNamedCalCheckedCount.Location = new System.Drawing.Point(712, 8);
             this.LabelNamedCalCheckedCount.Name = "LabelNamedCalCheckedCount";
             this.LabelNamedCalCheckedCount.Size = new System.Drawing.Size(119, 13);
             this.LabelNamedCalCheckedCount.TabIndex = 1;
@@ -534,7 +557,7 @@
             this.TabPageDebug.Controls.Add(this.groupBox1);
             this.TabPageDebug.Location = new System.Drawing.Point(4, 22);
             this.TabPageDebug.Name = "TabPageDebug";
-            this.TabPageDebug.Size = new System.Drawing.Size(1152, 536);
+            this.TabPageDebug.Size = new System.Drawing.Size(952, 536);
             this.TabPageDebug.TabIndex = 3;
             this.TabPageDebug.Text = "TabPageDebug";
             this.TabPageDebug.UseVisualStyleBackColor = true;
@@ -680,29 +703,6 @@
             this.CheckBoxLogToFile.TabIndex = 7;
             this.CheckBoxLogToFile.Text = "Log To File";
             this.CheckBoxLogToFile.UseVisualStyleBackColor = true;
-            // 
-            // ColumnUserName
-            // 
-            this.ColumnUserName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ColumnUserName.HeaderText = "User ID";
-            this.ColumnUserName.Name = "ColumnUserName";
-            this.ColumnUserName.ReadOnly = true;
-            // 
-            // ColumnLastNamedCalAccess
-            // 
-            this.ColumnLastNamedCalAccess.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.ColumnLastNamedCalAccess.HeaderText = "Last Accessed";
-            this.ColumnLastNamedCalAccess.Name = "ColumnLastNamedCalAccess";
-            this.ColumnLastNamedCalAccess.ReadOnly = true;
-            this.ColumnLastNamedCalAccess.Width = 102;
-            // 
-            // ColumnDeleteNamedCal
-            // 
-            this.ColumnDeleteNamedCal.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.ColumnDeleteNamedCal.HeaderText = "Delete";
-            this.ColumnDeleteNamedCal.Name = "ColumnDeleteNamedCal";
-            this.ColumnDeleteNamedCal.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.ColumnDeleteNamedCal.Width = 63;
             // 
             // Form1
             // 

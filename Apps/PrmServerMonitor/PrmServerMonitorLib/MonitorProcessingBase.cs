@@ -22,6 +22,10 @@ namespace PrmServerMonitorLib
         protected MonitorProcessingBase(bool LifetimeTraceArg)
         {
             LifetimeTrace = LifetimeTraceArg;
+            if (LifetimeTrace)
+            {
+                EstablishTraceLogFile();
+            }
         }
 
         /// <summary>

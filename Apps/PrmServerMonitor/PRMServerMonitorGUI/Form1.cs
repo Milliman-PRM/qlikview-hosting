@@ -83,7 +83,7 @@ namespace PRMServerMonitorGUI
         /// <param name="e"></param>
         private void ButtonDeleteNamedCalTest_Click(object sender, EventArgs e)
         {
-            QlikviewCalManager Worker = new QlikviewCalManager(ComboBoxServer.Text);
+            QlikviewCalManager Worker = new QlikviewCalManager(ComboBoxServer.Text, true);
             Worker.RemoveOneNamedCal(TextBoxUserName.Text, true);
         }
 

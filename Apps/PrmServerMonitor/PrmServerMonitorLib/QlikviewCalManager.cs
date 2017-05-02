@@ -207,6 +207,7 @@ namespace PrmServerMonitorLib
                     CalConfig.NamedCALs.Assigned = CurrentNamedCALs.Count();
                     CalConfig.NamedCALs.AssignedCALs = CurrentNamedCALs.ToArray();
                     CalConfig.NamedCALs.RemovedAssignedCALs = RemovedNamedCALs.ToArray();
+                    Client.SaveCALConfiguration(CalConfig);
                     ReturnValue = true;
                 }
             }
