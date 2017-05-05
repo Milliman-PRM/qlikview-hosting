@@ -365,7 +365,7 @@ namespace PRMServerMonitorGUI
         {
             // Background: For all cell types, the runtime doesn't fire the CellValueChanged event until the cell edit is complete e.g. not after each keystroke 
             // for a text cell.  For a checkbox cell this happens when the cell loses focus, which is too late for interactive validation.  
-            if (DataGridViewDocCals.Columns[e.ColumnIndex].Name == "ColumnDeleteDocCal" && e.RowIndex != -1)
+            if (e.ColumnIndex > -1 && DataGridViewDocCals.Columns[e.ColumnIndex].Name == "ColumnDeleteDocCal" && e.RowIndex != -1)
             {
                 DataGridViewDocCals.EndEdit();
             }
@@ -380,7 +380,7 @@ namespace PRMServerMonitorGUI
         {
             // Background: For all cell types, the runtime doesn't fire the CellValueChanged event until the cell edit is complete e.g. not after each keystroke 
             // for a text cell.  For a checkbox cell this happens when the cell loses focus, which is too late for interactive validation.  
-            if (DataGridViewNamedCals.Columns[e.ColumnIndex].Name == "ColumnDeleteNamedCal" && e.RowIndex != -1)
+            if (e.ColumnIndex > -1 && DataGridViewNamedCals.Columns[e.ColumnIndex].Name == "ColumnDeleteNamedCal" && e.RowIndex != -1)
             {
                 DataGridViewNamedCals.EndEdit();
             }
