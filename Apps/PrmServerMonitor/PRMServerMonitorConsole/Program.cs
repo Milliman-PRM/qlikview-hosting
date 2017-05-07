@@ -85,16 +85,11 @@ namespace PRMServerMonitorConsole
                             QlikviewCalManager Worker = new QlikviewCalManager("localhost");
                             List<DocCalEntry> AllDocCals = Worker.EnumerateDocumentCals(false, SelectLimit, AllowDeleteOfUndatedDocCals, MinimumAgeToDelete);
 
-                            foreach (DocCalEntry Entry in AllDocCals)
+                            Trace.WriteLine(string.Format("Based on configured threshold, {0} document CALs should be deleted", AllDocCals.FindAll(e => e.DeleteFlag)));
+
+                            foreach (DocCalEntry Entry in AllDocCals.FindAll(e => e.DeleteFlag))
                             {
-                                if (Entry.DeleteFlag == true)
-                                {
-#if false  // true for testing
-                                    Trace.WriteLine("Would remove Cal: " + Entry.UserName + ", " + Entry.RelativePath + ", " + Entry.DocumentName + ", " + Entry.LastUsedDateTime.ToLongDateString() + ", false");
-#else
-                                    Worker.RemoveOneDocumentCal(Entry.UserName, Entry.RelativePath, Entry.DocumentName, false);
-#endif
-                                }
+                                Worker.RemoveOneDocumentCal(Entry.UserName, Entry.RelativePath, Entry.DocumentName, false);
                             }
                         }
                         break;
@@ -117,16 +112,11 @@ namespace PRMServerMonitorConsole
                             QlikviewCalManager Worker = new QlikviewCalManager("localhost");
                             List<NamedCalEntry> AllNamedCals = Worker.EnumerateNamedCals(MaxNamedCALsToDelete, AllowDeleteOfUndatedNamedCals, MinimumNamedCalAgeHoursToDelete, false);
 
-                            foreach (NamedCalEntry Entry in AllNamedCals)
+                            Trace.WriteLine(string.Format("Based on configured threshold, {0} named CALs should be deleted", AllNamedCals.FindAll(e => e.DeleteFlag)));
+
+                            foreach (NamedCalEntry Entry in AllNamedCals.FindAll(e => e.DeleteFlag))
                             {
-                                if (Entry.DeleteFlag == true)
-                                {
-#if false  // true for testing
-                                    Trace.WriteLine("Would remove Cal: " + Entry.UserName + ", " + Entry.LastUsedDateTime.ToLongDateString() + ", false");
-#else
-                                    Worker.RemoveOneNamedCal(Entry.UserName, false);
-#endif
-                                }
+                                Worker.RemoveOneNamedCal(Entry.UserName, false);
                             }
                         }
                         break;

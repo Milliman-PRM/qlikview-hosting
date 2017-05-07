@@ -5,6 +5,7 @@
  */
 
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -239,7 +240,7 @@ namespace PrmServerMonitorLib
                 EstablishTraceLogFile();
             }
 
-            Trace.WriteLine(string.Format("Attempting to remove user {0} from document {1}", UserName, DocumentName));
+            Trace.WriteLine(string.Format("Attempting to remove user {0} from document {1}", UserName, Path.Combine(RelativePath, DocumentName)));
 
             bool ReturnValue = false;
             try
@@ -289,6 +290,7 @@ namespace PrmServerMonitorLib
                             //Save the metadata back to the server
                             Client.SaveDocumentMetaData(Meta);
 
+                            Trace.WriteLine(string.Format("Succesfully deleted document CAL for user {0} and document {1}", UserName, Path.Combine(RelativePath, DocumentName)));
                             ReturnValue = true;
                         }
                     }
