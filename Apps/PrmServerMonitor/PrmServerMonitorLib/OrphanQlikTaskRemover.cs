@@ -14,27 +14,43 @@ using PrmServerMonitorLib.ServiceSupport;
 
 namespace PrmServerMonitorLib
 {
-    public class OrphanQlikTaskRemover : ServerMonitorProcessingBase
+    /// <summary>
+    /// Constructor, passes arguments to the base class
+    /// </summary>
+    public class OrphanQlikTaskRemover : QlikviewProcessingBase
     {
+        public OrphanQlikTaskRemover(string ServerNameArg = "localhost", bool LifetimeTraceArg = false) : base(ServerNameArg, LifetimeTraceArg)
+        { }
+
+        /// <summary>
+        /// Destructor
+        /// </summary>
+        ~OrphanQlikTaskRemover()
+        {
+            CloseTraceLogFile(true);
+        }
+
         /// <summary>
         /// Button handler that initiates cleanup of orphaned documents
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public void RemoveOrphanTasks()
+        public void RemoveOrphanTasks(bool LogToFile)
         {
             // the project setup for a QMS client application can be found at https://community.qlik.com/docs/DOC-2639
 
-            EstablishTraceLog();
+            if (LogToFile)
+            {
+                EstablishTraceLogFile();
+            }
 
             try
             {
-                QMSClient Client;
-
-                string QMS = "http://localhost:4799/QMS/Service";
-                Client = new QMSClient("BasicHttpBinding_IQMS", QMS);
-                string key = Client.GetTimeLimitedServiceKey();
-                ServiceKeyClientMessageInspector.ServiceKey = key;
+                if (!ConnectClient("BasicHttpBinding_IQMS", ServerName))
+                {
+                    Trace.WriteLine("In " + this.GetType().Name + ".RemoveOrphanTasks(): Failed to connect to web service");
+                    return;
+                }
 
                 ServiceInfo[] myServices = Client.GetServices(ServiceTypes.QlikViewDistributionService);
                 foreach (ServiceInfo service in myServices)
@@ -56,7 +72,8 @@ namespace PrmServerMonitorLib
             }
             finally
             {
-                CloseTraceLog();
+                DisconnectClient();
+                CloseTraceLogFile();
             }
 
         }
