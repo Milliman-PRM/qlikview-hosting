@@ -85,7 +85,7 @@ namespace PRMServerMonitorConsole
                             QlikviewCalManager Worker = new QlikviewCalManager("localhost");
                             List<DocCalEntry> AllDocCals = Worker.EnumerateDocumentCals(false, SelectLimit, AllowDeleteOfUndatedDocCals, MinimumAgeToDelete);
 
-                            Trace.WriteLine(string.Format("Based on configured threshold, {0} document CALs should be deleted", AllDocCals.FindAll(e => e.DeleteFlag)));
+                            Trace.WriteLine(string.Format("Based on configured threshold, {0} document CALs should be deleted", AllDocCals.FindAll(e => e.DeleteFlag).Count));
 
                             foreach (DocCalEntry Entry in AllDocCals.FindAll(e => e.DeleteFlag))
                             {
@@ -112,7 +112,7 @@ namespace PRMServerMonitorConsole
                             QlikviewCalManager Worker = new QlikviewCalManager("localhost");
                             List<NamedCalEntry> AllNamedCals = Worker.EnumerateNamedCals(MaxNamedCALsToDelete, AllowDeleteOfUndatedNamedCals, MinimumNamedCalAgeHoursToDelete, false);
 
-                            Trace.WriteLine(string.Format("Based on configured threshold, {0} named CALs should be deleted", AllNamedCals.FindAll(e => e.DeleteFlag)));
+                            Trace.WriteLine(string.Format("Based on configured threshold, {0} named CALs should be deleted", AllNamedCals.FindAll(e => e.DeleteFlag).Count));
 
                             foreach (NamedCalEntry Entry in AllNamedCals.FindAll(e => e.DeleteFlag))
                             {
