@@ -114,6 +114,11 @@ namespace PrmServerMonitorLib
                     Trace.WriteLine("# assigned document CALs:" + CalConfig.DocumentCALs.Assigned);
                     Trace.WriteLine("# in license document CALs:" + CalConfig.DocumentCALs.InLicense);
                     Trace.WriteLine("# limit document CALs:" + CalConfig.DocumentCALs.Limit);
+                    List<DocCalEntry> DocCals = EnumerateDocumentCals(UseTraceFile, CalConfig.DocumentCALs.InLicense, true, 0);
+                    foreach (DocCalEntry Entry in DocCals)
+                    {
+                        Trace.WriteLine(string.Format("Document CAL for user {0} for document {1}, last used {2}", Entry.UserName, Path.Combine(Entry.RelativePath, Entry.DocumentName), Entry.LastUsedDateTime.ToString("yyyy-MM-dd HH:mm:ss")));
+                    }
 
                     //Named CALs
                     Trace.WriteLine("\r\nNamed CALs:");
