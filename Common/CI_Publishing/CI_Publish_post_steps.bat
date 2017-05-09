@@ -17,3 +17,5 @@ C:\Windows\SysWOW64\inetsrv\appcmd.exe add app /site.name:"Default Web Site" /pa
 C:\Windows\SysWOW64\inetsrv\appcmd.exe add app /site.name:"Default Web Site" /path:"/prm_ci_<<branch_name>>_SQLBrowser" /physicalPath:"D:\installedapplications\prm_ci\<<branch_name>>\SQLBrowser" /applicationPool:"Qlikview IIS" 
 
 C:\Windows\SysWOW64\inetsrv\appcmd.exe add app /site.name:"Default Web Site" /path:"/prm_ci_<<branch_name>>_WEBTestHarness" sGIT_BRANCH%\WEBTestHarnessphysicalPath:"D:\installedapplications\prm_ci\sGIT_BRANCH%\WEBTestHarness" /applicationPool:"Qlikview IIS" 
+
+echo %errorlevel% > error.log
