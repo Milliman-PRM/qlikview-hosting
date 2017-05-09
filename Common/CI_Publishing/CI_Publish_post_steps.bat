@@ -18,4 +18,3 @@ C:\Windows\SysWOW64\inetsrv\appcmd.exe add app /site.name:"Default Web Site" /pa
 
 C:\Windows\SysWOW64\inetsrv\appcmd.exe add app /site.name:"Default Web Site" /path:"/prm_ci_<<branch_name>>_WEBTestHarness" /physicalPath:"D:\installedapplications\prm_ci\<<branch_name>>\WEBTestHarness" /applicationPool:"Qlikview IIS" 
 
-echo %errorlevel% > error.log
