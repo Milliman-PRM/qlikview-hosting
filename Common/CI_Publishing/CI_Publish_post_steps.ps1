@@ -6,6 +6,9 @@ $errorCode = 0
 # Clear URL file, if it exists
 set-content -LiteralPath $urlFilePath "Published URLs:"
 
+# Remove error.log file, if it exists
+remove-item $outputPath
+
 # (Re-)create applications and log deployed URLs to text file
 try 
 {
