@@ -79,6 +79,7 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="Properties\DataSources\System.Data.DataSet.datasource" />
+    <None Include="Properties\DataSources\System.Uri.datasource" />
     <None Include="Service References\QMSAPIService\MillimanReportReduction.QMSAPIService.CALConfiguration.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
@@ -173,41 +174,41 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\QMSAPIService\QMSBackendService.wsdl" />
-    <None Include="Service References\QMSAPIService\Service.wsdl" />
-    <None Include="Service References\QMSAPIService\Service.xsd">
+    <None Include="Service References\QMSAPIService\Service11.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\QMSAPIService\Service1.wsdl" />
-    <None Include="Service References\QMSAPIService\Service1.xsd">
+    <None Include="Service References\QMSAPIService\Service111.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\QMSAPIService\Service10.xsd">
+    <None Include="Service References\QMSAPIService\Service1110.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\QMSAPIService\Service2.xsd">
+    <None Include="Service References\QMSAPIService\Service112.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\QMSAPIService\Service3.xsd">
+    <None Include="Service References\QMSAPIService\Service113.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\QMSAPIService\Service4.xsd">
+    <None Include="Service References\QMSAPIService\Service114.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\QMSAPIService\Service5.xsd">
+    <None Include="Service References\QMSAPIService\Service115.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\QMSAPIService\Service6.xsd">
+    <None Include="Service References\QMSAPIService\Service116.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\QMSAPIService\Service7.xsd">
+    <None Include="Service References\QMSAPIService\Service117.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\QMSAPIService\Service8.xsd">
+    <None Include="Service References\QMSAPIService\Service118.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\QMSAPIService\Service9.xsd">
+    <None Include="Service References\QMSAPIService\Service119.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\QMSAPIService\Service2.wsdl" />
+    <None Include="Service References\QMSAPIService\Service21.wsdl" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="HowItWorks.txt" />
