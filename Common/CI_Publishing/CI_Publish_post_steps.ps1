@@ -17,11 +17,8 @@ try
                 "/prm_ci_<<branch_name>>_ClientUserAdmin" = "D:\installedapplications\prm_ci\<<branch_name>>\ClientUserAdmin";
                 "/prm_ci_<<branch_name>>_Milliman" = "D:\installedapplications\prm_ci\<<branch_name>>\Milliman";
                 "/prm_ci_<<branch_name>>_MillimanServices" = "D:\installedapplications\prm_ci\<<branch_name>>\MillimanServices";
-                "/prm_ci_<<branch_name>>_MillimanSupport" = "D:\installedapplications\prm_ci\<<branch_name>>\MillimanSupport";
                 "/prm_ci_<<branch_name>>_ProjectManagementConsoleServices" = "D:\installedapplications\prm_ci\<<branch_name>>\ProjectManagementConsoleServices";
                 "/prm_ci_<<branch_name>>_ProjectManConsole" = "D:\installedapplications\prm_ci\<<branch_name>>\ProjectManConsole";
-                "/prm_ci_<<branch_name>>_SQLBrowser" = "D:\installedapplications\prm_ci\<<branch_name>>\SQLBrowser";
-                "/prm_ci_<<branch_name>>_WEBTestHarness" = "D:\installedapplications\prm_ci\<<branch_name>>\WEBTestHarness"
                 }
 
     foreach ($app in $apps.GetEnumerator())
