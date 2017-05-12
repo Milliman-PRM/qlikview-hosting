@@ -1,1 +1,0 @@
-start /wait PrmServerMonitor.exe console orphantaskremoval
