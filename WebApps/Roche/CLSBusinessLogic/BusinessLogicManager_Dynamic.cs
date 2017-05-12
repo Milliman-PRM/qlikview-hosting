@@ -213,7 +213,7 @@ namespace CLSBusinessLogic
                 return dt;
 
             }
-            catch (Exception msg)
+            catch (Exception)
             {
                 // something went wrong, and you wanna know why
                 throw;
