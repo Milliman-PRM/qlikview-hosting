@@ -121,7 +121,11 @@ namespace MillimanDev
             }
             //end email patch
 
-            if ((string.Compare(CurrentPage, @"UserLogin.aspx", true) != 0) && (string.Compare(CurrentPage, @"AssertionService.aspx", true) != 0) && (string.Compare(CurrentPage, @"LostPassword.aspx", true) != 0) && (string.Compare(CurrentPage, @"time.aspx", true) != 0)) //no recursive login voodoo
+            if ((string.Compare(CurrentPage, @"UserLogin.aspx", true) != 0) &&
+                (string.Compare(CurrentPage, @"AssertionService.aspx", true) != 0) &&
+                (string.Compare(CurrentPage, @"LostPassword.aspx", true) != 0) &&
+                (string.Compare(CurrentPage, @"PasswordExpired.aspx", true) != 0) &&
+                (string.Compare(CurrentPage, @"time.aspx", true) != 0)) //no recursive login voodoo
             {
                 if (string.Compare(Request.CurrentExecutionFilePathExtension, @".aspx", true) == 0)  //only protect aspx pages
                 {
