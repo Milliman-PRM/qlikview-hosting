@@ -56,7 +56,7 @@ namespace MillimanCommon
                     return DD;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 Report.Log(Report.ReportType.Error, "DownloadDescriptions:GetDescriptionFilename|----Sharp serializer failed----");
             }

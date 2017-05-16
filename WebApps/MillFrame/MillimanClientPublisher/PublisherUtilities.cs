@@ -82,7 +82,7 @@ namespace ClientPublisher
                 }
                 return ZID;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
             }

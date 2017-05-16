@@ -137,7 +137,7 @@ namespace Milliman.Reduction.ReductionEngine {
                 string working_path = Path.GetDirectoryName(configFilePath);
                 string qvw_path = Path.Combine(working_path, config.MasterQVW);
                 string file_name = Path.GetFileNameWithoutExtension(configFilePath), flag_file_name = string.Empty;
-                using( var f = File.Create(flag_file_name = Path.Combine(working_path, string.Format("{0}_running.{1}", file_name, "txt"))) ) ;
+                File.Create(flag_file_name = Path.Combine(working_path, string.Format("{0}_running.{1}", file_name, "txt")));
                 _L.Debug( string.Format("Created processing flag file '{0}'", file_name));
 
                 if(!File.Exists(qvw_path) ) {
