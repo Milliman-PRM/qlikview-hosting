@@ -165,7 +165,6 @@ namespace ReportingTest
         [TestMethod]
         public void TestGetFileCopyToDestinationInLocation()
         {
-            var filePaths = EnumFileProcessor.eFilePath.IisLogs;
             var fileLocation = FileFunctions.GetFileProcessingInDirectory();
             Assert.IsNotNull(fileLocation);
         }
