@@ -58,7 +58,7 @@ try
             $xml.Save($webConfigFilePath)
         }
 
-        New-WebApplication -Force -Name $app.Name -PhysicalPath $app.Value -Site "Default Web Site" -ApplicationPool "Qlikview IIS"
+        New-WebApplication -Force -Name $app.Name -PhysicalPath $app.Value -Site "Default Web Site" -ApplicationPool "CI_IIS"
         Add-Content -LiteralPath $urlFilePath ($urlBase + $app.Name + "/")
     }
 }
