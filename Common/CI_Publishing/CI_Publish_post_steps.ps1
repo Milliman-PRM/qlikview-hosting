@@ -24,6 +24,40 @@ try
 
     foreach ($app in $apps.GetEnumerator())
     {
+        # Manipulate web.config contents
+        $webConfigFilePath = [System.IO.Path]::Combine( $app.Value, "web.config" );
+
+        if ((Test-Path $webConfigFilePath) -eq $true -and $app.Key -ne "/prm_ci_add_publish_definition_for_CI_MillimanServices")
+        {
+
+            $xml = [xml](get-content $webConfigFilePath)
+            $root = $xml.get_DocumentElement();
+
+            if ($root.connectionStrings.HasChildNodes)
+            {
+                # Some of the config files explicitly set the connection string, rather than pulling from template files
+                # There are a couple different possible values based on current config files
+                # Replace both with the _CI database
+                $connectionString = $root.connectionStrings.ChildNodes.connectionString.Replace("PortalDB_Staging","PortalDB_CI")
+                $connectionString = $root.connectionStrings.ChildNodes.connectionString.Replace("PortalDBSFv2M1","PortalDB_CI")
+                $root.connectionStrings.ChildNodes[0].SetAttribute("connectionString", $connectionString)
+            }
+            elseif ($app.Key -eq "/prm_ci_<<branch_name>>_UserAdmin")
+            {
+                 # User Admin puts its config files in a different location, so we need to handle that
+                $root.appSettings.configSource = "Configs\appsettings_CI.config"
+                $root.connectionStrings.configSource = "Configs\connectionStrings_CI.config"
+            }
+            else
+            {
+                # Handle the standard configuration files
+                $root.appSettings.configSource = "bin\Configs\appsettings_CI.config"
+                $root.connectionStrings.configSource = "bin\Configs\connectionStrings_CI.config"
+            }
+
+            $xml.Save($webConfigFilePath)
+        }
+
         New-WebApplication -Force -Name $app.Name -PhysicalPath $app.Value -Site "Default Web Site" -ApplicationPool "Qlikview IIS"
         Add-Content -LiteralPath $urlFilePath ($urlBase + $app.Name + "/")
     }
