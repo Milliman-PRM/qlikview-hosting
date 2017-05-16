@@ -220,7 +220,7 @@ namespace MillimanCommon
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 MillimanCommon.Report.Log(Report.ReportType.Error, CurrentErrorMsg);
             }
