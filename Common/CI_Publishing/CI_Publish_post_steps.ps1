@@ -58,7 +58,11 @@ try
             $xml.Save($webConfigFilePath)
         }
 
-        New-WebApplication -Force -Name $app.Name -PhysicalPath $app.Value -Site "Default Web Site" -ApplicationPool "CI_IIS"
+        # If the web application already exists, remove it
+        if ((Get-WebApplication $app.Key).Count -gt 0) { Remove-WebApplication -Name $app.Key -Site "Default Web Site" }
+
+        # Create web application
+        New-WebApplication -Name $app.Key -PhysicalPath $app.Value -Site "Default Web Site" -ApplicationPool "CI_IIS"
         Add-Content -LiteralPath $urlFilePath ($urlBase + $app.Name + "/")
     }
 }
