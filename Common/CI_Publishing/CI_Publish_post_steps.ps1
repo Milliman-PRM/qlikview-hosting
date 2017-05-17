@@ -26,6 +26,7 @@ try
     {
         # Manipulate web.config contents
         $webConfigFilePath = [System.IO.Path]::Combine( $app.Value, "web.config" );
+        $appConfigFilePath = [System.IO.Path]::Combine( $app.Value, "bin\Configs\appsettings_CI.config" );
 
         if ((Test-Path $webConfigFilePath) -eq $true -and $app.Key -ne "/prm_ci_<<branch_name>>_MillimanServices")
         {
@@ -42,17 +43,28 @@ try
                 $connectionString = $root.connectionStrings.ChildNodes.connectionString.Replace("PortalDBSFv2M1","PortalDB_CI")
                 $root.connectionStrings.ChildNodes[0].SetAttribute("connectionString", $connectionString)
             }
-            elseif ($app.Key -eq "/prm_ci_<<branch_name>>_UserAdmin")
-            {
-                 # User Admin puts its config files in a different location, so we need to handle that
-                $root.appSettings.configSource = "Configs\appsettings_CI.config"
-                $root.connectionStrings.configSource = "Configs\connectionStrings_CI.config"
-            }
             else
             {
-                # Handle the standard configuration files
-                $root.appSettings.configSource = "bin\Configs\appsettings_CI.config"
-                $root.connectionStrings.configSource = "bin\Configs\connectionStrings_CI.config"
+                # Web.config files without nested connectionStrings have a consistent format, but may be in different locations
+                if ($app.Key -eq "/prm_ci_<<branch_name>>_UserAdmin")
+                {
+                     # User Admin puts its config files in a different location, so we need to handle that
+                    $root.appSettings.configSource = "Configs\appsettings_CI.config"
+                    $root.connectionStrings.configSource = "Configs\connectionStrings_CI.config"
+
+                    # Override default appConfigFilePath for the UserAdmin application
+                    appConfigFilePath = [System.IO.Path]::Combine( $app.Value, "Configs\appsettings_CI.config" );
+                }
+                else
+                {
+                    # Handle the standard configuration files
+                    $root.appSettings.configSource = "bin\Configs\appsettings_CI.config"
+                    $root.connectionStrings.configSource = "bin\Configs\connectionStrings_CI.config"
+                }
+
+                # Replace ((branch_name)) with <<branch_name>> in appsettings_CI.config
+                $appSettings = (get-content $appConfigFilePath).Replace("((branch_name))", "<<branch_name>>")
+                Set-Content -LiteralPath $appConfigFilePath $appSettings
             }
 
             $xml.Save($webConfigFilePath)
