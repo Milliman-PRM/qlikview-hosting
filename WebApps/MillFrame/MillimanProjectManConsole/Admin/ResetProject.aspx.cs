@@ -205,7 +205,7 @@ namespace MillimanProjectManConsole.Admin
                     else
                     {
                         MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "System error - missing task");
-                        Response.Redirect("errors/missingtask.aspx");
+                        Response.Redirect("errors/missingtask.html");
                         IndexDownload.Text = "Could not retrieve task status";
                     }
                 }
