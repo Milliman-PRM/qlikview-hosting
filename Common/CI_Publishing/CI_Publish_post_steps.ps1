@@ -27,7 +27,7 @@ try
         # Manipulate web.config contents
         $webConfigFilePath = [System.IO.Path]::Combine( $app.Value, "web.config" );
 
-        if ((Test-Path $webConfigFilePath) -eq $true -and $app.Key -ne "/prm_ci_add_publish_definition_for_CI_MillimanServices")
+        if ((Test-Path $webConfigFilePath) -eq $true -and $app.Key -ne "/prm_ci_<<branch_name>>_MillimanServices")
         {
 
             $xml = [xml](get-content $webConfigFilePath)
