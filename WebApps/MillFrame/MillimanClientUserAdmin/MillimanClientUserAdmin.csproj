@@ -330,10 +330,10 @@
       <Link>Configs\appsettings_AK.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <Content Include="..\appsettings_CI.config">
+    <None Include="..\appsettings_CI.config">
       <Link>Configs\appsettings_CI.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </None>
     <None Include="..\appsettings_VN.config">
       <Link>Configs\appsettings_VN.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -342,10 +342,10 @@
       <Link>Configs\connectionStrings_AK.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <Content Include="..\connectionStrings_CI.config">
+    <None Include="..\connectionStrings_CI.config">
       <Link>Configs\connectionStrings_CI.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </None>
     <None Include="..\connectionStrings_VN.config">
       <Link>Configs\connectionStrings_VN.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -435,7 +435,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties UseAjaxifiedTemplates="True" UseJQuerySupport="True" />
+      <UserProperties UseJQuerySupport="True" UseAjaxifiedTemplates="True" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

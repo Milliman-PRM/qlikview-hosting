@@ -852,18 +852,18 @@
     <Content Include="Content\Images\glyphicons-halflings-regular.eot" />
     <Content Include="Content\Images\glyphicons-halflings-regular.ttf" />
     <Content Include="Content\Images\glyphicons-halflings-regular.woff" />
-    <Content Include="..\appsettings_CI.config">
+    <None Include="..\appsettings_CI.config">
       <Link>Configs\appsettings_CI.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </None>
     <None Include="..\connectionStrings_AK.config">
       <Link>Configs\connectionStrings_AK.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <Content Include="..\connectionStrings_CI.config">
+    <None Include="..\connectionStrings_CI.config">
       <Link>Configs\connectionStrings_CI.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </None>
     <None Include="..\connectionStrings_PreStag.config">
       <Link>Configs\connectionStrings_PreStag.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

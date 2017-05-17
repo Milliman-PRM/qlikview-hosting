@@ -313,10 +313,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </None>
-    <Content Include="..\..\appsettings_CI.config">
+    <None Include="..\..\appsettings_CI.config">
       <Link>Configs\appsettings_CI.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </None>
     <None Include="..\..\appsettings_PreStag.config">
       <Link>Configs\appsettings_PreStag.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -342,10 +342,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </None>
-    <Content Include="..\..\connectionStrings_CI.config">
+    <None Include="..\..\connectionStrings_CI.config">
       <Link>Configs\connectionStrings_CI.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </None>
     <None Include="..\..\connectionStrings_PreStag.config">
       <Link>Configs\connectionStrings_PreStag.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
