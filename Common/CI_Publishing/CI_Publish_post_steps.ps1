@@ -81,22 +81,20 @@ try
 catch 
 {
     $errorCode = 1
-    Set-Content -LiteralPath $outputPath $errorCode
 }
 
 # Set the Forms Authentication loginURL property for Milliman application
-try
-{
-    set-webconfigurationproperty -PSPath "MACHINE/WEBROOT/APPHOST/Default Web Site/prm_ci_<<branch_name>>_Milliman" -Filter "system.web/authentication/forms" -name loginURL -value "UserLogin.aspx"
-}
-catch
-{
-    $errorCode = 2
-    Set-Content -LiteralPath $outputPath $errorCode
-}
-
-# If we've reached this point and $errorCode is still 0, everything was fine
 if ($errorCode -eq 0)
 {
-    Set-Content -LiteralPath $outputPath $errorCode
+    try
+    {
+        set-webconfigurationproperty -PSPath "MACHINE/WEBROOT/APPHOST/Default Web Site/prm_ci_<<branch_name>>_Milliman" -Filter "system.web/authentication/forms" -name loginURL -value "UserLogin.aspx"
+    }
+    catch
+    {
+        $errorCode = 2
+    }
 }
+
+# Write out the error code
+Set-Content -LiteralPath $outputPath $errorCode
