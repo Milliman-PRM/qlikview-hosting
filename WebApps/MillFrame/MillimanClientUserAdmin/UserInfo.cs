@@ -95,6 +95,7 @@ public class UserInfo
     public enum StatusType { NONE, ERROR, SUCCESS, BADPASSWORD };
     public void SetStatus( StatusType theType )
     {
+        int i;
         if (theType == StatusType.NONE)
             _ValidationImage = "~/images/decoy-icon-16px.png";
         else if (theType == StatusType.ERROR)
