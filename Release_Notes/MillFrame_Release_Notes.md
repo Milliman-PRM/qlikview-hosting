@@ -35,6 +35,7 @@ A non-exhaustive list of what has changed in a more readable form than a commit 
   - Improved documentation (Readmes, Wiki, Release Notes)
   - Removal of Clinical Data Repository (CDR) Components from the code base
   - Fixed the log4net reference
+  - Added `CI_Publish` publishing definition to support automated deployments of in-progress branches to a test environment.
 
 
 
