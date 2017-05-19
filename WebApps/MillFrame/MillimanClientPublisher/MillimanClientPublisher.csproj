@@ -159,6 +159,7 @@
     <Content Include="images\status.png" />
     <Content Include="images\stop-icon.png" />
     <Content Include="images\warning-icon.png" />
+    <Content Include="PasswordExpired.aspx" />
     <Content Include="ReductionStep2.aspx" />
     <Content Include="ComplexReporting\Summary.aspx" />
     <Content Include="HTML\GeneralIssue.aspx" />
@@ -372,6 +373,13 @@
     </Compile>
     <Compile Include="ComplexReporting\ReviewApproval.aspx.designer.cs">
       <DependentUpon>ReviewApproval.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PasswordExpired.aspx.cs">
+      <DependentUpon>PasswordExpired.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PasswordExpired.aspx.designer.cs">
+      <DependentUpon>PasswordExpired.aspx</DependentUpon>
     </Compile>
     <Compile Include="ReductionStep2.aspx.cs">
       <DependentUpon>ReductionStep2.aspx</DependentUpon>
