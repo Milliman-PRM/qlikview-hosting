@@ -313,6 +313,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </None>
+    <None Include="..\..\appsettings_CI.config">
+      <Link>Configs\appsettings_CI.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\appsettings_PreStag.config">
       <Link>Configs\appsettings_PreStag.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -338,6 +342,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </None>
+    <None Include="..\..\connectionStrings_CI.config">
+      <Link>Configs\connectionStrings_CI.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\connectionStrings_PreStag.config">
       <Link>Configs\connectionStrings_PreStag.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -358,6 +366,7 @@
       <Link>Configs\connectionStrings_VN.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Properties\PublishProfiles\CI_Publish.pubxml" />
     <None Include="Properties\PublishProfiles\milliman-sk.pubxml" />
     <None Include="Properties\PublishProfiles\MillimanDebug.pubxml" />
     <Content Include="SSOConfigure\HCIntel.cer" />

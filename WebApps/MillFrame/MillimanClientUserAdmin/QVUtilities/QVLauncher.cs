@@ -19,7 +19,6 @@ using System.IO;
 
         #region Redirection Settings
         // URL that the user is redirected to after a successful login. AccessPoint is usually where you want to go
-        private string TryUrl = "/QlikView/";
         // URL redirected to after a failed login attempt
         private string BackUrl = "";
 

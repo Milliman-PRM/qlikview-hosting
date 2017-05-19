@@ -330,12 +330,20 @@
       <Link>Configs\appsettings_AK.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="..\appsettings_CI.config">
+      <Link>Configs\appsettings_CI.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="..\appsettings_VN.config">
       <Link>Configs\appsettings_VN.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\connectionStrings_AK.config">
       <Link>Configs\connectionStrings_AK.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\connectionStrings_CI.config">
+      <Link>Configs\connectionStrings_CI.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\connectionStrings_VN.config">
@@ -376,6 +384,7 @@
     <None Include="Configs\connectionStrings_PreStag.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Properties\PublishProfiles\CI_Publish.pubxml" />
     <None Include="Properties\PublishProfiles\MilimanClientUserAdmin_AK.pubxml" />
     <None Include="Properties\PublishProfiles\MillimanClientUserAdmin_PreStaging.pubxml" />
     <None Include="Properties\PublishProfiles\ReleaseCandidateProfile.pubxml" />
@@ -426,7 +435,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties UseAjaxifiedTemplates="True" UseJQuerySupport="True" />
+      <UserProperties UseJQuerySupport="True" UseAjaxifiedTemplates="True" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

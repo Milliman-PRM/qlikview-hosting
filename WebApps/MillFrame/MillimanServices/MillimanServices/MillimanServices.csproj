@@ -256,6 +256,7 @@
     <Content Include="Content\Images\glyphicons-halflings-regular.eot" />
     <Content Include="Content\Images\glyphicons-halflings-regular.ttf" />
     <Content Include="Content\Images\glyphicons-halflings-regular.woff" />
+    <None Include="Properties\PublishProfiles\CI_Publish.pubxml" />
     <None Include="Properties\PublishProfiles\MillimanDebug.pubxml" />
     <None Include="Properties\PublishProfiles\MillimanProduction.pubxml" />
     <Content Include="Reflector.ashx" />

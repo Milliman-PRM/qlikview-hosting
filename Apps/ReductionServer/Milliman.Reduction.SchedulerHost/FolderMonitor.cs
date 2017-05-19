@@ -189,7 +189,7 @@ namespace Milliman.Reduction.SchedulerHost {
                         handler.OnFailure.Add(p2);
                 }
 
-            } catch( Exception ex ) {
+            } catch( Exception ) {
                 handler = null;
             }
 

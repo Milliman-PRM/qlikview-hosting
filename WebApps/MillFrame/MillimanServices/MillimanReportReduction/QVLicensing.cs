@@ -80,7 +80,7 @@ namespace MillimanReportReduction
                     }
                 }
             }
-            catch (System.Exception ex)
+            catch (System.Exception)
             {
                 return null;  //return null if failed
             }

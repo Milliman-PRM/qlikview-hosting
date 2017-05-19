@@ -51,7 +51,7 @@ namespace ReportFileGeneratorApplication
                 {
                     _console_present = true;
                     try { var window_height = Console.WindowHeight; }
-                    catch (Exception ex)
+                    catch (Exception)
                     { _console_present = false; }
                 }
                 return _console_present.Value;
