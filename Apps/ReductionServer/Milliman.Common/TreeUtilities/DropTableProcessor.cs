@@ -37,7 +37,7 @@ namespace Milliman.Common.TreeUtilities {
                 Polenter.Serialization.SharpSerializer SS = new Polenter.Serialization.SharpSerializer(false);
                 SS.Serialize(Tables, QualifiedPath);
                 return true;
-            } catch( Exception ex ) {
+            } catch( Exception ) {
                 //Milliman.Common.Report.Log(Report.ReportType.Error, "Save error", ex);
             }
             return false;
@@ -49,7 +49,7 @@ namespace Milliman.Common.TreeUtilities {
                 DropTableProcessor DTP = new DropTableProcessor();
                 DTP.Tables = SS.Deserialize(QualfiedPath) as List<TableClass>;
                 return DTP;
-            } catch( Exception ex ) {
+            } catch( Exception  ) {
                 //MillimanCommon.Report.Log(Report.ReportType.Error, "Load error", ex);
             }
             return null;

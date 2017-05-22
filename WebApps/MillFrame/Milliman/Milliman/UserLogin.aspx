@@ -7,6 +7,12 @@
     <title>Milliman Health Care Intelligence</title>
     <link rel="Stylesheet" href="Css/Styles.css" />
     <style type="text/css">
+        .login-form {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
         .MenuWidth {
             width: 130px;
             text-align: center;
@@ -60,6 +66,11 @@
             width: 140px;
             height: 24px;
         }
+
+        input {
+            margin: 3px 5px 3px 20px;
+            padding: 3px;
+        }
     </style>
 
     <%--  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>--%>
@@ -81,9 +92,9 @@
 <body style="background-color: white; background-image: url(images/watermark.png); background-repeat: repeat">
 
 
-    <form id="myform" runat="server" defaultbutton="btnLogin" defaultfocus="txtUserName">
+    <form id="myform" runat="server" defaultbutton="btnLogin" defaultfocus="txtUserName" class="login-form">
         <div class="logincontent">
-            <table style="border-collapse: collapse; border-color: #3F3F3F;">
+            <table style="border-collapse: collapse;">
                 <tr>
                     <td style="text-align: left;" class="Col1Style">
                         <img src="Images/PRMLogo_height80.png" alt="PRM Logo" />
@@ -113,13 +124,20 @@
                 <tr style="background-color: #3F3F3F">
                     <td class="auto-style1">
                         <table style="border-collapse: collapse; background-color: #3F3F3F">
-                            <tr>
-                                <td class="auto-style4">
-                                    <asp:TextBox ID="txtUserName" Width="150px" runat="server" ToolTip="  Email"></asp:TextBox></td>
-                                <td class="auto-style4">
-                                    <asp:TextBox ID="txtPassword" Width="150px" runat="server" TextMode="Password" ToolTip="  Password"></asp:TextBox></td>
-                                <td class="auto-style5"><a id="LostPassWord" href="LostPassword.aspx" target="_self" style="padding: 0px; margin: 0px; text-align: right; vertical-align: middle; font: 400 9px arial; color: white; width: 130px;">&nbsp;&nbsp;Lost&nbsp;Password</a></td>
-
+                            <tr class="auto-style4">
+                                <td>
+                                    <asp:TextBox ID="txtUserName" Width="300px" runat="server" ToolTip="  Email" placeholder="Email"></asp:TextBox>
+                                </td>
+                            </tr>
+                            <tr class="auto-style4">
+                                <td>
+                                    <asp:TextBox ID="txtPassword" Width="300px" runat="server" TextMode="Password" ToolTip="  Password" placeholder="Password"></asp:TextBox>
+                                </td>
+                            </tr>
+                            <tr class="auto-style4">
+                                <td style="text-align: right;">
+                                    <a id="LostPassWord" href="LostPassword.aspx" target="_self" style="padding: 0px; margin: 0px; margin-right: 5px; font: 400 9px arial; color: white; width: 130px;">&nbsp;&nbsp;Lost&nbsp;Password</a>
+                                </td>
                             </tr>
                         </table>
                     </td>
@@ -143,7 +161,7 @@
                     <td style="text-align: center; background-color: #3D3D3D; vertical-align: middle;" colspan="" class="Col1Style">
                         <asp:Label ID="lblErrorMessage" CssClass="error-1" runat="server">*A valid email and password are required!</asp:Label>
                     </td>
-                    <td title="SFv2.11" style="text-align: right; background-color: #3D3D3D; color: white; height: 30px; vertical-align: bottom;" colspan="4">Powered by Milliman &nbsp;<asp:Label ID="lblcopyrightYear" runat="server"></asp:Label>
+                    <td title="SFv2.11" style="text-align: right; background-color: #3D3D3D; color: white; height: 30px; vertical-align: bottom;" colspan="4"><p style="margin-right: 5px; margin-bottom: 5px;">Powered by Milliman&nbsp;<asp:Label ID="lblcopyrightYear" runat="server"></asp:Label></p>
                         <script type="text/javascript">document.getElementById("lblcopyrightYear").innerHTML = new Date().getFullYear();</script>
                     </td>
                 </tr>

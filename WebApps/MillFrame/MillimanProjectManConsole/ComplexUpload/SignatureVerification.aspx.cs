@@ -205,7 +205,7 @@ namespace MillimanProjectManConsole.ComplexUpload
                     else
                     {
                         MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "System error - missing task");
-                        Response.Redirect("errors/missingtask.aspx");
+                        Response.Redirect("errors/missingtask.html");
                         SignatureVerifications.Text = "Could not retrieve processing status.";
                     }
                 }

@@ -7,6 +7,12 @@
     <title>Milliman Health Care Intelligence</title>
     <link rel="Stylesheet" href="Css/Styles.css" />
     <style type="text/css">
+        .logincontent {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
         .MenuWidth {
             width: 130px;
             text-align:center;
@@ -38,6 +44,10 @@
         }
         .auto-style5 {
             width: 174px;
+        }
+        input {
+            margin: 3px;
+            padding: 3px;
         }
     </style>
 
@@ -100,7 +110,7 @@
 
                             </td>
                             <td style="text-align:left">
-                               <asp:TextBox ID="txtUserName" Width="150px" runat="server" ToolTip="  Email"  ></asp:TextBox>
+                               <asp:TextBox ID="txtUserName" Width="300px" runat="server" ToolTip="  Email"  ></asp:TextBox>
                             </td>
                             <td>
                                 &nbsp;
@@ -115,11 +125,11 @@
                             </td>
                             <td>&nbsp;</td>
  
-                           <td style="text-align:right;background-color:#3D3D3D;color:white;height:30px;vertical-align:bottom;" colspan="4">
-                               <center> <div>
-                                Powered by Milliman &nbsp;<asp:Label ID="lblcopyrightYear" runat="server"></asp:Label>
-                                <script type="text/javascript">document.getElementById("lblcopyrightYear").innerHTML = new Date().getFullYear();</script>
-                            </div> </center>
+                            <td style="text-align:right;background-color:#3D3D3D;color:white;height:30px;vertical-align:bottom;" colspan="4">
+                               <div>
+                                    <p style="margin-bottom: 5px; margin-right: 5px;"></p>Powered by Milliman&nbsp;<asp:Label ID="lblcopyrightYear" runat="server"></asp:Label>
+                                    <script type="text/javascript">document.getElementById("lblcopyrightYear").innerHTML = new Date().getFullYear();</script>
+                                </div>
                             </td>
                         </tr>
                     </table>

@@ -142,6 +142,7 @@
     <Content Include="Images\Xml-icon.png" />
     <Content Include="Images\zip-icon.png" />
     <Content Include="MPMCServices.asmx" />
+    <None Include="Properties\PublishProfiles\CI_Publish.pubxml" />
     <None Include="Properties\PublishProfiles\Debug.pubxml" />
     <None Include="Properties\PublishProfiles\Staging Deploy Debug.pubxml" />
     <None Include="Properties\PublishProfiles\Staging.pubxml" />

@@ -281,7 +281,7 @@ namespace ClientPublisher
                             System.IO.File.Delete(MetaFile);
                             System.IO.File.Delete(Shared);
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {  //since this is not critical, but cleanup keep from crashing if fails
                         }
                     }
@@ -696,7 +696,7 @@ namespace ClientPublisher
                     else
                     {
                         MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "System error - missing task");
-                        Response.Redirect("errors/missingtask.aspx");
+                        Response.Redirect("errors/missingtask.html");
                         Status.Text = "Could not retrieve processing status.";
                     }
                 }

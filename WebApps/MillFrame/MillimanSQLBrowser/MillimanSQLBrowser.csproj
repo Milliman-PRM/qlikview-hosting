@@ -244,6 +244,7 @@
     <Content Include="Content\Images\glyphicons-halflings-regular.woff" />
     <None Include="LocalDeploy.pubxml" />
     <Content Include="packages.config" />
+    <None Include="PublishProfiles\CI_Publish.pubxml" />
     <None Include="PublishProfiles\PortalSQLUtility.pubxml" />
     <None Include="PublishProfiles\WebSQLUtilityDebug.pubxml" />
     <None Include="Staging.pubxml" />
