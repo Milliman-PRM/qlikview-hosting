@@ -238,7 +238,7 @@ namespace ClientPublisher
                     else
                     {
                         MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "System error - missing task");
-                        Response.Redirect("errors/missingtask.aspx");
+                        Response.Redirect("errors/missingtask.html");
                         Status.Text = "Could not retrieve processing status.";
                     }
                 }
