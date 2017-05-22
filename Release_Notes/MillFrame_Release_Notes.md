@@ -10,6 +10,7 @@ A non-exhaustive list of what has changed in a more readable form than a commit 
   - Client Publisher Console user guide updated
   - Improved the wording of warning messages in the Client Publisher
   - Add a button to the Project Management Console to view summary stats before publishing
+  - Implemented a system for password expiration
 
 #### Client Admin changes (e.g. Client Publisher, Client Administration Console - prm.milliman.com/PRMAdmin)
 
