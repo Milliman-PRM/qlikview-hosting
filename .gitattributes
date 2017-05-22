@@ -10,7 +10,39 @@
 # default for csharp files.
 # Note: This is only used by command line
 ###############################################################################
-*.cs     diff=csharp
+*.ascx     text 
+*.ashx     text 
+*.aspx     text 
+*.cd       text 
+*.cmd      text 
+*.coffee   text 
+*.config   text 
+*.cs       text diff=csharp  
+*.csproj   text 
+*.cshtml   text 
+*.css      text 
+*.dtd      text 
+*.edmx     text 
+*.htm      text diff=html
+*.html     text diff=html
+*.js       text 
+*.json     text 
+*.md       text 
+*.msbuild  text 
+*.nuspec   text 
+*.resx     text 
+*.ruleset  text 
+*.StyleCop text 
+*.targets  text 
+*.tt       text 
+*.txt      text 
+*.vb       text 
+*.vbhtml   text 
+*.vbproj   text 
+*.vbs      text 
+*.wsf      text 
+*.xml      text 
+*.xunit    text 
 
 ###############################################################################
 # Set the merge driver for project and solution files
@@ -40,9 +72,17 @@
 #
 # image files are treated as binary by default.
 ###############################################################################
-#*.jpg   binary
-#*.png   binary
-#*.gif   binary
+*.bmp binary 
+*.dll binary 
+*.gif binary 
+*.jpg binary 
+*.png binary 
+*.snk binary 
+
+###############################################################################
+# behavior for various binary types
+###############################################################################
+*.dll binary
 
 ###############################################################################
 # diff behavior for common document formats
