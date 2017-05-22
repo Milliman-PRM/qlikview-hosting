@@ -105,7 +105,7 @@
                     <td class="auto-style1"  >
                         <table style="border-collapse:collapse;background-color:#3F3F3F">
                          <tr>
-                        <td class="auto-style4"><asp:TextBox ID="txtUserName" Width="150px" runat="server" ToolTip="  Email"  ></asp:TextBox></td>
+                        <td class="auto-style4"><asp:TextBox ID="txtUserName" Width="250px" runat="server" ToolTip="  Email"  ></asp:TextBox></td>
                         <td class="auto-style4"><asp:TextBox ID="txtPassword" Width="150px" runat="server" TextMode="Password" ToolTip="  Password"></asp:TextBox></td>
                         <td class="auto-style5"><a id="LostPassWord" href="LostPassword.aspx" target="_self"  style="padding: 0px; margin: 0px; text-align:right; vertical-align:middle; font:400 9px arial; color:white; width:130px; " >&nbsp;&nbsp;Lost&nbsp;Password</a></td>
                       
