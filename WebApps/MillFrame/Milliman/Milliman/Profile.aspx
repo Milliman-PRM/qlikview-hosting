@@ -45,6 +45,7 @@
 
     </script>
 </head>
+<body style="background-color: white;" onload="OnLoad();">
     <form id="form1" runat="server">
         <div class="containerWrap">
             <div class="page-header engravedHeader">
