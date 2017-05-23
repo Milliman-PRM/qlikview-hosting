@@ -20,10 +20,6 @@
             border: 1px solid black;
             text-align: center;
         }
-
-        body {
-            background: url("../images/watermark.png");
-        }
     </style>
 </head>
 <body>
