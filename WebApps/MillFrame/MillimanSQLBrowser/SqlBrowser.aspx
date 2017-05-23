@@ -53,7 +53,7 @@ a:hover { color:cc0000;  text-decoration:underline; }
 
 </style>
 </head>
-<body style="margin:10px;background-color:white;background-image:url(images/watermark.png);background-repeat:repeat" >
+<body style="margin:10px;background-color:white;" >
 
 
 <%--<div style="padding:18px 10px 10px 10px;" align=left>--%>
