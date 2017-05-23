@@ -10,6 +10,7 @@ A non-exhaustive list of what has changed in a more readable form than a commit 
   - Client Publisher Console user guide updated
   - Improved the wording of warning messages in the Client Publisher
   - Add a button to the Project Management Console to view summary stats before publishing
+  - Implemented a system for password expiration
 
 #### Client Admin changes (e.g. Client Publisher, Client Administration Console - prm.milliman.com/PRMAdmin)
 
@@ -22,12 +23,12 @@ A non-exhaustive list of what has changed in a more readable form than a commit 
 
 #### Automated Processes changes (e.g. License Cleaner, Report Reduction, System Backup, Server Monitor, Backup Utility)
 
-  - Added explicit hard-coded directory creation in prebuild script to facilitate CI testing.
-  - Enhanced the automated reclaimation of unused Qlikview Document and named user CALs.  
+  - Added explicit hard-coded directory creation in prebuild script to facilitate CI testing
+  - Enhanced the automated reclamation of unused QlikView Document and named user CALs
 
 #### Lower level changes( e.g. Milliman Common, Project Management Console Services, Milliman Services, Databases)
 
-  - Removed hard-coded usernames and email addresses from production-deployed code.
+  - Removed hard-coded usernames and email addresses from production-deployed code
   - Fixed a casing issue in the password reset files
   - Updated the way that database connections are executed
   - Deployment scripts added to the repository
@@ -35,7 +36,7 @@ A non-exhaustive list of what has changed in a more readable form than a commit 
   - Improved documentation (Readmes, Wiki, Release Notes)
   - Removal of Clinical Data Repository (CDR) Components from the code base
   - Fixed the log4net reference
-  - Added `CI_Publish` publishing definition to support automated deployments of in-progress branches to a test environment.
+  - Added `CI_Publish` publishing definition to support automated deployments of in-progress branches to a test environment
 
 
 
