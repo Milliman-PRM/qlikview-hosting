@@ -72,17 +72,16 @@
 #
 # image files are treated as binary by default.
 ###############################################################################
-*.bmp binary 
-*.dll binary 
-*.gif binary 
-*.jpg binary 
-*.png binary 
-*.snk binary 
+*.bmp binary
+*.gif binary
+*.jpg binary
+*.png binary
 
 ###############################################################################
 # behavior for various binary types
 ###############################################################################
 *.dll binary
+*.snk binary
 
 ###############################################################################
 # diff behavior for common document formats
