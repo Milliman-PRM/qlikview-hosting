@@ -48,7 +48,7 @@
 
     </script>
 </head>
-<body style="background-color: white; background-image: url(images/watermark.png); background-repeat: repeat" onload="OnLoad();">
+<body style="background-color: white;" onload="OnLoad();">
     <form id="form1" runat="server">
         <table style="border: 0px solid gray; width: 850px; margin: 0px auto;" cellspacing="5" id="PrimaryContainer">
             <tr>

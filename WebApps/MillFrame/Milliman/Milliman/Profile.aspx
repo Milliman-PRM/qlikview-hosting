@@ -45,7 +45,6 @@
 
     </script>
 </head>
-<body style="background-color: white; background-image: url(images/watermark.png); background-repeat: repeat;" onload="OnLoad();">
     <form id="form1" runat="server">
         <div class="containerWrap">
             <div class="page-header engravedHeader">
