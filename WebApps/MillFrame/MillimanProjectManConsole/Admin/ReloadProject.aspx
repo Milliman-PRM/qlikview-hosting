@@ -5,11 +5,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>Project Update</title>
-    <style type="text/css">
-        body {
-            background:url("../images/watermark.png");
-        }
-</style>
 </head>
 <body style="background-color:white;font-size:12px">
     <form id="form1" runat="server" style="text-align:center">
