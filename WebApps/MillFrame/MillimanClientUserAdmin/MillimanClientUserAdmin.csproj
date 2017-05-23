@@ -308,7 +308,6 @@
     <Content Include="Images\Email.png" />
     <Content Include="Images\Notes.png" />
     <Content Include="Images\Edit.png" />
-    <Content Include="Images\watermark.png" />
     <Content Include="Images\Word-icon.png" />
     <Content Include="Images\Xml-icon.png" />
     <Content Include="Images\zip-icon.png" />
@@ -435,7 +434,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties UseJQuerySupport="True" UseAjaxifiedTemplates="True" />
+      <UserProperties UseAjaxifiedTemplates="True" UseJQuerySupport="True" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

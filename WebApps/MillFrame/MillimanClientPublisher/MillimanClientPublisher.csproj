@@ -323,7 +323,6 @@
     <Content Include="images\Video-icon.png" />
     <Content Include="images\warning-blue.png" />
     <Content Include="images\warning-orange.png" />
-    <Content Include="images\watermark.png" />
     <Content Include="images\Word-icon.png" />
     <Content Include="images\Xml-icon.png" />
     <Content Include="images\zip-icon.png" />

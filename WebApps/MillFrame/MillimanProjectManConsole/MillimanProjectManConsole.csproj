@@ -272,7 +272,6 @@
     <Content Include="images\upload.png" />
     <Content Include="images\user-guide.png" />
     <Content Include="images\warning-icon.png" />
-    <Content Include="images\watermark.png" />
     <Content Include="js\fckeditor\editor\css\behaviors\disablehandles.htc" />
     <Content Include="js\fckeditor\editor\css\behaviors\showtableborders.htc" />
     <Content Include="js\fckeditor\editor\css\fck_editorarea.css" />
