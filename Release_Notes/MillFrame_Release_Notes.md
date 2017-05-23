@@ -37,6 +37,7 @@ A non-exhaustive list of what has changed in a more readable form than a commit 
   - Removal of Clinical Data Repository (CDR) Components from the code base
   - Fixed the log4net reference
   - Added `CI_Publish` publishing definition to support automated deployments of in-progress branches to a test environment
+  - All open pull requests are published to PRM2, and cleaned up once closed.
 
 
 
