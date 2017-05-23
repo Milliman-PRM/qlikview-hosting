@@ -17,7 +17,7 @@ try
 {
     $apps = @{
                 "/prm_ci_<<branch_name>>_ClientPublisher" = "D:\installedapplications\prm_ci\<<branch_name>>\ClientPublisher";
-                "/prm_ci_<<branch_name>>_ClientUserAdmin" = "D:\installedapplications\prm_ci\<<branch_name>>\ClientAdmin";
+                "/prm_ci_<<branch_name>>_ClientAdmin" = "D:\installedapplications\prm_ci\<<branch_name>>\ClientUserAdmin";
                 "/prm_ci_<<branch_name>>_Milliman" = "D:\installedapplications\prm_ci\<<branch_name>>\Milliman";
                 "/prm_ci_<<branch_name>>_MillimanServices" = "D:\installedapplications\prm_ci\<<branch_name>>\MillimanServices";
                 "/prm_ci_<<branch_name>>_ProjectManagementConsoleServices" = "D:\installedapplications\prm_ci\<<branch_name>>\ProjectManagementConsoleServices";
