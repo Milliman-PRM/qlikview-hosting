@@ -55,8 +55,9 @@ h2{font-size:12px;color:#000;}
 /* admin dashboard */
 /* a-z alphabet link styles */
 .aToZWrap{padding:1px;border-top:1px solid #e6e6e6;border-bottom:1px solid #fff;background-image: url(images/buttons/a-z-wrap-bg.jpg)}
-.aTozNavigaion a{display: block;float: left;border: 1px solid #ccc;font-size: 13px;color: #333333;margin: 0px 3px 0px 0px;background-image: url(images/gridview/atoz-bg.jpg);padding: 3px;width: 15px;text-align: center;}
-.aTozNavigaion a:hover{border: 1px solid #000;border-top:#ccc; background-image:url(images/menu/menu-bg.gif); color: #fff; text-decoration: none;}
+.aTozNavigaion{display:inline-block;width:30px;}
+.aTozNavigaion a{display: block;border: 1px solid #ccc;font-size: 13px;padding: 3px;text-align: center;}
+.aTozNavigaion a:hover{border: 1px solid #000; color: #424242; text-decoration: none;}
 /* master content */
 .masterContentWrap{padding: 0px 0px 0px 0px;min-width:800px;}
 /* dropdownlists div wrap */
@@ -73,7 +74,7 @@ margin-left: 25px; font-size: 24px;font-style: normal;font-family:Georgia;
 /* dateTime in header */
 .dateTime{width: 193px; padding: 5px 0px 15px 32px;}
 /* page footer control style - admin pages */
-.footer{height: 30px; width: 100%; margin-top: 10px; background-image: url('images/menu/menu-bg.gif');border-top: 0px solid #999; position: fixed; bottom: 0px; left: 0px;filter:alpha(opacity=60);-moz-opacity:0.60;-khtml-opacity: 0.60;opacity: 0.60;}
+.footer{height: 30px; width: 100%; margin-top: 10px; position: fixed; bottom: 0px; left: 0px; filter: alpha(opacity=60); -moz-opacity: 0.60; -khtml-opacity: 0.60; opacity: 0.60;}
 .footerTitleText{text-align: center; vertical-align:middle; color: #000;}
 .footerTitleText a{color: #000;}
 .footerTitleText a:hover{color: black; text-decoration:underline;}
