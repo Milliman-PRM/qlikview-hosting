@@ -37,7 +37,7 @@ h2{font-size:12px;color:#000;}
 .dashboardItem a{display:block; float:left; width:60px; height:80px; border:1px solid #f4f4f4;background-color:#fff;background-image:url(images/cpanel/cpanel-icon.png);background-repeat: no-repeat; background-position: 15px 30px; margin: 0px 10px 15px 0px; padding:10px;font-size:11px; text-align:center;-moz-border-radius: 3px;-webkit-border-radius: 3px;}
 .dashboardItem a:hover{border:1px solid #b8d6fb; background-color:#eef5fd;background-image:url(images/cpanel/cpanel-icon-2.png);background-repeat: no-repeat; background-position: 15px 30px;color:#000;-moz-border-radius: 3px;-webkit-border-radius: 3px;}
 .dashboardTitle{font-weight: normal;color: #000000;font-size: 24px;font-style:italic;font-family:Georgia; margin-bottom:15px;}
-.dashboardCategoryWrap{width:100%;border:1px solid #fff;color:#999;background-color:#fff;margin-top:1px;padding:0px 0px 20px 0px;background-image:url(images/greybox/hint.png);background-repeat:repeat-x;}
+.dashboardCategoryWrap{width:100%;}
 .dashboardCategoryWrap td{vertical-align:top;width:400px;padding:5px 10px 5px 5px;}
 .dashboardTopPadding{padding:90px 0px 0px 0px;}
 .dashboardCategoryTitle{font-weight:bold;font-size:14px;color:#333;margin-bottom:10px;padding-bottom:5px;border-bottom:1px solid #ccc;}
@@ -131,7 +131,7 @@ margin-left: 25px; font-size: 24px;font-style: normal;font-family:Georgia;
 .helpSidebarClose a:hover{background-image:url(images/greybox/bg-2.png);color:#000;}
 .helpTitle{font-size:11px;}
 .helpText{font-size:11px;margin-bottom:10px;}
-.helpHintIcon{width:100px;height:100px;background-image:url(images/greybox/hint.png);margin:0px auto 10px auto;}
+.helpHintIcon{width:100px;height:100px;margin:0px auto 10px auto;}
 /* webconfig textbox */
 .webConfigBox{background-color:#fff;font-size:11px;border:1px solid #ccc;margin-bottom:5px;color:#666;}
 /* email broadcast styles */
