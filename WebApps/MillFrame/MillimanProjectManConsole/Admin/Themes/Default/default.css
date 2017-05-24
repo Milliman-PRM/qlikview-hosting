@@ -55,6 +55,8 @@ h2{font-size:12px;color:#000;}
 /* admin dashboard */
 /* a-z alphabet link styles */
 .aToZWrap{padding:1px;border-top:1px solid #e6e6e6;border-bottom:1px solid #fff;background-image: url(images/buttons/a-z-wrap-bg.jpg)}
+.aTozNavigaion{display:inline-block;width:30px;}
+.aTozNavigaion a{display: block; border: 1px solid #ccc; font-size: 13px; padding: 3px; text-align: center;}
 .aTozNavigaion a:hover{border: 1px solid #000; color: #424242; text-decoration: none;}
 /* master content */
 .masterContentWrap{padding: 0px 0px 0px 0px;min-width:800px;}
