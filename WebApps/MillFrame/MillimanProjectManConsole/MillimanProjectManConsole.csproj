@@ -139,7 +139,6 @@
     <Content Include="Admin\Themes\Default\Images\footer\gradient-bg.gif" />
     <Content Include="Admin\Themes\Default\Images\greybox\bg-2.png" />
     <Content Include="Admin\Themes\Default\Images\greybox\bg.png" />
-    <Content Include="Admin\Themes\Default\Images\greybox\hint.png" />
     <Content Include="Admin\Themes\Default\Images\greybox\info.png" />
     <Content Include="Admin\Themes\Default\Images\gridview\atoz-bg.jpg" />
     <Content Include="Admin\Themes\Default\Images\gridview\atoz-hover-bg.jpg" />
