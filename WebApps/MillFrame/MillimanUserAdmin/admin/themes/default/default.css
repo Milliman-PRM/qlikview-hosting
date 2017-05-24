@@ -176,7 +176,7 @@ margin-left: 25px; font-size: 24px;font-style: normal;font-family:Georgia;
 .Menu1 {line-height: 1.8655em;}
 .Menu1 ul.AspNet-Menu{width: 100%}
 /* Tier 2 */
-.Menu1 ul.AspNet-Menu ul{width:106px; top: 100%;left: 0;border:1px solid #336666; background: #f4f4f4;background-image: url(images/menu/menu-bg.png);background-repeat: no-repeat;filter:alpha(opacity=100);-moz-opacity:1.0;-khtml-opacity: 1.00;opacity: 1.00;}
+.Menu1 ul.AspNet-Menu ul{width:106px; top: 100%;left: 0;border:1px solid #336666; background: #f4f4f4;}
 /* Tier 3+ */
 .Menu1 ul.AspNet-Menu ul ul {top: 0;left: 100%;}
 /* all list items */

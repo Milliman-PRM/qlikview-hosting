@@ -153,7 +153,6 @@
     <Content Include="Admin\Themes\Default\Images\menu\menu-arrow-horiz.gif" />
     <Content Include="Admin\Themes\Default\Images\menu\menu-arrow.gif" />
     <Content Include="Admin\Themes\Default\Images\menu\menu-bg.gif" />
-    <Content Include="Admin\Themes\Default\Images\menu\menu-bg.png" />
     <Content Include="Admin\Themes\Default\Images\menu\selected-bg.gif" />
     <Content Include="Admin\Themes\Default\Images\mywsat\mywsat-logo.jpg" />
     <Content Include="Admin\Themes\Default\Images\mywsat\mywsat-logo.png" />
