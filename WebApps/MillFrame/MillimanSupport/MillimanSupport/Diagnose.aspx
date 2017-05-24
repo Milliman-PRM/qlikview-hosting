@@ -40,7 +40,7 @@
 }
     </style>
 </head>
-<body style="background-color:white;background-image:url(images/watermark.png);background-repeat:repeat">
+<body style="background-color:white;">
     <form id="form1" runat="server">
     <div>
         <table style="margin-left:auto;margin-right:auto;border:1px solid lightgray;">

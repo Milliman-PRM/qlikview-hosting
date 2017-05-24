@@ -11,7 +11,7 @@
         if (window != window.top) window.top.location.href = window.location.href;
     </script>
 </head>
-<body style="background-color: white; background-image: url(../Images/watermark.png); background-repeat: repeat">
+<body style="background-color: white;">
     <form id="form1" runat="server">
         <div id="divErrorPageContainer" class="center-block">
             <div class="row">
