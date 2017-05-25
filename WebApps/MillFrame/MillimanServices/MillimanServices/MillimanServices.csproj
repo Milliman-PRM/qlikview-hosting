@@ -147,7 +147,6 @@
     <Content Include="Images\SignIn.png" />
     <Content Include="Images\star-blue-icon.png" />
     <Content Include="Images\warning-orange.png" />
-    <Content Include="Images\watermark.png" />
     <Content Include="Javascript\jquery.min.js" />
     <Content Include="Javascript\WaterMark.min.js" />
     <Content Include="LostPassword.aspx" />

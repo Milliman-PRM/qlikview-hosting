@@ -139,7 +139,6 @@
     <Content Include="Admin\Themes\Default\Images\footer\gradient-bg.gif" />
     <Content Include="Admin\Themes\Default\Images\greybox\bg-2.png" />
     <Content Include="Admin\Themes\Default\Images\greybox\bg.png" />
-    <Content Include="Admin\Themes\Default\Images\greybox\hint.png" />
     <Content Include="Admin\Themes\Default\Images\greybox\info.png" />
     <Content Include="Admin\Themes\Default\Images\gridview\atoz-bg.jpg" />
     <Content Include="Admin\Themes\Default\Images\gridview\atoz-hover-bg.jpg" />
@@ -154,7 +153,6 @@
     <Content Include="Admin\Themes\Default\Images\menu\menu-arrow-horiz.gif" />
     <Content Include="Admin\Themes\Default\Images\menu\menu-arrow.gif" />
     <Content Include="Admin\Themes\Default\Images\menu\menu-bg.gif" />
-    <Content Include="Admin\Themes\Default\Images\menu\menu-bg.png" />
     <Content Include="Admin\Themes\Default\Images\menu\selected-bg.gif" />
     <Content Include="Admin\Themes\Default\Images\mywsat\mywsat-logo.jpg" />
     <Content Include="Admin\Themes\Default\Images\mywsat\mywsat-logo.png" />
@@ -272,7 +270,6 @@
     <Content Include="images\upload.png" />
     <Content Include="images\user-guide.png" />
     <Content Include="images\warning-icon.png" />
-    <Content Include="images\watermark.png" />
     <Content Include="js\fckeditor\editor\css\behaviors\disablehandles.htc" />
     <Content Include="js\fckeditor\editor\css\behaviors\showtableborders.htc" />
     <Content Include="js\fckeditor\editor\css\fck_editorarea.css" />

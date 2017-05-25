@@ -67,7 +67,7 @@
 
 	</script>
 </head>
-<body style="background-color:white;background-image:url(images/watermark.png);background-repeat:repeat">
+<body style="background-color:white;">
    
 
     <form id="myform" runat="server"  >
