@@ -82,7 +82,7 @@ try
         if ((Get-WebApplication $app.Key).Count -gt 0) { Remove-WebApplication -Name $app.Key -Site "Default Web Site" }
 
         # Create web application
-        New-WebApplication -Name $app.Key -PhysicalPath $app.Value -Site "Default Web Site" -ApplicationPool "CI_IIS"
+        New-WebApplication -Name $app.Key -PhysicalPath $app.Value -Site "Default Web Site" -ApplicationPool "CI_<<branch_name>>"
         Add-Content -LiteralPath $urlFilePath ($urlBase + $app.Name + "/")
     }
 }
