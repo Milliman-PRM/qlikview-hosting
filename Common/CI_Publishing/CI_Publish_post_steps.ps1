@@ -1,6 +1,6 @@
 $outputPath = "D:\installedapplications\prm_ci\<<branch_name>>\error.log"
 $urlFilePath = "D:\installedapplications\prm_ci\<<branch_name>>\urls.log"
-$urlBase = "https://indy-prm-2.milliman.com"
+$urlBase = "https://prm2.milliman.com"
 $errorCode = 0
 
 # Clear URL file, if it exists
