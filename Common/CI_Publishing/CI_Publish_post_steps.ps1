@@ -25,6 +25,21 @@ try
                 "/prm_ci_<<branch_name>>_UserAdmin" = "D:\installedapplications\prm_ci\<<branch_name>>\UserAdmin"
 				}
 
+    $name = "CI_<<branch_name>>"
+    $appPool = Get-ChildItem –Path IIS:\AppPools | where {$_.name -eq $name}
+
+    # Create branch-specific app pool if it doesn't already exist
+    if (-not $appPool)
+    {
+        $command = "C:\windows\system32\inetsrv\appcmd.exe add apppool /name:$name /managedRuntimeVersion:v4.0"
+        invoke-expression $command 
+
+        # Configuring credentials must be done separately from creating the application pool
+        $command = "C:\windows\system32\inetsrv\appcmd.exe set config /section:applicationPools `"/[name='$name'].processModel.identityType:SpecificUser`" `"/[name='$name'].processModel.userName:indy-prm-2\MillimanAdmin`" `"/[name='$name'].processModel.password:<<pool_password>>`""
+        invoke-expression $command
+    }
+
+
     foreach ($app in $apps.GetEnumerator())
     {
         # Manipulate web.config contents
