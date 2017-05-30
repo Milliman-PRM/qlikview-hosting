@@ -126,7 +126,7 @@
                         <table style="border-collapse: collapse; background-color: #3F3F3F">
                             <tr class="auto-style4">
                                 <td>
-                                    <asp:TextBox ID="txtUserName" AutoCompleteType="Disabled" Width="300px" runat="server" ToolTip="  Email" placeholder="Email"></asp:TextBox>
+                                    <asp:TextBox ID="txtUserName" Width="300px" runat="server" ToolTip="  Email" placeholder="Email"></asp:TextBox>
                                 </td>
                             </tr>
                             <tr class="auto-style4">
