@@ -131,7 +131,7 @@
                             </tr>
                             <tr class="auto-style4">
                                 <td>
-                                    <asp:TextBox ID="txtPassword" Width="300px" runat="server" TextMode="Password" ToolTip="  Password" placeholder="Password"></asp:TextBox>
+                                    <asp:TextBox ID="txtPassword" AutoCompleteType="Disabled" Width="300px" runat="server" TextMode="Password" ToolTip="  Password" placeholder="Password"></asp:TextBox>
                                 </td>
                             </tr>
                             <tr class="auto-style4">

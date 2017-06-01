@@ -32,7 +32,7 @@
                         </div>
                         <asp:Label ID="PasswordLabel" runat="server" AssociatedControlID="Password">Password:*</asp:Label>
                         <asp:RequiredFieldValidator ID="PasswordRequired" runat="server" ControlToValidate="Password" ErrorMessage="Password is required." ToolTip="Password is required." ValidationGroup="Login1" Display="Dynamic" EnableClientScript="False">*</asp:RequiredFieldValidator>
-                        <asp:TextBox ID="Password" runat="server" TabIndex="2" TextMode="Password" ToolTip="enter your password" MaxLength="50" Width="98%"></asp:TextBox>
+                        <asp:TextBox ID="Password"  AutoCompleteType="Disabled" runat="server" TabIndex="2" TextMode="Password" ToolTip="enter your password" MaxLength="50" Width="98%"></asp:TextBox>
                         <div class="clearBoth2">
                         </div>
                         <div class="hr">
