@@ -49,6 +49,7 @@
             this.LabelDocumentRoot = new System.Windows.Forms.Label();
             this.LabelDbConnectionString = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.ButtonGotoConfig = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
@@ -202,7 +203,7 @@
             this.toolStripMenuItemCopyRelative,
             this.toolStripMenuItemCopyAbsolute});
             this.contextMenuStripUngroupedDocuments.Name = "contextMenuStrip1";
-            this.contextMenuStripUngroupedDocuments.Size = new System.Drawing.Size(230, 70);
+            this.contextMenuStripUngroupedDocuments.Size = new System.Drawing.Size(230, 48);
             this.contextMenuStripUngroupedDocuments.Text = "Copy To Clipboard";
             // 
             // toolStripMenuItemCopyRelative
@@ -245,6 +246,7 @@
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.ButtonGotoConfig);
             this.groupBox1.Controls.Add(this.label8);
             this.groupBox1.Controls.Add(this.label9);
             this.groupBox1.Controls.Add(this.label10);
@@ -257,6 +259,16 @@
             this.groupBox1.TabIndex = 17;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Configuration";
+            // 
+            // ButtonGotoConfig
+            // 
+            this.ButtonGotoConfig.Location = new System.Drawing.Point(908, 16);
+            this.ButtonGotoConfig.Name = "ButtonGotoConfig";
+            this.ButtonGotoConfig.Size = new System.Drawing.Size(80, 51);
+            this.ButtonGotoConfig.TabIndex = 21;
+            this.ButtonGotoConfig.Text = "Edit Configuration And Close";
+            this.ButtonGotoConfig.UseVisualStyleBackColor = true;
+            this.ButtonGotoConfig.Click += new System.EventHandler(this.ButtonGotoConfig_Click);
             // 
             // label8
             // 
@@ -362,6 +374,7 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStripUngroupedDocuments;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemCopyRelative;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemCopyAbsolute;
+        private System.Windows.Forms.Button ButtonGotoConfig;
     }
 }
 

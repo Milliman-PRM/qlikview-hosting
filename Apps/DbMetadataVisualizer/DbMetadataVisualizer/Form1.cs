@@ -24,66 +24,71 @@ namespace DbMetadataVisualizer
         {
             InitializeComponent();
 
-            groupBox1.Text = "Configuration   -   From file: " + AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
-
-            Repo = UserRepo.GetInstance();
-
-            LabelDocumentRoot.Text = ConfigurationManager.AppSettings["QVDocumentRoot"].ToString();
-            LabelDbConnectionString.Text = ConfigurationManager.ConnectionStrings["PortalDB_ConnectionString"].ToString();
-            LabelRulesFile.Text = Path.GetFullPath(ConfigurationManager.AppSettings["RepoFilePath"].ToString());
-
-            ListBoxUserIds.Items.Clear();
-            ListBoxAllGroupsWithUsers.Items.Clear();
-            ListBoxAllGroupsWithNoUsers.Items.Clear();
-            ListBoxDocumentsNotInAnyGroup.Items.Clear();
-
-            foreach (MembershipUser x in Membership.GetAllUsers())
+            try
             {
-                ListBoxUserIds.Items.Add(x.UserName);
-            }
+                groupBox1.Text = "Configuration   -   From file: " + AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
 
-            // Start with all docs in docroot and below, remove those that are believed OK
-            List<string> QuestionableQvws = GetAllFilesWithExtension(DocRoot, "qvw", true);
+                Repo = UserRepo.GetInstance();
 
-            // Iterate over the roles defined in the Membership Database
-            foreach (string Role in Roles.GetAllRoles())
-            {
-                // Decide which ListBox the group should be displayed in
-                if (Roles.GetUsersInRole(Role).Count() > 0)
+                LabelDocumentRoot.Text = ConfigurationManager.AppSettings["QVDocumentRoot"].ToString();
+                LabelDbConnectionString.Text = ConfigurationManager.ConnectionStrings["PortalDB_ConnectionString"].ToString();
+                LabelRulesFile.Text = Path.GetFullPath(ConfigurationManager.AppSettings["RepoFilePath"].ToString());
+
+                ListBoxUserIds.Items.Clear();
+                ListBoxAllGroupsWithUsers.Items.Clear();
+                ListBoxAllGroupsWithNoUsers.Items.Clear();
+                ListBoxDocumentsNotInAnyGroup.Items.Clear();
+
+                foreach (MembershipUser x in Membership.GetAllUsers())
                 {
-                    ListBoxAllGroupsWithUsers.Items.Add(Role);
-                }
-                else
-                {
-                    ListBoxAllGroupsWithNoUsers.Items.Add(Role);
+                    ListBoxUserIds.Items.Add(x.UserName);
                 }
 
-                // Iterate over all groups in the UserRepo (rules.xml) associated with the current Membership role (usually 1)
-                foreach (KeyValuePair<string, List<UserRepo.QVEntity>> GroupDocs in Repo.RoleMap.Where(p => p.Key == Role))
+                // Start with all docs in docroot and below, remove those that are believed OK
+                List<string> QuestionableQvws = GetAllFilesWithExtension(DocRoot, "qvw", true);
+
+                // Iterate over the roles defined in the Membership Database
+                foreach (string Role in Roles.GetAllRoles())
                 {
-                    // Iterate over each Qlikview entity associated with the current group (usually but not always 1)
-                    foreach (UserRepo.QVEntity QvEntity in GroupDocs.Value.Where(e => !e.IsDirectory))
+                    // Decide which ListBox the group should be displayed in
+                    if (Roles.GetUsersInRole(Role).Count() > 0)
                     {
-                        string GroupNameConvertedToPathFragment;
+                        ListBoxAllGroupsWithUsers.Items.Add(Role);
+                    }
+                    else
+                    {
+                        ListBoxAllGroupsWithNoUsers.Items.Add(Role);
+                    }
 
-                        QuestionableQvws.Remove(Path.Combine(DocRoot, QvEntity.QualifiedPathName));
+                    // Iterate over all groups in the UserRepo (rules.xml) associated with the current Membership role (usually 1)
+                    foreach (KeyValuePair<string, List<UserRepo.QVEntity>> GroupDocs in Repo.RoleMap.Where(p => p.Key == Role))
+                    {
+                        // Iterate over each Qlikview entity associated with the current group (usually but not always 1)
+                        foreach (UserRepo.QVEntity QvEntity in GroupDocs.Value.Where(e => !e.IsDirectory))
+                        {
+                            string GroupNameConvertedToPathFragment;
 
-                        // Remove every QVW with directory path reflecting the group name. 
-                        GroupNameConvertedToPathFragment = GroupDocs.Key.Replace("_", @"\") + @"\";
-                        // FOR DEBUG var x = QuestionableQvws.Where(p => p.ToLower().Contains(GroupNameConvertedToPathFragment.ToLower()));
-                        QuestionableQvws.RemoveAll(p => p.ToLower().Contains(GroupNameConvertedToPathFragment.ToLower()));
+                            QuestionableQvws.Remove(Path.Combine(DocRoot, QvEntity.QualifiedPathName));
+
+                            // Remove every QVW with directory path reflecting the group name. 
+                            GroupNameConvertedToPathFragment = GroupDocs.Key.Replace("_", @"\") + @"\";
+                            // FOR DEBUG var x = QuestionableQvws.Where(p => p.ToLower().Contains(GroupNameConvertedToPathFragment.ToLower()));
+                            QuestionableQvws.RemoveAll(p => p.ToLower().Contains(GroupNameConvertedToPathFragment.ToLower()));
+                        }
                     }
                 }
-            }
 
-            long TotalBytes = 0;
-            foreach (string FileName in QuestionableQvws)
-            {
-                ListBoxDocumentsNotInAnyGroup.Items.Add(FileName.Replace(DocRoot+@"\", ""));
-                TotalBytes += new FileInfo(FileName).Length;
-            }
+                long TotalBytes = 0;
+                foreach (string FileName in QuestionableQvws)
+                {
+                    ListBoxDocumentsNotInAnyGroup.Items.Add(FileName.Replace(DocRoot + @"\", ""));
+                    TotalBytes += new FileInfo(FileName).Length;
+                }
 
-            LabelOrphanDocumentsReport.Text = "Ungrouped QVW count is " + QuestionableQvws.Count + " with combined file sizes: " + TotalBytes.ToString("N0");
+                LabelOrphanDocumentsReport.Text = "Ungrouped QVW count is " + QuestionableQvws.Count + " with combined file sizes: " + TotalBytes.ToString("N0");
+            }
+            catch
+            {}
         }
 
         private List<string> GetAllFilesWithExtension(string RootPath, string Extension, bool Recurse = true)
@@ -163,6 +168,12 @@ namespace DbMetadataVisualizer
             }
 
             Clipboard.SetText(TextToCopy);
+        }
+
+        private void ButtonGotoConfig_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("Notepad", AppDomain.CurrentDomain.SetupInformation.ConfigurationFile);
+            Application.Exit();
         }
     }
 }
