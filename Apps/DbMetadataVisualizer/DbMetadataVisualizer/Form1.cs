@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.SqlClient;
 using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -87,8 +88,30 @@ namespace DbMetadataVisualizer
 
                 LabelOrphanDocumentsReport.Text = "Ungrouped QVW count is " + QuestionableQvws.Count + " with combined file sizes: " + TotalBytes.ToString("N0");
             }
+            // Any exception probably means configuration needs to be modified.  Display the empty form and let user edit the config. 
             catch
-            {}
+            {
+                if (!Directory.Exists(ConfigurationManager.AppSettings["QVDocumentRoot"].ToString()))
+                {
+                    LabelDocumentRoot.Text += " *NOT FOUND*";
+                }
+                if (!File.Exists(ConfigurationManager.AppSettings["RepoFilePath"].ToString()))
+                {
+                    LabelRulesFile.Text += " *NOT FOUND*";
+                }
+                try
+                {
+                    using (SqlConnection Cxn = new SqlConnection(ConfigurationManager.ConnectionStrings["PortalDB_ConnectionString"].ToString() + @";Connection Timeout = 5"))
+                    {
+                        Cxn.Open();
+                        Cxn.Close();
+                    }
+                }
+                catch
+                {
+                    LabelDbConnectionString.Text += " *CONNECT FAILED*";
+                }
+            }
         }
 
         private List<string> GetAllFilesWithExtension(string RootPath, string Extension, bool Recurse = true)
