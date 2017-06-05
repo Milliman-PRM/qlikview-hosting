@@ -55,6 +55,7 @@
             this.label10 = new System.Windows.Forms.Label();
             this.LabelRulesFile = new System.Windows.Forms.Label();
             this.LabelOrphanDocumentsReport = new System.Windows.Forms.Label();
+            this.toolStripMenuItemCopyDistinctFolders = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStripUngroupedDocuments.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -67,6 +68,7 @@
             this.ListBoxUserIds.Size = new System.Drawing.Size(256, 251);
             this.ListBoxUserIds.TabIndex = 1;
             this.ListBoxUserIds.SelectedIndexChanged += new System.EventHandler(this.ListBoxUserIds_SelectedIndexChanged);
+            this.ListBoxUserIds.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.AnyListBox_PreviewKeyDown);
             // 
             // ListBoxGroupsOfSelectedUser
             // 
@@ -76,6 +78,7 @@
             this.ListBoxGroupsOfSelectedUser.Size = new System.Drawing.Size(256, 251);
             this.ListBoxGroupsOfSelectedUser.TabIndex = 2;
             this.ListBoxGroupsOfSelectedUser.SelectedIndexChanged += new System.EventHandler(this.ListBoxGroups_SelectedIndexChanged);
+            this.ListBoxGroupsOfSelectedUser.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.AnyListBox_PreviewKeyDown);
             // 
             // ListBoxDocuments
             // 
@@ -87,6 +90,7 @@
             this.ListBoxDocuments.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.ListBoxDocuments.Size = new System.Drawing.Size(471, 108);
             this.ListBoxDocuments.TabIndex = 3;
+            this.ListBoxDocuments.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.AnyListBox_PreviewKeyDown);
             // 
             // ListBoxUsersInSelectedGroup
             // 
@@ -98,6 +102,7 @@
             this.ListBoxUsersInSelectedGroup.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.ListBoxUsersInSelectedGroup.Size = new System.Drawing.Size(469, 121);
             this.ListBoxUsersInSelectedGroup.TabIndex = 4;
+            this.ListBoxUsersInSelectedGroup.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.AnyListBox_PreviewKeyDown);
             // 
             // label1
             // 
@@ -154,6 +159,7 @@
             this.ListBoxAllGroupsWithNoUsers.Size = new System.Drawing.Size(256, 251);
             this.ListBoxAllGroupsWithNoUsers.TabIndex = 10;
             this.ListBoxAllGroupsWithNoUsers.SelectedIndexChanged += new System.EventHandler(this.ListBoxGroups_SelectedIndexChanged);
+            this.ListBoxAllGroupsWithNoUsers.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.AnyListBox_PreviewKeyDown);
             // 
             // ListBoxAllGroupsWithUsers
             // 
@@ -165,6 +171,7 @@
             this.ListBoxAllGroupsWithUsers.Size = new System.Drawing.Size(256, 251);
             this.ListBoxAllGroupsWithUsers.TabIndex = 11;
             this.ListBoxAllGroupsWithUsers.SelectedIndexChanged += new System.EventHandler(this.ListBoxGroups_SelectedIndexChanged);
+            this.ListBoxAllGroupsWithUsers.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.AnyListBox_PreviewKeyDown);
             // 
             // label6
             // 
@@ -196,31 +203,33 @@
             this.ListBoxDocumentsNotInAnyGroup.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.ListBoxDocumentsNotInAnyGroup.Size = new System.Drawing.Size(471, 225);
             this.ListBoxDocumentsNotInAnyGroup.TabIndex = 13;
+            this.ListBoxDocumentsNotInAnyGroup.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.AnyListBox_PreviewKeyDown);
             // 
             // contextMenuStripUngroupedDocuments
             // 
             this.contextMenuStripUngroupedDocuments.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemCopyRelative,
-            this.toolStripMenuItemCopyAbsolute});
+            this.toolStripMenuItemCopyAbsolute,
+            this.toolStripMenuItemCopyDistinctFolders});
             this.contextMenuStripUngroupedDocuments.Name = "contextMenuStrip1";
-            this.contextMenuStripUngroupedDocuments.Size = new System.Drawing.Size(230, 48);
+            this.contextMenuStripUngroupedDocuments.Size = new System.Drawing.Size(254, 70);
             this.contextMenuStripUngroupedDocuments.Text = "Copy To Clipboard";
             // 
             // toolStripMenuItemCopyRelative
             // 
             this.toolStripMenuItemCopyRelative.Name = "toolStripMenuItemCopyRelative";
-            this.toolStripMenuItemCopyRelative.Size = new System.Drawing.Size(229, 22);
+            this.toolStripMenuItemCopyRelative.Size = new System.Drawing.Size(253, 22);
             this.toolStripMenuItemCopyRelative.Text = "Copy All With Relative Paths";
             this.toolStripMenuItemCopyRelative.ToolTipText = "Copy All Contents with Relative Paths To Clipboard";
-            this.toolStripMenuItemCopyRelative.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
+            this.toolStripMenuItemCopyRelative.Click += new System.EventHandler(this.toolStripMenuItemCopyRelative_Click);
             // 
             // toolStripMenuItemCopyAbsolute
             // 
             this.toolStripMenuItemCopyAbsolute.Name = "toolStripMenuItemCopyAbsolute";
-            this.toolStripMenuItemCopyAbsolute.Size = new System.Drawing.Size(229, 22);
+            this.toolStripMenuItemCopyAbsolute.Size = new System.Drawing.Size(253, 22);
             this.toolStripMenuItemCopyAbsolute.Text = "Copy All With Absolute Paths";
             this.toolStripMenuItemCopyAbsolute.ToolTipText = "Copy All Contents with Absolute Paths To Clipboard";
-            this.toolStripMenuItemCopyAbsolute.Click += new System.EventHandler(this.toolStripMenuItem2_Click);
+            this.toolStripMenuItemCopyAbsolute.Click += new System.EventHandler(this.toolStripMenuItemCopyAbsolute_Click);
             // 
             // LabelDocumentRoot
             // 
@@ -317,6 +326,13 @@
             this.LabelOrphanDocumentsReport.Text = "LabelOrphanDocumentsReport";
             this.LabelOrphanDocumentsReport.TextAlign = System.Drawing.ContentAlignment.BottomRight;
             // 
+            // toolStripMenuItemCopyDistinctFolders
+            // 
+            this.toolStripMenuItemCopyDistinctFolders.Name = "toolStripMenuItemCopyDistinctFolders";
+            this.toolStripMenuItemCopyDistinctFolders.Size = new System.Drawing.Size(253, 22);
+            this.toolStripMenuItemCopyDistinctFolders.Text = "Copy All Distinct Absolute Folders";
+            this.toolStripMenuItemCopyDistinctFolders.Click += new System.EventHandler(this.toolStripMenuItemCopyDistinctFolders_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -375,6 +391,7 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemCopyRelative;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemCopyAbsolute;
         private System.Windows.Forms.Button ButtonGotoConfig;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemCopyDistinctFolders;
     }
 }
 
