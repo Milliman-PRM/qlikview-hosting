@@ -171,7 +171,7 @@ namespace DbMetadataVisualizer
             }
         }
 
-        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        private void toolStripMenuItemCopyRelative_Click(object sender, EventArgs e)
         {
             string TextToCopy = string.Empty;
             foreach (string Item in ListBoxDocumentsNotInAnyGroup.Items)
@@ -182,7 +182,7 @@ namespace DbMetadataVisualizer
             Clipboard.SetText(TextToCopy);
         }
 
-        private void toolStripMenuItem2_Click(object sender, EventArgs e)
+        private void toolStripMenuItemCopyAbsolute_Click(object sender, EventArgs e)
         {
             string TextToCopy = string.Empty;
             foreach (string Item in ListBoxDocumentsNotInAnyGroup.Items)
@@ -197,6 +197,32 @@ namespace DbMetadataVisualizer
         {
             System.Diagnostics.Process.Start("Notepad", AppDomain.CurrentDomain.SetupInformation.ConfigurationFile);
             Application.Exit();
+        }
+
+        private void AnyListBox_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.C)
+            {
+                string TextToCopy = string.Empty;
+                foreach (string Item in ((ListBox)sender).SelectedItems)
+                {
+                    TextToCopy += Item + "\r\n";
+                }
+
+                Clipboard.SetText(TextToCopy);
+            }
+        }
+
+        private void toolStripMenuItemCopyDistinctFolders_Click(object sender, EventArgs e)
+        {
+            HashSet<string> Folders = new HashSet<string>();
+            foreach (string Item in ListBoxDocumentsNotInAnyGroup.Items)
+            {
+                Folders.Add(Path.GetDirectoryName(Path.Combine(DocRoot, Item)));
+            }
+            string TextToCopy = string.Join("\r\n", Folders.ToArray());
+
+            Clipboard.SetText(TextToCopy);
         }
     }
 }
