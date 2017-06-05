@@ -1,6 +1,6 @@
 ___
 
-##**PRM Release MillFrame 4.1.0**
+##**PRM Release MillFrame 4.2.0**
 
 #***PRM User Administration Console User Guide***
 
@@ -39,7 +39,7 @@ If you are having any technical difficulty with the product, please contact our 
 
 ##Overview
 
-Millframe 4.1.0 is an application that allows the Milliman administrators to add and manage users, and set different roles for the users. The global administrators can add, update and delete user’s association to a group. It allows global administrators to add, update and delete Groups and create rules for groups. It also allows to add, update and delete Super Groups, and grant or revoke user permissions as a publisher for a Super Group. The users can search for users, run a query to view the Logged In users, Locked users, Suspended users, and run reports to view the Group Contents etc.
+Millframe User Administrator Console is an application that allows the Milliman administrators to add and manage users, and set different roles for the users. The global administrators can add, update and delete user’s association to a group. It allows global administrators to add, update and delete Groups and create rules for groups. It also allows to add, update and delete Super Groups, and grant or revoke user permissions as a publisher for a Super Group. The users can search for users, run a query to view the Logged In users, Locked users, Suspended users, and run reports to view the Group Contents etc.
 
 
 ##Logging into the User Administrator Console
