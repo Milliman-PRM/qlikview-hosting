@@ -10,7 +10,6 @@ A non-exhaustive list of what has changed in a more readable form than a commit 
   - Client Publisher Console user guide updated
   - Improved the wording of warning messages in the Client Publisher
   - Add a button to the Project Management Console to view summary stats before publishing
-  - Implemented a system for password expiration
   - Blocked autocompletion of password fields for security purposes
 
 #### Client Admin changes (e.g. Client Publisher, Client Administration Console - prm.milliman.com/PRMAdmin)
@@ -41,6 +40,7 @@ A non-exhaustive list of what has changed in a more readable form than a commit 
   - Added `CI_Publish` publishing definition to support automated deployments of in-progress branches to a test environment
   - All open pull requests are published to PRM2, and cleaned up once closed.
   - Implemented x-frame-options HTTP header to defend against input hijacking and impersonation attacks
+  - Internet Explorer is no longer forced to render in IE7 compatibility mode
 
 
 
