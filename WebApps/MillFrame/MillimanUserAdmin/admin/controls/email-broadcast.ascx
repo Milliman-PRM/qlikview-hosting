@@ -36,8 +36,7 @@
         <input id="chkAll" onclick="SelectAllCheckboxes('chkRows',this.checked);" runat="server" type="checkbox" title="Check all checkboxes" />
       </HeaderTemplate>
       <ItemTemplate>
-        <asp:CheckBox ID="chkRows" runat="server" ToolTip="Select user in this row." onclick="alert( CountAllCheckboxesWithState('chkRows', true));" />
-          <!-- onclick="getElementById('totalRecordCount').innerText = CountAllCheckboxesWithState('chkRows', true);" -->
+        <asp:CheckBox ID="chkRows" runat="server" ToolTip="Select user in this row." onclick="getElementById('ctl00_ContentPlaceHolder1_emailBroadcast_totalRecordCount').innerText = CountAllCheckboxesWithState('chkRows', true);" />
       </ItemTemplate>
       <ItemStyle Width="25px" HorizontalAlign="Center" />
     </asp:TemplateField>
