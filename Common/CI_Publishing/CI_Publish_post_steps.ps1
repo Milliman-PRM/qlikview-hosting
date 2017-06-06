@@ -1,3 +1,12 @@
+# Code Owners: Ben Wyatt, Steve Gredell
+
+### OBJECTIVE:
+#  Run deployment steps on "testing server" to deploy MillFrame and components
+
+### DEVELOPER NOTES:
+#  Is pushed out to the "testing server" where it is picked up by a scheduled task and run
+
+
 $outputPath = "D:\installedapplications\prm_ci\<<branch_name>>\error.log"
 $urlFilePath = "D:\installedapplications\prm_ci\<<branch_name>>\urls.log"
 $urlBase = "https://prm2.milliman.com"
