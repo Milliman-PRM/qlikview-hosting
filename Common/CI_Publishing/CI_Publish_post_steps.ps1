@@ -23,7 +23,7 @@ try
                 "/prm_ci_<<branch_name>>_ProjectManagementConsoleServices" = "D:\installedapplications\prm_ci\<<branch_name>>\ProjectManagementConsoleServices";
                 "/prm_ci_<<branch_name>>_ProjectManConsole" = "D:\installedapplications\prm_ci\<<branch_name>>\ProjectManConsole";
                 "/prm_ci_<<branch_name>>_UserAdmin" = "D:\installedapplications\prm_ci\<<branch_name>>\UserAdmin"
-				}
+                }
 
     $name = "CI_<<branch_name>>"
     $appPool = Get-ChildItem –Path IIS:\AppPools | where {$_.name -eq $name}
