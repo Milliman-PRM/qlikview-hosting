@@ -115,7 +115,7 @@
                                     <asp:TemplateField ShowHeader="False">
                                         <EditItemTemplate>
                                             <asp:Button ID="Button1" CssClass="btn btn-primary" runat="server" CausesValidation="True" CommandName="Update" Text="Save" OnClientClick="return confirm('This will UPDATE the User Info. Click OK to continue.')" />
-                                            <asp:Button ID="Button2" CssClass="btn btn-primary" runat="server" CausesValidation="False" CommandName="Cancel" Text="Reset" OnClientClick="location.reload(true)" />
+                                            <asp:Button ID="Button2" CssClass="btn btn-primary" runat="server" CausesValidation="False" CommandName="Cancel" Text="Cancel" OnClientClick="location.reload(true)" />
                                             <asp:Button ID="Button4" CssClass="btn btn-primary" runat="server" Text="Unlock" OnClick="UnlockUser" OnClientClick="return confirm('Click OK to unlock this user.')" />
                                             <asp:Button ID="Button5" CssClass="btn btn-primary" runat="server" Text="Delete" OnClick="DeleteUser" OnClientClick="return confirm('Are you sure? This will delete all information related to this user including the user profile.')" />
                                         </EditItemTemplate>
