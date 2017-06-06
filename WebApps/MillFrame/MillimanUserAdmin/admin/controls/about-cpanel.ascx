@@ -4,7 +4,7 @@
 </div>
 <div class="dashboardWrap">
     <div class="dashboardTitle">
-      PRM User Administration v4.1.0
+      PRM User Administration v4.2.0
     </div>
  
     <div class="dashboardItem">
