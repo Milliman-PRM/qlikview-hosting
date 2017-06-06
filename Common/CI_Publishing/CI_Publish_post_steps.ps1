@@ -93,6 +93,10 @@ try
             $xml.Save($webConfigFilePath)
         }
 
+        # Replace QVDocuments path in PMC MappingFile.mapping: https://indy-github.milliman.com/PRM/qlikview-hosting/issues/142
+        $mappingFile = "D:\InstalledApplications\PRM_CI\((branch_name))\ProjectManConsole\AppCode\MappingFile.mapping"
+        Set-Content -LiteralPath $mappingFile ((get-content $mappingFile).Replace("PRM_Staging_PreStaging\PMC_Directories", "PRM_CI_Support\Runtime"))
+
         # If the web application already exists, remove it
         if ((Get-WebApplication $app.Key).Count -gt 0) { Remove-WebApplication -Name $app.Key -Site "Default Web Site" }
 
