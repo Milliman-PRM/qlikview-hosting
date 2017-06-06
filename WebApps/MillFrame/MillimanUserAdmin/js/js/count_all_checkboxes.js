@@ -18,5 +18,5 @@ function CountAllCheckboxesWithState(CheckBoxId, CheckVal) {
             }
         }
     }
-    return TotalCount;
+    return TotalCount.toString();
 }
