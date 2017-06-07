@@ -32,10 +32,10 @@ function ChangeRowColor(row) {
 //-------------------------------------------------------------------------------
 //  toggle checkboxes in gridview javascript function
 //-------------------------------------------------------------------------------
-function SelectAllCheckboxes(CheckBoxId, CheckVal) {
+function SelectAllCheckboxes(CheckBoxId, CheckVal, WhereToWrite) {
     var idEndsWithSelector = "input:checkbox[id$='" + CheckBoxId + "']";
     $(idEndsWithSelector).each(function (index) {
         this.checked = CheckVal;  // does not trigger the click event on the checkbox
     })
-    return CountAllCheckboxesWithState(CheckBoxId, CheckVal);  // returns string
+    return CountAllCheckboxesWithState(CheckBoxId, CheckVal, WhereToWrite);
 }
