@@ -5,7 +5,7 @@
     <a name="login" id="login" style="display: block; height: 0px; width: 0px; border: 0px;"></a>
     <div class="liTitle" style="font-size: 14pt; text-align: center" title="Project Management Console&#13;Updated:Dec 9, 2015">
         <img src="images/PRMLogo_height80.png" style="width: 99%" />
-        Project Management Console v4.1.1
+        Project Management Console v4.2.0
     </div>
     <asp:ValidationSummary ID="ValidationSummary1" runat="server" ShowMessageBox="True" ValidationGroup="Login1" EnableClientScript="False" />
     <%-- success label --%>
@@ -32,7 +32,7 @@
                         </div>
                         <asp:Label ID="PasswordLabel" runat="server" AssociatedControlID="Password">Password:*</asp:Label>
                         <asp:RequiredFieldValidator ID="PasswordRequired" runat="server" ControlToValidate="Password" ErrorMessage="Password is required." ToolTip="Password is required." ValidationGroup="Login1" Display="Dynamic" EnableClientScript="False">*</asp:RequiredFieldValidator>
-                        <asp:TextBox ID="Password" runat="server" TabIndex="2" TextMode="Password" ToolTip="enter your password" MaxLength="50" Width="98%"></asp:TextBox>
+                        <asp:TextBox ID="Password"  AutoCompleteType="Disabled" runat="server" TabIndex="2" TextMode="Password" ToolTip="enter your password" MaxLength="50" Width="98%"></asp:TextBox>
                         <div class="clearBoth2">
                         </div>
                         <div class="hr">

@@ -1,3 +1,12 @@
+# Code Owners: Ben Wyatt, Steve Gredell
+
+### OBJECTIVE:
+#  Run deployment steps on "testing server" to deploy MillFrame and components
+
+### DEVELOPER NOTES:
+#  Is pushed out to the "testing server" where it is picked up by a scheduled task and run
+
+
 $outputPath = "D:\installedapplications\prm_ci\<<branch_name>>\error.log"
 $urlFilePath = "D:\installedapplications\prm_ci\<<branch_name>>\urls.log"
 $urlBase = "https://prm2.milliman.com"
@@ -18,12 +27,12 @@ try
     $apps = @{
                 "/prm_ci_<<branch_name>>_ClientPublisher" = "D:\installedapplications\prm_ci\<<branch_name>>\ClientPublisher";
                 "/prm_ci_<<branch_name>>_ClientAdmin" = "D:\installedapplications\prm_ci\<<branch_name>>\ClientUserAdmin";
-                "/prm_ci_<<branch_name>>_Milliman" = "D:\installedapplications\prm_ci\<<branch_name>>\Milliman";
+                "/prm_ci_<<branch_name>>" = "D:\installedapplications\prm_ci\<<branch_name>>\Milliman";
                 "/prm_ci_<<branch_name>>_MillimanServices" = "D:\installedapplications\prm_ci\<<branch_name>>\MillimanServices";
                 "/prm_ci_<<branch_name>>_ProjectManagementConsoleServices" = "D:\installedapplications\prm_ci\<<branch_name>>\ProjectManagementConsoleServices";
                 "/prm_ci_<<branch_name>>_ProjectManConsole" = "D:\installedapplications\prm_ci\<<branch_name>>\ProjectManConsole";
                 "/prm_ci_<<branch_name>>_UserAdmin" = "D:\installedapplications\prm_ci\<<branch_name>>\UserAdmin"
-				}
+                }
 
     $name = "CI_<<branch_name>>"
     $appPool = Get-ChildItem –Path IIS:\AppPools | where {$_.name -eq $name}
@@ -92,6 +101,10 @@ try
             }
             $xml.Save($webConfigFilePath)
         }
+
+        # Replace QVDocuments path in PMC MappingFile.mapping: https://indy-github.milliman.com/PRM/qlikview-hosting/issues/142
+        $mappingFile = "D:\InstalledApplications\PRM_CI\<<branch_name>>\ProjectManConsole\AppCode\MappingFile.mapping"
+        Set-Content -LiteralPath $mappingFile (get-content $mappingFile).Replace("PRM_Staging_PreStaging\PMC_Directories", "PRM_CI_Support\Runtime")
 
         # If the web application already exists, remove it
         if ((Get-WebApplication $app.Key).Count -gt 0) { Remove-WebApplication -Name $app.Key -Site "Default Web Site" }
