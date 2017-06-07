@@ -36,7 +36,7 @@
         <input id="chkAll" onclick="SelectAllCheckboxes('chkRows',this.checked);" runat="server" type="checkbox" title="Check all checkboxes" />
       </HeaderTemplate>
       <ItemTemplate>
-        <asp:CheckBox ID="chkRows" runat="server" ToolTip="Select user in this row." onclick="document.getElementById('ctl00_ContentPlaceHolder1_emailBroadcast_totalRecordCount').innerText = CountAllCheckboxesWithState('chkRows', true);" />
+        <asp:CheckBox ID="chkRows" runat="server" ToolTip="Select user in this row." onclick="document.getElementById('ctl00_ContentPlaceHolder1_emailBroadcast_selectedCount').innerText = CountAllCheckboxesWithState('chkRows', true) + ' selected';" />
       </ItemTemplate>
       <ItemStyle Width="25px" HorizontalAlign="Center" />
     </asp:TemplateField>
@@ -107,6 +107,10 @@
   <%-- total record count --%>
   <div class="messageWrap">
     <asp:HyperLink ID="totalRecordCount" runat="server"></asp:HyperLink>
+  </div>
+  <%-- selected count --%>
+  <div class="messageWrap">
+    <asp:HyperLink ID="selectedCount" runat="server">0 selected</asp:HyperLink>
   </div>
   <%-- delete selected users button --%>
   <div class="buttonCSS">
