@@ -33,10 +33,10 @@
     <asp:BoundField DataField="RowNumber" HeaderText="#" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="20px" />
     <asp:TemplateField HeaderText="Del">
       <HeaderTemplate>
-        <input id="chkAll" onclick="SelectAllCheckboxes('chkRows',this.checked);" runat="server" type="checkbox" title="Check all checkboxes" />
+        <input id="chkAll" onclick="$(a[id$='_selectedCount']).innerText = SelectAllCheckboxes('chkRows', this.checked);" runat="server" type="checkbox" title="Check all checkboxes" />
       </HeaderTemplate>
       <ItemTemplate>
-        <asp:CheckBox ID="chkRows" runat="server" ToolTip="Select user in this row." onclick="document.getElementById('ctl00_ContentPlaceHolder1_emailBroadcast_selectedCount').innerText = CountAllCheckboxesWithState('chkRows', true) + ' selected';" />
+        <asp:CheckBox ID="chkRows" runat="server" ToolTip="Select user in this row." onclick="$(a[id$='_selectedCount']).innerText = CountAllCheckboxesWithState('chkRows', true) + ' selected';" />
       </ItemTemplate>
       <ItemStyle Width="25px" HorizontalAlign="Center" />
     </asp:TemplateField>

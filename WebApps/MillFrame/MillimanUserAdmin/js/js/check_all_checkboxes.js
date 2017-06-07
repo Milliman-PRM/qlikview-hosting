@@ -33,17 +33,9 @@ function ChangeRowColor(row) {
 //  toggle checkboxes in gridview javascript function
 //-------------------------------------------------------------------------------
 function SelectAllCheckboxes(CheckBoxId, CheckVal) {
-    for (var i = 0; i < document.forms[0].elements.length; i++) //Loop through all form elements
-    {
-        var elm = document.forms[0].elements[i];
-        if (elm.type === 'checkbox') //Check if the element is a checkbox
-        {
-            var str = elm.name;
-            if (str.indexOf(CheckBoxId) !== -1) //See if checkbox has ID which we're looking for
-            {
-                elm.click();
-                elm.checked = CheckVal; //Set the checked value
-            }
-        }
-    }
+    var idEndsWithSelector = "input:checkbox[id$='" + CheckBoxId + "']";
+    $(idEndsWithSelector).each(function (index) {
+        this.checked = CheckVal;  // does not trigger the click event on the checkbox
+    })
+    return CountAllCheckboxesWithState(CheckBoxId, CheckVal);  // returns string
 }
