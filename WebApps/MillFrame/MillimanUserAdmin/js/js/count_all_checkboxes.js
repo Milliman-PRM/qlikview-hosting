@@ -3,9 +3,9 @@
 //-------------------------------------------------------------------------------
 function CountAllCheckboxesWithState(CheckBoxId, CheckVal) {
     var TotalCount = 0;
-    for (i = 0; i < document.forms[0].elements.length; i++) //Loop through all form elements
+    for (var i = 0; i < document.forms[0].elements.length; i++) //Loop through all form elements
     {
-        elm = document.forms[0].elements[i];
+        var elm = document.forms[0].elements[i];
         if (elm.type === 'checkbox') //Check if the element is a checkbox
         {
             var str = elm.name;
