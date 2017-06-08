@@ -37,5 +37,5 @@ function SelectAllCheckboxes(CheckBoxId, CheckVal, WhereToWrite) {
     $(idEndsWithSelector).each(function (index) {
         this.checked = CheckVal;  // does not trigger the click event on the checkbox
     })
-    return CountAllCheckboxesWithState(CheckBoxId, CheckVal, WhereToWrite);
+    return CountAllCheckboxesWithState(CheckBoxId, true, WhereToWrite);
 }
