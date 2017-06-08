@@ -95,8 +95,9 @@ foreach ($line in $paths)
         {
             # Some of the config files explicitly set the connection string, rather than pulling from template files
             # There are a couple different possible values based on current config files
-            $connectionString = $root.connectionStrings.ChildNodes.connectionString.Replace("PortalDB_CI","PortalDBSFv2M1")
-            $connectionString = $root.connectionStrings.ChildNodes.connectionString.Replace("PortalDB_Staging","PortalDBSFv2M1")
+            $connectionString = $root.connectionStrings.ChildNodes[0].connectionString
+            $connectionString = $connectionString.Replace("PortalDB_CI","PortalDBSFv2M1")
+            $connectionString = $connectionString.Replace("PortalDB_Staging","PortalDBSFv2M1")
             $root.connectionStrings.ChildNodes[0].SetAttribute("connectionString", $connectionString)
         }
         else
