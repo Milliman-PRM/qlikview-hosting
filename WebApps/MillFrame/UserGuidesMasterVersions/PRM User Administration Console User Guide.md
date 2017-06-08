@@ -130,7 +130,7 @@ Clicking on the + button beside the Categories listed in **Group Selection** rev
 
 Administrator can click on the **Save** button to create user account(s).
 
-Administrator can click on the **Reset** button to reset all the fields to its default state.
+Administrator can click on the **Cancel** button to reset all the fields to their currently stored values.
 
 ![](Images/PRM_User_Administration_Console_User_Guide/image6.png ""){width=100% height=auto}\
 
