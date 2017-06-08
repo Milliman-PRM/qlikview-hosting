@@ -124,7 +124,7 @@ if ($errorCode -eq 0)
 {
     try
     {
-        set-webconfigurationproperty -PSPath "MACHINE/WEBROOT/APPHOST/Default Web Site/prm_ci_<<branch_name>>_Milliman" -Filter "system.web/authentication/forms" -name loginURL -value "UserLogin.aspx"
+        set-webconfigurationproperty -PSPath "MACHINE/WEBROOT/APPHOST/Default Web Site/prm_ci_<<branch_name>>" -Filter "system.web/authentication/forms" -name loginURL -value "UserLogin.aspx"
     }
     catch
     {
