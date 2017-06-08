@@ -30,7 +30,7 @@
             <table style="width: 100%; height: 100%;">
                 <tr>
                     <td style="float: left;"><a href="./default.aspx">
-                        <img src="../images/PRMLogo_height80.png" style="border-width: 0px; height: 55px;" /></a> </td>
+                        <img alt="Milliman PRM Analytics logo" src="../images/PRMLogo_height80.png" style="border-width: 0px; height: 55px;" /></a> </td>
                     <td>
 <%--                        let's include a hidden iframe that points to a no-information page on server - if session is expired, then
                         navigating to verification.aspx, will kick us back to login screen, which has a framebuster to make it top level window--%>
