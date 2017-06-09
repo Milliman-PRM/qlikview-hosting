@@ -35,6 +35,7 @@ The following procedures must be completed before deployment begins.
 	-	Take care to ensure that your local copy of the file only specifies source & target paths for applications to be updated on the target server. For example, do not include the PMC when deploying to the production web server, as it should not have that application installed.
 	-	If you have mapped the share above as X:, you will only have to update the source folder paths. Find & replace is your friend.
 -	Execute `Millframe_Deployment.ps1`, specifying your updated `pathMap.csv` as the `-pathMapFile` parameter, to complete the code deployment.
+-	Restart IIS on the production server
 
 ### Post-deployment testing
 
