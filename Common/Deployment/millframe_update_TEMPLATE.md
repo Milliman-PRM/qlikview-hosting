@@ -25,7 +25,7 @@ The following procedures must be completed before deployment begins.
 -   Make sure no users are running the system
 -   Reboot the server
 -   Copy `D:\InstalledApplications\PRM` to another location
--   Back up the `PortalDBSFV2m1` to another location
+-   Back up the `PortalDBSFV2m1` database to another location
 -   Archive the two backups made above to `\\indy-backups\PRM\_Archive`
 
 ### Deploying code updates - Executed from `Indy-PRM-2`
