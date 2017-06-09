@@ -21,6 +21,7 @@ A non-exhaustive list of what has changed in a more readable form than a commit 
   - Improvements to the reduction status reporting
   - Improvements to the reduction process error handling
   - Blocked autocompletion of password fields for security purposes
+  - Force redirect to login.aspx if the user is not currently authenticated
 
 #### Automated Processes changes (e.g. License Cleaner, Report Reduction, System Backup, Server Monitor, Backup Utility)
 
