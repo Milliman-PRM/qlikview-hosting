@@ -197,6 +197,10 @@
       <Link>Configs\appsettings_CI.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="..\appsettings_PRODUCTION.config">
+      <Link>Configs\appsettings_PRODUCTION.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="..\appsettings_VN.config">
       <Link>Configs\appsettings_VN.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -207,6 +211,10 @@
     </None>
     <None Include="..\connectionStrings_CI.config">
       <Link>Configs\connectionStrings_CI.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\connectionStrings_PRODUCTION.config">
+      <Link>Configs\connectionStrings_PRODUCTION.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\connectionStrings_TP.config">

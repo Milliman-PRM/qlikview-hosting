@@ -328,6 +328,10 @@
       <Link>Configs\appsettings_PreStag.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\appsettings_PRODUCTION.config">
+      <Link>Configs\appsettings_PRODUCTION.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\appsettings_Stag.config">
       <Link>Configs\appsettings_Stag.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -355,6 +359,10 @@
     </None>
     <None Include="..\..\connectionStrings_PreStag.config">
       <Link>Configs\connectionStrings_PreStag.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\connectionStrings_PRODUCTION.config">
+      <Link>Configs\connectionStrings_PRODUCTION.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\..\connectionStrings_Stag.config">
@@ -421,7 +429,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>2183</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
