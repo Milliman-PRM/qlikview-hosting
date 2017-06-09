@@ -59,7 +59,7 @@
         }
     </style>
 </head>
-<body onresize="FullSize('MainTable');" style="background-image: url(Imates/watermark.png); overflow: hidden">
+<body onresize="FullSize('MainTable');" style="overflow: hidden">
     <div id="zone" style="width: 100%; height: 100%">
         <form id="form1" runat="server">
             <telerik:RadScriptManager ID="RadScriptManager1" runat="server">

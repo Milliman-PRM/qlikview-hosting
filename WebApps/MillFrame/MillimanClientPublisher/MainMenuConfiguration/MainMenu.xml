@@ -5,7 +5,7 @@
     <Item Text='Profile' Href='javascript:OpenProfile();' Width='100px' LeftLogo="images/administrator-icon.png" />
     <Item Text='Help' Width='100px'>
       <Group Flow='Vertical'>
-        <Item Text='Support' Width='200px' Href="mailto:prm.support@milliman.com?Subject='Support%20Request'" Target='_blank'/>
+        <Item Text='Support' Width='200px' Href="mailto:prm.support@milliman.com?Subject='Support%20Request'" />
         <Item Text='About Milliman' Width='200px' Href='http://www.milliman.com' Target='_blank'  />
       </Group>
     </Item>

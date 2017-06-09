@@ -8,7 +8,7 @@
     <link href="../Content/Style/bootstrap.css" rel="stylesheet" />
     <link href="../Content/Style/MillframeStyle.css" rel="stylesheet" />
 </head>
-<body style="background-color: white; background-image: url(../images/watermark.png); background-repeat: repeat">
+<body style="background-color: white;">
     <form id="form1" runat="server">
         <div id="divErrorPageContainer" class="center-block">
             <div class="row">

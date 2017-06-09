@@ -33,10 +33,10 @@
     <asp:BoundField DataField="RowNumber" HeaderText="#" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="20px" />
     <asp:TemplateField HeaderText="Del">
       <HeaderTemplate>
-        <input id="chkAll" onclick="SelectAllCheckboxes('chkRows',this.checked);" runat="server" type="checkbox" title="Check all checkboxes" />
+        <input id="chkAll" onclick="SelectAllCheckboxes('_chkRows', this.checked, '_selectedCount');" runat="server" type="checkbox" title="Check all checkboxes" />
       </HeaderTemplate>
       <ItemTemplate>
-        <asp:CheckBox ID="chkRows" runat="server" ToolTip="Select user in this row." />
+        <asp:CheckBox ID="chkRows" runat="server" ToolTip="Select user in this row." onclick="CountAllCheckboxesWithState('_chkRows', true, '_selectedCount')" />
       </ItemTemplate>
       <ItemStyle Width="25px" HorizontalAlign="Center" />
     </asp:TemplateField>
@@ -107,6 +107,10 @@
   <%-- total record count --%>
   <div class="messageWrap">
     <asp:HyperLink ID="totalRecordCount" runat="server"></asp:HyperLink>
+  </div>
+  <%-- selected count --%>
+  <div class="messageWrap">
+    <asp:HyperLink ID="selectedCount" runat="server">0 selected</asp:HyperLink>
   </div>
   <%-- delete selected users button --%>
   <div class="buttonCSS">

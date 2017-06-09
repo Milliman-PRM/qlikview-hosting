@@ -1,6 +1,15 @@
+# Code Owners: Ben Wyatt, Steve Gredell
+
+### OBJECTIVE:
+#  Run deployment steps on "testing server" to deploy MillFrame and components
+
+### DEVELOPER NOTES:
+#  Is pushed out to the "testing server" where it is picked up by a scheduled task and run
+
+
 $outputPath = "D:\installedapplications\prm_ci\<<branch_name>>\error.log"
 $urlFilePath = "D:\installedapplications\prm_ci\<<branch_name>>\urls.log"
-$urlBase = "https://indy-prm-2.milliman.com"
+$urlBase = "https://prm2.milliman.com"
 $errorCode = 0
 
 # Clear URL file, if it exists
@@ -17,13 +26,28 @@ try
 {
     $apps = @{
                 "/prm_ci_<<branch_name>>_ClientPublisher" = "D:\installedapplications\prm_ci\<<branch_name>>\ClientPublisher";
-                "/prm_ci_<<branch_name>>_ClientUserAdmin" = "D:\installedapplications\prm_ci\<<branch_name>>\ClientUserAdmin";
-                "/prm_ci_<<branch_name>>_Milliman" = "D:\installedapplications\prm_ci\<<branch_name>>\Milliman";
+                "/prm_ci_<<branch_name>>_ClientAdmin" = "D:\installedapplications\prm_ci\<<branch_name>>\ClientUserAdmin";
+                "/prm_ci_<<branch_name>>" = "D:\installedapplications\prm_ci\<<branch_name>>\Milliman";
                 "/prm_ci_<<branch_name>>_MillimanServices" = "D:\installedapplications\prm_ci\<<branch_name>>\MillimanServices";
                 "/prm_ci_<<branch_name>>_ProjectManagementConsoleServices" = "D:\installedapplications\prm_ci\<<branch_name>>\ProjectManagementConsoleServices";
                 "/prm_ci_<<branch_name>>_ProjectManConsole" = "D:\installedapplications\prm_ci\<<branch_name>>\ProjectManConsole";
                 "/prm_ci_<<branch_name>>_UserAdmin" = "D:\installedapplications\prm_ci\<<branch_name>>\UserAdmin"
-				}
+                }
+
+    $name = "CI_<<branch_name>>"
+    $appPool = Get-ChildItem –Path IIS:\AppPools | where {$_.name -eq $name}
+
+    # Create branch-specific app pool if it doesn't already exist
+    if (-not $appPool)
+    {
+        $command = "C:\windows\system32\inetsrv\appcmd.exe add apppool /name:$name /managedRuntimeVersion:v4.0"
+        invoke-expression $command 
+
+        # Configuring credentials must be done separately from creating the application pool
+        $command = "C:\windows\system32\inetsrv\appcmd.exe set config /section:applicationPools `"/[name='$name'].processModel.identityType:SpecificUser`" `"/[name='$name'].processModel.userName:indy-prm-2\MillimanAdmin`" `"/[name='$name'].processModel.password:<<pool_password>>`""
+        invoke-expression $command
+    }
+
 
     foreach ($app in $apps.GetEnumerator())
     {
@@ -78,11 +102,15 @@ try
             $xml.Save($webConfigFilePath)
         }
 
+        # Replace QVDocuments path in PMC MappingFile.mapping: https://indy-github.milliman.com/PRM/qlikview-hosting/issues/142
+        $mappingFile = "D:\InstalledApplications\PRM_CI\<<branch_name>>\ProjectManConsole\AppCode\MappingFile.mapping"
+        Set-Content -LiteralPath $mappingFile (get-content $mappingFile).Replace("PRM_Staging_PreStaging\PMC_Directories", "PRM_CI_Support\Runtime")
+
         # If the web application already exists, remove it
         if ((Get-WebApplication $app.Key).Count -gt 0) { Remove-WebApplication -Name $app.Key -Site "Default Web Site" }
 
         # Create web application
-        New-WebApplication -Name $app.Key -PhysicalPath $app.Value -Site "Default Web Site" -ApplicationPool "CI_IIS"
+        New-WebApplication -Name $app.Key -PhysicalPath $app.Value -Site "Default Web Site" -ApplicationPool "CI_<<branch_name>>"
         Add-Content -LiteralPath $urlFilePath ($urlBase + $app.Name + "/")
     }
 }
@@ -96,7 +124,7 @@ if ($errorCode -eq 0)
 {
     try
     {
-        set-webconfigurationproperty -PSPath "MACHINE/WEBROOT/APPHOST/Default Web Site/prm_ci_<<branch_name>>_Milliman" -Filter "system.web/authentication/forms" -name loginURL -value "UserLogin.aspx"
+        set-webconfigurationproperty -PSPath "MACHINE/WEBROOT/APPHOST/Default Web Site/prm_ci_<<branch_name>>" -Filter "system.web/authentication/forms" -name loginURL -value "UserLogin.aspx"
     }
     catch
     {
