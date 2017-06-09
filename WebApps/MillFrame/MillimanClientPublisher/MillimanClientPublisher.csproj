@@ -159,6 +159,7 @@
     <Content Include="images\status.png" />
     <Content Include="images\stop-icon.png" />
     <Content Include="images\warning-icon.png" />
+    <Content Include="PasswordExpired.aspx" />
     <Content Include="ReductionStep2.aspx" />
     <Content Include="ComplexReporting\Summary.aspx" />
     <Content Include="HTML\GeneralIssue.aspx" />
@@ -192,12 +193,20 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </None>
+    <None Include="..\appsettings_CI.config">
+      <Link>Configs\appsettings_CI.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="..\appsettings_VN.config">
       <Link>Configs\appsettings_VN.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\connectionStrings_AK.config">
       <Link>Configs\connectionStrings_AK.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\connectionStrings_CI.config">
+      <Link>Configs\connectionStrings_CI.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\connectionStrings_TP.config">
@@ -239,6 +248,7 @@
       <Link>Configs\connectionStrings_Stakeholder.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Properties\PublishProfiles\CI_Publish.pubxml" />
     <None Include="Properties\PublishProfiles\Debug_vn.pubxml" />
     <None Include="Properties\PublishProfiles\LocalPublish.pubxml" />
     <None Include="Properties\PublishProfiles\MillimanClientPublisher_AK.pubxml" />
@@ -372,6 +382,13 @@
     </Compile>
     <Compile Include="ComplexReporting\ReviewApproval.aspx.designer.cs">
       <DependentUpon>ReviewApproval.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PasswordExpired.aspx.cs">
+      <DependentUpon>PasswordExpired.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PasswordExpired.aspx.designer.cs">
+      <DependentUpon>PasswordExpired.aspx</DependentUpon>
     </Compile>
     <Compile Include="ReductionStep2.aspx.cs">
       <DependentUpon>ReductionStep2.aspx</DependentUpon>

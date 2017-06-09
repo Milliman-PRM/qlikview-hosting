@@ -52,11 +52,19 @@ namespace ClientPublisher
             return DashboardIndex == -1 ? string.Empty : Items[DashboardIndex];
         }
 
+        /// <summary>
+        /// Checks whether the current session is authenticated and redirects to login page when not, except when loading pages that don't require an authenticated user
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void Application_AuthenticateRequest(object sender, EventArgs e)
         {
             string CurrentPage = Path.GetFileName(Request.PhysicalPath);
 
-            //if ((string.Compare(CurrentPage, @"UserLogin.aspx", true) != 0) && (string.Compare(CurrentPage, @"LostPassword.aspx", true) != 0) && (string.Compare(CurrentPage, @"time.aspx", true) != 0)) //no recursive login voodoo
+            //if ((string.Compare(CurrentPage, @"UserLogin.aspx", true) != 0) && 
+            //    (string.Compare(CurrentPage, @"LostPassword.aspx", true) != 0) && 
+            //    (string.Compare(CurrentPage, @"PasswordExpired.aspx", true) != 0) &&
+            //    (string.Compare(CurrentPage, @"time.aspx", true) != 0)) //no recursive login voodoo
             //{
             //    if (string.Compare(Request.CurrentExecutionFilePathExtension, @".aspx", true) == 0)  //only protect aspx pages
             //    {

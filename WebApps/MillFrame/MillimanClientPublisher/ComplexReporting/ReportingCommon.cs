@@ -88,7 +88,7 @@ namespace ClientPublisher.ComplexReporting
                 foreach (string PHILeak in Reduced)
                 {
                     if (string.IsNullOrEmpty(PHILeak) == false) //dont add empty entries
-                        ThisUserInfo.Add(new List<string>() { "", "", RedMsg.Replace("_MSG_", PHILeak), RedMsg.Replace("_MSG_", "PHI BREACH"), "" });
+                        ThisUserInfo.Add(new List<string>() { "", "", RedMsg.Replace("_MSG_", PHILeak), RedMsg.Replace("_MSG_", "Previously Not Authorized"), "" });
                 }
                 foreach (string Missing in AdminSelected)
                 {

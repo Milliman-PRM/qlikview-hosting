@@ -607,7 +607,7 @@ namespace CLSMedicareReimbursement
                     RatesGrid.DataBind();
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //report error
             }

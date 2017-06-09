@@ -139,6 +139,7 @@
     <Content Include="Javascript\jquery.v1.7.1.js" />
     <Content Include="Javascript\npm.js" />
     <Content Include="Logs\placeholder.txt" />
+    <Content Include="PasswordExpired.aspx" />
     <Content Include="SecureLinkUsed.html" />
     <Content Include="SecureLinkIssue.html" />
     <Content Include="EmailDameon.asmx" />
@@ -256,6 +257,13 @@
     <Compile Include="MillimanLogout.aspx.designer.cs">
       <DependentUpon>MillimanLogout.aspx</DependentUpon>
     </Compile>
+    <Compile Include="PasswordExpired.aspx.cs">
+      <DependentUpon>PasswordExpired.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PasswordExpired.aspx.designer.cs">
+      <DependentUpon>PasswordExpired.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Profile.aspx.cs">
       <DependentUpon>Profile.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -313,6 +321,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </None>
+    <None Include="..\..\appsettings_CI.config">
+      <Link>Configs\appsettings_CI.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\appsettings_PreStag.config">
       <Link>Configs\appsettings_PreStag.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -338,6 +350,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </None>
+    <None Include="..\..\connectionStrings_CI.config">
+      <Link>Configs\connectionStrings_CI.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\connectionStrings_PreStag.config">
       <Link>Configs\connectionStrings_PreStag.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -358,6 +374,7 @@
       <Link>Configs\connectionStrings_VN.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Properties\PublishProfiles\CI_Publish.pubxml" />
     <None Include="Properties\PublishProfiles\milliman-sk.pubxml" />
     <None Include="Properties\PublishProfiles\MillimanDebug.pubxml" />
     <Content Include="SSOConfigure\HCIntel.cer" />

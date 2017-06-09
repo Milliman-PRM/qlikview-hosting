@@ -33,6 +33,7 @@
     <asp:Label runat="server" ID="SignatureVerifications">Starting verification......</asp:Label><br /><br />
     <center>
         <asp:Button ID="RenameGroup" runat="server" Text="Rename Group" Visible="false" OnClick="RenameGroup_Click"></asp:Button>
+        <asp:Button ID="PublishContent" runat="server" Text="Publish Content" Visible="false" OnClick="PublishContent_Click"></asp:Button>
     </center>
     </div>
     </form>

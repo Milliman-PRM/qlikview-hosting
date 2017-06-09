@@ -82,16 +82,35 @@ namespace ClientPublisher
         {
             if (Membership.ValidateUser(txtUserName.Text, txtPassword.Text))
             {
-                this.Session["milliman"] = "Yes, I am!";
-                Session["patientid"] = "";
                 MembershipUserCollection MUC = Membership.FindUsersByName(txtUserName.Text);
                 MembershipUser MU = MUC[txtUserName.Text];
-                FormsAuthentication.SetAuthCookie(MU.UserName, false);
 
-                CleanupUserLocalDirectory();
+                string PasswordExpirationDaysString = WebConfigurationManager.AppSettings["PasswordExpirationDays"];
+                int PasswordExpirationDays;
+                if (int.TryParse(PasswordExpirationDaysString, out PasswordExpirationDays) == false)
+                {
+                    PasswordExpirationDays = 60;  // default
+                }
+                TimeSpan ConfiguredPasswordExpiration = new TimeSpan(PasswordExpirationDays, 0, 0, 0);
+                TimeSpan TimeSinceLastPasswordChange = DateTime.Now - MU.LastPasswordChangedDate;
 
-                Response.Redirect("default.aspx");
+                if (TimeSinceLastPasswordChange > ConfiguredPasswordExpiration)
+                {
+                    // Password is expired, handle that.
+                    Session["passwordagedays"] = (int)(TimeSinceLastPasswordChange.TotalDays);
+                    Response.Redirect("PasswordExpired.aspx");
+                    return;
+                }
+                else
+                {
+                    // OK to treat as authenticated session
+                    this.Session["milliman"] = "Yes, I am!";
+                    Session["patientid"] = "";
+                    FormsAuthentication.SetAuthCookie(MU.UserName, false);
 
+                    Response.Redirect("default.aspx");
+                    return;
+                }
             }
             else
             {

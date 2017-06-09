@@ -40,202 +40,222 @@ namespace ClientPublisher
             //reduction report.aspx since it's the first screen of publishing
             public void Process(object parms)
             {
-                //we would have created a tooltip.dat, description.dat and reductionrequired.dat file if the values changed
-                ClientPublisher.ProcessingCode.Processor Process = new ClientPublisher.ProcessingCode.Processor();
-
-                DisplayMessage = "Setting up local working directories....";
-
-                string ReducedCacheDir = System.IO.Path.Combine(ProjectSettings.AbsoluteProjectPath, "ReducedCachedQVWs");
-                string ReducedUserDir = System.IO.Path.Combine(ProjectSettings.AbsoluteProjectPath, "ReducedUserQVWs");
-                string WorkingCacheDir = System.IO.Path.Combine(WorkingDirectory, "ReducedCachedQVWs");
-                string WorkingUserDir = System.IO.Path.Combine(WorkingDirectory, "ReducedUserQVWs");
-
-                //first clear the working directories
-               if ( Process.SetupWorkingDirectory(WorkingDirectory) == false )
-               {
-                    MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "Failed to clear working directory'" + WorkingDirectory + "'");
-                    NavigateTo = "HTML/GeneralIssue.aspx?msg=" + MillimanCommon.Utilities.ConvertStringToHex("Failed to clear working directory'" + WorkingDirectory + "'");  
-                    TaskCompletionWithError = true;
-                    TaskCompleted = true;
-                    base.TaskProcessor(parms);
-                    return;
-               }
-               DisplayMessage = "Copying files to local working directories....";
-                //Copy selections files & user dirs
-                if ( Process.CopyLegacyProjectFiles( WorkingDirectory, ProjectSettings) == false )
+                try
                 {
-                    MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "Failed to copy needed files from published project '" + ProjectSettings.ProjectName + "'");
-                    NavigateTo = "HTML/GeneralIssue.aspx?msg=" + MillimanCommon.Utilities.ConvertStringToHex("Failed to copy needed files from published project '" + ProjectSettings.ProjectName + "'");
-                    TaskCompletionWithError = true;
-                    TaskCompleted = true;
-                    base.TaskProcessor(parms);
-                    return;
-                }
+                    //we would have created a tooltip.dat, description.dat and reductionrequired.dat file if the values changed
+                    ClientPublisher.ProcessingCode.Processor Process = new ClientPublisher.ProcessingCode.Processor();
 
-                //new code added to validate before processing
-                string LegacyDirectory = System.IO.Path.Combine(WorkingDirectory, "Legacy"); //copies old version of project here for processing
-                if (ValidationProcessor(LegacyDirectory, ProjectSettings) == false)
-                {
-                    //validation processor logs an eror, thus no need here
-                    NavigateTo = "HTML/GeneralIssue.aspx?msg=" + MillimanCommon.Utilities.ConvertStringToHex("The project '" + ProjectSettings.ProjectName + "' failed to validate.  Please report this issue to a system administrator for assistance.");
-                    TaskCompletionWithError = true;
-                    TaskCompleted = true;
-                    base.TaskProcessor(parms);
-                    return;
-                }
-                // end validation code
+                    DisplayMessage = "Setting up local working directories....";
 
-                DisplayMessage = "Generating hierarchy information setup for new QVW....";
-                //issue request for hierarchy from new master QVW ( needed for autoinclusion processor )
-                MillimanCommon.ReduceConfig ReductionConfiguration = Process.NewMasterQVWParameters(WorkingDirectory, ProjectSettings);
-                if ( ReductionConfiguration == null )
-                {
-                    MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "Failed to create configuration file to extract data from '" + ProjectSettings.ProjectName + "'");
-                    NavigateTo = "HTML/GeneralIssue.aspx?msg=" + MillimanCommon.Utilities.ConvertStringToHex("Failed to create configuration file to extract data from '" + ProjectSettings.ProjectName + "'");
-                    TaskCompletionWithError = true;
-                    TaskCompleted = true;
-                    base.TaskProcessor(parms);
-                    return;
-                }
+                    string ReducedCacheDir = System.IO.Path.Combine(ProjectSettings.AbsoluteProjectPath, "ReducedCachedQVWs");
+                    string ReducedUserDir = System.IO.Path.Combine(ProjectSettings.AbsoluteProjectPath, "ReducedUserQVWs");
+                    string WorkingCacheDir = System.IO.Path.Combine(WorkingDirectory, "ReducedCachedQVWs");
+                    string WorkingUserDir = System.IO.Path.Combine(WorkingDirectory, "ReducedUserQVWs");
 
-                //always do this since we need the hiearchy info anyway
-                DisplayMessage = "Request processing to generate new QVW hierarchy....";
-                string RootReductionFolder = System.Configuration.ConfigurationManager.AppSettings["ReductionServerRoot"];
-                //issue request for hierarchy from new master QVW ( needed for autoinclusion processor )
-                bool NewMasterQVWProcessing = Process.ProcessMasterQVW(WorkingDirectory, ProjectSettings, ReductionConfiguration, RootReductionFolder);
-                
-                if (NewMasterQVWProcessing == false)
-                {
-                    MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "Failed to process new master QVW '" + ProjectSettings.ProjectName + "'");
-                    NavigateTo = "HTML/GeneralIssue.aspx?msg=" + MillimanCommon.Utilities.ConvertStringToHex("Failed to process new master QVW '" + ProjectSettings.ProjectName + "'");
-                    TaskCompletionWithError = true;
-                    TaskCompleted = true;
-                    base.TaskProcessor(parms);
-                    return;
-                }
-
-                DisplayMessage = "Hierarchy generated, moving files for processing.....";
-                //copy processed files to working directory
-                if ( Process.CopyFilesToWorkingDir( WorkingDirectory, ReductionConfiguration) == false )
-                {
-                    MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "Failed to move hierarchy files to local working area '" + ProjectSettings.ProjectName + "'");
-                    NavigateTo = "HTML/GeneralIssue.aspx?msg=" + MillimanCommon.Utilities.ConvertStringToHex("Failed to move hierarchy files to local working area '" + ProjectSettings.ProjectName + "'");
-                    TaskCompletionWithError = true;
-                    TaskCompleted = true;
-                    base.TaskProcessor(parms);
-                    return;
-                }
-
-                if (ProjectSettings.AutomaticInclusion)
-                {
-                    DisplayMessage = "Checking selections for auto-inclusion.....";
-                    //HAVE TO CHECK AUTO INCLUSION Measures!!! can be check via selections vs current hiearchy tree ( adjust selectsions when true by tunking last level of sel )
-                    if (Process.AutoInclusion(WorkingDirectory, ProjectSettings) == false)
+                    //first clear the working directories
+                    if (Process.SetupWorkingDirectory(WorkingDirectory) == false)
                     {
-                        MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "Auto inclusion processing failed for '" + ProjectSettings.ProjectName + "'");
-                        NavigateTo = "HTML/GeneralIssue.aspx?msg=" + MillimanCommon.Utilities.ConvertStringToHex("Auto inclusion processing failed for '" + ProjectSettings.ProjectName + "'");
+                        MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "Failed to clear working directory'" + WorkingDirectory + "'");
+                        NavigateTo = "HTML/GeneralIssue.aspx?msg=" + MillimanCommon.Utilities.ConvertStringToHex("Failed to clear working directory'" + WorkingDirectory + "'");
                         TaskCompletionWithError = true;
                         TaskCompleted = true;
                         base.TaskProcessor(parms);
                         return;
                     }
-                }
-                //Create reduction list to implement caching so we do minimal reductions and moving, this will generate a dictionary will
-                //duplicate selections files grouped  ie                 UniqueSels.UniqueSelectionDictionary
-
-                DisplayMessage = "Generating reduction configurations.....";
-                ProcessingCode.UniqueSelections UniqueSels = new ProcessingCode.UniqueSelections(WorkingDirectory, ProjectSettings, ReductionConfiguration.SelectionSets[0].DataModelFile );
-
-                //coherace each selection file into criteria file( only unique selections ) - this is done on instantation of UniqueSelections
-                DisplayMessage = "Moving reduction configurations for processing.....";
-                //create working dir on reduction server
-                string RemoteReductionDir = System.IO.Path.Combine(RootReductionFolder, Guid.NewGuid().ToString("N"));
-                System.IO.Directory.CreateDirectory(RemoteReductionDir);
-                if ( System.IO.Directory.Exists(RemoteReductionDir) == false )
-                {
-                    MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "Failed to create remote reduction directory -" + RemoteReductionDir);
-                    NavigateTo = "HTML/GeneralIssue.aspx?msg=" + MillimanCommon.Utilities.ConvertStringToHex("Remote reduction server did not allow directory to be created. Please contact PRM support to correct this issue");
-                    TaskCompletionWithError = true;
-                    TaskCompleted = true;
-                    base.TaskProcessor(parms);
-                    return;
-                }
-                //copy master QVW that user uploaded to reduction server working dir VWN
-                string QVWRemoteVersion = System.IO.Path.Combine(RemoteReductionDir, ProjectSettings.QVName + ".qvw");
-                string QVWLocalVersion = System.IO.Path.Combine(WorkingDirectory, ProjectSettings.QVName + ".qvw");
-                System.IO.File.Copy( QVWLocalVersion, QVWRemoteVersion);
-                if ( System.IO.File.Exists(QVWRemoteVersion) == false )
-                {
-                    MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "Failed to master QVW to remote reduction directory -" + RemoteReductionDir);
-                    NavigateTo = "HTML/GeneralIssue.aspx?msg=" + MillimanCommon.Utilities.ConvertStringToHex("Failed to copy master QVW to reduction server. Please contact PRM support to correct this issue");
-                    TaskCompletionWithError = true;
-                    TaskCompleted = true;
-                    base.TaskProcessor(parms);
-                    return;
-                }
-
-                int TotalAccounts = 0;
-                List<string> MissingRemoteFiles = new List<string>();
-
-                foreach( KeyValuePair<string, ProcessingCode.UniqueSelections.UniqueSelection> KVP in UniqueSels.UniqueSelectionDictionary )
-                {
-                    string RemoteConfigurationFile = System.IO.Path.Combine(RemoteReductionDir, KVP.Key + ".config");
-                    KVP.Value.ReductionConfiguration.Serialize(RemoteConfigurationFile); //write config file to reduction server
-                    //check to see if really there
-                    if (System.IO.File.Exists( RemoteConfigurationFile) == false)
+                    DisplayMessage = "Copying files to local working directories....";
+                    //Copy selections files & user dirs
+                    if (Process.CopyLegacyProjectFiles(WorkingDirectory, ProjectSettings) == false)
                     {
-                        MissingRemoteFiles.Add(RemoteConfigurationFile);
-                    }
-                    else
-                    {
-                        TotalAccounts += KVP.Value.Accounts.Count;
-                    }
-                }
-                //create reduction server semaphore file
-                string RemoteSemaphore = System.IO.Path.Combine(RemoteReductionDir, "request_complete.txt");
-                System.IO.File.WriteAllText(RemoteSemaphore, " ");
-
-                //loop watching reductions and updating display
-                bool ReductionStatus =  WaitOnReductionProcessing(WorkingDirectory, ProjectSettings, RemoteReductionDir, TotalAccounts, UniqueSels);
-                
-                bool ReductionMovingStatus = WaitOnMovingReductionProcessing(WorkingDirectory, ProjectSettings, RemoteReductionDir, TotalAccounts, UniqueSels);
-                
-                if ( ReductionStatus == false )
-                {
-                    NavigateTo = "HTML/ReductionIssue.html";
-                    TaskCompletionWithError = true;
-                    TaskCompleted = true;
-                    base.TaskProcessor(parms);
-                    return;
-                }
-                else if ( ReductionMovingStatus == false )
-                {
-                    NavigateTo = "HTML/ReductionMoveIssue.html";
-                    TaskCompletionWithError = true;
-                    TaskCompleted = true;
-                    base.TaskProcessor(parms);
-                    return;
-                }
-                else
-                {
-                    if ( WaitOnSystemReportProcessing(WorkingDirectory, ProjectSettings, RemoteReductionDir, TotalAccounts, UniqueSels) )
-                    {
-                        //write this file we are ready, don't use session since we might need to trigger manually
-                        string ReadyFile = System.IO.Path.Combine(WorkingDirectory, "ready_to_publish.txt");
-                        System.IO.File.WriteAllText(ReadyFile, DateTime.Now.ToString());
-                        NavigateTo = "ReductionStep2.aspx?key=" + ReductionIndex;  //report generation
-                        TaskCompletionWithError = true;
-                        TaskCompleted = true;
-                        base.TaskProcessor(parms);
-                    }
-                    else
-                    {
-                        NavigateTo = "HTML/SystemReportingError.html";
+                        MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "Failed to copy needed files from published project '" + ProjectSettings.ProjectName + "'");
+                        NavigateTo = "HTML/GeneralIssue.aspx?msg=" + MillimanCommon.Utilities.ConvertStringToHex("Failed to copy needed files from published project '" + ProjectSettings.ProjectName + "'");
                         TaskCompletionWithError = true;
                         TaskCompleted = true;
                         base.TaskProcessor(parms);
                         return;
                     }
+
+                    //new code added to validate before processing
+                    string LegacyDirectory = System.IO.Path.Combine(WorkingDirectory, "Legacy"); //copies old version of project here for processing
+                    if (ValidationProcessor(LegacyDirectory, ProjectSettings) == false)
+                    {
+                        //validation processor logs an eror, thus no need here
+                        NavigateTo = "HTML/GeneralIssue.aspx?msg=" + MillimanCommon.Utilities.ConvertStringToHex("The project '" + ProjectSettings.ProjectName + "' failed to validate.  Please report this issue to a system administrator for assistance.");
+                        TaskCompletionWithError = true;
+                        TaskCompleted = true;
+                        base.TaskProcessor(parms);
+                        return;
+                    }
+                    // end validation code
+
+                    DisplayMessage = "Generating hierarchy information setup for new QVW....";
+                    //issue request for hierarchy from new master QVW ( needed for autoinclusion processor )
+                    MillimanCommon.ReduceConfig ReductionConfiguration = Process.NewMasterQVWParameters(WorkingDirectory, ProjectSettings);
+                    if (ReductionConfiguration == null)
+                    {
+                        MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "Failed to create configuration file to extract data from '" + ProjectSettings.ProjectName + "'");
+                        NavigateTo = "HTML/GeneralIssue.aspx?msg=" + MillimanCommon.Utilities.ConvertStringToHex("Failed to create configuration file to extract data from '" + ProjectSettings.ProjectName + "'");
+                        TaskCompletionWithError = true;
+                        TaskCompleted = true;
+                        base.TaskProcessor(parms);
+                        return;
+                    }
+
+                    //always do this since we need the hiearchy info anyway
+                    DisplayMessage = "Request processing to generate new QVW hierarchy....";
+                    string RootReductionFolder = System.Configuration.ConfigurationManager.AppSettings["ReductionServerRoot"];
+                    string RootReductionFolderUser = System.Configuration.ConfigurationManager.AppSettings["ReductionServerUser"];
+                    string RootReductionFolderPswd = System.Configuration.ConfigurationManager.AppSettings["ReductionServerPswd"];
+                    string RootReductionFolderDomain = System.Configuration.ConfigurationManager.AppSettings["ReductionServerDomain"];
+
+                    System.Net.NetworkCredential DriveCredentials = new System.Net.NetworkCredential
+                    {
+                        UserName = RootReductionFolderUser,  // provide credentials with rights to the resource requested
+                        Password = RootReductionFolderPswd,  // provide credentials with rights to the resource requested
+                        Domain = RootReductionFolderDomain
+                    };
+                    using (new MillimanCommon.NetworkConnection(RootReductionFolder, DriveCredentials))
+                    {
+                        //issue request for hierarchy from new master QVW ( needed for autoinclusion processor )
+                        bool NewMasterQVWProcessing = Process.ProcessMasterQVW(WorkingDirectory, ProjectSettings, ReductionConfiguration, RootReductionFolder);
+
+                        if (NewMasterQVWProcessing == false)
+                        {
+                            MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "Failed to process new master QVW '" + ProjectSettings.ProjectName + "'");
+                            NavigateTo = "HTML/GeneralIssue.aspx?msg=" + MillimanCommon.Utilities.ConvertStringToHex("Failed to process new master QVW '" + ProjectSettings.ProjectName + "'");
+                            TaskCompletionWithError = true;
+                            TaskCompleted = true;
+                            base.TaskProcessor(parms);
+                            return;
+                        }
+
+                        DisplayMessage = "Hierarchy generated, moving files for processing.....";
+                        //copy processed files to working directory
+                        if (Process.CopyFilesToWorkingDir(WorkingDirectory, ReductionConfiguration) == false)
+                        {
+                            MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "Failed to move hierarchy files to local working area '" + ProjectSettings.ProjectName + "'");
+                            NavigateTo = "HTML/GeneralIssue.aspx?msg=" + MillimanCommon.Utilities.ConvertStringToHex("Failed to move hierarchy files to local working area '" + ProjectSettings.ProjectName + "'");
+                            TaskCompletionWithError = true;
+                            TaskCompleted = true;
+                            base.TaskProcessor(parms);
+                            return;
+                        }
+
+                        if (ProjectSettings.AutomaticInclusion)
+                        {
+                            DisplayMessage = "Checking selections for auto-inclusion.....";
+                            //HAVE TO CHECK AUTO INCLUSION Measures!!! can be check via selections vs current hiearchy tree ( adjust selectsions when true by tunking last level of sel )
+                            if (Process.AutoInclusion(WorkingDirectory, ProjectSettings) == false)
+                            {
+                                MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "Auto inclusion processing failed for '" + ProjectSettings.ProjectName + "'");
+                                NavigateTo = "HTML/GeneralIssue.aspx?msg=" + MillimanCommon.Utilities.ConvertStringToHex("Auto inclusion processing failed for '" + ProjectSettings.ProjectName + "'");
+                                TaskCompletionWithError = true;
+                                TaskCompleted = true;
+                                base.TaskProcessor(parms);
+                                return;
+                            }
+                        }
+                        //Create reduction list to implement caching so we do minimal reductions and moving, this will generate a dictionary will
+                        //duplicate selections files grouped  ie                 UniqueSels.UniqueSelectionDictionary
+
+                        DisplayMessage = "Generating reduction configurations.....";
+                        ProcessingCode.UniqueSelections UniqueSels = new ProcessingCode.UniqueSelections(WorkingDirectory, ProjectSettings, ReductionConfiguration.SelectionSets[0].DataModelFile);
+
+                        //coherace each selection file into criteria file( only unique selections ) - this is done on instantation of UniqueSelections
+                        DisplayMessage = "Moving reduction configurations for processing.....";
+                        //create working dir on reduction server
+                        string RemoteReductionDir = System.IO.Path.Combine(RootReductionFolder, Guid.NewGuid().ToString("N"));
+                        System.IO.Directory.CreateDirectory(RemoteReductionDir);
+                        if (System.IO.Directory.Exists(RemoteReductionDir) == false)
+                        {
+                            MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "Failed to create remote reduction directory -" + RemoteReductionDir);
+                            NavigateTo = "HTML/GeneralIssue.aspx?msg=" + MillimanCommon.Utilities.ConvertStringToHex("Remote reduction server did not allow directory to be created. Please contact PRM support to correct this issue");
+                            TaskCompletionWithError = true;
+                            TaskCompleted = true;
+                            base.TaskProcessor(parms);
+                            return;
+                        }
+                        //copy master QVW that user uploaded to reduction server working dir VWN
+                        string QVWRemoteVersion = System.IO.Path.Combine(RemoteReductionDir, ProjectSettings.QVName + ".qvw");
+                        string QVWLocalVersion = System.IO.Path.Combine(WorkingDirectory, ProjectSettings.QVName + ".qvw");
+                        System.IO.File.Copy(QVWLocalVersion, QVWRemoteVersion);
+                        if (System.IO.File.Exists(QVWRemoteVersion) == false)
+                        {
+                            MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "Failed to master QVW to remote reduction directory -" + RemoteReductionDir);
+                            NavigateTo = "HTML/GeneralIssue.aspx?msg=" + MillimanCommon.Utilities.ConvertStringToHex("Failed to copy master QVW to reduction server. Please contact PRM support to correct this issue");
+                            TaskCompletionWithError = true;
+                            TaskCompleted = true;
+                            base.TaskProcessor(parms);
+                            return;
+                        }
+
+                        int TotalAccounts = 0;
+                        List<string> MissingRemoteFiles = new List<string>();
+
+                        foreach (KeyValuePair<string, ProcessingCode.UniqueSelections.UniqueSelection> KVP in UniqueSels.UniqueSelectionDictionary)
+                        {
+                            string RemoteConfigurationFile = System.IO.Path.Combine(RemoteReductionDir, KVP.Key + ".config");
+                            KVP.Value.ReductionConfiguration.Serialize(RemoteConfigurationFile); //write config file to reduction server
+                                                                                                 //check to see if really there
+                            if (System.IO.File.Exists(RemoteConfigurationFile) == false)
+                            {
+                                MissingRemoteFiles.Add(RemoteConfigurationFile);
+                            }
+                            else
+                            {
+                                TotalAccounts += KVP.Value.Accounts.Count;
+                            }
+                        }
+                        //create reduction server semaphore file
+                        string RemoteSemaphore = System.IO.Path.Combine(RemoteReductionDir, "request_complete.txt");
+                        System.IO.File.WriteAllText(RemoteSemaphore, " ");
+
+                        //loop watching reductions and updating display
+                        bool ReductionStatus = WaitOnReductionProcessing(WorkingDirectory, ProjectSettings, RemoteReductionDir, TotalAccounts, UniqueSels);
+
+                        bool ReductionMovingStatus = WaitOnMovingReductionProcessing(WorkingDirectory, ProjectSettings, RemoteReductionDir, TotalAccounts, UniqueSels);
+
+                        if (ReductionStatus == false)
+                        {
+                            NavigateTo = "HTML/ReductionIssue.html";
+                            TaskCompletionWithError = true;
+                            TaskCompleted = true;
+                            base.TaskProcessor(parms);
+                            return;
+                        }
+                        else if (ReductionMovingStatus == false)
+                        {
+                            NavigateTo = "HTML/ReductionMoveIssue.html";
+                            TaskCompletionWithError = true;
+                            TaskCompleted = true;
+                            base.TaskProcessor(parms);
+                            return;
+                        }
+                        else
+                        {
+                            if (WaitOnSystemReportProcessing(WorkingDirectory, ProjectSettings, RemoteReductionDir, TotalAccounts, UniqueSels))
+                            {
+                                //write this file we are ready, don't use session since we might need to trigger manually
+                                string ReadyFile = System.IO.Path.Combine(WorkingDirectory, "ready_to_publish.txt");
+                                System.IO.File.WriteAllText(ReadyFile, DateTime.Now.ToString());
+                                NavigateTo = "ReductionStep2.aspx?key=" + ReductionIndex;  //report generation
+                                TaskCompletionWithError = true;
+                                TaskCompleted = true;
+                                base.TaskProcessor(parms);
+                            }
+                            else
+                            {
+                                NavigateTo = "HTML/SystemReportingError.html";
+                                TaskCompletionWithError = true;
+                                TaskCompleted = true;
+                                base.TaskProcessor(parms);
+                                return;
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "Processing error", ex);
                 }
             }
 
@@ -261,7 +281,7 @@ namespace ClientPublisher
                             System.IO.File.Delete(MetaFile);
                             System.IO.File.Delete(Shared);
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {  //since this is not critical, but cleanup keep from crashing if fails
                         }
                     }
@@ -585,15 +605,52 @@ namespace ClientPublisher
                         return;
                     }
                     string WorkingDirectory = PublisherUtilities.GetWorkingDirectory(System.Web.Security.Membership.GetUser().UserName, theProject.ProjectName);
-                    SimpleUpdateClass SU = new SimpleUpdateClass();
-                    SU.ReductionIndex = Index.ToString();
-                    SU.ProjectSettings = theProject;
-                    SU.WorkingDirectory = WorkingDirectory;
-                    SU.Account = System.Web.Security.Membership.GetUser().UserName;
-                    SU.ShowAllProgressBars = false;
-                    Global.TaskManager.ScheduleTask(SU);
-                    SU.StartTask();
-                    Response.Redirect("ReductionStep1.aspx?Processing=" + SU.TaskID);
+
+                    //Story 2124 - Task 2129 - either send control on to report page, re-attach to running task, or create a new task
+                    //variables to use in checking to see if should reconnect or task is finished
+                    string ReadyFile = "ready_to_publish.txt";
+                    string TaskRunningFile = "task_running.txt";
+                    string QualifiedReadyFile = System.IO.Path.Combine(WorkingDirectory, ReadyFile);
+                    string QualifiedTaskRunningFile = System.IO.Path.Combine(WorkingDirectory, TaskRunningFile);
+                    bool TaskNotFound = true;
+
+                    //else look to see if task is already running if so restore
+                    if (System.IO.File.Exists(QualifiedTaskRunningFile))
+                    {
+                        string ProcessID = System.IO.File.ReadAllText(QualifiedTaskRunningFile);
+                        SimpleUpdateClass AttachmentTask = Global.TaskManager.FindTask(ProcessID) as SimpleUpdateClass;
+                        if (AttachmentTask != null )
+                        {   //found the task, so connect to it
+                            Response.Redirect("ReductionStep1.aspx?Processing=" + AttachmentTask.TaskID);
+                            return;
+                        }
+                        //didn find task, so delete file - should not be there
+                        System.IO.File.Delete(QualifiedTaskRunningFile);  //not really running
+                    }
+                    //maybe it's done - check to see if finished
+                    if (System.IO.File.Exists(QualifiedReadyFile))
+                    {
+                        Response.Redirect("ReductionStep2.aspx?key=" + Request["Key"]);
+                        return; //stop this pages, processing - time to move on
+                    }
+                    //not running and not finished - let's start at new reduction task
+                    if (TaskNotFound)
+                    {
+                        //we didn't find a running task, so create one and let's get started...
+                        SimpleUpdateClass SU = new SimpleUpdateClass();
+                        //write out id file, so we can reconnect if needed
+                        System.IO.File.WriteAllText(QualifiedTaskRunningFile, SU.TaskID);
+
+                        SU.ReductionIndex = Index.ToString();
+                        SU.ProjectSettings = theProject;
+                        SU.WorkingDirectory = WorkingDirectory;
+                        SU.Account = System.Web.Security.Membership.GetUser().UserName;
+                        //if NO task running thin start a new one
+                        SU.ShowAllProgressBars = false;
+                        Global.TaskManager.ScheduleTask(SU);
+                        SU.StartTask();
+                        Response.Redirect("ReductionStep1.aspx?Processing=" + SU.TaskID);
+                    }
                 }
                 else
                 {
@@ -639,7 +696,7 @@ namespace ClientPublisher
                     else
                     {
                         MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "System error - missing task");
-                        Response.Redirect("errors/missingtask.aspx");
+                        Response.Redirect("errors/missingtask.html");
                         Status.Text = "Could not retrieve processing status.";
                     }
                 }

@@ -163,6 +163,7 @@ namespace MillimanProjectManConsole.ComplexUpload
                                 MillimanReportReduction.QVWCaching.WriteQVWRedirector(QVWR.QualifiedQVWNameToReduce, UserName, QVWInCache, true);
                                 SuccessfulReductions.Add(UserName);
                                 Reports.AddItemToList(new MillimanCommon.QVWReportBank.ProcessingStatusClass(UserName, PS.QVName, "Reduced - Available"));
+                                Reports.AddItemToList(new MillimanCommon.QVWReportBank.ProcessingStatusClass(UserName, PS.QVName, "success"));
                             }
                         }
                         catch (Exception ex)
@@ -189,6 +190,7 @@ namespace MillimanProjectManConsole.ComplexUpload
                         //System.IO.File.Copy(CachedQVW, ReduceToQVW);
                         SuccessfulReductions.Add(UserName);
                         Reports.AddItemToList(new MillimanCommon.QVWReportBank.ProcessingStatusClass(UserName, PS.QVName, "Copied - Available"));
+                        Reports.AddItemToList(new MillimanCommon.QVWReportBank.ProcessingStatusClass(UserName, PS.QVName, "success"));
                     }
                     Index++;
                 }
@@ -266,7 +268,7 @@ namespace MillimanProjectManConsole.ComplexUpload
                     else
                     {
                         MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "System error - missing task");
-                        Response.Redirect("errors/missingtask.aspx");
+                        Response.Redirect("errors/missingtask.html");
 
                     }
                 }

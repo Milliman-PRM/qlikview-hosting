@@ -383,7 +383,6 @@ namespace MillimanDev
         /// <param name="ACL_Entity"></param>
         private void LoadProduct(MillimanCommon.UserAccessList.UserAccess ACL_Entity)
         {
-
             string DBBrowser = WebConfigurationManager.AppSettings["DatabaseBrowserURL"]; //full url to browser page
             string QVDocumentRoot = WebConfigurationManager.AppSettings["QVDocumentRoot"];
 
@@ -392,6 +391,7 @@ namespace MillimanDev
 
             System.Web.UI.WebControls.TableRow ProductRow = new System.Web.UI.WebControls.TableRow();
             System.Web.UI.WebControls.TableCell ProductCell = new System.Web.UI.WebControls.TableCell();
+
             //ProductCell.Text = " <table cellspacing='0'><tr><td align='right' style='background-image:url(images/header.gif);border:1px solid gray'><a href='dashboard.aspx?dashboardid=POPULATION'> <img src='images/nodatabase.png' title='Direct database access is not available.' style='width:15px;height:15px;border-style:none;vertical-align:middle' /> </a></td></tr><tr><td style='border:1px solid gray' ><a href='dashboard.aspx?dashboardid=POPULATION' target='_blank'>  <img src='Css/populationreport.gif' style='border-style:none'></img></a></td></tr></table>";
             ProductCell.Text = " <table cellspacing='0'><tr><td align='right' style='background-image:url(images/header.gif);border:1px solid gray'> _DOWNLOAD1_ _DOWNLOAD2_ _DOWNLOAD3_ _DOWNLOAD4_ _DOWNLOAD5_ _DOWNLOAD6_ _DBACCESS_</td></tr><tr><td style='border:1px solid gray' align='middle'  ><a href='_DASHBOARD_' target='_blank' onclick='return _ENABLED_;' ><img src='imagereflector.aspx?key=_THUMBNAIL_' title='Click to launch - _REPORTNAME_ ' style='border-style:none'></img></a></td></tr></table>";
             //ProductCell.Text = " <table cellspacing='0'><tr><td align='right' style='background-image:url(images/header.gif);border:1px solid gray'> _DBACCESS_ </td></tr><tr><td style='border:1px solid gray' align='middle'  ><a href='_DASHBOARD_' target='_blank'><img src='imagereflector.aspx?key=_THUMBNAIL_' title='Click to launch - _REPORTNAME_ ' style='border-style:none'></img></a></td></tr></table>";
@@ -637,7 +637,7 @@ namespace MillimanDev
             }
             else
             {
-                LoadProducts();
+                Groups_SelectedIndexChanged(sender, e);
             }
         }
 

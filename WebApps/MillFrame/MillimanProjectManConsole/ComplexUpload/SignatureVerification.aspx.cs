@@ -194,6 +194,7 @@ namespace MillimanProjectManConsole.ComplexUpload
                             SignatureVerifications.Visible = true;
                             Global.TaskManager.DeleteTask(SVC.TaskID);
                             Image1.Visible = false;
+                            PublishContent.Visible = true;
                         }
                         else
                         {
@@ -204,7 +205,7 @@ namespace MillimanProjectManConsole.ComplexUpload
                     else
                     {
                         MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "System error - missing task");
-                        Response.Redirect("errors/missingtask.aspx");
+                        Response.Redirect("errors/missingtask.html");
                         SignatureVerifications.Text = "Could not retrieve processing status.";
                     }
                 }
@@ -215,6 +216,11 @@ namespace MillimanProjectManConsole.ComplexUpload
         {
             //VWN implement rename group
             MillimanCommon.Alert.Show("RENAME GROUP");
+        }
+
+        protected void PublishContent_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("../ComplexReporting/ReportingShell.aspx");
         }
     }
 }

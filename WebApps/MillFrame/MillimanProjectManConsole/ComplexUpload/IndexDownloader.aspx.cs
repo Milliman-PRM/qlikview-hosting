@@ -32,7 +32,8 @@ namespace MillimanProjectManConsole.ComplexUpload
                     if (ProjectMissing)
                     {
                         // if either of these is true, it was uploaded before, and is now missing from production
-                        if ( (string.IsNullOrEmpty(PS.UploadedToProduction) == false ) || (PS.UploadedToProductionDate != null) )
+                        // Issue:2139 changed check of PS.UploadedToProductionDate from null check to checking for empty string
+                        if ( (string.IsNullOrEmpty(PS.UploadedToProduction) == false ) || (string.IsNullOrEmpty(PS.UploadedToProductionDate) == false) )
                         {
                             DisplayMessage = XML; //not really xml and error message
                             TaskCompletionWithError = true;
@@ -157,7 +158,7 @@ namespace MillimanProjectManConsole.ComplexUpload
                     else
                     {
                         MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "System error - missing task");
-                        Response.Redirect("errors/missingtask.aspx");
+                        Response.Redirect("errors/missingtask.html");
                         IndexDownload.Text = "Could not retrieve task status";
                     }
                 }
