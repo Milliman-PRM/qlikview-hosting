@@ -41,6 +41,6 @@ The following procedures must be completed before deployment begins.
 - Test logging in to all updated applications
 - Test that users can still access reports and user guides in the Web Portal
 - Examine all web.config files in updated folders. Ensure that the following references were updated correctly:
-  - Any references to appsettings_CI.config have been changed to appsettings_PRODUCTION.config
-  - Any reference to connectionstrings_CI.config have been changed to connectionstrings_PRODUCTION.config
+  - Any references to appsettings_CI.config have been changed to appsettings_PROD.config
+  - Any reference to connectionstrings_CI.config have been changed to connectionstrings_PROD.config
   - Any databse connection strings point at the database named PortalDBSFV2m1 and not PortalDB_CI
