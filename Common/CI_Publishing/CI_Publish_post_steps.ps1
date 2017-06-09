@@ -7,7 +7,7 @@
 #  Is pushed out to the "testing server" where it is picked up by a scheduled task and run
 
 $branchFolder = "D:\installedapplications\prm_ci\<<branch_name>>\"
-$zipPath = "D:\installedapplications\prm_ci\<<branch_name>>\publish.zip"
+$zipPath = "D:\installedapplications\prm_ci\publish.zip"
 $unzipPath = "D:\installedapplications\prm_ci\<<branch_name>>\"
 $outputPath = "D:\installedapplications\prm_ci\<<branch_name>>\error.log"
 $urlFilePath = "D:\installedapplications\prm_ci\<<branch_name>>\urls.log"
