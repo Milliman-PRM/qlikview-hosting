@@ -102,8 +102,16 @@ foreach ($line in $paths)
         }
         else
         {
-            $root.appSettings.configSource = $root.appSettings.configSource.Replace("appsettings_CI.config", "appsettings_PROD.config")
-            $root.connectionStrings.configSource = $root.connectionStrings.configSource.Replace("connectionStrings_CI.config", "connectionStrings_PROD.config")
+            if ($root.appSettings.configSource -like "bin\*")
+            {
+                $root.appSettings.configSource = "bin\Configs\appsettings_PRODUCTION.config"
+                $root.connectionStrings.configSource = "bin\Configs\connectionStrings_PRODUCTION.config"
+            }
+            else
+            {
+                $root.appSettings.configSource = "Configs\appsettings_PROD.config"
+                $root.connectionStrings.configSource = "Configs\connectionStrings_PRODUCTION.config"
+            }
         }
         $xml.Save($webConfigFilePath)
     }
