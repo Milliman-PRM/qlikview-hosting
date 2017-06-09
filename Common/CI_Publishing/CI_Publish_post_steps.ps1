@@ -6,11 +6,22 @@
 ### DEVELOPER NOTES:
 #  Is pushed out to the "testing server" where it is picked up by a scheduled task and run
 
-
+$zipPath = "D:\installedapplications\prm_ci\<<branch_name>>\publish.zip"
+$unzipPath = "D:\installedapplications\prm_ci\<<branch_name>>\"
 $outputPath = "D:\installedapplications\prm_ci\<<branch_name>>\error.log"
 $urlFilePath = "D:\installedapplications\prm_ci\<<branch_name>>\urls.log"
 $urlBase = "https://prm2.milliman.com"
 $errorCode = 0
+
+try
+{
+    $unzipCommand = "D:\InstalledApplications\7zip\7za.exe e $zipPath -o $unzipPath"
+    Invoke-Command $unzipCommand
+}
+catch
+{
+    $errorCode = 3
+}
 
 # Clear URL file, if it exists
 set-content -LiteralPath $urlFilePath "Published URLs:"
