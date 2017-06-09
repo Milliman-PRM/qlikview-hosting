@@ -17,6 +17,7 @@ try
 {
     $unzipCommand = "D:\InstalledApplications\7zip\7za.exe x $zipPath -o$unzipPath"
     Invoke-Expression $unzipCommand
+    remove-item $zipPath
 }
 catch
 {
