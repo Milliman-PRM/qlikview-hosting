@@ -15,8 +15,8 @@ $errorCode = 0
 
 try
 {
-    $unzipCommand = "D:\InstalledApplications\7zip\7za.exe e $zipPath -o $unzipPath"
-    Invoke-Command $unzipCommand
+    $unzipCommand = "D:\InstalledApplications\7zip\7za.exe x $zipPath -o$unzipPath"
+    Invoke-Expression $unzipCommand
 }
 catch
 {
