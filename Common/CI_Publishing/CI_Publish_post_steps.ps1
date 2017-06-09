@@ -6,12 +6,27 @@
 ### DEVELOPER NOTES:
 #  Is pushed out to the "testing server" where it is picked up by a scheduled task and run
 
+$branchFolder = "D:\installedapplications\prm_ci\<<branch_name>>\"
 $zipPath = "D:\installedapplications\prm_ci\<<branch_name>>\publish.zip"
 $unzipPath = "D:\installedapplications\prm_ci\<<branch_name>>\"
 $outputPath = "D:\installedapplications\prm_ci\<<branch_name>>\error.log"
 $urlFilePath = "D:\installedapplications\prm_ci\<<branch_name>>\urls.log"
 $urlBase = "https://prm2.milliman.com"
 $errorCode = 0
+
+if (test-path $branchFolder)
+{
+    try
+    {
+        remove-item $branchFolder -Recurse
+        new-item $branchFolder -ItemType Directory
+    }
+    catch
+    {
+        $errorCode = 4
+    }
+    
+}
 
 try
 {
@@ -28,12 +43,6 @@ if ($errorCode -eq 0)
 {
     # Clear URL file, if it exists
     set-content -LiteralPath $urlFilePath "Published URLs:"
-
-    # Remove error.log file, if it exists
-    if (test-path $outputPath)
-    {
-        remove-item $outputPath
-    }
 
     # (Re-)create applications and log deployed URLs to text file
     try 
