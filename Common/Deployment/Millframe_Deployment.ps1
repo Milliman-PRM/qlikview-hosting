@@ -102,8 +102,8 @@ foreach ($line in $paths)
         }
         else
         {
-            $root.appSettings.configSource = $root.appSettings.configSource.Replace("appsettings_CI.config", "appsettings_PROD.config")
-            $root.connectionStrings.configSource = $root.connectionStrings.configSource.Replace("connectionStrings_CI.config", "connectionStrings_PROD.config")
+            $root.appSettings.configSource = $root.appSettings.configSource.Replace("appsettings_CI.config", "appsettings_PRODUCTION.config")
+            $root.connectionStrings.configSource = $root.connectionStrings.configSource.Replace("connectionStrings_CI.config", "connectionStrings_PRODUCTION.config")
         }
         $xml.Save($webConfigFilePath)
     }
