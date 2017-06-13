@@ -873,9 +873,10 @@
       <Link>Configs\connectionStrings_PRODUCTION.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <Content Include="..\connectionStrings_PRODUCTION_PMC.config">
+    <None Include="..\connectionStrings_PRODUCTION_PMC.config">
       <Link>Configs\connectionStrings_PRODUCTION_PMC.config</Link>
-    </Content>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="..\connectionStrings_Stag.config">
       <Link>Configs\connectionStrings_Stag.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
