@@ -84,7 +84,7 @@ foreach ($line in $paths)
 foreach ($line in $paths)
 {
     # Manipulate web.config contents
-    $webConfigFilePath = [System.IO.Path]::Combine( $line.destination, "web.config" );
+    $webConfigFilePath = [System.IO.Path]::Combine( $line.destination, "web.config" )
 
     if ((Test-Path $webConfigFilePath) -eq $true)
     {
@@ -102,16 +102,38 @@ foreach ($line in $paths)
         }
         else
         {
-            if ($root.appSettings.configSource -like "bin\*")
+            # Test possible config file paths to determine which is correct for the current application
+            # The ordering of these checks is significant and should be preserved
+            $appSettings = "bin\Configs\appsettings_PRODUCTION_PMC.config"
+            $testpath = [System.IO.Path]::Combine( $line.destination, $appSettings )
+
+            if ((test-path $testpath) -eq $false)
             {
-                $root.appSettings.configSource = "bin\Configs\appsettings_PRODUCTION.config"
-                $root.connectionStrings.configSource = "bin\Configs\connectionStrings_PRODUCTION.config"
+                $appSettings = "bin\Configs\appsettings_PRODUCTION.config"
+                $testpath = [System.IO.Path]::Combine( $line.destination, $appSettings )
+
+                if ((test-path $testpath) -eq $false)
+                {
+                    $appSettings = "Configs\appsettings_PROD.config"
+                }
             }
-            else
+
+            $connectionStrings = "bin\Configs\connectionstrings_PRODUCTION_PMC.config"
+            $testpath = [System.IO.Path]::Combine( $line.destination, $connectionStrings )
+
+            if ((test-path $testpath) -eq $false)
             {
-                $root.appSettings.configSource = "Configs\appsettings_PROD.config"
-                $root.connectionStrings.configSource = "Configs\connectionStrings_PRODUCTION.config"
+                $connectionStrings = "bin\Configs\connectionstrings_PRODUCTION.config"
+                $testpath = [System.IO.Path]::Combine( $line.destination, $connectionStrings )
+
+                if ((test-path $testpath) -eq $false)
+                {
+                    $connectionStrings = "Configs\appsettings_PROD.config"
+                }
             }
+
+            $root.appSettings.configSource = $appSettings
+            $root.connectionStrings.configSource = $connectionStrings
         }
         $xml.Save($webConfigFilePath)
     }
