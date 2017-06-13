@@ -857,6 +857,10 @@
       <Link>Configs\appsettings_PRODUCTION.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="..\appsettings_PRODUCTION_PMC.config">
+      <Link>Configs\appsettings_PRODUCTION_PMC.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="..\connectionStrings_AK.config">
       <Link>Configs\connectionStrings_AK.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
