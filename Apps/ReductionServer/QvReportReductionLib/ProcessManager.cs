@@ -281,7 +281,7 @@ namespace QvReportReductionLib
                     Runner.ConfigFileContent = TaskConfig;
                     Runner.QVWOriginalFullFileName = Path.Combine(Path.GetDirectoryName(ConfigFilePath), TaskConfig.MasterQVW);
                     Runner.Run();
-                    Trace.WriteLine("Process finishing successfully.");
+                    Trace.WriteLine("ReductionRunner.Run() process returned for config " + ConfigFilePath);
                 }
 
             }
