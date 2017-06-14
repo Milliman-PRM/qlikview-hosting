@@ -165,15 +165,16 @@ namespace Milliman.Reduction.ReductionEngine {
                     settings.UserName = System.Configuration.ConfigurationManager.AppSettings["QMSUser"];
                     settings.Password = System.Configuration.ConfigurationManager.AppSettings["QMSPassword"];
                     Trace.WriteLine(string.Format("QMS Address is: '{0}', and QMS User is '{1}'", settings.QMSURL,settings.UserName));
+
                     ReductionEngine.ReductionRunner runner = new ReductionEngine.ReductionRunner(settings);
-                    runner.ConfigFile = config;
+                    runner.ConfigFileContent = config;
                     runner.QVWOriginalFullFileName = Path.Combine(Path.GetDirectoryName(configFilePath), config.MasterQVW);
                     runner.Run();
                     Trace.WriteLine("Process finishing successfully.");
                 }
                 
             } catch(Exception ex ) {
-                Trace.WriteLine(string.Format("Unable to finish processing config file '{0}' {1}", configFilePath, ex));
+                Trace.WriteLine(string.Format("Unable to finish processing config file '{0}'\r\n{1}\r\n{2}", configFilePath, ex.Message, ex.StackTrace));
                 return;
             }
         }
