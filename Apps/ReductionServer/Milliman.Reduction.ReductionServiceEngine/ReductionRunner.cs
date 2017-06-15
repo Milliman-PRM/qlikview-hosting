@@ -24,14 +24,14 @@ namespace Milliman.Reduction.ReductionEngine
         private QMSConnection QmsCxn;
         private QMSAPI.DocumentFolder SourceDocumentFolder;
         //private QMSAPI.TaskInfo HierarchyTaskInfo;
-        StringBuilder _userMessage = new StringBuilder();
+        //StringBuilder _userMessage = new StringBuilder();
 
         private Dictionary<string, List<Action>> _late_execution = new Dictionary<string, List<Action>>();
 
         public Milliman.Common.ReduceConfig ConfigFileContent { get; set; }
         public string QVWOriginalFullFileName { get; set; }
-        public string QVWHierarchyFQFileNameGUID { get; private set; }
-        public string QVWHierarchyFQFolderNameGUID { get; set; }
+        //public string QVWHierarchyFQFileNameGUID { get; private set; }
+        //public string QVWHierarchyFQFolderNameGUID { get; set; }
         //public string QVWReductionFQFileNameGUID { get; private set; }
         //public string QVWReductionFQFolderNameGUID { get; set; }
         public QMSSettings QVConnectionSettings { get; set; }
@@ -50,7 +50,7 @@ namespace Milliman.Reduction.ReductionEngine
         }
 
         /// <summary>
-        /// Handles all the low level work associated with one Reduction Service config file.
+        /// Entry point to manage all the low level work associated with one Reduction Service config file.
         /// </summary>
         public void Run()
         {
@@ -58,7 +58,7 @@ namespace Milliman.Reduction.ReductionEngine
             {
                 while (true)
                 {
-                    // Root hierarchy task is always required. 
+                    // Root hierarchy task. 
                     Guid RootHierarchyTaskId = Guid.NewGuid();
 
                     string RootWorkingPath = Path.Combine(SourceDocumentFolder.General.Path, RootHierarchyTaskId.ToString("N"));
@@ -68,9 +68,6 @@ namespace Milliman.Reduction.ReductionEngine
                     File.Copy(QVWOriginalFullFileName, RootWorkingQvwFilePath, true);
 
                     ExtractHierarchyFromExistingQvw(RootWorkingQvwFilePath, RootHierarchyTaskId);
-                    //CreateAncillaryScript(this.QVWHierarchyFQFolderNameGUID);
-                    //createHierarchyTask(this.QVWHierarchyFQFileNameGUID, SourceDocumentFolder, out HierarchyTaskInfo);
-                    //runHierarchyTask(HierarchyTaskInfo);
 
                     foreach (ReductionSettings SelectionSet in this.ConfigFileContent.SelectionSets)
                     {
@@ -85,20 +82,23 @@ namespace Milliman.Reduction.ReductionEngine
 
                             string ReductionWorkingPath = Path.Combine(RootWorkingPath, ReductionTaskId.ToString("N"));
                             Directory.CreateDirectory(ReductionWorkingPath);
-                            Trace.WriteLine(string.Format("ReductionWorkingPath folder {0} created", ReductionWorkingPath));
+                            //Trace.WriteLine(string.Format("ReductionWorkingPath folder {0} created", ReductionWorkingPath));
 
                             string ReductionQvwFilePath = Path.Combine(ReductionWorkingPath, ReductionTaskId.ToString("N") + ".qvw");
                             File.Copy(RootWorkingQvwFilePath, ReductionQvwFilePath, true);
                             Trace.WriteLine(string.Format("Copied root QVW File {0} to {1}", RootWorkingQvwFilePath, ReductionQvwFilePath));
 
-                            QMSAPI.DocumentTask reduction_document_task = this.CreateReductionTask(SourceDocumentFolder.General.Path,
+                            QMSAPI.DocumentTask reduction_document_task = this.CreateReductionTask(ReductionTaskId,
+                                                                                                   ReductionQvwFilePath,
                                                                                                    SelectionSet.ReducedQVWName,
                                                                                                    SelectionSet.DropDisassoicatedDataModelTables,
-                                                                                                   SelectionSet.SelectionCriteria, SelectionSet.DropTables);
+                                                                                                   SelectionSet.SelectionCriteria,
+                                                                                                   SelectionSet.DropTables);
                             this.runReductionTask(reduction_document_task, true);
 
                             if ((SelectionSet.UniqueValuesFromMasterQVWColumns != null) && (SelectionSet.UniqueValuesFromMasterQVWColumns.Count > 0))
-                                this.generateUniqueValuesForQVW(this.QVWHierarchyFQFolderNameGUID, SelectionSet.UniqueValuesFromMasterQVWColumns, SelectionSet, true);
+                                this.generateUniqueValuesForQVW(RootWorkingPath, SelectionSet.UniqueValuesFromMasterQVWColumns, SelectionSet, true);
+
                             if ((SelectionSet.UniqueValuesFromReducedQVWColumns != null) && (SelectionSet.UniqueValuesFromReducedQVWColumns.Count > 0))
                             {
                                 Guid HierarchyTaskId = Guid.NewGuid();
@@ -141,7 +141,7 @@ namespace Milliman.Reduction.ReductionEngine
             createCompleteFlags(this.ConfigFileContent.ConfigFileNameWithoutExtension);
         }
 
-        private void ExtractHierarchyFromExistingQvw(string QvwFilePath, Guid HierarchyTaskId=new Guid(), string DestinationRelativeFolder = ".")
+        private void ExtractHierarchyFromExistingQvw(string QvwFilePath, Guid HierarchyTaskId = new Guid(), string DestinationRelativeFolder = ".")
         {
             string WorkingFolder = Path.GetDirectoryName(QvwFilePath);
 
@@ -237,7 +237,7 @@ namespace Milliman.Reduction.ReductionEngine
             }
         }
 
-        private QMSAPI.DocumentNode GetNode(string qvwName)
+        private QMSAPI.DocumentNode GetNode(string QvwName)
         {
             // Connect to Qlikview server
             QMSAPI.IQMS QmsClient = ConnectToQMS(this.QVConnectionSettings);
@@ -245,7 +245,7 @@ namespace Milliman.Reduction.ReductionEngine
             QMSAPI.DocumentNode node = null;
             foreach (var doc_node in QmsClient.GetSourceDocuments(this.QdsId))
             {
-                if (doc_node.Name == qvwName)
+                if (doc_node.Name == QvwName)
                 {
                     node = doc_node;
                     break;
@@ -253,11 +253,11 @@ namespace Milliman.Reduction.ReductionEngine
             }
             if (node == null)
             {
-                Trace.WriteLine(string.Format("Could not find node '{0}' on Publisher's source documents. The process will be terminated ...", qvwName));
+                Trace.WriteLine(string.Format("Could not find node '{0}' on Publisher's source documents.", QvwName));
             }
             else
             {
-                Trace.WriteLine(string.Format("Successfully fetched SourceDocument '{0}' from Qlikview Publisher", qvwName));
+                //Trace.WriteLine(string.Format("Successfully fetched SourceDocument '{0}' from Qlikview Publisher", qvwName));
             }
             return node;
         }
@@ -433,73 +433,6 @@ namespace Milliman.Reduction.ReductionEngine
         }
 
         /// <summary>
-        /// Creates a folder for the reduction work and copies the original master qvw to that folder
-        /// </summary>
-        /// <param name="sourceFileName">The original qvw file to be reduced</param>
-        /// <param name="destinationFolderName">The Qlikview server's self reported SourceDocuments folder.</param>
-        /// <param name="taskId">A GUID that identifies the selectionset being processed</param>
-        /// <param name="QVWFolderNameGUID"></param>
-        /// <param name="QVWFileNameGUID"></param>
-        /// <returns></returns>
-        private void PrepareFileStructureForHierarchy(string sourceFileName, string destinationFolderName, Guid taskId, out string QVWFolderNameGUID, out string QVWFileNameGUID)
-        {
-            QVWFolderNameGUID = string.Empty;
-            QVWFileNameGUID = string.Empty;
-            try
-            {
-                // Create the output folder as a subfolder of the QMS SourceDocuments folder
-                QVWFolderNameGUID = Path.Combine(destinationFolderName, taskId.ToString("N"));
-                Directory.CreateDirectory(QVWFolderNameGUID);
-                Trace.WriteLine(string.Format("Task destination folder '{0}' created in PrepareFileStructureForHierarchy()", QVWFolderNameGUID));
-
-                QVWFileNameGUID = Path.Combine(QVWFolderNameGUID, taskId.ToString("N") + ".qvw");
-                Trace.WriteLine(string.Format("Copying local QVW File {0} to Qlikview Server file {1}", sourceFileName, QVWFileNameGUID));
-                File.Copy(sourceFileName, QVWFileNameGUID, true);
-            }
-            catch (Exception ex)
-            {
-                //LogToUser("Unable to prepare Structure to Process Hierarchy files: {0}", ex.Message);
-                Trace.WriteLine(string.Format("Unable copy local file to QlikView server {0}", ex));
-                throw new ReductionRunnerException(string.Format("Unable copy local file to QlikView server\r\n{0}\r\n{1}", ex.Message, ex.StackTrace));
-            }
-
-        }
-
-        /// <summary>
-        /// Create ancillary script and copy it to legacy script file
-        /// </summary>
-        /// <param name="destinationFolder"></param>
-        /// <returns></returns>
-        private void CreateAncillaryScript(string destinationFolder)
-        {
-            try
-            {
-                Trace.WriteLine("Creating 'ancillary script' on destination folder " + destinationFolder);
-                string ancillary_full_file_path = Path.Combine(destinationFolder, "ancillary_script.txt");
-                using (FileStream ancillary_stream = File.Create(ancillary_full_file_path))
-                {
-                    using (StreamWriter ancillary_writer = new StreamWriter(ancillary_stream))
-                    {
-                        ancillary_writer.WriteLine("LET DataExtraction=true();");
-                        ancillary_writer.Flush();
-                    }
-                }
-                Trace.WriteLine(string.Format("Ancillary script file created: '{0}'", ancillary_full_file_path));
-
-                //Trace.WriteLine("Creating legacy script file");
-                //string legacy_full_file_path = Path.Combine(destinationFolder, "care_coordinator_report.txt");
-                //File.Copy(ancillary_full_file_path, legacy_full_file_path);
-                //Trace.WriteLine(string.Format("Ancillary script file copied to legacy script file: '{0}'", legacy_full_file_path));
-            }
-            catch (Exception ex)
-            {
-                //LogToUser("Unable to create 'ancillary script' (or legacy script) for processing:\r\n{0}", ex.Message);
-                Trace.WriteLine(string.Format("Unable to create 'ancillary script' (or legacy script)\r\n{0}", ex.Message));
-                throw new ReductionRunnerException(string.Format("Unable to create 'ancillary script' (or legacy script)\r\n{0}", ex.Message));
-            }
-        }
-
-        /// <summary>
         /// 
         /// </summary>
         /// <param name="qvwDocumentPath">The full path of the reduced qvw that this task is to create</param>
@@ -519,24 +452,13 @@ namespace Milliman.Reduction.ReductionEngine
                 Trace.WriteLine(string.Format("Creating task for Qlikview Document '{0}'", qvwDocumentPath));
                 QmsClient.ClearQVSCache(QMSAPI.QVSCacheObjects.All);
                 Trace.WriteLine("QVSCache successfully cleared");
-                QMSAPI.DocumentNode node = null;
+
                 Trace.WriteLine("Searching for correct document node on Publisher's Source Documents");
-                foreach (var doc_node in QmsClient.GetSourceDocuments(this.QdsId))
-                {
-                    if (doc_node.Name == qvw_file_name)
-                    {
-                        node = doc_node;
-                        break;
-                    }
-                }
-                if (node == null)
+                QMSAPI.DocumentNode Node = GetNode(qvw_file_name);
+                if (Node == null)
                 {
                     Trace.WriteLine(string.Format("Could not find node '{0}' on Publisher's source documents. The process will be terminated", qvw_file_name));
                     throw new ReductionRunnerException(string.Format("Could not find node '{0}' on Publisher's source documents. The process will be terminated", qvw_file_name));
-                }
-                else
-                {
-                    Trace.WriteLine(string.Format("Successfully fetched SourceDocument '{0}' from Qlikview Publisher", qvw_file_name));
                 }
 
                 QMSAPI.DocumentTask temp_task = QMSWrapper.GetTask();
@@ -544,7 +466,7 @@ namespace Milliman.Reduction.ReductionEngine
                 Trace.WriteLine("Setting up hierarchy task properties");
                 temp_task.ID = HierarchyTaskId;
                 temp_task.QDSID = this.QdsId;
-                temp_task.Document = node;
+                temp_task.Document = Node;
 
                 #region General Tab
                 Trace.WriteLine("Configuring General Tab");
@@ -634,9 +556,6 @@ namespace Milliman.Reduction.ReductionEngine
 
         private void RunHierarchyTask(QMSAPI.TaskInfo task)
         {
-            // Connect to Qlikview server
-            QMSAPI.IQMS QmsClient = ConnectToQMS(this.QVConnectionSettings);
-
             try
             {
                 DateTime StartTime = DateTime.Now;
@@ -644,6 +563,8 @@ namespace Milliman.Reduction.ReductionEngine
                 this.RunTaskSynchronously(task.ID);
 
                 this.AddCleanUpAction(new Action(() => {
+                    QMSAPI.IQMS QmsClient = ConnectToQMS(this.QVConnectionSettings);
+
                     Trace.WriteLine(string.Format("Deleting task '{0}'", task.ID.ToString("N")));
                     QmsClient.DeleteTask(task.ID, QMSAPI.TaskType.DocumentTask);
                 }));
@@ -680,7 +601,7 @@ namespace Milliman.Reduction.ReductionEngine
                 MasterCandidateFiles[3] = list_model;
 
                 string destination_folder = Path.GetDirectoryName(this.QVWOriginalFullFileName);
-                string source_folder = this.QVWHierarchyFQFolderNameGUID, file_name = string.Empty;
+                //string source_folder = this.QVWHierarchyFQFolderNameGUID, file_name = string.Empty;
                 string tree_file_folder = Path.GetTempPath();
 
                 if (!string.IsNullOrEmpty(SelectionSet.HierarchyFile))
@@ -720,74 +641,16 @@ namespace Milliman.Reduction.ReductionEngine
             }
         }
 
-        private void prepareFileStructureForReduction(string sourceFileName, string destinationFolderName)
+        private QMSAPI.DocumentTask CreateReductionTask(Guid ReductionTaskId, string QvwFileToReducePath, string ReducedQvwFileName, bool shouldDropDisassociatedTables, List<NVPair> selectionCriteria, List<string> tablesToDrop)
         {
             try
             {
-                ReductionTaskId_ = Guid.NewGuid();
-                this.QVWReductionFQFolderNameGUID = Path.Combine(destinationFolderName, ReductionTaskId_.ToString("N"));
-                Trace.WriteLine(string.Format("Attempting to create destination folder '{0}'", this.QVWReductionFQFolderNameGUID));
-                Directory.CreateDirectory(this.QVWReductionFQFolderNameGUID);
-                Trace.WriteLine(string.Format("Destination folder '{0}' created successfully...", this.QVWReductionFQFolderNameGUID));
+                string TaskFolder = Path.GetDirectoryName(QvwFileToReducePath);
+                string FileToReducePath = Path.Combine(TaskFolder, QvwFileToReducePath);
 
-                this.QVWReductionFQFileNameGUID = Path.Combine(this.QVWReductionFQFolderNameGUID, ReductionTaskId_.ToString("N") + ".qvw");
-                Trace.WriteLine("Copying local QVW File into the Qlikview Server...");
-                Trace.WriteLine(string.Format("Source path: '{0}'", sourceFileName));
-                Trace.WriteLine(string.Format("Destination path: '{0}'", this.QVWReductionFQFileNameGUID));
-                File.Copy(sourceFileName, this.QVWReductionFQFileNameGUID, true);
-                Trace.WriteLine("File successfully copied");
-                //LogToUser("Successfully prepared folders and tasks to run the Reduction...");
-            }
-            catch (Exception ex)
-            {
-                //LogToUser("Failed to prepare reduction folder and tasks for file '{0}': {1}", sourceFileName, ex.Message);
-                Trace.WriteLine(string.Format("Unable copy local file to QlikView server {0}", ex));
-                throw new ReductionRunnerException(string.Format("Unable copy local file to QlikView server {0}", ex));
-            }
-        }
-
-/*        private void prepareFileStructureForReduction(string sourceFileName, string destinationFolderName, Guid taskId)
-        {
-            try
-            {
-                ReductionTaskId_ = Guid.NewGuid();
-                this.QVWReductionFQFolderNameGUID = Path.Combine(destinationFolderName, ReductionTaskId_.ToString("N"));
-                Trace.WriteLine(string.Format("Attempting to create destination folder '{0}'", this.QVWReductionFQFolderNameGUID));
-                Directory.CreateDirectory(this.QVWReductionFQFolderNameGUID);
-                Trace.WriteLine(string.Format("Destination folder '{0}' created successfully...", this.QVWReductionFQFolderNameGUID));
-
-                this.QVWReductionFQFileNameGUID = Path.Combine(this.QVWReductionFQFolderNameGUID, ReductionTaskId_.ToString("N") + ".qvw");
-                Trace.WriteLine("Copying local QVW File into the Qlikview Server...");
-                Trace.WriteLine(string.Format("Source path: '{0}'", sourceFileName));
-                Trace.WriteLine(string.Format("Destination path: '{0}'", this.QVWReductionFQFileNameGUID));
-                File.Copy(sourceFileName, this.QVWReductionFQFileNameGUID, true);
-                Trace.WriteLine("File successfully copied");
-                //LogToUser("Successfully prepared folders and tasks to run the Reduction...");
-            }
-            catch (Exception ex)
-            {
-                //LogToUser("Failed to prepare reduction folder and tasks for file '{0}': {1}", sourceFileName, ex.Message);
-                Trace.WriteLine(string.Format("Unable copy local file to QlikView server {0}", ex));
-                throw new ReductionRunnerException(string.Format("Unable copy local file to QlikView server {0}", ex));
-            }
-        }
-*/
-        private QMSAPI.DocumentTask CreateReductionTask(string destinationFolderName, string reducedQVWFileName, bool shouldDropDisassociatedTables, List<NVPair> selectionCriteria, List<string> tablesToDrop)
-        {
-            // Connect to Qlikview server
-            QMSAPI.IQMS QmsClient = ConnectToQMS(this.QVConnectionSettings);
-
-            try
-            {
-                DateTime start;
-                string task_id_string = ReductionTaskId_.ToString("N");
-                string task_folder = Path.Combine(destinationFolderName, task_id_string);
-                string reduced_qvw_full_file_name = Path.Combine(task_folder, reducedQVWFileName);
-                string task_full_file_name = Path.Combine(destinationFolderName, task_id_string, task_id_string + ".qvw");
-                string task_file_name = task_id_string + ".qvw";
                 Trace.WriteLine("Processing Drop Tables...");
-                start = DateTime.Now;
-                bool drop_required = ReductionHelper.dropTableProcessor(task_folder,
+                DateTime start = DateTime.Now;
+                bool drop_required = ReductionHelper.dropTableProcessor(TaskFolder,
                     shouldDropDisassociatedTables,
                     this.ConfigFileContent.MasterQVW,
                     selectionCriteria,
@@ -797,53 +660,45 @@ namespace Milliman.Reduction.ReductionEngine
                 //delete any previous reduced files
                 //System.IO.File.Delete(ReducedQVWName);
 
-                QMSAPI.DocumentNode node = null;
                 Trace.WriteLine("Searching for correct document node on Publisher's Source Documents");
-                foreach (var doc_node in QmsClient.GetSourceDocuments(this.QdsId))
+                QMSAPI.DocumentNode Node = GetNode(Path.GetFileName(QvwFileToReducePath));
+                if (Node == null)
                 {
-                    if (doc_node.Name == task_file_name)
-                    {
-                        node = doc_node;
-                        break;
-                    }
-                }
-                if (node == null)
-                {
-                    Trace.WriteLine(string.Format("Could not find node '{0}' on Publisher's source documents. The process will be terminated ...", task_file_name));
+                    Trace.WriteLine(string.Format("Could not find node '{0}' on Publisher's source documents. The process will be terminated ...", QvwFileToReducePath));
                     return null;
                 }
-                else
-                {
-                    Trace.WriteLine(string.Format("Successfully fetched SourceDocument '{0}' from Qlikview Publisher", task_file_name));
-                }
+
                 Trace.WriteLine("Setting up task properties...");
                 Trace.WriteLine("Configuring General Tab");
                 QMSAPI.DocumentTask temp_task = QMSWrapper.GetTask();
 
                 //Creates the Reduction Task
                 QMSAPI.DocumentTask task_reduction = new QMSAPI.DocumentTask();
-                task_reduction.ID = ReductionTaskId_;
+
+                task_reduction.ID = ReductionTaskId;
                 task_reduction.QDSID = QdsId;
-                task_reduction.Document = node;
+                task_reduction.Document = Node;
+                task_reduction.Scope = QMSAPI.DocumentTaskScope.General;
+                task_reduction.Scope |= QMSAPI.DocumentTaskScope.Reduce;
+                task_reduction.Scope |= QMSAPI.DocumentTaskScope.Distribute;
+                task_reduction.Scope |= QMSAPI.DocumentTaskScope.Reload;
 
                 #region general
-                task_reduction.Scope = QMSAPI.DocumentTaskScope.General;
                 task_reduction.General = new QMSAPI.DocumentTask.TaskGeneral();
                 task_reduction.General.Enabled = true;
-                task_reduction.General.TaskName = "Reload & Reduce " + task_file_name;
-                task_reduction.General.TaskDescription = "Performs reduction on " + task_file_name;
+                task_reduction.General.TaskName = "Reload & Reduce " + QvwFileToReducePath;
+                task_reduction.General.TaskDescription = "Performs reduction on " + QvwFileToReducePath;
                 #endregion
 
                 #region reduce
-                task_reduction.Scope |= QMSAPI.DocumentTaskScope.Reduce;
                 task_reduction.Reduce = new QMSAPI.DocumentTask.TaskReduce();
-                task_reduction.Reduce.DocumentNameTemplate = Path.GetFileNameWithoutExtension(reduced_qvw_full_file_name);
+                task_reduction.Reduce.DocumentNameTemplate = Path.GetFileNameWithoutExtension(QvwFileToReducePath);
                 task_reduction.Reduce.Static = new QMSAPI.DocumentTask.TaskReduce.TaskReduceStatic();
                 task_reduction.Reduce.Static.Reductions = new QMSAPI.TaskReduction[selectionCriteria.Count];
                 int Index = 0;
                 foreach (var selection in selectionCriteria)
                 {
-                    Trace.WriteLine(string.Format("For task {0}, selection key: {1} with value {2}", task_id_string, selection.FieldName, selection.Value)); // TODO delete this
+                    Trace.WriteLine(string.Format("For task {0}, selection key: {1} with value {2}", ReductionTaskId.ToString("N"), selection.FieldName, selection.Value)); // TODO delete this
                     task_reduction.Reduce.Static.Reductions[Index] = new QMSAPI.TaskReduction();
                     task_reduction.Reduce.Static.Reductions[Index].Type = QMSAPI.TaskReductionType.ByField;
                     task_reduction.Reduce.Static.Reductions[Index].Field = new QMSAPI.TaskReduction.TaskReductionField();
@@ -857,7 +712,6 @@ namespace Milliman.Reduction.ReductionEngine
                 #endregion
 
                 #region distribute
-                task_reduction.Scope |= QMSAPI.DocumentTaskScope.Distribute;
                 task_reduction.Distribute = new QMSAPI.DocumentTask.TaskDistribute();
                 task_reduction.Distribute.Output = new QMSAPI.DocumentTask.TaskDistribute.TaskDistributeOutput();
                 task_reduction.Distribute.Output.Type = QMSAPI.TaskDistributionOutputType.QlikViewDocument;
@@ -871,7 +725,7 @@ namespace Milliman.Reduction.ReductionEngine
                 task_reduction.Distribute.Static.DistributionEntries[0].Destination = new QMSAPI.TaskDistributionDestination();
                 task_reduction.Distribute.Static.DistributionEntries[0].Destination.Folder = new QMSAPI.TaskDistributionDestination.TaskDistributionDestinationFolder();
                 task_reduction.Distribute.Static.DistributionEntries[0].Destination.Type = QMSAPI.TaskDistributionDestinationType.Folder;
-                task_reduction.Distribute.Static.DistributionEntries[0].Destination.Folder.Name = System.IO.Path.GetDirectoryName(reduced_qvw_full_file_name);
+                task_reduction.Distribute.Static.DistributionEntries[0].Destination.Folder.Name = System.IO.Path.GetDirectoryName(QvwFileToReducePath);
 
                 task_reduction.Distribute.Notification = new QMSAPI.DocumentTask.TaskDistribute.TaskDistributeNotification();
                 task_reduction.Distribute.Notification.SendNotificationEmail = false;
@@ -882,7 +736,6 @@ namespace Milliman.Reduction.ReductionEngine
                 #endregion
 
                 #region reload
-                task_reduction.Scope |= QMSAPI.DocumentTaskScope.Reload;
                 task_reduction.Reload = new QMSAPI.DocumentTask.TaskReload();
                 if (drop_required)
                     task_reduction.Reload.Mode = QMSAPI.TaskReloadMode.Partial; //this will result in tables being dropped as defined by the drop table processor
@@ -905,10 +758,10 @@ namespace Milliman.Reduction.ReductionEngine
                 task_reduction.Triggering.Triggers[0] = trigger_schedule;
                 #endregion
 
+                QMSAPI.IQMS QmsClient = ConnectToQMS(this.QVConnectionSettings);
                 QmsClient.SaveDocumentTask(task_reduction);
 
                 System.Threading.Thread.Sleep(4000);//give it a second
-
 
                 return task_reduction;
             }
@@ -921,9 +774,6 @@ namespace Milliman.Reduction.ReductionEngine
 
         private void runReductionTask(QMSAPI.DocumentTask task, bool cleanUpWhenDone)
         {
-            // Connect to Qlikview server
-            QMSAPI.IQMS QmsClient = ConnectToQMS(this.QVConnectionSettings);
-
             try
             {
                 Trace.WriteLine(string.Format("Attempting to run newly created reduction task '{0}' ...", task.ID.ToString("N")));
@@ -946,6 +796,8 @@ namespace Milliman.Reduction.ReductionEngine
 
                 this.AddCleanUpAction(new Action(() =>
                 {
+                    QMSAPI.IQMS QmsClient = ConnectToQMS(this.QVConnectionSettings);
+
                     Trace.WriteLine(string.Format("Deleting task '{0}'", task.ID.ToString("N")));
                     QmsClient.DeleteTask(task.ID, QMSAPI.TaskType.DocumentTask);
                     Trace.WriteLine(string.Format("Deleting original file '{0}'", task.General));
@@ -1068,6 +920,7 @@ namespace Milliman.Reduction.ReductionEngine
         {
             this.backLog(C_WRAP, action);
         }
+
         //private void LogToUser(string message, params object[] args)
         //{
         //    LogToUser(string.Format(message, args));
@@ -1077,60 +930,6 @@ namespace Milliman.Reduction.ReductionEngine
         //    _userMessage.Append(string.Format("{0} [USER] {1}", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), message));
         //}
         #endregion
-
-        /// <summary>
-        /// Clean up ALL orphan tasks for the Milliman Source Document folder
-        /// </summary>
-        public void CleanUpOrphans()
-        {
-            int error_count = 0;
-
-            SourceDocumentFolder = GetSourceDocumentFolder();
-
-            // Connect to Qlikview server
-            QMSAPI.IQMS QmsClient = ConnectToQMS(this.QVConnectionSettings);
-
-            var orphan_folders = QmsClient.GetSourceDocumentNodes(QdsId, SourceDocumentFolder.ID, "\\<Orphans>");
-            if (orphan_folders.Length > 0)
-                Trace.WriteLine(string.Format("Found {0} orphan folders", orphan_folders.Length));
-            else
-                Trace.WriteLine("No Orphan documents were found for clean up.");
-
-            foreach (var node in orphan_folders)
-            {
-                var ophan_document_folders = QmsClient.GetSourceDocumentNodes(QdsId, SourceDocumentFolder.ID, "\\<Orphans>\\" + node.Name);
-                foreach (var orphan_document_node in ophan_document_folders)
-                {
-                    try
-                    {
-                        Trace.WriteLine(string.Format("Checking tasks for document '{0}'", orphan_document_node.Name));
-                        var orphan_document_tasks = QmsClient.GetTasksForDocument(orphan_document_node.ID);
-                        foreach (var document_task in orphan_document_tasks)
-                        {
-                            try
-                            {
-                                Trace.WriteLine(string.Format("Deleting task '{0}' of type '{1}'", document_task.Name, document_task.Type.ToString()));
-                                QmsClient.DeleteTask(document_task.ID, document_task.Type);
-                            }
-                            catch (Exception task_exception)
-                            {
-                                error_count++;
-                                Trace.WriteLine(string.Format("Error while trying to delete task '{0}':\r\n\t\t{1}", document_task.Name, task_exception.Message));
-                            }
-                        }
-                    }
-                    catch (Exception orphan_document_exception)
-                    {
-                        error_count++;
-                        Trace.WriteLine(string.Format("Error while trying to get documents for folder '{0}':\r\n\t\t{1}", orphan_document_node.Name, orphan_document_exception.Message));
-                    }
-                }
-            }
-            if (error_count > 0)
-                Trace.WriteLine(string.Format("Sanitation complete with {0} error{1}.", error_count, error_count > 1 ? "s" : ""));
-            else
-                Trace.WriteLine("Sanitation was completed with no errors.");
-        }
 
         public Dictionary<string, int> GetQVSDocumentsPerUser()
         {
