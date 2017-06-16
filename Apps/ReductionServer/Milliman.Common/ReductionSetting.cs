@@ -58,15 +58,15 @@ namespace Milliman.Common {
                     _DropTables = value; }
         }
 
-        private bool _DropDisassoicatedDataModelTables;
+        private bool _DropDisassociatedDataModelTables;
 
         /// <summary>
         /// INPUT:When set to true, if the input selected values do not contain a selection from a table that is part of the
         /// hierarchy, the table as referenced by the hierarchy should be dropped - prevents ePHI leaks in disassociated tables
         /// </summary>
-        public bool DropDisassoicatedDataModelTables {
-            get { return _DropDisassoicatedDataModelTables; }
-            set { _DropDisassoicatedDataModelTables = value; }
+        public bool DropDisassociatedDataModelTables {
+            get { return _DropDisassociatedDataModelTables; }
+            set { _DropDisassociatedDataModelTables = value; }
         }
 
 

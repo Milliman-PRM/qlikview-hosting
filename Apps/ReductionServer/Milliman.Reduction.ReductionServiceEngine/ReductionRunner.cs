@@ -91,7 +91,7 @@ namespace Milliman.Reduction.ReductionEngine
                             QMSAPI.DocumentTask reduction_document_task = this.CreateReductionTask(ReductionTaskId,
                                                                                                    ReductionQvwFilePath,
                                                                                                    SelectionSet.ReducedQVWName,
-                                                                                                   SelectionSet.DropDisassoicatedDataModelTables,
+                                                                                                   SelectionSet.DropDisassociatedDataModelTables,
                                                                                                    SelectionSet.SelectionCriteria,
                                                                                                    SelectionSet.DropTables);
                             this.runReductionTask(reduction_document_task, true);
