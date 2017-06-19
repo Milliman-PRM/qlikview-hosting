@@ -63,9 +63,11 @@ namespace Milliman.Reduction.ReductionEngine
 
                     string RootWorkingPath = Path.Combine(SourceDocumentFolder.General.Path, RootHierarchyTaskId.ToString("N"));
                     Directory.CreateDirectory(RootWorkingPath);
+                    //Trace.WriteLine(string.Format("Folder {0} created for hierarchy task", ReductionWorkingPath));
 
                     string RootWorkingQvwFilePath = Path.Combine(RootWorkingPath, RootHierarchyTaskId.ToString("N") + ".qvw");
                     File.Copy(QVWOriginalFullFileName, RootWorkingQvwFilePath, true);
+                    //Trace.WriteLine(string.Format("Copied original QVW File {0} to {1} for hierarchy task", QVWOriginalFullFileName, RootWorkingQvwFilePath));
 
                     ExtractHierarchyFromExistingQvw(RootWorkingQvwFilePath, RootHierarchyTaskId);
 
@@ -82,11 +84,11 @@ namespace Milliman.Reduction.ReductionEngine
 
                             string ReductionWorkingPath = Path.Combine(RootWorkingPath, ReductionTaskId.ToString("N"));
                             Directory.CreateDirectory(ReductionWorkingPath);
-                            //Trace.WriteLine(string.Format("ReductionWorkingPath folder {0} created", ReductionWorkingPath));
+                            //Trace.WriteLine(string.Format("Folder {0} created for reduction task", ReductionWorkingPath));
 
                             string ReductionQvwFilePath = Path.Combine(ReductionWorkingPath, ReductionTaskId.ToString("N") + ".qvw");
-                            File.Copy(RootWorkingQvwFilePath, ReductionQvwFilePath, true);
-                            Trace.WriteLine(string.Format("Copied root QVW File {0} to {1}", RootWorkingQvwFilePath, ReductionQvwFilePath));
+                            File.Copy(QVWOriginalFullFileName, ReductionQvwFilePath, true);
+                            //Trace.WriteLine(string.Format("Copied original QVW File {0} to {1} for reduction task", QVWOriginalFullFileName, ReductionQvwFilePath));
 
                             QMSAPI.DocumentTask reduction_document_task = this.CreateReductionTask(ReductionTaskId,
                                                                                                    ReductionQvwFilePath,
@@ -692,7 +694,7 @@ namespace Milliman.Reduction.ReductionEngine
 
                 #region reduce
                 task_reduction.Reduce = new QMSAPI.DocumentTask.TaskReduce();
-                task_reduction.Reduce.DocumentNameTemplate = Path.GetFileNameWithoutExtension(QvwFileToReducePath);
+                task_reduction.Reduce.DocumentNameTemplate = Path.GetFileNameWithoutExtension(ReducedQvwFileName);
                 task_reduction.Reduce.Static = new QMSAPI.DocumentTask.TaskReduce.TaskReduceStatic();
                 task_reduction.Reduce.Static.Reductions = new QMSAPI.TaskReduction[selectionCriteria.Count];
                 int Index = 0;
