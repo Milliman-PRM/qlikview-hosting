@@ -30,10 +30,6 @@ namespace Milliman.Reduction.ReductionEngine
 
         public Milliman.Common.ReduceConfig ConfigFileContent { get; set; }
         public string QVWOriginalFullFileName { get; set; }
-        //public string QVWHierarchyFQFileNameGUID { get; private set; }
-        //public string QVWHierarchyFQFolderNameGUID { get; set; }
-        //public string QVWReductionFQFileNameGUID { get; private set; }
-        //public string QVWReductionFQFolderNameGUID { get; set; }
         public QMSSettings QVConnectionSettings { get; set; }
         public List<string>[] MasterCandidateFiles { get; set; }
 
@@ -63,11 +59,11 @@ namespace Milliman.Reduction.ReductionEngine
 
                     string RootWorkingPath = Path.Combine(SourceDocumentFolder.General.Path, RootHierarchyTaskId.ToString("N"));
                     Directory.CreateDirectory(RootWorkingPath);
-                    //Trace.WriteLine(string.Format("Folder {0} created for hierarchy task", ReductionWorkingPath));
+                    //Trace.WriteLine(string.Format("Folder {0} created for root hierarchy task", ReductionWorkingPath));
 
                     string RootWorkingQvwFilePath = Path.Combine(RootWorkingPath, RootHierarchyTaskId.ToString("N") + ".qvw");
                     File.Copy(QVWOriginalFullFileName, RootWorkingQvwFilePath, true);
-                    //Trace.WriteLine(string.Format("Copied original QVW File {0} to {1} for hierarchy task", QVWOriginalFullFileName, RootWorkingQvwFilePath));
+                    //Trace.WriteLine(string.Format("Copied original QVW File {0} to {1} for root hierarchy task", QVWOriginalFullFileName, RootWorkingQvwFilePath));
 
                     ExtractHierarchyFromExistingQvw(RootWorkingQvwFilePath, RootHierarchyTaskId);
 
@@ -107,6 +103,7 @@ namespace Milliman.Reduction.ReductionEngine
 
                                 string ReducedQvwWorkingPath = Path.Combine(RootWorkingPath, HierarchyTaskId.ToString("N"));
                                 Directory.CreateDirectory(ReducedQvwWorkingPath);
+                                //Trace.WriteLine(string.Format("Folder {0} created for reduced hierarchy task", ReductionWorkingPath));
 
                                 string ReducedQvwFileName = Path.Combine(ReducedQvwWorkingPath, Path.GetFileName(SelectionSet.ReducedQVWName) + ".qvw");
                                 File.Copy(RootWorkingQvwFilePath, ReducedQvwFileName, true);
@@ -442,12 +439,10 @@ namespace Milliman.Reduction.ReductionEngine
         /// <returns></returns>
         private QMSAPI.TaskInfo CreateHierarchyTask(string qvwDocumentPath, Guid HierarchyTaskId = new Guid())
         {
-            QMSAPI.TaskInfo taskInfo = null;
-
             // Connect to Qlikview server
             QMSAPI.IQMS QmsClient = ConnectToQMS(this.QVConnectionSettings);
 
-            taskInfo = null;
+            QMSAPI.TaskInfo TaskInfo = null;
             try
             {
                 string qvw_file_name = Path.GetFileName(qvwDocumentPath);
@@ -486,7 +481,7 @@ namespace Milliman.Reduction.ReductionEngine
                 #endregion
 
                 #region Reduce Tab
-                Trace.WriteLine("Configuring Reduce Tab...");
+                Trace.WriteLine("Configuring Reduce Tab");
                 temp_task.Scope |= QMSAPI.DocumentTaskScope.Reduce;
                 temp_task.Reduce = new QMSAPI.DocumentTask.TaskReduce();
                 temp_task.Reduce.DocumentNameTemplate = string.Empty;
@@ -497,7 +492,7 @@ namespace Milliman.Reduction.ReductionEngine
                 temp_task.Reduce.Dynamic.Type = new QMSAPI.TaskReductionType();
                 #endregion
 
-                #region Distribution Tab // we don't really need it at the time.
+                #region Distribution Tab // not used for hierarchy task
                 //Trace.WriteLine("Configuring Distribution Tab...");
                 //temp_task.Scope |= QMSAPI.DocumentTaskScope.Distribute;
                 //temp_task.Distribute = new QMSAPI.DocumentTask.TaskDistribute();
@@ -536,15 +531,14 @@ namespace Milliman.Reduction.ReductionEngine
                 ((QMSAPI.ScheduleTrigger)temp_task.Triggering.Triggers[0]).StartAt = DateTime.Now;
                 #endregion
 
-                Trace.WriteLine("Asynchronously saving task");
+                Trace.WriteLine("Saving hierarchy task");
                 QmsClient.SaveDocumentTask(temp_task);
-                do
+                while ((TaskInfo = QmsClient.FindTask(QdsId, QMSAPI.TaskType.DocumentTask, temp_task.General.TaskName)) == null)
                 {
                     System.Threading.Thread.Sleep(500);
-                    taskInfo = QmsClient.FindTask(QdsId, QMSAPI.TaskType.DocumentTask, temp_task.General.TaskName);
-                } while (taskInfo == null);
+                }
 
-                Trace.WriteLine(string.Format("Task of ID '{0}' successfully saved", temp_task.ID.ToString("N")));
+                Trace.WriteLine(string.Format("Task with ID '{0}' successfully saved", temp_task.ID.ToString("N")));
             }
             catch (Exception ex)
             {
@@ -553,7 +547,7 @@ namespace Milliman.Reduction.ReductionEngine
                 throw new ReductionRunnerException(string.Format("An error occurred while setting up the hierarchy task on the Publisher server. The process will be terminated... {0}", ex));
             }
 
-            return taskInfo;
+            return TaskInfo;
         }
 
         private void RunHierarchyTask(QMSAPI.TaskInfo task)
@@ -670,8 +664,7 @@ namespace Milliman.Reduction.ReductionEngine
                     return null;
                 }
 
-                Trace.WriteLine("Setting up task properties...");
-                Trace.WriteLine("Configuring General Tab");
+                Trace.WriteLine("Setting up reduction task properties");
                 QMSAPI.DocumentTask temp_task = QMSWrapper.GetTask();
 
                 //Creates the Reduction Task
