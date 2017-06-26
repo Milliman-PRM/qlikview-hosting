@@ -58,22 +58,15 @@ public partial class admin_controls_edit_user_modal : System.Web.UI.UserControl
         user = Membership.GetUser(username);
         UserUpdateMessage.Text = "";
 
-        // get selected user's password
-        try
+        // get selected user's account status
+        if (user.IsLockedOut == true)
         {
-            if (user.IsLockedOut == true)
-            {
-                lblCurrentPassword.Text = "Inactive:Locked Out";
-            }
-            else
-            {
-                string password = Membership.Providers["dbSqlMemberShipProviderAdmin"].GetPassword(username, null);
-                lblCurrentPassword.Text = "Active:E" + MillimanCommon.Utilities.ConvertStringToHex(password) + "O";
-            }
+            lblCurrentAccountStatus.Text = "Current Account Status Locked Out";
         }
-        catch (Exception ex)
+        else
         {
-            UserUpdateMessage.Text = "OOps! This user has been deleted already! " + "Error: " + ex.Message;
+            //string password = Membership.Providers["dbSqlMemberShipProviderAdmin"].GetPassword(username, null);
+            lblCurrentAccountStatus.Text = "Current Account Status Active";
         }
 
         //always go into edit mode
@@ -149,7 +142,7 @@ public partial class admin_controls_edit_user_modal : System.Web.UI.UserControl
 
             string NewPassword = PasswordGenerator.Generate();
 
-            OldPasswordTextbox.Attributes.Add("value", NewPassword);
+            //OldPasswordTextbox.Attributes.Add("value", NewPassword);
             Suggested.Text = "Suggested New Password @" + NewPassword;            
         }
     }
