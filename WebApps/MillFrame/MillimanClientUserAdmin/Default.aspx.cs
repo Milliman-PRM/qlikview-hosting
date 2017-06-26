@@ -357,6 +357,12 @@ public partial class Default : System.Web.UI.Page
                         Response.Redirect("HTML/NotAuthorizedIssue.html");
                         return string.Empty;
                     }
+                    //make sure I have ClientUserAdmin rights
+                    else if (!IsClientUserAdmin(CE.UserName))
+                    {
+                        Response.Redirect("HTML/NotAuthorizedIssue.html");
+                        return string.Empty;
+                    }
                     //check to see if the indicated user is online via main application
                     else if ((Membership.GetUser(CE.UserName).IsOnline == false))
                     {
@@ -392,6 +398,36 @@ public partial class Default : System.Web.UI.Page
             }
         }
         return "";
+    }
+
+    private bool IsClientUserAdmin(string UserId)
+    {
+        bool ReturnVal = false;
+        try
+        {
+            string ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["dbMyCMSConnectionString"].ConnectionString;
+            System.Data.SqlClient.SqlCommand comm = new System.Data.SqlClient.SqlCommand();
+            comm.Connection = new System.Data.SqlClient.SqlConnection(ConnectionString);
+            String sql = @"SELECT IsClientAdministrator from aspnet_customprofile where UserId='" + UserId.ToUpper() + "'";
+            comm.CommandText = sql;
+            comm.Connection.Open();
+            System.Data.SqlClient.SqlDataReader cursor = comm.ExecuteReader();
+            while (cursor.Read())
+            {
+                string Value = cursor["IsClientAdministrator"].ToString();
+                if (string.IsNullOrEmpty(Value) == false)
+                {
+                    ReturnVal = System.Convert.ToBoolean(Value);
+                    break;
+                }
+            }
+            comm.Connection.Close();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.ToString());
+        }
+        return ReturnVal;
     }
 
     private void UpdateLicenseMessage()
