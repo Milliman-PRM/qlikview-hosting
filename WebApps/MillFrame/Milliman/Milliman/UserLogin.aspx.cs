@@ -265,17 +265,10 @@ namespace MillimanDev
         public void UserValidate()
         {
             var user = Membership.GetUser(txtUserName.Text);
-            //wrong username
-            if (user.UserName != txtUserName.Text)
+            //wrong username or password
+            if (user.UserName != txtUserName.Text || user.GetPassword() != txtPassword.Text)
             {
-                lblErrorMessage.Text = string.Format("The username you provided is incorrect.");
-                return;
-            }
-
-            //wrong password
-            if (user.GetPassword() != txtPassword.Text)
-            {
-                lblErrorMessage.Text = string.Format("The password you provided is incorrect.");
+                lblErrorMessage.Text = string.Format("The username or password that you provided is incorrect.");
                 return;
             }
 
