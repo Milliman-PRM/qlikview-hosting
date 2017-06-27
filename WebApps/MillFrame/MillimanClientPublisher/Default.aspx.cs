@@ -74,6 +74,12 @@ namespace ClientPublisher
                             Response.Redirect("HTML/NotAuthorizedIssue.html");
                             return string.Empty;
                         }
+                        //make sure I have ClientPublisher rights
+                        else if (!IsClientPublisher(CE.UserName))
+                        {
+                            Response.Redirect("HTML/NotAuthorizedIssue.html");
+                            return string.Empty;
+                        }
                         //check to see if the indicated user is online via main application
                         else if ((Membership.GetUser(CE.UserName).IsOnline == false))
                         {
@@ -109,6 +115,36 @@ namespace ClientPublisher
                 }
             }
             return "";
+        }
+
+        private bool IsClientPublisher(string UserId)
+        {
+            bool ReturnVal = false;
+            try
+            {
+                string ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["dbMyCMSConnectionString"].ConnectionString;
+                System.Data.SqlClient.SqlCommand comm = new System.Data.SqlClient.SqlCommand();
+                comm.Connection = new System.Data.SqlClient.SqlConnection(ConnectionString);
+                String sql = @"SELECT IsPublishingAdministrator from aspnet_customprofile c join aspnet_users u on c.UserId = u.UserId where u.UserName='" + UserId + "'";
+                comm.CommandText = sql;
+                comm.Connection.Open();
+                System.Data.SqlClient.SqlDataReader cursor = comm.ExecuteReader();
+                while (cursor.Read())
+                {
+                    string Value = cursor["IsPublishingAdministrator"].ToString();
+                    if (string.IsNullOrEmpty(Value) == false)
+                    {
+                        ReturnVal = System.Convert.ToBoolean(Value);
+                        break;
+                    }
+                }
+                comm.Connection.Close();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+            return ReturnVal;
         }
 
         /// <summary>
