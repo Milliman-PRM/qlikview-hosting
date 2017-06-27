@@ -257,7 +257,7 @@ namespace MillimanDev
                 }
                 else
                 {
-                    lblErrorMessage.Text = "A valid user name and password is required for access!";
+                    lblErrorMessage.Text = "The username or password that you provided is incorrect.";
                 }
             }
         }
