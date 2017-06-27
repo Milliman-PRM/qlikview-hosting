@@ -101,8 +101,6 @@ User record also contains
 
 -   **User Name**
 
--   **Security Q&A**
-
 -   **Active (account status)**
 
 -   **Is Locked Out**
