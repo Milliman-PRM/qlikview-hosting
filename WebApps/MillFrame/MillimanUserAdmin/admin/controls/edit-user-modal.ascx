@@ -53,17 +53,6 @@
                                     <asp:BoundField DataField="Email" HeaderText="Email" ReadOnly="True">                                       
                                         <ItemStyle BackColor="#ececec" CssClass="form-control"/>
                                     </asp:BoundField>
-                                    <asp:TemplateField HeaderText="Security Q&A">
-                                        <EditItemTemplate>
-                                            <asp:TextBox ID="TextBox1" CssClass="form-control" runat="server" Text='<%# Bind("PasswordQuestion") + ":" + Bind("Comment")  %>' TextMode="MultiLine" Height="100px" Width="245px" ReadOnly="True"></asp:TextBox>
-                                        </EditItemTemplate>
-                                        <InsertItemTemplate>
-                                            <asp:TextBox ID="TextBox1" CssClass="form-control" runat="server" Text='<%# Bind("PasswordQuestion") + ":" + Bind("Comment") %>' ReadOnly="True"></asp:TextBox>
-                                        </InsertItemTemplate>
-                                        <ItemTemplate>
-                                            <asp:Label ID="Label1" runat="server" Text='<%# Bind("PasswordQuestion") + ":" + Bind("Comment")  %>'></asp:Label>
-                                        </ItemTemplate>
-                                    </asp:TemplateField>
                                     <asp:TemplateField HeaderText="Client User Administrator" ControlStyle-Width="300px">
                                         <ItemTemplate>
                                             <asp:CheckBox runat="server" ID="IsClientAdministrator" />
