@@ -376,13 +376,8 @@
                             <div class="roundShadowContainer" style="visibility: visible">
                                 <div class="row">&nbsp;</div>
                                 <div class="row">
-                                    <div class="col-sm-4">
-                                        <asp:TextBox ID="OldPasswordTextbox" CssClass="form-control" runat="server" TextMode="Password" Width="140px" Visible="False"></asp:TextBox>
-                                    </div>
                                     <div class="col-sm-8">
-                                        <label for="PasswordTextbox" class="labelweak">Current Password:</label>
-                                        <br />
-                                        <asp:Label ID="lblCurrentPassword" runat="server" EnableViewState="False" ReadOnly="True" CssClass="form-control"></asp:Label>
+                                        <asp:Label ID="lblCurrentAccountStatus" runat="server" EnableViewState="False" ReadOnly="True" CssClass="form-control"></asp:Label>
                                     </div>
                                 </div>
                                 <div class="row">&nbsp;</div>
