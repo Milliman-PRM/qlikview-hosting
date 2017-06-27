@@ -408,7 +408,7 @@ public partial class Default : System.Web.UI.Page
             string ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["dbMyCMSConnectionString"].ConnectionString;
             System.Data.SqlClient.SqlCommand comm = new System.Data.SqlClient.SqlCommand();
             comm.Connection = new System.Data.SqlClient.SqlConnection(ConnectionString);
-            String sql = @"SELECT IsClientAdministrator from aspnet_customprofile where UserId='" + UserId.ToUpper() + "'";
+            String sql = @"SELECT IsClientAdministrator from aspnet_customprofile c join aspnet_user u on c.UserId = u.UserId where u.UserName='" + UserId + "'";
             comm.CommandText = sql;
             comm.Connection.Open();
             System.Data.SqlClient.SqlDataReader cursor = comm.ExecuteReader();
