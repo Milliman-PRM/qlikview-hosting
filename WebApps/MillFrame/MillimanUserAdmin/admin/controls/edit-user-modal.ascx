@@ -53,17 +53,6 @@
                                     <asp:BoundField DataField="Email" HeaderText="Email" ReadOnly="True">                                       
                                         <ItemStyle BackColor="#ececec" CssClass="form-control"/>
                                     </asp:BoundField>
-                                    <asp:TemplateField HeaderText="Security Q&A">
-                                        <EditItemTemplate>
-                                            <asp:TextBox ID="TextBox1" CssClass="form-control" runat="server" Text='<%# Bind("PasswordQuestion") + ":" + Bind("Comment")  %>' TextMode="MultiLine" Height="100px" Width="245px" ReadOnly="True"></asp:TextBox>
-                                        </EditItemTemplate>
-                                        <InsertItemTemplate>
-                                            <asp:TextBox ID="TextBox1" CssClass="form-control" runat="server" Text='<%# Bind("PasswordQuestion") + ":" + Bind("Comment") %>' ReadOnly="True"></asp:TextBox>
-                                        </InsertItemTemplate>
-                                        <ItemTemplate>
-                                            <asp:Label ID="Label1" runat="server" Text='<%# Bind("PasswordQuestion") + ":" + Bind("Comment")  %>'></asp:Label>
-                                        </ItemTemplate>
-                                    </asp:TemplateField>
                                     <asp:TemplateField HeaderText="Client User Administrator" ControlStyle-Width="300px">
                                         <ItemTemplate>
                                             <asp:CheckBox runat="server" ID="IsClientAdministrator" />
@@ -376,13 +365,8 @@
                             <div class="roundShadowContainer" style="visibility: visible">
                                 <div class="row">&nbsp;</div>
                                 <div class="row">
-                                    <div class="col-sm-4">
-                                        <asp:TextBox ID="OldPasswordTextbox" CssClass="form-control" runat="server" TextMode="Password" Width="140px" Visible="False"></asp:TextBox>
-                                    </div>
                                     <div class="col-sm-8">
-                                        <label for="PasswordTextbox" class="labelweak">Current Password:</label>
-                                        <br />
-                                        <asp:Label ID="lblCurrentPassword" runat="server" EnableViewState="False" ReadOnly="True" CssClass="form-control"></asp:Label>
+                                        <asp:Label ID="lblCurrentAccountStatus" runat="server" EnableViewState="False" ReadOnly="True" CssClass="form-control"></asp:Label>
                                     </div>
                                 </div>
                                 <div class="row">&nbsp;</div>
