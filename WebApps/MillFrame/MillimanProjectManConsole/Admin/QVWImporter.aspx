@@ -18,10 +18,6 @@
         font-size:14px;
         border:1px solid black;
     }
-
-        body {
-            background:url("../images/watermark.png");
-        }
 </style>
 </head>
 <body>

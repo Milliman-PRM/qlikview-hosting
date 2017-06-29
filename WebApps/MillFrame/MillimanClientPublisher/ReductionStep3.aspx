@@ -18,10 +18,6 @@
         border:1px solid black;
         text-align:center;
     }
-
-    body {
-        background:url("../images/watermark.png");
-    }
     div.progress {
         position: absolute;
         top: 0px;

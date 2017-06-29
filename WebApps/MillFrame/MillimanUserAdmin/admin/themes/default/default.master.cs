@@ -9,6 +9,12 @@ public partial class admin_themes_default_default : System.Web.UI.MasterPage
 
     protected void Page_Load(object sender, EventArgs e)
     {
+        // Ensure user is currently authenticated to the application. If not, redirect back to login page.
+        if (!Page.Request.IsAuthenticated)
+        {
+            Response.Redirect(MapPath("~/login.aspx"));
+        }
+
         if (!Page.IsPostBack)
         {
             // get number of registred users and assign it to global variable

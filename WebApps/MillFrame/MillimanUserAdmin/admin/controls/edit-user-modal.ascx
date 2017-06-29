@@ -53,17 +53,6 @@
                                     <asp:BoundField DataField="Email" HeaderText="Email" ReadOnly="True">                                       
                                         <ItemStyle BackColor="#ececec" CssClass="form-control"/>
                                     </asp:BoundField>
-                                    <asp:TemplateField HeaderText="Security Q&A">
-                                        <EditItemTemplate>
-                                            <asp:TextBox ID="TextBox1" CssClass="form-control" runat="server" Text='<%# Bind("PasswordQuestion") + ":" + Bind("Comment")  %>' TextMode="MultiLine" Height="100px" Width="245px" ReadOnly="True"></asp:TextBox>
-                                        </EditItemTemplate>
-                                        <InsertItemTemplate>
-                                            <asp:TextBox ID="TextBox1" CssClass="form-control" runat="server" Text='<%# Bind("PasswordQuestion") + ":" + Bind("Comment") %>' ReadOnly="True"></asp:TextBox>
-                                        </InsertItemTemplate>
-                                        <ItemTemplate>
-                                            <asp:Label ID="Label1" runat="server" Text='<%# Bind("PasswordQuestion") + ":" + Bind("Comment")  %>'></asp:Label>
-                                        </ItemTemplate>
-                                    </asp:TemplateField>
                                     <asp:TemplateField HeaderText="Client User Administrator" ControlStyle-Width="300px">
                                         <ItemTemplate>
                                             <asp:CheckBox runat="server" ID="IsClientAdministrator" />
@@ -115,7 +104,7 @@
                                     <asp:TemplateField ShowHeader="False">
                                         <EditItemTemplate>
                                             <asp:Button ID="Button1" CssClass="btn btn-primary" runat="server" CausesValidation="True" CommandName="Update" Text="Save" OnClientClick="return confirm('This will UPDATE the User Info. Click OK to continue.')" />
-                                            <asp:Button ID="Button2" CssClass="btn btn-primary" runat="server" CausesValidation="False" CommandName="Cancel" Text="Cancel" />
+                                            <asp:Button ID="Button2" CssClass="btn btn-primary" runat="server" CausesValidation="False" CommandName="Cancel" Text="Cancel" OnClientClick="location.reload(true)" />
                                             <asp:Button ID="Button4" CssClass="btn btn-primary" runat="server" Text="Unlock" OnClick="UnlockUser" OnClientClick="return confirm('Click OK to unlock this user.')" />
                                             <asp:Button ID="Button5" CssClass="btn btn-primary" runat="server" Text="Delete" OnClick="DeleteUser" OnClientClick="return confirm('Are you sure? This will delete all information related to this user including the user profile.')" />
                                         </EditItemTemplate>
@@ -376,13 +365,8 @@
                             <div class="roundShadowContainer" style="visibility: visible">
                                 <div class="row">&nbsp;</div>
                                 <div class="row">
-                                    <div class="col-sm-4">
-                                        <asp:TextBox ID="OldPasswordTextbox" CssClass="form-control" runat="server" TextMode="Password" Width="140px" Visible="False"></asp:TextBox>
-                                    </div>
                                     <div class="col-sm-8">
-                                        <label for="PasswordTextbox" class="labelweak">Current Password:</label>
-                                        <br />
-                                        <asp:Label ID="lblCurrentPassword" runat="server" EnableViewState="False" ReadOnly="True" CssClass="form-control"></asp:Label>
+                                        <asp:Label ID="lblCurrentAccountStatus" runat="server" EnableViewState="False" ReadOnly="True" CssClass="form-control"></asp:Label>
                                     </div>
                                 </div>
                                 <div class="row">&nbsp;</div>

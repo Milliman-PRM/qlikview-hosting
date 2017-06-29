@@ -10,16 +10,21 @@ A non-exhaustive list of what has changed in a more readable form than a commit 
   - Client Publisher Console user guide updated
   - Improved the wording of warning messages in the Client Publisher
   - Add a button to the Project Management Console to view summary stats before publishing
-  - Implemented a system for password expiration
+  - Blocked autocompletion of password fields for security purposes
+  - The validation message for invalid username and passwords was updated to be less specific
 
 #### Client Admin changes (e.g. Client Publisher, Client Administration Console - prm.milliman.com/PRMAdmin)
 
-  - *None*
+  - Added new authorization checks to the Client User Admin and Client Publisher
 
 #### PRM Admin changes (e.g. Project Management Console, Signature App, User Admin)
 
   - Improvements to the reduction status reporting
   - Improvements to the reduction process error handling
+  - Blocked autocompletion of password fields for security purposes
+  - Force redirect to login.aspx if the user is not currently authenticated
+  - Removed the hex encoded user passwords from the user profile view
+  - Removed the security question from the user profile view
 
 #### Automated Processes changes (e.g. License Cleaner, Report Reduction, System Backup, Server Monitor, Backup Utility)
 
@@ -37,6 +42,11 @@ A non-exhaustive list of what has changed in a more readable form than a commit 
   - Removal of Clinical Data Repository (CDR) Components from the code base
   - Fixed the log4net reference
   - Added `CI_Publish` publishing definition to support automated deployments of in-progress branches to a test environment
+  - All open pull requests are published to PRM2, and cleaned up once closed.
+  - Implemented x-frame-options HTTP header to defend against input hijacking and impersonation attacks
+  - Internet Explorer is no longer forced to render in IE7 compatibility mode
+  - All cookies now have the require SSL flag set to true
+
 
 
 
