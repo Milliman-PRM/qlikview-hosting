@@ -146,7 +146,10 @@ namespace MillimanDev2
                             if (Request["newuser"] != null)
                             {
                                 string ResetFile = System.IO.Path.Combine(WebConfigurationManager.AppSettings["ResetUserInfoRoot"], Membership.GetUser().ProviderUserKey.ToString() + ".rst");
-                                System.IO.File.Delete(ResetFile);
+                                if (System.IO.File.Exists(ResetFile))
+                                {
+                                    System.IO.File.Delete(ResetFile);
+                                }
                                 Response.Redirect("default.aspx");
                             }
                             else
