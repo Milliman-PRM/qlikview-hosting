@@ -265,9 +265,11 @@
 
     <script type="text/javascript">
 
+        var passwordMinimumLength = 8;
+
         //form load
         function OnLoad() {
-            var msg = 'You are required to change your password and complete your profile information before continuing.&nbsp <br>Passwords must have a minimum length of 8 characters with at least 1 non-alphanumeric character.';
+            var msg = 'You are required to change your password and complete your profile information before continuing.&nbsp <br>Passwords must comply with the indicated requirements.';
             if (window.location.href.indexOf('newuser') == -1) {
                 //do nothing   -- this is not a new user       
             }
@@ -527,8 +529,8 @@
                         return false;
                     }
 
-                    if (newPassword.length < 8) {
-                        var msg = ('The New Password field length must be at least 8 chars.');
+                    if (newPassword.length < passwordMinimumLength) {
+                        var msg = ('The New Password field length must be at least ' + passwordMinimumLength + ' chars.');
                         $('#NewPassword').addClass('textbox-focus');
                         showErrorAlert(msg);
                         return false;
@@ -541,8 +543,8 @@
                         return false;
                     }
 
-                    if (confirmPassword.length < 8) {
-                        var msg = ('The Confirm Password length must be at least 8 chars.');
+                    if (confirmPassword.length < passwordMinimumLength) {
+                        var msg = ('The Confirm Password length must be at least ' + passwordMinimumLength + ' chars.');
                         $('#ConfirmNewPassword').addClass('textbox-focus');
                         showErrorAlert(msg);
                         return false;
@@ -590,7 +592,7 @@
             var newpasswordValue = $(this).val();
 
             //validate the length
-            if (newpasswordValue.length >= 8) {
+            if (newpasswordValue.length >= passwordMinimumLength) {
                 $('#length').removeClass('invalidPassword').addClass('validPassword');
                 badInputData = false;
             } else {
