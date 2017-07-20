@@ -590,7 +590,7 @@
             var newpasswordValue = $(this).val();
 
             //validate the length
-            if (newpasswordValue.length > 8) {
+            if (newpasswordValue.length >= 8) {
                 $('#length').removeClass('invalidPassword').addClass('validPassword');
                 badInputData = false;
             } else {
