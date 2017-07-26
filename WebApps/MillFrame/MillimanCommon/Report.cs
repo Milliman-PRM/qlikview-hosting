@@ -14,11 +14,12 @@ namespace MillimanCommon
         {
             try
             {
-                string _Msg = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss").PadRight(25) + _ReportType.ToString().PadRight(10) + Msg + "\r\n";
+                Msg = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss").PadRight(25) + _ReportType.ToString().PadRight(10) + Msg + "\r\n";
                 if (ex != null)
                 {
-                    _Msg += "Exception trace: " + ex.ToString() + "\r\n";
+                    Msg += "Exception trace: " + ex.ToString() + "\r\n";
                 }
+                System.IO.File.AppendAllText(System.Web.HttpContext.Current.Server.MapPath(LogFile), Msg);
             }
             catch (Exception)  //eat exceptions
             {
