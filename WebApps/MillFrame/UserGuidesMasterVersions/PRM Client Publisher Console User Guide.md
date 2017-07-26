@@ -1,6 +1,6 @@
-﻿___
+___
 
-##**PRM Release MillFrame 4.2.0**
+##**PRM Release MillFrame 4.2**
 
 #***Client Publisher Console (CPC) User Guide***
 
