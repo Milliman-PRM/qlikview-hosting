@@ -14,11 +14,9 @@ namespace MillimanCommon
         {
             try
             {
-                string _Msg = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss").PadRight(25) + _ReportType.ToString().PadRight(10) + Msg + "\r\n";
+                string _Msg = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss").PadRight(25) + _ReportType.ToString().PadRight(10) + Msg;
                 if (ex != null)
-                    _Msg += "Exception trace: " + ex.ToString();
-
-                System.IO.File.AppendAllText(System.Web.HttpContext.Current.Server.MapPath(LogFile), _Msg + " --EndLogMsg--\r\n");
+                    _Msg += "\r\nException trace: " + ex.ToString();
             }
             catch (Exception)  //eat exceptions
             {
