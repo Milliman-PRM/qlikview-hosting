@@ -2,6 +2,12 @@
 
 A non-exhaustive list of what has changed in a more readable form than a commit history.
 
+### v4.2.1
+
+  - Corrected minimum password length enforcement from 9 to 8 characters
+  - Changed default password expiration from 60 to 90 days
+  - Improved log file readability
+
 ### v4.2.0
 
 #### Client visible changes (e.g. Portal - prm.milliman.com, User guide)
