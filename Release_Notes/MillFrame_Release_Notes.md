@@ -4,7 +4,12 @@ A non-exhaustive list of what has changed in a more readable form than a commit 
 
 ### v4.2.1
 
+#### Client visible changes (e.g. Portal - prm.milliman.com, User guide)
+
   - Corrected minimum password length enforcement from 9 to 8 characters
+
+#### Lower level changes( e.g. Milliman Common, Project Management Console Services, Milliman Services, Databases)
+
   - Changed default password expiration from 60 to 90 days
   - Improved log file readability
 
