@@ -172,7 +172,7 @@ namespace MillimanDev
             try
             {
                 string LogFile = Path.Combine(Server.MapPath("~"), ConfigurationManager.AppSettings["Logfile"]);
-                string Info = DateTime.Now.ToString().PadRight(20, ' ') + Level.ToString().PadRight(15, ' ') + Msg + "\r\n";
+                string Info = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss").PadRight(20, ' ') + Level.ToString().PadRight(15, ' ') + Msg + "\r\n";
                 System.IO.File.AppendAllText(LogFile, Info);
             }
             catch (Exception)

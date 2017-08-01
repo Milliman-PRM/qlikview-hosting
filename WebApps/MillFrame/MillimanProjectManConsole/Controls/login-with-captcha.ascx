@@ -5,7 +5,7 @@
     <a name="login" id="login" style="display: block; height: 0px; width: 0px; border: 0px;"></a>
     <div class="liTitle" style="font-size: 14pt; text-align: center" title="Project Management Console&#13;Updated:Dec 9, 2015">
         <img src="images/PRMLogo_height80.png" style="width: 99%" />
-        Project Management Console v4.2.0
+        Project Management Console v4.2
     </div>
     <asp:ValidationSummary ID="ValidationSummary1" runat="server" ShowMessageBox="True" ValidationGroup="Login1" EnableClientScript="False" />
     <%-- success label --%>
