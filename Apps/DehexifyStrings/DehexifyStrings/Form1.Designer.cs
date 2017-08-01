@@ -34,9 +34,9 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.ButtonReadSelections = new System.Windows.Forms.Button();
-            this.TextBoxSelections = new System.Windows.Forms.TextBox();
             this.TreeViewHierarchy = new System.Windows.Forms.TreeView();
+            this.TextBoxSelections = new System.Windows.Forms.TextBox();
+            this.ButtonReadSelections = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -105,15 +105,17 @@
             this.tabPage2.Text = "User Selections";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // ButtonReadSelections
+            // TreeViewHierarchy
             // 
-            this.ButtonReadSelections.Location = new System.Drawing.Point(7, 7);
-            this.ButtonReadSelections.Name = "ButtonReadSelections";
-            this.ButtonReadSelections.Size = new System.Drawing.Size(75, 23);
-            this.ButtonReadSelections.TabIndex = 0;
-            this.ButtonReadSelections.Text = "Browse...";
-            this.ButtonReadSelections.UseVisualStyleBackColor = true;
-            this.ButtonReadSelections.Click += new System.EventHandler(this.ButtonReadSelections_Click);
+            this.TreeViewHierarchy.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.TreeViewHierarchy.CheckBoxes = true;
+            this.TreeViewHierarchy.Location = new System.Drawing.Point(7, 37);
+            this.TreeViewHierarchy.Name = "TreeViewHierarchy";
+            this.TreeViewHierarchy.ShowNodeToolTips = true;
+            this.TreeViewHierarchy.Size = new System.Drawing.Size(429, 406);
+            this.TreeViewHierarchy.TabIndex = 2;
             // 
             // TextBoxSelections
             // 
@@ -126,16 +128,15 @@
             this.TextBoxSelections.Size = new System.Drawing.Size(194, 406);
             this.TextBoxSelections.TabIndex = 1;
             // 
-            // TreeViewHierarchy
+            // ButtonReadSelections
             // 
-            this.TreeViewHierarchy.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.TreeViewHierarchy.CheckBoxes = true;
-            this.TreeViewHierarchy.Location = new System.Drawing.Point(7, 37);
-            this.TreeViewHierarchy.Name = "TreeViewHierarchy";
-            this.TreeViewHierarchy.Size = new System.Drawing.Size(429, 406);
-            this.TreeViewHierarchy.TabIndex = 2;
+            this.ButtonReadSelections.Location = new System.Drawing.Point(7, 7);
+            this.ButtonReadSelections.Name = "ButtonReadSelections";
+            this.ButtonReadSelections.Size = new System.Drawing.Size(75, 23);
+            this.ButtonReadSelections.TabIndex = 0;
+            this.ButtonReadSelections.Text = "Browse...";
+            this.ButtonReadSelections.UseVisualStyleBackColor = true;
+            this.ButtonReadSelections.Click += new System.EventHandler(this.ButtonReadSelections_Click);
             // 
             // Form1
             // 

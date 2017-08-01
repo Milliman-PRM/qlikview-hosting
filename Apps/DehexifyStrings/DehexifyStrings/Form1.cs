@@ -115,20 +115,19 @@ namespace DehexifyStrings
             AddTreeNode(Dom.DocumentElement, TNode);
         }
 
-        private void AddTreeNode(XmlNode NodeToAdd, TreeNode InTreeNode)
+        private void AddTreeNode(XmlNode NodeToAdd, TreeNode TargetTreeNode)
         {
-            for (int i = 0; i <= NodeToAdd.ChildNodes.Count - 1; i++)
+            foreach (XmlNode NextChildXmlNode in NodeToAdd.ChildNodes)
             {
-                //TreeNode NewTreeNode = new TreeNode("");
-                XmlNode XNode = NodeToAdd.ChildNodes[i];
-                InTreeNode.Nodes.Add(new TreeNode(XNode.Name));
-                TreeNode TNode = InTreeNode.Nodes[i];
-                AddTreeNode(XNode, TNode);
+                TreeNode NewChildTreeNode = new TreeNode(NextChildXmlNode.Name);
+                TargetTreeNode.Nodes.Add(NewChildTreeNode);
+                AddTreeNode(NextChildXmlNode, NewChildTreeNode);
             }
 
             if (NodeToAdd.Attributes.GetNamedItem("Value") != null && NodeToAdd.Attributes.GetNamedItem("Text") != null)
             {
-                InTreeNode.Text = NodeToAdd.Attributes["Value"].Value + " - " + NodeToAdd.Attributes["Text"].Value;
+                TargetTreeNode.ToolTipText = NodeToAdd.Attributes["Value"].Value;
+                TargetTreeNode.Text = NodeToAdd.Attributes["Text"].Value;
             }
         }
 
@@ -155,18 +154,56 @@ namespace DehexifyStrings
                         string XML = System.IO.File.ReadAllText(openFileDialog1.FileName);
                         XMLD.LoadXml(XML);
 
-                        foreach (XmlNode Selection in XMLD.SelectSingleNode("Collection").SelectSingleNode("Items").SelectNodes("Simple"))
+                        foreach (XmlNode SelectionNode in XMLD.SelectSingleNode("Collection").SelectSingleNode("Items").SelectNodes("Simple"))
                         {
-                            string[] Selected = Selection.Attributes["value"].Value.Split('|');
-                            string One = Selected[1];
-
-                            TreeNode[] x = TreeViewHierarchy.Nodes.Find(One, false);
+                            string[] SelectionStrings = SelectionNode.Attributes["value"].Value.Split('|');
+                            CheckSelectedNode(SelectionStrings.Skip(1), TreeViewHierarchy.Nodes[0]);
                         }
 
                         //var x = TreeViewHierarchy.Nodes.Find(SelectedLeaf[1], false);
                     }
                 }
             }
+        }
+
+        private bool CheckSelectedNode(IEnumerable<string> SelectionStrings, TreeNode ParentTreeNode)
+        {
+            int ChildChecks = 0;
+
+            foreach (TreeNode ChildNode in ParentTreeNode.Nodes)
+            {
+                if (SelectionStrings.First() == ChildNode.Text)
+                {
+                    if (SelectionStrings.Count() == 1)  // meaning if this is the leaf node for this hierarchy
+                    {
+                        ChildNode.Checked = true;
+                        ChildNode.BackColor = Color.LightGreen;
+                        ChildChecks++;
+                    }
+                    else
+                    {
+                        if (CheckSelectedNode(SelectionStrings.Skip(1), ChildNode))
+                        {
+                            ChildChecks++;
+                        }
+                    }
+                }
+            }
+
+            if (ChildChecks == ParentTreeNode.Nodes.Count)
+            {
+                ParentTreeNode.Checked = true;
+                ParentTreeNode.BackColor = Color.LightGreen;
+                return true;
+            }
+            else if (ChildChecks > 0)
+            {
+                ParentTreeNode.Checked = true;
+                ParentTreeNode.BackColor = Color.Yellow;
+                return true;
+            }
+
+            return false;
         }
     }
 }
