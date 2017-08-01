@@ -348,19 +348,17 @@ namespace MillimanDev
         /// <summary>
         /// given the users ID,  do they have to reset thier password and enter info
         /// </summary>
-        /// <param name="UserID"></param>
+        /// <param name="MembershipUserID"></param>
         /// <returns></returns>
-        private bool IsNewUser(string UserID)
+        private bool IsNewUser(string MembershipUserID)
         {
             try
             {
-                string ResetFile = System.IO.Path.Combine(WebConfigurationManager.AppSettings["ResetUserInfoRoot"], UserID + ".rst");
+                string ResetFile = System.IO.Path.Combine(WebConfigurationManager.AppSettings["ResetUserInfoRoot"], MembershipUserID + ".rst");
                 return System.IO.File.Exists(ResetFile);
             }
             catch (Exception)
-            {
-
-            }
+            {}
 
             return false;
         }

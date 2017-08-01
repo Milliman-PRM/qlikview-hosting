@@ -89,7 +89,7 @@ namespace ClientPublisher
                 int PasswordExpirationDays;
                 if (int.TryParse(PasswordExpirationDaysString, out PasswordExpirationDays) == false)
                 {
-                    PasswordExpirationDays = 60;  // default
+                    PasswordExpirationDays = 90;  // default
                 }
                 TimeSpan ConfiguredPasswordExpiration = new TimeSpan(PasswordExpirationDays, 0, 0, 0);
                 TimeSpan TimeSinceLastPasswordChange = DateTime.Now - MU.LastPasswordChangedDate;

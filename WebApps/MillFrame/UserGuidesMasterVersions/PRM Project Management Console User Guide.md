@@ -1,6 +1,6 @@
 ___
 
-##**PRM Release MillFrame 4.2.0**
+##**PRM Release MillFrame 4.2**
 
 #***PRM Project Management Console (PMC) Guide***
 

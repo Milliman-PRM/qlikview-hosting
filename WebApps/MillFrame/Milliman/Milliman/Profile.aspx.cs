@@ -71,7 +71,10 @@ namespace MillimanDev2
 
             MembershipUser MU = Membership.GetUser();
             MU.Email = Email.Value;
-            MU.Comment = Answer.Value;
+            if (!string.IsNullOrWhiteSpace(Answer.Value))
+            {  // Assume no change to answer if it's blank
+                MU.Comment = Answer.Value;
+            }
             Membership.UpdateUser(MU);
 
             if (Request["newuser"] != null)
@@ -146,7 +149,10 @@ namespace MillimanDev2
                             if (Request["newuser"] != null)
                             {
                                 string ResetFile = System.IO.Path.Combine(WebConfigurationManager.AppSettings["ResetUserInfoRoot"], Membership.GetUser().ProviderUserKey.ToString() + ".rst");
-                                System.IO.File.Delete(ResetFile);
+                                if (System.IO.File.Exists(ResetFile))
+                                {
+                                    System.IO.File.Delete(ResetFile);
+                                }
                                 Response.Redirect("default.aspx");
                             }
                             else
@@ -168,7 +174,7 @@ namespace MillimanDev2
 	            }
 	            catch (Exception ex)
 	            {
-                     MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "Change password error", ex );
+                     MillimanCommon.Report.Log(MillimanCommon.Report.ReportType.Error, "Change password error for user " + Membership.GetUser().UserName, ex );
                      Page.ClientScript.RegisterClientScriptBlock(GetType(), "ErrorScript", "ErrorDialog()", true);
 	            }
             
