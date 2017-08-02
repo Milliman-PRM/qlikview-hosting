@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Xml;
 using System.IO;
@@ -17,6 +18,8 @@ namespace DehexifyStrings
     public partial class Form1 : Form
     {
         string _ProjectFolder = string.Empty;
+        string _ProjectName = string.Empty;
+        int _HierarchyLevelsIncludingProjectName = 0;
 
         public Form1()
         {
@@ -33,28 +36,48 @@ namespace DehexifyStrings
             }
 
             XmlDocument XMLD = new XmlDocument();
-            string XML = "<xml>" + System.IO.File.ReadAllText(FileName) + "</xml>";
+            string XML = string.Format("<xml Text=\"{0}\" Value=\"Project Name\">", _ProjectName) + System.IO.File.ReadAllText(FileName) + "</xml>";
             XMLD.LoadXml(XML);
 
-            DecodeXmlNode(XMLD.SelectSingleNode("xml"));
+            // Record the depth of the hierarchy
+            _HierarchyLevelsIncludingProjectName = 0;
+            XmlNode NodeWalk = XMLD;
+            while (NodeWalk.HasChildNodes)
+            {
+                NodeWalk = NodeWalk.FirstChild;
+                _HierarchyLevelsIncludingProjectName++;
+            }
+
+            DecodeXmlNode(XMLD.SelectSingleNode("xml"), true, true);
 
             return XMLD;
         }
 
-        private XmlNode DecodeXmlNode(XmlNode EncodedNode)
+        private XmlNode DecodeXmlNode(XmlNode EncodedNode, bool ReturnInputOnFail, bool RecurseDown = true)
         {
-            if (EncodedNode.Attributes.Count == 2)
+            if (EncodedNode.Attributes.GetNamedItem("Text") != null && EncodedNode.Attributes.GetNamedItem("Value") != null)
             {
                 string EncodedText = EncodedNode.Attributes["Text"].Value;
-                string EncodedValue = EncodedNode.Attributes["Value"].Value;
-
-                EncodedNode.Attributes["Value"].Value = DecodeDelimitedString(EncodedValue, '|');
                 EncodedNode.Attributes["Text"].Value = DecodeDelimitedString(EncodedText, '|');
+                if (ReturnInputOnFail && string.IsNullOrEmpty(EncodedNode.Attributes["Text"].Value) && EncodedText.Length > 1)
+                {
+                    EncodedNode.Attributes["Text"].Value = EncodedText;
+                }
+
+                string EncodedValue = EncodedNode.Attributes["Value"].Value;
+                EncodedNode.Attributes["Value"].Value = DecodeDelimitedString(EncodedValue, '|');
+                if (ReturnInputOnFail && string.IsNullOrEmpty(EncodedNode.Attributes["Value"].Value) && EncodedValue.Length > 1)
+                {
+                    EncodedNode.Attributes["Value"].Value = EncodedValue;
+                }
             }
 
-            foreach (XmlNode Child in EncodedNode.ChildNodes.OfType<XmlElement>())
+            if (RecurseDown)
             {
-                DecodeXmlNode(Child);
+                foreach (XmlNode Child in EncodedNode.ChildNodes.OfType<XmlElement>())
+                {
+                    DecodeXmlNode(Child, ReturnInputOnFail, RecurseDown);
+                }
             }
 
             return EncodedNode;
@@ -114,8 +137,8 @@ namespace DehexifyStrings
         {
             TreeViewHierarchy.Nodes.Clear();
 
-            TreeViewHierarchy.Nodes.Add(new TreeNode(Dom.DocumentElement.Name));
-            TreeNode TNode = TreeViewHierarchy.Nodes[0];
+            TreeNode TNode = new TreeNode(Dom.DocumentElement.Name);
+            TreeViewHierarchy.Nodes.Add(TNode);
 
             AddTreeNode(Dom.DocumentElement, TNode);
         }
@@ -124,7 +147,7 @@ namespace DehexifyStrings
         {
             foreach (XmlNode NextChildXmlNode in NodeToAdd.ChildNodes)
             {
-                TreeNode NewChildTreeNode = new TreeNode(NextChildXmlNode.Name);
+                TreeNode NewChildTreeNode = new TreeNode(NextChildXmlNode.Name);  // Tree node text is modified below
                 TargetTreeNode.Nodes.Add(NewChildTreeNode);
                 AddTreeNode(NextChildXmlNode, NewChildTreeNode);
             }
@@ -158,23 +181,41 @@ namespace DehexifyStrings
                         return;
                     }
 
+                    XmlDocument HciprojXml = new XmlDocument();
+                    using (StreamReader R = new StreamReader(ProjectFile))
+                    {
+                        HciprojXml.LoadXml(R.ReadToEnd());
+                    }
+                    _ProjectName = HciprojXml.SelectSingleNode("Complex").SelectSingleNode("Properties").SelectSingleNode("Simple[@name=\"ProjectName\"]").Attributes["value"].Value;
+
+                    XmlDocument HierarchyDocument = DecodeHierarchyFile(HierarchyFile);
+                    XmlToTree(HierarchyDocument);
+
                     // Find all subfolders that are named only with hexidecimal digits
                     string[] SelectionsFolders = Directory.GetDirectories(Path.Combine(_ProjectFolder, "ReducedUserQVWs")).Where(d => !Regex.IsMatch(Path.GetFileName(d), "[^a-fA-F0-9]")).ToArray();
 
                     ListViewUsers.Items.Clear();
                     foreach (string Folder in SelectionsFolders)
                     {
+                        string SelectionFile = Directory.GetFiles(Folder, "*.selections").FirstOrDefault();
+                        UserItemDetail ThisUserDetail = new UserItemDetail
+                        {
+                            SelectionFile = string.IsNullOrEmpty(SelectionFile) ? "" : SelectionFile,
+                            HexedUserName = Path.GetFileName(Folder),
+                        };
+
                         string UserName = HexToString(Path.GetFileName(Folder));
                         ListViewItem NewItem = new ListViewItem(UserName);
+                        NewItem.Tag = ThisUserDetail;
                         ListViewUsers.Items.Add(NewItem);
-                        ListViewUsers.Columns[0].Text = string.Format("User Name ({0})", ListViewUsers.Items.Count);
+                        ListViewUsers.Columns[0].Text = string.Format("User Name ({0} total)", ListViewUsers.Items.Count);
+                        ListViewUsers.Items[ListViewUsers.Items.Count - 1].Selected = true;
+                        ListViewUsers.Items[ListViewUsers.Items.Count - 1].Selected = false;
                     }
-
-                    XmlDocument HierarchyDocument = DecodeHierarchyFile(HierarchyFile);
-                    XmlToTree(HierarchyDocument);
                 }
                 finally
                 {
+                    ListBoxUserDetail.Items.Clear();
                     this.Cursor = OriginalCursor;
                 }
 
@@ -202,38 +243,39 @@ namespace DehexifyStrings
             }
         }
 
-        private bool CheckSelectedTreeNode(IEnumerable<string> SelectionStrings, TreeNode ParentTreeNode, bool Checked=true)
+        private bool CheckSelectedTreeNode(string[] SelectionStrings, TreeNode ParentTreeNode, bool Checked=true)
         {
-            int ChildChecks = 0;
-
             foreach (TreeNode ChildNode in ParentTreeNode.Nodes)
             {
-                if (SelectionStrings.First() == ChildNode.Text)
+                string[] ChildSelectionStrings = SelectionStrings.Skip(1).ToArray();
+                if (ChildSelectionStrings.First() == ChildNode.Text)
                 {
-                    if (SelectionStrings.Count() == 1)  // meaning if this is the leaf node for this hierarchy
+                    if (ChildSelectionStrings.Count() == 1)  // meaning if this is the leaf node for this hierarchy
                     {
                         ChildNode.Checked = Checked;
                         ChildNode.BackColor = Color.LightGreen;
-                        ChildChecks++;
                         break;
                     }
                     else
                     {
-                        if (CheckSelectedTreeNode(SelectionStrings.Skip(1), ChildNode, Checked))
-                        {
-                            ChildChecks++;
-                        }
+                        CheckSelectedTreeNode(ChildSelectionStrings, ChildNode, Checked);
                     }
                 }
             }
 
-            if (ChildChecks == ParentTreeNode.Nodes.Count)
+            int ChildredChecked = 0;
+            foreach (TreeNode N in ParentTreeNode.Nodes)
+            {
+                if (N.Checked) ChildredChecked++;
+            }
+
+            if (ChildredChecked == ParentTreeNode.Nodes.Count)
             {
                 ParentTreeNode.Checked = Checked;
                 ParentTreeNode.BackColor = Color.LightGreen;
                 return true;
             }
-            else if (ChildChecks > 0)
+            else if (ChildredChecked > 0)
             {
                 ParentTreeNode.Checked = Checked;
                 ParentTreeNode.BackColor = Color.Yellow;
@@ -246,46 +288,54 @@ namespace DehexifyStrings
         private void ListViewUsers_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Uncheck everything in the hierarchy tree
-            SetTreeNodeCheck(TreeViewHierarchy.Nodes[0], false, true);
-
-            // Undo any previous BackColor values
-            foreach (ListViewItem Item in ListViewUsers.Items)
+            if (TreeViewHierarchy.Nodes.Count > 0)
             {
-                Item.BackColor = Color.White;
+                SetTreeNodeCheck(TreeViewHierarchy.Nodes[0], false, true);
             }
-            TextBoxErrorList.Text = string.Empty;
+
+            ListBoxErrors.Items.Clear();
+            ListBoxUserDetail.Items.Clear();
 
             ListView.SelectedListViewItemCollection SelectedListItems = ListViewUsers.SelectedItems;
             // If the ListView is set for single selection then this foreach will always find at most one selected item
             foreach (ListViewItem SelectedUserItem in SelectedListItems)
             {
-                SelectedUserItem.BackColor = SystemColors.Highlight;
+                SelectedUserItem.BackColor = Color.LightGreen;
+                UserItemDetail UserDetail = SelectedUserItem.Tag as UserItemDetail;
 
-                string HexedUserName = StringToHex(SelectedUserItem.Text);
-                string SelectionFolder = Path.Combine(_ProjectFolder, "ReducedUserQVWs", HexedUserName);
+                string SelectionFolder = Path.Combine(_ProjectFolder, "ReducedUserQVWs", UserDetail.HexedUserName);
 
-                string[] SelectionFiles = Directory.GetFiles(SelectionFolder, "*.selections");
+                ListBoxUserDetail.Items.Add("Selection file: " + UserDetail.SelectionFile);
+                ListBoxUserDetail.Items.Add("Encoded User Name: " + UserDetail.HexedUserName);
 
-                foreach (string SelectionFile in SelectionFiles)
+                string SelectionFile = UserDetail.SelectionFile;
+                if (File.Exists(SelectionFile))
+                using (StreamReader Reader = new StreamReader(SelectionFile))
                 {
-                    using (StreamReader Reader = new StreamReader(SelectionFile))
-                    {
-                        XmlDocument XMLD = new XmlDocument();
-                        string XML = Reader.ReadToEnd();
-                        XMLD.LoadXml(XML);
+                    XmlDocument XMLD = new XmlDocument();
+                    string XML = Reader.ReadToEnd();
+                    XMLD.LoadXml(XML);
 
-                        foreach (XmlNode SelectionNode in XMLD.SelectSingleNode("Collection").SelectSingleNode("Items").SelectNodes("Simple"))
+                    foreach (XmlNode SelectionNode in XMLD.SelectSingleNode("Collection").SelectSingleNode("Items").SelectNodes("Simple"))
+                    {
+                        bool Found = false;
+                        string[] SelectionStrings = SelectionNode.Attributes["value"].Value.Split('|');
+                        int Levels = SelectionStrings.Length;
+                        if (Levels != _HierarchyLevelsIncludingProjectName)
                         {
-                            bool Found = false;
-                            string[] SelectionStrings = SelectionNode.Attributes["value"].Value.Split('|');
-                            this.Invoke((MethodInvoker)delegate {
-                                Found = CheckSelectedTreeNode(SelectionStrings.Skip(1), TreeViewHierarchy.Nodes[0]);
-                            });
-                            if (!Found)
-                            {
-                                TextBoxErrorList.Text += SelectionNode.Attributes["value"].Value + "\r\n";
-                                // TODO Indicate this problem in the UI somewhere. 
-                            }
+                            SelectedUserItem.BackColor = Color.OrangeRed;
+                            ListBoxErrors.Items.Add("Wrong selection depth: " + SelectionNode.Attributes["value"].Value);
+                        }
+
+                        this.Invoke((MethodInvoker)delegate {
+                            Found = CheckSelectedTreeNode(SelectionStrings, TreeViewHierarchy.Nodes[0]);
+                        });
+
+                        if (!Found)
+                        {
+                            SelectedUserItem.BackColor = Color.OrangeRed;
+                            ListBoxErrors.Items.Add(SelectionNode.Attributes["value"].Value);
+                            // TODO Indicate this problem in the UI somewhere. 
                         }
                     }
                 }
@@ -308,6 +358,32 @@ namespace DehexifyStrings
                 default:
                     break;
             }
+        }
+
+        private void splitContainer1_Panel1_Resize(object sender, EventArgs e)
+        {
+            if (ListViewUsers.Columns.Count > 0)
+            ListViewUsers.Columns[0].Width = splitContainer1.Panel1.Width - 4;
+        }
+
+        private void ListViewUsers_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                if (ListViewUsers.GetItemAt(e.X, e.Y) != null)
+                {
+                    ContextMenuStripUserList.Show(Cursor.Position);
+                }
+            }
+        }
+
+        private void ToolStripMenuItemEditSelections_Click(object sender, EventArgs e)
+        {
+            string UserName = ListViewUsers.FocusedItem.Text;
+            string SelectionsFileFolder = Path.Combine(_ProjectFolder, "ReducedUserQVWs", StringToHex(UserName));
+            string SelectionsFile = Directory.GetFiles(SelectionsFileFolder, "*.selections").FirstOrDefault();
+
+            Process.Start("notepad.exe", SelectionsFile);
         }
     }
 }
