@@ -26,6 +26,7 @@ namespace DehexifyStrings
             InitializeComponent();
 
             ButtonToggleExpand.Text = "Expand All";
+            TabPageCompareSelections_Resize(null, null);
         }
 
         private XmlDocument DecodeHierarchyFile(string FileName)
@@ -161,7 +162,7 @@ namespace DehexifyStrings
 
         private void ButtonReadProject_Click(object sender, EventArgs e)
         {
-            OpenFileDialog1.Title = "Open Selections file";
+            OpenFileDialog1.Title = "Open Project file";
             OpenFileDialog1.Filter = "Project files (*.hciprj)|*.hciprj|All files (*.*)|*.*";
 
             if (OpenFileDialog1.ShowDialog() == DialogResult.OK && File.Exists(OpenFileDialog1.FileName))
@@ -197,10 +198,10 @@ namespace DehexifyStrings
                     ListViewUsers.Items.Clear();
                     foreach (string Folder in SelectionsFolders)
                     {
-                        string SelectionFile = Directory.GetFiles(Folder, "*.selections").FirstOrDefault();
+                        string SelectionFile = Path.Combine(Folder, _ProjectName + ".selections");
                         UserItemDetail ThisUserDetail = new UserItemDetail
                         {
-                            SelectionFile = string.IsNullOrEmpty(SelectionFile) ? "" : SelectionFile,
+                            SelectionFile = File.Exists(SelectionFile) ? SelectionFile : "Not Found",
                             HexedUserName = Path.GetFileName(Folder),
                         };
 
@@ -340,7 +341,6 @@ namespace DehexifyStrings
                     }
                 }
             }
-
         }
 
         private void ButtonToggleExpand_Click(object sender, EventArgs e)
@@ -379,11 +379,174 @@ namespace DehexifyStrings
 
         private void ToolStripMenuItemEditSelections_Click(object sender, EventArgs e)
         {
-            string UserName = ListViewUsers.FocusedItem.Text;
-            string SelectionsFileFolder = Path.Combine(_ProjectFolder, "ReducedUserQVWs", StringToHex(UserName));
-            string SelectionsFile = Directory.GetFiles(SelectionsFileFolder, "*.selections").FirstOrDefault();
+            string SelectionsFile = (ListViewUsers.FocusedItem.Tag as UserItemDetail).SelectionFile;
 
-            Process.Start("notepad.exe", SelectionsFile);
+            if (File.Exists(SelectionsFile))
+            {
+                Process.Start("notepad.exe", SelectionsFile);
+            }
+        }
+
+        private void TextBoxAnyFileChosen_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            OpenFileDialog1.Title = "Open Selections File";
+            OpenFileDialog1.Filter = "Selection files (*.selections*)|*.selections*|All files (*.*)|*.*";
+
+            if (OpenFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                (sender as TextBox).Text = OpenFileDialog1.FileName;
+            }
+        }
+        private DataTable CompareSelectionFiles()
+        {
+            if (!File.Exists(TextBoxLeftFile.Text) || !File.Exists(TextBoxRightFile.Text))
+            {
+                return null;
+            }
+
+            XmlDocument BaseXml = new XmlDocument();
+            XmlDocument ComparisonXml = new XmlDocument();
+            string Xml = string.Empty;
+            HashSet<string> LeftFileSelections = new HashSet<string>();
+            HashSet<string> RightFileSelections = new HashSet<string>();
+            HashSet<string> UnionOfAllSelections = new HashSet<string>();
+            int MaxDepth = 0;
+
+            //Xml = string.Format("<xml Text=\"{0}\" Value=\"Project Name\">", _ProjectName) + System.IO.File.ReadAllText(TextBoxLeftFile.Text) + "</xml>";
+            Xml = System.IO.File.ReadAllText(TextBoxLeftFile.Text);
+            BaseXml.LoadXml(Xml);
+            foreach (XmlNode SelectionNode in BaseXml.SelectSingleNode("Collection").SelectSingleNode("Items").SelectNodes("Simple"))
+            {
+                LeftFileSelections.Add(SelectionNode.Attributes["value"].Value);
+                UnionOfAllSelections.Add(SelectionNode.Attributes["value"].Value);
+                MaxDepth = Math.Max(MaxDepth, SelectionNode.Attributes["value"].Value.Split('|').Length - 1);
+            }
+
+            Xml = System.IO.File.ReadAllText(TextBoxRightFile.Text);
+            ComparisonXml.LoadXml(Xml);
+            foreach (XmlNode SelectionNode in ComparisonXml.SelectSingleNode("Collection").SelectSingleNode("Items").SelectNodes("Simple"))
+            {
+                RightFileSelections.Add(SelectionNode.Attributes["value"].Value);
+                UnionOfAllSelections.Add(SelectionNode.Attributes["value"].Value);
+                MaxDepth = Math.Max(MaxDepth, SelectionNode.Attributes["value"].Value.Split(new char[] {'|'}, StringSplitOptions.None).Length - 1);
+            }
+
+            // Define the columns
+            DataTable ReturnValue = new DataTable("SelectionComparisonResultTable");
+            for (int Level=1; Level <= MaxDepth; Level++)
+            {
+                ReturnValue.Columns.Add("Hier" + Level, typeof(string));
+            }
+            ReturnValue.Columns.Add("In Base", typeof(bool));
+            ReturnValue.Columns.Add("In Comparison", typeof(bool));
+            ReturnValue.Columns.Add("Status", typeof(string));
+
+            // Add the rows
+            foreach (string Selection in UnionOfAllSelections.OrderBy(s => s))
+            {
+                string[] SelectionArray = Selection.Split('|');
+                DataRow NewRow = ReturnValue.NewRow();
+                for (int Level = 1 ; Level <= MaxDepth ; Level++)
+                {
+                    NewRow["Hier" + Level] = SelectionArray[Level];
+                }
+                NewRow["In Base"] = LeftFileSelections.Contains(Selection);
+                NewRow["In Comparison"] = RightFileSelections.Contains(Selection);
+                var x = (bool)NewRow["In Base"];
+                if (LeftFileSelections.Contains(Selection) && RightFileSelections.Contains(Selection))
+                {
+                    NewRow["Status"] = "No Change";
+                }
+                else if (LeftFileSelections.Contains(Selection) && !RightFileSelections.Contains(Selection))
+                {
+                    NewRow["Status"] = "Removed";
+                }
+                else if (!LeftFileSelections.Contains(Selection) && RightFileSelections.Contains(Selection))
+                {
+                    NewRow["Status"] = "Added";
+                }
+                ReturnValue.Rows.Add(NewRow);
+            }
+
+            return ReturnValue;
+        }
+
+        private void TabPageCompareSelections_Resize(object sender, EventArgs e)
+        {
+            TextBoxLeftFile.Width = TabPageCompareSelections.Width - TextBoxLeftFile.Left - TextBoxLeftFile.Margin.Right;
+            TextBoxRightFile.Width = TabPageCompareSelections.Width - TextBoxRightFile.Left - TextBoxRightFile.Margin.Right;
+        }
+
+        private void ToolStripMenuItemCompareSelectionsFiles_Click(object sender, EventArgs e)
+        {
+            TextBoxLeftFile.Text = (ListViewUsers.FocusedItem.Tag as UserItemDetail).SelectionFile;
+            TextBoxRightFile.Text = TextBoxLeftFile.Text + "_new";
+            tabControl1.SelectedTab = TabPageCompareSelections;
+        }
+
+        private void ButtonCompareSelectionFiles_Click(object sender, EventArgs e)
+        {
+            DataGridViewSelectionComparison.AutoGenerateColumns = true;
+            //DataGridViewSelectionComparison.Rows.Clear();
+            DataGridViewSelectionComparison.Enabled = true;
+
+            DataSet SelectionComparisonResult = new DataSet();
+            DataTable SelectionComparisonResultTable = CompareSelectionFiles();
+            SelectionComparisonResult.Tables.Add(SelectionComparisonResultTable);
+
+            DataGridViewSelectionComparison.DataSource = SelectionComparisonResult;
+            DataGridViewSelectionComparison.DataMember = "SelectionComparisonResultTable";
+
+            foreach (DataGridViewColumn C in DataGridViewSelectionComparison.Columns)
+            {
+                switch (C.ValueType.ToString())
+                {
+                    case "System.String":
+                        //MessageBox.Show(C.Name + " is string");
+                        C.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                        break;
+                    case "System.Boolean":
+                        C.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+                        C.Width = 50;
+                        //MessageBox.Show(C.Name + " is bool");
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            foreach (DataGridViewRow R in DataGridViewSelectionComparison.Rows)
+            {
+            }
+
+        }
+
+        private void TextBoxLeftFile_TextChanged(object sender, EventArgs e)
+        {
+            DataGridViewSelectionComparison.Enabled = false;
+        }
+
+        private void DataGridViewSelectionComparison_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        {
+            DataGridViewRow R = ((DataGridView)sender).Rows[e.RowIndex];
+
+            if (R.Cells["Status"].Value == null)
+            {
+                return;
+            }
+            switch (R.Cells["Status"].Value.ToString())
+            {
+                case "Added":
+                    R.DefaultCellStyle.BackColor = Color.IndianRed;
+                    break;
+                case "Removed":
+                    R.DefaultCellStyle.BackColor = Color.LightGreen;
+                    break;
+                case "No Change":
+                default:
+                    break;
+            }
+
         }
     }
 }
