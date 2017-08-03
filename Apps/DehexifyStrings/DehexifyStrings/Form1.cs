@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+ * CODE OWNERS: Tom Puckett,
+ * OBJECTIVE: Visualize hierarchies and associated selections, and see insights to the result of preparations for report publication
+ * DEVELOPER NOTES: <What future developers need to know.>
+ */
+
+using System;
 using System.Diagnostics;
 using System.Threading;
 using System.Xml;
@@ -524,16 +530,11 @@ namespace DehexifyStrings
                         break;
                 }
             }
-
-            foreach (DataGridViewRow R in DataGridViewSelectionComparison.Rows)
-            {
-            }
-
         }
 
-        private void TextBoxLeftFile_TextChanged(object sender, EventArgs e)
+        private void TextBoxAnyFile_TextChanged(object sender, EventArgs e)
         {
-            DataGridViewSelectionComparison.Enabled = false;
+            DataGridViewSelectionComparison.DataSource = null;
         }
 
         private void DataGridViewSelectionComparison_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)

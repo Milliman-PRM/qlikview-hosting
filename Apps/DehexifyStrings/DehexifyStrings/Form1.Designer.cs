@@ -328,6 +328,7 @@
             this.TextBoxRightFile.Size = new System.Drawing.Size(963, 20);
             this.TextBoxRightFile.TabIndex = 1;
             this.TextBoxRightFile.Text = "Double-Click to Browse";
+            this.TextBoxRightFile.TextChanged += new System.EventHandler(this.TextBoxAnyFile_TextChanged);
             this.TextBoxRightFile.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.TextBoxAnyFileChosen_MouseDoubleClick);
             // 
             // TextBoxLeftFile
@@ -340,7 +341,7 @@
             this.TextBoxLeftFile.Size = new System.Drawing.Size(966, 20);
             this.TextBoxLeftFile.TabIndex = 0;
             this.TextBoxLeftFile.Text = "Double-Click to Browse";
-            this.TextBoxLeftFile.TextChanged += new System.EventHandler(this.TextBoxLeftFile_TextChanged);
+            this.TextBoxLeftFile.TextChanged += new System.EventHandler(this.TextBoxAnyFile_TextChanged);
             this.TextBoxLeftFile.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.TextBoxAnyFileChosen_MouseDoubleClick);
             // 
             // Form1
