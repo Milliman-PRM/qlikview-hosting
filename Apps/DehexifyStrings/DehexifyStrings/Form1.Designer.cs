@@ -32,6 +32,7 @@
             this.OpenFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.TabPageHierarchySelections = new System.Windows.Forms.TabPage();
+            this.CheckBoxUseNewSelections = new System.Windows.Forms.CheckBox();
             this.ButtonToggleExpand = new System.Windows.Forms.Button();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.ListViewUsers = new System.Windows.Forms.ListView();
@@ -47,12 +48,12 @@
             this.ToolStripMenuItemCompareSelectionsFiles = new System.Windows.Forms.ToolStripMenuItem();
             this.ButtonReadProject = new System.Windows.Forms.Button();
             this.TabPageCompareSelections = new System.Windows.Forms.TabPage();
+            this.DataGridViewSelectionComparison = new System.Windows.Forms.DataGridView();
+            this.ButtonCompareSelectionFiles = new System.Windows.Forms.Button();
             this.LabelComparisonFile = new System.Windows.Forms.Label();
             this.LabelBaseFile = new System.Windows.Forms.Label();
             this.TextBoxRightFile = new System.Windows.Forms.TextBox();
             this.TextBoxLeftFile = new System.Windows.Forms.TextBox();
-            this.ButtonCompareSelectionFiles = new System.Windows.Forms.Button();
-            this.DataGridViewSelectionComparison = new System.Windows.Forms.DataGridView();
             this.tabControl1.SuspendLayout();
             this.TabPageHierarchySelections.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -79,6 +80,7 @@
             // 
             // TabPageHierarchySelections
             // 
+            this.TabPageHierarchySelections.Controls.Add(this.CheckBoxUseNewSelections);
             this.TabPageHierarchySelections.Controls.Add(this.ButtonToggleExpand);
             this.TabPageHierarchySelections.Controls.Add(this.splitContainer1);
             this.TabPageHierarchySelections.Controls.Add(this.ButtonReadProject);
@@ -89,6 +91,16 @@
             this.TabPageHierarchySelections.TabIndex = 1;
             this.TabPageHierarchySelections.Text = "User Selections";
             this.TabPageHierarchySelections.UseVisualStyleBackColor = true;
+            // 
+            // CheckBoxUseNewSelections
+            // 
+            this.CheckBoxUseNewSelections.AutoSize = true;
+            this.CheckBoxUseNewSelections.Location = new System.Drawing.Point(89, 9);
+            this.CheckBoxUseNewSelections.Name = "CheckBoxUseNewSelections";
+            this.CheckBoxUseNewSelections.Size = new System.Drawing.Size(149, 17);
+            this.CheckBoxUseNewSelections.TabIndex = 4;
+            this.CheckBoxUseNewSelections.Text = "Use \'_new\' Selection Files";
+            this.CheckBoxUseNewSelections.UseVisualStyleBackColor = true;
             // 
             // ButtonToggleExpand
             // 
@@ -263,6 +275,31 @@
             this.TabPageCompareSelections.UseVisualStyleBackColor = true;
             this.TabPageCompareSelections.Resize += new System.EventHandler(this.TabPageCompareSelections_Resize);
             // 
+            // DataGridViewSelectionComparison
+            // 
+            this.DataGridViewSelectionComparison.AllowUserToAddRows = false;
+            this.DataGridViewSelectionComparison.AllowUserToDeleteRows = false;
+            this.DataGridViewSelectionComparison.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.DataGridViewSelectionComparison.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.DataGridViewSelectionComparison.Location = new System.Drawing.Point(6, 106);
+            this.DataGridViewSelectionComparison.Name = "DataGridViewSelectionComparison";
+            this.DataGridViewSelectionComparison.ReadOnly = true;
+            this.DataGridViewSelectionComparison.Size = new System.Drawing.Size(1047, 377);
+            this.DataGridViewSelectionComparison.TabIndex = 6;
+            this.DataGridViewSelectionComparison.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.DataGridViewSelectionComparison_RowPostPaint);
+            // 
+            // ButtonCompareSelectionFiles
+            // 
+            this.ButtonCompareSelectionFiles.Location = new System.Drawing.Point(4, 77);
+            this.ButtonCompareSelectionFiles.Name = "ButtonCompareSelectionFiles";
+            this.ButtonCompareSelectionFiles.Size = new System.Drawing.Size(102, 23);
+            this.ButtonCompareSelectionFiles.TabIndex = 5;
+            this.ButtonCompareSelectionFiles.Text = "Compare Files";
+            this.ButtonCompareSelectionFiles.UseVisualStyleBackColor = true;
+            this.ButtonCompareSelectionFiles.Click += new System.EventHandler(this.ButtonCompareSelectionFiles_Click);
+            // 
             // LabelComparisonFile
             // 
             this.LabelComparisonFile.AutoSize = true;
@@ -291,6 +328,7 @@
             this.TextBoxRightFile.Size = new System.Drawing.Size(963, 20);
             this.TextBoxRightFile.TabIndex = 1;
             this.TextBoxRightFile.Text = "Double-Click to Browse";
+            this.TextBoxRightFile.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.TextBoxAnyFileChosen_MouseDoubleClick);
             // 
             // TextBoxLeftFile
             // 
@@ -305,28 +343,6 @@
             this.TextBoxLeftFile.TextChanged += new System.EventHandler(this.TextBoxLeftFile_TextChanged);
             this.TextBoxLeftFile.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.TextBoxAnyFileChosen_MouseDoubleClick);
             // 
-            // ButtonCompareSelectionFiles
-            // 
-            this.ButtonCompareSelectionFiles.Location = new System.Drawing.Point(4, 77);
-            this.ButtonCompareSelectionFiles.Name = "ButtonCompareSelectionFiles";
-            this.ButtonCompareSelectionFiles.Size = new System.Drawing.Size(102, 23);
-            this.ButtonCompareSelectionFiles.TabIndex = 5;
-            this.ButtonCompareSelectionFiles.Text = "Compare Files";
-            this.ButtonCompareSelectionFiles.UseVisualStyleBackColor = true;
-            this.ButtonCompareSelectionFiles.Click += new System.EventHandler(this.ButtonCompareSelectionFiles_Click);
-            // 
-            // DataGridViewSelectionComparison
-            // 
-            this.DataGridViewSelectionComparison.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.DataGridViewSelectionComparison.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.DataGridViewSelectionComparison.Location = new System.Drawing.Point(6, 106);
-            this.DataGridViewSelectionComparison.Name = "DataGridViewSelectionComparison";
-            this.DataGridViewSelectionComparison.Size = new System.Drawing.Size(1047, 377);
-            this.DataGridViewSelectionComparison.TabIndex = 6;
-            this.DataGridViewSelectionComparison.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.DataGridViewSelectionComparison_RowPostPaint);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -337,6 +353,7 @@
             this.Text = "Project Metadata Visualizer";
             this.tabControl1.ResumeLayout(false);
             this.TabPageHierarchySelections.ResumeLayout(false);
+            this.TabPageHierarchySelections.PerformLayout();
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.Panel2.PerformLayout();
@@ -375,6 +392,7 @@
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemCompareSelectionsFiles;
         private System.Windows.Forms.Button ButtonCompareSelectionFiles;
         private System.Windows.Forms.DataGridView DataGridViewSelectionComparison;
+        private System.Windows.Forms.CheckBox CheckBoxUseNewSelections;
     }
 }
 

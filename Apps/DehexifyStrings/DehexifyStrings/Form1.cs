@@ -198,7 +198,8 @@ namespace DehexifyStrings
                     ListViewUsers.Items.Clear();
                     foreach (string Folder in SelectionsFolders)
                     {
-                        string SelectionFile = Path.Combine(Folder, _ProjectName + ".selections");
+                        string Extension = CheckBoxUseNewSelections.Checked ? ".selections_new" : ".selections";
+                        string SelectionFile = Path.Combine(Folder, _ProjectName + Extension);
                         UserItemDetail ThisUserDetail = new UserItemDetail
                         {
                             SelectionFile = File.Exists(SelectionFile) ? SelectionFile : "Not Found",
@@ -412,7 +413,6 @@ namespace DehexifyStrings
             HashSet<string> UnionOfAllSelections = new HashSet<string>();
             int MaxDepth = 0;
 
-            //Xml = string.Format("<xml Text=\"{0}\" Value=\"Project Name\">", _ProjectName) + System.IO.File.ReadAllText(TextBoxLeftFile.Text) + "</xml>";
             Xml = System.IO.File.ReadAllText(TextBoxLeftFile.Text);
             BaseXml.LoadXml(Xml);
             foreach (XmlNode SelectionNode in BaseXml.SelectSingleNode("Collection").SelectSingleNode("Items").SelectNodes("Simple"))
@@ -480,14 +480,25 @@ namespace DehexifyStrings
         private void ToolStripMenuItemCompareSelectionsFiles_Click(object sender, EventArgs e)
         {
             TextBoxLeftFile.Text = (ListViewUsers.FocusedItem.Tag as UserItemDetail).SelectionFile;
-            TextBoxRightFile.Text = TextBoxLeftFile.Text + "_new";
+            TextBoxRightFile.Text = TextBoxLeftFile.Text.EndsWith("_new") ? TextBoxLeftFile.Text.Substring(0, TextBoxLeftFile.Text.Length - "_new".Length) : 
+                                                                            TextBoxLeftFile.Text + "_new";
             tabControl1.SelectedTab = TabPageCompareSelections;
+            DataGridViewSelectionComparison.DataSource = null;
         }
 
         private void ButtonCompareSelectionFiles_Click(object sender, EventArgs e)
         {
+            foreach (TextBox B in new TextBox[] { TextBoxLeftFile, TextBoxRightFile })
+            {
+                if (!File.Exists(B.Text))
+                {
+                    MessageBox.Show(string.Format("File {0} not found", B.Text));
+                    return;
+                }
+            }
+
             DataGridViewSelectionComparison.AutoGenerateColumns = true;
-            //DataGridViewSelectionComparison.Rows.Clear();
+            DataGridViewSelectionComparison.DataSource = null;
             DataGridViewSelectionComparison.Enabled = true;
 
             DataSet SelectionComparisonResult = new DataSet();
@@ -506,8 +517,7 @@ namespace DehexifyStrings
                         C.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
                         break;
                     case "System.Boolean":
-                        C.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-                        C.Width = 50;
+                        C.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
                         //MessageBox.Show(C.Name + " is bool");
                         break;
                     default:
