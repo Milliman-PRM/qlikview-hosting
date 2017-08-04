@@ -45,8 +45,8 @@
     <CodeAnalysisRuleSet />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ComponentPro.Saml">
-      <HintPath>..\..\..\ComponentPro\UltimateSaml v5.2.8221\Bin\Net4_0\ComponentPro.Saml.dll</HintPath>
+    <Reference Include="ComponentPro.Saml, Version=6.3.40.60129, Culture=neutral, PublicKeyToken=0efede2d78b28dff, processorArchitecture=MSIL">
+      <HintPath>..\..\..\ComponentPro\UltimateSaml v6.3.40.60129\Bin\Net4_0\ComponentPro.Saml.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Polenter.SharpSerializer">
