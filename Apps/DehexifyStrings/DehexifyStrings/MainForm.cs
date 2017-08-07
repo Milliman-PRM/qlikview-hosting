@@ -204,7 +204,7 @@ namespace DehexifyStrings
                     ListViewUsers.Items.Clear();
                     foreach (string Folder in SelectionsFolders)
                     {
-                        string Extension = CheckBoxUseNewSelections.Checked ? ".selections_new" : ".selections";
+                        string Extension = CheckBoxUseNewSelections.Checked ? ".selections_old" : ".selections";
                         string SelectionFile = Path.Combine(Folder, _ProjectName + Extension);
                         UserItemDetail ThisUserDetail = new UserItemDetail
                         {
@@ -485,11 +485,26 @@ namespace DehexifyStrings
 
         private void ToolStripMenuItemCompareSelectionsFiles_Click(object sender, EventArgs e)
         {
-            TextBoxLeftFile.Text = (ListViewUsers.FocusedItem.Tag as UserItemDetail).SelectionFile;
-            TextBoxRightFile.Text = TextBoxLeftFile.Text.EndsWith("_new") ? TextBoxLeftFile.Text.Substring(0, TextBoxLeftFile.Text.Length - "_new".Length) : 
-                                                                            TextBoxLeftFile.Text + "_new";
-            tabControl1.SelectedTab = TabPageCompareSelections;
-            DataGridViewSelectionComparison.DataSource = null;
+            string DepictedSelections = (ListViewUsers.FocusedItem.Tag as UserItemDetail).SelectionFile;
+
+            if (DepictedSelections.EndsWith("_old"))
+            {
+                TextBoxLeftFile.Text = DepictedSelections;
+                TextBoxRightFile.Text = DepictedSelections.Substring(0, DepictedSelections.Length - "_old".Length);
+            }
+            else if(DepictedSelections.EndsWith(".selections"))
+            {
+                TextBoxLeftFile.Text = DepictedSelections + "_old";
+                TextBoxRightFile.Text = DepictedSelections;
+            }
+            else
+            {
+                TextBoxLeftFile.Text = DepictedSelections;
+                TextBoxRightFile.Text = string.Empty;
+            }
+
+            tabControl1.SelectedTab = TabPageCompareSelections;  // Switch to the comparison tab
+            DataGridViewSelectionComparison.DataSource = null;  // Clear the results grid in case it has a previous comparison
         }
 
         private void ButtonCompareSelectionFiles_Click(object sender, EventArgs e)
