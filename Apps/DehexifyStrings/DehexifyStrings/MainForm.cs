@@ -21,13 +21,13 @@ using System.Text.RegularExpressions;
 
 namespace DehexifyStrings
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
         string _ProjectFolder = string.Empty;
         string _ProjectName = string.Empty;
         int _HierarchyLevelsIncludingProjectName = 0;
 
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
 
