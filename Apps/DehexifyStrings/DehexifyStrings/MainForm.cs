@@ -180,13 +180,17 @@ namespace DehexifyStrings
                 {
                     string ProjectFile = OpenFileDialog1.FileName;
                     _ProjectFolder = Path.GetFullPath(Path.GetDirectoryName(ProjectFile));
-                    string HierarchyFile = Directory.GetFiles(_ProjectFolder, "*.hierarchy_*").FirstOrDefault();
+
+                    string HierarchySuffix = CheckBoxUseNewSelections.Checked ? "*.hierarchy_*_old" : "*.hierarchy_*_new";
+                    string HierarchyFile = Directory.GetFiles(_ProjectFolder, HierarchySuffix).FirstOrDefault();
 
                     if (!File.Exists(HierarchyFile))
                     {
                         MessageBox.Show("No hierarchy file found in folder " + _ProjectFolder);
                         return;
                     }
+
+                    LabelHierarchyFile.Text = HierarchyFile;
 
                     XmlDocument HciprojXml = new XmlDocument();
                     using (StreamReader R = new StreamReader(ProjectFile))

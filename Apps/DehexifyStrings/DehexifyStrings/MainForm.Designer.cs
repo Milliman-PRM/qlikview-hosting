@@ -54,6 +54,7 @@
             this.LabelBaseFile = new System.Windows.Forms.Label();
             this.TextBoxRightFile = new System.Windows.Forms.TextBox();
             this.TextBoxLeftFile = new System.Windows.Forms.TextBox();
+            this.LabelHierarchyFile = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.TabPageHierarchySelections.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -67,8 +68,8 @@
             // 
             // tabControl1
             // 
-            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.TabPageHierarchySelections);
             this.tabControl1.Controls.Add(this.TabPageCompareSelections);
@@ -80,6 +81,7 @@
             // 
             // TabPageHierarchySelections
             // 
+            this.TabPageHierarchySelections.Controls.Add(this.LabelHierarchyFile);
             this.TabPageHierarchySelections.Controls.Add(this.CheckBoxUseNewSelections);
             this.TabPageHierarchySelections.Controls.Add(this.ButtonToggleExpand);
             this.TabPageHierarchySelections.Controls.Add(this.splitContainer1);
@@ -97,14 +99,14 @@
             this.CheckBoxUseNewSelections.AutoSize = true;
             this.CheckBoxUseNewSelections.Location = new System.Drawing.Point(89, 9);
             this.CheckBoxUseNewSelections.Name = "CheckBoxUseNewSelections";
-            this.CheckBoxUseNewSelections.Size = new System.Drawing.Size(149, 17);
+            this.CheckBoxUseNewSelections.Size = new System.Drawing.Size(144, 17);
             this.CheckBoxUseNewSelections.TabIndex = 4;
             this.CheckBoxUseNewSelections.Text = "Find \'_old\' Selection Files";
             this.CheckBoxUseNewSelections.UseVisualStyleBackColor = true;
             // 
             // ButtonToggleExpand
             // 
-            this.ButtonToggleExpand.Location = new System.Drawing.Point(425, 6);
+            this.ButtonToggleExpand.Location = new System.Drawing.Point(239, 9);
             this.ButtonToggleExpand.Name = "ButtonToggleExpand";
             this.ButtonToggleExpand.Size = new System.Drawing.Size(75, 23);
             this.ButtonToggleExpand.TabIndex = 1;
@@ -114,8 +116,8 @@
             // 
             // splitContainer1
             // 
-            this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
             this.splitContainer1.Location = new System.Drawing.Point(7, 37);
@@ -140,8 +142,8 @@
             // 
             // ListViewUsers
             // 
-            this.ListViewUsers.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.ListViewUsers.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ListViewUsers.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.ColumnHeaderUserName});
@@ -184,7 +186,7 @@
             // 
             // ListBoxUserDetail
             // 
-            this.ListBoxUserDetail.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.ListBoxUserDetail.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ListBoxUserDetail.FormattingEnabled = true;
             this.ListBoxUserDetail.Location = new System.Drawing.Point(307, 22);
@@ -204,8 +206,8 @@
             // 
             // ListBoxErrors
             // 
-            this.ListBoxErrors.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.ListBoxErrors.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ListBoxErrors.FormattingEnabled = true;
             this.ListBoxErrors.Location = new System.Drawing.Point(307, 169);
@@ -216,7 +218,7 @@
             // 
             // TreeViewHierarchy
             // 
-            this.TreeViewHierarchy.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.TreeViewHierarchy.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.TreeViewHierarchy.CheckBoxes = true;
             this.TreeViewHierarchy.ContextMenuStrip = this.ContextMenuStripUserList;
@@ -279,8 +281,8 @@
             // 
             this.DataGridViewSelectionComparison.AllowUserToAddRows = false;
             this.DataGridViewSelectionComparison.AllowUserToDeleteRows = false;
-            this.DataGridViewSelectionComparison.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.DataGridViewSelectionComparison.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.DataGridViewSelectionComparison.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.DataGridViewSelectionComparison.Location = new System.Drawing.Point(6, 106);
@@ -320,8 +322,8 @@
             // 
             // TextBoxRightFile
             // 
-            this.TextBoxRightFile.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.TextBoxRightFile.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.TextBoxRightFile.Location = new System.Drawing.Point(90, 44);
             this.TextBoxRightFile.Name = "TextBoxRightFile";
@@ -333,8 +335,8 @@
             // 
             // TextBoxLeftFile
             // 
-            this.TextBoxLeftFile.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.TextBoxLeftFile.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.TextBoxLeftFile.Location = new System.Drawing.Point(90, 16);
             this.TextBoxLeftFile.Name = "TextBoxLeftFile";
@@ -344,13 +346,22 @@
             this.TextBoxLeftFile.TextChanged += new System.EventHandler(this.TextBoxAnyFile_TextChanged);
             this.TextBoxLeftFile.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.TextBoxAnyFileChosen_MouseDoubleClick);
             // 
-            // Form1
+            // LabelHierarchyFile
+            // 
+            this.LabelHierarchyFile.AutoSize = true;
+            this.LabelHierarchyFile.Location = new System.Drawing.Point(320, 13);
+            this.LabelHierarchyFile.MinimumSize = new System.Drawing.Size(50, 0);
+            this.LabelHierarchyFile.Name = "LabelHierarchyFile";
+            this.LabelHierarchyFile.Size = new System.Drawing.Size(50, 13);
+            this.LabelHierarchyFile.TabIndex = 5;
+            // 
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1092, 537);
             this.Controls.Add(this.tabControl1);
-            this.Name = "Form1";
+            this.Name = "MainForm";
             this.Text = "Project Metadata Visualizer";
             this.tabControl1.ResumeLayout(false);
             this.TabPageHierarchySelections.ResumeLayout(false);
@@ -394,6 +405,7 @@
         private System.Windows.Forms.Button ButtonCompareSelectionFiles;
         private System.Windows.Forms.DataGridView DataGridViewSelectionComparison;
         private System.Windows.Forms.CheckBox CheckBoxUseNewSelections;
+        private System.Windows.Forms.Label LabelHierarchyFile;
     }
 }
 
