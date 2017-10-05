@@ -125,9 +125,9 @@ namespace SystemBackup
 
                 Status = true;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                Trace.WriteLine("Exception caught in BackupProcessor::BackupSystem()");
+                Trace.WriteLine("Exception caught in BackupProcessor::BackupSystem():\r\n" + e.Message + "\r\n" + e.StackTrace);
             }
 
             try
@@ -135,9 +135,9 @@ namespace SystemBackup
                 Trace.WriteLine("Removing directory " + BackUpDirectory);
                 System.IO.Directory.Delete(BackUpDirectory, true);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                Trace.WriteLine("Exception caught while removing directory" + BackUpDirectory);
+                Trace.WriteLine("Exception caught while removing directory " + BackUpDirectory + ":\r\n" + e.Message + "\r\n" + e.StackTrace);
             }
 
             return Status;
@@ -183,9 +183,9 @@ namespace SystemBackup
                 Trace.WriteLine("Sending email notification to address " + EmailAddress);
                 client.Send(objeto_mail);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                Trace.WriteLine("Exception caught while sending email notification");
+                Trace.WriteLine("Exception caught while sending email notification:\r\n" + e.Message + "\r\n" + e.StackTrace);
             }
         }
 
