@@ -2,6 +2,16 @@
 
 A non-exhaustive list of what has changed in a more readable form than a commit history.
 
+### v4.2.2
+
+#### Client visible changes (e.g. Portal - prm.milliman.com, User guide)
+
+  - None
+
+#### Lower level changes( e.g. Milliman Common, Project Management Console Services, Milliman Services, Databases)
+
+  - Enhanced exception logging in nightly backup utility
+
 ### v4.2.1
 
 #### Client visible changes (e.g. Portal - prm.milliman.com, User guide)
