@@ -224,6 +224,8 @@ namespace DehexifyStrings
                         ListViewUsers.Items[ListViewUsers.Items.Count - 1].Selected = true;
                         ListViewUsers.Items[ListViewUsers.Items.Count - 1].Selected = false;
                     }
+                    ListViewUsers.Sorting = SortOrder.Ascending;
+                    ListViewUsers.Sort();
                 }
                 finally
                 {
