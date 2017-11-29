@@ -18,6 +18,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
+using MillimanCommon;
 
 namespace DehexifyStrings
 {
@@ -580,5 +581,13 @@ namespace DehexifyStrings
             }
 
         }
+
+        private void TextBoxTimeAspxStatusEncoded_TextChanged(object sender, EventArgs e)
+        {
+            MillimanCommon.AutoCrypt AC = new MillimanCommon.AutoCrypt();
+
+            TextBoxTimeAspxStatusDecoded.Text = AC.AutoDecrypt(TextBoxTimeAspxStatusEncoded.Text);
+        }
+
     }
 }

@@ -32,6 +32,7 @@
             this.OpenFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.TabPageHierarchySelections = new System.Windows.Forms.TabPage();
+            this.LabelHierarchyFile = new System.Windows.Forms.Label();
             this.CheckBoxUseNewSelections = new System.Windows.Forms.CheckBox();
             this.ButtonToggleExpand = new System.Windows.Forms.Button();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -54,7 +55,10 @@
             this.LabelBaseFile = new System.Windows.Forms.Label();
             this.TextBoxRightFile = new System.Windows.Forms.TextBox();
             this.TextBoxLeftFile = new System.Windows.Forms.TextBox();
-            this.LabelHierarchyFile = new System.Windows.Forms.Label();
+            this.TabPageTimeAspxStatus = new System.Windows.Forms.TabPage();
+            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.TextBoxTimeAspxStatusEncoded = new System.Windows.Forms.TextBox();
+            this.TextBoxTimeAspxStatusDecoded = new System.Windows.Forms.TextBox();
             this.tabControl1.SuspendLayout();
             this.TabPageHierarchySelections.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -64,6 +68,11 @@
             this.ContextMenuStripUserList.SuspendLayout();
             this.TabPageCompareSelections.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DataGridViewSelectionComparison)).BeginInit();
+            this.TabPageTimeAspxStatus.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
+            this.splitContainer2.Panel1.SuspendLayout();
+            this.splitContainer2.Panel2.SuspendLayout();
+            this.splitContainer2.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -73,6 +82,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.TabPageHierarchySelections);
             this.tabControl1.Controls.Add(this.TabPageCompareSelections);
+            this.tabControl1.Controls.Add(this.TabPageTimeAspxStatus);
             this.tabControl1.Location = new System.Drawing.Point(13, 13);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -93,6 +103,15 @@
             this.TabPageHierarchySelections.TabIndex = 1;
             this.TabPageHierarchySelections.Text = "User Selections";
             this.TabPageHierarchySelections.UseVisualStyleBackColor = true;
+            // 
+            // LabelHierarchyFile
+            // 
+            this.LabelHierarchyFile.AutoSize = true;
+            this.LabelHierarchyFile.Location = new System.Drawing.Point(320, 13);
+            this.LabelHierarchyFile.MinimumSize = new System.Drawing.Size(50, 0);
+            this.LabelHierarchyFile.Name = "LabelHierarchyFile";
+            this.LabelHierarchyFile.Size = new System.Drawing.Size(50, 13);
+            this.LabelHierarchyFile.TabIndex = 5;
             // 
             // CheckBoxUseNewSelections
             // 
@@ -346,14 +365,59 @@
             this.TextBoxLeftFile.TextChanged += new System.EventHandler(this.TextBoxAnyFile_TextChanged);
             this.TextBoxLeftFile.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.TextBoxAnyFileChosen_MouseDoubleClick);
             // 
-            // LabelHierarchyFile
+            // TabPageTimeAspxStatus
             // 
-            this.LabelHierarchyFile.AutoSize = true;
-            this.LabelHierarchyFile.Location = new System.Drawing.Point(320, 13);
-            this.LabelHierarchyFile.MinimumSize = new System.Drawing.Size(50, 0);
-            this.LabelHierarchyFile.Name = "LabelHierarchyFile";
-            this.LabelHierarchyFile.Size = new System.Drawing.Size(50, 13);
-            this.LabelHierarchyFile.TabIndex = 5;
+            this.TabPageTimeAspxStatus.Controls.Add(this.splitContainer2);
+            this.TabPageTimeAspxStatus.Location = new System.Drawing.Point(4, 22);
+            this.TabPageTimeAspxStatus.Name = "TabPageTimeAspxStatus";
+            this.TabPageTimeAspxStatus.Size = new System.Drawing.Size(1059, 486);
+            this.TabPageTimeAspxStatus.TabIndex = 3;
+            this.TabPageTimeAspxStatus.Text = "time.aspx Status";
+            this.TabPageTimeAspxStatus.UseVisualStyleBackColor = true;
+            // 
+            // splitContainer2
+            // 
+            this.splitContainer2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitContainer2.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer2.Name = "splitContainer2";
+            this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer2.Panel1
+            // 
+            this.splitContainer2.Panel1.Controls.Add(this.TextBoxTimeAspxStatusEncoded);
+            // 
+            // splitContainer2.Panel2
+            // 
+            this.splitContainer2.Panel2.Controls.Add(this.TextBoxTimeAspxStatusDecoded);
+            this.splitContainer2.Size = new System.Drawing.Size(1056, 486);
+            this.splitContainer2.SplitterDistance = 241;
+            this.splitContainer2.TabIndex = 0;
+            // 
+            // TextBoxTimeAspxStatusEncoded
+            // 
+            this.TextBoxTimeAspxStatusEncoded.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.TextBoxTimeAspxStatusEncoded.Location = new System.Drawing.Point(3, 3);
+            this.TextBoxTimeAspxStatusEncoded.Multiline = true;
+            this.TextBoxTimeAspxStatusEncoded.Name = "TextBoxTimeAspxStatusEncoded";
+            this.TextBoxTimeAspxStatusEncoded.Size = new System.Drawing.Size(1050, 235);
+            this.TextBoxTimeAspxStatusEncoded.TabIndex = 0;
+            this.TextBoxTimeAspxStatusEncoded.Text = "Paste encoded status here to see decoded version below";
+            this.TextBoxTimeAspxStatusEncoded.TextChanged += new System.EventHandler(this.TextBoxTimeAspxStatusEncoded_TextChanged);
+            // 
+            // TextBoxTimeAspxStatusDecoded
+            // 
+            this.TextBoxTimeAspxStatusDecoded.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.TextBoxTimeAspxStatusDecoded.Location = new System.Drawing.Point(4, 4);
+            this.TextBoxTimeAspxStatusDecoded.Multiline = true;
+            this.TextBoxTimeAspxStatusDecoded.Name = "TextBoxTimeAspxStatusDecoded";
+            this.TextBoxTimeAspxStatusDecoded.Size = new System.Drawing.Size(1049, 234);
+            this.TextBoxTimeAspxStatusDecoded.TabIndex = 0;
             // 
             // MainForm
             // 
@@ -375,6 +439,13 @@
             this.TabPageCompareSelections.ResumeLayout(false);
             this.TabPageCompareSelections.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DataGridViewSelectionComparison)).EndInit();
+            this.TabPageTimeAspxStatus.ResumeLayout(false);
+            this.splitContainer2.Panel1.ResumeLayout(false);
+            this.splitContainer2.Panel1.PerformLayout();
+            this.splitContainer2.Panel2.ResumeLayout(false);
+            this.splitContainer2.Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
+            this.splitContainer2.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -406,6 +477,10 @@
         private System.Windows.Forms.DataGridView DataGridViewSelectionComparison;
         private System.Windows.Forms.CheckBox CheckBoxUseNewSelections;
         private System.Windows.Forms.Label LabelHierarchyFile;
+        private System.Windows.Forms.TabPage TabPageTimeAspxStatus;
+        private System.Windows.Forms.SplitContainer splitContainer2;
+        private System.Windows.Forms.TextBox TextBoxTimeAspxStatusEncoded;
+        private System.Windows.Forms.TextBox TextBoxTimeAspxStatusDecoded;
     }
 }
 
