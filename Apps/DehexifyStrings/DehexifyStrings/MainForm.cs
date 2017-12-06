@@ -310,6 +310,7 @@ namespace DehexifyStrings
 
             ListBoxErrors.Items.Clear();
             ListBoxUserDetail.Items.Clear();
+            int SelectionCount = 0;
 
             ListView.SelectedListViewItemCollection SelectedListItems = ListViewUsers.SelectedItems;
             // If the ListView is set for single selection then this foreach will always find at most one selected item
@@ -333,6 +334,7 @@ namespace DehexifyStrings
 
                     foreach (XmlNode SelectionNode in XMLD.SelectSingleNode("Collection").SelectSingleNode("Items").SelectNodes("Simple"))
                     {
+                        SelectionCount++;
                         bool Found = false;
                         string[] SelectionStrings = SelectionNode.Attributes["value"].Value.Split('|');
                         int Levels = SelectionStrings.Length;
@@ -355,6 +357,8 @@ namespace DehexifyStrings
                     }
                 }
             }
+
+            ListBoxUserDetail.Items.Add("Leaf Nodes Selected: " + SelectionCount);
         }
 
         private void ButtonToggleExpand_Click(object sender, EventArgs e)
