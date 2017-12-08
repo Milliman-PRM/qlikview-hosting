@@ -346,7 +346,6 @@
     <Content Include="NoReductionVerify.aspx" />
     <Content Include="SimpleUpdateVerify.aspx" />
     <Content Include="Site.css" />
-    <Content Include="time.aspx" />
     <Content Include="UserGuide\PRM Client Publisher Console User Guide.html" />
     <Content Include="UserLogin.aspx" />
     <Content Include="Web.config">
@@ -535,13 +534,6 @@
     </Compile>
     <Compile Include="TaskBase.cs" />
     <Compile Include="TaskManager.cs" />
-    <Compile Include="time.aspx.cs">
-      <DependentUpon>time.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="time.aspx.designer.cs">
-      <DependentUpon>time.aspx</DependentUpon>
-    </Compile>
     <Compile Include="UserLogin.aspx.cs">
       <DependentUpon>UserLogin.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

@@ -155,7 +155,6 @@
     <Content Include="MainMenuConfiguration\MainMenu.xml">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="time.aspx" />
     <Content Include="UnspecifiedIssue.html" />
     <Content Include="Css\Milliman_small.jpg" />
     <Content Include="ImageReflector.aspx" />
@@ -289,13 +288,6 @@
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="SSOConfiguration.cs" />
-    <Compile Include="time.aspx.cs">
-      <DependentUpon>time.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="time.aspx.designer.cs">
-      <DependentUpon>time.aspx</DependentUpon>
-    </Compile>
     <Compile Include="UserLogin.aspx.cs">
       <DependentUpon>UserLogin.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
