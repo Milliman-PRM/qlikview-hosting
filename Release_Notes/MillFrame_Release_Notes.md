@@ -2,9 +2,10 @@
 
 A non-exhaustive list of what has changed in a more readable form than a commit history.
 
-### v4.3.0
+### v4.2.3
 
   - Update the welcome email and reset password email to users on PRM so that they are more generic for users from other offices and cleaned up some wording and formatting.
+  - Remove time.aspx
 
 ### v4.2.2
 
