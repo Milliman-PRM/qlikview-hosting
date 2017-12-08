@@ -134,7 +134,6 @@
     <Content Include="MillimanRelay.asmx" />
     <Content Include="Status.aspx" />
     <Content Include="Tickets.aspx" />
-    <Content Include="time.aspx" />
     <Content Include="Troubleshooting.aspx" />
     <Content Include="UnspecifiedIssue.html" />
     <Content Include="Css\Milliman_small.jpg" />
@@ -262,13 +261,6 @@
     </Compile>
     <Compile Include="Tickets.aspx.designer.cs">
       <DependentUpon>Tickets.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="time.aspx.cs">
-      <DependentUpon>time.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="time.aspx.designer.cs">
-      <DependentUpon>time.aspx</DependentUpon>
     </Compile>
     <Compile Include="Troubleshooting.aspx.cs">
       <DependentUpon>Troubleshooting.aspx</DependentUpon>

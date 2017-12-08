@@ -136,7 +136,6 @@
     <Content Include="Images\PRMLogo_height80.png" />
     <Content Include="Images\PRM_Logo.png" />
     <Content Include="Images\transparent16x16.gif" />
-    <Content Include="time.aspx" />
     <Content Include="UnspecifiedIssue.html" />
     <Content Include="Css\Milliman_small.jpg" />
     <Content Include="Images\applychanges.png" />
@@ -235,13 +234,6 @@
       <DependentUpon>Reflector.ashx</DependentUpon>
     </Compile>
     <Compile Include="SystemCredentials.cs" />
-    <Compile Include="time.aspx.cs">
-      <DependentUpon>time.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="time.aspx.designer.cs">
-      <DependentUpon>time.aspx</DependentUpon>
-    </Compile>
     <Compile Include="UserLogin.aspx.cs">
       <DependentUpon>UserLogin.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
