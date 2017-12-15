@@ -18,6 +18,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
+using MillimanCommon;
 
 namespace DehexifyStrings
 {
@@ -148,6 +149,8 @@ namespace DehexifyStrings
             TreeViewHierarchy.Nodes.Add(TNode);
 
             AddTreeNode(Dom.DocumentElement, TNode);
+
+            TreeViewHierarchy.Sort();
         }
 
         private void AddTreeNode(XmlNode NodeToAdd, TreeNode TargetTreeNode)
@@ -180,13 +183,17 @@ namespace DehexifyStrings
                 {
                     string ProjectFile = OpenFileDialog1.FileName;
                     _ProjectFolder = Path.GetFullPath(Path.GetDirectoryName(ProjectFile));
-                    string HierarchyFile = Directory.GetFiles(_ProjectFolder, "*.hierarchy_*").FirstOrDefault();
+
+                    string HierarchySuffix = CheckBoxUseNewSelections.Checked ? "*.hierarchy_*_old" : "*.hierarchy_*_new";
+                    string HierarchyFile = Directory.GetFiles(_ProjectFolder, HierarchySuffix).FirstOrDefault();
 
                     if (!File.Exists(HierarchyFile))
                     {
                         MessageBox.Show("No hierarchy file found in folder " + _ProjectFolder);
                         return;
                     }
+
+                    LabelHierarchyFile.Text = HierarchyFile;
 
                     XmlDocument HciprojXml = new XmlDocument();
                     using (StreamReader R = new StreamReader(ProjectFile))
@@ -220,6 +227,8 @@ namespace DehexifyStrings
                         ListViewUsers.Items[ListViewUsers.Items.Count - 1].Selected = true;
                         ListViewUsers.Items[ListViewUsers.Items.Count - 1].Selected = false;
                     }
+                    ListViewUsers.Sorting = SortOrder.Ascending;
+                    ListViewUsers.Sort();
                 }
                 finally
                 {
@@ -303,6 +312,7 @@ namespace DehexifyStrings
 
             ListBoxErrors.Items.Clear();
             ListBoxUserDetail.Items.Clear();
+            int SelectionCount = 0;
 
             ListView.SelectedListViewItemCollection SelectedListItems = ListViewUsers.SelectedItems;
             // If the ListView is set for single selection then this foreach will always find at most one selected item
@@ -326,6 +336,7 @@ namespace DehexifyStrings
 
                     foreach (XmlNode SelectionNode in XMLD.SelectSingleNode("Collection").SelectSingleNode("Items").SelectNodes("Simple"))
                     {
+                        SelectionCount++;
                         bool Found = false;
                         string[] SelectionStrings = SelectionNode.Attributes["value"].Value.Split('|');
                         int Levels = SelectionStrings.Length;
@@ -348,6 +359,8 @@ namespace DehexifyStrings
                     }
                 }
             }
+
+            ListBoxUserDetail.Items.Add("Leaf Nodes Selected: " + SelectionCount);
         }
 
         private void ButtonToggleExpand_Click(object sender, EventArgs e)
@@ -573,6 +586,105 @@ namespace DehexifyStrings
                     break;
             }
 
+        }
+
+        private void TextBoxTimeAspxStatusEncoded_TextChanged(object sender, EventArgs e)
+        {
+            MillimanCommon.AutoCrypt AC = new MillimanCommon.AutoCrypt();
+
+            TextBoxTimeAspxStatusDecoded.Text = AC.AutoDecrypt(TextBoxTimeAspxStatusEncoded.Text);
+        }
+
+        private void ButtonSelectHierarchyUserAccessFiles_Click(object sender, EventArgs e)
+        {
+            ListViewSelections.Items.Clear();
+            ListViewSelectionUsers.Items.Clear();
+
+            OpenFileDialog1.Title = "Open Hierarchy File";
+            OpenFileDialog1.Filter = "Hierarchy1 files (*.hierarchy1.txt)|*.hierarchy1.txt|UserAccess1 files (*.hierarchy1.txt)|*.UserAccess1.txt|All files (*.*)|*.*";
+
+            if (OpenFileDialog1.ShowDialog() != DialogResult.OK || 
+                !File.Exists(OpenFileDialog1.FileName) ||
+                ( !OpenFileDialog1.FileName.ToLower().Contains(".hierarchy1.txt") && !OpenFileDialog1.FileName.ToLower().Contains(".useraccess1.txt")))
+            {
+                return;
+            }
+
+            string FileBaseName = OpenFileDialog1.FileName.Substring(0, OpenFileDialog1.FileName.LastIndexOf('.', OpenFileDialog1.FileName.Length-5));
+            string Hierarchy1FileName = FileBaseName + ".hierarchy1.txt";
+            string UserAccess1FileName = FileBaseName + ".useraccess1.txt";
+
+            // Read contents of the Hierarchy file
+            string[] AllHierarchyLines = File.ReadAllLines(Hierarchy1FileName);
+            List<string> HierarchyValues = new List<string>();
+            for (int i=1; i< AllHierarchyLines.Length; i++)
+            {
+                HierarchyValues.Add(AllHierarchyLines[i].Split('|')[0]);
+            }
+            foreach (var SelectionValue in HierarchyValues.OrderBy(v => v))
+            {
+                ListViewSelections.Items.Add(new ListViewItem(SelectionValue));
+            }
+
+            // Read contents of the UserAccess file
+            string[] AllUserAccessLines = File.ReadAllLines(UserAccess1FileName);
+            List<string> AccessFileHierarchyValues = AllUserAccessLines[0].Split('|').Skip(1).ToList();
+            // Validate
+            if (AccessFileHierarchyValues.Count != HierarchyValues.Count ||
+                AccessFileHierarchyValues.OrderBy(v=>v).Except(HierarchyValues.OrderBy(v => v)).Count() > 0 ||
+                HierarchyValues.OrderBy(v => v).Except(AccessFileHierarchyValues.OrderBy(v => v)).Count() > 0)
+            {
+                MessageBox.Show(string.Format("Mismatch of hierarchy values between UserAccess file and Hierarchy file!"));
+                return;
+            }
+
+            Dictionary<string, Dictionary<string, bool>> ExpectedUserSelections = new Dictionary<string, Dictionary<string, bool>>();
+            for (int i = 1; i < AllUserAccessLines.Length; i++)
+            {
+                string UserName = AllUserAccessLines[i].Split('|').First();
+                List<string> Selections = AllUserAccessLines[i].Split('|').Skip(1).ToList();
+                Dictionary<string, bool> ThisUserSelections = new Dictionary<string, bool>();
+                for (int j = 0; j < Selections.Count; j++)
+                {
+                    ThisUserSelections[AccessFileHierarchyValues[j]] = Selections[j].ToLower() == "x" ? true : false;
+                }
+                ExpectedUserSelections[UserName] = ThisUserSelections;
+            }
+
+            foreach (var User in ExpectedUserSelections.OrderBy(u=>u.Key))
+            {
+                ListViewItem NewItem = new ListViewItem(User.Key);
+                NewItem.Tag = User.Value;
+                ListViewSelectionUsers.Items.Add(NewItem);
+            }
+        }
+
+        private void ListViewSelectionUsers_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ListBoxSelectionDetails.Items.Clear();
+            foreach (ListViewItem SelectionItem in ListViewSelections.Items)
+            {
+                SelectionItem.Checked = false;
+                SelectionItem.BackColor = Color.OrangeRed;
+            }
+
+            foreach (ListViewItem SelectedUser in ListViewSelectionUsers.SelectedItems)
+            {
+                ListBoxSelectionDetails.Items.Add("Selected user " + SelectedUser.Text);
+
+                Dictionary<string,bool> SelectionDict = SelectedUser.Tag as Dictionary<string, bool>;
+                foreach (ListViewItem SelectionValueItem in ListViewSelections.Items)
+                {
+                    if (SelectionDict[SelectionValueItem.Text])
+                    {
+                        SelectionValueItem.Checked = true;
+                        SelectionValueItem.BackColor = Color.LightGreen;
+                    }
+                }
+            }
+
+            ListBoxSelectionDetails.Items.Add(string.Format("{0} items ARE selected", ListViewSelections.CheckedItems.Count));
+            ListBoxSelectionDetails.Items.Add(string.Format("{0} items NOT selected", ListViewSelections.Items.Count - ListViewSelections.CheckedItems.Count));
         }
     }
 }

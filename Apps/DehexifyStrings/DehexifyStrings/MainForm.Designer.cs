@@ -32,6 +32,7 @@
             this.OpenFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.TabPageHierarchySelections = new System.Windows.Forms.TabPage();
+            this.LabelHierarchyFile = new System.Windows.Forms.Label();
             this.CheckBoxUseNewSelections = new System.Windows.Forms.CheckBox();
             this.ButtonToggleExpand = new System.Windows.Forms.Button();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -54,6 +55,17 @@
             this.LabelBaseFile = new System.Windows.Forms.Label();
             this.TextBoxRightFile = new System.Windows.Forms.TextBox();
             this.TextBoxLeftFile = new System.Windows.Forms.TextBox();
+            this.TabPageTimeAspxStatus = new System.Windows.Forms.TabPage();
+            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.TextBoxTimeAspxStatusEncoded = new System.Windows.Forms.TextBox();
+            this.TextBoxTimeAspxStatusDecoded = new System.Windows.Forms.TextBox();
+            this.TabPageHierarchyUserAccessVisualizer = new System.Windows.Forms.TabPage();
+            this.ListViewSelections = new System.Windows.Forms.ListView();
+            this.ColumnFacility = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.ListViewSelectionUsers = new System.Windows.Forms.ListView();
+            this.ColumnHeaderUser = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.ButtonSelectHierarchyUserAccessFiles = new System.Windows.Forms.Button();
+            this.ListBoxSelectionDetails = new System.Windows.Forms.ListBox();
             this.tabControl1.SuspendLayout();
             this.TabPageHierarchySelections.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -63,15 +75,23 @@
             this.ContextMenuStripUserList.SuspendLayout();
             this.TabPageCompareSelections.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DataGridViewSelectionComparison)).BeginInit();
+            this.TabPageTimeAspxStatus.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
+            this.splitContainer2.Panel1.SuspendLayout();
+            this.splitContainer2.Panel2.SuspendLayout();
+            this.splitContainer2.SuspendLayout();
+            this.TabPageHierarchyUserAccessVisualizer.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
             // 
-            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.TabPageHierarchySelections);
             this.tabControl1.Controls.Add(this.TabPageCompareSelections);
+            this.tabControl1.Controls.Add(this.TabPageTimeAspxStatus);
+            this.tabControl1.Controls.Add(this.TabPageHierarchyUserAccessVisualizer);
             this.tabControl1.Location = new System.Drawing.Point(13, 13);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -80,6 +100,7 @@
             // 
             // TabPageHierarchySelections
             // 
+            this.TabPageHierarchySelections.Controls.Add(this.LabelHierarchyFile);
             this.TabPageHierarchySelections.Controls.Add(this.CheckBoxUseNewSelections);
             this.TabPageHierarchySelections.Controls.Add(this.ButtonToggleExpand);
             this.TabPageHierarchySelections.Controls.Add(this.splitContainer1);
@@ -89,22 +110,31 @@
             this.TabPageHierarchySelections.Padding = new System.Windows.Forms.Padding(3);
             this.TabPageHierarchySelections.Size = new System.Drawing.Size(1059, 486);
             this.TabPageHierarchySelections.TabIndex = 1;
-            this.TabPageHierarchySelections.Text = "User Selections";
+            this.TabPageHierarchySelections.Text = "PMC Generated Selections";
             this.TabPageHierarchySelections.UseVisualStyleBackColor = true;
+            // 
+            // LabelHierarchyFile
+            // 
+            this.LabelHierarchyFile.AutoSize = true;
+            this.LabelHierarchyFile.Location = new System.Drawing.Point(320, 13);
+            this.LabelHierarchyFile.MinimumSize = new System.Drawing.Size(50, 0);
+            this.LabelHierarchyFile.Name = "LabelHierarchyFile";
+            this.LabelHierarchyFile.Size = new System.Drawing.Size(50, 13);
+            this.LabelHierarchyFile.TabIndex = 5;
             // 
             // CheckBoxUseNewSelections
             // 
             this.CheckBoxUseNewSelections.AutoSize = true;
             this.CheckBoxUseNewSelections.Location = new System.Drawing.Point(89, 9);
             this.CheckBoxUseNewSelections.Name = "CheckBoxUseNewSelections";
-            this.CheckBoxUseNewSelections.Size = new System.Drawing.Size(149, 17);
+            this.CheckBoxUseNewSelections.Size = new System.Drawing.Size(144, 17);
             this.CheckBoxUseNewSelections.TabIndex = 4;
             this.CheckBoxUseNewSelections.Text = "Find \'_old\' Selection Files";
             this.CheckBoxUseNewSelections.UseVisualStyleBackColor = true;
             // 
             // ButtonToggleExpand
             // 
-            this.ButtonToggleExpand.Location = new System.Drawing.Point(425, 6);
+            this.ButtonToggleExpand.Location = new System.Drawing.Point(239, 9);
             this.ButtonToggleExpand.Name = "ButtonToggleExpand";
             this.ButtonToggleExpand.Size = new System.Drawing.Size(75, 23);
             this.ButtonToggleExpand.TabIndex = 1;
@@ -114,8 +144,8 @@
             // 
             // splitContainer1
             // 
-            this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
             this.splitContainer1.Location = new System.Drawing.Point(7, 37);
@@ -140,8 +170,8 @@
             // 
             // ListViewUsers
             // 
-            this.ListViewUsers.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.ListViewUsers.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ListViewUsers.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.ColumnHeaderUserName});
@@ -184,7 +214,7 @@
             // 
             // ListBoxUserDetail
             // 
-            this.ListBoxUserDetail.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.ListBoxUserDetail.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ListBoxUserDetail.FormattingEnabled = true;
             this.ListBoxUserDetail.Location = new System.Drawing.Point(307, 22);
@@ -204,8 +234,8 @@
             // 
             // ListBoxErrors
             // 
-            this.ListBoxErrors.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.ListBoxErrors.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ListBoxErrors.FormattingEnabled = true;
             this.ListBoxErrors.Location = new System.Drawing.Point(307, 169);
@@ -216,7 +246,7 @@
             // 
             // TreeViewHierarchy
             // 
-            this.TreeViewHierarchy.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.TreeViewHierarchy.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.TreeViewHierarchy.CheckBoxes = true;
             this.TreeViewHierarchy.ContextMenuStrip = this.ContextMenuStripUserList;
@@ -279,8 +309,8 @@
             // 
             this.DataGridViewSelectionComparison.AllowUserToAddRows = false;
             this.DataGridViewSelectionComparison.AllowUserToDeleteRows = false;
-            this.DataGridViewSelectionComparison.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.DataGridViewSelectionComparison.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.DataGridViewSelectionComparison.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.DataGridViewSelectionComparison.Location = new System.Drawing.Point(6, 106);
@@ -320,8 +350,8 @@
             // 
             // TextBoxRightFile
             // 
-            this.TextBoxRightFile.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.TextBoxRightFile.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.TextBoxRightFile.Location = new System.Drawing.Point(90, 44);
             this.TextBoxRightFile.Name = "TextBoxRightFile";
@@ -333,8 +363,8 @@
             // 
             // TextBoxLeftFile
             // 
-            this.TextBoxLeftFile.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.TextBoxLeftFile.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.TextBoxLeftFile.Location = new System.Drawing.Point(90, 16);
             this.TextBoxLeftFile.Name = "TextBoxLeftFile";
@@ -344,13 +374,140 @@
             this.TextBoxLeftFile.TextChanged += new System.EventHandler(this.TextBoxAnyFile_TextChanged);
             this.TextBoxLeftFile.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.TextBoxAnyFileChosen_MouseDoubleClick);
             // 
-            // Form1
+            // TabPageTimeAspxStatus
+            // 
+            this.TabPageTimeAspxStatus.Controls.Add(this.splitContainer2);
+            this.TabPageTimeAspxStatus.Location = new System.Drawing.Point(4, 22);
+            this.TabPageTimeAspxStatus.Name = "TabPageTimeAspxStatus";
+            this.TabPageTimeAspxStatus.Size = new System.Drawing.Size(1059, 486);
+            this.TabPageTimeAspxStatus.TabIndex = 3;
+            this.TabPageTimeAspxStatus.Text = "time.aspx Status";
+            this.TabPageTimeAspxStatus.UseVisualStyleBackColor = true;
+            // 
+            // splitContainer2
+            // 
+            this.splitContainer2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitContainer2.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer2.Name = "splitContainer2";
+            this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer2.Panel1
+            // 
+            this.splitContainer2.Panel1.Controls.Add(this.TextBoxTimeAspxStatusEncoded);
+            // 
+            // splitContainer2.Panel2
+            // 
+            this.splitContainer2.Panel2.Controls.Add(this.TextBoxTimeAspxStatusDecoded);
+            this.splitContainer2.Size = new System.Drawing.Size(1056, 486);
+            this.splitContainer2.SplitterDistance = 241;
+            this.splitContainer2.TabIndex = 0;
+            // 
+            // TextBoxTimeAspxStatusEncoded
+            // 
+            this.TextBoxTimeAspxStatusEncoded.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.TextBoxTimeAspxStatusEncoded.Location = new System.Drawing.Point(3, 3);
+            this.TextBoxTimeAspxStatusEncoded.Multiline = true;
+            this.TextBoxTimeAspxStatusEncoded.Name = "TextBoxTimeAspxStatusEncoded";
+            this.TextBoxTimeAspxStatusEncoded.Size = new System.Drawing.Size(1050, 235);
+            this.TextBoxTimeAspxStatusEncoded.TabIndex = 0;
+            this.TextBoxTimeAspxStatusEncoded.Text = "Paste encoded status here to see decoded version below";
+            this.TextBoxTimeAspxStatusEncoded.TextChanged += new System.EventHandler(this.TextBoxTimeAspxStatusEncoded_TextChanged);
+            // 
+            // TextBoxTimeAspxStatusDecoded
+            // 
+            this.TextBoxTimeAspxStatusDecoded.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.TextBoxTimeAspxStatusDecoded.Location = new System.Drawing.Point(4, 4);
+            this.TextBoxTimeAspxStatusDecoded.Multiline = true;
+            this.TextBoxTimeAspxStatusDecoded.Name = "TextBoxTimeAspxStatusDecoded";
+            this.TextBoxTimeAspxStatusDecoded.Size = new System.Drawing.Size(1049, 234);
+            this.TextBoxTimeAspxStatusDecoded.TabIndex = 0;
+            // 
+            // TabPageHierarchyUserAccessVisualizer
+            // 
+            this.TabPageHierarchyUserAccessVisualizer.Controls.Add(this.ListBoxSelectionDetails);
+            this.TabPageHierarchyUserAccessVisualizer.Controls.Add(this.ListViewSelections);
+            this.TabPageHierarchyUserAccessVisualizer.Controls.Add(this.ListViewSelectionUsers);
+            this.TabPageHierarchyUserAccessVisualizer.Controls.Add(this.ButtonSelectHierarchyUserAccessFiles);
+            this.TabPageHierarchyUserAccessVisualizer.Location = new System.Drawing.Point(4, 22);
+            this.TabPageHierarchyUserAccessVisualizer.Name = "TabPageHierarchyUserAccessVisualizer";
+            this.TabPageHierarchyUserAccessVisualizer.Size = new System.Drawing.Size(1059, 486);
+            this.TabPageHierarchyUserAccessVisualizer.TabIndex = 4;
+            this.TabPageHierarchyUserAccessVisualizer.Text = "Hierarchy/UserAccess File Visualizer";
+            this.TabPageHierarchyUserAccessVisualizer.UseVisualStyleBackColor = true;
+            // 
+            // ListViewSelections
+            // 
+            this.ListViewSelections.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.ListViewSelections.CheckBoxes = true;
+            this.ListViewSelections.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.ColumnFacility});
+            this.ListViewSelections.Location = new System.Drawing.Point(316, 34);
+            this.ListViewSelections.Name = "ListViewSelections";
+            this.ListViewSelections.Size = new System.Drawing.Size(404, 449);
+            this.ListViewSelections.TabIndex = 2;
+            this.ListViewSelections.UseCompatibleStateImageBehavior = false;
+            this.ListViewSelections.View = System.Windows.Forms.View.Details;
+            // 
+            // ColumnFacility
+            // 
+            this.ColumnFacility.Text = "Facility";
+            this.ColumnFacility.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.ColumnFacility.Width = 390;
+            // 
+            // ListViewSelectionUsers
+            // 
+            this.ListViewSelectionUsers.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.ListViewSelectionUsers.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.ColumnHeaderUser});
+            this.ListViewSelectionUsers.Location = new System.Drawing.Point(4, 34);
+            this.ListViewSelectionUsers.Name = "ListViewSelectionUsers";
+            this.ListViewSelectionUsers.Size = new System.Drawing.Size(305, 449);
+            this.ListViewSelectionUsers.TabIndex = 1;
+            this.ListViewSelectionUsers.UseCompatibleStateImageBehavior = false;
+            this.ListViewSelectionUsers.View = System.Windows.Forms.View.Details;
+            this.ListViewSelectionUsers.SelectedIndexChanged += new System.EventHandler(this.ListViewSelectionUsers_SelectedIndexChanged);
+            // 
+            // ColumnHeaderUser
+            // 
+            this.ColumnHeaderUser.Text = "User";
+            this.ColumnHeaderUser.Width = 290;
+            // 
+            // ButtonSelectHierarchyUserAccessFiles
+            // 
+            this.ButtonSelectHierarchyUserAccessFiles.Location = new System.Drawing.Point(4, 4);
+            this.ButtonSelectHierarchyUserAccessFiles.Name = "ButtonSelectHierarchyUserAccessFiles";
+            this.ButtonSelectHierarchyUserAccessFiles.Size = new System.Drawing.Size(186, 23);
+            this.ButtonSelectHierarchyUserAccessFiles.TabIndex = 0;
+            this.ButtonSelectHierarchyUserAccessFiles.Text = "Select Files";
+            this.ButtonSelectHierarchyUserAccessFiles.UseVisualStyleBackColor = true;
+            this.ButtonSelectHierarchyUserAccessFiles.Click += new System.EventHandler(this.ButtonSelectHierarchyUserAccessFiles_Click);
+            // 
+            // ListBoxSelectionDetails
+            // 
+            this.ListBoxSelectionDetails.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ListBoxSelectionDetails.FormattingEnabled = true;
+            this.ListBoxSelectionDetails.Location = new System.Drawing.Point(727, 34);
+            this.ListBoxSelectionDetails.Name = "ListBoxSelectionDetails";
+            this.ListBoxSelectionDetails.Size = new System.Drawing.Size(329, 446);
+            this.ListBoxSelectionDetails.TabIndex = 3;
+            // 
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1092, 537);
             this.Controls.Add(this.tabControl1);
-            this.Name = "Form1";
+            this.Name = "MainForm";
             this.Text = "Project Metadata Visualizer";
             this.tabControl1.ResumeLayout(false);
             this.TabPageHierarchySelections.ResumeLayout(false);
@@ -364,6 +521,14 @@
             this.TabPageCompareSelections.ResumeLayout(false);
             this.TabPageCompareSelections.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DataGridViewSelectionComparison)).EndInit();
+            this.TabPageTimeAspxStatus.ResumeLayout(false);
+            this.splitContainer2.Panel1.ResumeLayout(false);
+            this.splitContainer2.Panel1.PerformLayout();
+            this.splitContainer2.Panel2.ResumeLayout(false);
+            this.splitContainer2.Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
+            this.splitContainer2.ResumeLayout(false);
+            this.TabPageHierarchyUserAccessVisualizer.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -394,6 +559,18 @@
         private System.Windows.Forms.Button ButtonCompareSelectionFiles;
         private System.Windows.Forms.DataGridView DataGridViewSelectionComparison;
         private System.Windows.Forms.CheckBox CheckBoxUseNewSelections;
+        private System.Windows.Forms.Label LabelHierarchyFile;
+        private System.Windows.Forms.TabPage TabPageTimeAspxStatus;
+        private System.Windows.Forms.SplitContainer splitContainer2;
+        private System.Windows.Forms.TextBox TextBoxTimeAspxStatusEncoded;
+        private System.Windows.Forms.TextBox TextBoxTimeAspxStatusDecoded;
+        private System.Windows.Forms.TabPage TabPageHierarchyUserAccessVisualizer;
+        private System.Windows.Forms.Button ButtonSelectHierarchyUserAccessFiles;
+        private System.Windows.Forms.ListView ListViewSelectionUsers;
+        private System.Windows.Forms.ColumnHeader ColumnHeaderUser;
+        private System.Windows.Forms.ListView ListViewSelections;
+        private System.Windows.Forms.ColumnHeader ColumnFacility;
+        private System.Windows.Forms.ListBox ListBoxSelectionDetails;
     }
 }
 
