@@ -149,6 +149,8 @@ namespace DehexifyStrings
             TreeViewHierarchy.Nodes.Add(TNode);
 
             AddTreeNode(Dom.DocumentElement, TNode);
+
+            TreeViewHierarchy.Sort();
         }
 
         private void AddTreeNode(XmlNode NodeToAdd, TreeNode TargetTreeNode)
