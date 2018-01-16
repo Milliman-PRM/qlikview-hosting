@@ -229,7 +229,7 @@
             <div class="space"></div>
             <div class="row">
                 <div class="center-block" style="float: none; width: 415px;">
-                    <div class="col-md-9">
+                    <div class="col-md-12">
                         <asp:Button ID="Button1" runat="server" CommandName="ChangePassword" Text="Save"
                             OnClick="ChangePasswordPushButton_Click" CssClass="btn btn-primary"
                             OnClientClick="return Validate();" />
