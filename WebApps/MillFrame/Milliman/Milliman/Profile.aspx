@@ -228,13 +228,11 @@
             </div>
             <div class="space"></div>
             <div class="row">
-                <div class="center-block" style="float: none; width: 415px;">
-                    <div class="col-md-9">
+                <div class="center-block" style="float: none; width: 800px;">
+                    <div class="col-md-12" style="text-align: right; margin-top: 1em;">
                         <asp:Button ID="Button1" runat="server" CommandName="ChangePassword" Text="Save"
                             OnClick="ChangePasswordPushButton_Click" CssClass="btn btn-primary"
                             OnClientClick="return Validate();" />
-                        <asp:Button ID="Button2" runat="server" CommandName="ResetForm" Text="Reset" CssClass="btn btn-primary"
-                            OnClientClick="ClearTextboxes();" />
                     </div>
                 </div>
             </div>
@@ -271,7 +269,7 @@
         function OnLoad() {
             var msg = 'You are required to change your password and complete your profile information before continuing.&nbsp <br>Passwords must comply with the indicated requirements.';
             if (window.location.href.indexOf('newuser') == -1) {
-                //do nothing   -- this is not a new user       
+                //do nothing   -- this is not a new user
             }
             else {
                 showInformationAlert(msg);
@@ -308,7 +306,7 @@
         var isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
         // Firefox 1.0+
         var isFirefox = typeof InstallTrigger !== 'undefined';
-        // Safari <= 9 "[object HTMLElementConstructor]" 
+        // Safari <= 9 "[object HTMLElementConstructor]"
         var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
         // Internet Explorer 6-11
         var isIE = /*@cc_on!@*/false || !!document.documentMode;
@@ -583,7 +581,7 @@
             return true;
         }
 
-        //***************** Start Validate Password Data ******************************//       
+        //***************** Start Validate Password Data ******************************//
         var badInputData = false;
         var messagePasswordUserNameChars = "";
         //Password Check
@@ -656,13 +654,13 @@
                 badInputData = true;
             }
 
-            //validate non-printable chars 
+            //validate non-printable chars
             if (newpasswordValue.match(/[^\u0000-\u007F]/)) {
                 badInputData = true;
             }
 
             //the passwrod should not contain 3 or more char from user name
-            //find user name 
+            //find user name
             var username = '<%=Context.User.Identity.Name%>';
             //get new password value
             var newPasswordVal = $('#NewPassword').val();
@@ -842,9 +840,9 @@
             $('#passwordMatchMessage').removeClass('badMatch');
         }
 
-        //***************** End  Validate Password Data ******************************// 
+        //***************** End  Validate Password Data ******************************//
 
-        //***************** Alert Messages ******************************// 
+        //***************** Alert Messages ******************************//
         function showErrorAlert(alertMessage) {
             BootstrapDialog.show({
                 title: 'Data Entry Issue',
@@ -900,7 +898,7 @@
                 }],
             });
         }
-        //***************** Alert Messages ******************************// 
+        //***************** Alert Messages ******************************//
 
         //UserFirstName.addEventListener("onclick", removeElementClass(), false);
         var UserFirstName = document.getElementById("UserFirstName");
@@ -938,7 +936,7 @@
             removeElementClass(Answer, 'textbox-focus');
         };
 
-        //***************** Element Class ******************************// 
+        //***************** Element Class ******************************//
 
         //remove class
         // Check whether element has a classname
@@ -980,7 +978,7 @@
         function trim(s) {
             return rtrim(ltrim(s));
         }
-        //***************** Element Class ******************************// 
+        //***************** Element Class ******************************//
 
     </script>
 </body>
