@@ -2,6 +2,10 @@
 
 A non-exhaustive list of what has changed in a more readable form than a commit history.
 
+### v4.2.5
+
+  - Remove the **Reset** button from the User Profile Password Settings so that our end users and not confused about which button performs which action
+
 ### v4.2.4
 
   - Fix the table formatting in the reset password email
