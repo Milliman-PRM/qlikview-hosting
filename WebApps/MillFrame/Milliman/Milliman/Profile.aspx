@@ -233,8 +233,8 @@
                         <asp:Button ID="Button1" runat="server" CommandName="ChangePassword" Text="Save"
                             OnClick="ChangePasswordPushButton_Click" CssClass="btn btn-primary"
                             OnClientClick="return Validate();" />
-                        <asp:Button ID="Button2" runat="server" CommandName="ResetForm" Text="Reset" CssClass="btn btn-primary"
-                            OnClientClick="ClearTextboxes();" />
+                        <!-- <asp:Button ID="Button2" runat="server" CommandName="ResetForm" Text="Reset" CssClass="btn btn-primary"
+                            OnClientClick="ClearTextboxes();" /> -->
                     </div>
                 </div>
             </div>
