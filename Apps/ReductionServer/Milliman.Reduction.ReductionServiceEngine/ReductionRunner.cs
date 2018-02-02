@@ -126,7 +126,7 @@ namespace Milliman.Reduction.ReductionEngine
             }
             catch (ReductionRunnerException ex)
             {
-                Trace.WriteLine(ex);  //catch and log the exception
+                Trace.WriteLine("ReductionRunnerException" + ex);  //catch and log the exception
             }
             catch (Exception ex)
             {
@@ -762,7 +762,7 @@ namespace Milliman.Reduction.ReductionEngine
             }
             catch (Exception ex)
             {
-                Trace.WriteLine(string.Format("An error occurred when trying to run the Reduction task... {0}", ex));
+                Trace.WriteLine(string.Format("An error occurred when trying to create or save the Reduction task... {0}", ex));
                 return null;
             }
         }
