@@ -10,5 +10,10 @@ namespace QvReportReductionLib
     {
         public string RootPath { get; set; }
         public int MaxConcurrentTasks { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("RootPath: {0}, MaxConcurrentTasks: {1}", RootPath, MaxConcurrentTasks);
+        }
     }
 }

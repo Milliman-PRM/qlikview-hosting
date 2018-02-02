@@ -21,7 +21,7 @@ namespace QvReportReductionLib
     public class ProcessManager
     {
         // These collections are keyed on the config file name
-        private static Dictionary<string, RunningReductionTask> ExecutingTasks = null;
+        private static Dictionary<string, RunningReductionTask> ExecutingTasks = new Dictionary<string, RunningReductionTask>();
 
         /// <summary>
         /// class used to pass operational parameters to the thread that handles tasks of a single config file
@@ -39,7 +39,7 @@ namespace QvReportReductionLib
         }
 
         private bool _StopSignal;  // wrapped by the thread safe StopSignal property
-        private Object ObjectStateLock = null;
+        private object InstanceStateLock = new object();
         private Thread MainServiceWorkerThread = null;
 
         private string RootPath = string.Empty;
@@ -49,15 +49,6 @@ namespace QvReportReductionLib
         /// </summary>
         public ProcessManager()
         {
-            ObjectStateLock = new object();
-            lock (ObjectStateLock)
-            {
-                if (ExecutingTasks == null)
-                {
-                    ExecutingTasks = new Dictionary<string, RunningReductionTask>();
-                }
-            }
-
             StopSignal = false;
             MainServiceWorkerThread = new Thread(WorkerThreadMain);
         }
@@ -69,21 +60,20 @@ namespace QvReportReductionLib
         {
             get
             {
-                bool ReturnVal;
-                lock (ObjectStateLock) { ReturnVal = _StopSignal; }
-                return ReturnVal;
+                lock (InstanceStateLock) { return _StopSignal; }
             }
             set
             {
-                lock (ObjectStateLock) { _StopSignal = value; }
+                lock (InstanceStateLock) { _StopSignal = value; }
             }
         }
 
         public bool ThreadAlive
         {
             get {
-                return (MainServiceWorkerThread != null && (MainServiceWorkerThread.ThreadState == System.Threading.ThreadState.Running || MainServiceWorkerThread.ThreadState == System.Threading.ThreadState.WaitSleepJoin))
-                       ? true : false;
+                return (MainServiceWorkerThread != null && 
+                            (MainServiceWorkerThread.ThreadState == System.Threading.ThreadState.Running || 
+                             MainServiceWorkerThread.ThreadState == System.Threading.ThreadState.WaitSleepJoin));
             }
         }
 
@@ -172,23 +162,24 @@ namespace QvReportReductionLib
                     {
                         string ConfigFileName = ExecutingTasks.Keys.ElementAt(i);
 
-                        //Trace.WriteLine(string.Format("ThreadState {0} for config file {1}", ExecutingThreads[ConfigFileName].ThreadState.ToString(), ConfigFileName));
+                        Trace.WriteLine(string.Format("ThreadState {0} for config file {1}", ExecutingTasks[ConfigFileName].Thd.ThreadState.ToString(), ConfigFileName));
                         if (ExecutingTasks[ConfigFileName].Thd.ThreadState == System.Threading.ThreadState.Stopped)
                         {
-                            Trace.WriteLine("Thread state Stopped, removing from management: " + ConfigFileName);
+                            Trace.WriteLine(string.Format("Thread state Stopped, removing from management: {0}", ConfigFileName));
                             ExecutingTasks.Remove(ConfigFileName);
                         }
                     }
                 }
 
-                // Trace.WriteLine(string.Format("After cleanup, {0}:{1} threads managed", ExecutingThreads.Count, ExecutingTasks.Count));
+                Trace.WriteLine(string.Format("After cleanup, {0} threads managed", ExecutingTasks.Count));
 
                 // Identify new tasks to initiate, up to configured limit
+                // TODO Decide whether to implement a recursive search.  This currently supports search only in immediate subfolders (might be best). 
                 foreach (string TaskFolderName in Directory.EnumerateDirectories(ProcessConfig.RootPath)
                                                            .Where(d => ProcessManager.FolderContainsAReductionRequest(d))   // only include valid, ready tasks
                                                            .OrderBy(d => new DirectoryInfo(d).CreationTime))                // order by oldest first (treat the file system like a queue)
                 {
-                    //Trace.WriteLine("Found task(s) in folder " + TaskFolderName);
+                    Trace.WriteLine("Found task(s) in folder " + TaskFolderName);
 
                     lock (ExecutingTasks)
                     {
@@ -232,7 +223,7 @@ namespace QvReportReductionLib
             string ConfigFilePath = (Args as RuductionTaskThreadArgs).ConfigFileName;
             ReduceConfig TaskConfig = (Args as RuductionTaskThreadArgs).TaskConfig;
 
-            Trace.WriteLine(string.Format("Initializing processing of config file '{0}'", ConfigFilePath));
+            Trace.WriteLine(string.Format("Initializing dedicated thread for processing of config file '{0}'", ConfigFilePath));
             try
             {
                 string TaskFolder = Path.GetDirectoryName(ConfigFilePath);
@@ -268,16 +259,17 @@ namespace QvReportReductionLib
                 }
                 else
                 {
-                    Trace.WriteLine(string.Format("File '{0}' is correctly signed and marked to be processed. Shipping to Loop & Reduce on the Publisher Server...", TaskConfig.MasterQVW));
+                    Trace.WriteLine(string.Format("File '{0}' is correctly signed and marked to be processed. Shipping task to ReductionRunner", TaskConfig.MasterQVW));
                     // Get QMS connection parameters
-                    QMSSettings Settings = new QMSSettings();
-                    Settings.QMSURL = System.Configuration.ConfigurationManager.AppSettings["QMS"];
-                    Settings.UserName = System.Configuration.ConfigurationManager.AppSettings["QMSUser"];
-                    Settings.Password = System.Configuration.ConfigurationManager.AppSettings["QMSPassword"];
-                    Trace.WriteLine(string.Format("QMS Address is: '{0}', and QMS User is '{1}'", Settings.QMSURL, Settings.UserName));
+                    QMSSettings QmsSettings = new QMSSettings
+                    {
+                        QMSURL = System.Configuration.ConfigurationManager.AppSettings["QMS"],
+                        UserName = System.Configuration.ConfigurationManager.AppSettings["QMSUser"],
+                        Password = System.Configuration.ConfigurationManager.AppSettings["QMSPassword"],
+                    };
 
                     // Create the Runner and start the processing
-                    ReductionRunner Runner = new ReductionRunner(Settings);
+                    ReductionRunner Runner = new ReductionRunner(QmsSettings);
                     Runner.ConfigFileContent = TaskConfig;
                     Runner.QVWOriginalFullFileName = Path.Combine(Path.GetDirectoryName(ConfigFilePath), TaskConfig.MasterQVW);
                     Runner.Run();
