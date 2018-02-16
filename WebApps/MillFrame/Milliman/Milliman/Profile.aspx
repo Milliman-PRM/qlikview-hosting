@@ -634,8 +634,8 @@
             var username = '<%=Context.User.Identity.Name%>';
             //get new password value
             var newPasswordVal = $('#NewPassword').val();
-            //divide the user name into 3 letters so abcdefghi@somthing.com will look like [abd def ghi @som thi ng. com]
-            // example: ["abc", "def", "g.h", "ijk", "@em", "ail", ".co", "m"]
+            // divide the user name into all 3 letter combinations in the username
+            // example: abc@place.com ==> ["abc", "@pl", "ace", ".co", "bc@", "pla", "ce.", "com", "c@p", "lac", "e.c"]
             var partsOfThreeLettersUsernameArray = username.match(/.{3}/g)
                                 .concat(
                                         username.substr(1).match(/.{3}/g),
