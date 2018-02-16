@@ -541,12 +541,6 @@
                         return false;
                     }
 
-                    if (confirmPassword.length < passwordMinimumLength) {
-                        var msg = ('The Confirm Password length must be at least ' + passwordMinimumLength + ' chars.');
-                        $('#ConfirmNewPassword').addClass('textbox-focus');
-                        showErrorAlert(msg);
-                        return false;
-                    }
                     if (newPassword != confirmPassword) {
                         var msg = ('The password verification, New Password field and Confirm New Password field do not match!');
                         showErrorAlert(msg);
@@ -601,12 +595,6 @@
             //validate any uppercase letter
             if (newpasswordValue.match(/[A-Z]/)) {
                 $('#capital').removeClass('invalidPassword').addClass('validPassword');
-                if (badInputData) {
-                    badInputData = true;
-                }
-                else {
-                    badInputData = false;
-                }
             } else {
                 $('#capital').removeClass('validPassword').addClass('invalidPassword');
                 badInputData = true;
@@ -615,12 +603,6 @@
             //validate any lower case letter
             if (newpasswordValue.match(/[a-z]/)) {
                 $('#lowercase').removeClass('invalidPassword').addClass('validPassword');
-                if (badInputData) {
-                    badInputData = true;
-                }
-                else {
-                    badInputData = false;
-                }
             } else {
                 $('#lowercase').removeClass('validPassword').addClass('invalidPassword');
                 badInputData = true;
@@ -629,12 +611,6 @@
             //validate a number
             if (newpasswordValue.match(/[0-9]/)) {
                 $('#number').removeClass('invalidPassword').addClass('validPassword');
-                if (badInputData) {
-                    badInputData = true;
-                }
-                else {
-                    badInputData = false;
-                }
             } else {
                 $('#number').removeClass('validPassword').addClass('invalidPassword');
                 badInputData = true;
@@ -643,12 +619,6 @@
             //validate allowed special
             if (newpasswordValue.match(/[~!@#$%^&*;?+_.]/)) {
                 $('#special').removeClass('invalidPassword').addClass('validPassword');
-                if (badInputData) {
-                    badInputData = true;
-                }
-                else {
-                    badInputData = false;
-                }
             } else {
                 $('#special').removeClass('validPassword').addClass('invalidPassword');
                 badInputData = true;
@@ -691,13 +661,6 @@
                 }
                 else {
                     messagePasswordUserNameChars = "";
-                    if (badInputData) {
-                        badInputData = true;
-                    }
-                    else {
-                        badInputData = false;
-                    }
-
                 }
             }
 
