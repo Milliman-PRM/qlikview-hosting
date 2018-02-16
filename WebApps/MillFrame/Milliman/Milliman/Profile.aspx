@@ -323,7 +323,7 @@
             $('input[name="ConfirmNewPassword"]').attr('autocomplete', 'off');
         }
 
-        //***************** display the importatn hint next to the image ******************************//
+        //***************** display the important hint next to the image ******************************//
         var moveLeft = 10;
         var moveDown = 20;
         $('.divImportant').hover(function (e) {
@@ -459,7 +459,7 @@
                 }
             }
 
-            //if there are specail in name then check if they are allowed
+            //if there are special in name then check if they are allowed
             if (elementValue.match(new RegExp($('#hdAllChars').val(), "gi"))) {
                 //allowed special chars from web.config
                 var allowedSplChars = trim(AllowedSpecialCharactersInUserName).split(',');
@@ -541,12 +541,6 @@
                         return false;
                     }
 
-                    if (confirmPassword.length < passwordMinimumLength) {
-                        var msg = ('The Confirm Password length must be at least ' + passwordMinimumLength + ' chars.');
-                        $('#ConfirmNewPassword').addClass('textbox-focus');
-                        showErrorAlert(msg);
-                        return false;
-                    }
                     if (newPassword != confirmPassword) {
                         var msg = ('The password verification, New Password field and Confirm New Password field do not match!');
                         showErrorAlert(msg);
@@ -601,12 +595,6 @@
             //validate any uppercase letter
             if (newpasswordValue.match(/[A-Z]/)) {
                 $('#capital').removeClass('invalidPassword').addClass('validPassword');
-                if (badInputData) {
-                    badInputData = true;
-                }
-                else {
-                    badInputData = false;
-                }
             } else {
                 $('#capital').removeClass('validPassword').addClass('invalidPassword');
                 badInputData = true;
@@ -615,12 +603,6 @@
             //validate any lower case letter
             if (newpasswordValue.match(/[a-z]/)) {
                 $('#lowercase').removeClass('invalidPassword').addClass('validPassword');
-                if (badInputData) {
-                    badInputData = true;
-                }
-                else {
-                    badInputData = false;
-                }
             } else {
                 $('#lowercase').removeClass('validPassword').addClass('invalidPassword');
                 badInputData = true;
@@ -629,12 +611,6 @@
             //validate a number
             if (newpasswordValue.match(/[0-9]/)) {
                 $('#number').removeClass('invalidPassword').addClass('validPassword');
-                if (badInputData) {
-                    badInputData = true;
-                }
-                else {
-                    badInputData = false;
-                }
             } else {
                 $('#number').removeClass('validPassword').addClass('invalidPassword');
                 badInputData = true;
@@ -643,12 +619,6 @@
             //validate allowed special
             if (newpasswordValue.match(/[~!@#$%^&*;?+_.]/)) {
                 $('#special').removeClass('invalidPassword').addClass('validPassword');
-                if (badInputData) {
-                    badInputData = true;
-                }
-                else {
-                    badInputData = false;
-                }
             } else {
                 $('#special').removeClass('validPassword').addClass('invalidPassword');
                 badInputData = true;
@@ -664,8 +634,8 @@
             var username = '<%=Context.User.Identity.Name%>';
             //get new password value
             var newPasswordVal = $('#NewPassword').val();
-            //divide the user name into 3 letters so abcdefghi@somthing.com will look like [abd def ghi @som thi ng. com]
-            // example: ["abc", "def", "g.h", "ijk", "@em", "ail", ".co", "m"]
+            // divide the user name into all 3 letter combinations in the username
+            // example: abc@place.com ==> ["abc", "@pl", "ace", ".co", "bc@", "pla", "ce.", "com", "c@p", "lac", "e.c"]
             var partsOfThreeLettersUsernameArray = username.match(/.{3}/g)
                                 .concat(
                                         username.substr(1).match(/.{3}/g),
@@ -691,13 +661,6 @@
                 }
                 else {
                     messagePasswordUserNameChars = "";
-                    if (badInputData) {
-                        badInputData = true;
-                    }
-                    else {
-                        badInputData = false;
-                    }
-
                 }
             }
 
