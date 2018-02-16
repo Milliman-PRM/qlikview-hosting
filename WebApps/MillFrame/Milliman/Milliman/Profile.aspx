@@ -323,7 +323,7 @@
             $('input[name="ConfirmNewPassword"]').attr('autocomplete', 'off');
         }
 
-        //***************** display the importatn hint next to the image ******************************//
+        //***************** display the important hint next to the image ******************************//
         var moveLeft = 10;
         var moveDown = 20;
         $('.divImportant').hover(function (e) {
@@ -459,7 +459,7 @@
                 }
             }
 
-            //if there are specail in name then check if they are allowed
+            //if there are special in name then check if they are allowed
             if (elementValue.match(new RegExp($('#hdAllChars').val(), "gi"))) {
                 //allowed special chars from web.config
                 var allowedSplChars = trim(AllowedSpecialCharactersInUserName).split(',');
