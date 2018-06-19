@@ -238,7 +238,7 @@ namespace MillimanReportReduction
                 DateTime TaskCompletedAt = DateTime.Now;
                 System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
                 stopwatch.Start();
-                int MaxMilliseconds = 60 * 20 * 1000;  //only wait 15 mins for this
+                int MaxMilliseconds = 60 * 20 * 1000;  //only wait 20 mins for this
                 bool FinishedWithError = false;
                 while (Finished == false)
                 {
