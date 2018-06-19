@@ -73,7 +73,6 @@ Each Millframe component is represented by a project under the broader Millframe
 
 System reporting components are represented by projects under the SystemReporting solution.
 
-
 |Component|Visual Studio Project|Description|URL/Deployment Location|
 |---------|-------|-----------|---|
 ||Framework/Milliman.Controller|Defines controller classes for various log file types|N/A|
