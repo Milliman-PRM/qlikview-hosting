@@ -69,7 +69,7 @@ namespace MillimanProjectManConsole
             }
         }
 
-        const int MaxTotalBytes = 1000000000; // 1 MB
+        const int MaxTotalBytes = int.MaxValue;
 
         Int64 totalBytes;
 
