@@ -2,6 +2,11 @@
 
 A non-exhaustive list of what has changed in a more readable form than a commit history.
 
+### v4.2.6
+
+  - Modified hard coded limit on PMC supported report file size from 1,000,000,000 bytes to 2 GB
+  - Modified hard coded limit on PMC Qlikview task processing time (from 3 to 20 minutes)
+
 ### v4.2.5
 
   - Remove the **Reset** button from the User Profile Password Settings to remove confusion for end users
