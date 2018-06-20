@@ -2,6 +2,9 @@
 
 A non-exhaustive list of what has changed in a more readable form than a commit history.
 
+### v4.2.7
+  - Modified hard coded limit on PMC supported report file size in frontend code from 1,000,000,000 byes to 2 GB
+
 ### v4.2.6
 
   - Modified hard coded limit on PMC supported report file size from 1,000,000,000 bytes to 2 GB

@@ -77,7 +77,7 @@
                 <td colspan="2">
 <%--                    <asp:FileUpload ID="ReloadUpload" runat="server" width="100%"/>--%>
                     <telerik:RadAsyncUpload runat="server" ID="QVWUpload" 
-                        AllowedFileExtensions="qvw" MaxFileSize="1000000000" MaxFileInputsCount="1">
+                        AllowedFileExtensions="qvw" MaxFileSize="2147483647" MaxFileInputsCount="1">
                     </telerik:RadAsyncUpload>
 
                 </td>
